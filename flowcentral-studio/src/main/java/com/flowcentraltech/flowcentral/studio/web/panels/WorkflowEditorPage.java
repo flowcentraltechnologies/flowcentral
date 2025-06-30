@@ -73,26 +73,26 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
     }
 
     public boolean isPublished() throws UnifyException {
-        return getAu().environment().value(boolean.class, "published", new WorkflowQuery().id(workflowId));
+        return au().environment().value(boolean.class, "published", new WorkflowQuery().id(workflowId));
     }
     
     public void publish() throws UnifyException {
-        Workflow workflow = getAu().environment().listLean(Workflow.class, workflowId);
+        Workflow workflow = au().environment().listLean(Workflow.class, workflowId);
         final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(),
                 workflow.getName());
         workflowModuleService.publishWorkflow(workflowName);
     }
 
     public void commitDesign() throws UnifyException {
-        Workflow workflow = getAu().environment().find(Workflow.class, workflowId);
+        Workflow workflow = au().environment().find(Workflow.class, workflowId);
         workflow.setStepList(new ArrayList<WfStep>(workflowEditor.getWorkflowSteps().values()));
-        getAu().environment().updateByIdVersion(workflow);
+        au().environment().updateByIdVersion(workflow);
     }
 
     public void newEditor() throws UnifyException {
-        WorkflowEditor.Builder web = WorkflowEditor.newBuilder(getAu(), entityDef, workflowId);
+        WorkflowEditor.Builder web = WorkflowEditor.newBuilder(au(), entityDef, workflowId);
         boolean isOldDesign = false;
-        for (WfStep step : getAu().environment()
+        for (WfStep step : au().environment()
                 .listAllWithChildren(Query.of(WfStep.class).addEquals("workflowId", workflowId).addOrder("id"))) {
             web.addStep(step);
             isOldDesign |= step.getDesignX() != 0;

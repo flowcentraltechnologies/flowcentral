@@ -99,7 +99,7 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
     }
 
     public void commitDesign() throws UnifyException {
-        ReportConfiguration reportConfiguration = getAu().environment().find(ReportConfiguration.class, baseId);
+        ReportConfiguration reportConfiguration = au().environment().find(ReportConfiguration.class, baseId);
         List<com.flowcentraltech.flowcentral.report.entities.ReportColumn> columnList = Collections.emptyList();
         if (reportEditor.getDesign() != null && reportEditor.getDesign().getColumns() != null) {
             columnList = new ArrayList<com.flowcentraltech.flowcentral.report.entities.ReportColumn>();
@@ -123,12 +123,12 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
         }
 
         reportConfiguration.setColumnList(columnList);
-        getAu().environment().updateByIdVersion(reportConfiguration);
+        au().environment().updateByIdVersion(reportConfiguration);
     }
 
     public void newEditor() throws UnifyException {
         ReportEditor.Builder teb = ReportEditor.newBuilder(entityDef);
-        for (com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn : getAu().environment()
+        for (com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn : au().environment()
                 .findAll(Query.of(com.flowcentraltech.flowcentral.report.entities.ReportColumn.class)
                         .addEquals("reportConfigurationId", baseId).addOrder("id"))) {
             teb.addColumn(reportColumn.getFieldName(), reportColumn.getRenderWidget(),
@@ -141,12 +141,12 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
         }
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", getAu().resolveSessionMessage("$m{studio.reportconfiguration.form.design}"), "!fc-reporteditor",
+        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.reportconfiguration.form.design}"), "!fc-reporteditor",
                 RendererType.SIMPLE_WIDGET);
-        tsdb.addTabDef("preview", getAu().resolveSessionMessage("$m{studio.reportconfiguration.form.preview}"),
+        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.reportconfiguration.form.preview}"),
                 "fc-reportpreviewpanel", RendererType.STANDALONE_PANEL);
         reportEditor = teb.build();
-        reportPreview = new ReportPreview(getAu(), reportEditor);
+        reportPreview = new ReportPreview(au(), reportEditor);
         final String appletName = null;
         tabSheet = new TabSheet(tsdb.build(),
                 Arrays.asList(new TabSheetItem("reportEditor", appletName, reportEditor, DESIGN_INDEX, true),

@@ -97,7 +97,7 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
     }
 
     public void commitDesign() throws UnifyException {
-        AppTable appTable = getAu().environment().find(AppTable.class, baseId);
+        AppTable appTable = au().environment().find(AppTable.class, baseId);
         List<AppTableColumn> columnList = Collections.emptyList();
         if (tableEditor.getDesign() != null && tableEditor.getDesign().getColumns() != null) {
             columnList = new ArrayList<AppTableColumn>();
@@ -122,12 +122,12 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
         }
 
         appTable.setColumnList(columnList);
-        getAu().environment().updateByIdVersion(appTable);
+        au().environment().updateByIdVersion(appTable);
     }
 
     public void newEditor() throws UnifyException {
         TableEditor.Builder teb = TableEditor.newBuilder(entityDef);
-        for (AppTableColumn appTableColumn : getAu().environment()
+        for (AppTableColumn appTableColumn : au().environment()
                 .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
             teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
                     appTableColumn.getLinkAct(), appTableColumn.getSymbol(), appTableColumn.getOrder(),
@@ -137,12 +137,12 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
         }
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", getAu().resolveSessionMessage("$m{studio.apptable.form.design}"), "!fc-tableeditor",
+        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.apptable.form.design}"), "!fc-tableeditor",
                 RendererType.SIMPLE_WIDGET);
-        tsdb.addTabDef("preview", getAu().resolveSessionMessage("$m{studio.apptable.form.preview}"),
+        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.apptable.form.preview}"),
                 "fc-tablepreviewpanel", RendererType.STANDALONE_PANEL);
         tableEditor = teb.build();
-        tablePreview = new TablePreview(getAu(), tableEditor);
+        tablePreview = new TablePreview(au(), tableEditor);
         final String appletName = null;
         tabSheet = new TabSheet(tsdb.build(),
                 Arrays.asList(new TabSheetItem("tableEditor", appletName, tableEditor, DESIGN_INDEX, true),

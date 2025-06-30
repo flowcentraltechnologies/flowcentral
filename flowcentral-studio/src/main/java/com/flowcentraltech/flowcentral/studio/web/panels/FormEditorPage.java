@@ -105,7 +105,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
     }
 
     public void commitDesign() throws UnifyException {
-        AppForm appForm = getAu().environment().find(AppForm.class, baseId);
+        AppForm appForm = au().environment().find(AppForm.class, baseId);
         List<AppFormElement> elementList = Collections.emptyList();
         if (formEditor.getDesign() != null && formEditor.getDesign().getTabs() != null) {
             elementList = new ArrayList<AppFormElement>();
@@ -172,12 +172,12 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
         }
 
         appForm.setElementList(elementList);
-        getAu().environment().updateByIdVersion(appForm);
+        au().environment().updateByIdVersion(appForm);
     }
 
     public void newEditor() throws UnifyException {
-        FormEditor.Builder feb = FormEditor.newBuilder(formDef);
-        for (AppFormElement appFormElement : getAu().environment()
+        FormEditor.Builder feb = FormEditor.newBuilder(au(), formDef);
+        for (AppFormElement appFormElement : au().environment()
                 .findAll(Query.of(AppFormElement.class).addEquals("appFormId", baseId).addOrder("id"))) {
             switch (appFormElement.getType()) {
                 case FIELD:
@@ -215,14 +215,14 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
             }
         }
 
-        formEditor = feb.build(getAu());
+        formEditor = feb.build();
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", getAu().resolveSessionMessage("$m{studio.appform.form.design}"), "!fc-formeditor",
+        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.appform.form.design}"), "!fc-formeditor",
                 RendererType.SIMPLE_WIDGET);
-        tsdb.addTabDef("preview", getAu().resolveSessionMessage("$m{studio.appform.form.preview}"),
+        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.appform.form.preview}"),
                 "fc-formpreviewpanel", RendererType.STANDALONE_PANEL);
-        formPreview = new FormPreview(getAu(), formEditor);
+        formPreview = new FormPreview(au(), formEditor);
         final String appletName = null;
         tabSheet = new TabSheet(tsdb.build(),
                 Arrays.asList(new TabSheetItem("formEditor", appletName, formEditor, DESIGN_INDEX, true),
