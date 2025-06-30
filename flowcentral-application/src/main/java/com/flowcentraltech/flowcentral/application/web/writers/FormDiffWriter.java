@@ -94,15 +94,14 @@ public class FormDiffWriter extends AbstractControlWriter {
     }
 
     private void writeDiff(ResponseWriter writer, DiffEntity diffEntity, int depth, boolean original)
-            throws UnifyException {
+            throws UnifyException {    	
         if (!DataUtils.isBlank(diffEntity.getFields())) {
             if (!StringUtils.isBlank(diffEntity.getLabel())) {
                 if (depth == 0) {
                     writer.write("<div class=\"head\">");
                 } else {
                     writer.write("<div class=\"headtab\">");
-                }
-
+                }                
                 writer.writeWithHtmlEscape(diffEntity.getLabel());
                 writer.write("</div>");
             }
@@ -113,11 +112,11 @@ public class FormDiffWriter extends AbstractControlWriter {
             }
 
             writer.write("\">");
-            for (DiffEntityField field : diffEntity.getFields()) {
+            for (DiffEntityField field : diffEntity.getFields()) {            	
                 writer.write("<div class=\"diffrow\">");
 
                 writer.write("<div class=\"difflbl\">");
-                writer.writeWithHtmlEscape(field.getLabel());
+                writer.writeWithHtmlEscape(resolveSessionMessage(field.getLabel()));
                 writer.write(":");
                 writer.write("</div>");
 
