@@ -104,7 +104,7 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
     }
 
     public void commitDesign() throws UnifyException {
-        Dashboard dashboard = getAu().environment().find(Dashboard.class, baseId);
+        Dashboard dashboard = au().environment().find(Dashboard.class, baseId);
         List<DashboardSection> sectionList = Collections.emptyList();
         List<DashboardTile> tileList = Collections.emptyList();
         if (dashboardEditor.getDesign() != null && dashboardEditor.getDesign().getSections() != null) {
@@ -135,12 +135,12 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
 
         dashboard.setSectionList(sectionList);
         dashboard.setTileList(tileList);
-        getAu().environment().updateByIdVersion(dashboard);
+        au().environment().updateByIdVersion(dashboard);
     }
 
     public void newEditor() throws UnifyException {
         DashboardEditor.Builder deb = DashboardEditor.newBuilder(cms, dashboardDef);
-        Dashboard dashboard = getAu().environment().find(Dashboard.class, baseId);
+        Dashboard dashboard = au().environment().find(Dashboard.class, baseId);
         for (DashboardSection dashboardSection : dashboard.getSectionList()) {
             deb.addSection(dashboardSection.getType(), dashboardSection.getHeight());
         }
@@ -150,12 +150,12 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
                     dashboardTile.getChart(), dashboardTile.getSection(), dashboardTile.getIndex());
         }
 
-        dashboardEditor = deb.build(getAu());
+        dashboardEditor = deb.build(au());
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", getAu().resolveSessionMessage("$m{studio.dashboard.form.design}"),
+        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.dashboard.form.design}"),
                 "!fc-dashboardeditor", RendererType.SIMPLE_WIDGET);
-        tsdb.addTabDef("preview", getAu().resolveSessionMessage("$m{studio.dashboard.form.preview}"),
+        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.dashboard.form.preview}"),
                 "fc-dashboardpreviewpanel", RendererType.STANDALONE_PANEL);
         dashboardPreview = new DashboardPreview(dashboardEditor);
 

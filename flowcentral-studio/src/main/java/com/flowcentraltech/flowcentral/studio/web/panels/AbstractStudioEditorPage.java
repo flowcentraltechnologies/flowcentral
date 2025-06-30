@@ -52,7 +52,7 @@ public abstract class AbstractStudioEditorPage {
         return breadCrumbs;
     }
 
-    public final AppletUtilities getAu() {
+    public final AppletUtilities au() {
         return au;
     }
 
