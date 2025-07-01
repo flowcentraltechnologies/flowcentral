@@ -1067,7 +1067,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
-    private IndexedTarget getIndexedTarget() throws UnifyException {
+    @Override
+    protected IndexedTarget getIndexedTarget() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         return getRequestAttribute(boolean.class, IN_WORKFLOW_DRAFT_LOOP_FLAG)
                 ? DataUtils.convert(IndexedTarget.class, applet.removeWorkflowDraftInfo().getRequestTarget())
