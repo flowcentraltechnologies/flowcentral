@@ -57,7 +57,7 @@
 		<sysParameter code="CDN-0013"
 			description="$m{codegeneration.sysparam.snapshotslocalfolder}"
 			editor="!ui-text maxLen:128" type="STRING" editable="true" />
-		<sysParameter code="CDN-0014" defaultVal="false"
+		<sysParameter code="CDN-0014" defaultVal="true"
 			description="$m{codegeneration.sysparam.enablesnapshotslocalfolder}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 	</sysParameters>
