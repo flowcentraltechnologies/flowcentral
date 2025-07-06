@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "helpSheet")
-public class HelpSheetConfig extends BaseRootConfig {
+public class HelpSheetConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String entity;

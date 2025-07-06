@@ -18,12 +18,12 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
- * Convenient abstract base class for named configurations.
+ * Convenient abstract base class for root application configurations.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class BaseRootConfig extends BaseNameConfig {
+public abstract class BaseRootAppConfig extends BaseXmlConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private final String xmlns;
@@ -36,10 +36,16 @@ public abstract class BaseRootConfig extends BaseNameConfig {
 
     private String schemaLocation;
 
-    protected BaseRootConfig(String xsd) {
+    protected BaseRootAppConfig(String xsd) {
         this.xmlns = "http://flowcentraltech.com/schema-common";
         this.xmlnsXsi = "http://www.w3.org/2001/XMLSchema-instance";
         this.xsiSchemaLocation = this.xmlns + " https://schema.flowcentralplatform.com/xsd/" + xsd;
+    }
+
+    protected BaseRootAppConfig() {
+        this.xmlns = null;
+        this.xmlnsXsi = null;
+        this.xsiSchemaLocation = null;
     }
 
     public final String getXmlns() {
@@ -60,6 +66,11 @@ public abstract class BaseRootConfig extends BaseNameConfig {
 
     public void setSchemaLocation(String schemaLocation) {
         this.schemaLocation = schemaLocation;
+    }
+
+    @Override
+    public boolean includeXmlDeclaration() {
+        return true;
     }
 
 }

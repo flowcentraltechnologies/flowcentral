@@ -20,7 +20,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -35,6 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.tcdng.unify.core.UnifyError;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.XmlConfig;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.XmlConfigUtils;
 
@@ -70,20 +70,12 @@ public final class ConfigurationUtils {
         }
     }
 
-    public static void writeConfig(BaseConfig config, OutputStream outputStream) throws UnifyException {
-        try {
-            outputStream.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".getBytes(StandardCharsets.UTF_8));
-            XmlConfigUtils.writeXmlConfig(config, outputStream);
-        } catch (IOException e) {
-        }
+    public static void writeConfig(XmlConfig config, OutputStream outputStream) throws UnifyException {
+        XmlConfigUtils.writeXmlConfig(config, outputStream);
     }
 
-    public static void writeConfigNoEscape(BaseConfig config, OutputStream outputStream) throws UnifyException {
-        try {
-            outputStream.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".getBytes(StandardCharsets.UTF_8));
-            XmlConfigUtils.writeXmlConfigNoEscape(config, outputStream);
-        } catch (IOException e) {
-        }
+    public static void writeConfigNoEscape(XmlConfig config, OutputStream outputStream) throws UnifyException {
+        XmlConfigUtils.writeXmlConfigNoEscape(config, outputStream);
     }
 
     public static String readString(String fileResource, String workingPath) throws UnifyException {

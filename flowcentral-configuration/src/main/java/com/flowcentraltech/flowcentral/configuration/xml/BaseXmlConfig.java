@@ -15,18 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.core.data.XmlConfig;
 
 /**
- * Convenient abstract base class for configurations.
+ * Convenient abstract base class for XML configurations.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class BaseConfig {
+public abstract class BaseXmlConfig extends BaseNameConfig implements XmlConfig {
 
-    @Override
-    public final String toString() {
-        return StringUtils.toXmlString(this);
-    }
 }
