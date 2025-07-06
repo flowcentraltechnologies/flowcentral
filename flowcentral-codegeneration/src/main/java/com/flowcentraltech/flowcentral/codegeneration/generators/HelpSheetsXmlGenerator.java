@@ -78,6 +78,7 @@ public class HelpSheetsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 helpSheetConfig.setEntity(appHelpSheet.getEntity());
                 helpSheetConfig.setLabel(appHelpSheet.getLabel());
                 helpSheetConfig.setHelpOverview(appHelpSheet.getHelpOverview());
+                helpSheetConfig.setClassified(appHelpSheet.isClassified());
 
                 List<HelpEntryConfig> entryList = new ArrayList<HelpEntryConfig>();
                 for (AppHelpEntry entry: appHelpSheet.getEntryList()) {

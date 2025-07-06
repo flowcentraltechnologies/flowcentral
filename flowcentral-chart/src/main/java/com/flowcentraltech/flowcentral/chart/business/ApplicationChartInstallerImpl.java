@@ -92,6 +92,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chart.setFormatYLabels(appChartConfig.isFormatYLabels());
                     chart.setStacked(appChartConfig.isStacked());
                     chart.setSmooth(appChartConfig.isSmooth());
+                    chart.setClassified(appChartConfig.getClassified());
                     chart.setDeprecated(false);
                     chart.setConfigType(ConfigType.STATIC);
                     environment().create(chart);
@@ -114,6 +115,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     oldChart.setFormatYLabels(appChartConfig.isFormatYLabels());
                     oldChart.setStacked(appChartConfig.isStacked());
                     oldChart.setSmooth(appChartConfig.isSmooth());
+                    oldChart.setClassified(appChartConfig.getClassified());
                     oldChart.setDeprecated(false);
                     oldChart.setConfigType(ConfigType.STATIC);
                     environment().updateByIdVersion(oldChart);
@@ -150,6 +152,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chartDataSource.setCategories(
                             InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
                     chartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
+                    chartDataSource.setClassified(appChartDataSourceConfig.getClassified());
                     chartDataSource.setDeprecated(false);
                     chartDataSource.setConfigType(ConfigType.STATIC);
                     environment().create(chartDataSource);
@@ -167,6 +170,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     oldChartDataSource.setCategories(
                             InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
                     oldChartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
+                    oldChartDataSource.setClassified(appChartDataSourceConfig.getClassified());
                     oldChartDataSource.setDeprecated(false);
                     oldChartDataSource.setConfigType(ConfigType.STATIC);
                     environment().updateByIdVersion(oldChartDataSource);
@@ -212,6 +216,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 chart.setFormatYLabels(appChartConfig.isFormatYLabels());
                 chart.setStacked(appChartConfig.isStacked());
                 chart.setSmooth(appChartConfig.isSmooth());
+                chart.setClassified(appChartConfig.getClassified());
                 chart.setDeprecated(false);
                 chart.setConfigType(ConfigType.CUSTOM);
                 environment().create(chart);
@@ -241,6 +246,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 chartDataSource.setCategories(
                         InputWidgetUtils.newAppPropertySequence(appChartDataSourceConfig.getCategories()));
                 chartDataSource.setFieldSequence(newAppFieldSequence(appChartDataSourceConfig.getFieldSequence()));
+                chartDataSource.setClassified(appChartDataSourceConfig.getClassified());
                 chartDataSource.setDeprecated(false);
                 chartDataSource.setConfigType(ConfigType.CUSTOM);
                 environment().create(chartDataSource);

@@ -80,6 +80,7 @@ public class NotificationLargeTextsXmlGenerator extends AbstractResourcesArtifac
                 notifLargeTextConfig.setFontFamily(notifLargeText.getFontFamily());
                 notifLargeTextConfig.setFontSizeInPixels(notifLargeText.getFontSizeInPixels());
                 notifLargeTextConfig.setBody(notifLargeText.getBody());
+                notifLargeTextConfig.setClassified(notifLargeText.isClassified());
 
                 List<NotifLargeTextParamConfig> paramList = new ArrayList<NotifLargeTextParamConfig>();
                 for (NotificationLargeTextParam param : notifLargeText.getParamList()) {

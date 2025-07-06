@@ -4645,6 +4645,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAPI.setSupportDelete(apiConfig.getSupportDelete());
                     appAPI.setSupportRead(apiConfig.getSupportRead());
                     appAPI.setSupportUpdate(apiConfig.getSupportDelete());
+                    appAPI.setClassified(apiConfig.getClassified());
                     appAPI.setDeprecated(false);
                     appAPI.setConfigType(ConfigType.STATIC);
                     environment().create(appAPI);
@@ -4660,6 +4661,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppAPI.setSupportRead(apiConfig.getSupportRead());
                     oldAppAPI.setSupportUpdate(apiConfig.getSupportDelete());
                     oldAppAPI.setConfigType(ConfigType.STATIC);
+                    oldAppAPI.setClassified(apiConfig.getClassified());
                     oldAppAPI.setDeprecated(false);
                     environment().updateByIdVersion(oldAppAPI);
                 }
@@ -4713,6 +4715,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setAssignDescField(appletConfig.getAssignDescField());
                     appApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
                     appApplet.setTitleFormat(appletConfig.getTitleFormat());
+                    appApplet.setClassified(appletConfig.getClassified());
                     appApplet.setDeprecated(false);
                     appApplet.setConfigType(ConfigType.STATIC);
                     populateChildList(appApplet, applicationName, appletConfig, false);
@@ -4737,6 +4740,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
                     oldAppApplet.setTitleFormat(appletConfig.getTitleFormat());
                     oldAppApplet.setConfigType(ConfigType.STATIC);
+                    oldAppApplet.setClassified(appletConfig.getClassified());
                     oldAppApplet.setDeprecated(false);
                     populateChildList(oldAppApplet, applicationName, appletConfig, false);
                     environment().updateByIdVersion(oldAppApplet);
@@ -4773,6 +4777,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
                     appEnumeration.setLabel(enumerationConfig.getLabel());
                     appEnumeration.setDeprecated(false);
+                    appEnumeration.setClassified(enumerationConfig.getClassified());
                     appEnumeration.setConfigType(ConfigType.STATIC);
                     populateChildList(appEnumeration, enumerationConfig);
                     environment().create(appEnumeration);
@@ -4781,6 +4786,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
                     oldAppEnumeration.setLabel(enumerationConfig.getLabel());
                     oldAppEnumeration.setDeprecated(false);
+                    oldAppEnumeration.setClassified(enumerationConfig.getClassified());
                     oldAppEnumeration.setConfigType(ConfigType.STATIC);
                     populateChildList(oldAppEnumeration, enumerationConfig);
                     environment().updateByIdVersion(oldAppEnumeration);
@@ -4812,6 +4818,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appWidgetType.setStretch(widgetTypeConfig.isStretch());
                     appWidgetType.setListOption(widgetTypeConfig.isListOption());
                     appWidgetType.setEnumOption(widgetTypeConfig.isEnumOption());
+                    appWidgetType.setClassified(widgetTypeConfig.getClassified());
                     appWidgetType.setDeprecated(false);
                     appWidgetType.setConfigType(ConfigType.STATIC);
                     environment().create(appWidgetType);
@@ -4825,6 +4832,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldWidgetType.setStretch(widgetTypeConfig.isStretch());
                     oldWidgetType.setListOption(widgetTypeConfig.isListOption());
                     oldWidgetType.setEnumOption(widgetTypeConfig.isEnumOption());
+                    oldWidgetType.setClassified(widgetTypeConfig.getClassified());
                     oldWidgetType.setDeprecated(false);
                     oldWidgetType.setConfigType(ConfigType.STATIC);
                     environment().updateByIdVersion(oldWidgetType);
@@ -4859,6 +4867,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appRef.setFilterGenerator(refConfig.getFilterGenerator());
                     appRef.setFilterGeneratorRule(refConfig.getFilterGeneratorRule());
                     appRef.setFilter(InputWidgetUtils.newAppFilter(refConfig.getFilter()));
+                    appRef.setClassified(refConfig.getClassified());
                     appRef.setDeprecated(false);
                     appRef.setConfigType(ConfigType.STATIC);
                     environment().create(appRef);
@@ -4876,6 +4885,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppRef.setFilterGeneratorRule(refConfig.getFilterGeneratorRule());
                     oldAppRef.setFilter(InputWidgetUtils.newAppFilter(refConfig.getFilter()));
                     oldAppRef.setConfigType(ConfigType.STATIC);
+                    oldAppRef.setClassified(refConfig.getClassified());
                     oldAppRef.setDeprecated(false);
                     environment().updateByIdVersion(oldAppRef);
                 }
@@ -4925,6 +4935,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setAuditable(appEntityConfig.getAuditable());
                     appEntity.setReportable(appEntityConfig.getReportable());
                     appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
+                    appEntity.setClassified(appEntityConfig.getClassified());
                     appEntity.setDeprecated(false);
                     appEntity.setConfigType(ConfigType.STATIC);
                     populateChildList(appEntity, applicationName, appEntityConfig, false);
@@ -4947,6 +4958,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppEntity.setReportable(appEntityConfig.getReportable());
                     oldAppEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                     oldAppEntity.setConfigType(ConfigType.STATIC);
+                    oldAppEntity.setClassified(appEntityConfig.getClassified());
                     oldAppEntity.setDeprecated(false);
                     populateChildList(oldAppEntity, applicationName, appEntityConfig, false);
                     environment().updateByIdVersion(oldAppEntity);
@@ -5020,6 +5032,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setNonConforming(appTableConfig.getNonConforming());
                     appTable.setFixedRows(appTableConfig.getFixedRows());
                     appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
+                    appTable.setClassified(appTableConfig.getClassified());
                     appTable.setDeprecated(false);
                     appTable.setConfigType(ConfigType.STATIC);
                     populateChildList(appTable, applicationName, appTableConfig, false);
@@ -5049,6 +5062,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppTable.setFixedRows(appTableConfig.getFixedRows());
                     oldAppTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     oldAppTable.setConfigType(ConfigType.STATIC);
+                    oldAppTable.setClassified(appTableConfig.getClassified());
                     oldAppTable.setDeprecated(false);
                     populateChildList(oldAppTable, applicationName, appTableConfig, false);
                     environment().updateByIdVersion(oldAppTable);
@@ -5086,6 +5100,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appForm.setTitleFormat(appFormConfig.getTitleFormat());
                     appForm.setName(appFormConfig.getName());
                     appForm.setDescription(description);
+                    appForm.setClassified(appFormConfig.getClassified());
                     appForm.setDeprecated(false);
                     appForm.setConfigType(ConfigType.STATIC);
                     populateChildList(appForm, appFormConfig, applicationId, applicationName, false);
@@ -5104,6 +5119,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppForm.setTitleFormat(appFormConfig.getTitleFormat());
                     oldAppForm.setDescription(description);
                     oldAppForm.setConfigType(ConfigType.STATIC);
+                    oldAppForm.setClassified(appFormConfig.getClassified());
                     oldAppForm.setDeprecated(false);
                     populateChildList(oldAppForm, appFormConfig, applicationId, applicationName, false);
                     environment().updateByIdVersion(oldAppForm);
@@ -5177,6 +5193,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appPropertyRule.setDefaultList(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             propertyRuleConfig.getDefaultList()));
                     appPropertyRule.setIgnoreCase(propertyRuleConfig.isIgnoreCase());
+                    appPropertyRule.setClassified(propertyRuleConfig.getClassified());
                     appPropertyRule.setDeprecated(false);
                     appPropertyRule.setConfigType(ConfigType.STATIC);
                     populateChildList(appPropertyRule, applicationName, propertyRuleConfig, false);
@@ -5194,6 +5211,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             propertyRuleConfig.getDefaultList()));
                     oldAppPropertyRule.setIgnoreCase(propertyRuleConfig.isIgnoreCase());
                     oldAppPropertyRule.setConfigType(ConfigType.STATIC);
+                    oldAppPropertyRule.setClassified(propertyRuleConfig.getClassified());
                     oldAppPropertyRule.setDeprecated(false);
                     populateChildList(oldAppPropertyRule, applicationName, propertyRuleConfig, false);
                     environment().updateByIdVersion(oldAppPropertyRule);
@@ -5250,6 +5268,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAssignmentPage.setBaseField(appAssignmentPageConfig.getBaseField());
                     appAssignmentPage.setRuleDescField(appAssignmentPageConfig.getRuleDescField());
                     appAssignmentPage.setDeprecated(false);
+                    appAssignmentPage.setClassified(appAssignmentPageConfig.getClassified());
                     appAssignmentPage.setConfigType(ConfigType.STATIC);
                     environment().create(appAssignmentPage);
                 } else {
@@ -5282,6 +5301,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppAssignmentPage.setRuleDescField(appAssignmentPageConfig.getRuleDescField());
                     oldAppAssignmentPage.setConfigType(ConfigType.STATIC);
                     oldAppAssignmentPage.setDeprecated(false);
+                    oldAppAssignmentPage.setClassified(appAssignmentPageConfig.getClassified());
                     environment().updateByIdVersion(oldAppAssignmentPage);
                 }
             }
@@ -5310,6 +5330,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appSuggestionType.setDescription(description);
                     appSuggestionType.setParent(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             suggestionTypeConfig.getParent()));
+                    appSuggestionType.setClassified(suggestionTypeConfig.getClassified());
                     appSuggestionType.setDeprecated(false);
                     appSuggestionType.setConfigType(ConfigType.STATIC);
                     environment().create(appSuggestionType);
@@ -5318,6 +5339,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldSuggestionType.setDescription(description);
                     oldSuggestionType.setParent(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             suggestionTypeConfig.getParent()));
+                    oldSuggestionType.setClassified(suggestionTypeConfig.getClassified());
                     oldSuggestionType.setDeprecated(false);
                     oldSuggestionType.setConfigType(ConfigType.STATIC);
                     environment().updateByIdVersion(oldSuggestionType);
@@ -5407,6 +5429,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAPI.setSupportDelete(apiConfig.getSupportDelete());
                     appAPI.setSupportRead(apiConfig.getSupportRead());
                     appAPI.setSupportUpdate(apiConfig.getSupportDelete());
+                    appAPI.setClassified(apiConfig.getClassified());
                     appAPI.setDeprecated(false);
                     appAPI.setConfigType(ConfigType.CUSTOM);
                     environment().create(appAPI);
@@ -5452,6 +5475,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appApplet.setAssignDescField(appletConfig.getAssignDescField());
                 appApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
                 appApplet.setTitleFormat(appletConfig.getTitleFormat());
+                appApplet.setClassified(appletConfig.getClassified());
                 appApplet.setDeprecated(false);
                 appApplet.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appApplet, applicationName, appletConfig, true);
@@ -5482,6 +5506,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEnumeration.setName(enumerationConfig.getName());
                 appEnumeration.setDescription(resolveApplicationMessage(enumerationConfig.getDescription()));
                 appEnumeration.setLabel(resolveApplicationMessage(enumerationConfig.getLabel()));
+                appEnumeration.setClassified(enumerationConfig.getClassified());
                 appEnumeration.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appEnumeration, enumerationConfig);
                 environment().create(appEnumeration);
@@ -5510,6 +5535,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appWidgetType.setStretch(widgetTypeConfig.isStretch());
                 appWidgetType.setListOption(widgetTypeConfig.isListOption());
                 appWidgetType.setEnumOption(widgetTypeConfig.isEnumOption());
+                appWidgetType.setClassified(widgetTypeConfig.getClassified());
                 appWidgetType.setDeprecated(false);
                 appWidgetType.setConfigType(ConfigType.CUSTOM);
                 environment().create(appWidgetType);
@@ -5540,6 +5566,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appRef.setFilterGenerator(refConfig.getFilterGenerator());
                 appRef.setFilterGeneratorRule(refConfig.getFilterGeneratorRule());
                 appRef.setFilter(InputWidgetUtils.newAppFilter(refConfig.getFilter()));
+                appRef.setClassified(refConfig.getClassified());
                 appRef.setDeprecated(false);
                 appRef.setConfigType(ConfigType.CUSTOM);
                 environment().create(appRef);
@@ -5579,6 +5606,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEntity.setReportable(appEntityConfig.getReportable());
                 appEntity.setActionPolicy(appEntityConfig.getActionPolicy());
                 appEntity.setDeprecated(false);
+                appEntity.setClassified(appEntityConfig.getClassified());
                 appEntity.setSchemaUpdateRequired(true);
                 appEntity.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appEntity, applicationName, appEntityConfig, true);
@@ -5647,6 +5675,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appTable.setNonConforming(appTableConfig.getNonConforming());
                 appTable.setFixedRows(appTableConfig.getFixedRows());
                 appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
+                appTable.setClassified(appTableConfig.getClassified());
                 appTable.setDeprecated(false);
                 appTable.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appTable, applicationName, appTableConfig, true);
@@ -5679,6 +5708,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appForm.setTitleFormat(appFormConfig.getTitleFormat());
                 appForm.setName(appFormConfig.getName());
                 appForm.setDescription(description);
+                appForm.setClassified(appFormConfig.getClassified());
                 appForm.setDeprecated(false);
                 appForm.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appForm, appFormConfig, applicationId, applicationName, true);
@@ -5734,6 +5764,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appPropertyRule.setDefaultList(ApplicationNameUtils.ensureLongNameReference(applicationName,
                         propertyRuleConfig.getDefaultList()));
                 appPropertyRule.setIgnoreCase(propertyRuleConfig.isIgnoreCase());
+                appPropertyRule.setClassified(propertyRuleConfig.getClassified());
                 appPropertyRule.setDeprecated(false);
                 appPropertyRule.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appPropertyRule, applicationName, propertyRuleConfig, true);
@@ -5785,7 +5816,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appAssignmentPage.setBaseField(appAssignmentPageConfig.getBaseField());
                 appAssignmentPage.setRuleDescField(appAssignmentPageConfig.getRuleDescField());
                 appAssignmentPage.setDeprecated(false);
-                appAssignmentPage.setConfigType(ConfigType.CUSTOM);
+                appAssignmentPage.setClassified(appAssignmentPageConfig.getClassified());
+               appAssignmentPage.setConfigType(ConfigType.CUSTOM);
                 environment().create(appAssignmentPage);
             }
 
@@ -5808,6 +5840,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appSuggestionType.setDescription(description);
                 appSuggestionType.setParent(ApplicationNameUtils.ensureLongNameReference(applicationName,
                         suggestionTypeConfig.getParent()));
+                appSuggestionType.setClassified(suggestionTypeConfig.getClassified());
                 appSuggestionType.setDeprecated(false);
                 appSuggestionType.setConfigType(ConfigType.CUSTOM);
                 environment().create(appSuggestionType);
@@ -7071,6 +7104,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private void populateChildList(AppPropertyList appPropertyList, String applicationName,
             PropertyListConfig propertyListConfig) throws UnifyException {
+        appPropertyList.setClassified(propertyListConfig.getClassified());
+        
         List<AppPropertySet> itemSet = Collections.emptyList();
         if (!DataUtils.isBlank(propertyListConfig.getPropSetList())) {
             itemSet = new ArrayList<AppPropertySet>();

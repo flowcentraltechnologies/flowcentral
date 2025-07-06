@@ -30,7 +30,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.AppletTypeXmlAd
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class AppletConfig extends BaseNameConfig {
+public class AppletConfig extends BaseClassifiedConfig {
 
     @JsonSerialize(using = AppletTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = AppletTypeXmlAdapter.Deserializer.class)

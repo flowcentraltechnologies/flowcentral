@@ -91,6 +91,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     dashboard.setDescription(description);
                     dashboard.setSections(dashboardConfig.getSections());
                     dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
+                    dashboard.setClassified(dashboardConfig.getClassified());
                     dashboard.setDeprecated(false);
                     dashboard.setConfigType(ConfigType.STATIC);
                     populateChildList(dashboardConfig, dashboard, applicationName, false);
@@ -100,6 +101,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     oldDashboard.setSections(dashboardConfig.getSections());
                     oldDashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
                     oldDashboard.setConfigType(ConfigType.STATIC);
+                    oldDashboard.setClassified(dashboardConfig.getClassified());
                     oldDashboard.setDeprecated(false);
                     populateChildList(dashboardConfig, oldDashboard, applicationName, false);
                     environment().updateByIdVersion(oldDashboard);
@@ -133,6 +135,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                 dashboard.setDescription(description);
                 dashboard.setSections(dashboardConfig.getSections());
                 dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
+                dashboard.setClassified(dashboardConfig.getClassified());
                 dashboard.setDeprecated(false);
                 dashboard.setConfigType(ConfigType.CUSTOM);
                 populateChildList(dashboardConfig, dashboard, applicationName, true);

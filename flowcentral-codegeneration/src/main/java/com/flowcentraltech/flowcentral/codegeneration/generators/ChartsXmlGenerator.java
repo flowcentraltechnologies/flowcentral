@@ -83,7 +83,7 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 appChartConfig.setFormatYLabels(chart.isFormatYLabels());
                 appChartConfig.setStacked(chart.isStacked());
                 appChartConfig.setSmooth(chart.isSmooth());
-
+                appChartConfig.setClassified(chart.isClassified());
                 chartConfigList.add(appChartConfig);
             }
 
@@ -111,6 +111,7 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 appChartDataSourceConfig.setName(chartDataSource.getName());
                 appChartDataSourceConfig.setDescription(ctx.isSnapshotMode() ? chartDataSource.getDescription() :"$m{" + descKey + "}");
                 appChartDataSourceConfig.setEntity(chartDataSource.getEntity());
+                appChartDataSourceConfig.setClassified(chartDataSource.isClassified());
                 appChartDataSourceConfig
                         .setCategoryBase(InputWidgetUtils.getFilterConfig(au(), chartDataSource.getCategoryBase()));
                 appChartDataSourceConfig

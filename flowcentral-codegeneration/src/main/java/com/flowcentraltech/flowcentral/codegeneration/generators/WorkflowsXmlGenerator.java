@@ -110,6 +110,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 workflowConfig.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
                 workflowConfig.setPublished(workflow.isPublished());
                 workflowConfig.setRunnable(workflow.isRunnable());
+                workflowConfig.setClassified(workflow.isClassified());
                 workflowConfig.setDescFormat(workflow.getDescFormat());
                 workflowConfig.setEntity(workflow.getEntity());
 
@@ -328,6 +329,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 wfChannelConfig.setDestination(wfChannel.getDestination());
                 wfChannelConfig.setRule(wfChannel.getRule());
                 wfChannelConfig.setDirection(wfChannel.getDirection());
+                wfChannelConfig.setClassified(wfChannel.isClassified());
                 wfChannelConfigList.add(wfChannelConfig);
             }
 
@@ -361,6 +363,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 wfWizardConfig.setLabel(ctx.isSnapshotMode() ? wfWizard.getLabel() :"$m{" + labelKey + "}");
                 wfWizardConfig.setEntity(wfWizard.getEntity());
                 wfWizardConfig.setSubmitWorkflow(wfWizard.getSubmitWorkflow());
+                wfWizardConfig.setClassified(wfWizard.isClassified());
 
                 // Steps
                 if (!DataUtils.isBlank(wfWizard.getStepList())) {

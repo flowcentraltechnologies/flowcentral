@@ -116,6 +116,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         reportableDefinition.setEntity(entity);
                         reportableDefinition.setTitle(description);
                         reportableDefinition.setDescription(description);
+                        reportableDefinition.setClassified(appEntityConfig.getClassified());
                         reportableDefinition.setDeprecated(false);
                         reportableDefinition.setConfigType(ConfigType.STATIC);
                         populateChildList(appEntityConfig, reportableDefinition);
@@ -125,6 +126,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         oldReportableDefinition.setEntity(entity);
                         oldReportableDefinition.setTitle(description);
                         oldReportableDefinition.setDescription(description);
+                        oldReportableDefinition.setClassified(appEntityConfig.getClassified());
                         oldReportableDefinition.setDeprecated(false);
                         oldReportableDefinition.setConfigType(ConfigType.STATIC);
                         populateChildList(appEntityConfig, oldReportableDefinition);
@@ -190,6 +192,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
                     reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                     reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
+                    reportConfiguration.setClassified(reportConfig.getClassified());
                     reportConfiguration.setDeprecated(false);
                     reportConfiguration.setConfigType(ConfigType.STATIC);
                     populateChildList(reportConfig, reportConfiguration);
@@ -217,6 +220,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     oldReportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
                     oldReportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                     oldReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
+                    oldReportConfiguration.setClassified(reportConfig.getClassified());
                     oldReportConfiguration.setDeprecated(false);
                     oldReportConfiguration.setConfigType(ConfigType.STATIC);
                     populateChildList(reportConfig, oldReportConfiguration);
@@ -258,6 +262,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportableDefinition.setEntity(entity);
                     reportableDefinition.setTitle(description);
                     reportableDefinition.setDescription(description);
+                    reportableDefinition.setClassified(appEntityConfig.getClassified());
                     reportableDefinition.setDeprecated(false);
                     reportableDefinition.setConfigType(ConfigType.CUSTOM);
                     populateChildList(appEntityConfig, reportableDefinition);
@@ -313,6 +318,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
                 reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                 reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
+                reportConfiguration.setClassified(reportConfig.getClassified());
                 reportConfiguration.setDeprecated(false);
                 reportConfiguration.setConfigType(ConfigType.CUSTOM);
                 populateChildList(reportConfig, reportConfiguration);

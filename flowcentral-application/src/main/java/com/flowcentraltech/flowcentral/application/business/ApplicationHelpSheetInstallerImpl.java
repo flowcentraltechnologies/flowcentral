@@ -84,6 +84,7 @@ public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifa
                     appHelpSheet.setEntity(entity);
                     appHelpSheet.setLabel(helpSheetConfig.getLabel());
                     appHelpSheet.setHelpOverview(helpSheetConfig.getHelpOverview());
+                    appHelpSheet.setClassified(helpSheetConfig.getClassified());
                     appHelpSheet.setDeprecated(false);
                     appHelpSheet.setConfigType(ConfigType.STATIC);
                     populateChildList(appHelpSheet, helpSheetConfig);
@@ -93,6 +94,7 @@ public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifa
                     oldAppHelpSheet.setEntity(entity);
                     oldAppHelpSheet.setLabel(helpSheetConfig.getLabel());
                     oldAppHelpSheet.setHelpOverview(helpSheetConfig.getHelpOverview());
+                    oldAppHelpSheet.setClassified(helpSheetConfig.getClassified());
                     oldAppHelpSheet.setDeprecated(false);
                     oldAppHelpSheet.setConfigType(ConfigType.STATIC);
                     populateChildList(oldAppHelpSheet, helpSheetConfig);
@@ -127,6 +129,7 @@ public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifa
                 appHelpSheet.setEntity(entity);
                 appHelpSheet.setLabel(helpSheetConfig.getLabel());
                 appHelpSheet.setHelpOverview(helpSheetConfig.getHelpOverview());
+                appHelpSheet.setClassified(helpSheetConfig.getClassified());
                 appHelpSheet.setDeprecated(false);
                 appHelpSheet.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appHelpSheet, helpSheetConfig);

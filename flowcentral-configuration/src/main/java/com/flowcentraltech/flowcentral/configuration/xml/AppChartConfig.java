@@ -35,7 +35,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartTypeXmlAda
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "chart")
-public class AppChartConfig extends BaseNameConfig {
+public class AppChartConfig extends BaseClassifiedConfig {
 
     @JsonSerialize(using = ChartTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = ChartTypeXmlAdapter.Deserializer.class)
