@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -70,11 +71,19 @@ public final class ConfigurationUtils {
     }
 
     public static void writeConfig(BaseConfig config, OutputStream outputStream) throws UnifyException {
-        XmlConfigUtils.writeXmlConfig(config, outputStream);
+        try {
+            outputStream.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".getBytes(StandardCharsets.UTF_8));
+            XmlConfigUtils.writeXmlConfig(config, outputStream);
+        } catch (IOException e) {
+        }
     }
 
     public static void writeConfigNoEscape(BaseConfig config, OutputStream outputStream) throws UnifyException {
-        XmlConfigUtils.writeXmlConfigNoEscape(config, outputStream);
+        try {
+            outputStream.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".getBytes(StandardCharsets.UTF_8));
+            XmlConfigUtils.writeXmlConfigNoEscape(config, outputStream);
+        } catch (IOException e) {
+        }
     }
 
     public static String readString(String fileResource, String workingPath) throws UnifyException {
