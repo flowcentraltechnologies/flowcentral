@@ -436,6 +436,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 appAssignmentPage.setBaseField(appApplet.getBaseField());
                 appAssignmentPage.setAssignField(appApplet.getAssignField());
                 appAssignmentPage.setRuleDescField(appApplet.getAssignDescField());
+                appAssignmentPage.setClassified(false);
                 appAssignmentPage.setConfigType(ConfigType.CUSTOM);
                 au.application().createAppAssignmentPage(appAssignmentPage);
 

@@ -79,6 +79,7 @@ public class NotificationTemplatesXmlGenerator extends AbstractResourcesArtifact
                 notifTemplateConfig.setEntity(notifTemplate.getEntity());
                 notifTemplateConfig.setSubject(notifTemplate.getSubject());
                 notifTemplateConfig.setBody(notifTemplate.getTemplate());
+                notifTemplateConfig.setClassified(notifTemplate.isClassified());
 
                 List<NotifTemplateParamConfig> paramList = new ArrayList<NotifTemplateParamConfig>();
                 for (NotificationTemplateParam param: notifTemplate.getParamList()) {

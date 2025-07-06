@@ -31,7 +31,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChannelDirectio
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class WfChannelConfig extends BaseNameConfig {
+public class WfChannelConfig extends BaseClassifiedConfig {
 
     @JsonSerialize(using = ChannelDirectionTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = ChannelDirectionTypeXmlAdapter.Deserializer.class)

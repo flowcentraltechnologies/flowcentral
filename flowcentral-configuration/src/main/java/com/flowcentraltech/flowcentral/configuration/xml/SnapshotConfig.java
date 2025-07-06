@@ -31,7 +31,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "snapshot")
-public class SnapshotConfig extends BaseConfig {
+public class SnapshotConfig extends BaseXmlConfig {
 
     @JacksonXmlProperty
     private String applicationCode;
@@ -63,6 +63,11 @@ public class SnapshotConfig extends BaseConfig {
     @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
     @JacksonXmlProperty
     private String snapshotMessage;
+
+    @Override
+    public boolean includeXmlDeclaration() {
+        return true;
+    }
 
     public String getApplicationCode() {
         return applicationCode;

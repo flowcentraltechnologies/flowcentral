@@ -72,6 +72,7 @@ public class DashboardsXmlGenerator extends AbstractStaticModuleArtifactGenerato
                 appDashboardConfig.setDescription(ctx.isSnapshotMode() ? dashboard.getDescription() :"$m{" + descKey + "}");
                 appDashboardConfig.setSections(dashboard.getSections());
                 appDashboardConfig.setAllowSecondaryTenants(dashboard.isAllowSecondaryTenants());
+                appDashboardConfig.setClassified(dashboard.isClassified());
 
                 // Sections
                 if (!DataUtils.isBlank(dashboard.getSectionList())) {

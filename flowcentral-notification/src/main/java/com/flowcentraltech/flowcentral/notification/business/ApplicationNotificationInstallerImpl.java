@@ -95,6 +95,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationTemplate.setEntity(entity);
                     notificationTemplate.setSubject(notifTemplateConfig.getSubject());
                     notificationTemplate.setTemplate(notifTemplateConfig.getBody());
+                    notificationTemplate.setClassified(notifTemplateConfig.getClassified());
                     notificationTemplate.setDeprecated(false);
                     notificationTemplate.setConfigType(ConfigType.STATIC);
                     populateChildList(notificationTemplate, notifTemplateConfig);
@@ -106,6 +107,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     oldNotificationTemplate.setEntity(entity);
                     oldNotificationTemplate.setSubject(notifTemplateConfig.getSubject());
                     oldNotificationTemplate.setTemplate(notifTemplateConfig.getBody());
+                    oldNotificationTemplate.setClassified(notifTemplateConfig.getClassified());
                     oldNotificationTemplate.setDeprecated(false);
                     oldNotificationTemplate.setConfigType(ConfigType.STATIC);
                     populateChildList(oldNotificationTemplate, notifTemplateConfig);
@@ -143,6 +145,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                     notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                     notificationLargeText.setBody(notifLargeTextConfig.getBody());
+                    notificationLargeText.setClassified(notifLargeTextConfig.getClassified());
                     notificationLargeText.setDeprecated(false);
                     notificationLargeText.setConfigType(ConfigType.STATIC);
                     populateChildList(notificationLargeText, notifLargeTextConfig);
@@ -153,6 +156,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     oldNotificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                     oldNotificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                     oldNotificationLargeText.setBody(notifLargeTextConfig.getBody());
+                    oldNotificationLargeText.setClassified(notifLargeTextConfig.getClassified());
                     oldNotificationLargeText.setDeprecated(false);
                     oldNotificationLargeText.setConfigType(ConfigType.STATIC);
                     populateChildList(oldNotificationLargeText, notifLargeTextConfig);
@@ -189,6 +193,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 notificationTemplate.setEntity(entity);
                 notificationTemplate.setSubject(notifTemplateConfig.getSubject());
                 notificationTemplate.setTemplate(notifTemplateConfig.getBody());
+                notificationTemplate.setClassified(notifTemplateConfig.getClassified());
                 notificationTemplate.setDeprecated(false);
                 notificationTemplate.setConfigType(ConfigType.CUSTOM);
                 populateChildList(notificationTemplate, notifTemplateConfig);
@@ -214,6 +219,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 notificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                 notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                 notificationLargeText.setBody(notifLargeTextConfig.getBody());
+                notificationLargeText.setClassified(notifLargeTextConfig.getClassified());
                 notificationLargeText.setDeprecated(false);
                 notificationLargeText.setConfigType(ConfigType.CUSTOM);
                 populateChildList(notificationLargeText, notifLargeTextConfig);

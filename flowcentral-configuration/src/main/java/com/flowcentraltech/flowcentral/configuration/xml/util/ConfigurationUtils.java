@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.tcdng.unify.core.UnifyError;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.XmlConfig;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.XmlConfigUtils;
 
@@ -69,11 +70,11 @@ public final class ConfigurationUtils {
         }
     }
 
-    public static void writeConfig(BaseConfig config, OutputStream outputStream) throws UnifyException {
+    public static void writeConfig(XmlConfig config, OutputStream outputStream) throws UnifyException {
         XmlConfigUtils.writeXmlConfig(config, outputStream);
     }
 
-    public static void writeConfigNoEscape(BaseConfig config, OutputStream outputStream) throws UnifyException {
+    public static void writeConfigNoEscape(XmlConfig config, OutputStream outputStream) throws UnifyException {
         XmlConfigUtils.writeXmlConfigNoEscape(config, outputStream);
     }
 

@@ -15,18 +15,28 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import com.tcdng.unify.core.util.StringUtils;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
- * Convenient abstract base class for configurations.
+ * Convenient abstract base class for XML configurations.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class BaseConfig {
+public abstract class BaseClassifiedConfig extends BaseNameConfig {
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean classified;
 
-    @Override
-    public final String toString() {
-        return StringUtils.toXmlString(this);
+    protected BaseClassifiedConfig() {
+        this.classified = Boolean.FALSE;
+    }
+
+    public Boolean getClassified() {
+        return classified;
+    }
+
+    public void setClassified(Boolean classified) {
+        this.classified = classified;
     }
 }

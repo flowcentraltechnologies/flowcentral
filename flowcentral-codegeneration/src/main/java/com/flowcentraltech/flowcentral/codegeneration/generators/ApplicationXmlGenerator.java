@@ -256,6 +256,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 apiConfig.setSupportDelete(appAPI.getSupportDelete());
                 apiConfig.setSupportRead(appAPI.getSupportRead());
                 apiConfig.setSupportUpdate(appAPI.getSupportUpdate());
+                apiConfig.setClassified(appAPI.isClassified());
 
                 apiList.add(apiConfig);
             }
@@ -294,6 +295,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appletConfig.setAssignDescField(appApplet.getAssignDescField());
                 appletConfig.setPseudoDeleteField(appApplet.getPseudoDeleteField());
                 appletConfig.setTitleFormat(appApplet.getTitleFormat());
+                appletConfig.setClassified(appApplet.isClassified());
 
                 // Properties
                 if (!DataUtils.isBlank(appApplet.getPropList())) {
@@ -405,6 +407,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                     itemList.add(enumerationItemConfig);
                 }
 
+                enumerationConfig.setClassified(appEnumeration.isClassified());
                 enumerationConfig.setItemList(itemList);
                 enumerationList.add(enumerationConfig);
             }
@@ -434,6 +437,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 widgetTypeConfig.setStretch(appWidgetType.isStretch());
                 widgetTypeConfig.setListOption(appWidgetType.isListOption());
                 widgetTypeConfig.setEnumOption(appWidgetType.isEnumOption());
+                widgetTypeConfig.setClassified(appWidgetType.isClassified());
                 widgetTypeList.add(widgetTypeConfig);
             }
 
@@ -462,6 +466,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 refConfig.setFilterGenerator(appRef.getFilterGenerator());
                 refConfig.setFilterGeneratorRule(appRef.getFilterGeneratorRule());
                 refConfig.setFilter(InputWidgetUtils.getFilterConfig(au(), appRef.getFilter()));
+                refConfig.setClassified(appRef.isClassified());
                 refList.add(refConfig);
             }
 
@@ -508,6 +513,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appEntityConfig.setAuditable(appEntity.isAuditable());
                 appEntityConfig.setReportable(appEntity.isReportable());
                 appEntityConfig.setActionPolicy(appEntity.isActionPolicy());
+                appEntityConfig.setClassified(appEntity.isClassified());
 
                 // Fields
                 if (!DataUtils.isBlank(appEntity.getFieldList())) {
@@ -782,6 +788,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appTableConfig.setNonConforming(appTable.isNonConforming());
                 appTableConfig.setFixedRows(appTable.isFixedRows());
                 appTableConfig.setLimitSelectToColumns(appTable.isLimitSelectToColumns());
+                appTableConfig.setClassified(appTable.isClassified());
 
                 // Columns
                 if (!DataUtils.isBlank(appTable.getColumnList())) {
@@ -904,6 +911,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appFormConfig.setConsolidatedState(appForm.getConsolidatedState());
                 appFormConfig.setListingGenerator(appForm.getListingGenerator());
                 appFormConfig.setTitleFormat(appForm.getTitleFormat());
+                appFormConfig.setClassified(appForm.isClassified());
 
                 // Filters
                 if (!DataUtils.isBlank(appForm.getFilterList())) {
@@ -1277,6 +1285,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 propertyListConfig.setName(appPropertyList.getName());
                 propertyListConfig.setDescription(
                         ctx.isSnapshotMode() ? appPropertyList.getDescription() : "$m{" + descKey + "}");
+                propertyListConfig.setClassified(appPropertyList.isClassified());
 
                 // Property sets
                 if (!DataUtils.isBlank(appPropertyList.getItemSet())) {
@@ -1349,6 +1358,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 propertyRuleConfig.setPropValField(appPropertyRule.getPropValField());
                 propertyRuleConfig.setDefaultList(appPropertyRule.getDefaultList());
                 propertyRuleConfig.setIgnoreCase(appPropertyRule.isIgnoreCase());
+                propertyRuleConfig.setClassified(appPropertyRule.isClassified());
 
                 // Property choice
                 if (!DataUtils.isBlank(appPropertyRule.getChoiceList())) {
@@ -1433,6 +1443,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appAssignmentPageConfig.setAssignField(appAssignmentPage.getAssignField());
                 appAssignmentPageConfig.setBaseField(appAssignmentPage.getBaseField());
                 appAssignmentPageConfig.setRuleDescField(appAssignmentPage.getRuleDescField());
+                appAssignmentPageConfig.setClassified(appAssignmentPage.isClassified());
                 assignmentPageList.add(appAssignmentPageConfig);
                 ctx.addMessageGap(StaticMessageCategoryType.ASSIGNMENT_PAGE);
             }
@@ -1456,6 +1467,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 suggestionTypeConfig.setDescription(
                         ctx.isSnapshotMode() ? appSuggestionType.getDescription() : "$m{" + descKey + "}");
                 suggestionTypeConfig.setParent(appSuggestionType.getParent());
+                suggestionTypeConfig.setClassified(appSuggestionType.isClassified());
                 suggestionTypeList.add(suggestionTypeConfig);
             }
 

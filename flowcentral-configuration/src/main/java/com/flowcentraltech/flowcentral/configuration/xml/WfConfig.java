@@ -29,7 +29,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "workflow")
-public class WfConfig extends BaseRootConfig {
+public class WfConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(localName = "steps")
     private WfStepsConfig stepsConfig;

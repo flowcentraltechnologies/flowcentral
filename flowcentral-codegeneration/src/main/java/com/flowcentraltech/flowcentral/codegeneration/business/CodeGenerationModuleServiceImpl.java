@@ -212,7 +212,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
-            String zipFilename = String.format("%s_extension_%s%s", filenamePrefix, smf.format(now), ".zip");
+            String zipFilename = String.format("extension_%s_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
             codeGenerationItem.setFilename(zipFilename);
@@ -286,13 +286,6 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     StaticModuleArtifactGenerator generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-xml-generator");
                     generator.generate(moduleCtx, moduleName, zos);
-
-                    // Generate messages
-//                    addTaskMessage(taskMonitor, "Generating messages for module [{0}]...", moduleName);
-//                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
-//                            "extension-module-messages-generator");
-//                    generator = (StaticModuleArtifactGenerator) getComponent("extension-module-messages-generator");
-//                    generator.generate(moduleCtx, moduleName, zos);
                 }
             }
 
@@ -305,12 +298,10 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
-            final String fileName = String.format("%s_snapshot_%s", filenamePrefix, smf.format(now));
-            String zipFilename = String.format("%s_snapshot_%s%s", filenamePrefix, smf.format(now), ".zip");
-
+            final String name = String.format("snapshot_%s_%s", filenamePrefix, smf.format(now));
             IOUtils.close(zos);
-            return new Snapshot(getApplicationName(), getDeploymentVersion(), getAuxiliaryVersion(), fileName,
-                    zipFilename, baos.toByteArray());
+            return new Snapshot(getApplicationName(), getDeploymentVersion(), getAuxiliaryVersion(), name,
+                    name + ".zip", baos.toByteArray());
         } finally {
             IOUtils.close(zos);
         }

@@ -189,6 +189,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 appAPI.setSupportDelete(Boolean.TRUE);
                 appAPI.setSupportRead(Boolean.TRUE);
                 appAPI.setSupportUpdate(Boolean.TRUE);
+                appAPI.setClassified(false);
 
                 au.environment().create(appAPI);
                 logDebug(taskMonitor, "REST API [{0}] successfully created.", apiName);
