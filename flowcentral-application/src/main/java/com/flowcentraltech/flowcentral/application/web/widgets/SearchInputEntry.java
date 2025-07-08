@@ -173,14 +173,18 @@ public class SearchInputEntry {
     private AbstractInput<?> evalInput(EntityFieldDef entityFieldDef, AbstractInput<?> currentIn)
             throws UnifyException {
         final boolean search = false;
+        final EntityFieldDef _entityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
+                ? entityFieldDef.getResolvedTypeFieldDef()
+                : entityFieldDef;
+
         if (currentIn == null) {
             return InputWidgetUtils.newInput(au, entityFieldDef,
-                    entityFieldDef.isDate() || entityFieldDef.isTimestamp(), search);
+                    _entityFieldDef.isDate() || _entityFieldDef.isTimestamp(), search);
         }
 
         if (fieldChange) {
             AbstractInput<?> newIn = InputWidgetUtils.newInput(au, entityFieldDef,
-                    entityFieldDef.isDate() || entityFieldDef.isTimestamp(), search);
+                    _entityFieldDef.isDate() || _entityFieldDef.isTimestamp(), search);
             if (!newIn.compatible(currentIn)) {
                 return newIn;
             }
