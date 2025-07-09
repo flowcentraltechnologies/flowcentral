@@ -330,6 +330,18 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         if (entityActionResult != null && entityActionResult.isWithTaskResult()) {
             fireEntityActionResultTask(entityActionResult);
         }
+        
+        if (entityActionResult != null) {
+            if (entityActionResult.getSuccessHint() != null) {
+                hintUser(entityActionResult.getSuccessHint() );
+                return;
+            }
+            
+            if (entityActionResult.getFailureHint() != null) {
+                hintUser(MODE.ERROR, entityActionResult.getFailureHint() );
+                return;
+            }
+        }
 
         hintUser("$m{entitysearch.actionappliedto.items.hint}");
     }
