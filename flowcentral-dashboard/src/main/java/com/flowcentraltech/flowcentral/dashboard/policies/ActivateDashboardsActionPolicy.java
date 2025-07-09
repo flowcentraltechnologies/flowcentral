@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.dashboard.policies;
 
+import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardQuery;
 import com.tcdng.unify.core.UnifyException;
@@ -26,6 +27,7 @@ import com.tcdng.unify.core.annotation.Component;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
+@EntityReferences({ "dashboard.dashboard" })
 @Component("activatedashboards-actionpolicy")
 public class ActivateDashboardsActionPolicy extends AbstractDashboardEntityListActionPolicy {
 
