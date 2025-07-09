@@ -2,6 +2,7 @@ package com.flowcentraltech.flowcentral.common.data;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 import com.tcdng.unify.core.criterion.Restriction;
 
@@ -25,6 +26,10 @@ public class Entries {
         return inputs;
     }
 
+    public Set<String> getInputNames() {
+        return inputs != null ? inputs.keySet() : Collections.emptySet();
+    }
+    
     public Object getInput(String name) {
         return inputs != null ? inputs.get(name) : null;
     }
