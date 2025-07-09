@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.common.business.SearchInputRestrictionGenerator;
+import com.flowcentraltech.flowcentral.common.data.Entries;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
@@ -301,34 +301,5 @@ public class SearchEntries {
 
     private String getLabelSuggestion(String fieldName) {
         return labelSuggestion != null ? labelSuggestion.getSuggestedLabel(fieldName) : null;
-    }
-
-    public static class Entries {
-
-        private final Map<String, Object> inputs;
-
-        private final Restriction restriction;
-
-        private Entries(Map<String, Object> inputs, Restriction restriction) {
-            this.inputs = inputs;
-            this.restriction = restriction;
-        }
-
-        private Entries() {
-            this.inputs = Collections.emptyMap();
-            this.restriction = null;
-        }
-
-        public Map<String, Object> getInputs() {
-            return inputs;
-        }
-
-        public Restriction getRestriction() {
-            return restriction;
-        }
-
-        public boolean isWithRestriction() {
-            return restriction != null;
-        }
     }
 }

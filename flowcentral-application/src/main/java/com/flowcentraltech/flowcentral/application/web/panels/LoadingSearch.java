@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.data.Entries;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
@@ -293,7 +294,7 @@ public class LoadingSearch {
     }
 
     public void applySearchEntriesToSearch() throws UnifyException {
-        SearchEntries.Entries entries = searchEntries.getEntries();
+        Entries entries = searchEntries.getEntries();
         Restriction searchRestriction = null;
         if (isWithBaseFilter()) {
             recalcBaseRestriction();            

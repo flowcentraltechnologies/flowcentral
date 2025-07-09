@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.Entries;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.FilterConditionListType;
@@ -506,6 +507,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
         }
     }
 
+    public Entries getEntries() throws UnifyException {
+        return searchEntries.getEntries();
+    }
+    
     public void hideFilterEditor() {
         filterEditorVisible = false;
         filterEditorPinned = false;

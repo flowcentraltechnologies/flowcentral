@@ -316,7 +316,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         if (!StringUtils.isBlank(appTableActionPolicy)) {
             EntitySearch entitySearch = getEntitySearch();
             EntityListActionContext eCtx = new EntityListActionContext(tableWidget.getSelectedItems(),
-                    appTableActionPolicy);
+                    appTableActionPolicy, entitySearch.getEntries());
             EntityListActionResult entityActionResult = entitySearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
             entitySearch.applySearchEntriesToSearch();
