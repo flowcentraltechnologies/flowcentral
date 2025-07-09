@@ -35,7 +35,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component(WorkflowModuleNameConstants.WORKFLOW_WORKITEMS_TABLE_ACTION_POLICY)
+@Component(name = WorkflowModuleNameConstants.WORKFLOW_WORKITEMS_TABLE_ACTION_POLICY, description = "Apply User Actions to Workitems")
 public class WorkItemEntityListActionPolicy extends AbstractWfEntityListActionPolicy {
 
     @Override

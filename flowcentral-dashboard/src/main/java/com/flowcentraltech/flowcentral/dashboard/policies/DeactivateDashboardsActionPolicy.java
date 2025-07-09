@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @EntityReferences({ "dashboard.dashboard" })
-@Component("deactivatedashboards-actionpolicy")
+@Component(name = "deactivatedashboards-actionpolicy", description = "Deactivate Dashboards")
 public class DeactivateDashboardsActionPolicy extends AbstractDashboardEntityListActionPolicy {
 
 	@Override
