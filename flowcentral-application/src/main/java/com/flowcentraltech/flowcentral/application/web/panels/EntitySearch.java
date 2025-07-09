@@ -491,7 +491,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public void applySearchEntriesToSearch() throws UnifyException {
         EntityDef entityDef = searchEntries.getEntityDef();
-        Restriction restriction = searchEntries.getEntries().getRestriction();
+        Restriction restriction = isShowSearch() ? searchEntries.getEntries().getRestriction() : null;
         entityTable.setRequiredCriteriaNotSet(restriction == null && isSearchOnCriteriaOnly());
         applyRestrictionToSearch(entityDef, restriction);
     }
