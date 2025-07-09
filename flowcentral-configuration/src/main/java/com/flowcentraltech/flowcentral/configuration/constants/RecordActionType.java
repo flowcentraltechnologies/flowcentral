@@ -32,6 +32,8 @@ public enum RecordActionType implements EnumConst {
 
     CREATE(
             "C"),
+    CREATEAS(
+            "S"),
     UPDATE(
             "U"),
     UPDATE_ORIGINAL(
@@ -55,8 +57,24 @@ public enum RecordActionType implements EnumConst {
         return UPDATE.code;
     }
 
+    public boolean isCreate() {
+        return CREATE.equals(this);
+    }
+
+    public boolean isCreateAs() {
+        return CREATEAS.equals(this);
+    }
+
+    public boolean isCreateOnly() {
+        return CREATE.equals(this) || CREATEAS.equals(this);
+    }
+
     public boolean isUpdate() {
-        return CREATE.equals(this) || UPDATE.equals(this) || UPDATE_ORIGINAL.equals(this);
+        return CREATE.equals(this) || CREATEAS.equals(this) || UPDATE.equals(this) || UPDATE_ORIGINAL.equals(this);
+    }
+
+    public boolean isUpdateOnly() {
+        return UPDATE.equals(this) || UPDATE_ORIGINAL.equals(this);
     }
 
     public static RecordActionType fromCode(String code) {

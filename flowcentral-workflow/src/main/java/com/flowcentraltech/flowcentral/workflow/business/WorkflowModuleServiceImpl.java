@@ -1801,7 +1801,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 case RECORD_ACTION:
                     if (currWfStepDef.isWithRecordAction()) {
                         switch (currWfStepDef.getRecordActionType()) {
-                            case CREATE: {
+                            case CREATE:
+                            case CREATEAS:{
                                 WorkEntity newInst = entityClassDef.newInst(wfEntityInst);
                                 Long originWorkRecId = (Long) environment().create(newInst);
                                 fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,

@@ -131,6 +131,8 @@ public abstract class AbstractTable<T, U> {
 
     private boolean viewOnly;
 
+    private boolean editable;
+
     private boolean disabled;
 
     private boolean fixedRows;
@@ -183,6 +185,7 @@ public abstract class AbstractTable<T, U> {
         this.highlightedRow = -1;
         this.detailsIndex = -1;
         this.sections = Collections.emptyList();
+        this.editable = true;
     }
 
     public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
@@ -399,11 +402,19 @@ public abstract class AbstractTable<T, U> {
     }
 
     public boolean isViewOnly() {
-        return viewOnly || disabled;
+        return viewOnly || disabled || !editable;
     }
 
     public void setViewOnly(boolean viewOnly) {
         this.viewOnly = viewOnly;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     public boolean isDisabled() {

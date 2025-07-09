@@ -243,11 +243,13 @@ public class SearchEntry implements EntityFieldAttributes {
         }
 
         if (defVal != null && isFieldEntry()) {
-           entityFieldDef = entityDef.getFieldDef(fieldName);
+            entityFieldDef = entityDef.getFieldDef(fieldName);
+            entityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef() ? entityFieldDef.getResolvedTypeFieldDef()
+                    : entityFieldDef;
             if (entityFieldDef.isDate() || entityFieldDef.isTimestamp()) {
                 ((AbstractInput<Object>) getParamInput())
                         .setValue(LingualDateUtils.getDateFromNow(au.getNow(), LingualDateType.fromCode(defVal)));
-            } else { 
+            } else {
                 ((AbstractInput<Object>) getParamInput()).setStringValue(defVal);
             }
         }

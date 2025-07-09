@@ -579,7 +579,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                         standalonePanel = standalonePanel.getStandalonePanel();
                     }
 
-                    final boolean editable = isEditable();
+                    final boolean editable = table.isEditable() && isEditable();
                     final boolean entryMode = table.isEntryMode();
                     for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
                         final boolean useCellEditor = tableColumnDef.isWithCellEditor() && tableColumnDef.isEditable();
