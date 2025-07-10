@@ -100,6 +100,7 @@ import com.tcdng.unify.core.data.StringComposition;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordAutenticationService;
 import com.tcdng.unify.core.security.PasswordGenerator;
+import com.tcdng.unify.core.security.UserProfile;
 import com.tcdng.unify.core.system.UserSessionManager;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.ColorUtils;
@@ -579,9 +580,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throws UnifyException {
         PasswordAutenticationService passwordAuthService = (PasswordAutenticationService) getComponent(
                 PasswordAutenticationService.class);
-        List<String> roleCodes = passwordAuthService.getRoles(userLoginId);
-        if (!DataUtils.isBlank(roleCodes)) {
-            List<Role> roleList = organizationModuleService.findRoles(new RoleQuery().codeIn(roleCodes));
+        UserProfile userProfile = passwordAuthService.getUserProfile(userLoginId);
+        if (!DataUtils.isBlank(userProfile.getRoles())) {
+            List<Role> roleList = organizationModuleService.findRoles(new RoleQuery().codeIn(userProfile.getRoles()));
             if (!DataUtils.isBlank(roleList)) {
                 final List<UserRoleInfo> result = new ArrayList<UserRoleInfo>();
                 final List<Long> branchScopingIdList = organizationModuleService.getCurrentUserBranchIds(userLoginId,

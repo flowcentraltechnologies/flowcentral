@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
+import com.flowcentraltech.flowcentral.common.data.Entries;
 import com.flowcentraltech.flowcentral.common.data.LoadingItems;
 import com.tcdng.unify.common.database.Entity;
 
@@ -35,6 +36,8 @@ public class EntityListActionContext extends AbstractContext {
 
     private List<? extends Entity> instList;
 
+    private Entries entries;
+    
     private String policyName;
 
     private Object result;
@@ -45,7 +48,8 @@ public class EntityListActionContext extends AbstractContext {
         this.policyName = policyName;
     }
 
-    public EntityListActionContext(List<? extends Entity> instList, String policyName) {
+    public EntityListActionContext(List<? extends Entity> instList, String policyName, Entries entries) {
+        this.entries = entries;
         this.loadingItems = Collections.emptyList();
         this.instList = instList;
         this.policyName = policyName;
@@ -65,6 +69,14 @@ public class EntityListActionContext extends AbstractContext {
         return null;
     }
     
+    public Entries getEntries() {
+        return entries;
+    }
+
+    public boolean isWithEntries() {
+        return entries != null;
+    }
+
     public String getPolicyName() {
         return policyName;
     }

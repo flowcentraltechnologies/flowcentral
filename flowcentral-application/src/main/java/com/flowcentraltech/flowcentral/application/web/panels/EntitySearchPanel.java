@@ -316,7 +316,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         if (!StringUtils.isBlank(appTableActionPolicy)) {
             EntitySearch entitySearch = getEntitySearch();
             EntityListActionContext eCtx = new EntityListActionContext(tableWidget.getSelectedItems(),
-                    appTableActionPolicy);
+                    appTableActionPolicy, entitySearch.getEntries());
             EntityListActionResult entityActionResult = entitySearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
             entitySearch.applySearchEntriesToSearch();
@@ -329,6 +329,18 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
     private void handleEntityActionResult(EntityListActionResult entityActionResult) throws UnifyException {
         if (entityActionResult != null && entityActionResult.isWithTaskResult()) {
             fireEntityActionResultTask(entityActionResult);
+        }
+        
+        if (entityActionResult != null) {
+            if (entityActionResult.getSuccessHint() != null) {
+                hintUser(entityActionResult.getSuccessHint() );
+                return;
+            }
+            
+            if (entityActionResult.getFailureHint() != null) {
+                hintUser(MODE.ERROR, entityActionResult.getFailureHint() );
+                return;
+            }
         }
 
         hintUser("$m{entitysearch.actionappliedto.items.hint}");

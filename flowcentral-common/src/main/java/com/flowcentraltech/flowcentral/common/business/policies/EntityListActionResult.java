@@ -30,6 +30,10 @@ public class EntityListActionResult {
 
     private String resultTaskCaption;
 
+    private String successHint;
+
+    private String failureHint;
+
     private Object result;
 
     public EntityListActionResult(EntityListActionContext ctx, TaskSetup resultTaskSetup, String resultTaskCaption) {
@@ -56,5 +60,21 @@ public class EntityListActionResult {
 
     public boolean isWithTaskResult() {
         return resultTaskSetup != null;
+    }
+
+    public String getSuccessHint() {
+        return successHint;
+    }
+
+    public void setSuccessHint(String successHint) {
+        this.successHint = successHint;
+    }
+
+    public String getFailureHint() {
+        return failureHint;
+    }
+
+    public void setFailureHint(String failureHint) {
+        this.failureHint = failureHint;
     }
 }
