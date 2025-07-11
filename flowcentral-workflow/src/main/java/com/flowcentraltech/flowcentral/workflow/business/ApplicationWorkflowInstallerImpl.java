@@ -75,6 +75,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
@@ -92,16 +93,20 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Override
-    public void installApplicationArtifacts(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
-            throws UnifyException {
+    public void installApplicationArtifacts(final TaskMonitor taskMonitor, final InstallationContext ctx,
+            final ApplicationInstall applicationInstall) throws UnifyException {
         final AppConfig applicationConfig = applicationInstall.getApplicationConfig();
         final String applicationName = applicationConfig.getName();
         final Long applicationId = applicationInstall.getApplicationId();
 
         logDebug(taskMonitor, "Executing workflow installer...");
+        final boolean deprecate = ctx.install(applicationName);
         // Install configured workflows
-        environment().updateAll(new WorkflowQuery().applicationId(applicationId).isStatic(),
-                new Update().add("deprecated", Boolean.TRUE));
+        if (deprecate) {
+            environment().updateAll(new WorkflowQuery().applicationId(applicationId).isStatic(),
+                    new Update().add("deprecated", Boolean.TRUE));
+        }
+
         if (applicationConfig.getWorkflowsConfig() != null) {
             if (!DataUtils.isBlank(applicationConfig.getWorkflowsConfig().getWorkflowList())) {
                 for (AppWorkflowConfig applicationWorkflowConfig : applicationConfig.getWorkflowsConfig()
@@ -156,8 +161,11 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
         // Install workflow channels
         logDebug(taskMonitor, "Installing application workflow channels...");
-        environment().updateAll(new WfChannelQuery().applicationId(applicationId).isStatic(),
-                new Update().add("deprecated", Boolean.TRUE));
+        if (deprecate) {
+            environment().updateAll(new WfChannelQuery().applicationId(applicationId).isStatic(),
+                    new Update().add("deprecated", Boolean.TRUE));
+        }
+
         if (applicationConfig.getWfChannelsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getWfChannelsConfig().getChannelList())) {
             WfChannel wfChannel = new WfChannel();
@@ -206,8 +214,11 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
         // Install workflow wizards
         logDebug(taskMonitor, "Installing application workflow form wizards...");
-        environment().updateAll(new WfWizardQuery().applicationId(applicationId).isStatic(),
-                new Update().add("deprecated", Boolean.TRUE));
+        if (deprecate) {
+            environment().updateAll(new WfWizardQuery().applicationId(applicationId).isStatic(),
+                    new Update().add("deprecated", Boolean.TRUE));
+        }
+
         if (applicationConfig.getWorkflowWizardsConfig() != null) {
             if (!DataUtils.isBlank(applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList())) {
                 WfWizard wfWizard = new WfWizard();

@@ -209,9 +209,9 @@ public class ExtensionModuleStaticFileBuilderContext {
 
     public void addMessage(StaticMessageCategoryType category, String key, String val) {
         if (val != null) {
-        for (Map.Entry<String, String> entry : messageReplacements.entrySet()) {
-            val = val.replaceAll(entry.getKey(), entry.getValue());
-        }
+            for (Map.Entry<String, String> entry : messageReplacements.entrySet()) {
+                val = val.replaceAll(entry.getKey(), entry.getValue());
+            }
         } else {
             val = "";
         }

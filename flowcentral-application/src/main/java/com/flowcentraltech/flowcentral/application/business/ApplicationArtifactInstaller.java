@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
@@ -36,13 +37,15 @@ public interface ApplicationArtifactInstaller extends FlowCentralComponent {
      * 
      * @param taskMonitor
      *                           the task monitor
+     * @param ctx
+     *                           installation context
      * @param applicationInstall
      *                           the application install object
      * @throws UnifyException
      *                        if an error occurs
      */
-    void installApplicationArtifacts(TaskMonitor taskMonitor, ApplicationInstall applicationInstall)
-            throws UnifyException;
+    void installApplicationArtifacts(TaskMonitor taskMonitor, InstallationContext ctx,
+            ApplicationInstall applicationInstall) throws UnifyException;
 
     /**
      * Restore custom application artifacts.
