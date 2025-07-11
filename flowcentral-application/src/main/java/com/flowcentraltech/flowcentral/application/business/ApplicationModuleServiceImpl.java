@@ -4571,6 +4571,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final ApplicationInstall applicationInstall) throws UnifyException {
         final AppConfig applicationConfig = applicationInstall.getApplicationConfig();
         final Optional<Long> moduleId = appletUtilities.system().getModuleId(applicationConfig.getModule());
+        String label = resolveApplicationMessage(applicationConfig.getLabel());
         String description = resolveApplicationMessage(applicationConfig.getDescription());
 
         // Applications
@@ -4584,7 +4585,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             application.setModuleId(moduleId.get());
             application.setName(applicationConfig.getName());
             application.setDescription(description);
-            application.setLabel(applicationConfig.getLabel());
+            application.setLabel(label);
             application.setDisplayIndex(applicationConfig.getDisplayIndex());
             application.setDevelopable(applicationConfig.getDevelopable());
             application.setMenuAccess(applicationConfig.getMenuAccess());
@@ -4595,7 +4596,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             logDebug(taskMonitor, "Upgrading application [{0}]...", description);
             oldApplication.setModuleId(moduleId.get());
             oldApplication.setDescription(description);
-            oldApplication.setLabel(applicationConfig.getLabel());
+            oldApplication.setLabel(label);
             oldApplication.setDevelopable(applicationConfig.getDevelopable());
             oldApplication.setMenuAccess(applicationConfig.getMenuAccess());
             oldApplication.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
@@ -4930,7 +4931,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 AppEntity oldAppEntity = environment()
                         .findLean(new AppEntityQuery().applicationId(applicationId).name(appEntityConfig.getName()));
                 description = appEntityConfig.getDescription();
-                String label = appEntityConfig.getLabel();
+                label = appEntityConfig.getLabel();
                 Class<? extends BaseEntity> entityClass = (Class<? extends BaseEntity>) ReflectUtils
                         .classForName(appEntityConfig.getType());
                 String tableName = !StringUtils.isBlank(appEntityConfig.getDelegate()) ? appEntityConfig.getTable()
@@ -5272,7 +5273,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 AppAssignmentPage oldAppAssignmentPage = environment().findLean(new AppAssignmentPageQuery()
                         .applicationId(applicationId).name(appAssignmentPageConfig.getName()));
                 description = resolveApplicationMessage(appAssignmentPageConfig.getDescription());
-                String label = resolveApplicationMessage(appAssignmentPageConfig.getLabel());
+                label = resolveApplicationMessage(appAssignmentPageConfig.getLabel());
                 if (oldAppAssignmentPage == null) {
                     logDebug("Installing new application assignment page [{0}]...", appAssignmentPageConfig.getName());
                     appAssignmentPage.setId(null);
