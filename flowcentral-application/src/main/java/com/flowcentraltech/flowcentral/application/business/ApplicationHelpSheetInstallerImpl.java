@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.HelpEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.HelpSheetConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
@@ -51,19 +52,22 @@ import com.tcdng.unify.core.util.DataUtils;
 public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifactInstaller {
 
     @Override
-    public void installApplicationArtifacts(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
-            throws UnifyException {
+    public void installApplicationArtifacts(final TaskMonitor taskMonitor, final InstallationContext ctx,
+            final ApplicationInstall applicationInstall) throws UnifyException {
         final AppConfig applicationConfig = applicationInstall.getApplicationConfig();
         final Long applicationId = applicationInstall.getApplicationId();
 
         logDebug(taskMonitor, "Executing help sheet installer...");
+        final boolean deprecate = ctx.install(applicationConfig.getName());
         // Install configured help sheets
-        environment().updateAll(new AppHelpSheetQuery().applicationId(applicationId).isStatic(),
-                new Update().add("deprecated", Boolean.TRUE));
+        if (deprecate) {
+            environment().updateAll(new AppHelpSheetQuery().applicationId(applicationId).isStatic(),
+                    new Update().add("deprecated", Boolean.TRUE));
+        }
+
         if (applicationConfig.getHelpSheetsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getHelpSheetsConfig().getHelpSheetList())) {
-            for (AppHelpSheetConfig appHelpSheetConfig : applicationConfig.getHelpSheetsConfig()
-                    .getHelpSheetList()) {
+            for (AppHelpSheetConfig appHelpSheetConfig : applicationConfig.getHelpSheetsConfig().getHelpSheetList()) {
                 HelpSheetInstall helpSheetInstall = getConfigurationLoader()
                         .loadHelpSheetInstallation(appHelpSheetConfig.getConfigFile());
                 // Template
@@ -73,8 +77,8 @@ public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifa
                         helpSheetConfig.getEntity());
                 logDebug(taskMonitor, "Installing configured help sheet [{0}]...", description);
 
-                AppHelpSheet oldAppHelpSheet = environment().findLean(new AppHelpSheetQuery()
-                        .applicationId(applicationId).name(helpSheetConfig.getName()));
+                AppHelpSheet oldAppHelpSheet = environment()
+                        .findLean(new AppHelpSheetQuery().applicationId(applicationId).name(helpSheetConfig.getName()));
 
                 if (oldAppHelpSheet == null) {
                     AppHelpSheet appHelpSheet = new AppHelpSheet();
@@ -166,8 +170,7 @@ public class ApplicationHelpSheetInstallerImpl extends AbstractApplicationArtifa
         return Arrays.asList(new DeletionParams("help sheets", new AppHelpSheetQuery()));
     }
 
-    private void populateChildList(AppHelpSheet appHelpSheet, HelpSheetConfig helpSheetConfig)
-            throws UnifyException {
+    private void populateChildList(AppHelpSheet appHelpSheet, HelpSheetConfig helpSheetConfig) throws UnifyException {
         List<AppHelpEntry> entryList = null;
         if (helpSheetConfig.getEntries() != null && !DataUtils.isBlank(helpSheetConfig.getEntries().getEntryList())) {
             entryList = new ArrayList<AppHelpEntry>();

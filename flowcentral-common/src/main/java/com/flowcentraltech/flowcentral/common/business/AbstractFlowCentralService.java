@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.business.AbstractBusinessService;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.system.HeartbeatManager;
@@ -55,30 +56,30 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     private static final int KEEP_CLUSTER_SAFE_IN_MINUTES = 2;
 
     @Override
-    public final void installFeatures(List<ModuleInstall> moduleInstallList) throws UnifyException {
+    public final void installFeatures(InstallationContext ctx, List<ModuleInstall> moduleInstallList) throws UnifyException {
         for (ModuleInstall moduleInstall : moduleInstallList) {
-            doInstallModuleFeatures(moduleInstall);
+            doInstallModuleFeatures(ctx, moduleInstall);
         }
     }
 
     @Override
     public void clearDefinitionsCache() throws UnifyException {
-        
+
     }
 
     protected final String generateRandomUUID() {
         return UUID.randomUUID().toString();
     }
-    
+
     protected final boolean isEnterprise() throws UnifyException {
-        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(
+                getContainerSetting(String.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
 
     protected final EnvironmentService environment() {
         return environmentService;
     }
-    
+
     @Override
     protected String resolveApplicationMessage(String message, Object... params) throws UnifyException {
         Messages messages = getSessionAttribute(Messages.class,
@@ -104,7 +105,7 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
 
         return new EntityActionResult(ctx);
     }
-    
+
     protected <T> T extractResult(PostResp<T> resp) throws UnifyException {
         if (resp.isError()) {
             throwOperationErrorException(new Exception(resp.getError()));
@@ -125,13 +126,14 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     protected final void exitSystemRestoreMode() throws UnifyException {
         releaseLock(SYSTEM_RESTORE_LOCK);
     }
-    
+
     protected final boolean isStale(Query<? extends Entity> query, VersionedEntityDef baseDef) throws UnifyException {
         final Optional<Long> versionOpt = environment().valueOptional(long.class, "versionNo",
                 query.addEquals("id", baseDef.getId()));
         return !versionOpt.isPresent() || versionOpt.get() > baseDef.getVersion();
     }
-    
-    protected abstract void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException;
+
+    protected abstract void doInstallModuleFeatures(InstallationContext ctx, ModuleInstall moduleInstall)
+            throws UnifyException;
 
 }

@@ -46,6 +46,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplat
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
@@ -60,15 +61,19 @@ import com.tcdng.unify.core.util.DataUtils;
 public class ApplicationNotificationInstallerImpl extends AbstractApplicationArtifactInstaller {
 
     @Override
-    public void installApplicationArtifacts(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
-            throws UnifyException {
+    public void installApplicationArtifacts(final TaskMonitor taskMonitor, final InstallationContext ctx,
+            final ApplicationInstall applicationInstall) throws UnifyException {
         final AppConfig applicationConfig = applicationInstall.getApplicationConfig();
         final Long applicationId = applicationInstall.getApplicationId();
 
         logDebug(taskMonitor, "Executing notification installer...");
+        final boolean deprecate = ctx.install(applicationConfig.getName());
         // Install configured notification templates
-        environment().updateAll(new NotificationTemplateQuery().applicationId(applicationId).isStatic(),
-                new Update().add("deprecated", Boolean.TRUE));
+        if (deprecate) {
+            environment().updateAll(new NotificationTemplateQuery().applicationId(applicationId).isStatic(),
+                    new Update().add("deprecated", Boolean.TRUE));
+        }
+
         if (applicationConfig.getNotifTemplatesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getNotifTemplatesConfig().getNotifTemplateList())) {
             for (AppNotifTemplateConfig applicationNotifTemplateConfig : applicationConfig.getNotifTemplatesConfig()
@@ -117,8 +122,11 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
         }
 
         // Install configured notification large texts
-        environment().updateAll(new NotificationLargeTextQuery().applicationId(applicationId).isStatic(),
-                new Update().add("deprecated", Boolean.TRUE));
+        if (deprecate) {
+            environment().updateAll(new NotificationLargeTextQuery().applicationId(applicationId).isStatic(),
+                    new Update().add("deprecated", Boolean.TRUE));
+        }
+
         if (applicationConfig.getNotifLargeTextsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
             for (AppNotifLargeTextConfig applicationNotifLargeTextConfig : applicationConfig.getNotifLargeTextsConfig()

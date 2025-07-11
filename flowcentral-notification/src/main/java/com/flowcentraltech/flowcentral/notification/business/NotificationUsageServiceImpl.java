@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplat
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 
 /**
  * Default implementation of notification usage service.
@@ -111,7 +112,7 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
 
     }
 }

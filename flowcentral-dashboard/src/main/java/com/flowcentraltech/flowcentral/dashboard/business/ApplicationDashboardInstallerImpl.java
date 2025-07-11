@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTileQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
@@ -67,16 +68,20 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Override
-    public void installApplicationArtifacts(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
-            throws UnifyException {
+    public void installApplicationArtifacts(final TaskMonitor taskMonitor, final InstallationContext ctx,
+            final ApplicationInstall applicationInstall) throws UnifyException {
         final AppConfig applicationConfig = applicationInstall.getApplicationConfig();
         final String applicationName = applicationConfig.getName();
         final Long applicationId = applicationInstall.getApplicationId();
 
         logDebug(taskMonitor, "Executing dashboard installer...");
+        final boolean deprecate = ctx.install(applicationName);
         // Install configured dashboards
-        environment().updateAll(new DashboardQuery().applicationId(applicationId).isStatic(),
-                new Update().add("deprecated", Boolean.TRUE));
+        if (deprecate) {
+            environment().updateAll(new DashboardQuery().applicationId(applicationId).isStatic(),
+                    new Update().add("deprecated", Boolean.TRUE));
+        }
+
         if (applicationConfig.getDashboardsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getDashboardsConfig().getDashboardList())) {
             for (AppDashboardConfig dashboardConfig : applicationConfig.getDashboardsConfig().getDashboardList()) {
@@ -183,10 +188,11 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
         return Arrays.asList(new DeletionParams("dashboards", new DashboardQuery()));
     }
 
-    private void populateChildList(AppDashboardConfig dashboardConfig, Dashboard dashboard, String applicationName, boolean restore)
-            throws UnifyException {
+    private void populateChildList(AppDashboardConfig dashboardConfig, Dashboard dashboard, String applicationName,
+            boolean restore) throws UnifyException {
         List<DashboardSection> sectionList = null;
-        if (dashboardConfig.getSectionList() != null && !DataUtils.isBlank(dashboardConfig.getSectionList().getSectionList())) {
+        if (dashboardConfig.getSectionList() != null
+                && !DataUtils.isBlank(dashboardConfig.getSectionList().getSectionList())) {
             sectionList = new ArrayList<DashboardSection>();
             for (DashboardSectionConfig dashboardSectionConfig : dashboardConfig.getSectionList().getSectionList()) {
                 DashboardSection dashboardSection = new DashboardSection();
@@ -216,14 +222,13 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     dashboardTile.setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
                     dashboardTile.setSection(dashboardTileConfig.getSection());
                     dashboardTile.setIndex(dashboardTileConfig.getIndex());
-                    dashboardTile.setConfigType(restore ? ConfigType.CUSTOM: ConfigType.STATIC);
+                    dashboardTile.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC);
                     tileList.add(dashboardTile);
                 } else {
                     oldDashboardTile.setType(dashboardTileConfig.getType());
                     oldDashboardTile.setChart(ApplicationNameUtils.ensureLongNameReference(applicationName,
                             dashboardTileConfig.getChart()));
-                    oldDashboardTile
-                            .setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
+                    oldDashboardTile.setDescription(resolveApplicationMessage(dashboardTileConfig.getDescription()));
                     oldDashboardTile.setSection(dashboardTileConfig.getSection());
                     oldDashboardTile.setIndex(dashboardTileConfig.getIndex());
                     oldDashboardTile.setConfigType(ConfigType.STATIC);

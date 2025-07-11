@@ -98,6 +98,7 @@ import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.Feature;
 import com.tcdng.unify.core.application.FeatureQuery;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
@@ -701,7 +702,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(final ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall) throws UnifyException {
         installModuleAndSystemParameters(moduleInstall);
     }
 
