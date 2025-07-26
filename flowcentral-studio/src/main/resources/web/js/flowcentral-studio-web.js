@@ -46,7 +46,7 @@ fuxstudio.rigStudioMenu = function(rgp) {
 			evp.uType = _menucat.type;
 
 			ux.addHdl(_id(categoryId + _menucat.index), "click",
-					fuxstudio.smClickHandler, evp);
+					fuxstudio.smClickHdl, evp);
 		}
 	}
 
@@ -64,7 +64,7 @@ fuxstudio.rigStudioMenu = function(rgp) {
 	}
 }
 
-fuxstudio.smClickHandler = function(uEv) {
+fuxstudio.smClickHdl = function(uEv) {
 	const evp = uEv.evp;
 	_id(evp.uSelCtrlId).value = evp.uType;
 	ux.post(uEv);
@@ -783,11 +783,11 @@ fuxstudio.rigTableColumnEditorPanel = function(rgp) {
 	}
 	
 	const evp = {uId:id};
-	ux.addHdl(_id(rgp.pApplyId), "click", fuxstudio.tceApplyHandler, evp);
-	ux.addHdl(_id(rgp.pCancelId), "click", fuxstudio.tceCancelHandler, evp);
+	ux.addHdl(_id(rgp.pApplyId), "click", fuxstudio.tceApplyHdl, evp);
+	ux.addHdl(_id(rgp.pCancelId), "click", fuxstudio.tceCancelHdl, evp);
 }
 
-fuxstudio.tceApplyHandler = function(uEv) {
+fuxstudio.tceApplyHdl = function(uEv) {
 	const tce = _id(uEv.evp.uId);
 	if (tce._evp) {
 		tce.apply();
@@ -796,7 +796,7 @@ fuxstudio.tceApplyHandler = function(uEv) {
 	}
 }
 
-fuxstudio.tceCancelHandler = function(uEv) {
+fuxstudio.tceCancelHdl = function(uEv) {
 	const tce = _id(uEv.evp.uId);
 	tce.hide();
 }
@@ -1119,11 +1119,11 @@ fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 	}
 	
 	const evp = {uId:id};
-	ux.addHdl(_id(rgp.pApplyId), "click", fuxstudio.rceApplyHandler, evp);
-	ux.addHdl(_id(rgp.pCancelId), "click", fuxstudio.rceCancelHandler, evp);
+	ux.addHdl(_id(rgp.pApplyId), "click", fuxstudio.rceApplyHdl, evp);
+	ux.addHdl(_id(rgp.pCancelId), "click", fuxstudio.rceCancelHdl, evp);
 }
 
-fuxstudio.rceApplyHandler = function(uEv) {
+fuxstudio.rceApplyHdl = function(uEv) {
 	const rce = _id(uEv.evp.uId);
 	if (rce._evp) {
 		rce.apply();
@@ -1132,7 +1132,7 @@ fuxstudio.rceApplyHandler = function(uEv) {
 	}
 }
 
-fuxstudio.rceCancelHandler = function(uEv) {
+fuxstudio.rceCancelHdl = function(uEv) {
 	const rce = _id(uEv.evp.uId);
 	rce.hide();
 }
