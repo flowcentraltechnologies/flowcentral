@@ -113,14 +113,11 @@ public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
                         }
 
                         if (expandable && (currVisibleDepth == j)) {
-                            writer.write("<span id=\"").write(cid).write("\" class=\"icon g_fsm\">");
                             if (expanded) {
-                                writer.write(resolveSymbolHtmlHexCode("caret-down"));
+                                writeFontIcon(writer, cid, "icon", "caret-down");
                             } else {
-                                writer.write(resolveSymbolHtmlHexCode("caret-right"));
+                                writeFontIcon(writer, cid, "icon", "caret-right");
                             }
-
-                            writer.write("</span>");
                         }
 
                         writer.write("</td>");

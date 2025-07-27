@@ -49,7 +49,7 @@ public class FormAnnotationWriter extends AbstractControlWriter {
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         FormAnnotationWidget frmAnnotationWidget = (FormAnnotationWidget) widget;
         writer.write("<div");
-        writeTagAttributesWithTrailingExtraStyleClass(writer, frmAnnotationWidget, "g_fsm");
+        writeTagAttributes(writer, frmAnnotationWidget);
         writer.write(">");
 
         List<FormAnnotationDef> formAnnotationDefList = frmAnnotationWidget.getFormAnnotationDef();
@@ -78,9 +78,7 @@ public class FormAnnotationWriter extends AbstractControlWriter {
 
                 if (frmAnnotationDef.isClosable()) {
                     writer.write("<div class=\"cls\" style=\"display:table-cell;\">");
-                    writer.write("<span id=\"").write(cid).write("\" class=\"icon\">");
-                    writer.write(resolveSymbolHtmlHexCode("cross"));
-                    writer.write("</span>");
+                    writeFontIcon(writer, cid, "icon", "cross");
                     writer.write("</div>");
                 }
 

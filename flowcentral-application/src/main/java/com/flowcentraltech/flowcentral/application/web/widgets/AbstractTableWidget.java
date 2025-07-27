@@ -458,7 +458,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (viewCtrl == null) {
             viewCtrl = (Control) addInternalChildWidget(
                     "!ui-button symbol:$s{file} alwaysValueIndex:true styleClass:$e{"
-                            + getUplAttribute(String.class, "viewButtonClass") + " g_fsm} caption:"
+                            + getUplAttribute(String.class, "viewButtonClass") + "} caption:"
                             + "$m{table.row.view} captionBinding:$s{"
                             + getUplAttribute(String.class, "viewButtonCaptionBinding") + "}");
         }
@@ -470,7 +470,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (editCtrl == null) {
             editCtrl = (Control) addInternalChildWidget(
                     "!ui-button symbol:$s{edit} alwaysValueIndex:true styleClass:$e{"
-                            + getUplAttribute(String.class, "editButtonClass") + " g_fsm} caption:"
+                            + getUplAttribute(String.class, "editButtonClass") + "} caption:"
                             + "$m{table.row.edit} captionBinding:$s{"
                             + getUplAttribute(String.class, "editButtonCaptionBinding") + "}");
         }
@@ -481,7 +481,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public UploadControl getUploadCtrl() throws UnifyException {
         if (uploadCtrl == null) {
             uploadCtrl = (UploadControl) addInternalChildWidget("!ui-fileuploadbutton styleClass:$s{"
-                    + getUplAttribute(String.class, "viewButtonClass") + " g_fsm}");
+                    + getUplAttribute(String.class, "viewButtonClass") + "}");
         }
 
         return uploadCtrl;
@@ -844,7 +844,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 String label = actionLabel[i];
                 actionCtrl[i] = (Control) addInternalChildWidget(
                         "!ui-button symbol:$s{file} alwaysValueIndex:true" + resolvePrivilege(actionPrivilege, i) + " styleClass:$e{"
-                                + getUplAttribute(String.class, "actionButtonClass") + " g_fsm} caption:"
+                                + getUplAttribute(String.class, "actionButtonClass") + "} caption:"
                                 + "$s{" + resolveSessionMessage(label) + "}");
             }
         } else {

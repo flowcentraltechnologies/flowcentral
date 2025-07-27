@@ -73,13 +73,13 @@ public class IconBarWriter extends AbstractControlWriter {
             boolean active) throws UnifyException {
         writer.write("<div class=\"");
         writer.write(active ? "ibact" : "ibict");
-        writer.write(" g_fsm\" style=\"display:table-cell;\">");
+        writer.write("\" style=\"display:table-cell;\">");
         writer.write("<div class=\"ibitem");
         if (active) {
             writer.write(vertical ? " ibvert" : " ibhoriz");
         }
         writer.write("\">");
-        writer.write("<span class=\"ibiconcat\">").write(resolveSymbolHtmlHexCode(item.getIcon())).write("</span>");
+        writeFontIcon(writer, "ibiconcat", item.getIcon());
         final String label = serialNo
                 ? resolveSessionMessage("$m{iconbar.serialno.label}", index + 1, resolveSessionMessage(item.getLabel()))
                 : resolveSessionMessage(item.getLabel());

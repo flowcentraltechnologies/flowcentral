@@ -104,7 +104,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         final boolean application = !StringUtils.isBlank(applicationName);
 
         writer.write("<div");
-        writeTagAttributesWithTrailingExtraStyleClass(writer, studioMenuWidget, "g_fsm");
+        writeTagAttributes(writer, studioMenuWidget);
         writer.write("><div class=\"mheader\">");
         writer.write("<span>");
         writer.writeWithHtmlEscape(application ? getSessionMessage("studio.menu.application.components")
@@ -112,13 +112,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         writer.write("</span></div><div class=\"mbody\">");
         if (searchable) {
             // Search
-            writer.write("<div class=\"msearch\"><span class=\"mfil g_fsm\">");
-            writer.write(resolveSymbolHtmlHexCode("filter"));
-            writer.write("</span>");
+            writer.write("<div class=\"msearch\">");
+            writeFontIcon(writer, "mfil", "filter");
             writer.writeStructureAndContent(studioMenuWidget.getSearchCtrl());
-            writer.write("<span class=\"mban g_fsm\" id=\"").write(studioMenuWidget.getClearId()).write("\">");
-            writer.write(resolveSymbolHtmlHexCode("ban"));
-            writer.write("</span>");
+            writeFontIcon(writer, studioMenuWidget.getClearId(), "mban", "ban");
             writer.write("</div>");
         }
 
@@ -164,7 +161,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             }
 
             writer.write("\">");
-            writer.write("<span class=\"symcat\">").write(resolveSymbolHtmlHexCode(category.icon())).write("</span>");
+            writeFontIcon(writer, "symcat", category.icon());
             writer.write("<span class=\"labelcat\">").writeWithHtmlEscape(resolveSessionMessage(category.caption2()))
                     .write("</span>");
             writer.write("</div>");

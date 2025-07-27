@@ -555,7 +555,7 @@ public class TableWriter extends AbstractControlWriter {
                     if (sortable && tabelColumnDef.isSortable()) {
                         writer.write("id = \"").write(columnHeaderId).write(columnIndex).write("\"");
                         if (appendSortedSym = (columnIndex == tableWidget.getSortColumnIndex())) {
-                            writer.write(" class = \"sorted g_fsm\"");
+                            writer.write(" class = \"sorted\"");
                         } else {
                             writer.write(" class = \"sort\"");
                         }
@@ -581,9 +581,9 @@ public class TableWriter extends AbstractControlWriter {
                     if (appendSortedSym) {
                         writer.write("&nbsp;");
                         if (OrderType.ASCENDING.equals(tableWidget.getSortType())) {
-                            writer.write(resolveSymbolHtmlHexCode("caret-up"));
+                            writeFontIcon(writer, "caret-up");
                         } else {
-                            writer.write(resolveSymbolHtmlHexCode("caret-down"));
+                            writeFontIcon(writer, "caret-down");
                         }
                     }
                     writer.write("</span>");
