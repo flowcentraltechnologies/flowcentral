@@ -106,19 +106,15 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
     }
 
     private void writeLabelWithIcon(ResponseWriter writer, AppletDef appletDef, boolean draft) throws UnifyException {
-        writer.write("<span class=\"icon\">");
         final String icon = appletDef.isWithIcon() ? appletDef.getIcon() : "window-maximize";
-        writer.write(resolveSymbolHtmlHexCode(icon));
-        writer.write("</span>");
+        writeFontIcon(writer, "icon", icon);
         writer.write(appletDef.isWithSubApplets() ? "<span class=\"aclm\">" : "<span class=\"acl\">")
                 .writeWithHtmlEscape(draft
                         ? resolveSessionMessage("$m{label.draft.applet}", resolveSessionMessage(appletDef.getLabel()))
                         : resolveSessionMessage(appletDef.getLabel()))
                 .write("</span>");
         if (appletDef.isWithSubApplets()) {
-            writer.write("<span class=\"icon\">");
-            writer.write(resolveSymbolHtmlHexCode("angle-right"));
-            writer.write("</span>");
+            writeFontIcon(writer, "icon", "angle-right");
         }
     }
 
@@ -154,7 +150,7 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
                     writer.writeContextURL(misb, _path);
                     misb.append('"');
 
-                    misb.append(",\"label\":\"").append(_appletDef.getLabel()).append('"');
+                    misb.append(",\"label\":\"").append(resolveSessionMessage(_appletDef.getLabel())).append('"');
 
                     if (_appletDef.isOpenWindow()) {
                         misb.append(",\"isOpenWin\":").append(_appletDef.isOpenWindow());

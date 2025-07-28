@@ -49,7 +49,7 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
         final JsonWriter jsonWriter = new JsonWriter();
         jsonWriter.beginObject();
         writer.write("<div");
-        writeTagAttributesWithTrailingExtraStyleClass(writer, workflowEditorWidget, "g_fsm");
+        writeTagAttributes(writer, workflowEditorWidget);
         writer.write(">");
         jsonWriter.write("editable", !workflowEditor.isReadOnly());
         jsonWriter.beginArray("editTypes");
@@ -92,8 +92,7 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
                         .getListDescription();
                 writer.write("<div class=\"item\" id=\"").write(workflowEditorWidget.getChoiceId()).write(i)
                         .write("\">");
-                writer.write("<span class=\"symcat\">").write(resolveSymbolHtmlHexCode(workflowStepType.icon()))
-                        .write("</span>");
+                writeFontIcon(writer, "symcat", "workflowStepType.icon()");
                 writer.write("<span class=\"labelcat\">").writeWithHtmlEscape(label).write("</span>");
                 writer.write("</div>");
 

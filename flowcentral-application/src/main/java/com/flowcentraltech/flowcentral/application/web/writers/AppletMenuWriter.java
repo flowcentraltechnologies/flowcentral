@@ -71,27 +71,22 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
         if (horizontal) {
             writer.write("<div");
-            writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm");
+            writeTagAttributes(writer, appletMenuWidget);
             writer.write(">");
 
             // Body
             writer.write("<div class=\"hmbody\">");
             if (searchable) {
                 // Search
-                writer.write("<div class=\"hmsearch\"><span class=\"mfil g_fsm\">");
-                writer.write(resolveSymbolHtmlHexCode("filter"));
-                writer.write("</span>");
+                writer.write("<div class=\"hmsearch\">");
+                writeFontIcon(writer, "mfil", "filter");
                 writer.writeStructureAndContent(appletMenuWidget.getSearchCtrl());
-                writer.write("<span class=\"mban g_fsm\" id=\"").write(appletMenuWidget.getClearId()).write("\">");
-                writer.write(resolveSymbolHtmlHexCode("ban"));
-                writer.write("</span>");
+                writeFontIcon(writer, appletMenuWidget.getClearId(), "mban", "ban");
                 writer.write("</div>");
             }
 
             writer.write("<div class=\"hmnav\" id=\"").write(appletMenuWidget.getNavLeftId()).write("\">");;
-            writer.write("<span class=\"g_fsm\">");
-            writer.write(resolveSymbolHtmlHexCode("chevron-left"));
-            writer.write("</span>");
+            writeFontIcon(writer, "chevron-left");
             writer.write("</div>");
 
             writer.write("<div class=\"hmsection\"");
@@ -101,10 +96,8 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             doWriteSectionStructureAndContent(writer, appletMenuWidget, menuSectionId);
             writer.write("</div>");
 
-            writer.write("<div class=\"hmnav\" id=\"").write(appletMenuWidget.getNavRightId()).write("\">");;
-            writer.write("<span class=\"g_fsm\">");
-            writer.write(resolveSymbolHtmlHexCode("chevron-right"));
-            writer.write("</span>");
+            writer.write("<div class=\"hmnav\" id=\"").write(appletMenuWidget.getNavRightId()).write("\">");
+            writeFontIcon(writer, "chevron-right");
             writer.write("</div>");
 
             writer.write("</div>");
@@ -113,7 +106,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             writer.write("</div>");
         } else {
             writer.write("<div");
-            writeTagAttributesWithTrailingExtraStyleClass(writer, appletMenuWidget, "g_fsm");
+            writeTagAttributes(writer, appletMenuWidget);
             writer.write(">");
             // Header
             writer.write("<div class=\"mheader\">");
@@ -121,12 +114,8 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             writer.writeWithHtmlEscape(getSessionMessage("appletmenu.application"));
             writer.write("</span></div>");
             writer.write("<div style=\"display:inline-block;float:right;\">");
-            writer.write("<span id=\"exp_").write(appletMenuWidget.getId()).write("\" class=\"icon\">");
-            writer.write(resolveSymbolHtmlHexCode("plus-square"));
-            writer.write("</span>");
-            writer.write("<span id=\"col_").write(appletMenuWidget.getId()).write("\" class=\"icon\">");
-            writer.write(resolveSymbolHtmlHexCode("minus-square"));
-            writer.write("</span>");
+            writeFontIcon(writer, "exp_" + appletMenuWidget.getId(), "icon", "plus-square");
+            writeFontIcon(writer, "col_" + appletMenuWidget.getId(), "icon", "minus-square");
             writer.write("</div></div>");
             // End header
 
@@ -139,13 +128,10 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             writer.write("<div class=\"mbody\">");
             if (searchable) {
                 // Search
-                writer.write("<div class=\"msearch\"><span class=\"mfil g_fsm\">");
-                writer.write(resolveSymbolHtmlHexCode("filter"));
-                writer.write("</span>");
+                writer.write("<div class=\"msearch\">");
+                writeFontIcon(writer, "mfil", "filter");
                 writer.writeStructureAndContent(appletMenuWidget.getSearchCtrl());
-                writer.write("<span class=\"mban g_fsm\" id=\"").write(appletMenuWidget.getClearId()).write("\">");
-                writer.write(resolveSymbolHtmlHexCode("ban"));
-                writer.write("</span>");
+                writeFontIcon(writer, appletMenuWidget.getClearId(), "mban", "ban");
                 writer.write("</div>");
             }
 
