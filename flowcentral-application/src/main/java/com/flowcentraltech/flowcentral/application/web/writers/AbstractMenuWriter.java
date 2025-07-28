@@ -150,7 +150,7 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
                     writer.writeContextURL(misb, _path);
                     misb.append('"');
 
-                    misb.append(",\"label\":\"").append(_appletDef.getLabel()).append('"');
+                    misb.append(",\"label\":\"").append(resolveSessionMessage(_appletDef.getLabel())).append('"');
 
                     if (_appletDef.isOpenWindow()) {
                         misb.append(",\"isOpenWin\":").append(_appletDef.isOpenWindow());
