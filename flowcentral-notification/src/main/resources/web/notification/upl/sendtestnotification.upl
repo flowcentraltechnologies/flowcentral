@@ -1,0 +1,61 @@
+// UPL template for send test notification page
+// Copyright (c) 2021-2025 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!ui-page caption:$m{notification.sendtestnotification.title} components:$c{basePanel}
+	subCaptionBinding:altSubCaption
+
+// Base panel
+!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{headerBar sendNotificationPanel actionPanel}
+
+// Header
+!ui-panel:headerBar layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom}
+	components:$c{sendNotificationLabel} 
+!ui-label:sendNotificationLabel styleClass:$e{fc-largelabel}
+	caption:$m{notification.sendtestnotification.header.title}
+
+// Send notification panel
+!ui-panel:sendNotificationPanel style:$s{margin-bottom:10px;}
+	layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
+    components:$c{frmType frmEmail frmMobile frmUserloginId}
+!ui-select:frmType caption:$m{notification.sendtestnotification.type} list:$s{notificationtypelist} binding:type
+    eventHandler:$d{!ui-event event:onchange action:$c{switchTypeAct}}
+!ui-text:frmEmail caption:$m{notification.sendtestnotification.email} focus:true
+	binding:email size:48
+    eventHandler:$d{!ui-event event:onenter action:$c{sendNotificationAct}}
+!ui-integertext:frmMobile caption:$m{notification.sendtestnotification.mobile} focus:true
+	binding:mobile size:15 acceptPlus:true
+    eventHandler:$d{!ui-event event:onenter action:$c{sendNotificationAct}}
+!ui-text:frmUserloginId caption:$m{notification.sendtestnotification.user} focus:true
+	binding:userLoginId size:48
+    eventHandler:$d{!ui-event event:onenter action:$c{sendNotificationAct}}
+
+//Validations
+!ui-emailvalidation:frmEmailVal components:$c{frmEmail}
+!ui-mobilevalidation:frmMobileVal components:$c{frmMobile}
+
+// Action panel
+!ui-panel:actionPanel layout:$d{!ui-horizontal } components:$c{sendNotifBtn}
+!ui-button:sendNotifBtn styleClass:$e{fc-actbutton} caption:$m{button.sendnotification}
+	eventHandler:$d{!ui-event event:onclick action:$c{sendNotificationAct}}
+
+// Actions
+!ui-post:switchTypeAct path:$n{/switchType}
+	components:$c{sendNotificationPanel}
+!ui-post:sendNotificationAct path:$n{/sendNotification}
+	validations:$c{frmEmailVal frmMobileVal}
+	components:$c{sendNotificationPanel}
+
+    
