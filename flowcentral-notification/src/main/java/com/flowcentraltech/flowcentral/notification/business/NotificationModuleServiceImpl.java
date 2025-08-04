@@ -701,8 +701,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                     @Override
                     protected boolean stale(NotifType type, NotifChannelDef notifChannelDef) throws Exception {
-                        return (environment().value(long.class, "versionNo", new NotificationChannelQuery()
-                                .id(notifChannelDef.getId())) > notifChannelDef.getVersion());
+                        return isStale(new NotificationChannelQuery(), notifChannelDef);
                     }
 
                     @Override
@@ -719,8 +718,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                     @Override
                     protected boolean stale(String name, NotifChannelDef notifChannelDef) throws Exception {
-                        return (environment().value(long.class, "versionNo", new NotificationChannelQuery()
-                                .id(notifChannelDef.getId())) > notifChannelDef.getVersion());
+                        return isStale(new NotificationChannelQuery(), notifChannelDef);
                     }
 
                     @Override
