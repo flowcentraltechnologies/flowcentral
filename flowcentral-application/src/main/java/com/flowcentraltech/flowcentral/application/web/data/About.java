@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.data;
 
+import java.util.Date;
+
 /**
  * About data object.
  * 
@@ -29,10 +31,17 @@ public class About {
 
     private String applicationVersion;
 
-    public About(String applicationCode, String applicationName, String applicationVersion) {
+    private Date serverDateTime;
+
+    private String serverTimeZone;
+
+    public About(String applicationCode, String applicationName, String applicationVersion, Date serverDateTime,
+            String serverTimeZone) {
         this.applicationCode = applicationCode;
         this.applicationName = applicationName;
         this.applicationVersion = applicationVersion;
+        this.serverDateTime = serverDateTime;
+        this.serverTimeZone = serverTimeZone;
     }
 
     public String getApplicationCode() {
@@ -45,6 +54,14 @@ public class About {
 
     public String getApplicationVersion() {
         return applicationVersion;
+    }
+
+    public Date getServerDateTime() {
+        return serverDateTime;
+    }
+
+    public String getServerTimeZone() {
+        return serverTimeZone;
     }
 
 }
