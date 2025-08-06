@@ -16,7 +16,7 @@
 
 	<!-- System Parameters -->
 	<sysParameters>
-		<sysParameter code="NOT-0001" defaultVal="false"
+		<sysParameter code="NOT-0001" defaultVal="true"
 			description="$m{notification.sysparam.notificationenabled}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" control="true"
 			editable="true" />
