@@ -85,19 +85,13 @@
 					type="STRING" inputWidget="application.textarea" maxLen="256" />
 				<field name="target"
 					label="$m{osmessaging.osmessagingendpoint.target}" type="STRING"
-					inputWidget="application.text" maxLen="64" />
-				<field name="processor"
-					label="$m{osmessaging.osmessagingendpoint.processor}" type="STRING"
-					inputWidget="application.text" maxLen="64" />
-				<field name="userName"
-					label="$m{osmessaging.osmessagingendpoint.username}" type="STRING"
-					inputWidget="application.text" maxLen="64" />
+					inputWidget="application.text" maxLen="32" />
 				<field name="password"
 					label="$m{osmessaging.osmessagingendpoint.password}" type="STRING"
-					inputWidget="application.password" maxLen="64" />
+					inputWidget="application.password" maxLen="32" />
 				<field name="authorization"
 					label="$m{osmessaging.osmessagingendpoint.authorization}" type="STRING"
-					inputWidget="application.textarea" maxLen="512" nullable="true"/>
+					inputWidget="application.textarea" maxLen="128" nullable="true"/>
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="nameUc"
@@ -157,8 +151,6 @@
 					widthRatio="3" />
 				<column field="target" renderWidget="application.text"
 					widthRatio="2"/>
-				<column field="processor" renderWidget="application.text"
-					widthRatio="2"/>
 				<column field="statusDesc" renderWidget="application.text"
 					label="$m{osmessaging.osmessagingendpoint.status}" widthRatio="1" />
 				<column field="createDt" renderWidget="application.datetime"
@@ -206,12 +198,10 @@
 					<section name="targetDetails" columns="TYPE_2"
 						label="$m{osmessaging.osmessagingendpoint.form.section.targetdetails}">
 						<field name="target" column="0" required="true" />
-						<field name="processor" column="0" required="true" />
 						<field name="nodeUrl" column="1" required="true" />
 					</section>
 					<section name="authDetails" columns="TYPE_2"
 						label="$m{osmessaging.osmessagingendpoint.form.section.authdetails}">
-						<field name="userName" column="0" required="true" />
 						<field name="password" column="0" required="true" />
 						<field name="authorization" column="1" required="false" editable="false" />
 					</section>
