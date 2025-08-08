@@ -92,7 +92,7 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
                         .getListDescription();
                 writer.write("<div class=\"item\" id=\"").write(workflowEditorWidget.getChoiceId()).write(i)
                         .write("\">");
-                writeFontIcon(writer, "symcat", "workflowStepType.icon()");
+                writeFontIcon(writer, "symcat", workflowStepType.icon());
                 writer.write("<span class=\"labelcat\">").writeWithHtmlEscape(label).write("</span>");
                 writer.write("</div>");
 
