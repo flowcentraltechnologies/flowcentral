@@ -13,19 +13,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.constants;
+package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
-* OS messaging request header constants.
-* 
-* @author FlowCentral Technologies Limited
-* @since 4.1
-*/
-public interface OSMessagingRequestHeaderConstants {
+ * OS messaging error constants.
+ * 
+ * @author FlowCentral Technologies Limited
+ * @since 4.1
+ */
+public interface OSMessagingErrorConstants {
 
-    String OS_TARGET_APPLICATION = "OS-Target-Application";
+    String AUTHORIZATION_REQUIRED = "GP01";
 
-    String OS_SOURCE_APPLICATION = "OS-Source-Application";
+    String NOT_AUTHORIZED= "GP02";
 
-    String OS_MESSAGING_PROCESSOR = "OS-Messaging-Processor";
+    String PROCESSING_EXCEPTION = "GP03";
+
+    String PROCESSOR_EXCEPTION = "GP04";
+
 }

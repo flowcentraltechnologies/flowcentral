@@ -37,4 +37,8 @@ public class OSMessagingEndpointQuery extends BaseStatusEntityQuery<OSMessagingE
         return (OSMessagingEndpointQuery) addLike("description", description);
     }
 
+    public OSMessagingEndpointQuery target(String target) {
+        return (OSMessagingEndpointQuery) addEquals("target", target);
+    }
+
 }

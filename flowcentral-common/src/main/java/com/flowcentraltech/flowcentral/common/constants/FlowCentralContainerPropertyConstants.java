@@ -36,4 +36,10 @@ public interface FlowCentralContainerPropertyConstants {
 
     String FLOWCENTRAL_APPLICATION_URL = "flowcentral.application.url";
 
+    String FLOWCENTRAL_APPLICATION_OS_APPID = "flowcentral.application.os.appid";
+
+    String FLOWCENTRAL_APPLICATION_OS_VENDORNAME = "flowcentral.application.os.vendorname";
+
+    String FLOWCENTRAL_APPLICATION_OS_VENDORDOMAIN = "flowcentral.application.os.vendordomain";
+
 }

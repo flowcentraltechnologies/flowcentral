@@ -30,11 +30,14 @@ import com.tcdng.unify.core.annotation.Column;
  * @since 4.1
  */
 @Table(name = "FC_OSMESSAGINGASYNC",
-        indexes = { @Index({ "endpoint" }) })
+        indexes = { @Index({ "target" }) })
 public class OSMessagingAsync extends BaseAuditEntity {
 
-    @Column(name = "ENDPOINT_NM", length = 64)
-    private String endpoint;
+    @Column(name = "TARGET", length = 32)
+    private String target;
+
+    @Column(name = "PROCESSOR", length = 64)
+    private String processor;
 
     @Column(name = "ASYNC_MESSAGE", type = ColumnType.CLOB)
     private String message;
@@ -59,15 +62,23 @@ public class OSMessagingAsync extends BaseAuditEntity {
     
     @Override
     public String getDescription() {
-        return this.endpoint;
+        return target + " " + processor;
     }
 
-    public String getEndpoint() {
-        return endpoint;
+    public String getTarget() {
+        return target;
     }
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getProcessor() {
+        return processor;
+    }
+
+    public void setProcessor(String processor) {
+        this.processor = processor;
     }
 
     public String getMessage() {

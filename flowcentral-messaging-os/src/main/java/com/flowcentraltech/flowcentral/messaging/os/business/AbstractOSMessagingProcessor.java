@@ -19,7 +19,7 @@ import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingResponseConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -32,8 +32,6 @@ import com.tcdng.unify.core.util.ReflectUtils;
  */
 public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
         extends AbstractFlowCentralComponent implements OSMessagingProcessor<T, U> {
-
-    protected static final OSMessagingError NO_ERROR = new OSMessagingError();
 
     private final Class<T> responseClass;
 
@@ -58,7 +56,7 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
                 return doProcess(request);
             }
         } catch (Exception e) {
-            error = new OSMessagingError(OSMessagingResponseConstants.PROCESSING_EXCEPTION,
+            error = new OSMessagingError(OSMessagingErrorConstants.PROCESSOR_EXCEPTION,
                     getExceptionMessage(LocaleType.APPLICATION, e));
         }
 

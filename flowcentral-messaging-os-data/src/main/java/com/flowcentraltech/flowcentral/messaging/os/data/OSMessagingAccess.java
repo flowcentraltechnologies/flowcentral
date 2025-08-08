@@ -24,13 +24,11 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  */
 public class OSMessagingAccess {
     
-    private String target;
-    
-    private String source;
+    private final OSMessagingHeader header;
     
     private String authorization;
-    
-    private String processor;
+
+    private String requestId;
     
     private String responseCode;
     
@@ -41,23 +39,17 @@ public class OSMessagingAccess {
     private String requestBody;
     
     private Long runtimeInMilliSec;
-    
-    private String reference;
 
-    public String getTarget() {
-        return target;
+    public OSMessagingAccess(OSMessagingHeader header) {
+        this.header = header;
     }
 
-    public void setTarget(String target) {
-        this.target = target;
+    public OSMessagingAccess() {
+        this.header = null;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
+    public OSMessagingHeader getHeader() {
+        return header;
     }
 
     public String getAuthorization() {
@@ -68,12 +60,12 @@ public class OSMessagingAccess {
         this.authorization = authorization;
     }
 
-    public String getProcessor() {
-        return processor;
+    public String getRequestId() {
+        return requestId;
     }
 
-    public void setProcessor(String processor) {
-        this.processor = processor;
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public String getResponseCode() {
@@ -116,12 +108,8 @@ public class OSMessagingAccess {
         this.runtimeInMilliSec = runtimeInMilliSec;
     }
 
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
+    public boolean isWithHeader() {
+        return header != null;
     }
 
     public boolean isWithAuthorization() {

@@ -8,6 +8,7 @@ package com.flowcentraltech.flowcentral.messaging.os.entities;
 
 import java.util.Date;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
@@ -37,15 +38,12 @@ public class OSMessagingEndpointPolicy extends BaseStatusEntityPolicy {
         super.preUpdate(record, now);
     }
 
-	private void generateEncoded(OSMessagingEndpoint osMessagingEndpoint) throws UnifyException {
-		String userName = osMessagingEndpoint.getUserName();
-		String password = osMessagingEndpoint.getPassword();
-		if (userName != null && password != null) {
-			String basic = userName + ":" + password;
-			String encodedAuthentication = EncodingUtils.getBase64String(basic);
-			osMessagingEndpoint.setAuthorization(encodedAuthentication);
-		} else {
-			osMessagingEndpoint.setAuthorization(null);
-		}
-	}
+    private void generateEncoded(OSMessagingEndpoint osMessagingEndpoint) throws UnifyException {
+        final String userName = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+        final String password = osMessagingEndpoint.getPassword();
+        String basic = userName + ":" + password;
+        String encodedAuthentication = EncodingUtils.getBase64String(basic);
+        osMessagingEndpoint.setAuthorization(encodedAuthentication);
+    }
 }

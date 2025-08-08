@@ -15,13 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpoint;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -33,58 +29,54 @@ import com.tcdng.unify.core.UnifyException;
 public interface OSMessagingModuleService extends FlowCentralService {
 
     /**
-     * Finds messaging endpoints.
-     * 
-     * @param query
-     *              the search criteria
-     * @return list of endpoints
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<OSMessagingEndpoint> findMessagingEndpoints(OSMessagingEndpointQuery query) throws UnifyException;
-    
-    /**
      * Sends synchronous message.
      * 
      * @param respClass
-     *                     the response class
+     *                  the response class
      * @param request
-     *                     the message
-     * @param endpointName
-     *                     the messaging end-point.
+     *                  the message
+     * @param target
+     *                  the messaging target
+     * @param processor
+     *                  the messaging processor
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
     <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            U request, String endpointName) throws UnifyException;
+            U request, String target, String processor) throws UnifyException;
 
     /**
      * Sends asynchronous message.
      * 
      * @param request
-     *                     the message
-     * @param endpointName
-     *                     the messaging end-point.
+     *                  the message
+     * @param target
+     *                  the messaging target
+     * @param processor
+     *                  the messaging processor
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String endpointName) throws UnifyException;
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target, String processor)
+            throws UnifyException;
 
     /**
      * Sends asynchronous message with a delay.
      * 
      * @param request
-     *                     the message
-     * @param endpointName
-     *                     the messaging end-point.
+     *                    the message
+     * @param target
+     *                    the messaging target
+     * @param processor
+     *                    the messaging processor
      * @param delayInSecs
-     *                     the delay in seconds.
+     *                    the delay in seconds.
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String endpointName, long delayInSecs)
-            throws UnifyException;
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target, String processor,
+            long delayInSecs) throws UnifyException;
 }

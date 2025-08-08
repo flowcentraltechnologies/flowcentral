@@ -31,7 +31,8 @@ import com.tcdng.unify.core.annotation.Policy;
 @Table(name = "FC_OSMESSAGINGENDPOINT",
         uniqueConstraints = {
                 @UniqueConstraint({ "name" }),
-                @UniqueConstraint({ "description" }) })
+                @UniqueConstraint({ "description" }),
+                @UniqueConstraint({ "target" }) })
 public class OSMessagingEndpoint extends BaseStatusEntity {
 
     @Column(name = "ENDPOINT_NM", length = 64)
@@ -43,19 +44,13 @@ public class OSMessagingEndpoint extends BaseStatusEntity {
     @Column(name = "NODE_URL", length = 256)
     private String nodeUrl;
 
-    @Column(name = "TARGET", length = 64)
+    @Column(name = "TARGET", length = 32)
     private String target;
 
-    @Column(name = "PROCESSOR", length = 64)
-    private String processor;
-
-    @Column(name = "AUTH_USERNAME", length = 64)
-    private String userName;
-
-    @Column(name = "AUTH_PASSWORD", length = 64)
+    @Column(name = "AUTH_PASSWORD", length = 32)
     private String password;
 
-    @Column(name = "AUTH_BASE64", length = 512, nullable = true)
+    @Column(name = "AUTH_BASE64", length = 128, nullable = true)
     private String authorization;
 
     @Override
@@ -89,22 +84,6 @@ public class OSMessagingEndpoint extends BaseStatusEntity {
 
     public void setTarget(String target) {
         this.target = target;
-    }
-
-    public String getProcessor() {
-        return processor;
-    }
-
-    public void setProcessor(String processor) {
-        this.processor = processor;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getPassword() {

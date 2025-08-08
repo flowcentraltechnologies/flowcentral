@@ -15,22 +15,44 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
+
 /**
- * Abstract base class for OS messaging requests.
+ * OS messaging header.
  * 
  * @author FlowCentral Technologies Limited
- * @since 4.1 
+ * @since 4.1
  */
-public abstract class BaseOSMessagingReq {
+public class OSMessagingHeader {
 
-    private String requestId;
+    private String target;
 
-    public String getRequestId() {
-        return requestId;
+    private String source;
+
+    private String processor;
+
+    private String versionNo;
+
+    public OSMessagingHeader(String target, String source, String processor, String versionNo) {
+        this.target = target;
+        this.source = source;
+        this.processor = processor;
+        this.versionNo = versionNo;
     }
 
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public String getTarget() {
+        return target;
     }
-   
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getProcessor() {
+        return processor;
+    }
+
+    public String getVersionNo() {
+        return versionNo;
+    }
+
 }
