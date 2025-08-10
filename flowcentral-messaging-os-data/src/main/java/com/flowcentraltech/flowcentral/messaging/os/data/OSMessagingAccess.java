@@ -48,6 +48,14 @@ public class OSMessagingAccess {
         return header;
     }
 
+    public String getSource() {
+        return header != null ? header.getSource() : null;
+    }
+
+    public String getProcessor() {
+        return header != null ? header.getProcessor() : null;
+    }
+
     public String getResponseCode() {
         return responseCode;
     }
