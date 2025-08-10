@@ -146,7 +146,7 @@
 			type="com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync"
 			auditable="true" reportable="true">
 			<fields>
-				<field name="endpoint"
+				<field name="target"
 					label="$m{osmessaging.osmessagingasync.endpoint}" type="STRING"
 					inputWidget="osmessaging.endpointlist" maxLen="64" basicSearch="true" />
 				<field name="message"
@@ -219,7 +219,7 @@
 			entity="osMessagingAsync" itemsPerPage="20" serialNo="true"
 			basicSearch="true">
 			<columns>
-				<column field="endpoint" renderWidget="application.name"
+				<column field="target" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="nextAttemptOn" renderWidget="application.text"
 					widthRatio="1" />
@@ -290,7 +290,7 @@
 					contentType="MINIFORM">
 					<section name="osMessagingAsyncDetails" columns="TYPE_2"
 						label="$m{osmessaging.osmessagingasync.form.section.basicdetails}">
-						<field name="endpoint" column="0" required="true" />
+						<field name="target" column="0" required="true" />
 						<field name="message" column="1" required="true" />
 					</section>
 					<section name="processingDetails" columns="TYPE_2"
