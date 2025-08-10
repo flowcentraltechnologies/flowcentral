@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.messaging.os.business;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -28,6 +29,17 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface OSMessagingModuleService extends FlowCentralService {
 
+    /**
+     * Gets OS messaging header based on supplied authorization.
+     * 
+     * @param authorization
+     *                      the authorization
+     * @return the OS messaging header
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException;
+    
     /**
      * Sends synchronous message.
      * 

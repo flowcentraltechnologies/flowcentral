@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
-import java.util.Optional;
-
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAccess;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
@@ -31,15 +29,14 @@ import com.tcdng.unify.core.UnifyException;
 public interface OSMessagingAccessManager extends  FlowCentralService {
 
     /**
-     * Checks if application has messaging access.
+     * Checks processor access by looking at supplied messaging header.
      * 
-     * @param authorization
-     *                      the authorization token
-     * @return response the corresponding header
+     * @param header
+     *                      the header
      * @throws UnifyException
-     *                        if an error occurs
+     *                        if check access failed. if an error occurs
      */
-    Optional<OSMessagingHeader> resolveAccess(String authorization) throws UnifyException;
+    void checkAccess(OSMessagingHeader header) throws UnifyException;
 
     /**
      * Logs messaging access.
@@ -50,17 +47,5 @@ public interface OSMessagingAccessManager extends  FlowCentralService {
      *                        if an error occurs
      */
     void logAccess(OSMessagingAccess access) throws UnifyException;
-    
-    /**
-     * Gets target authorization.
-     * 
-     * @param target
-     *                  the target OS application ID
-     * @param processor
-     *                  the target processor
-     * @return the authorization
-     * @throws UnifyException
-     *                        if not authorized. if an error occurs
-     */
-    String getTargetAuthorization(String target, String processor) throws UnifyException;
+
 }

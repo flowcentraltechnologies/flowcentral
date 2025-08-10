@@ -26,13 +26,14 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface OSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> extends FlowCentralComponent {
-     
+public interface OSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
+        extends FlowCentralComponent {
+
     /**
      * Gets the processor request class.
      */
     Class<? extends BaseOSMessagingReq> getRequestClass();
-    
+
     /**
      * Processes a gateway request.
      * 

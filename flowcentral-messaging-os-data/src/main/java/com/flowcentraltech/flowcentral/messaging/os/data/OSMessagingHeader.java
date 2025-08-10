@@ -24,23 +24,16 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  */
 public class OSMessagingHeader {
 
-    private String target;
-
     private String source;
 
     private String processor;
+    
+    private long versionNo;
 
-    private String versionNo;
-
-    public OSMessagingHeader(String target, String source, String processor, String versionNo) {
-        this.target = target;
+    public OSMessagingHeader(String source, String processor, long versionNo) {
         this.source = source;
         this.processor = processor;
         this.versionNo = versionNo;
-    }
-
-    public String getTarget() {
-        return target;
     }
 
     public String getSource() {
@@ -51,7 +44,7 @@ public class OSMessagingHeader {
         return processor;
     }
 
-    public String getVersionNo() {
+    public long getVersionNo() {
         return versionNo;
     }
 

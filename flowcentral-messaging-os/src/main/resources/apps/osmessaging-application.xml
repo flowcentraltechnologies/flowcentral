@@ -8,33 +8,49 @@
 	description="$m{osmessaging.short.description}"
 	label="$m{osmessaging.label}" module="osmessaging">
 	<!-- Widgets -->
-	<widgetTypes>
-		<widgetType name="endpointlist"
-			description="$m{osmessaging.widgettype.endpointlist}"
-			dataType="STRING" inputType="STRING"
-			editor="!ui-select blankOption:$s{} list:osmessagingendpointlist listKey:$s{name}"
-			renderer="!ui-label" />
-	</widgetTypes>
+
 	<!-- Applets -->
 	<applets>
-		<applet name="manageOSMessagingEndpoint"
-			description="$m{osmessaging.osmessagingendpoint.manage}"
-			label="$m{osmessaging.osmessagingendpoint.manage.label}" icon="ethernet"
-			type="MANAGE_ENTITYLIST" entity="osMessagingEndpoint"
+		<applet name="manageOSMessagingTarget"
+			description="$m{osmessaging.osmessagingtarget.manage}"
+			label="$m{osmessaging.osmessagingtarget.manage.label}" icon="ethernet"
+			type="MANAGE_ENTITYLIST" entity="osMessagingTarget"
 			menuAccess="true">
 			<properties>
 				<property name="searchTable"
-					value="osMessagingEndpointTable" />
+					value="osMessagingTargetTable" />
 				<property name="searchTable.new" value="true" />
 				<property name="searchTable.report" value="true" />
 				<property name="searchTable.quickFilter" value="true" />
 				<property name="searchTable.basicSearchOnly" value="true" />
-				<property name="createForm" value="osMessagingEndpointForm" />
+				<property name="createForm" value="osMessagingTargetForm" />
 				<property name="createForm.save" value="true" />
 				<property name="createForm.save.next" value="true" />
 				<property name="createForm.save.close" value="true" />
 				<property name="maintainForm"
-					value="osMessagingEndpointForm" />
+					value="osMessagingTargetForm" />
+				<property name="maintainForm.update" value="true" />
+				<property name="maintainForm.delete" value="true" />
+			</properties>
+		</applet>
+		<applet name="manageOSMessagingSource"
+			description="$m{osmessaging.osmessagingsource.manage}"
+			label="$m{osmessaging.osmessagingsource.manage.label}" icon="ethernet"
+			type="MANAGE_ENTITYLIST" entity="osMessagingSource"
+			menuAccess="true">
+			<properties>
+				<property name="searchTable"
+					value="osMessagingSourceTable" />
+				<property name="searchTable.new" value="true" />
+				<property name="searchTable.report" value="true" />
+				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.basicSearchOnly" value="true" />
+				<property name="createForm" value="osMessagingSourceForm" />
+				<property name="createForm.save" value="true" />
+				<property name="createForm.save.next" value="true" />
+				<property name="createForm.save.close" value="true" />
+				<property name="maintainForm"
+					value="osMessagingSourceForm" />
 				<property name="maintainForm.update" value="true" />
 				<property name="maintainForm.delete" value="true" />
 			</properties>
@@ -59,46 +75,68 @@
 	</applets>
 	<!-- References -->
 	<references>
-		<reference name="osMessagingEndpointRef"
-			description="$m{osmessaging.osmessagingendpoint.reference}"
-			entity="osMessagingEndpoint" searchField="description" />
+		<reference name="osMessagingTargetRef"
+			description="$m{osmessaging.osmessagingtarget.reference}"
+			entity="osMessagingTarget" searchField="description" />
+		<reference name="osMessagingSourceRef"
+			description="$m{osmessaging.osmessagingsource.reference}"
+			entity="osMessagingSource" searchField="description" />
 		<reference name="osMessagingAsyncRef"
 			description="$m{osmessaging.osmessagingasync.reference}"
 			entity="osMessagingAsync" searchField="endpoint" />
 	</references>
 	<!-- Entities -->
 	<entities>
-		<entity name="osMessagingEndpoint"
-			description="$m{osmessaging.osmessagingendpoint}"
-			label="$m{osmessaging.osmessagingendpoint.label}"
-			type="com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpoint"
+		<entity name="osMessagingTarget"
+			description="$m{osmessaging.osmessagingtarget}"
+			label="$m{osmessaging.osmessagingtarget.label}"
+			type="com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTarget"
 			auditable="true" reportable="true">
 			<fields>
 				<field name="name"
-					label="$m{osmessaging.osmessagingendpoint.name}" type="STRING"
+					label="$m{osmessaging.osmessagingtarget.name}" type="STRING"
 					inputWidget="application.name" maxLen="64" basicSearch="true" />
 				<field name="description"
-					label="$m{osmessaging.osmessagingendpoint.description}" type="STRING"
+					label="$m{osmessaging.osmessagingtarget.description}" type="STRING"
 					inputWidget="application.text" maxLen="128" />
-				<field name="nodeUrl"
-					label="$m{osmessaging.osmessagingendpoint.nodeurl}"
+				<field name="targetUrl"
+					label="$m{osmessaging.osmessagingtarget.targeturl}"
 					type="STRING" inputWidget="application.textarea" maxLen="256" />
-				<field name="target"
-					label="$m{osmessaging.osmessagingendpoint.target}" type="STRING"
-					inputWidget="application.text" maxLen="32" />
 				<field name="password"
-					label="$m{osmessaging.osmessagingendpoint.password}" type="STRING"
+					label="$m{osmessaging.osmessagingtarget.password}" type="STRING"
 					inputWidget="application.password" maxLen="32" />
-				<field name="authorization"
-					label="$m{osmessaging.osmessagingendpoint.authorization}" type="STRING"
-					inputWidget="application.textarea" maxLen="128" nullable="true"/>
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="nameUc"
-					description="$m{osmessaging.osmessagingendpoint.uc.name}"
+					description="$m{osmessaging.osmessagingtarget.uc.name}"
 					fieldList="name" />
 				<uniqueConstraint name="descUc"
-					description="$m{osmessaging.osmessagingendpoint.uc.description}"
+					description="$m{osmessaging.osmessagingtarget.uc.description}"
+					fieldList="description" />
+			</uniqueConstraints>
+		</entity>
+		<entity name="osMessagingSource"
+			description="$m{osmessaging.osmessagingsource}"
+			label="$m{osmessaging.osmessagingsource.label}"
+			type="com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSource"
+			auditable="true" reportable="true">
+			<fields>
+				<field name="name"
+					label="$m{osmessaging.osmessagingsource.name}" type="STRING"
+					inputWidget="application.name" maxLen="64" basicSearch="true" />
+				<field name="description"
+					label="$m{osmessaging.osmessagingsource.description}" type="STRING"
+					inputWidget="application.text" maxLen="128" />
+				<field name="password"
+					label="$m{osmessaging.osmessagingsource.password}" type="STRING"
+					inputWidget="application.password" maxLen="32" />
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="nameUc"
+					description="$m{osmessaging.osmessagingsource.uc.name}"
+					fieldList="name" />
+				<uniqueConstraint name="descUc"
+					description="$m{osmessaging.osmessagingsource.uc.description}"
 					fieldList="description" />
 			</uniqueConstraints>
 		</entity>
@@ -137,22 +175,38 @@
 	</entities>
 	<!-- Tables -->
 	<tables>
-		<table name="osMessagingEndpointTable"
-			description="$m{osmessaging.osmessagingendpoint.table}"
-			label="$m{osmessaging.osmessagingendpoint.table.label}"
-			entity="osMessagingEndpoint" itemsPerPage="20" serialNo="true"
+		<table name="osMessagingTargetTable"
+			description="$m{osmessaging.osmessagingtarget.table}"
+			label="$m{osmessaging.osmessagingtarget.table.label}"
+			entity="osMessagingTarget" itemsPerPage="20" serialNo="true"
 			basicSearch="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="2" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
-					widthRatio="2" />
-				<column field="nodeUrl" renderWidget="application.text"
+					widthRatio="4" />
+				<column field="targetUrl" renderWidget="application.text"
 					widthRatio="3" />
-				<column field="target" renderWidget="application.text"
-					widthRatio="2"/>
 				<column field="statusDesc" renderWidget="application.text"
-					label="$m{osmessaging.osmessagingendpoint.status}" widthRatio="1" />
+					label="$m{osmessaging.osmessagingtarget.status}" widthRatio="1" />
+				<column field="createDt" renderWidget="application.datetime"
+					widthRatio="2" order="DESC" />
+				<column field="updateDt" renderWidget="application.datetime"
+					widthRatio="2" />
+			</columns>
+		</table>
+		<table name="osMessagingSourceTable"
+			description="$m{osmessaging.osmessagingsource.table}"
+			label="$m{osmessaging.osmessagingsource.table.label}"
+			entity="osMessagingSource" itemsPerPage="20" serialNo="true"
+			basicSearch="true">
+			<columns>
+				<column field="name" renderWidget="application.name"
+					widthRatio="2" linkAct="maintainAct" />
+				<column field="description" renderWidget="application.text"
+					widthRatio="4" />
+				<column field="statusDesc" renderWidget="application.text"
+					label="$m{osmessaging.osmessagingsource.status}" widthRatio="1" />
 				<column field="createDt" renderWidget="application.datetime"
 					widthRatio="2" order="DESC" />
 				<column field="updateDt" renderWidget="application.datetime"
@@ -182,28 +236,45 @@
 	</tables>
 	<!-- Forms -->
 	<forms>
-		<form name="osMessagingEndpointForm"
-			description="$m{osmessaging.osmessagingendpoint.form}"
-			entity="osMessagingEndpoint">
+		<form name="osMessagingTargetForm"
+			description="$m{osmessaging.osmessagingtarget.form}"
+			entity="osMessagingTarget">
 			<tabs>
 				<tab name="basicDetails"
-					label="$m{osmessaging.osmessagingendpoint.form.basicdetails}"
+					label="$m{osmessaging.osmessagingtarget.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="osMessagingEndpointDetails" columns="TYPE_2"
-						label="$m{osmessaging.osmessagingendpoint.form.section.basicdetails}">
+					<section name="osMessagingTargetDetails" columns="TYPE_2"
+						label="$m{osmessaging.osmessagingtarget.form.section.basicdetails}">
 						<field name="name" column="0" required="true" />
 						<field name="description" column="0" required="true" />
 						<field name="status" column="1" required="true" />
 					</section>
 					<section name="targetDetails" columns="TYPE_2"
-						label="$m{osmessaging.osmessagingendpoint.form.section.targetdetails}">
-						<field name="target" column="0" required="true" />
-						<field name="nodeUrl" column="1" required="true" />
+						label="$m{osmessaging.osmessagingtarget.form.section.targetdetails}">
+						<field name="targetUrl" column="0" required="true" />
+						<field name="password" column="1" required="true" />
+					</section>
+				</tab>
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
+		</form>
+		<form name="osMessagingSourceForm"
+			description="$m{osmessaging.osmessagingsource.form}"
+			entity="osMessagingSource">
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{osmessaging.osmessagingsource.form.basicdetails}"
+					contentType="MINIFORM">
+					<section name="osMessagingSourceDetails" columns="TYPE_2"
+						label="$m{osmessaging.osmessagingsource.form.section.basicdetails}">
+						<field name="name" column="0" required="true" />
+						<field name="description" column="0" required="true" />
+						<field name="status" column="1" required="true" />
 					</section>
 					<section name="authDetails" columns="TYPE_2"
-						label="$m{osmessaging.osmessagingendpoint.form.section.authdetails}">
+						label="$m{osmessaging.osmessagingsource.form.section.authdetails}">
 						<field name="password" column="0" required="true" />
-						<field name="authorization" column="1" required="false" editable="false" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"

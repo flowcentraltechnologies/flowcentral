@@ -18,27 +18,23 @@ package com.flowcentraltech.flowcentral.messaging.os.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 
 /**
- * OS messaging end-point query.
+ * OS messaging target query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class OSMessagingEndpointQuery extends BaseStatusEntityQuery<OSMessagingEndpoint> {
+public class OSMessagingTargetQuery extends BaseStatusEntityQuery<OSMessagingTarget> {
 
-    public OSMessagingEndpointQuery() {
-        super(OSMessagingEndpoint.class);
+    public OSMessagingTargetQuery() {
+        super(OSMessagingTarget.class);
     }
 
-    public OSMessagingEndpointQuery name(String name) {
-        return (OSMessagingEndpointQuery) addEquals("name", name);
+    public OSMessagingTargetQuery name(String name) {
+        return (OSMessagingTargetQuery) addEquals("name", name);
     }
 
-    public OSMessagingEndpointQuery descriptionLike(String description) {
-        return (OSMessagingEndpointQuery) addLike("description", description);
-    }
-
-    public OSMessagingEndpointQuery target(String target) {
-        return (OSMessagingEndpointQuery) addEquals("target", target);
+    public OSMessagingTargetQuery descriptionLike(String description) {
+        return (OSMessagingTargetQuery) addLike("description", description);
     }
 
 }

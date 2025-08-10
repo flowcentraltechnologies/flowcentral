@@ -15,9 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
-import java.util.Optional;
-
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessManager;
+import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingModuleService;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingProcessor;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
@@ -34,7 +33,6 @@ import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractPlainJsonController;
 import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
-import com.tcdng.unify.web.http.HttpRequestHeaders;
 
 /**
  * OS Messaging Controller.
@@ -46,6 +44,9 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
 public class OSMessagingController extends AbstractPlainJsonController {
 
     @Configurable
+    private OSMessagingModuleService osMessagingModuleService;
+
+    @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
     @SuppressWarnings("unchecked")
@@ -55,40 +56,38 @@ public class OSMessagingController extends AbstractPlainJsonController {
         OSMessagingAccess access = null;
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
-        HttpRequestHeaders headers = getHttpRequestHeaders();
-        final String authorization = headers.getHeader(HttpRequestHeaderConstants.AUTHORIZATION);
-        if (StringUtils.isBlank(authorization)) {
-            error = getOSMessagingError(OSMessagingErrorConstants.AUTHORIZATION_REQUIRED);
+
+        if (osMessagingAccessManager == null) {
+            error = getOSMessagingError(OSMessagingErrorConstants.ACCESS_MANAGER_NOT_FOUND);
         } else {
-            try {
-                final Optional<OSMessagingHeader> hoption = osMessagingAccessManager.resolveAccess(authorization);
-                if (hoption.isPresent()) {
-                    final OSMessagingHeader header = hoption.get();
+            final String authorization = getHttpRequestHeaders().getHeader(HttpRequestHeaderConstants.AUTHORIZATION);
+            if (StringUtils.isBlank(authorization)) {
+                error = getOSMessagingError(OSMessagingErrorConstants.AUTHORIZATION_REQUIRED);
+            } else {
+                try {
+                    final OSMessagingHeader header = osMessagingModuleService.getOSMessagingHeader(authorization);
+                    osMessagingAccessManager.checkAccess(header);
                     access = new OSMessagingAccess(header);
-                    access.setAuthorization(authorization);
                     final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
                             OSMessagingProcessor.class, header.getProcessor());
-                    BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(), requestJson);                    
+                    BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(), requestJson);
                     response = _processor.process((BaseOSMessagingReq) request);
-                } else {
-                    error = getOSMessagingError(OSMessagingErrorConstants.NOT_AUTHORIZED);
+                } catch (Exception e) {
+                    error = new OSMessagingError(OSMessagingErrorConstants.PROCESSING_EXCEPTION,
+                            getExceptionMessage(LocaleType.APPLICATION, e));
                 }
-            } catch (Exception e) {
-                error = new OSMessagingError(OSMessagingErrorConstants.PROCESSING_EXCEPTION,
-                        getExceptionMessage(LocaleType.APPLICATION, e));
             }
         }
 
-        if (error != null) {
+        if (response == null) {
             response = new OSMessagingErrorResponse(error);
         }
 
         final String responseJson = getResponseJsonFromObject(response);
-        
         if (access == null) {
             access = new OSMessagingAccess();
         }
-        
+
         access.setResponseCode(response.getResponseCode());
         access.setResponseMessage(response.getResponseMessage());
         access.setRequestBody(requestJson);

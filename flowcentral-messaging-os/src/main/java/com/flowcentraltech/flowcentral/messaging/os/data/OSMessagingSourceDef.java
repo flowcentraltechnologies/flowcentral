@@ -19,12 +19,12 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 
 /**
- * OS messaging endpoint definition.
+ * OS messaging source definition.
  *
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class OSMessagingEndpointDef implements VersionedEntityDef {
+public class OSMessagingSourceDef implements VersionedEntityDef {
 
     private Long id;
     
@@ -32,27 +32,18 @@ public class OSMessagingEndpointDef implements VersionedEntityDef {
 
     private String description;
 
-    private String nodeUrl;
-
-    private String target;
-
     private String password;
-
-    private String authorization;
     
     private RecordStatus status;
     
     private long versionNo;
 
-    public OSMessagingEndpointDef(Long id, String name, String description, String nodeUrl, String target, String password,
-            String authorization, RecordStatus status, long versionNo) {
+    public OSMessagingSourceDef(Long id, String name, String description, String password,
+            RecordStatus status, long versionNo) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.nodeUrl = nodeUrl;
-        this.target = target;
         this.password = password;
-        this.authorization = authorization;
         this.status = status;
         this.versionNo = versionNo;
     }
@@ -75,20 +66,12 @@ public class OSMessagingEndpointDef implements VersionedEntityDef {
         return description;
     }
 
-    public String getNodeUrl() {
-        return nodeUrl;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public String getAuthorization() {
-        return authorization;
+    public long getVersionNo() {
+        return versionNo;
     }
 
     public RecordStatus getStatus() {

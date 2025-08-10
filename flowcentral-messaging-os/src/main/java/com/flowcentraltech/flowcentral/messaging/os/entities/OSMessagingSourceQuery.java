@@ -13,25 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.data;
+package com.flowcentraltech.flowcentral.messaging.os.entities;
+
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 
 /**
- * OS messaging error constants.
+ * OS messaging source query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface OSMessagingErrorConstants {
+public class OSMessagingSourceQuery extends BaseStatusEntityQuery<OSMessagingSource> {
 
-    String AUTHORIZATION_REQUIRED = "GP01";
+    public OSMessagingSourceQuery() {
+        super(OSMessagingSource.class);
+    }
 
-    String NOT_AUTHORIZED= "GP02";
+    public OSMessagingSourceQuery name(String name) {
+        return (OSMessagingSourceQuery) addEquals("name", name);
+    }
 
-    String PROCESSING_EXCEPTION = "GP03";
-
-    String PROCESSOR_EXCEPTION = "GP04";
-
-    String ACCESS_MANAGER_NOT_FOUND = "GP05";
-
+    public OSMessagingSourceQuery descriptionLike(String description) {
+        return (OSMessagingSourceQuery) addLike("description", description);
+    }
 
 }

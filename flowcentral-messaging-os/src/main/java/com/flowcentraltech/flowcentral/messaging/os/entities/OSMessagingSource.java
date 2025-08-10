@@ -19,39 +19,26 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.Policy;
 
 /**
- * OS messaging end-point.
+ * OS messaging source.
  *
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Policy("osmessagingendpoint-policy")
-@Table(name = "FC_OSMESSAGINGENDPOINT",
-        uniqueConstraints = {
-                @UniqueConstraint({ "name" }),
-                @UniqueConstraint({ "description" }),
-                @UniqueConstraint({ "target" }) })
-public class OSMessagingEndpoint extends BaseStatusEntity {
+@Table(name = "FC_OSMESSAGINGSOURCE", uniqueConstraints = {
+        @UniqueConstraint({ "name" }),
+        @UniqueConstraint({ "description" })})
+public class OSMessagingSource extends BaseStatusEntity {
 
-    @Column(name = "ENDPOINT_NM", length = 64)
+    @Column(name = "SOURCE_NM", length = 64)
     private String name;
 
-    @Column(name = "ENDPOINT_DESC", length = 128)
+    @Column(name = "SOURCE_DESC", length = 128)
     private String description;
 
-    @Column(name = "NODE_URL", length = 256)
-    private String nodeUrl;
-
-    @Column(name = "TARGET", length = 32)
-    private String target;
-
-    @Column(name = "AUTH_PASSWORD", length = 32)
+    @Column(name = "AUTH_PASSWORD", length = 96, transformer = "twoway-stringcryptograph")
     private String password;
-
-    @Column(name = "AUTH_BASE64", length = 128, nullable = true)
-    private String authorization;
 
     @Override
     public String getDescription() {
@@ -70,36 +57,12 @@ public class OSMessagingEndpoint extends BaseStatusEntity {
         this.description = description;
     }
 
-    public String getNodeUrl() {
-        return nodeUrl;
-    }
-
-    public void setNodeUrl(String nodeUrl) {
-        this.nodeUrl = nodeUrl;
-    }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getAuthorization() {
-        return authorization;
-    }
-
-    public void setAuthorization(String authorization) {
-        this.authorization = authorization;
     }
 
 }

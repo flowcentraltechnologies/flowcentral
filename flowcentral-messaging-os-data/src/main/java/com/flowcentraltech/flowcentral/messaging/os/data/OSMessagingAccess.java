@@ -26,8 +26,6 @@ public class OSMessagingAccess {
     
     private final OSMessagingHeader header;
     
-    private String authorization;
-    
     private String responseCode;
     
     private String responseMessage;
@@ -48,14 +46,6 @@ public class OSMessagingAccess {
 
     public OSMessagingHeader getHeader() {
         return header;
-    }
-
-    public String getAuthorization() {
-        return authorization;
-    }
-
-    public void setAuthorization(String authorization) {
-        this.authorization = authorization;
     }
 
     public String getResponseCode() {
@@ -102,7 +92,4 @@ public class OSMessagingAccess {
         return header != null;
     }
 
-    public boolean isWithAuthorization() {
-        return authorization != null && !authorization.trim().isEmpty();
-    }
 }
