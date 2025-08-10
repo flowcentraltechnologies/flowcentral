@@ -32,6 +32,8 @@ import com.tcdng.unify.core.util.ReflectUtils;
  */
 public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
         extends AbstractFlowCentralComponent implements OSMessagingProcessor<T, U> {
+    
+    protected static final OSMessagingError NO_ERROR = new OSMessagingError();
 
     private final Class<T> responseClass;
 
