@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleN
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingEndpointDef;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpoint;
@@ -43,6 +44,8 @@ import com.tcdng.unify.core.business.QueuedExec;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
@@ -59,18 +62,39 @@ import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 @Component(OSMessagingModuleNameConstants.OSMESSAGING_MODULE_SERVICE)
 public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService implements OSMessagingModuleService {
 
-    private static final String PROCESS_MESSAGE_ASYNC =  "os::processmessageasync";
-    
+    private static final String PROCESS_MESSAGE_ASYNC = "os::processmessageasync";
+
     private static final int MAX_MESSAGING_THREADS = 32;
-    
-    private static final int MAX_PROCESSING_BATCH_SIZE = 128;
+
+    private static final int MAX_PROCESSING_BATCH_SIZE = 512;
 
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
+    private FactoryMap<String, OSMessagingEndpointDef> endpointDefFactoryMap;
+
     private final QueuedExec<Long> queuedExec;
 
     public OSMessagingModuleServiceImpl() {
+
+        this.endpointDefFactoryMap = new StaleableFactoryMap<String, OSMessagingEndpointDef>()
+            {
+
+                @Override
+                protected boolean stale(String target, OSMessagingEndpointDef endPointDef) throws Exception {
+                    return isStale(new OSMessagingEndpointQuery(), endPointDef);
+                }
+
+                @Override
+                protected OSMessagingEndpointDef create(String target, Object... arg1) throws Exception {
+                    OSMessagingEndpoint endpoint = environment().find(new OSMessagingEndpointQuery().target(target));
+                    return new OSMessagingEndpointDef(endpoint.getId(), endpoint.getName(), endpoint.getDescription(),
+                            endpoint.getNodeUrl(), endpoint.getTarget(), endpoint.getPassword(),
+                            endpoint.getAuthorization(), endpoint.getStatus(), endpoint.getVersionNo());
+                }
+
+            };
+
         this.queuedExec = new AbstractQueuedExec<Long>(MAX_MESSAGING_THREADS)
             {
 
@@ -124,7 +148,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target, String processor,
             long delayInSeconds) throws UnifyException {
         osMessagingAccessManager.getTargetAuthorization(target, processor);
-        
+
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
@@ -138,8 +162,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Synchronized(PROCESS_MESSAGE_ASYNC)
     @Periodic(PeriodicType.FASTER)
     public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
-        final List<Long> pendingList = environment().valueList(Long.class, "id",
-                new OSMessagingAsyncQuery().isDue(getNow()).isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE));
+        final List<Long> pendingList = environment().valueList(Long.class, "id", new OSMessagingAsyncQuery()
+                .isDue(getNow()).isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
         if (!DataUtils.isBlank(pendingList)) {
             environment().updateAll(new OSMessagingAsyncQuery().idIn(pendingList),
                     new Update().add("processing", Boolean.TRUE));
@@ -151,24 +175,20 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    protected void doInstallModuleFeatures(final InstallationContext ctx,ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall)
+            throws UnifyException {
 
     }
 
-    private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
+    protected <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
             Object message) throws UnifyException {
-        OSMessagingEndpoint endpoint = environment().find(new OSMessagingEndpointQuery().target(target));
-        if (endpoint == null) {
-            throwOperationErrorException(
-                    new IllegalArgumentException("Unknown OS application target [" + target + "]."));
-        }
-
-        final String authorization = processor == null ? endpoint.getAuthorization()
+        OSMessagingEndpointDef endpointDef = endpointDefFactoryMap.get(target);
+        final String authorization = processor == null ? endpointDef.getAuthorization()
                 : osMessagingAccessManager.getTargetAuthorization(target, processor);
         Map<String, String> headers = new HashMap<String, String>();
         headers.put(HttpRequestHeaderConstants.AUTHORIZATION, authorization);
-        final String messagingUrl = endpoint.getNodeUrl() + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
+        final String messagingUrl = endpointDef.getNodeUrl() + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
         return extractResult(IOUtils.postObjectToEndpointUsingJson(respClass, messagingUrl, message, headers));
     }
-    
+
 }

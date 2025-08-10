@@ -22,15 +22,5 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  * @since 4.1 
  */
 public abstract class BaseOSMessagingReq {
-
-    private String requestId;
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
    
 }

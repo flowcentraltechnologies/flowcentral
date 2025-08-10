@@ -27,8 +27,6 @@ public class OSMessagingAccess {
     private final OSMessagingHeader header;
     
     private String authorization;
-
-    private String requestId;
     
     private String responseCode;
     
@@ -58,14 +56,6 @@ public class OSMessagingAccess {
 
     public void setAuthorization(String authorization) {
         this.authorization = authorization;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
     }
 
     public String getResponseCode() {

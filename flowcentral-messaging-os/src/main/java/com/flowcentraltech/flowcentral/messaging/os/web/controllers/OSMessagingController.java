@@ -55,7 +55,6 @@ public class OSMessagingController extends AbstractPlainJsonController {
         OSMessagingAccess access = null;
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
-        String originalRequestId = null;
         HttpRequestHeaders headers = getHttpRequestHeaders();
         final String authorization = headers.getHeader(HttpRequestHeaderConstants.AUTHORIZATION);
         if (StringUtils.isBlank(authorization)) {
@@ -70,7 +69,6 @@ public class OSMessagingController extends AbstractPlainJsonController {
                     final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
                             OSMessagingProcessor.class, header.getProcessor());
                     BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(), requestJson);                    
-                    access.setRequestId(originalRequestId = request.getRequestId());
                     response = _processor.process((BaseOSMessagingReq) request);
                 } else {
                     error = getOSMessagingError(OSMessagingErrorConstants.NOT_AUTHORIZED);
@@ -85,7 +83,6 @@ public class OSMessagingController extends AbstractPlainJsonController {
             response = new OSMessagingErrorResponse(error);
         }
 
-        response.setOriginalRequestId(originalRequestId);        
         final String responseJson = getResponseJsonFromObject(response);
         
         if (access == null) {
