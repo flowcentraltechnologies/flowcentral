@@ -70,6 +70,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private static final String PROCESS_MESSAGE_ASYNC = "os::processmessageasync";
 
+    private static final String BASIC_AUTH_PREFIX = "Basic ";
+
     private static final int MAX_MESSAGING_THREADS = 32;
 
     private static final int MAX_PROCESSING_BATCH_SIZE = 512;
@@ -118,6 +120,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 @Override
                 protected OSMessagingSourceDef create(String source, Object... arg1) throws Exception {
                     final OSMessagingSource osSource = environment().find(new OSMessagingSourceQuery().name(source));
+                    if (osSource == null) {
+                        throw new IllegalArgumentException("Message source [" + source + "] is unknown.");
+                    }
+                    
                     return new OSMessagingSourceDef(osSource.getId(), osSource.getName(), osSource.getDescription(),
                             osSource.getPassword(), osSource.getStatus(), osSource.getVersionNo());
                 }
@@ -135,26 +141,25 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected OSMessagingHeader create(String authorization, Object... arg1) throws Exception {
-                    final String credentials = EncodingUtils.decodeBase64String(authorization);
-                    try {
-                        String[] parts = credentials.split(":", 2);
-                        String[] nparts = parts[0].split(".", 2);
+                    if (authorization.startsWith(BASIC_AUTH_PREFIX)) {
+                        try {
+                            final String credentials = EncodingUtils
+                                    .decodeBase64String(authorization.substring(BASIC_AUTH_PREFIX.length()));
+                            String[] parts = credentials.split(":", 2);
+                            String[] nparts = parts[0].split(".", 2);
 
-                        final String source = nparts[0];
-                        final String processor = nparts[1];
-                        final String password = parts[1];
+                            final String source = nparts[0];
+                            final String processor = nparts[1];
+                            final String password = parts[1];
 
-                        OSMessagingSourceDef osSourceDef = osSourceDefFactoryMap.get(source);
-                        if (!osSourceDef.getPassword().equals(password)) {
-                            throw new IllegalArgumentException("Invalid authorization.");
+                            OSMessagingSourceDef osSourceDef = osSourceDefFactoryMap.get(source);
+                            if (osSourceDef.getPassword().equals(password) && isComponent(processor)
+                                    && getComponent(processor) instanceof OSMessagingProcessor) {
+                                return new OSMessagingHeader(source, processor, osSourceDef.getVersionNo());
+                            }
+                        } catch (Exception e) {
+                            logError(e);
                         }
-
-                        if (osSourceDef.getPassword().equals(password) && isComponent(processor)
-                                && getComponent(processor) instanceof OSMessagingProcessor) {
-                            return new OSMessagingHeader(source, processor, osSourceDef.getVersionNo());
-                        }
-                    } catch (Exception e) {
-                        logError(e);
                     }
 
                     throw new IllegalArgumentException("Invalid authorization.");
