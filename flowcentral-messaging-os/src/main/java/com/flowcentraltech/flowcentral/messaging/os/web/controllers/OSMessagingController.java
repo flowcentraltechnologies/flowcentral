@@ -21,7 +21,6 @@ import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingProcesso
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAccess;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
@@ -52,8 +51,6 @@ public class OSMessagingController extends AbstractPlainJsonController {
     @SuppressWarnings("unchecked")
     @Override
     protected final String doExecute(String actionName, String requestJson) throws UnifyException {
-        long startTime = System.currentTimeMillis();
-        OSMessagingAccess access = null;
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
 
@@ -67,7 +64,6 @@ public class OSMessagingController extends AbstractPlainJsonController {
                 try {
                     final OSMessagingHeader header = osMessagingModuleService.getOSMessagingHeader(authorization);
                     osMessagingAccessManager.checkAccess(header);
-                    access = new OSMessagingAccess(header);
                     final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
                             OSMessagingProcessor.class, header.getProcessor());
                     BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(), requestJson);
@@ -83,19 +79,7 @@ public class OSMessagingController extends AbstractPlainJsonController {
             response = new OSMessagingErrorResponse(error);
         }
 
-        final String responseJson = getResponseJsonFromObject(response);
-        if (access == null) {
-            access = new OSMessagingAccess();
-        }
-
-        access.setResponseCode(response.getResponseCode());
-        access.setResponseMessage(response.getResponseMessage());
-        access.setRequestBody(requestJson);
-        access.setResponseBody(responseJson);
-        access.setRuntimeInMilliSec(System.currentTimeMillis() - startTime);
-        osMessagingAccessManager.logAccess(access);
-
-        return responseJson;
+        return getResponseJsonFromObject(response);
     }
 
     private OSMessagingError getOSMessagingError(String messageKey) throws UnifyException {

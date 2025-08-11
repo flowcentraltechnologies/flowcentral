@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAccess;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.tcdng.unify.core.UnifyException;
 
@@ -37,15 +36,5 @@ public interface OSMessagingAccessManager extends  FlowCentralService {
      *                        if check access failed. if an error occurs
      */
     void checkAccess(OSMessagingHeader header) throws UnifyException;
-
-    /**
-     * Logs messaging access.
-     * 
-     * @param access
-     *                    the access object
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void logAccess(OSMessagingAccess access) throws UnifyException;
 
 }
