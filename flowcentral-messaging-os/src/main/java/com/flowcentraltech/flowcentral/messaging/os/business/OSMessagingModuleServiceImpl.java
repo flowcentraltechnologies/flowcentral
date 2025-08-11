@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralServic
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
@@ -32,10 +33,12 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingSourceDef;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingTargetDef;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncQuery;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingLog;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSource;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSourceQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTarget;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTargetQuery;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -56,6 +59,7 @@ import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.EncodingUtils;
 import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 
 /**
@@ -75,6 +79,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     private static final int MAX_MESSAGING_THREADS = 32;
 
     private static final int MAX_PROCESSING_BATCH_SIZE = 512;
+
+    @Configurable
+    private SystemModuleService systemModuleService;
 
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
@@ -146,7 +153,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                             final String credentials = EncodingUtils
                                     .decodeBase64String(authorization.substring(BASIC_AUTH_PREFIX.length()));
                             String[] parts = credentials.split(":", 2);
-                            String[] nparts = parts[0].split(".", 2);
+                            String[] nparts = parts[0].split("\\.", 2);
 
                             final String source = nparts[0];
                             final String processor = nparts[1];
@@ -260,8 +267,23 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         final OSMessagingTargetDef osTargetDef = osTargetDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osTargetDef.getAuthentication(processor));
-        return extractResult(
-                IOUtils.postObjectToEndpointUsingJson(respClass, osTargetDef.getTargetUrl(), message, headers));
+        PostResp<T> resp = IOUtils.postObjectToEndpointUsingJson(respClass, osTargetDef.getTargetUrl(), message,
+                headers);
+        T result = extractResult(resp);
+        if (systemModuleService.getSysParameterValue(boolean.class,
+                OSMessagingModuleSysParamConstants.MESSAGE_LOGGING_ENABLED)) {
+            OSMessagingLog log = new OSMessagingLog();
+            log.setTarget(target);
+            log.setProcessor(processor);
+            log.setRequestBody(resp.getReqJson());
+            log.setResponseBody(resp.getRespJson());
+            log.setResponseCode(result.getResponseCode());
+            log.setResponseMsg(result.getResponseMessage());
+            log.setRuntimeInMilliSec(resp.getExecMilliSec());
+            environment().create(log);
+        }
+
+        return result;
     }
 
 }

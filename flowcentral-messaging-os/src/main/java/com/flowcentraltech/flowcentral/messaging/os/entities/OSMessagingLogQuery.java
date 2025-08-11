@@ -13,15 +13,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.constants;
+package com.flowcentraltech.flowcentral.messaging.os.entities;
+
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
- * OS messaging module system parameter constants.
+ * OS messaging log query.
  * 
- * @author FlowCentral Technologies Limited
- * @since 4.1
+ * @author Lateef Ojulari
+ * @since 1.0
  */
-public interface OSMessagingModuleSysParamConstants {
+public class OSMessagingLogQuery extends BaseAuditEntityQuery<OSMessagingLog> {
 
-    String MESSAGE_LOGGING_ENABLED = "OMG-0001";
+    public OSMessagingLogQuery() {
+        super(OSMessagingLog.class);
+    }
+
+    public OSMessagingLogQuery target(String target) {
+        return (OSMessagingLogQuery) addEquals("target", target);
+    }
 }

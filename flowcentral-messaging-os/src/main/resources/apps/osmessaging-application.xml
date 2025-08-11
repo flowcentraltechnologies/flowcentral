@@ -13,7 +13,7 @@
 	<applets>
 		<applet name="manageOSMessagingTarget"
 			description="$m{osmessaging.osmessagingtarget.manage}"
-			label="$m{osmessaging.osmessagingtarget.manage.label}" icon="ethernet"
+			label="$m{osmessaging.osmessagingtarget.manage.label}" icon="sign-out"
 			type="MANAGE_ENTITYLIST" entity="osMessagingTarget"
 			menuAccess="true">
 			<properties>
@@ -35,7 +35,7 @@
 		</applet>
 		<applet name="manageOSMessagingSource"
 			description="$m{osmessaging.osmessagingsource.manage}"
-			label="$m{osmessaging.osmessagingsource.manage.label}" icon="ethernet"
+			label="$m{osmessaging.osmessagingsource.manage.label}" icon="sign-in"
 			type="MANAGE_ENTITYLIST" entity="osMessagingSource"
 			menuAccess="true">
 			<properties>
@@ -72,6 +72,21 @@
 				<property name="maintainForm.delete" value="false" />
 			</properties>
 		</applet>
+		<applet name="manageOSMessagingLog"
+			description="$m{osmessaging.osmessaginglog.manage}"
+			label="$m{osmessaging.osmessaginglog.manage.label}" icon="logs"
+			type="MANAGE_ENTITYLIST" entity="osMessagingLog" menuAccess="true">
+			<properties>
+				<property name="searchTable" value="osMessagingLogTable" />
+				<property name="searchTable.new" value="false" />
+				<property name="searchTable.report" value="true" />
+				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.basicSearchOnly" value="true" />
+				<property name="maintainForm" value="osMessagingLogForm" />
+				<property name="maintainForm.update" value="false" />
+				<property name="maintainForm.delete" value="false" />
+			</properties>
+		</applet>
 	</applets>
 	<!-- References -->
 	<references>
@@ -84,6 +99,9 @@
 		<reference name="osMessagingAsyncRef"
 			description="$m{osmessaging.osmessagingasync.reference}"
 			entity="osMessagingAsync" searchField="endpoint" />
+		<reference name="osMessagingLogRef"
+			description="$m{osmessaging.osmessaginglog.reference}"
+			entity="osMessagingLog" searchField="osMessagingDesc" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -172,6 +190,34 @@
 					inputWidget="application.checkbox" nullable="true" />
 			</fields>
 		</entity>
+		<entity name="osMessagingLog"
+			description="$m{osmessaging.osmessaginglog}"
+			label="$m{osmessaging.osmessaginglog.label}"
+			type="com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingLog">
+			<fields>
+				<field name="target"
+					label="$m{osmessaging.osmessaginglog.target}" type="STRING"
+					maxLen="32" basicSearch="true" />
+				<field name="processor"
+					label="$m{osmessaging.osmessaginglog.processor}" type="STRING"
+					maxLen="64" nullable="true" basicSearch="true"/>
+				<field name="requestBody"
+					label="$m{osmessaging.osmessaginglog.requestbody}" type="STRING"
+					nullable="true" />
+				<field name="responseBody"
+					label="$m{osmessaging.osmessaginglog.responsebody}" type="STRING"
+					nullable="true" />
+				<field name="responseCode"
+					label="$m{osmessaging.osmessaginglog.responsecode}" type="STRING"
+					maxLen="10" nullable="true" />
+				<field name="responseMsg"
+					label="$m{osmessaging.osmessaginglog.responsemsg}" type="STRING"
+					maxLen="512" nullable="true" />
+				<field name="runtimeInMilliSec"
+					label="$m{osmessaging.osmessaginglog.runtimeinmillisec}" type="LONG"
+					nullable="true" />
+			</fields>
+		</entity>
 	</entities>
 	<!-- Tables -->
 	<tables>
@@ -226,6 +272,27 @@
 				<column field="sentOn" renderWidget="application.datetime"
 					widthRatio="1"/>
 				<column field="responseCode" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="createDt" renderWidget="application.datetime"
+					widthRatio="1" order="DESC" />
+				<column field="updateDt" renderWidget="application.datetime"
+					widthRatio="1" />
+			</columns>
+		</table>
+		<table name="osMessagingLogTable"
+			description="$m{osmessaging.osmessaginglog.table}"
+			label="$m{osmessaging.osmessaginglog.table.label}"
+			entity="osMessagingLog" itemsPerPage="25" serialNo="true"
+			basicSearch="true">
+			<columns>
+				<column field="target"
+					renderWidget="application.text" widthRatio="1"
+					 linkAct="maintainAct" />
+				<column field="processor" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="responseCode" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="responseMsg" renderWidget="application.text"
 					widthRatio="1" />
 				<column field="createDt" renderWidget="application.datetime"
 					widthRatio="1" order="DESC" />
@@ -303,6 +370,42 @@
 						label="$m{osmessaging.osmessagingasync.form.section.response}">
 						<field name="responseCode" column="0" />
 						<field name="responseMsg" column="1" />
+					</section>
+				</tab>
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
+		</form>
+		<form name="osMessagingLogForm"
+			description="$m{osmessaging.osmessaginglog.form}"
+			entity="osMessagingLog">
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{osmessaging.osmessaginglog.form.basicdetails}"
+					contentType="MINIFORM">
+					<section name="basicDetails" columns="TYPE_2"
+						label="$m{osmessaging.osmessaginglog.form.basicdetails}">
+						<field name="target" column="0" required="true" />
+						<field name="processor" inputWidget="application.name"
+							column="1" required="true" />
+						<field name="runtimeInMilliSec"
+							inputWidget="application.integer" column="1" />
+					</section>
+					<section name="requestDetails" columns="TYPE_1"
+						label="$m{osmessaging.osmessaginglog.form.requestdetails}">
+						<field name="requestBody" inputWidget="application.textareamedium"
+							column="0" />
+					</section>
+					<section name="responseDetails" columns="TYPE_2"
+						label="$m{osmessaging.osmessaginglog.form.responsedetails}">
+						<field name="responseCode" inputWidget="application.text"
+							column="0" />
+						<field name="responseMsg" inputWidget="application.text"
+							column="1" />
+					</section>
+					<section name="responseDetailsBody" columns="TYPE_1">
+						<field name="responseBody" inputWidget="application.textareamedium"
+							column="0" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
