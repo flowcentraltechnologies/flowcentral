@@ -98,7 +98,7 @@
 			entity="osMessagingSource" searchField="description" />
 		<reference name="osMessagingAsyncRef"
 			description="$m{osmessaging.osmessagingasync.reference}"
-			entity="osMessagingAsync" searchField="endpoint" />
+			entity="osMessagingAsync" searchField="target" />
 		<reference name="osMessagingLogRef"
 			description="$m{osmessaging.osmessaginglog.reference}"
 			entity="osMessagingLog" searchField="osMessagingDesc" />
@@ -166,7 +166,7 @@
 			<fields>
 				<field name="target"
 					label="$m{osmessaging.osmessagingasync.endpoint}" type="STRING"
-					inputWidget="osmessaging.endpointlist" maxLen="64" basicSearch="true" />
+					inputWidget="application.text" maxLen="64" basicSearch="true" />
 				<field name="message"
 					label="$m{osmessaging.osmessagingasync.message}" type="CLOB"
 					inputWidget="application.textareamedium" />
