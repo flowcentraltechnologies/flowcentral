@@ -262,7 +262,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     }
 
-    protected <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
+    private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
             Object message) throws UnifyException {
         final OSMessagingTargetDef osTargetDef = osTargetDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
