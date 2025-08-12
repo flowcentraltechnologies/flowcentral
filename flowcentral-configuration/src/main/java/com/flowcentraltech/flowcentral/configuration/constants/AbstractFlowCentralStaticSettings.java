@@ -15,7 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
+import java.util.List;
+
 import com.tcdng.unify.common.constants.AbstractUnifyStaticSettings;
+import com.tcdng.unify.common.data.UnifyContainerProperty;
 
 /**
  * Convenient abstract base class for flowcentral static settings.
@@ -29,6 +32,13 @@ public abstract class AbstractFlowCentralStaticSettings extends AbstractUnifySta
     private String installerName;
 
     private String moduleConfigName;
+
+    public AbstractFlowCentralStaticSettings(String installerName, String moduleConfigName, String messageBase,
+            int level, List<UnifyContainerProperty> containerProperties) {
+        super(messageBase, level, containerProperties);
+        this.installerName = installerName;
+        this.moduleConfigName = moduleConfigName;
+    }
 
     public AbstractFlowCentralStaticSettings(String installerName, String moduleConfigName, String messageBase,
             int level) {
