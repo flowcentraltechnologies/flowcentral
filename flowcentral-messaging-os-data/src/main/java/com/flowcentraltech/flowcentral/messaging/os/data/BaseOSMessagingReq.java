@@ -25,12 +25,22 @@ public abstract class BaseOSMessagingReq {
     
     private final String processor;
 
+    private String source;
+
     protected BaseOSMessagingReq(String processor) {
         this.processor = processor;
     }
 
-    public String getProcessor() {
+    public final String getProcessor() {
         return processor;
+    }
+
+    public final String getSource() {
+        return source;
+    }
+
+    public final void setSource(String source) {
+        this.source = source;
     }
       
 }

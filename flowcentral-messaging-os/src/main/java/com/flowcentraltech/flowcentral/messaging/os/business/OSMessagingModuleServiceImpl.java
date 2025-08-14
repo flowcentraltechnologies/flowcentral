@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSourceQu
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTarget;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTargetQuery;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -86,14 +87,16 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
-    private FactoryMap<String, OSMessagingTargetDef> osTargetDefFactoryMap;
+    private final FactoryMap<String, OSMessagingTargetDef> osTargetDefFactoryMap;
 
-    private FactoryMap<String, OSMessagingSourceDef> osSourceDefFactoryMap;
+    private final FactoryMap<String, OSMessagingSourceDef> osSourceDefFactoryMap;
 
-    private FactoryMap<String, OSMessagingHeader> osHeaderFactoryMap;
+    private final FactoryMap<String, OSMessagingHeader> osHeaderFactoryMap;
 
     private final QueuedExec<Long> queuedExec;
 
+    private String sourceId;
+    
     public OSMessagingModuleServiceImpl() {
 
         this.osTargetDefFactoryMap = new StaleableFactoryMap<String, OSMessagingTargetDef>()
@@ -229,6 +232,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             String target, U request) throws UnifyException {
+        request.setSource(sourceId);
         return sendMessage(respClass, target, request.getProcessor(), request);
     }
 
@@ -242,6 +246,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             throws UnifyException {
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
+        request.setSource(sourceId);
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
         osMessagingAsync.setTarget(target);
         osMessagingAsync.setProcessor(request.getProcessor());
@@ -263,6 +268,12 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 queuedExec.execute(osMessagingAsyncId);
             }
         }
+    }
+
+    @Override
+    public void initialize(UnifyComponentContext unifyComponentContext) throws UnifyException {
+        super.initialize(unifyComponentContext);
+        sourceId = getContainerSetting(String.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
     }
 
     @Override
