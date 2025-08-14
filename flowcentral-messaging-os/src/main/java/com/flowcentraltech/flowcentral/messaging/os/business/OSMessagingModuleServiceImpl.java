@@ -97,7 +97,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     private final QueuedExec<Long> queuedExec;
 
     private OSInfo osInfo;
-    
+
     public OSMessagingModuleServiceImpl() {
 
         this.osTargetDefFactoryMap = new StaleableFactoryMap<String, OSMessagingTargetDef>()
@@ -238,8 +238,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             String target, U request) throws UnifyException {
+        logDebug("Sending synchronous message to [{0}]. Request = [\n{1}]", target, prettyJsonOnDebug(request));
         request.setSource(osInfo.getAppId());
-        return sendMessage(respClass, target, request.getProcessor(), request);
+        T resp = sendMessage(respClass, target, request.getProcessor(), request);
+        logDebug("Synchronous send message successful. Response = [\n{0}]", prettyJsonOnDebug(resp));
+        return resp;
     }
 
     @Override
@@ -250,6 +253,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSeconds)
             throws UnifyException {
+        logDebug("Sending asynchronous message to [{0}] with delay [{1}ms]. Request = [\n{2}]", target, delayInSeconds,
+                prettyJsonOnDebug(request));
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
         request.setSource(osInfo.getAppId());
@@ -264,8 +269,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Synchronized(PROCESS_MESSAGE_ASYNC)
     @Periodic(PeriodicType.FASTER)
     public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
+        logDebug("Processing asynchronous messages...");
         final List<Long> pendingList = environment().valueList(Long.class, "id", new OSMessagingAsyncQuery()
                 .isDue(getNow()).isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
+        logDebug("Processing asynchronous [{0}] messages...", pendingList.size());
         if (!DataUtils.isBlank(pendingList)) {
             environment().updateAll(new OSMessagingAsyncQuery().idIn(pendingList),
                     new Update().add("processing", Boolean.TRUE));
