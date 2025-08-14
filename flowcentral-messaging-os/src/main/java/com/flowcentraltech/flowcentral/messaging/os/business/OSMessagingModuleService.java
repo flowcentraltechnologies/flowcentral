@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSource;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSourceQuery;
@@ -35,6 +36,15 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface OSMessagingModuleService extends FlowCentralService {
 
+    /**
+     * Gets container OS information.
+     * 
+     * @return the OS information.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    OSInfo getOSInfo() throws UnifyException;
+    
     /**
      * Finds OS messaging targets.
      * 

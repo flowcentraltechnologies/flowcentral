@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleN
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingSourceDef;
@@ -95,7 +96,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private final QueuedExec<Long> queuedExec;
 
-    private String sourceId;
+    private OSInfo osInfo;
     
     public OSMessagingModuleServiceImpl() {
 
@@ -215,6 +216,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public OSInfo getOSInfo() throws UnifyException {
+        return osInfo;
+    }
+
+    @Override
     public List<OSMessagingTarget> findOSMessagingTargets(OSMessagingTargetQuery query) throws UnifyException {
         return environment().findAll(query);
     }
@@ -232,7 +238,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             String target, U request) throws UnifyException {
-        request.setSource(sourceId);
+        request.setSource(osInfo.getAppId());
         return sendMessage(respClass, target, request.getProcessor(), request);
     }
 
@@ -246,7 +252,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             throws UnifyException {
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
-        request.setSource(sourceId);
+        request.setSource(osInfo.getAppId());
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
         osMessagingAsync.setTarget(target);
         osMessagingAsync.setProcessor(request.getProcessor());
@@ -273,7 +279,13 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public void initialize(UnifyComponentContext unifyComponentContext) throws UnifyException {
         super.initialize(unifyComponentContext);
-        sourceId = getContainerSetting(String.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+        final String appId = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+        final String vendorName = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORNAME);
+        final String vendorDomain = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORDOMAIN);
+        osInfo = new OSInfo(appId, vendorName, vendorDomain);
     }
 
     @Override
