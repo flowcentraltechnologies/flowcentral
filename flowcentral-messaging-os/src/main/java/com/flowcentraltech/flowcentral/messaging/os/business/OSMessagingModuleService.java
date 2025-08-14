@@ -56,7 +56,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<OSMessagingSource> findOSMessagingSources(OSMessagingSourceQuery query) throws UnifyException;
-    
+
     /**
      * Gets OS messaging header based on supplied authorization.
      * 
@@ -67,50 +67,49 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException;
-    
+
     /**
      * Sends synchronous message.
      * 
      * @param respClass
      *                  the response class
-     * @param request
-     *                  the message
      * @param target
      *                  the messaging target
+     * @param request
+     *                  the message
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
     <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            U request, String target) throws UnifyException;
+            String target, U request) throws UnifyException;
 
     /**
      * Sends asynchronous message.
      * 
-     * @param request
-     *                  the message
      * @param target
-     *                  the messaging target
+     *                the messaging target
+     * @param request
+     *                the message
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target)
-            throws UnifyException;
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request) throws UnifyException;
 
     /**
      * Sends asynchronous message with a delay.
      * 
-     * @param request
-     *                    the message
      * @param target
      *                    the messaging target
+     * @param request
+     *                    the message
      * @param delayInSecs
      *                    the delay in seconds.
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target,
-            long delayInSecs) throws UnifyException;
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSecs)
+            throws UnifyException;
 }

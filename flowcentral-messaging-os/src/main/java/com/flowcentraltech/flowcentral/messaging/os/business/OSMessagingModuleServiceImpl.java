@@ -130,7 +130,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     if (osSource == null) {
                         throw new IllegalArgumentException("Message source [" + source + "] is unknown.");
                     }
-                    
+
                     return new OSMessagingSourceDef(osSource.getId(), osSource.getName(), osSource.getDescription(),
                             osSource.getPassword(), osSource.getStatus(), osSource.getVersionNo());
                 }
@@ -228,19 +228,18 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            U request, String target) throws UnifyException {
+            String target, U request) throws UnifyException {
         return sendMessage(respClass, target, request.getProcessor(), request);
     }
 
     @Override
-    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target)
-            throws UnifyException {
-        sendAsynchronousMessage(request, target, 0L);
+    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request) throws UnifyException {
+        sendAsynchronousMessage(target, request, 0L);
     }
 
     @Override
-    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target,
-            long delayInSeconds) throws UnifyException {
+    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSeconds)
+            throws UnifyException {
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
