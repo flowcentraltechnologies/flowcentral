@@ -212,30 +212,40 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public List<OSMessagingTarget> findOSMessagingTargets(OSMessagingTargetQuery query) throws UnifyException {
+        return environment().findAll(query);
+    }
+
+    @Override
+    public List<OSMessagingSource> findOSMessagingSources(OSMessagingSourceQuery query) throws UnifyException {
+        return environment().findAll(query);
+    }
+
+    @Override
     public OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException {
         return osHeaderFactoryMap.get(authorization);
     }
 
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            U request, String target, String processor) throws UnifyException {
-        return sendMessage(respClass, target, processor, request);
+            U request, String target) throws UnifyException {
+        return sendMessage(respClass, target, request.getProcessor(), request);
     }
 
     @Override
-    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target, String processor)
+    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target)
             throws UnifyException {
-        sendAsynchronousMessage(request, target, processor, 0L);
+        sendAsynchronousMessage(request, target, 0L);
     }
 
     @Override
-    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target, String processor,
+    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target,
             long delayInSeconds) throws UnifyException {
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
         osMessagingAsync.setTarget(target);
-        osMessagingAsync.setProcessor(processor);
+        osMessagingAsync.setProcessor(request.getProcessor());
         osMessagingAsync.setMessage(DataUtils.asJsonString(request, PrintFormat.NONE));
         osMessagingAsync.setNextAttemptOn(nextAttemptOn);
         environment().create(osMessagingAsync);

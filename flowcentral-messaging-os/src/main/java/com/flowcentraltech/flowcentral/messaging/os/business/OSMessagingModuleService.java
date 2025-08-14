@@ -15,10 +15,16 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSource;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSourceQuery;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTarget;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTargetQuery;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -29,6 +35,28 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface OSMessagingModuleService extends FlowCentralService {
 
+    /**
+     * Finds OS messaging targets.
+     * 
+     * @param query
+     *              the target query
+     * @return the list of messaging targets
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<OSMessagingTarget> findOSMessagingTargets(OSMessagingTargetQuery query) throws UnifyException;
+
+    /**
+     * Finds OS messaging sources.
+     * 
+     * @param query
+     *              the source query
+     * @return the list of messaging sources
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<OSMessagingSource> findOSMessagingSources(OSMessagingSourceQuery query) throws UnifyException;
+    
     /**
      * Gets OS messaging header based on supplied authorization.
      * 
@@ -49,14 +77,12 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                  the message
      * @param target
      *                  the messaging target
-     * @param processor
-     *                  the messaging processor
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
     <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            U request, String target, String processor) throws UnifyException;
+            U request, String target) throws UnifyException;
 
     /**
      * Sends asynchronous message.
@@ -65,13 +91,11 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                  the message
      * @param target
      *                  the messaging target
-     * @param processor
-     *                  the messaging processor
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target, String processor)
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target)
             throws UnifyException;
 
     /**
@@ -81,14 +105,12 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                    the message
      * @param target
      *                    the messaging target
-     * @param processor
-     *                    the messaging processor
      * @param delayInSecs
      *                    the delay in seconds.
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target, String processor,
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String target,
             long delayInSecs) throws UnifyException;
 }

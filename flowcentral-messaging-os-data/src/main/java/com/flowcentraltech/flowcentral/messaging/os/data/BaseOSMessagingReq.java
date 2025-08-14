@@ -21,6 +21,16 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  * @author FlowCentral Technologies Limited
  * @since 4.1 
  */
-public abstract class BaseOSMessagingReq {
-   
+public abstract class BaseOSMessagingReq {   
+    
+    private final String processor;
+
+    protected BaseOSMessagingReq(String processor) {
+        this.processor = processor;
+    }
+
+    public String getProcessor() {
+        return processor;
+    }
+      
 }
