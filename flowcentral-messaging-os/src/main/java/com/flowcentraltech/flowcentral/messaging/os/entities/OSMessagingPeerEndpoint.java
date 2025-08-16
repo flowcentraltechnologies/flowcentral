@@ -44,11 +44,8 @@ public class OSMessagingPeerEndpoint extends BaseStatusEntity {
     @Column(name = "ENDPOINT_URL", length = 256)
     private String endpointUrl;
 
-    @Column(name = "IN_MSG_PASSWORD", length = 128, transformer = "twoway-stringcryptograph")
-    private String inMsgPassword;
-
-    @Column(name = "OUT_MSG_PASSWORD", length = 128, transformer = "twoway-stringcryptograph")
-    private String outMsgPassword;
+    @Column(name = "PEER_AUTH", length = 128, transformer = "twoway-stringcryptograph")
+    private String peerPassword;
 
     @Override
     public String getDescription() {
@@ -79,20 +76,12 @@ public class OSMessagingPeerEndpoint extends BaseStatusEntity {
         this.endpointUrl = endpointUrl;
     }
 
-    public String getInMsgPassword() {
-        return inMsgPassword;
+    public String getPeerPassword() {
+        return peerPassword;
     }
 
-    public void setInMsgPassword(String inMsgPassword) {
-        this.inMsgPassword = inMsgPassword;
-    }
-
-    public String getOutMsgPassword() {
-        return outMsgPassword;
-    }
-
-    public void setOutMsgPassword(String outMsgPassword) {
-        this.outMsgPassword = outMsgPassword;
+    public void setPeerPassword(String peerPassword) {
+        this.peerPassword = peerPassword;
     }
 
     public void setDescription(String description) {

@@ -98,11 +98,8 @@
 				<field name="endpointUrl"
 					label="$m{osmessaging.osmessagingpeerendpoint.endpointurl}"
 					type="STRING" inputWidget="application.textarea" maxLen="256" />
-				<field name="inMsgPassword"
-					label="$m{osmessaging.osmessagingpeerendpoint.inpassword}" type="STRING"
-					inputWidget="application.password" maxLen="64" />
-				<field name="outMsgPassword"
-					label="$m{osmessaging.osmessagingpeerendpoint.outpassword}" type="STRING"
+				<field name="peerPassword"
+					label="$m{osmessaging.osmessagingpeerendpoint.peerpassword}" type="STRING"
 					inputWidget="application.password" maxLen="64" />
 			</fields>
 			<uniqueConstraints>
@@ -261,8 +258,7 @@
 					<section name="endpointDetails" columns="TYPE_2"
 						label="$m{osmessaging.osmessagingpeerendpoint.form.section.endpointdetails}">
 						<field name="endpointUrl" column="0" required="true" />
-						<field name="inMsgPassword" column="1" required="true" />
-						<field name="outMsgPassword" column="1" required="true" />
+						<field name="peerPassword" column="1" required="true" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"

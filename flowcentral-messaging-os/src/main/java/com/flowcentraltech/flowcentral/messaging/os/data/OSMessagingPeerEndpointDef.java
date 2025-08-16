@@ -40,9 +40,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     private String endpointUrl;
 
-    private String inMsgPassword;
-
-    private String outMsgPassword;
+    private String peerPassword;
 
     private RecordStatus status;
 
@@ -53,14 +51,13 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
     private Map<String, String> authentications;
 
     public OSMessagingPeerEndpointDef(Long id, String appId, String name, String description, String endpointUrl,
-            String inMsgPassword, String outMsgPassword, RecordStatus status, long versionNo, String sourceAppId) {
+            String peerPassword, RecordStatus status, long versionNo, String sourceAppId) {
         this.id = id;
         this.appId = appId;
         this.name = name;
         this.description = description;
         this.endpointUrl = endpointUrl;
-        this.inMsgPassword = inMsgPassword;
-        this.outMsgPassword = outMsgPassword;
+        this.peerPassword = peerPassword;
         this.status = status;
         this.versionNo = versionNo;
         this.sourceAppId = sourceAppId;
@@ -93,12 +90,8 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         return endpointUrl;
     }
 
-    public String getInMsgPassword() {
-        return inMsgPassword;
-    }
-
-    public String getOutMsgPassword() {
-        return outMsgPassword;
+    public String getPeerPassword() {
+        return peerPassword;
     }
 
     public RecordStatus getStatus() {
@@ -120,7 +113,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
                 authentication = authentications.get(processor);
                 if (authentication == null) {
                     authentication = EncodingUtils
-                            .getBase64String(sourceAppId + "." + processor + ":" + outMsgPassword);
+                            .getBase64String(sourceAppId + "." + processor + ":" + peerPassword);
                     authentications.put(processor, authentication);
                 }
             }

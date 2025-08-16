@@ -109,7 +109,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                             FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
                     final OSMessagingPeerEndpoint osPeerEndpoint = environment().find(new OSMessagingPeerEndpointQuery().appId(target));
                     return new OSMessagingPeerEndpointDef(osPeerEndpoint.getId(), osPeerEndpoint.getAppId(), osPeerEndpoint.getName(), osPeerEndpoint.getDescription(),
-                            osPeerEndpoint.getEndpointUrl(), osPeerEndpoint.getInMsgPassword(), osPeerEndpoint.getOutMsgPassword(), osPeerEndpoint.getStatus(),
+                            osPeerEndpoint.getEndpointUrl(), osPeerEndpoint.getPeerPassword(), osPeerEndpoint.getStatus(),
                             osPeerEndpoint.getVersionNo(), source);
                 }
 
@@ -138,7 +138,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                             final String password = parts[1];
 
                             OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(source);
-                            if (osPeerEndpointDef.getInMsgPassword().equals(password) && isComponent(processor)
+                            if (osPeerEndpointDef.getPeerPassword().equals(password) && isComponent(processor)
                                     && getComponent(processor) instanceof OSMessagingProcessor) {
                                 return new OSMessagingHeader(source, processor, osPeerEndpointDef.getVersionNo());
                             }
