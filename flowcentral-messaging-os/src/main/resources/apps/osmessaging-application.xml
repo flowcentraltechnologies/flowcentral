@@ -13,7 +13,7 @@
 	<applets>
 		<applet name="manageOSMessagingPeerEndpoint"
 			description="$m{osmessaging.osmessagingpeerendpoint.manage}"
-			label="$m{osmessaging.osmessagingpeerendpoint.manage.label}" icon="sign-out"
+			label="$m{osmessaging.osmessagingpeerendpoint.manage.label}" icon="circle-nodes"
 			type="MANAGE_ENTITYLIST" entity="osMessagingPeerEndpoint"
 			menuAccess="true">
 			<properties>
