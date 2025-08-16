@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTarget;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTargetQuery;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -30,27 +30,27 @@ import com.tcdng.unify.core.list.ZeroParams;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * OS messaging targets list.
+ * OS messaging peer end-point list.
  *
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component("osmessagingtargetlist")
-public class OSMessagingTargetListCommand extends AbstractOSMessagingListCommand<ZeroParams> {
+@Component("osmessagingpeerendpointlist")
+public class OSMessagingPeerEndpointListCommand extends AbstractOSMessagingListCommand<ZeroParams> {
 
-    public OSMessagingTargetListCommand() {
+    public OSMessagingPeerEndpointListCommand() {
         super(ZeroParams.class);
     }
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams param) throws UnifyException {
-        List<OSMessagingTarget> targetsList = osmessaging()
-                .findOSMessagingTargets((OSMessagingTargetQuery) new OSMessagingTargetQuery()
+        List<OSMessagingPeerEndpoint> endpointList = osmessaging()
+                .findOSMessagingEndpoints((OSMessagingPeerEndpointQuery) new OSMessagingPeerEndpointQuery()
                         .addSelect("name", "description").ignoreEmptyCriteria(true).addOrder("description"));
-        if (!DataUtils.isBlank(targetsList)) {
+        if (!DataUtils.isBlank(endpointList)) {
             List<ListData> resultList = new ArrayList<ListData>();
-            for (OSMessagingTarget osMessagingTarget : targetsList) {
-                resultList.add(new ListData(osMessagingTarget.getName(), osMessagingTarget.getDescription()));
+            for (OSMessagingPeerEndpoint osMessagingEndpoint : endpointList) {
+                resultList.add(new ListData(osMessagingEndpoint.getName(), osMessagingEndpoint.getDescription()));
             }
 
             return resultList;

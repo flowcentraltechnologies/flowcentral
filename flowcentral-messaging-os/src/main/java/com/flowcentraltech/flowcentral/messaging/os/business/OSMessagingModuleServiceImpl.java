@@ -30,15 +30,12 @@ import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingSourceDef;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingTargetDef;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerEndpointDef;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingLog;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSource;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSourceQuery;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTarget;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTargetQuery;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
@@ -88,9 +85,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
-    private final FactoryMap<String, OSMessagingTargetDef> osTargetDefFactoryMap;
-
-    private final FactoryMap<String, OSMessagingSourceDef> osSourceDefFactoryMap;
+    private final FactoryMap<String, OSMessagingPeerEndpointDef> osPeerEndpointDefFactoryMap;
 
     private final FactoryMap<String, OSMessagingHeader> osHeaderFactoryMap;
 
@@ -100,43 +95,22 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     public OSMessagingModuleServiceImpl() {
 
-        this.osTargetDefFactoryMap = new StaleableFactoryMap<String, OSMessagingTargetDef>()
+        this.osPeerEndpointDefFactoryMap = new StaleableFactoryMap<String, OSMessagingPeerEndpointDef>()
             {
 
                 @Override
-                protected boolean stale(String target, OSMessagingTargetDef osTargetDef) throws Exception {
-                    return isStale(new OSMessagingTargetQuery(), osTargetDef);
+                protected boolean stale(String target, OSMessagingPeerEndpointDef osPeerEndpointDef) throws Exception {
+                    return isStale(new OSMessagingPeerEndpointQuery(), osPeerEndpointDef);
                 }
 
                 @Override
-                protected OSMessagingTargetDef create(String target, Object... arg1) throws Exception {
+                protected OSMessagingPeerEndpointDef create(String target, Object... arg1) throws Exception {
                     final String source = getContainerSetting(String.class,
                             FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
-                    final OSMessagingTarget osTarget = environment().find(new OSMessagingTargetQuery().name(target));
-                    return new OSMessagingTargetDef(osTarget.getId(), osTarget.getName(), osTarget.getDescription(),
-                            osTarget.getTargetUrl(), osTarget.getPassword(), osTarget.getStatus(),
-                            osTarget.getVersionNo(), source);
-                }
-
-            };
-
-        this.osSourceDefFactoryMap = new StaleableFactoryMap<String, OSMessagingSourceDef>()
-            {
-
-                @Override
-                protected boolean stale(String source, OSMessagingSourceDef osSourceDef) throws Exception {
-                    return isStale(new OSMessagingSourceQuery(), osSourceDef);
-                }
-
-                @Override
-                protected OSMessagingSourceDef create(String source, Object... arg1) throws Exception {
-                    final OSMessagingSource osSource = environment().find(new OSMessagingSourceQuery().name(source));
-                    if (osSource == null) {
-                        throw new IllegalArgumentException("Message source [" + source + "] is unknown.");
-                    }
-
-                    return new OSMessagingSourceDef(osSource.getId(), osSource.getName(), osSource.getDescription(),
-                            osSource.getPassword(), osSource.getStatus(), osSource.getVersionNo());
+                    final OSMessagingPeerEndpoint osPeerEndpoint = environment().find(new OSMessagingPeerEndpointQuery().appId(target));
+                    return new OSMessagingPeerEndpointDef(osPeerEndpoint.getId(), osPeerEndpoint.getAppId(), osPeerEndpoint.getName(), osPeerEndpoint.getDescription(),
+                            osPeerEndpoint.getEndpointUrl(), osPeerEndpoint.getInMsgPassword(), osPeerEndpoint.getOutMsgPassword(), osPeerEndpoint.getStatus(),
+                            osPeerEndpoint.getVersionNo(), source);
                 }
 
             };
@@ -146,8 +120,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected boolean stale(String authorization, OSMessagingHeader osHeader) throws Exception {
-                    OSMessagingSourceDef osSourceDef = osSourceDefFactoryMap.get(osHeader.getSource());
-                    return osHeader.getVersionNo() != osSourceDef.getVersionNo();
+                    OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(osHeader.getSource());
+                    return osHeader.getVersionNo() != osPeerEndpointDef.getVersionNo();
                 }
 
                 @Override
@@ -163,10 +137,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                             final String processor = nparts[1];
                             final String password = parts[1];
 
-                            OSMessagingSourceDef osSourceDef = osSourceDefFactoryMap.get(source);
-                            if (osSourceDef.getPassword().equals(password) && isComponent(processor)
+                            OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(source);
+                            if (osPeerEndpointDef.getInMsgPassword().equals(password) && isComponent(processor)
                                     && getComponent(processor) instanceof OSMessagingProcessor) {
-                                return new OSMessagingHeader(source, processor, osSourceDef.getVersionNo());
+                                return new OSMessagingHeader(source, processor, osPeerEndpointDef.getVersionNo());
                             }
                         } catch (Exception e) {
                             logError(e);
@@ -221,12 +195,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public List<OSMessagingTarget> findOSMessagingTargets(OSMessagingTargetQuery query) throws UnifyException {
-        return environment().findAll(query);
-    }
-
-    @Override
-    public List<OSMessagingSource> findOSMessagingSources(OSMessagingSourceQuery query) throws UnifyException {
+    public List<OSMessagingPeerEndpoint> findOSMessagingEndpoints(OSMessagingPeerEndpointQuery query)
+            throws UnifyException {
         return environment().findAll(query);
     }
 
@@ -303,10 +273,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
             Object message) throws UnifyException {
-        final OSMessagingTargetDef osTargetDef = osTargetDefFactoryMap.get(target);
+        final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
-        headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osTargetDef.getAuthentication(processor));
-        PostResp<T> resp = IOUtils.postObjectToEndpointUsingJson(respClass, osTargetDef.getTargetUrl(), message,
+        headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
+        PostResp<T> resp = IOUtils.postObjectToEndpointUsingJson(respClass, osPeerEndpointDef.getEndpointUrl(), message,
                 headers);
         T result = extractResult(resp);
         if (systemModuleService.getSysParameterValue(boolean.class,

@@ -22,10 +22,8 @@ import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSource;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingSourceQuery;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTarget;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingTargetQuery;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -46,26 +44,15 @@ public interface OSMessagingModuleService extends FlowCentralService {
     OSInfo getOSInfo() throws UnifyException;
     
     /**
-     * Finds OS messaging targets.
+     * Finds OS messaging endpoints.
      * 
      * @param query
-     *              the target query
-     * @return the list of messaging targets
+     *              the endpoint query
+     * @return the list of messaging endpoints
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<OSMessagingTarget> findOSMessagingTargets(OSMessagingTargetQuery query) throws UnifyException;
-
-    /**
-     * Finds OS messaging sources.
-     * 
-     * @param query
-     *              the source query
-     * @return the list of messaging sources
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<OSMessagingSource> findOSMessagingSources(OSMessagingSourceQuery query) throws UnifyException;
+    List<OSMessagingPeerEndpoint> findOSMessagingEndpoints(OSMessagingPeerEndpointQuery query) throws UnifyException;
 
     /**
      * Gets OS messaging header based on supplied authorization.

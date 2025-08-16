@@ -20,45 +20,50 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
-import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.tcdng.unify.core.util.EncodingUtils;
 
 /**
- * OS messaging target definition.
+ * OS messaging peer end-point definition.
  *
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class OSMessagingTargetDef implements VersionedEntityDef {
+public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     private Long id;
+
+    private String appId;
 
     private String name;
 
     private String description;
 
-    private String targetUrl;
+    private String endpointUrl;
 
-    private String password;
+    private String inMsgPassword;
+
+    private String outMsgPassword;
 
     private RecordStatus status;
 
     private long versionNo;
 
-    private String source;
+    private String sourceAppId;
 
     private Map<String, String> authentications;
-    
-    public OSMessagingTargetDef(Long id, String name, String description, String targetUrl, String password,
-            RecordStatus status, long versionNo, String source) {
+
+    public OSMessagingPeerEndpointDef(Long id, String appId, String name, String description, String endpointUrl,
+            String inMsgPassword, String outMsgPassword, RecordStatus status, long versionNo, String sourceAppId) {
         this.id = id;
+        this.appId = appId;
         this.name = name;
         this.description = description;
-        this.targetUrl = targetUrl + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
-        this.password = password;
+        this.endpointUrl = endpointUrl;
+        this.inMsgPassword = inMsgPassword;
+        this.outMsgPassword = outMsgPassword;
         this.status = status;
         this.versionNo = versionNo;
-        this.source = source;
+        this.sourceAppId = sourceAppId;
         this.authentications = new HashMap<String, String>();
     }
 
@@ -72,6 +77,10 @@ public class OSMessagingTargetDef implements VersionedEntityDef {
         return versionNo;
     }
 
+    public String getAppId() {
+        return appId;
+    }
+
     public String getName() {
         return name;
     }
@@ -80,20 +89,28 @@ public class OSMessagingTargetDef implements VersionedEntityDef {
         return description;
     }
 
-    public String getTargetUrl() {
-        return targetUrl;
+    public String getEndpointUrl() {
+        return endpointUrl;
     }
 
-    public String getPassword() {
-        return password;
+    public String getInMsgPassword() {
+        return inMsgPassword;
+    }
+
+    public String getOutMsgPassword() {
+        return outMsgPassword;
     }
 
     public RecordStatus getStatus() {
         return status;
     }
- 
-    public String getSource() {
-        return source;
+
+    public long getVersionNo() {
+        return versionNo;
+    }
+
+    public String getSourceAppId() {
+        return sourceAppId;
     }
 
     public String getAuthentication(String processor) {
@@ -102,7 +119,8 @@ public class OSMessagingTargetDef implements VersionedEntityDef {
             synchronized (this) {
                 authentication = authentications.get(processor);
                 if (authentication == null) {
-                    authentication = EncodingUtils.getBase64String(source + "." + processor + ":" + password);
+                    authentication = EncodingUtils
+                            .getBase64String(sourceAppId + "." + processor + ":" + outMsgPassword);
                     authentications.put(processor, authentication);
                 }
             }
