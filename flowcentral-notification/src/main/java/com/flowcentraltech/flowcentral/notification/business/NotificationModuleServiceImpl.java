@@ -479,7 +479,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                 final int localMaxAttempts = notifChannelDef
                                         .isProp(NotificationChannelPropertyConstants.MAX_TRIES)
                                                 ? notifChannelDef.getPropValue(int.class,
-                                                        NotificationChannelPropertyConstants.MAX_TRIES)
+                                                        NotificationChannelPropertyConstants.MAX_TRIES, maxBatchSize)
                                                 : maxAttempts;
                                 final int localRetryMinutes = notifChannelDef
                                         .isProp(NotificationChannelPropertyConstants.RETRY_MINUTES)
