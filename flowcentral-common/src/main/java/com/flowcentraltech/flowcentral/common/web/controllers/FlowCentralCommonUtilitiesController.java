@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.web.controllers;
 
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleAuditConstants;
+import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
@@ -39,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component("/application/commonutilities")
+@Component(CommonModuleNameConstants.COMMON_UTILITIES)
 @UplBinding("web/common/upl/flowcentralcommonutilities.upl")
 @ResultMappings({
         @ResultMapping(name = FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS,
