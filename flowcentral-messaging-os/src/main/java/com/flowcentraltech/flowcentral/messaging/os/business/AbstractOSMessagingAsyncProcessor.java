@@ -15,34 +15,30 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
-import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
-import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * OS messaging processor.
+ * Convenient abstract base class for OS messaging asynchronous processors.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface OSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
-        extends FlowCentralComponent {
+public abstract class AbstractOSMessagingAsyncProcessor<U extends BaseOSMessagingReq>
+        extends AbstractOSMessagingProcessor<OSMessagingAsyncResponse, U> {
 
-    /**
-     * Gets the processor request class.
-     */
-    Class<? extends BaseOSMessagingReq> getRequestClass();
+    private static final OSMessagingAsyncResponse RESPONSE = new OSMessagingAsyncResponse();
+    
+    public AbstractOSMessagingAsyncProcessor(Class<U> requestClass) {
+        super(OSMessagingAsyncResponse.class, requestClass);
+    }
 
-    /**
-     * Processes a gateway request.
-     * 
-     * @param request
-     *                the request to process
-     * @return the gateway response
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    T process(U request) throws UnifyException;
+    @Override
+    protected final OSMessagingAsyncResponse doProcess(U request) throws UnifyException {
+        doAsyncProcess(request);
+        return RESPONSE;
+    }
 
+    protected abstract void doAsyncProcess(U request) throws UnifyException;
 }

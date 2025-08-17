@@ -19,8 +19,9 @@ import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingResponseConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.ReflectUtils;
 
@@ -32,9 +33,12 @@ import com.tcdng.unify.core.util.ReflectUtils;
  */
 public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
         extends AbstractFlowCentralComponent implements OSMessagingProcessor<T, U> {
-
+    
     protected static final OSMessagingError NO_ERROR = new OSMessagingError();
-
+    
+    @Configurable
+    private OSMessagingModuleService osMessagingModuleService;
+    
     private final Class<T> responseClass;
 
     private final Class<U> requestClass;
@@ -58,7 +62,7 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
                 return doProcess(request);
             }
         } catch (Exception e) {
-            error = new OSMessagingError(OSMessagingResponseConstants.PROCESSING_EXCEPTION,
+            error = createError(OSMessagingErrorConstants.PROCESSOR_EXCEPTION,
                     getExceptionMessage(LocaleType.APPLICATION, e));
         }
 
@@ -78,6 +82,18 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
 
     }
 
+    protected final OSMessagingModuleService osmessaging() {
+        return osMessagingModuleService;
+    }
+
+    protected final OSMessagingError createError(String errorCode) throws UnifyException {
+        return createError(errorCode, getApplicationMessage(errorCode));
+    }
+    
+    protected final OSMessagingError createError(String errorCode, String errorMessage) throws UnifyException {
+        return new OSMessagingError(errorCode, errorMessage);
+    }
+    
     protected abstract OSMessagingError validateRequest(U request) throws UnifyException;
 
     protected abstract T doProcess(U request) throws UnifyException;

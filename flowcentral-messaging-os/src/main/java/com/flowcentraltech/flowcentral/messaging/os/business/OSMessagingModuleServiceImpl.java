@@ -21,18 +21,26 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
-import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerEndpointDef;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncQuery;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpoint;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpointQuery;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingLog;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Periodic;
 import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Synchronized;
@@ -43,10 +51,15 @@ import com.tcdng.unify.core.business.QueuedExec;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.EncodingUtils;
 import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.PostResp;
+import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 
 /**
  * Implementation of OS messaging module service.
@@ -58,15 +71,87 @@ import com.tcdng.unify.core.util.IOUtils;
 @Component(OSMessagingModuleNameConstants.OSMESSAGING_MODULE_SERVICE)
 public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService implements OSMessagingModuleService {
 
-    private static final String PROCESS_MESSAGE_ASYNC =  "os::processmessageasync";
-    
+    private static final String PROCESS_MESSAGE_ASYNC = "os::processmessageasync";
+
+    private static final String BASIC_AUTH_PREFIX = "Basic ";
+
     private static final int MAX_MESSAGING_THREADS = 32;
-    
-    private static final int MAX_PROCESSING_BATCH_SIZE = 128;
+
+    private static final int MAX_PROCESSING_BATCH_SIZE = 512;
+
+    @Configurable
+    private SystemModuleService systemModuleService;
+
+    @Configurable
+    private OSMessagingAccessManager osMessagingAccessManager;
+
+    private final FactoryMap<String, OSMessagingPeerEndpointDef> osPeerEndpointDefFactoryMap;
+
+    private final FactoryMap<String, OSMessagingHeader> osHeaderFactoryMap;
 
     private final QueuedExec<Long> queuedExec;
 
+    private OSInfo osInfo;
+
     public OSMessagingModuleServiceImpl() {
+
+        this.osPeerEndpointDefFactoryMap = new StaleableFactoryMap<String, OSMessagingPeerEndpointDef>()
+            {
+
+                @Override
+                protected boolean stale(String target, OSMessagingPeerEndpointDef osPeerEndpointDef) throws Exception {
+                    return isStale(new OSMessagingPeerEndpointQuery(), osPeerEndpointDef);
+                }
+
+                @Override
+                protected OSMessagingPeerEndpointDef create(String target, Object... arg1) throws Exception {
+                    final String source = getContainerSetting(String.class,
+                            FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+                    final OSMessagingPeerEndpoint osPeerEndpoint = environment().find(new OSMessagingPeerEndpointQuery().appId(target));
+                    return new OSMessagingPeerEndpointDef(osPeerEndpoint.getId(), osPeerEndpoint.getAppId(), osPeerEndpoint.getName(), osPeerEndpoint.getDescription(),
+                            osPeerEndpoint.getEndpointUrl(), osPeerEndpoint.getPeerPassword(), osPeerEndpoint.getStatus(),
+                            osPeerEndpoint.getVersionNo(), source);
+                }
+
+            };
+
+        this.osHeaderFactoryMap = new StaleableFactoryMap<String, OSMessagingHeader>()
+            {
+
+                @Override
+                protected boolean stale(String authorization, OSMessagingHeader osHeader) throws Exception {
+                    OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(osHeader.getSource());
+                    return osHeader.getVersionNo() != osPeerEndpointDef.getVersionNo();
+                }
+
+                @Override
+                protected OSMessagingHeader create(String authorization, Object... arg1) throws Exception {
+                    if (authorization.startsWith(BASIC_AUTH_PREFIX)) {
+                        try {
+                            final String credentials = EncodingUtils
+                                    .decodeBase64String(authorization.substring(BASIC_AUTH_PREFIX.length()));
+                            String[] parts = credentials.split(":", 2);
+                            String[] nparts = parts[0].split("\\.", 2);
+
+                            final String source = nparts[0];
+                            final String processor = nparts[1];
+                            final String password = parts[1];
+
+                            OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(source);
+                            if (osPeerEndpointDef.getPeerPassword().equals(password) && isComponent(processor)
+                                    && getComponent(processor) instanceof OSMessagingProcessor) {
+                                return new OSMessagingHeader(source, processor, osPeerEndpointDef.getVersionNo());
+                            }
+                        } catch (Exception e) {
+                            logError(e);
+                        }
+                    }
+
+                    throw new IllegalArgumentException("Invalid authorization.");
+                }
+
+            };
+
         this.queuedExec = new AbstractQueuedExec<Long>(MAX_MESSAGING_THREADS)
             {
 
@@ -82,22 +167,19 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
                     try {
                         OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class,
-                                osMessagingAsync.getEndpoint(), osMessagingAsync.getMessage());
+                                osMessagingAsync.getTarget(), osMessagingAsync.getProcessor(),
+                                osMessagingAsync.getMessage());
                         environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
-                                new Update()
-                                .add("processing", Boolean.FALSE)
-                                .add("sentOn", getNow())
-                                .add("responseCode", resp.getResponseCode())
-                                .add("responseMsg", resp.getResponseMessage()));
+                                new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
+                                        .add("responseCode", resp.getResponseCode())
+                                        .add("responseMsg", resp.getResponseMessage()));
                     } catch (UnifyException e) {
                         logError(e);
                         try {
-                            final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
-                                    60);
+                            final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(),
+                                    FrequencyUnit.SECOND, 60);
                             environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
-                                    new Update()
-                                    .add("nextAttemptOn", nextAttemptOn)
-                                    .add("processing", Boolean.FALSE));
+                                    new Update().add("nextAttemptOn", nextAttemptOn).add("processing", Boolean.FALSE));
                         } catch (UnifyException e1) {
                             logError(e);
                         }
@@ -108,29 +190,47 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public List<OSMessagingEndpoint> findMessagingEndpoints(OSMessagingEndpointQuery query) throws UnifyException {
+    public OSInfo getOSInfo() throws UnifyException {
+        return osInfo;
+    }
+
+    @Override
+    public List<OSMessagingPeerEndpoint> findOSMessagingEndpoints(OSMessagingPeerEndpointQuery query)
+            throws UnifyException {
         return environment().findAll(query);
     }
 
     @Override
+    public OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException {
+        return osHeaderFactoryMap.get(authorization);
+    }
+
+    @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            U request, String endpointName) throws UnifyException {
-        return sendMessage(respClass, endpointName, request);
+            String target, U request) throws UnifyException {
+        logDebug("Sending synchronous message to [{0}]. Request = [\n{1}]", target, prettyJsonOnDebug(request));
+        request.setSource(osInfo.getAppId());
+        T resp = sendMessage(respClass, target, request.getProcessor(), request);
+        logDebug("Synchronous send message successful. Response = [\n{0}]", prettyJsonOnDebug(resp));
+        return resp;
     }
 
     @Override
-    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String endpointName)
+    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request) throws UnifyException {
+        sendAsynchronousMessage(target, request, 0L);
+    }
+
+    @Override
+    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSeconds)
             throws UnifyException {
-        sendAsynchronousMessage(request, endpointName, 0);
-    }
-
-    @Override
-    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String endpointName,
-            long delayInSeconds) throws UnifyException {
+        logDebug("Sending asynchronous message to [{0}] with delay [{1}ms]. Request = [\n{2}]", target, delayInSeconds,
+                prettyJsonOnDebug(request));
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
+        request.setSource(osInfo.getAppId());
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
-        osMessagingAsync.setEndpoint(endpointName);
+        osMessagingAsync.setTarget(target);
+        osMessagingAsync.setProcessor(request.getProcessor());
         osMessagingAsync.setMessage(DataUtils.asJsonString(request, PrintFormat.NONE));
         osMessagingAsync.setNextAttemptOn(nextAttemptOn);
         environment().create(osMessagingAsync);
@@ -139,8 +239,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Synchronized(PROCESS_MESSAGE_ASYNC)
     @Periodic(PeriodicType.FASTER)
     public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
-        final List<Long> pendingList = environment().valueList(Long.class, "id",
-                new OSMessagingAsyncQuery().isDue(getNow()).isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE));
+        logDebug("Processing asynchronous messages...");
+        final List<Long> pendingList = environment().valueList(Long.class, "id", new OSMessagingAsyncQuery()
+                .isDue(getNow()).isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
+        logDebug("Processing asynchronous [{0}] messages...", pendingList.size());
         if (!DataUtils.isBlank(pendingList)) {
             environment().updateAll(new OSMessagingAsyncQuery().idIn(pendingList),
                     new Update().add("processing", Boolean.TRUE));
@@ -152,23 +254,45 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    protected void doInstallModuleFeatures(final InstallationContext ctx,ModuleInstall moduleInstall) throws UnifyException {
+    public void initialize(UnifyComponentContext unifyComponentContext) throws UnifyException {
+        super.initialize(unifyComponentContext);
+        final String appId = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+        final String vendorName = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORNAME);
+        final String vendorDomain = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORDOMAIN);
+        osInfo = new OSInfo(appId, vendorName, vendorDomain);
+    }
+
+    @Override
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall)
+            throws UnifyException {
 
     }
 
-    private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String endpointName, Object message)
-            throws UnifyException {
-        OSMessagingEndpoint endpoint = environment().find(new OSMessagingEndpointQuery().name(endpointName));
-        if (endpoint == null) {
-            throwOperationErrorException(
-                    new IllegalArgumentException("Unknown OS application endpoint [" + endpointName + "]."));
+    private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
+            Object message) throws UnifyException {
+        final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
+        final Map<String, String> headers = new HashMap<String, String>();
+        headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
+        PostResp<T> resp = IOUtils.postObjectToEndpointUsingJson(respClass, osPeerEndpointDef.getEndpointUrl(), message,
+                headers);
+        T result = extractResult(resp);
+        if (systemModuleService.getSysParameterValue(boolean.class,
+                OSMessagingModuleSysParamConstants.MESSAGE_LOGGING_ENABLED)) {
+            OSMessagingLog log = new OSMessagingLog();
+            log.setTarget(target);
+            log.setProcessor(processor);
+            log.setRequestBody(resp.getReqJson());
+            log.setResponseBody(resp.getRespJson());
+            log.setResponseCode(result.getResponseCode());
+            log.setResponseMsg(result.getResponseMessage());
+            log.setRuntimeInMilliSec(resp.getExecMilliSec());
+            environment().create(log);
         }
 
-        Map<String, String> headers = new HashMap<String, String>();
-        headers.put(OSMessagingRequestHeaderConstants.OS_SOURCE_APPLICATION, getApplicationCode());
-        headers.put(OSMessagingRequestHeaderConstants.OS_TARGET_APPLICATION, endpoint.getTarget());
-        headers.put(OSMessagingRequestHeaderConstants.OS_MESSAGING_PROCESSOR, endpoint.getProcessor());
-        final String messagingUrl = endpoint.getNodeUrl() + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
-        return extractResult(IOUtils.postObjectToEndpointUsingJson(respClass, messagingUrl, message, headers));
+        return result;
     }
+
 }

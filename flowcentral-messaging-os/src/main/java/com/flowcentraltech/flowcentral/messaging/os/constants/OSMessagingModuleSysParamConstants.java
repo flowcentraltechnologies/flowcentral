@@ -16,14 +16,12 @@
 package com.flowcentraltech.flowcentral.messaging.os.constants;
 
 /**
- * Messaging module system parameter constants.
+ * OS messaging module system parameter constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
 public interface OSMessagingModuleSysParamConstants {
 
-    String MESSAGING_READ_ENABLED = "MSG-0001";
-
-    String MESSAGING_WRITE_ENABLED = "MSG-0002";
+    String MESSAGE_LOGGING_ENABLED = "OMG-0001";
 }

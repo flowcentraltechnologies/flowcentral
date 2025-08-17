@@ -22,12 +22,10 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  * @since 4.1
  */
 public abstract class BaseOSMessagingResp {
-    
+   
     private String responseCode;
 
     private String responseMessage;
-
-    private String reference;
 
     public BaseOSMessagingResp(String responseCode, String responseMessage) {
         this.responseCode = responseCode;
@@ -57,14 +55,6 @@ public abstract class BaseOSMessagingResp {
     
     public boolean isSuccessful() {
         return OSMessagingResponseConstants.SUCCESS_CODE.equals(responseCode);
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
     }
 
 }

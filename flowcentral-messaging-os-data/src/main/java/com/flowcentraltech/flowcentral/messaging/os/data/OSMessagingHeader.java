@@ -13,28 +13,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.business;
+package com.flowcentraltech.flowcentral.messaging.os.data;
 
-import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
-import com.tcdng.unify.core.UnifyException;
 
 /**
- * OS messaging access manager.
+ * OS messaging header.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface OSMessagingAccessManager extends  FlowCentralService {
+public class OSMessagingHeader {
 
-    /**
-     * Checks processor access by looking at supplied messaging header.
-     * 
-     * @param header
-     *                      the header
-     * @throws UnifyException
-     *                        if check access failed. if an error occurs
-     */
-    void checkAccess(OSMessagingHeader header) throws UnifyException;
+    private String source;
+
+    private String processor;
+    
+    private long versionNo;
+
+    public OSMessagingHeader(String source, String processor, long versionNo) {
+        this.source = source;
+        this.processor = processor;
+        this.versionNo = versionNo;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getProcessor() {
+        return processor;
+    }
+
+    public long getVersionNo() {
+        return versionNo;
+    }
 
 }

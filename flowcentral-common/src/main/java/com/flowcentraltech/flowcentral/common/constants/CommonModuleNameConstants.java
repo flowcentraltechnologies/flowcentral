@@ -30,4 +30,6 @@ public interface CommonModuleNameConstants {
     String SYS_PARAM_GENERATOR = "common-sysparamgenerator";
 
     String CONFIGURED_REPORT_RESOURCE = "/resource/configuredreport";
+
+    String COMMON_UTILITIES= "/application/commonutilities";
 }

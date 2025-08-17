@@ -23,7 +23,9 @@
 
 // Details
 !ui-panel:detailsPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true captionSuffix:$s{:} inlineCaption:true}
-    components:$c{applicationName applicationCode applicationVersion}	
+    components:$c{applicationName applicationCode applicationVersion serverTimeZone serverDateTime}	
 !ui-label:applicationName caption:$m{aboutpanel.applicationname} layoutCaption:true binding:applicationName
 !ui-label:applicationCode caption:$m{aboutpanel.applicationcode} layoutCaption:true binding:applicationCode
 !ui-label:applicationVersion caption:$m{aboutpanel.applicationversion} layoutCaption:true binding:applicationVersion
+!ui-label:serverTimeZone caption:$m{aboutpanel.servertimezone} layoutCaption:true binding:serverTimeZone
+!ui-label:serverDateTime caption:$m{aboutpanel.serverdatetime} layoutCaption:true binding:serverDateTime

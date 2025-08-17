@@ -20,8 +20,10 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpoint;
-import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingEndpointQuery;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -33,58 +35,78 @@ import com.tcdng.unify.core.UnifyException;
 public interface OSMessagingModuleService extends FlowCentralService {
 
     /**
-     * Finds messaging endpoints.
+     * Gets container OS information.
      * 
-     * @param query
-     *              the search criteria
-     * @return list of endpoints
+     * @return the OS information.
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<OSMessagingEndpoint> findMessagingEndpoints(OSMessagingEndpointQuery query) throws UnifyException;
+    OSInfo getOSInfo() throws UnifyException;
     
+    /**
+     * Finds OS messaging endpoints.
+     * 
+     * @param query
+     *              the endpoint query
+     * @return the list of messaging endpoints
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<OSMessagingPeerEndpoint> findOSMessagingEndpoints(OSMessagingPeerEndpointQuery query) throws UnifyException;
+
+    /**
+     * Gets OS messaging header based on supplied authorization.
+     * 
+     * @param authorization
+     *                      the authorization
+     * @return the OS messaging header
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException;
+
     /**
      * Sends synchronous message.
      * 
      * @param respClass
-     *                     the response class
+     *                  the response class
+     * @param target
+     *                  the messaging target
      * @param request
-     *                     the message
-     * @param endpointName
-     *                     the messaging end-point.
+     *                  the message
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
     <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            U request, String endpointName) throws UnifyException;
+            String target, U request) throws UnifyException;
 
     /**
      * Sends asynchronous message.
      * 
+     * @param target
+     *                the messaging target
      * @param request
-     *                     the message
-     * @param endpointName
-     *                     the messaging end-point.
+     *                the message
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String endpointName) throws UnifyException;
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request) throws UnifyException;
 
     /**
      * Sends asynchronous message with a delay.
      * 
+     * @param target
+     *                    the messaging target
      * @param request
-     *                     the message
-     * @param endpointName
-     *                     the messaging end-point.
+     *                    the message
      * @param delayInSecs
-     *                     the delay in seconds.
+     *                    the delay in seconds.
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(T request, String endpointName, long delayInSecs)
+    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSecs)
             throws UnifyException;
 }

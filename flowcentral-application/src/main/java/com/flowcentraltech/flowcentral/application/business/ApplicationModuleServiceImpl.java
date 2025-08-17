@@ -116,7 +116,6 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateHolder
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
-import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
 import com.flowcentraltech.flowcentral.common.business.PreInstallationSetup;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.SystemDefinitionsCache;
@@ -235,6 +234,7 @@ import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
+import com.tcdng.unify.core.application.PostBootSetup;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;

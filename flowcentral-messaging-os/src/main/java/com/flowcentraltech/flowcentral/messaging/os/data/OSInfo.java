@@ -16,31 +16,34 @@
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
- * Abstract base class for OS messaging requests.
- * 
+ * OS information.
+ *
  * @author FlowCentral Technologies Limited
- * @since 4.1 
+ * @since 4.1
  */
-public abstract class BaseOSMessagingReq {   
-    
-    private final String processor;
+public class OSInfo {
 
-    private String source;
+	private String appId;
+	
+	private String vendorName;
+	
+	private String vendorDomain;
 
-    protected BaseOSMessagingReq(String processor) {
-        this.processor = processor;
-    }
+	public OSInfo(String appId, String vendorName, String vendorDomain) {
+		this.appId = appId;
+		this.vendorName = vendorName;
+		this.vendorDomain = vendorDomain;
+	}
 
-    public final String getProcessor() {
-        return processor;
-    }
+	public String getAppId() {
+		return appId;
+	}
 
-    public final String getSource() {
-        return source;
-    }
+	public String getVendorName() {
+		return vendorName;
+	}
 
-    public final void setSource(String source) {
-        this.source = source;
-    }
-      
+	public String getVendorDomain() {
+		return vendorDomain;
+	}
 }

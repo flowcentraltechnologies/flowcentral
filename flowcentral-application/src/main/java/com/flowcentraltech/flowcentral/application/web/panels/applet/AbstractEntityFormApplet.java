@@ -1809,7 +1809,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                         AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
             }
             
-            au().workItemUtilities().checkSubmitToWorkflowChannel(channel, (WorkEntity) inst);
+            if (!StringUtils.isBlank(channel)) {
+                au().workItemUtilities().checkSubmitToWorkflowChannel(channel, (WorkEntity) inst);
+            }
 
             entityActionResult = createInst();
             takeAuditSnapshot(rCtx.auditEventType());
