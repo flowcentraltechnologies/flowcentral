@@ -470,12 +470,11 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                             }
 
                             try {
-                                final int localMaxBatchSize = notifChannelDef.isThrottled()
+                                int localMaxBatchSize = notifChannelDef.isThrottled()
                                         ? notifChannelDef.getMessagesPerMinute()
-                                        : (notifChannelDef.isProp(NotificationChannelPropertyConstants.MAX_BATCH_SIZE)
-                                                ? notifChannelDef.getPropValue(int.class,
-                                                        NotificationChannelPropertyConstants.MAX_BATCH_SIZE)
-                                                : maxBatchSize);
+                                        : notifChannelDef.getPropValue(int.class,
+                                                        NotificationChannelPropertyConstants.MAX_BATCH_SIZE);
+                                localMaxBatchSize = localMaxBatchSize == 0 ? maxBatchSize: localMaxBatchSize;
                                 final int localMaxAttempts = notifChannelDef
                                         .isProp(NotificationChannelPropertyConstants.MAX_TRIES)
                                                 ? notifChannelDef.getPropValue(int.class,
@@ -486,6 +485,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                                 ? notifChannelDef.getPropValue(int.class,
                                                         NotificationChannelPropertyConstants.RETRY_MINUTES)
                                                 : retryMinutes;
+                                localMaxBatchSize = 5;
                                 if (localMaxBatchSize > 0) {
                                     logDebug(
                                             "Parameters for sending notifications extracted. MaxBatchSize = [{0}], MaxAttempts = [{1}], RetryMinutes = [{2}]",
