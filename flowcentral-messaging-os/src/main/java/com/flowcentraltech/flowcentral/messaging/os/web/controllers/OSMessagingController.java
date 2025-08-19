@@ -51,6 +51,7 @@ public class OSMessagingController extends AbstractPlainJsonController {
     @SuppressWarnings("unchecked")
     @Override
     protected final String doExecute(String actionName, String requestJson) throws UnifyException {
+        logDebug("Executing controller request. Action = [{0}], request = [{1}]...", actionName, requestJson);
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
 
@@ -69,6 +70,7 @@ public class OSMessagingController extends AbstractPlainJsonController {
                     BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(), requestJson);
                     response = _processor.process((BaseOSMessagingReq) request);
                 } catch (Exception e) {
+                    logError(e);
                     error = new OSMessagingError(OSMessagingErrorConstants.PROCESSING_EXCEPTION,
                             getExceptionMessage(LocaleType.APPLICATION, e));
                 }
