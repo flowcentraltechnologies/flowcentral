@@ -46,11 +46,11 @@ public class OSMessagingPeerEndpointListCommand extends AbstractOSMessagingListC
     public List<? extends Listable> execute(Locale locale, ZeroParams param) throws UnifyException {
         List<OSMessagingPeerEndpoint> endpointList = osmessaging()
                 .findOSMessagingEndpoints((OSMessagingPeerEndpointQuery) new OSMessagingPeerEndpointQuery()
-                        .addSelect("name", "description").ignoreEmptyCriteria(true).addOrder("description"));
+                        .addSelect("appId", "description").ignoreEmptyCriteria(true).addOrder("description"));
         if (!DataUtils.isBlank(endpointList)) {
             List<ListData> resultList = new ArrayList<ListData>();
             for (OSMessagingPeerEndpoint osMessagingEndpoint : endpointList) {
-                resultList.add(new ListData(osMessagingEndpoint.getName(), osMessagingEndpoint.getDescription()));
+                resultList.add(new ListData(osMessagingEndpoint.getAppId(), osMessagingEndpoint.getDescription()));
             }
 
             return resultList;

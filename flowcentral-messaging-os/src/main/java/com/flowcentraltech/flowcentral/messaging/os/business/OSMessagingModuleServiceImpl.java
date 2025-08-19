@@ -208,8 +208,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             String target, U request) throws UnifyException {
-        logDebug("Sending synchronous message to [{0}]. Request = [\n{1}]", target, prettyJsonOnDebug(request));
         request.setSource(osInfo.getAppId());
+        logDebug("Sending synchronous message to [{0}]. Request = [\n{1}]", target, prettyJsonOnDebug(request));
         T resp = sendMessage(respClass, target, request.getProcessor(), request);
         logDebug("Synchronous send message successful. Response = [\n{0}]", prettyJsonOnDebug(resp));
         return resp;
@@ -223,11 +223,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSeconds)
             throws UnifyException {
+        request.setSource(osInfo.getAppId());
         logDebug("Sending asynchronous message to [{0}] with delay [{1}ms]. Request = [\n{2}]", target, delayInSeconds,
                 prettyJsonOnDebug(request));
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
-        request.setSource(osInfo.getAppId());
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
         osMessagingAsync.setTarget(target);
         osMessagingAsync.setProcessor(request.getProcessor());
@@ -273,6 +273,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
             Object message) throws UnifyException {
+        logDebug("Sending message [{0}\n]", message instanceof String ? message: prettyJsonOnDebug(message));
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
