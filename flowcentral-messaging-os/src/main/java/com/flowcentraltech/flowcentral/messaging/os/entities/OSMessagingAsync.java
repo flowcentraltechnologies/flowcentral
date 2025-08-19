@@ -42,13 +42,13 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "ASYNC_MESSAGE", type = ColumnType.CLOB)
     private String message;
 
-    @Column(name = "NEXT_ATTEMPT_ON")
+    @Column(name = "NEXT_ATTEMPT_ON", type = ColumnType.TIMESTAMP)
     private Date nextAttemptOn;
 
-    @Column(name = "PROCESS_BEFORE", nullable = true)
+    @Column(name = "PROCESS_BEFORE", type = ColumnType.TIMESTAMP, nullable = true)
     private Date processBefore;
 
-    @Column(name = "SENT_ON", nullable = true)
+    @Column(name = "SENT_ON", type = ColumnType.TIMESTAMP, nullable = true)
     private Date sentOn;
 
     @Column(name = "RESP_CD", length = 10, nullable = true)

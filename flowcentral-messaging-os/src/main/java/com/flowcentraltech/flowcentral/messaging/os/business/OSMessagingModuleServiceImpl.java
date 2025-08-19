@@ -234,16 +234,17 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Synchronized(PROCESS_MESSAGE_ASYNC)
-    @Periodic(PeriodicType.FASTER)
+    @Periodic(PeriodicType.FAST)
     public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing asynchronous messages...");
         final List<Long> pendingList = environment().valueList(Long.class, "id", new OSMessagingAsyncQuery()
-                .isDue(getNow()).isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
+                .isDue(getNow()).isResponseNull().isNotProcessing().setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
         logDebug("Processing asynchronous [{0}] messages...", pendingList.size());
         if (!DataUtils.isBlank(pendingList)) {
             environment().updateAll(new OSMessagingAsyncQuery().idIn(pendingList),
                     new Update().add("processing", Boolean.TRUE));
-            keepThreadAndClusterSafe("processBefore", new OSMessagingAsyncQuery().isProcessing().idIn(pendingList));
+            keepThreadAndClusterSafe("processBefore",
+                    new OSMessagingAsyncQuery().isResponseNull().isProcessing().idIn(pendingList));
             for (Long osMessagingAsyncId : pendingList) {
                 queuedExec.execute(osMessagingAsyncId);
             }
