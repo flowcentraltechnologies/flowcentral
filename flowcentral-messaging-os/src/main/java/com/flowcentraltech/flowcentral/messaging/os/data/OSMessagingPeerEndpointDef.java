@@ -20,7 +20,8 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
-import com.tcdng.unify.core.util.EncodingUtils;
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
+import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
 
 /**
  * OS messaging peer end-point definition.
@@ -56,7 +57,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         this.appId = appId;
         this.name = name;
         this.description = description;
-        this.endpointUrl = endpointUrl;
+        this.endpointUrl = endpointUrl + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
         this.peerPassword = peerPassword;
         this.status = status;
         this.versionNo = versionNo;
@@ -112,8 +113,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
             synchronized (this) {
                 authentication = authentications.get(processor);
                 if (authentication == null) {
-                    authentication = EncodingUtils
-                            .getBase64String(sourceAppId + "." + processor + ":" + peerPassword);
+                    authentication = OSMessagingUtils.getAuthorization(sourceAppId, processor, peerPassword);
                     authentications.put(processor, authentication);
                 }
             }

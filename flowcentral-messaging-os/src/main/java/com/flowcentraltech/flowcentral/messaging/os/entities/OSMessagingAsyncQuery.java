@@ -42,6 +42,10 @@ public class OSMessagingAsyncQuery extends BaseAuditEntityQuery<OSMessagingAsync
         return (OSMessagingAsyncQuery) addLessThanEqual("nextAttemptOn", now);
     }
 
+    public OSMessagingAsyncQuery isResponseNull() {
+        return (OSMessagingAsyncQuery) addIsNull("responseCode");
+    }
+
     public OSMessagingAsyncQuery isSent() {
         return (OSMessagingAsyncQuery) addIsNotNull("sentOn");
     }
