@@ -46,6 +46,7 @@ import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.security.TwoFactorAutenticationService;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.UnifyWebPropertyConstants;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -72,7 +73,8 @@ import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
         @ResultMapping(name = "switchvalidateotp",
                 response = { "!switchpanelresponse panels:$l{loginSequencePanel.validateOTPPanel}" }),
         @ResultMapping(name = "switchbranchpanel", response = { "!showpopupresponse popup:$s{selectBranchPanel}" }) ,
-        @ResultMapping(name = "switchrolepanel", response = { "!showpopupresponse popup:$s{selectRolePanel}" }) })
+        @ResultMapping(name = "switchrolepanel", response = { "!showpopupresponse popup:$s{selectRolePanel}" }),
+        @ResultMapping(name = "forwardwelcome", response = { "!forwardresponse path:$x{application.web.home}" }) })
 public class UserLoginController extends AbstractApplicationForwarderController<UserLoginPageBean> {
 
     @Configurable
@@ -264,11 +266,18 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         return "refreshlogin";
     }
 
+    @Action
+    public String exit() throws UnifyException {
+        return "forwardwelcome";
+    }
+    
     @Override
     protected void onInitPage() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
         pageBean.setLoginTenantId(null);
         setPageWidgetVisible("frmLoginTenantId", isTenancyEnabled());
+        setPageWidgetVisible("frmExitBtn",
+                getContainerSetting(boolean.class, UnifyWebPropertyConstants.APPLICATION_BUNDLED_MODE_ENABLED));
         setLoginMessage(null);
         setChgPwdMessage(null);
         setValidateOTPMsg(null);
