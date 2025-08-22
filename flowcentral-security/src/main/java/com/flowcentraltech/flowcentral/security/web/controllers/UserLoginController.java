@@ -22,6 +22,7 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractApplicationForwarderController;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.BranchInfo;
@@ -307,10 +308,16 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     private void loadUIOptions() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
-        pageBean.setLoginTitle(
-                system().getSysParameterValue(String.class, SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_TITLE));
-        pageBean.setLoginSubtitle(
-                system().getSysParameterValue(String.class, SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE));
+        final String loginTitle = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_LOGINTITLE);
+        final String loginSubtitle = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_LOGINSUBTITLE);
+        pageBean.setLoginImage(getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_LOGINHEADERIMAGE));
+        pageBean.setLoginTitle(!StringUtils.isBlank(loginTitle) ? resolveSessionMessage(loginTitle)
+                : system().getSysParameterValue(String.class, SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_TITLE));
+        pageBean.setLoginSubtitle(!StringUtils.isBlank(loginSubtitle) ? resolveSessionMessage(loginSubtitle)
+                : system().getSysParameterValue(String.class, SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE));
     }
 
     private String twoFactorAuthCheck() throws UnifyException {

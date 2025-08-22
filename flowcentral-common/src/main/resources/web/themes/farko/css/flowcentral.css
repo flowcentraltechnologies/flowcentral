@@ -216,7 +216,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-loginbtn {padding:12px 0px;width:100%;background-color:var(--color-deep);color:#fff;font-weight:bold;}
 .fc-loginbtn:hover:enabled {color:#fff;background-color:var(--color-menu);}
 .fc-logincancelbtn {padding:12px 0px;width:100%;font-weight:bold;}
-
+.fc-loginexitbtn {margin-top:-10px;padding:12px 0px;width:100%;font-weight:bold;}
+ 
 .fc-logininfo {text-align: center; width: 460px; padding-right:40px; min-height:320px;font-family: "avenir-regular",helvetica,arial}
 .fc-logininfo-label {display:block; text-align:left; font-size:32px; color:#444;}
 .fc-loginbannersection {display:inline-block; width:814px;}

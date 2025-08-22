@@ -36,6 +36,14 @@ public interface FlowCentralContainerPropertyConstants {
 
     String FLOWCENTRAL_APPLICATION_URL = "flowcentral.application.url";
 
+    String FLOWCENTRAL_APPLICATION_APPHEADERIMAGE = "flowcentral.application.appheaderimage";
+
+    String FLOWCENTRAL_APPLICATION_LOGINHEADERIMAGE = "flowcentral.application.loginheaderimage";
+
+    String FLOWCENTRAL_APPLICATION_LOGINTITLE = "flowcentral.application.logintitle";
+
+    String FLOWCENTRAL_APPLICATION_LOGINSUBTITLE = "flowcentral.application.loginsubtitle";
+
     String FLOWCENTRAL_APPLICATION_OS_APPID = "flowcentral.application.os.appid";
 
     String FLOWCENTRAL_APPLICATION_OS_VENDORNAME = "flowcentral.application.os.vendorname";

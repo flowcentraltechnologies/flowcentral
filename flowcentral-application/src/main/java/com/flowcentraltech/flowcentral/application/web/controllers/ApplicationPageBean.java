@@ -34,6 +34,8 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
     
     private String headerTitle;
     
+    private String topBannerImage;
+    
     private String contentStyleClass;
     
     private boolean enableStickyPaths;
@@ -66,6 +68,14 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     public void setWorkspaceCode(String workspaceCode) {
         this.workspaceCode = workspaceCode;
+    }
+
+    public String getTopBannerImage() {
+        return topBannerImage;
+    }
+
+    public void setTopBannerImage(String topBannerImage) {
+        this.topBannerImage = topBannerImage;
     }
 
     public String getHeaderTitle() {

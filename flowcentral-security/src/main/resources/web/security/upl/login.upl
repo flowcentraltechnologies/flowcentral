@@ -28,7 +28,7 @@
 
 // Header Section
 !ui-panel:headerSection styleClass:$e{fc-loginheader fc-loginheadertop} components:$c{topBannerImg}
-!ui-image:topBannerImg src:$s{web/images/applicationloginbanner.png}
+!ui-image:topBannerImg src:$s{web/images/applicationloginbanner.png} srcBinding:loginImage
 	styleClass:$e{fc-loginheaderimg}
 
 // Login caption
@@ -57,7 +57,7 @@
 !ui-label:frmLoginMsg styleClass:$e{ui-loginmsg} binding:loginMessage
 !ui-button:frmLoginBtn caption:$m{security.application.signin} styleClass:$e{fc-loginbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{loginAct}}
-!ui-button:frmExitBtn caption:$m{security.application.exit} styleClass:$e{fc-logincancelbtn}
+!ui-button:frmExitBtn caption:$m{security.application.exit} styleClass:$e{fc-loginexitbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{exitAct}}
 
 // 2FA
