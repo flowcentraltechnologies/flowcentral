@@ -72,6 +72,9 @@ public class AppletConfig extends BaseClassifiedConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private Boolean supportOpenInNewWindow;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean supportRemoteAccess;
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;
@@ -94,6 +97,7 @@ public class AppletConfig extends BaseClassifiedConfig {
     public AppletConfig() {
         this.menuAccess = Boolean.FALSE;
         this.supportOpenInNewWindow = Boolean.FALSE;
+        this.supportRemoteAccess = Boolean.FALSE;
         this.allowSecondaryTenants = Boolean.FALSE;
     }
     
@@ -191,6 +195,14 @@ public class AppletConfig extends BaseClassifiedConfig {
 
     public void setSupportOpenInNewWindow(Boolean supportOpenInNewWindow) {
         this.supportOpenInNewWindow = supportOpenInNewWindow;
+    }
+
+    public Boolean getSupportRemoteAccess() {
+        return supportRemoteAccess;
+    }
+
+    public void setSupportRemoteAccess(Boolean supportRemoteAccess) {
+        this.supportRemoteAccess = supportRemoteAccess;
     }
 
     public Boolean getAllowSecondaryTenants() {

@@ -38,125 +38,150 @@ public enum AppletType implements EnumConst {
             "MEL",
             FlowCentralAppletPathConstants.MANAGE_ENTITYLIST,
             false,
+            true,
             true),
     MANAGE_ENTITYLIST_ASSIGN(
             "MEA",
             FlowCentralAppletPathConstants.MANAGE_ENTITYLIST,
             false,
-            true),
+            true,
+            false),
     MANAGE_ENTITYLIST_SUBMISSION(
             "MEB",
             FlowCentralAppletPathConstants.MANAGE_ENTITYLIST,
             false,
-            true),
+            true,
+            false),
     MANAGE_ENTITYLIST_SINGLEFORM(
             "MLS",
             FlowCentralAppletPathConstants.MANAGE_ENTITYLIST_SINGLEFORM,
             false,
-            true),
+            true,
+            false),
     MANAGE_LOADINGLIST(
             "MLL",
             FlowCentralAppletPathConstants.MANAGE_LOADINGLIST,
             false,
-            true),
+            true,
+            false),
     HEADLESS_TABS(
             "HDL",
             FlowCentralAppletPathConstants.HEADLESS_TABS,
             false,
-            true),
+            true,
+            false),
     CREATE_ENTITY(
             "CEN",
             FlowCentralAppletPathConstants.CREATE_ENTITY,
             true,
-            true),
+            true,
+            false),
     CREATE_ENTITY_SUBMISSION(
             "CEB",
             FlowCentralAppletPathConstants.CREATE_ENTITY,
             true,
-            true),
+            true,
+            false),
     CREATE_ENTITY_SINGLEFORM(
             "CNS",
             FlowCentralAppletPathConstants.CREATE_ENTITY_SINGLEFORM,
             true,
-            true),
+            true,
+            false),
     FORM_WIZARD(
             "FWZ",
             FlowCentralAppletPathConstants.FORM_WIZARD,
             true,
-            true),
+            true,
+            false),
     LISTING(
             "LST",
             FlowCentralAppletPathConstants.LISTING,
             true,
+            false,
             false),
     MANAGE_PROPERTYLIST(
             "MPL",
             null,
             false,
-            true),
+            true,
+            false),
     MY_WORKITEM(
             "MWI",
             FlowCentralAppletPathConstants.MY_WORKITEM,
             true,
-            true),
+            true,
+            false),
     TASK_EXECUTION(
             "TEX",
             FlowCentralAppletPathConstants.TASK_EXECUTION,
             true,
-            true),
+            true,
+            false),
     DATA_IMPORT(
             "DIM",
             FlowCentralAppletPathConstants.DATA_IMPORT,
             true,
-            true),
+            true,
+            false),
     FACADE(
             "FAC",
             null,
+            false,
             false,
             false),
     FACADE_MULTIPLE(
             "FCM",
             null,
             false,
+            false,
             false),
     PATH_PAGE(
             "PPG",
             null,
             false,
-            true),
+            true,
+            false),
     PATH_WINDOW(
             "PWN",
             null,
             false,
-            true),
+            true,
+            false),
     REVIEW_WORKITEMS(
             "RWK",
             FlowCentralAppletPathConstants.REVIEW_WORKITEMS,
             false,
-            true),
+            true,
+            false),
     REVIEW_SINGLEFORMWORKITEMS(
             "RWS",
             FlowCentralAppletPathConstants.REVIEW_SINGLEFORMWORKITEMS,
             false,
-            true),
+            true,
+            false),
     REVIEW_WIZARDWORKITEMS(
             "RWZ",
             FlowCentralAppletPathConstants.REVIEW_WIZARDWORKITEMS,
             false,
-            true),
+            true,
+            false),
     STUDIO_FC_COMPONENT(
             "SAC",
             null,
             true,
-            true);
+            true,
+            false);
 
-    public static final List<AppletType> MANAGE_ENTITY_LIST_TYPES = Collections.unmodifiableList(Arrays.asList(
-            MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM));
+    public static final List<AppletType> MANAGE_ENTITY_LIST_TYPES = Collections
+            .unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN,
+                    MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM));
 
-    public static final List<AppletType> UNRESERVED_LIST = Collections.unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST,
-            MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM, MANAGE_LOADINGLIST,
-            HEADLESS_TABS, CREATE_ENTITY, CREATE_ENTITY_SUBMISSION, CREATE_ENTITY_SINGLEFORM, FORM_WIZARD, LISTING, TASK_EXECUTION, FACADE,
-            FACADE_MULTIPLE, PATH_WINDOW, PATH_PAGE));
+    public static final List<AppletType> UNRESERVED_LIST = Collections
+            .unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN,
+                    MANAGE_ENTITYLIST_SUBMISSION, MANAGE_ENTITYLIST_SINGLEFORM, MANAGE_LOADINGLIST, HEADLESS_TABS,
+                    CREATE_ENTITY, CREATE_ENTITY_SUBMISSION, CREATE_ENTITY_SINGLEFORM, FORM_WIZARD, LISTING,
+                    TASK_EXECUTION, FACADE, FACADE_MULTIPLE, PATH_WINDOW, PATH_PAGE));
 
     private final String code;
 
@@ -166,11 +191,14 @@ public enum AppletType implements EnumConst {
 
     private final boolean replication;
 
-    private AppletType(String code, String path, boolean formInitial, boolean replication) {
+    private final boolean remotable;
+
+    private AppletType(String code, String path, boolean formInitial, boolean replication, boolean remotable) {
         this.code = code;
         this.path = path;
         this.formInitial = formInitial;
         this.replication = replication;
+        this.remotable = remotable;
     }
 
     @Override
@@ -195,6 +223,10 @@ public enum AppletType implements EnumConst {
         return replication;
     }
 
+    public boolean isRemotable() {
+        return remotable;
+    }
+
     public boolean reserved() {
         return !UNRESERVED_LIST.contains(this);
     }
@@ -217,8 +249,9 @@ public enum AppletType implements EnumConst {
     }
 
     public boolean isEntityList() {
-        return MANAGE_ENTITYLIST.equals(this) || MANAGE_ENTITYLIST_ASSIGN.equals(this)
-                || MANAGE_ENTITYLIST_SUBMISSION.equals(this) || MANAGE_ENTITYLIST_SINGLEFORM.equals(this);
+        return MANAGE_ENTITYLIST.equals(this)
+                || MANAGE_ENTITYLIST_ASSIGN.equals(this) || MANAGE_ENTITYLIST_SUBMISSION.equals(this)
+                || MANAGE_ENTITYLIST_SINGLEFORM.equals(this);
     }
 
     public boolean isAssignment() {
@@ -243,8 +276,8 @@ public enum AppletType implements EnumConst {
     }
 
     public boolean supportsDetachedMaintain() {
-        return MANAGE_ENTITYLIST.equals(this) || MANAGE_ENTITYLIST_ASSIGN.equals(this)
-                || MANAGE_ENTITYLIST_SUBMISSION.equals(this);
+        return MANAGE_ENTITYLIST.equals(this)
+                || MANAGE_ENTITYLIST_ASSIGN.equals(this) || MANAGE_ENTITYLIST_SUBMISSION.equals(this);
     }
 
     public static AppletType fromCode(String code) {

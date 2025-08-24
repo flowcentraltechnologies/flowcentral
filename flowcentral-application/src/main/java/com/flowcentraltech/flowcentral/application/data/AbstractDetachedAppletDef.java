@@ -235,6 +235,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public boolean isSupportRemoteAccess() {
+        return parentAppletDef.isSupportRemoteAccess();
+    }
+
+    @Override
     public boolean isAllowSecondaryTenants() {
         return parentAppletDef.isAllowSecondaryTenants();
     }
