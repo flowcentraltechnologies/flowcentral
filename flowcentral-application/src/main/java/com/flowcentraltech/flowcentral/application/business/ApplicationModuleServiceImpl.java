@@ -437,9 +437,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
                             appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
-                            appApplet.isSupportOpenInNewWindow(), appApplet.isAllowSecondaryTenants(),
-                            descriptiveButtons, _actLongName, appApplet.getDescription(), appApplet.getId(),
-                            appApplet.getVersionNo());
+                            appApplet.isSupportOpenInNewWindow(), appApplet.isSupportRemoteAccess(),
+                            appApplet.isAllowSecondaryTenants(), descriptiveButtons, _actLongName,
+                            appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
 
                     List<StringToken> titleFormat = !StringUtils.isBlank(appApplet.getTitleFormat())
                             ? StringUtils.breakdownParameterizedString(appApplet.getTitleFormat())
@@ -4719,6 +4719,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setPath(appletConfig.getPath());
                     appApplet.setMenuAccess(appletConfig.getMenuAccess());
                     appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
+                    appApplet.setSupportRemoteAccess(appletConfig.getSupportRemoteAccess());
                     appApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
                     appApplet.setDisplayIndex(appletConfig.getDisplayIndex());
                     appApplet.setBaseField(appletConfig.getBaseField());
@@ -5509,6 +5510,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appApplet.setPath(appletConfig.getPath());
                 appApplet.setMenuAccess(appletConfig.getMenuAccess());
                 appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
+                appApplet.setSupportRemoteAccess(appletConfig.getSupportRemoteAccess());
                 appApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
                 appApplet.setDisplayIndex(appletConfig.getDisplayIndex());
                 appApplet.setBaseField(appletConfig.getBaseField());

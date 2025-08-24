@@ -28,6 +28,7 @@
 	components:$c{topBannerImgBdy topTitle navigationBand topAlert topBannerControl userImg wkspSelPanel}
 !ui-panel:topBannerImgBdy styleClass:$e{fc-topbannerimgbody} components:$c{topBannerImg}
 !ui-image:topBannerImg src:$s{web/images/applicationbanner.png} styleClass:$e{fc-topbannerimg}
+	srcBinding:topBannerImage
 
 !ui-panel:topTitle styleClass:$e{fc-topheadertitle} components:$c{headerTitle}
 !ui-label:headerTitle binding:headerTitle

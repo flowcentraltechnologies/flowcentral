@@ -73,6 +73,9 @@ public class AppApplet extends BaseApplicationEntity {
     private boolean supportOpenInNewWindow;
 
     @Column
+    private boolean supportRemoteAccess;
+    
+    @Column
     private boolean allowSecondaryTenants;
 
     @Column
@@ -201,6 +204,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setSupportOpenInNewWindow(boolean supportOpenInNewWindow) {
         this.supportOpenInNewWindow = supportOpenInNewWindow;
+    }
+
+    public boolean isSupportRemoteAccess() {
+        return supportRemoteAccess;
+    }
+
+    public void setSupportRemoteAccess(boolean supportRemoteAccess) {
+        this.supportRemoteAccess = supportRemoteAccess;
     }
 
     public boolean isAllowSecondaryTenants() {

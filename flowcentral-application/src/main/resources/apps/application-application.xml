@@ -863,6 +863,9 @@
 				<field name="supportOpenInNewWindow"
 					label="$m{application.appapplet.supportopeninnewwindow}"
 					type="BOOLEAN" />
+				<field name="supportRemoteAccess"
+					label="$m{application.appapplet.supportremoteaccess}"
+					type="BOOLEAN" />
 				<field name="allowSecondaryTenants"
 					label="$m{application.appapplet.allowsecondarytenants}"
 					type="BOOLEAN" />

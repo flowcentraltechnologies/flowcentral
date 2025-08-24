@@ -119,6 +119,8 @@ public interface AppletDef extends VersionedEntityDef {
 
     boolean isSupportOpenInNewWindow();
     
+    boolean isSupportRemoteAccess();
+    
     boolean isAllowSecondaryTenants();
 
     List<AppletFilterDef> getPreferredFormFilterList();

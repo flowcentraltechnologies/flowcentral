@@ -2903,6 +2903,8 @@
 						column="1" />
 					<field name="supportOpenInNewWindow"
 						inputWidget="application.checkbox" column="1" />
+					<field name="supportRemoteAccess"
+						inputWidget="application.checkbox" column="1" visible="false" />
 					<field name="allowSecondaryTenants"
 						inputWidget="application.checkbox" column="1" />
 				</section>
@@ -3038,6 +3040,16 @@
 				</onCondition>
 				<setStates>
 					<setState type="FIELD" target="path" visible="TRUE" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="ON_SWITCH" name="remoteAccessPolicy"
+				description="$m{studio.appapplet.form.formstatepolicy.remoteaccesspolicy}">
+				<onCondition>
+					<restriction type="AMONGST" field="type"
+						paramA="MEL" />
+				</onCondition>
+				<setStates>
+					<setState type="FIELD" target="supportRemoteAccess" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 			</formStatePolicies>

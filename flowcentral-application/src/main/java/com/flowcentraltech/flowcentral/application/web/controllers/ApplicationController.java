@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleOptions;
@@ -229,8 +230,12 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         if (StringUtils.isBlank(headerTitle)) {
             headerTitle = getContainerSetting(String.class, "flowcentral.application.headertitle", null);
         }
+        
         pageBean.setHeaderTitle(headerTitle);
         setPageWidgetVisible("topTitle", !StringUtils.isBlank(headerTitle));
+        
+        pageBean.setTopBannerImage(getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_APPHEADERIMAGE));
     }
 
     private void setSessionWorkspace() throws UnifyException {
