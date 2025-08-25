@@ -205,6 +205,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             String target, U request) throws UnifyException {
         request.setSource(osInfo.getAppId());
+        request.setVersion(osInfo.getAppVersion());
         logDebug("Sending synchronous message to [{0}]. Request = [\n{1}]", target, prettyJsonOnDebug(request));
         T resp = sendMessage(respClass, target, request.getProcessor(), request);
         logDebug("Synchronous send message successful. Response = [\n{0}]", prettyJsonOnDebug(resp));
@@ -220,6 +221,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSeconds)
             throws UnifyException {
         request.setSource(osInfo.getAppId());
+        request.setVersion(osInfo.getAppVersion());
         logDebug("Sending asynchronous message to [{0}] with delay [{1}ms]. Request = [\n{2}]", target, delayInSeconds,
                 prettyJsonOnDebug(request));
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
@@ -265,7 +267,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORNAME);
         final String vendorDomain = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORDOMAIN);
-        osInfo = new OSInfo(appId, vendorName, vendorDomain);
+        final String appVersion = getDeploymentVersion();
+        osInfo = new OSInfo(appId, appVersion, vendorName, vendorDomain);
     }
 
     @Override
