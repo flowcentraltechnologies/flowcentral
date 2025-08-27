@@ -46,7 +46,7 @@
 
 // Login
 !ui-panel:loginPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
-	components:$c{frmUserName frmUserPassword frmLoginTenantId frmLoginMsg frmLoginBtn}	
+	components:$c{frmUserName frmUserPassword frmLoginTenantId frmLoginMsg frmLoginBtn frmExitBtn}	
 !ui-name:frmUserName caption:$m{security.application.loginid}
 	styleClass:$e{fc-logintxt} binding:userName case:upper focus:true
     eventHandler:$d{!ui-event event:onenter action:$c{loginAct}}
@@ -58,6 +58,8 @@
 !ui-label:frmLoginMsg styleClass:$e{ui-loginmsg} binding:loginMessage
 !ui-button:frmLoginBtn caption:$m{security.application.signin} styleClass:$e{fc-loginbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{loginAct}}
+!ui-button:frmExitBtn caption:$m{security.application.exit} styleClass:$e{fc-loginexitbtn}
+	eventHandler:$d{!ui-event event:onclick action:$c{exitAct}}
 
 // 2FA
 !ui-panel:validateOTPPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
@@ -96,6 +98,7 @@
 
 // Actions
 !ui-post:loginAct path:$n{/login} components:$c{loginPanel}
+!ui-post:exitAct path:$n{/exit}
 !ui-post:changePwdAct path:$n{/changeUserPassword} components:$c{oldPassword newPassword confirmPassword}
 !ui-post:revertLoginAct path:$n{/revertLogin}
 !ui-post:validateOTPAct path:$n{/validateOTP} components:$c{validateOTPPanel}
