@@ -143,6 +143,8 @@ public abstract class AbstractInterconnect {
 
     private Map<String, EntityInfo> entities;
 
+    private Map<Class<?>, EntityInfo> entitiesByImplClass;
+
     private final RefType refType;
 
     private EntityInstFinder entityInstFinder;
@@ -227,6 +229,11 @@ public abstract class AbstractInterconnect {
                     }
 
                     entities = detectAndApplyImplicitFields(_entitiesbyclassname);
+                    entitiesByImplClass = new HashMap<Class<?>, EntityInfo>();
+                    for (Map.Entry<String, EntityInfo> entry: entities.entrySet()) {
+                        entitiesByImplClass.put(entry.getValue().getImplClass(), entry.getValue());
+                    }
+                    
                     this.entityInstFinder = entityInstFinder;
                     initialized = true;
                     LOGGER.log(Level.INFO, "Total of [{0}] entity information loaded.", entities.size());
@@ -862,6 +869,11 @@ public abstract class AbstractInterconnect {
 
     public List<String> getAllEntityNames() {
         return new ArrayList<String>(entities.keySet());
+    }
+
+    public EntityInfo findEntityInfoByClass(Class<?> implClass) throws Exception {
+        checkInitialized();
+        return entitiesByImplClass.get(implClass);
     }
 
     public EntityInfo getEntityInfo(String entity) throws Exception {
