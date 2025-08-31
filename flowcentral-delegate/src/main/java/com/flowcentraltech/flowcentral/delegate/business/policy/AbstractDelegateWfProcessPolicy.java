@@ -75,7 +75,7 @@ public abstract class AbstractDelegateWfProcessPolicy extends AbstractWfProcessP
 
     protected JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req, String endpoint)
             throws UnifyException {
-        logDebug("Sending to delegate procedure service [{0}] and endpoint [{1}]...", req, endpoint);
+        logDebug("Sending to delegate procedure service [{0}] and endpoint [{1}]...", prettyJsonOnDebug(req), endpoint);
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
         String respJSON = sendToDelegateProcedureService(reqJSON, endpoint);
         JsonProcedureResponse resp = DataUtils.fromJsonString(JsonProcedureResponse.class, respJSON);
