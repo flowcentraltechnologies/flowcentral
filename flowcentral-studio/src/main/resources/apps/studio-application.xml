@@ -2899,6 +2899,8 @@
 						visible="false" />
 					<field name="displayIndex" inputWidget="application.integer"
 						column="1" />
+					<field name="portalAccess" inputWidget="application.checkbox"
+						column="1" visible="false" />
 					<field name="menuAccess" inputWidget="application.checkbox"
 						column="1" />
 					<field name="supportOpenInNewWindow"
@@ -2935,14 +2937,14 @@
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
 				<onCondition>
 					<restriction type="AND">
-						<restriction type="IS_NOT_NULL" field="id" />
-						<restriction type="EQUALS" field="configType"
-							paramA="S" />
+							<restriction type="IS_NOT_NULL" field="id" />
+							<restriction type="EQUALS" field="configType"
+								paramA="S" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="ANNOTATION" target="staticAnnotation"
-						visible="TRUE" />
+						<setState type="ANNOTATION" target="staticAnnotation"
+							visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="ON_SWITCH"
@@ -2950,15 +2952,15 @@
 				description="$m{studio.common.form.formstatepolicy.immutable}">
 				<onCondition>
 					<restriction type="AND">
-						<restriction type="IS_NOT_NULL" field="id" />
-						<restriction type="NOT_EQUALS" field="configType"
-							paramA="C" />
+							<restriction type="IS_NOT_NULL" field="id" />
+							<restriction type="NOT_EQUALS" field="configType"
+								paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="FIELD"
-						target="name,description,entity,type,label,baseField,assignField,assignDescField,pseudoDeleteField"
-						disabled="TRUE" />
+						<setState type="FIELD"
+							target="name,description,entity,type,label,baseField,assignField,assignDescField,pseudoDeleteField"
+							disabled="TRUE" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="ON_SWITCH"
@@ -2966,39 +2968,53 @@
 				description="$m{studio.common.form.formstatepolicy.mutable}">
 				<onCondition>
 					<restriction type="AND">
-						<restriction type="IS_NOT_NULL" field="id" />
-						<restriction type="EQUALS" field="configType"
-							paramA="C" />
+							<restriction type="IS_NOT_NULL" field="id" />
+							<restriction type="EQUALS" field="configType"
+								paramA="C" />
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="TAB" target="basicDetails" editable="TRUE" />
-					<setState type="FIELD"
-						target="name,description,entity,type,baseField,assignField"
-						editable="FALSE" />
+						<setState type="TAB" target="basicDetails"
+							editable="TRUE" />
+						<setState type="FIELD"
+							target="name,description,entity,type,baseField,assignField"
+							editable="FALSE" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="ON_SWITCH"
 				name="onCreatePolicy"
 				description="$m{studio.appapplet.form.formstatepolicy.oncreate}">
 				<onCondition>
-					<restriction type="IS_NULL" field="id" />
+						<restriction type="IS_NULL" field="id" />
 				</onCondition>
 				<setStates>
-					<setState type="TAB" target="basicDetails" editable="TRUE" />
-					<setState type="FIELD" target="type" disabled="FALSE" />
+						<setState type="TAB" target="basicDetails"
+							editable="TRUE" />
+						<setState type="FIELD" target="type" disabled="FALSE" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="ON_SWITCH" name="entityPolicy"
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
-					<restriction type="AMONGST" field="type"
-						paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CEB|CNS|DIM" />
+						<restriction type="AMONGST" field="type"
+							paramA="MEL|MEA|MEB|MLS|MLL|FWZ|CEN|CEB|CNS|DIM" />
 				</onCondition>
 				<setStates>
-					<setState type="FIELD" target="entity" visible="TRUE" />
+						<setState type="FIELD" target="entity" visible="TRUE" />
 				</setStates>
 			</formStatePolicy>
+				<formStatePolicy type="ON_SWITCH"
+					name="portalAccessPolicy"
+					description="$m{studio.appapplet.form.formstatepolicy.portalaccess}">
+					<onCondition>
+						<restriction type="AMONGST" field="type"
+							paramA="MEL" />
+					</onCondition>
+					<setStates>
+						<setState type="FIELD" target="portalAccess"
+							visible="TRUE" />
+					</setStates>
+				</formStatePolicy>
 			<formStatePolicy type="ON_SWITCH"
 				name="entityAssignPolicy"
 				description="$m{studio.appapplet.form.formstatepolicy.entityassign}">

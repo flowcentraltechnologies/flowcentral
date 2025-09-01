@@ -855,6 +855,8 @@
 					label="$m{application.appapplet.pseudodeletefield}"
 					type="STRING"
 					nullable="true" />
+				<field name="portalAccess"
+					label="$m{application.appapplet.portalaccess}" type="BOOLEAN" />
 				<field name="menuAccess"
 					label="$m{application.appapplet.menuaccess}" type="BOOLEAN" />
 				<field name="titleFormat"

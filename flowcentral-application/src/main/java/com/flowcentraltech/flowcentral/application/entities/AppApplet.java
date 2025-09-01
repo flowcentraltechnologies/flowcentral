@@ -65,6 +65,9 @@ public class AppApplet extends BaseApplicationEntity {
 
     @Column(length = 1024, nullable = true)
     private String titleFormat;
+    
+    @Column
+    private boolean portalAccess;
 
     @Column
     private boolean menuAccess;
@@ -188,6 +191,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setTitleFormat(String titleFormat) {
         this.titleFormat = titleFormat;
+    }
+
+    public boolean isPortalAccess() {
+        return portalAccess;
+    }
+
+    public void setPortalAccess(boolean portalAccess) {
+        this.portalAccess = portalAccess;
     }
 
     public boolean isMenuAccess() {
