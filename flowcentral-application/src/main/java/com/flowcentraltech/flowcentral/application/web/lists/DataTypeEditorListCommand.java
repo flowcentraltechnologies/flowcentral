@@ -18,19 +18,19 @@ package com.flowcentraltech.flowcentral.application.web.lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.business.AdditionalDataTypeEditorProvider;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
+import com.flowcentraltech.flowcentral.application.util.ApplicationQueryUtils;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.list.StringParam;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Data type editor list.
@@ -40,15 +40,9 @@ import com.tcdng.unify.core.list.StringParam;
  */
 @Component("datatypeeditorlist")
 public class DataTypeEditorListCommand extends AbstractApplicationListCommand<StringParam> {
-
-    private final Map<DataType, List<Listable>> editors;
-
-    @Configurable
-    private AdditionalDataTypeEditorProvider additionalProvider;
     
     public DataTypeEditorListCommand() {
         super(StringParam.class);
-        this.editors = new HashMap<DataType, List<Listable>>();
     }
 
     @Override
@@ -56,63 +50,21 @@ public class DataTypeEditorListCommand extends AbstractApplicationListCommand<St
         if (stringParam.isPresent()) {
             DataType dataType = DataType.fromCode(stringParam.getValue());
             if (dataType != null) {
-                List<Listable> list = editors.get(dataType);
-                if (list == null) {
-                    synchronized (this) {
-                        if (list == null) {
-                            list = new ArrayList<>();
-                            switch (dataType) {
-                                case BLOB:
-                                    break;
-                                case BOOLEAN:
-                                    list.add(new ListData("!ui-checkbox", "Check Box"));
-                                    list.add(new ListData("!ui-select list:booleanlist blankOption:$m{blank.none}",
-                                            "Boolean List"));
-                                    break;
-                                case CHAR:
-                                    list.add(new ListData("!ui-text maxLen:1", "Character Field"));
-                                    break;
-                                case CLOB:
-                                    break;
-                                case DATE:
-                                    list.add(new ListData(
-                                            "!ui-date formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true",
-                                            "Calendar Field"));
-                                    break;
-                                case DECIMAL:
-                                case DOUBLE:
-                                case FLOAT:
-                                    list.add(new ListData("!ui-decimal", "Decimal Field"));
-                                    break;
-                                case INTEGER:
-                                case LONG:
-                                case SHORT:
-                                    list.add(new ListData("!ui-integer", "Integer Field"));
-                                    break;
-                                case STRING:
-                                    list.add(new ListData("!ui-text", "Text Field"));
-                                    list.add(new ListData("!ui-integertext", "Integer Text Field"));
-                                    list.add(new ListData("!ui-alphanumeric", "Alphanumeric Text Field"));
-                                    list.add(new ListData("!ui-name", "Name Field"));
-                                    break;
-                                case TIMESTAMP:
-                                case TIMESTAMP_UTC:
-                                    list.add(new ListData("!ui-datetime clearable:true", "Datetime Field"));
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            if (additionalProvider != null) {
-                                list.addAll(additionalProvider.provide(locale, dataType));
-                             }
-                            
-                            editors.put(dataType, Collections.unmodifiableList(list));
+                AppWidgetTypeQuery query = new AppWidgetTypeQuery();
+                ApplicationQueryUtils.addWidgetTypeCriteria(query, dataType);
+                query.addSelect("editor", "description").addOrder("description");
+                List<AppWidgetType> widgetTypeList = application().findAppWidgetTypes(query);
+                if (!DataUtils.isBlank(widgetTypeList)) {
+                    final List<Listable> list = new ArrayList<Listable>();
+                    for (AppWidgetType appWidgetType: widgetTypeList) {
+                        final String editor = appWidgetType.getEditor();
+                        if (editor.indexOf("%s") < 0) {
+                            list.add(new ListData(editor, appWidgetType.getDescription()));
                         }
                     }
+                    
+                    return list;
                 }
-                
-                return list;
             }
         }
 

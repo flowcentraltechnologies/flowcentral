@@ -5366,7 +5366,7 @@
 					<field name="label" inputWidget="application.text"
 						column="0"
 						required="true" />
-					<field name="type" inputWidget="application.enumlist"
+					<field name="type" inputWidget="application.simpledatatypelist"
 						column="1" required="true" switchOnChange="true" />
 					<field name="editor"
 						inputWidget="application.datatypeeditorlist" column="1" />
