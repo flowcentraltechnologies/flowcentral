@@ -68,6 +68,9 @@ public class AppletConfig extends BaseClassifiedConfig {
     private int displayIndex;
 
     @JacksonXmlProperty(isAttribute = true)
+    private Boolean portalAccess;
+
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean menuAccess;
     
     @JacksonXmlProperty(isAttribute = true)
@@ -95,6 +98,7 @@ public class AppletConfig extends BaseClassifiedConfig {
     private AppletAlertsConfig alerts;
     
     public AppletConfig() {
+        this.portalAccess = Boolean.FALSE;
         this.menuAccess = Boolean.FALSE;
         this.supportOpenInNewWindow = Boolean.FALSE;
         this.supportRemoteAccess = Boolean.FALSE;
@@ -171,6 +175,14 @@ public class AppletConfig extends BaseClassifiedConfig {
 
     public void setPseudoDeleteField(String pseudoDeleteField) {
         this.pseudoDeleteField = pseudoDeleteField;
+    }
+
+    public Boolean getPortalAccess() {
+        return portalAccess;
+    }
+
+    public void setPortalAccess(Boolean portalAccess) {
+        this.portalAccess = portalAccess;
     }
 
     public Boolean getMenuAccess() {

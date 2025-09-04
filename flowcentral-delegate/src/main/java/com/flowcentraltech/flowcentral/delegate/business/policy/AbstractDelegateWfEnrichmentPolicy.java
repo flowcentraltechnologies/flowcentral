@@ -62,6 +62,7 @@ public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnric
     @Override
     public void enrich(ValueStoreWriter wfItemWriter, ValueStoreReader wfItemReader, String rule)
             throws UnifyException {
+        logDebug("Executing workflow enrichment policy [{0}]...", getName());
         Entity inst = (Entity) wfItemReader.getValueObject();
         ProcedureRequest req = new ProcedureRequest(operation);
         req.setEntity(registrar.resolveLongName(inst.getClass()));
@@ -89,6 +90,7 @@ public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnric
 
     protected JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req, String endpoint)
             throws UnifyException {
+        logDebug("Sending to delegate procedure service [{0}] and endpoint [{1}]...", prettyJsonOnDebug(req), endpoint);
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
         String respJSON = sendToDelegateProcedureService(reqJSON, endpoint);
         JsonProcedureResponse resp = DataUtils.fromJsonString(JsonProcedureResponse.class, respJSON);

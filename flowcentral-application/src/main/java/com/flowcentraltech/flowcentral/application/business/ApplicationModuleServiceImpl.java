@@ -436,10 +436,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final AppletType type = appApplet.getType();
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
-                            appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
-                            appApplet.isSupportOpenInNewWindow(), appApplet.isSupportRemoteAccess(),
-                            appApplet.isAllowSecondaryTenants(), descriptiveButtons, _actLongName,
-                            appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
+                            appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isPortalAccess(),
+                            appApplet.isMenuAccess(), appApplet.isSupportOpenInNewWindow(),
+                            appApplet.isSupportRemoteAccess(), appApplet.isAllowSecondaryTenants(), descriptiveButtons,
+                            _actLongName, appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
 
                     List<StringToken> titleFormat = !StringUtils.isBlank(appApplet.getTitleFormat())
                             ? StringUtils.breakdownParameterizedString(appApplet.getTitleFormat())
@@ -4717,6 +4717,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setIcon(appletConfig.getIcon());
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
+                    appApplet.setPortalAccess(appletConfig.getPortalAccess());
                     appApplet.setMenuAccess(appletConfig.getMenuAccess());
                     appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
                     appApplet.setSupportRemoteAccess(appletConfig.getSupportRemoteAccess());
@@ -4742,6 +4743,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppApplet.setIcon(appletConfig.getIcon());
                     oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     oldAppApplet.setPath(appletConfig.getPath());
+                    oldAppApplet.setPortalAccess(appletConfig.getPortalAccess());
                     oldAppApplet.setMenuAccess(appletConfig.getMenuAccess());
                     oldAppApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
                     oldAppApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
@@ -5508,6 +5510,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appApplet.setIcon(appletConfig.getIcon());
                 appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                 appApplet.setPath(appletConfig.getPath());
+                appApplet.setPortalAccess(appletConfig.getPortalAccess());
                 appApplet.setMenuAccess(appletConfig.getMenuAccess());
                 appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
                 appApplet.setSupportRemoteAccess(appletConfig.getSupportRemoteAccess());

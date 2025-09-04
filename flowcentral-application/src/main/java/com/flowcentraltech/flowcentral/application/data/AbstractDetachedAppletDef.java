@@ -225,6 +225,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public boolean isPortalAccess() {
+        return parentAppletDef.isPortalAccess();
+    }
+
+    @Override
     public boolean isMenuAccess() {
         return parentAppletDef.isMenuAccess();
     }
