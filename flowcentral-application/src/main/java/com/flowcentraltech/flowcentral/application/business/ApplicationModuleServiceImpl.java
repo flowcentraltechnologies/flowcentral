@@ -72,7 +72,10 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormFilterDef;
+import com.flowcentraltech.flowcentral.application.data.FormSectionDef;
+import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.HelpSheetDef;
 import com.flowcentraltech.flowcentral.application.data.IndexDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
@@ -88,6 +91,7 @@ import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
+import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
@@ -97,6 +101,14 @@ import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalApplet;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalForm;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalFormElement;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalTableColumn;
 import com.flowcentraltech.flowcentral.application.entities.*;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -3887,6 +3899,99 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         taskMonitor.getTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
         return 0;
+    }
+
+    @Override
+    public List<String> getPortalApplicationNames() throws UnifyException {
+        return new ArrayList<String>(
+                environment().valueSet(String.class, "applicationName", new AppAppletQuery().portalAccess(true)));
+    }
+
+    @Override
+    public Optional<PortalApplication> getPortalApplication(String applicationName) throws UnifyException {
+        if (environment().countAll(new AppAppletQuery().portalAccess(true).applicationName(applicationName)) == 0) {
+            return Optional.empty();
+        }
+
+        final ApplicationDef applicationDef = getApplicationDef(applicationName);
+        final Map<String, PortalApplet> applets = new HashMap<String, PortalApplet>();
+        final Map<String, PortalTable> tables = new HashMap<String, PortalTable>();
+        final Map<String, PortalForm> forms = new HashMap<String, PortalForm>();
+        final Map<String, PortalEntity> entities = new HashMap<String, PortalEntity>();
+        for (String appletName : environment().valueList(String.class, "name",
+                new AppAppletQuery().portalAccess(true).applicationName(applicationName))) {
+            final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
+            final AppletDef appletDef = getAppletDef(applet);
+            final String entity = appletDef.getEntity();
+            final EntityDef entityDef = getEntityDef(entity);
+            if (!entities.containsKey(entity)) {
+                List<PortalEntityField> fields = new ArrayList<PortalEntityField>();
+                for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
+                    final WidgetTypeDef widgetTypeDef = entityFieldDef.getInputWidget() != null
+                            ? getWidgetTypeDef(entityFieldDef.getInputWidget())
+                            : null;
+                    final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
+                    fields.add(new PortalEntityField(entityFieldDef.getDataType().name(), entityFieldDef.getFieldName(),
+                            entityFieldDef.getFieldLabel(), editor));
+                }
+
+                entities.put(entity, new PortalEntity(entityDef.getName(), entityDef.getDescription(),
+                        DataUtils.unmodifiableList(fields)));
+            }
+
+            final String table = appletDef.getPropDef(AppletPropertyConstants.SEARCH_TABLE).getValue();
+            if (table != null && !tables.containsKey(table)) {
+                final TableDef tableDef = getTableDef(table);
+                final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
+                for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
+                    columns.add(new PortalTableColumn(tableColumnDef.getFieldName(), tableColumnDef.getLabel(),
+                            tableColumnDef.getOrder().name(), tableColumnDef.getLinkAct(),
+                            tableColumnDef.getWidthRatio()));
+                }
+
+                tables.put(table, new PortalTable(tableDef.getName(), tableDef.getDescription(), tableDef.getLabel(),
+                        entity, DataUtils.unmodifiableList(columns)));
+            }
+
+            final List<String> formList = Arrays.asList(
+                    appletDef.getPropDef(AppletPropertyConstants.CREATE_FORM).getValue(),
+                    appletDef.getPropDef(AppletPropertyConstants.MAINTAIN_FORM).getValue());
+            for (String form : formList) {
+                if (form != null && !forms.containsKey(form)) {
+                    final FormDef formDef = getFormDef(form);
+                    final List<PortalFormElement> elements = new ArrayList<PortalFormElement>();
+                    for (FormTabDef formTabDef : formDef.getFormTabDefList()) {
+                        elements.add(new PortalFormElement(FormElementType.TAB.name(), null, formTabDef.getLabel(),
+                                formTabDef.getName(), null, null, 0));
+                        for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
+                            elements.add(new PortalFormElement(FormElementType.SECTION.name(), null,
+                                    formSectionDef.getLabel(), formSectionDef.getName(), null,
+                                    formSectionDef.getColumns().name(), 0));
+                            for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
+                                final WidgetTypeDef widgetTypeDef = formFieldDef.getWidgetName() != null
+                                        ? getWidgetTypeDef(formFieldDef.getWidgetName())
+                                        : null;
+                                final String editor = InputWidgetUtils.constructEditor(widgetTypeDef,
+                                        entityDef.getFieldDef(formFieldDef.getFieldName()));
+                                elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
+                                        formFieldDef.getFieldLabel(), formFieldDef.getFieldName(), editor, null,
+                                        formFieldDef.getColumn()));
+                            }
+                        }
+                    }
+
+                    forms.put(form, new PortalForm(formDef.getName(), formDef.getDescription(), entity,
+                            DataUtils.unmodifiableList(elements)));
+                }
+            }
+
+            applets.put(applet, new PortalApplet(appletDef.getName(), appletDef.getDescription(), appletDef.getLabel(),
+                    entity, appletDef.getIcon(), formList.get(0), formList.get(1), table));
+        }
+
+        return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
+                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
+                DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values())));
     }
 
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,

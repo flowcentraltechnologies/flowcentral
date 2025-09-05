@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.io.Reader;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.APIDef;
@@ -45,6 +46,7 @@ import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
 import com.flowcentraltech.flowcentral.application.entities.AppAPI;
 import com.flowcentraltech.flowcentral.application.entities.AppAPIQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
@@ -2084,4 +2086,24 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, Reader uploadFile,
             boolean withHeaderFlag) throws UnifyException;
+    
+    /**
+     * Gets the list of portal application names
+     * 
+     * @return the list of application long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> getPortalApplicationNames() throws UnifyException;
+    
+    /**
+     * Gets a portal application by name.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return the portal application if application has any portal applet.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<PortalApplication> getPortalApplication(String applicationName) throws UnifyException;
 }
