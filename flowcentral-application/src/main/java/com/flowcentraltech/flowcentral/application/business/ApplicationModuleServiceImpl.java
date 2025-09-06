@@ -3932,7 +3932,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             : null;
                     final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
                     fields.add(new PortalEntityField(entityFieldDef.getDataType().name(), entityFieldDef.getFieldName(),
-                            entityFieldDef.getFieldLabel(), editor));
+                            entityFieldDef.getFieldLabel(), editor, entityFieldDef.isNullable()));
                 }
 
                 entities.put(entity, new PortalEntity(entityDef.getName(), entityDef.getDescription(),
