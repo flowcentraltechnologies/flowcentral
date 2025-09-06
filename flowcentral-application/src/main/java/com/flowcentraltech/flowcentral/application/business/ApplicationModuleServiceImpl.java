@@ -401,11 +401,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected ApplicationDef create(String name, Object... params) throws Exception {
                     Application application = environment().list(new ApplicationQuery().name(name));
-                    return new ApplicationDef(application.getName(), application.getDescription(), application.getId(),
-                            application.getVersionNo(), application.isDevelopable(), application.isMenuAccess(),
-                            application.getModuleName(), application.getModuleDesc(), application.getModuleLabel(),
-                            application.getModuleShortCode(), application.getSectorShortCode(),
-                            application.getSectorColor());
+                    return new ApplicationDef(application.getName(), application.getDescription(),
+                            application.getLabel(), application.getId(), application.getVersionNo(),
+                            application.isDevelopable(), application.isMenuAccess(), application.getModuleName(),
+                            application.getModuleDesc(), application.getModuleLabel(), application.getModuleShortCode(),
+                            application.getSectorShortCode(), application.getSectorColor());
                 }
 
             };
@@ -3991,10 +3991,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             table));
         }
 
-        return Optional.of(
-                new PortalApplication(getDeploymentVersion(), applicationDef.getName(), applicationDef.getDescription(),
-                        DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
-                        DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values())));
+        return Optional.of(new PortalApplication(getDeploymentVersion(), applicationDef.getName(),
+                applicationDef.getDescription(), applicationDef.getLabel(), applicationDef.getModuleName(),
+                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
+                DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values())));
     }
 
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
