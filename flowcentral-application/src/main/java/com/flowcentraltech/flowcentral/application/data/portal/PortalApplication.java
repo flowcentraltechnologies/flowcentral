@@ -25,6 +25,8 @@ import java.util.List;
  */
 public class PortalApplication {
 
+    private String version;
+
     private String name;
 
     private String description;
@@ -37,14 +39,19 @@ public class PortalApplication {
 
     private List<PortalEntity> entities;
 
-    public PortalApplication(String name, String description, List<PortalApplet> applets,
+    public PortalApplication(String version, String name, String description, List<PortalApplet> applets,
             List<PortalTable> tables, List<PortalForm> forms, List<PortalEntity> entities) {
+        this.version = version;
         this.name = name;
         this.description = description;
         this.applets = applets;
         this.tables = tables;
         this.forms = forms;
         this.entities = entities;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public String getName() {

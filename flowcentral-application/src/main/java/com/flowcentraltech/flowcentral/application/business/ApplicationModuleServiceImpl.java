@@ -3985,13 +3985,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            applets.put(applet, new PortalApplet(appletDef.getName(), appletDef.getDescription(), appletDef.getLabel(),
-                    entity, appletDef.getIcon(), formList.get(0), formList.get(1), table));
+            applets.put(applet,
+                    new PortalApplet(appletDef.getType().name(), appletDef.getName(), appletDef.getDescription(),
+                            appletDef.getLabel(), entity, appletDef.getIcon(), formList.get(0), formList.get(1),
+                            table));
         }
 
-        return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
-                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
-                DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values())));
+        return Optional.of(
+                new PortalApplication(getDeploymentVersion(), applicationDef.getName(), applicationDef.getDescription(),
+                        DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
+                        DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values())));
     }
 
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
