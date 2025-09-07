@@ -3991,7 +3991,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             table));
         }
 
-        return Optional.of(new PortalApplication(getDeploymentVersion(), applicationDef.getName(),
+        return Optional.of(new PortalApplication(applicationDef.getName(),
                 applicationDef.getDescription(), applicationDef.getLabel(), applicationDef.getModuleName(),
                 DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
                 DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values())));
