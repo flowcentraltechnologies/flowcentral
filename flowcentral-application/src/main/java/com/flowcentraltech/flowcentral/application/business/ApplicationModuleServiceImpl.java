@@ -3962,10 +3962,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final List<PortalFormElement> elements = new ArrayList<PortalFormElement>();
                     for (FormTabDef formTabDef : formDef.getFormTabDefList()) {
                         elements.add(new PortalFormElement(FormElementType.TAB.name(), null, formTabDef.getLabel(),
-                                formTabDef.getName(), null, null, 0));
+                                formTabDef.getName(), null, formTabDef.getContentType().name(), null, 0));
                         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
                             elements.add(new PortalFormElement(FormElementType.SECTION.name(), null,
-                                    formSectionDef.getLabel(), formSectionDef.getName(), null,
+                                    formSectionDef.getLabel(), formSectionDef.getName(), null, null,
                                     formSectionDef.getColumns().name(), 0));
                             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
                                 final WidgetTypeDef widgetTypeDef = formFieldDef.getWidgetName() != null
@@ -3974,7 +3974,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 final String editor = InputWidgetUtils.constructEditor(widgetTypeDef,
                                         entityDef.getFieldDef(formFieldDef.getFieldName()));
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
-                                        formFieldDef.getFieldLabel(), formFieldDef.getFieldName(), editor, null,
+                                        formFieldDef.getFieldLabel(), formFieldDef.getFieldName(), editor, null, null,
                                         formFieldDef.getColumn()));
                             }
                         }
@@ -3991,10 +3991,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             table));
         }
 
-        return Optional.of(new PortalApplication(applicationDef.getName(),
-                applicationDef.getDescription(), applicationDef.getLabel(), applicationDef.getModuleName(),
-                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
-                DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values())));
+        return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
+                applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
+                DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
+                DataUtils.unmodifiableList(entities.values())));
     }
 
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
