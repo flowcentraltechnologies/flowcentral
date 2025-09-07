@@ -44,7 +44,7 @@ public class OSMessagingPeerEndpoint extends BaseStatusEntity {
     @Column(name = "ENDPOINT_URL", length = 256)
     private String endpointUrl;
 
-    @Column(name = "PEER_AUTH", length = 128, transformer = "twoway-stringcryptograph")
+    @Column(name = "PEER_AUTH", length = 256, transformer = "twoway-stringcryptograph")
     private String peerPassword;
 
     @Override

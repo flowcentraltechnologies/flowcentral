@@ -54,7 +54,7 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "RESP_CD", length = 10, nullable = true)
     private String responseCode;
 
-    @Column(name = "RESP_MSG", length=256, nullable = true)
+    @Column(name = "RESP_MSG", length=1024, nullable = true)
     private String responseMsg;
 
     @Column(name = "PROCESSING_FG", nullable = true)
