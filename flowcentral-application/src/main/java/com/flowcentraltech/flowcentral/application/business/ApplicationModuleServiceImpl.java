@@ -3946,8 +3946,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
                 for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(), tableColumnDef.getLabel(),
-                            tableColumnDef.getOrder().name(), tableColumnDef.getLinkAct(),
-                            tableColumnDef.getWidthRatio()));
+                            tableColumnDef.getOrder() != null ? tableColumnDef.getOrder().name() : null,
+                            tableColumnDef.getLinkAct(), tableColumnDef.getWidthRatio()));
                 }
 
                 tables.put(table, new PortalTable(tableDef.getName(), tableDef.getDescription(), tableDef.getLabel(),
@@ -3967,7 +3967,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
                             elements.add(new PortalFormElement(FormElementType.SECTION.name(), null,
                                     formSectionDef.getLabel(), formSectionDef.getName(), null, null,
-                                    formSectionDef.getColumns().name(), 0));
+                                    formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null,
+                                    0));
                             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
                                 final WidgetTypeDef widgetTypeDef = formFieldDef.getWidgetName() != null
                                         ? getWidgetTypeDef(formFieldDef.getWidgetName())
