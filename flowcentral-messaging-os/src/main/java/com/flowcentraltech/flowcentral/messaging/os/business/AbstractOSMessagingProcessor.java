@@ -62,8 +62,7 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
                 return doProcess(request);
             }
         } catch (Exception e) {
-            error = createError(OSMessagingErrorConstants.PROCESSOR_EXCEPTION,
-                    getExceptionMessage(LocaleType.APPLICATION, e));
+            error = createError(OSMessagingErrorConstants.PROCESSOR_EXCEPTION, e);
         }
 
         T resp = ReflectUtils.newInstance(responseClass);
@@ -90,8 +89,12 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
         return createError(errorCode, getApplicationMessage(errorCode));
     }
     
-    protected final OSMessagingError createError(String errorCode, String errorMessage) throws UnifyException {
-        return new OSMessagingError(errorCode, errorMessage);
+    protected final OSMessagingError createError(String errorCode, Exception e) throws UnifyException {
+        return createError(errorCode, getExceptionMessage(LocaleType.APPLICATION, e));
+    }
+    
+    protected final OSMessagingError createError(String errorCode, Object... params) throws UnifyException {
+        return new OSMessagingError(errorCode, getApplicationMessage(errorCode, params));
     }
     
     protected abstract OSMessagingError validateRequest(U request) throws UnifyException;
