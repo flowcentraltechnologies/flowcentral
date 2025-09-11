@@ -39,7 +39,6 @@ import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndp
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -59,6 +58,7 @@ import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.PostResp;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 
 /**
@@ -130,6 +130,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     if (OSMessagingUtils.isBasicAuthorization(authorization)) {
                         try {
                             OSCredentials credentials = OSMessagingUtils.getOSCredentials(authorization);
+                            System.out.println("@prime: credentials = " + StringUtils.toXmlString(credentials));
                             OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap
                                     .get(credentials.getSource());
                             if (osPeerEndpointDef.getPeerPassword().equals(credentials.getPassword())
@@ -260,8 +261,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public void initialize(UnifyComponentContext unifyComponentContext) throws UnifyException {
-        super.initialize(unifyComponentContext);
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
         final String serviceId = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
         final String vendorName = getContainerSetting(String.class,
