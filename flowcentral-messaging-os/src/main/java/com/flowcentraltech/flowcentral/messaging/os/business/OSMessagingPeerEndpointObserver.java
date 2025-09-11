@@ -38,6 +38,6 @@ public interface OSMessagingPeerEndpointObserver extends  UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void update(String appId, String endpointUrl, String peerPassword) throws UnifyException;
+    void observerUpdate(String appId, String endpointUrl, String peerPassword) throws UnifyException;
 
 }
