@@ -36,7 +36,7 @@
 		<sysParameter code="APP-0007" defaultVal="import"
 			description="$m{application.sysparam.importapplicationname}"
 			editor="!ui-text" type="NAME" />
-		<sysParameter code="APP-0008" defaultVal="true"
+		<sysParameter code="APP-0008" defaultVal="false"
 			description="$m{application.sysparam.tabbedcontent}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="APP-0009" defaultVal="true"
