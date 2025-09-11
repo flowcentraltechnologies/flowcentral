@@ -23,27 +23,27 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  */
 public class OSInfo {
 
-    private String appId;
+    private String serviceId;
 
-    private String appVersion;
+    private String serviceVersion;
 
     private String vendorName;
 
     private String vendorDomain;
 
-    public OSInfo(String appId, String appVersion, String vendorName, String vendorDomain) {
-        this.appId = appId;
-        this.appVersion = appVersion;
+    public OSInfo(String serviceId, String serviceVersion, String vendorName, String vendorDomain) {
+        this.serviceId = serviceId;
+        this.serviceVersion = serviceVersion;
         this.vendorName = vendorName;
         this.vendorDomain = vendorDomain;
     }
 
-    public String getAppId() {
-        return appId;
+    public String getServiceId() {
+        return serviceId;
     }
 
-    public String getAppVersion() {
-        return appVersion;
+    public String getServiceVersion() {
+        return serviceVersion;
     }
 
     public String getVendorName() {

@@ -39,7 +39,6 @@ import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndp
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -59,6 +58,7 @@ import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.PostResp;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 
 /**
@@ -130,6 +130,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     if (OSMessagingUtils.isBasicAuthorization(authorization)) {
                         try {
                             OSCredentials credentials = OSMessagingUtils.getOSCredentials(authorization);
+                            System.out.println("@prime: credentials = " + StringUtils.toXmlString(credentials));
                             OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap
                                     .get(credentials.getSource());
                             if (osPeerEndpointDef.getPeerPassword().equals(credentials.getPassword())
@@ -204,11 +205,12 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             String target, U request) throws UnifyException {
-        request.setSource(osInfo.getAppId());
-        request.setVersion(osInfo.getAppVersion());
-        logDebug("Sending synchronous message to [{0}]. Request = [\n{1}]", target, prettyJsonOnDebug(request));
+        request.setSource(osInfo.getServiceId());
+        request.setVersion(osInfo.getServiceVersion());
+        logDebug("Sending synchronous message to service [{0}]. Request = [\n{1}]", target, prettyJsonOnDebug(request));
         T resp = sendMessage(respClass, target, request.getProcessor(), request);
-        logDebug("Synchronous send message successful. Response = [\n{0}]", prettyJsonOnDebug(resp));
+        logDebug("Synchronous send message to service [{0}] successful. Response = [\n{1}]", target,
+                prettyJsonOnDebug(resp));
         return resp;
     }
 
@@ -220,8 +222,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSeconds)
             throws UnifyException {
-        request.setSource(osInfo.getAppId());
-        request.setVersion(osInfo.getAppVersion());
+        request.setSource(osInfo.getServiceId());
+        request.setVersion(osInfo.getServiceVersion());
         logDebug("Sending asynchronous message to [{0}] with delay [{1}ms]. Request = [\n{2}]", target, delayInSeconds,
                 prettyJsonOnDebug(request));
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
@@ -259,16 +261,16 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public void initialize(UnifyComponentContext unifyComponentContext) throws UnifyException {
-        super.initialize(unifyComponentContext);
-        final String appId = getContainerSetting(String.class,
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
+        final String serviceId = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
         final String vendorName = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORNAME);
         final String vendorDomain = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORDOMAIN);
-        final String appVersion = getDeploymentVersion();
-        osInfo = new OSInfo(appId, appVersion, vendorName, vendorDomain);
+        final String serviceVersion = getDeploymentVersion();
+        osInfo = new OSInfo(serviceId, serviceVersion, vendorName, vendorDomain);
     }
 
     @Override

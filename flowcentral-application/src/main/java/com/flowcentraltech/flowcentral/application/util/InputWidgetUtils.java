@@ -346,7 +346,7 @@ public final class InputWidgetUtils {
     public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
             throws UnifyException {
         String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, false);
-        if (widgetTypeDef.isStretch()) {
+        if (widgetTypeDef != null && widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
             esb.append(" style:$s{width:100%;");
 
@@ -395,12 +395,16 @@ public final class InputWidgetUtils {
 
     private static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef, String reference,
             boolean renderer) throws UnifyException {
-        final EntityFieldAttributes efa = entityFieldDef.isWithResolvedTypeFieldDef()
-                ? entityFieldDef.getResolvedTypeFieldDef()
-                : entityFieldDef;
-        String editor = renderer ? widgetTypeDef.getRenderer() : widgetTypeDef.getEditor();
-        editor = InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference);
-        return editor;
+        if (widgetTypeDef != null) {
+            final EntityFieldAttributes efa = entityFieldDef.isWithResolvedTypeFieldDef()
+                    ? entityFieldDef.getResolvedTypeFieldDef()
+                    : entityFieldDef;
+            String editor = renderer ? widgetTypeDef.getRenderer() : widgetTypeDef.getEditor();
+            editor = InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference);
+            return editor;
+        }
+
+        return null;
     }
 
     private static String resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,

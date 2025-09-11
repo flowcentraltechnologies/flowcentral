@@ -31,11 +31,14 @@ public class PortalEntityField {
 
     private String editor;
 
-    public PortalEntityField(String type, String name, String label, String editor) {
+    private boolean nullable;
+
+    public PortalEntityField(String type, String name, String label, String editor, boolean nullable) {
         this.type = type;
         this.name = name;
         this.label = label;
         this.editor = editor;
+        this.nullable = nullable;
     }
 
     public String getType() {
@@ -52,6 +55,10 @@ public class PortalEntityField {
 
     public String getEditor() {
         return editor;
+    }
+
+    public boolean isNullable() {
+        return nullable;
     }
 
 }

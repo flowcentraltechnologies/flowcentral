@@ -23,6 +23,8 @@ package com.flowcentraltech.flowcentral.application.data.portal;
  */
 public class PortalApplet {
 
+    private String type;
+
     private String name;
 
     private String description;
@@ -39,8 +41,9 @@ public class PortalApplet {
 
     private String table;
 
-    public PortalApplet(String name, String description, String label, String entity, String icon, String createForm,
+    public PortalApplet(String type, String name, String description, String label, String entity, String icon, String createForm,
             String maintainForm, String table) {
+        this.type = type;
         this.name = name;
         this.description = description;
         this.label = label;
@@ -49,6 +52,10 @@ public class PortalApplet {
         this.createForm = createForm;
         this.maintainForm = maintainForm;
         this.table = table;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getName() {

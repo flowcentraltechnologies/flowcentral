@@ -46,7 +46,7 @@ public class OSMessagingLog extends BaseAuditEntity {
     @Column(length = 10, nullable = true)
     private String responseCode;
 
-    @Column(length = 512, nullable = true)
+    @Column(length = 1024, nullable = true)
     private String responseMsg;
     
     @Column(nullable = true)
