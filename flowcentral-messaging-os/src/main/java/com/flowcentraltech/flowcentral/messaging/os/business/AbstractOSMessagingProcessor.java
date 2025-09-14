@@ -62,6 +62,7 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
                 return doProcess(request);
             }
         } catch (Exception e) {
+            logError(e);
             error = createError(OSMessagingErrorConstants.PROCESSOR_EXCEPTION, e);
         }
 
