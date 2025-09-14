@@ -58,7 +58,6 @@ import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.PostResp;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 
 /**
@@ -130,7 +129,6 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     if (OSMessagingUtils.isBasicAuthorization(authorization)) {
                         try {
                             OSCredentials credentials = OSMessagingUtils.getOSCredentials(authorization);
-                            System.out.println("@prime: credentials = " + StringUtils.toXmlString(credentials));
                             OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap
                                     .get(credentials.getSource());
                             if (osPeerEndpointDef.getPeerPassword().equals(credentials.getPassword())
