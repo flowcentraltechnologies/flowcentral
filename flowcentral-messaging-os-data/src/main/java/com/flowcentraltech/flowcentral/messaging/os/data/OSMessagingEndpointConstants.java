@@ -13,22 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.constants;
-
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingEndpointConstants;
+package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
- * OS messaging module name constants.
+ * OS messaging end-point constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface OSMessagingModuleNameConstants {
+public interface OSMessagingEndpointConstants {
 
-    String OSMESSAGING_MODULE_NAME = "osmessaging";
-
-    String OSMESSAGING_MODULE_SERVICE = "osmessaging-moduleservice";
-
-    String OSMESSAGING_CONTROLLER = OSMessagingEndpointConstants.ENDPOINT_PATH;
+    String ENDPOINT_PATH = "/flowcentral/os/messaging";
 
 }
