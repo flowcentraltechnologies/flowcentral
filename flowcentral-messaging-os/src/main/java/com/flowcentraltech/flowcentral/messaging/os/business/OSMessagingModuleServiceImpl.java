@@ -58,7 +58,6 @@ import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.PostResp;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 
 /**
@@ -130,7 +129,6 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     if (OSMessagingUtils.isBasicAuthorization(authorization)) {
                         try {
                             OSCredentials credentials = OSMessagingUtils.getOSCredentials(authorization);
-                            System.out.println("@prime: credentials = " + StringUtils.toXmlString(credentials));
                             OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap
                                     .get(credentials.getSource());
                             if (osPeerEndpointDef.getPeerPassword().equals(credentials.getPassword())
@@ -153,39 +151,17 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             {
 
                 @Override
-                protected void doExecute(Long osMessagingAsyncId) {
-                    OSMessagingAsync osMessagingAsync;
+                protected void doExecute(Long osMessagingAsyncId){
                     try {
-                        osMessagingAsync = environment().find(OSMessagingAsync.class, osMessagingAsyncId);
+                        sendAsynchronousMessage(osMessagingAsyncId);
                     } catch (UnifyException e) {
                         logError(e);
-                        return;
-                    }
-
-                    try {
-                        OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class,
-                                osMessagingAsync.getTarget(), osMessagingAsync.getProcessor(),
-                                osMessagingAsync.getMessage());
-                        environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
-                                new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
-                                        .add("responseCode", resp.getResponseCode())
-                                        .add("responseMsg", resp.getResponseMessage()));
-                    } catch (UnifyException e) {
-                        logError(e);
-                        try {
-                            final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(),
-                                    FrequencyUnit.SECOND, 60);
-                            environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
-                                    new Update().add("nextAttemptOn", nextAttemptOn).add("processing", Boolean.FALSE));
-                        } catch (UnifyException e1) {
-                            logError(e);
-                        }
                     }
                 }
 
             };
     }
-
+    
     @Override
     public OSInfo getOSInfo() throws UnifyException {
         return osInfo;
@@ -256,6 +232,36 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 }
             } finally {
                 releaseLock(PROCESS_MESSAGE_ASYNC);
+            }
+        }
+    }
+    
+    public void sendAsynchronousMessage(Long osMessagingAsyncId) throws UnifyException {
+        OSMessagingAsync osMessagingAsync;
+        try {
+            osMessagingAsync = environment().find(OSMessagingAsync.class, osMessagingAsyncId);
+        } catch (UnifyException e) {
+            logError(e);
+            return;
+        }
+
+        try {
+            OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class,
+                    osMessagingAsync.getTarget(), osMessagingAsync.getProcessor(),
+                    osMessagingAsync.getMessage());
+            environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
+                    new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
+                            .add("responseCode", resp.getResponseCode())
+                            .add("responseMsg", resp.getResponseMessage()));
+        } catch (UnifyException e) {
+            logError(e);
+            try {
+                final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(),
+                        FrequencyUnit.SECOND, 60);
+                environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
+                        new Update().add("nextAttemptOn", nextAttemptOn).add("processing", Boolean.FALSE));
+            } catch (UnifyException e1) {
+                logError(e);
             }
         }
     }
