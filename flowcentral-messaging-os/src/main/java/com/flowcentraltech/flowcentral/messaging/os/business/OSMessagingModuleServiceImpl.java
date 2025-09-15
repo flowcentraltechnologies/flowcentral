@@ -217,8 +217,18 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         logDebug("Processing asynchronous messages...");
         if (tryGrabLock(PROCESS_MESSAGE_ASYNC)) {
             try {
+                final Date now = getNow();
+                
+                // Recover dead 
+                environment().updateAll(new OSMessagingAsyncQuery().isDead(now),
+                        new Update().add("processing", Boolean.FALSE)
+                        .add("nextAttemptOn", now)
+                        .add("processBefore", null));
+                commitTransactions();
+                
+                // New items for processing
                 final List<Long> pendingList = environment().valueList(Long.class, "id",
-                        new OSMessagingAsyncQuery().isDue(getNow()).isResponseNull().isNotProcessing()
+                        new OSMessagingAsyncQuery().isDue(now).isResponseNull().isNotProcessing()
                                 .setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
                 logDebug("Processing asynchronous [{0}] messages...", pendingList.size());
                 if (!DataUtils.isBlank(pendingList)) {
