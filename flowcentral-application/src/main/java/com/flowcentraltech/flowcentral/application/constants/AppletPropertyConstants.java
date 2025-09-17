@@ -149,6 +149,8 @@ public interface AppletPropertyConstants {
     String MAINTAIN_FORM_DELETE_POLICY = "maintainForm.delete.policy";
 
     String MAINTAIN_FORM_DELETE_CONDITION = "maintainForm.delete.condition";
+    
+    String MAINTAIN_FORM_ATTACHMENT_DISABLE_CONDITION = "maintainForm.attachment.disable.condition";
 
     String MAINTAIN_FORM_ATTACHMENTS = "maintainForm.attachments";
 
