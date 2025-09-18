@@ -3945,7 +3945,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final TableDef tableDef = getTableDef(table);
                 final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
                 for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
-                    columns.add(new PortalTableColumn(tableColumnDef.getFieldName(), tableColumnDef.getLabel(),
+                    columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
+                            StringUtils.isBlank(tableColumnDef.getLabel())
+                                    ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
+                                    : tableColumnDef.getLabel(),
                             tableColumnDef.getOrder() != null ? tableColumnDef.getOrder().name() : null,
                             tableColumnDef.getLinkAct(), tableColumnDef.getWidthRatio()));
                 }
@@ -3976,8 +3979,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 final String editor = InputWidgetUtils.constructEditor(widgetTypeDef,
                                         entityDef.getFieldDef(formFieldDef.getFieldName()));
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
-                                        formFieldDef.getFieldLabel(), formFieldDef.getFieldName(), editor, null, null,
-                                        formFieldDef.getColumn()));
+                                        StringUtils.isBlank(formFieldDef.getFieldLabel())
+                                                ? entityDef.getFieldDef(formFieldDef.getFieldName()).getFieldLabel()
+                                                : formFieldDef.getFieldLabel(),
+                                        formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn()));
                             }
                         }
                     }
