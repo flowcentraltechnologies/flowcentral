@@ -149,25 +149,23 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
 
     @Periodic(PeriodicType.FASTER)
     public void triggerMessagingForExecution(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Triggering messaging for execution...");
-
         // Reads
         if (systemModuleService.getSysParameterValue(boolean.class,
                 MessagingModuleSysParamConstants.MESSAGING_READ_ENABLED)) {
             List<String> readConfigList = environment().valueList(String.class, "name",
                     new MessagingReadConfigQuery().status(RecordStatus.ACTIVE));
-            logDebug("[{0}] active read configurations detected...", readConfigList.size());
-            for (String readConfigName : readConfigList) {
-                MessagingConfigDef messagingConfigDef = readMessagingConfigDefFactoryMap.get(readConfigName);
-                MessagingExecContext ctx = messagingConfigDef.getCtx();
-                int len = ctx.getLoadingAvailable();
-                logDebug("Loading [{0}] threads for [{1}]...", len, readConfigName);
-                for (int i = 0; i < len; i++) {
-                    ctx.getPool().execute(new ReadExec(ctx));
+            if (!DataUtils.isBlank(readConfigList)) {
+                logDebug("[{0}] active read configurations detected...", readConfigList.size());
+                for (String readConfigName : readConfigList) {
+                    MessagingConfigDef messagingConfigDef = readMessagingConfigDefFactoryMap.get(readConfigName);
+                    MessagingExecContext ctx = messagingConfigDef.getCtx();
+                    int len = ctx.getLoadingAvailable();
+                    logDebug("Loading [{0}] threads for [{1}]...", len, readConfigName);
+                    for (int i = 0; i < len; i++) {
+                        ctx.getPool().execute(new ReadExec(ctx));
+                    }
                 }
             }
-        } else {
-            logDebug("Read messaging is currently disabled.");
         }
 
         // Writes
@@ -175,18 +173,18 @@ public class MessagingModuleServiceImpl extends AbstractFlowCentralService imple
                 MessagingModuleSysParamConstants.MESSAGING_WRITE_ENABLED)) {
             List<String> writeConfigList = environment().valueList(String.class, "name",
                     new MessagingWriteConfigQuery().status(RecordStatus.ACTIVE));
-            logDebug("[{0}] active write configurations detected...", writeConfigList.size());
-            for (String writeConfigName : writeConfigList) {
-                MessagingConfigDef messagingConfigDef = writeMessagingConfigDefFactoryMap.get(writeConfigName);
-                MessagingExecContext ctx = messagingConfigDef.getCtx();
-                int len = ctx.getLoadingAvailable();
-                logDebug("Loading [{0}] threads for [{1}]...", len, writeConfigName);
-                for (int i = 0; i < len; i++) {
-                    ctx.getPool().execute(new WriteExec(ctx));
+            if (!DataUtils.isBlank(writeConfigList)) {
+                logDebug("[{0}] active write configurations detected...", writeConfigList.size());
+                for (String writeConfigName : writeConfigList) {
+                    MessagingConfigDef messagingConfigDef = writeMessagingConfigDefFactoryMap.get(writeConfigName);
+                    MessagingExecContext ctx = messagingConfigDef.getCtx();
+                    int len = ctx.getLoadingAvailable();
+                    logDebug("Loading [{0}] threads for [{1}]...", len, writeConfigName);
+                    for (int i = 0; i < len; i++) {
+                        ctx.getPool().execute(new WriteExec(ctx));
+                    }
                 }
             }
-        } else {
-            logDebug("Write messaging is currently disabled.");
         }
     }
 

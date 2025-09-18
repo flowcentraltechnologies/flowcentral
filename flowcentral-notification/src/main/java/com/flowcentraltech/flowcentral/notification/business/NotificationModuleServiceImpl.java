@@ -437,7 +437,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public void sendNotifications(TaskMonitor taskMonitor) throws UnifyException {
         if (au.system().getSysParameterValue(boolean.class, NotificationModuleSysParamConstants.NOTIFICATION_ENABLED)
                 && tryGrabLock(SEND_NOTIFICATION_LOCK)) {
-            logDebug("Lock required to send notifications successfully grabbed...");
             try {
                 final int maxBatchSize = au.system().getSysParameterValue(int.class,
                         NotificationModuleSysParamConstants.NOTIFICATION_MAX_BATCH_SIZE);
@@ -549,7 +548,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 }
             } finally {
                 releaseLock(SEND_NOTIFICATION_LOCK);
-                logDebug("Lock required to send notifications successfully released...");
             }
         }
     }

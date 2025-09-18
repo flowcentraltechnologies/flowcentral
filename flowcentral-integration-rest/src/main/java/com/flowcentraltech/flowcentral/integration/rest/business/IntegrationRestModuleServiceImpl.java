@@ -53,7 +53,6 @@ public class IntegrationRestModuleServiceImpl extends AbstractFlowCentralService
     
     @Periodic(PeriodicType.FAST)
     public void checkRestEndpointChange(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Checking REST endpoint change...");
         if (init) {
             Set<String> restEndpointNames = endpointManager.getAndClearChangedRestEndpoint();
             if (!DataUtils.isBlank(restEndpointNames)) {
@@ -67,11 +66,13 @@ public class IntegrationRestModuleServiceImpl extends AbstractFlowCentralService
     
     @Broadcast
     public void updateAllRestEndpointCache() throws UnifyException {
-        logDebug("Updating REST endpoints...");
         Set<String> activeRestEndpointPaths = endpointManager.getActiveRestEndpointPaths();
-        controllerFinder.setControllerAliases(IntegrationRestModuleNameConstants.INTEGRATION_REST_CONTROLLER,
-                activeRestEndpointPaths);
-        logDebug("REST endpoints successfully updated.");
+        if (!DataUtils.isBlank(activeRestEndpointPaths)) {
+            logDebug("Updating REST endpoints...");
+            controllerFinder.setControllerAliases(IntegrationRestModuleNameConstants.INTEGRATION_REST_CONTROLLER,
+                    activeRestEndpointPaths);
+            logDebug("REST endpoints successfully updated.");
+        }
     }
  
     @Override

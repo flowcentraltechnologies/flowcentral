@@ -628,75 +628,75 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 SystemModuleSysParamConstants.SYSTEM_SCHEDULER_MAX_TRIGGER);
 
         // Fetch tasks ready to run
-        logDebug("Fetching ready tasks...");
         List<Long> readyScheduledTaskIdList = db().valueList(Long.class, "id",
                 new ScheduledTaskQuery().readyToRunOn(now));
+        if (!DataUtils.isBlank(readyScheduledTaskIdList)) {
+            // Schedule tasks that are active only today
+            logDebug("[{0}] potential scheduled task(s) to run...", readyScheduledTaskIdList.size());
+            int triggered = 0;
+            for (Long scheduledTaskId : readyScheduledTaskIdList) {
+                ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
+                final String taskLock = scheduledTaskDef.getLock();
+                logDebug("Setting up scheduled task [{0}] using lock [{1}] ...", scheduledTaskDef.getDescription(),
+                        taskLock);
+                Map<String, Object> taskParameters = new HashMap<String, Object>();
+                taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
+                taskParameters.put(TaskParameterConstants.TENANT_ID, Entity.PRIMARY_TENANT_ID);
+                taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
+                taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 
-        // Schedule tasks that are active only today
-        logDebug("[{0}] potential scheduled task(s) to run...", readyScheduledTaskIdList.size());
-        int triggered = 0;
-        for (Long scheduledTaskId : readyScheduledTaskIdList) {
-            ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
-            final String taskLock = scheduledTaskDef.getLock();
-            logDebug("Setting up scheduled task [{0}] using lock [{1}] ...", scheduledTaskDef.getDescription(),
-                    taskLock);
-            Map<String, Object> taskParameters = new HashMap<String, Object>();
-            taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
-            taskParameters.put(TaskParameterConstants.TENANT_ID, Entity.PRIMARY_TENANT_ID);
-            taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
-            taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
+                Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
+                        new ScheduledTaskQuery().id(scheduledTaskId));
+                final Date startOn = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getStartOffset());
+                Date expiryOn = CalendarUtils.getDateWithOffset(nextExecutionOn, expirationAllowanceMilliSec);
+                if (!now.before(startOn) && now.before(expiryOn)) {
+                    // Task execution has not expired. Start task
+                    // Load settings
+                    for (ParamValueDef pvd : scheduledTaskDef.getParamValuesDef().getParamValueList()) {
+                        taskParameters.put(pvd.getParamName(), pvd.getConvertedParamVal());
+                    }
 
-            Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
-                    new ScheduledTaskQuery().id(scheduledTaskId));
-            final Date startOn = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getStartOffset());
-            Date expiryOn = CalendarUtils.getDateWithOffset(nextExecutionOn, expirationAllowanceMilliSec);
-            if (!now.before(startOn) && now.before(expiryOn)) {
-                // Task execution has not expired. Start task
-                // Load settings
-                for (ParamValueDef pvd : scheduledTaskDef.getParamValuesDef().getParamValueList()) {
-                    taskParameters.put(pvd.getParamName(), pvd.getConvertedParamVal());
+                    // Fire task
+                    taskManager.scheduleTaskToRunAfter(scheduledTaskDef.getTaskName(), taskParameters, true, 0);
+                    logDebug("Task [{0}] is setup to run...", scheduledTaskDef.getDescription());
+                    triggered++;
                 }
 
-                // Fire task
-                taskManager.scheduleTaskToRunAfter(scheduledTaskDef.getTaskName(), taskParameters, true, 0);
-                logDebug("Task [{0}] is setup to run...", scheduledTaskDef.getDescription());
-                triggered++;
-            }
-
-            // Calculate and set next execution
-            Date calcNextExecutionOn = null;
-            long repeatMillSecs = scheduledTaskDef.getRepeatMillSecs();
-            if (repeatMillSecs > 0) {
-                Date limit = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getEndOffset());
-                long factor = ((now.getTime() - nextExecutionOn.getTime()) / repeatMillSecs) + 1;
-                long actNextOffsetMillSecs = factor * repeatMillSecs;
-                calcNextExecutionOn = CalendarUtils.getDateWithOffset(nextExecutionOn, actNextOffsetMillSecs);
-                if (calcNextExecutionOn.before(startOn) || calcNextExecutionOn.after(limit)) {
-                    calcNextExecutionOn = null;
+                // Calculate and set next execution
+                Date calcNextExecutionOn = null;
+                long repeatMillSecs = scheduledTaskDef.getRepeatMillSecs();
+                if (repeatMillSecs > 0) {
+                    Date limit = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getEndOffset());
+                    long factor = ((now.getTime() - nextExecutionOn.getTime()) / repeatMillSecs) + 1;
+                    long actNextOffsetMillSecs = factor * repeatMillSecs;
+                    calcNextExecutionOn = CalendarUtils.getDateWithOffset(nextExecutionOn, actNextOffsetMillSecs);
+                    if (calcNextExecutionOn.before(startOn) || calcNextExecutionOn.after(limit)) {
+                        calcNextExecutionOn = null;
+                    }
                 }
-            }
 
-            if (calcNextExecutionOn == null) {
-                if (now.before(startOn) && CalendarUtils.isWithinCalendar(scheduledTaskDef.getWeekdays(),
-                        scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), startOn)) {
-                    // Today start time
-                    calcNextExecutionOn = startOn;
-                } else {
-                    // Use next eligible date start time
-                    calcNextExecutionOn = CalendarUtils.getDateWithOffset(
-                            CalendarUtils.getNextEligibleDate(scheduledTaskDef.getWeekdays(),
-                                    scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), workingDt),
-                            scheduledTaskDef.getStartOffset());
+                if (calcNextExecutionOn == null) {
+                    if (now.before(startOn) && CalendarUtils.isWithinCalendar(scheduledTaskDef.getWeekdays(),
+                            scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), startOn)) {
+                        // Today start time
+                        calcNextExecutionOn = startOn;
+                    } else {
+                        // Use next eligible date start time
+                        calcNextExecutionOn = CalendarUtils.getDateWithOffset(
+                                CalendarUtils.getNextEligibleDate(scheduledTaskDef.getWeekdays(),
+                                        scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), workingDt),
+                                scheduledTaskDef.getStartOffset());
+                    }
                 }
-            }
 
-            environment().updateById(ScheduledTask.class, scheduledTaskId,
-                    new Update().add("nextExecutionOn", calcNextExecutionOn).add("lastExecutionOn", now));
-            logDebug("Task [{0}] is scheduled to run next on [{1,date,dd/MM/yy HH:mm:ss}]...",
-                    scheduledTaskDef.getDescription(), calcNextExecutionOn);
+                environment().updateById(ScheduledTask.class, scheduledTaskId,
+                        new Update().add("nextExecutionOn", calcNextExecutionOn).add("lastExecutionOn", now));
+                logDebug("Task [{0}] is scheduled to run next on [{1,date,dd/MM/yy HH:mm:ss}]...",
+                        scheduledTaskDef.getDescription(), calcNextExecutionOn);
 
-            if (triggered >= maxScheduledTaskTrigger) {
-                break;
+                if (triggered >= maxScheduledTaskTrigger) {
+                    break;
+                }
             }
         }
     }

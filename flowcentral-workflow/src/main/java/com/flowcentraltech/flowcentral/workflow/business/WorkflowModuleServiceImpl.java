@@ -1330,41 +1330,45 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public void sendWorkItemAlerts(TaskMonitor taskMonitor) throws UnifyException {
         if (tryGrabLock(WFITEMALERT_QUEUE_LOCK)) {
             try {
-                logDebug("Sending work item alerts...");
                 final Date now = getNow();
                 final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_ALERT_BATCH_SIZE);
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().reminderDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] reminder work item alerts...", wfItemList.size());
-                for (WfItem wfItem : wfItemList) {
-                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.REMINDER_NOTIFICATION);
-                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                            sent ? new Update().add("reminderAlertSent", true)
-                                    : new Update().add("reminderAlertSent", false).add("reminderDt", null));
-                }
+                if (!DataUtils.isBlank(wfItemList)) {
+                    logDebug("Sending [{0}] reminder work item alerts...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.REMINDER_NOTIFICATION);
+                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                                sent ? new Update().add("reminderAlertSent", true)
+                                        : new Update().add("reminderAlertSent", false).add("reminderDt", null));
+                    }
 
-                commitTransactions();
+                    commitTransactions();
+                }
 
                 wfItemList = environment().listAll(new WfItemQuery().criticalDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] critical work item alerts...", wfItemList.size());
-                for (WfItem wfItem : wfItemList) {
-                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.CRITICAL_NOTIFICATION);
-                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                            new Update().add("criticalAlertSent", sent).add("criticalDt", null));
-                }
+                if (!DataUtils.isBlank(wfItemList)) {
+                    logDebug("Sending [{0}] critical work item alerts...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.CRITICAL_NOTIFICATION);
+                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                                new Update().add("criticalAlertSent", sent).add("criticalDt", null));
+                    }
 
-                commitTransactions();
+                    commitTransactions();
+                }
 
                 wfItemList = environment().listAll(new WfItemQuery().expirationDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] expiration work item alerts...", wfItemList.size());
-                for (WfItem wfItem : wfItemList) {
-                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.EXPIRATION_NOTIFICATION);
-                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                            new Update().add("expirationAlertSent", sent).add("expectedDt", null));
+                if (!DataUtils.isBlank(wfItemList)) {
+                    logDebug("Sending [{0}] expiration work item alerts...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.EXPIRATION_NOTIFICATION);
+                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                                new Update().add("expirationAlertSent", sent).add("expectedDt", null));
+                    }
+
+                    commitTransactions();
                 }
-
-                commitTransactions();
-
             } finally {
                 releaseLock(WFITEMALERT_QUEUE_LOCK);
                 logDebug("Work item alerts sending completed.");
@@ -1417,34 +1421,34 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @SuppressWarnings("unchecked")
     @Periodic(PeriodicType.FASTER)
     public void ejectDelayedWorkItem(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Ejecting delayed work items...");
         if (tryGrabLock(WFITEM_EJECTION_LOCK)) {
             try {
-                logDebug("Fetching delayed work items ready for ejection...");
                 final Date now = getNow();
                 final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).setLimit(batchSize));
-                logDebug("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
                 List<Long> ejected = new ArrayList<Long>();
-                for (WfItem wfItem : wfItemList) {
-                    final Long wfItemId = wfItem.getId();
-                    final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-                    final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
-                    final String nextStepName = currentWfStepDef.getNextStepName();
+                if (!DataUtils.isBlank(wfItemList)) {
+                    logDebug("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        final Long wfItemId = wfItem.getId();
+                        final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+                        final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+                        final String nextStepName = currentWfStepDef.getNextStepName();
 
-                    final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
-                    final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(),
-                            wfItem.getWfStepName(), null, null, null, null);
+                        final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
+                        final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(),
+                                wfItem.getWfStepName(), null, null, null, null);
 
-                    wfItem.setWfItemEventId(wfItemEventId);
-                    wfItem.setEjectionDt(null);
-                    environment().updateByIdVersion(wfItem);
+                        wfItem.setWfItemEventId(wfItemEventId);
+                        wfItem.setEjectionDt(null);
+                        environment().updateByIdVersion(wfItem);
 
-                    pushToWfTransitionQueue(wfDef, wfItemId, true);
-                    commitTransactions();
+                        pushToWfTransitionQueue(wfDef, wfItemId, true);
+                        commitTransactions();
 
-                    ejected.add(wfItemId);
+                        ejected.add(wfItemId);
+                    }
                 }
 
                 List<WfStep> stepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
@@ -1453,8 +1457,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 for (WfStep wfStep : stepList) {
                     final String workflowName = ApplicationNameUtils
                             .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
-                    logDebug("Checking step [{0}] in workflow [{1}] for retriction ejection...", wfStep.getName(),
-                            workflowName);
                     final WfDef wfDef = getWfDef(workflowName);
                     final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfStep.getName());
                     final String nextStepName = currentWfStepDef.getNextStepName();
@@ -1472,8 +1474,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         }
 
                         List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
-                        logDebug("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
                         if (!DataUtils.isBlank(workRecIds)) {
+                            logDebug("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
                             List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
                                     Query.of((Class<? extends Entity>) entityDef.getEntityClass())
                                             .addAmongst("id", workRecIds).addRestriction(restriction));
@@ -1500,24 +1502,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             } finally {
                 releaseLock(WFITEM_EJECTION_LOCK);
-                logDebug("Work item ejections completed.");
             }
         }
     }
 
     @Periodic(PeriodicType.FASTEST)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Processing transition queue items...");
         List<WfTransitionQueue> pendingList = null;
         if (tryGrabLock(WFTRANSITION_QUEUE_LOCK)) {
             try {
-                logDebug("Lock acquired for transition queue processing...");
                 final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WFTRANSITION_PROCESSING_BATCH_SIZE);
                 pendingList = environment()
                         .findAll(new WfTransitionQueueQuery().unprocessed().orderById().setLimit(batchSize));
-                logDebug("Fetched [{0}] transition queue items...", pendingList.size());
                 if (!DataUtils.isBlank(pendingList)) {
+                    logDebug("Fetched [{0}] transition queue items...", pendingList.size());
                     List<Long> pendingIdList = new ArrayList<Long>();
                     for (WfTransitionQueue wfTransitionQueue : pendingList) {
                         pendingIdList.add(wfTransitionQueue.getId());
@@ -1528,7 +1527,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             } finally {
                 releaseLock(WFTRANSITION_QUEUE_LOCK);
-                logDebug("Released transition queue processing lock.");
             }
         }
 
@@ -1542,7 +1540,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     environment().updateByIdVersion(wfTransitionQueue);
                 }
             }
-            logDebug("Workflow transition completed.");
         }
     }
 
@@ -1551,39 +1548,39 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public void processAutoloadingItems(TaskMonitor taskMonitor) throws UnifyException {
         if (appletUtil.system().getSysParameterValue(boolean.class,
                 WorkflowModuleSysParamConstants.WF_ENABLE_AUTOLOADING)) {
-            logDebug("Processing workflow auto-loading...");
             if (tryGrabLock(WFAUTOLOADING_LOCK)) {
                 try {
-                    logDebug("Lock acquired for workflow auto loading...");
                     final Date now = getNow();
                     final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                             WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
                     List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
                             .supportsAutoload().addSelect("applicationName", "workflowName", "autoLoadConditionName"));
-                    logDebug("[{0}] steps detected with auto loading...", autoLoadStepList.size());
-                    for (WfStep wfStep : autoLoadStepList) {
-                        String workflowName = ApplicationNameUtils
-                                .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
-                        logDebug("Performing workflow auto loading for [{0}]...", workflowName);
-                        WfDef wfDef = getWfDef(workflowName);
-                        EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfDef.getEntity());
-                        Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName()).getFilterDef()
-                                .getRestriction(entityClassDef.getEntityDef(), null, now);
-                        List<? extends WorkEntity> entityList = environment().listAll(Query
-                                .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
-                                .addRestriction(restriction).addRestriction(new Or()
-                                        .add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
-                                .addOrder("id").setLimit(batchSize));
-                        logDebug("Loading [{0}] items for workflow [{1}]...", entityList.size(), workflowName);
-                        for (WorkEntity inst : entityList) {
-                            submitToWorkflowByName(workflowName, inst);
-                        }
+                    if (!DataUtils.isBlank(autoLoadStepList)) {
+                        logDebug("[{0}] steps detected with auto loading...", autoLoadStepList.size());
+                        for (WfStep wfStep : autoLoadStepList) {
+                            String workflowName = ApplicationNameUtils.getApplicationEntityLongName(
+                                    wfStep.getApplicationName(), wfStep.getWorkflowName());
+                            logDebug("Performing workflow auto loading for [{0}]...", workflowName);
+                            WfDef wfDef = getWfDef(workflowName);
+                            EntityClassDef entityClassDef = appletUtil.application()
+                                    .getEntityClassDef(wfDef.getEntity());
+                            Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName())
+                                    .getFilterDef().getRestriction(entityClassDef.getEntityDef(), null, now);
+                            List<? extends WorkEntity> entityList = environment().listAll(Query
+                                    .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
+                                    .addRestriction(restriction).addRestriction(new Or()
+                                            .add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
+                                    .addOrder("id").setLimit(batchSize));
+                            logDebug("Loading [{0}] items for workflow [{1}]...", entityList.size(), workflowName);
+                            for (WorkEntity inst : entityList) {
+                                submitToWorkflowByName(workflowName, inst);
+                            }
 
-                        logDebug("Workflow auto loading completed for [{0}].", workflowName);
+                            logDebug("Workflow auto loading completed for [{0}].", workflowName);
+                        }
                     }
                 } finally {
                     releaseLock(WFAUTOLOADING_LOCK);
-                    logDebug("Released workflow auto-loading lock.");
                 }
             }
         }
