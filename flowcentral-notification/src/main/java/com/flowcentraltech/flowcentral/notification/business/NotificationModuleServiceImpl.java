@@ -454,16 +454,9 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                             final NotifChannelDef notifChannelDef = tenantChannelInfo
                                     .getNotificationChannelDef(notifType);
                             if (notifChannelDef.isThrottled()) {
-                                logDebug("Throttling detected for [{0}] and tenant with id [{1}]...",
-                                        notifChannelDef.getName(), tenantId);
                                 if (notifChannelDef.isThrottledAndIsNotDue(now)) {
-                                    logDebug("Throttling not due an skipped for [{0}] and tenant with id [{1}].",
-                                            notifChannelDef.getName(), tenantId);
                                     continue;
                                 }
-
-                                logDebug("Applying throttle at the rate of [{0}] messages per minute...",
-                                        notifChannelDef.getMessagesPerMinute());
                             }
 
                             try {
@@ -484,16 +477,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                                 : retryMinutes;
                                 localMaxBatchSize = 5;
                                 if (localMaxBatchSize > 0) {
-                                    logDebug(
-                                            "Parameters for sending notifications extracted. MaxBatchSize = [{0}], MaxAttempts = [{1}], RetryMinutes = [{2}]",
-                                            localMaxBatchSize, localMaxAttempts, localRetryMinutes);
                                     List<Long> pendingNotificationIdList = environment().valueList(Long.class, "id",
                                             new NotificationOutboxQuery().type(notifType).due(now)
                                                     .status(NotificationOutboxStatus.NOT_SENT)
                                                     .setLimit(localMaxBatchSize));
-                                    logDebug("Sending [{0}] notifications via channel [{1}]...",
-                                            pendingNotificationIdList.size(), notifChannelDef.getDescription());
                                     if (!DataUtils.isBlank(pendingNotificationIdList)) {
+                                        logDebug("Sending [{0}] notifications via channel [{1}]...",
+                                                pendingNotificationIdList.size(), notifChannelDef.getDescription());
                                         NotificationMessagingChannel channel = getNotificationMessagingChannel(
                                                 notifType);
                                         ChannelMessage[] messages = getChannelMessages(tenantId,
