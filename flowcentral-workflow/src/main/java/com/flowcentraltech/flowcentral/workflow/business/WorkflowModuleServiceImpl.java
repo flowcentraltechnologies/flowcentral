@@ -1556,11 +1556,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
                             .supportsAutoload().addSelect("applicationName", "workflowName", "autoLoadConditionName"));
                     if (!DataUtils.isBlank(autoLoadStepList)) {
-                        logDebug("[{0}] steps detected with auto loading...", autoLoadStepList.size());
                         for (WfStep wfStep : autoLoadStepList) {
                             String workflowName = ApplicationNameUtils.getApplicationEntityLongName(
                                     wfStep.getApplicationName(), wfStep.getWorkflowName());
-                            logDebug("Performing workflow auto loading for [{0}]...", workflowName);
                             WfDef wfDef = getWfDef(workflowName);
                             EntityClassDef entityClassDef = appletUtil.application()
                                     .getEntityClassDef(wfDef.getEntity());
@@ -1571,12 +1569,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     .addRestriction(restriction).addRestriction(new Or()
                                             .add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
                                     .addOrder("id").setLimit(batchSize));
-                            logDebug("Loading [{0}] items for workflow [{1}]...", entityList.size(), workflowName);
                             for (WorkEntity inst : entityList) {
                                 submitToWorkflowByName(workflowName, inst);
                             }
-
-                            logDebug("Workflow auto loading completed for [{0}].", workflowName);
                         }
                     }
                 } finally {
