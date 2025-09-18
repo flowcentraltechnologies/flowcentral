@@ -1371,7 +1371,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             } finally {
                 releaseLock(WFITEMALERT_QUEUE_LOCK);
-                logDebug("Work item alerts sending completed.");
             }
         }
     }
