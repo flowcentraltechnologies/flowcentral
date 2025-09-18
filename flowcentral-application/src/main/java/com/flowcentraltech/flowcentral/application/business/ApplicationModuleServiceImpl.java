@@ -3933,7 +3933,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType()));
                     final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
                     fields.add(new PortalEntityField(entityFieldDef.getDataType().name(), entityFieldDef.getFieldName(),
-                            entityFieldDef.getFieldLabel(), editor, entityFieldDef.isNullable()));
+                            resolveApplicationMessage(entityFieldDef.getFieldLabel()), editor,
+                            entityFieldDef.isNullable()));
                 }
 
                 entities.put(entity, new PortalEntity(entityDef.getName(), entityDef.getDescription(),
@@ -3946,15 +3947,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
                 for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
-                            StringUtils.isBlank(tableColumnDef.getLabel())
+                            resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
-                                    : tableColumnDef.getLabel(),
+                                    : tableColumnDef.getLabel()),
                             tableColumnDef.getOrder() != null ? tableColumnDef.getOrder().name() : null,
                             tableColumnDef.getLinkAct(), tableColumnDef.getWidthRatio()));
                 }
 
-                tables.put(table, new PortalTable(tableDef.getName(), tableDef.getDescription(), tableDef.getLabel(),
-                        entity, DataUtils.unmodifiableList(columns)));
+                tables.put(table, new PortalTable(tableDef.getName(), tableDef.getDescription(),
+                        resolveApplicationMessage(tableDef.getLabel()), entity, DataUtils.unmodifiableList(columns)));
             }
 
             final List<String> formList = Arrays.asList(
@@ -3979,9 +3980,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 final String editor = InputWidgetUtils.constructEditor(widgetTypeDef,
                                         entityDef.getFieldDef(formFieldDef.getFieldName()));
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
-                                        StringUtils.isBlank(formFieldDef.getFieldLabel())
+                                        resolveApplicationMessage(StringUtils.isBlank(formFieldDef.getFieldLabel())
                                                 ? entityDef.getFieldDef(formFieldDef.getFieldName()).getFieldLabel()
-                                                : formFieldDef.getFieldLabel(),
+                                                : formFieldDef.getFieldLabel()),
                                         formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn()));
                             }
                         }
@@ -3994,8 +3995,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             applets.put(applet,
                     new PortalApplet(appletDef.getType().name(), appletDef.getName(), appletDef.getDescription(),
-                            appletDef.getLabel(), entity, appletDef.getIcon(), formList.get(0), formList.get(1),
-                            table));
+                            resolveApplicationMessage(appletDef.getLabel()), entity, appletDef.getIcon(),
+                            formList.get(0), formList.get(1), table));
         }
 
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
