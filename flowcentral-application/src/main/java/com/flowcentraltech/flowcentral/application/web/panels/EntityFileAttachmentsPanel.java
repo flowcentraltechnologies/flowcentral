@@ -33,13 +33,13 @@ import com.tcdng.unify.core.data.FileAttachmentsInfo;
 @UplBinding("web/application/upl/entityfileattachmentspanel.upl")
 public class EntityFileAttachmentsPanel extends BaseDialogPanel {
 
+	
 	@Override
 	public void switchState() throws UnifyException {
-		super.switchState();
-		final EntityFileAttachments formFileAttachments = getValue(EntityFileAttachments.class);
-		final FileAttachmentsInfo fileAttachmentsInfo = formFileAttachments.getFileAttachmentsInfo();
-		if(getRequestAttribute(boolean.class,AppletRequestAttributeConstants.ATTACHMENT_DISABLED)) {
-			fileAttachmentsInfo.setDisabled(true);
+		super.switchState();				
+		if(getRequestAttribute(boolean.class,AppletRequestAttributeConstants.ATTACHMENT_DISABLED)) {					
+			final EntityFileAttachments formFileAttachments = getValue(EntityFileAttachments.class);
+			formFileAttachments.setDisabled(true);			
 		}
 	}
 	
