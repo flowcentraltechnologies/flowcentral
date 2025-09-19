@@ -184,10 +184,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         request.setSource(osInfo.getServiceId());
         request.setVersion(osInfo.getServiceVersion());
         final String msg = DataUtils.asJsonString(request, PrintFormat.PRETTY);
-        logDebug("Sending synchronous message to service [{0}]. Request = [\n{1}]", target, msg);
-        T resp = sendMessage(respClass, target, request.getProcessor(), msg);
-        logDebug("Synchronous send message to service [{0}] successful. Response = [\n{1}]", target,
-                prettyJsonOnDebug(resp));
+        T resp = sendMessage(respClass, target, request.getProcessor(), msg, true);
         return resp;
     }
 
@@ -202,8 +199,6 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         request.setSource(osInfo.getServiceId());
         request.setVersion(osInfo.getServiceVersion());
         final String msg = DataUtils.asJsonString(request, PrintFormat.PRETTY);
-        logDebug("Sending asynchronous message to [{0}] with delay [{1}ms]. Request = [\n{2}]", target, delayInSeconds,
-                msg);
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
@@ -259,7 +254,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         try {
             OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class,
                     osMessagingAsync.getTarget(), osMessagingAsync.getProcessor(),
-                    osMessagingAsync.getMessage());
+                    osMessagingAsync.getMessage(), false);
             environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
                     new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
                             .add("responseCode", resp.getResponseCode())
@@ -297,8 +292,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
-            String msg) throws UnifyException {
-        logDebug("Sending message [{0}\n]", msg);
+            String msg, boolean sync) throws UnifyException {
+        logDebug(sync ? "Sending synchronous message [{0}\n]" : "Sending asynchronous message [{0}\n]", msg);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
@@ -318,6 +313,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             environment().create(log);
         }
 
+        logDebug("Response message [{0}\n]", resp.getRespJson());
         return result;
     }
 
