@@ -81,7 +81,9 @@ public class OSMessagingController extends AbstractPlainJsonController {
             response = new OSMessagingErrorResponse(error);
         }
 
-        return getResponseJsonFromObject(response);
+        final String respJson = getResponseJsonFromObject(response);
+        logDebug("Response message [\n{0}]", respJson);
+        return respJson;
     }
 
     private OSMessagingError getOSMessagingError(String messageKey) throws UnifyException {
