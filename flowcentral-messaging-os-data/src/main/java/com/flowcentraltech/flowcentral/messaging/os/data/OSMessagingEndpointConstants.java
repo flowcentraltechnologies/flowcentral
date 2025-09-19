@@ -16,41 +16,13 @@
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
- * OS information.
- *
+ * OS messaging end-point constants.
+ * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class OSInfo {
+public interface OSMessagingEndpointConstants {
 
-    private String appId;
+    String ENDPOINT_PATH = "/flowcentral/os/messaging";
 
-    private String appVersion;
-
-    private String vendorName;
-
-    private String vendorDomain;
-
-    public OSInfo(String appId, String appVersion, String vendorName, String vendorDomain) {
-        this.appId = appId;
-        this.appVersion = appVersion;
-        this.vendorName = vendorName;
-        this.vendorDomain = vendorDomain;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public String getAppVersion() {
-        return appVersion;
-    }
-
-    public String getVendorName() {
-        return vendorName;
-    }
-
-    public String getVendorDomain() {
-        return vendorDomain;
-    }
 }

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.constants;
 
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingEndpointConstants;
+
 /**
  * OS messaging module name constants.
  * 
@@ -27,6 +29,6 @@ public interface OSMessagingModuleNameConstants {
 
     String OSMESSAGING_MODULE_SERVICE = "osmessaging-moduleservice";
 
-    String OSMESSAGING_CONTROLLER = "/flowcentral/os/messaging";
+    String OSMESSAGING_CONTROLLER = OSMessagingEndpointConstants.ENDPOINT_PATH;
 
 }

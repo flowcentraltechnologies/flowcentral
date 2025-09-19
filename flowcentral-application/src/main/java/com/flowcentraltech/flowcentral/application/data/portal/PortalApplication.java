@@ -29,6 +29,10 @@ public class PortalApplication {
 
     private String description;
 
+    private String label;
+
+    private String module;
+
     private List<PortalApplet> applets;
 
     private List<PortalTable> tables;
@@ -37,10 +41,12 @@ public class PortalApplication {
 
     private List<PortalEntity> entities;
 
-    public PortalApplication(String name, String description, List<PortalApplet> applets,
-            List<PortalTable> tables, List<PortalForm> forms, List<PortalEntity> entities) {
+    public PortalApplication(String name, String description, String label, String module,
+            List<PortalApplet> applets, List<PortalTable> tables, List<PortalForm> forms, List<PortalEntity> entities) {
         this.name = name;
         this.description = description;
+        this.label = label;
+        this.module = module;
         this.applets = applets;
         this.tables = tables;
         this.forms = forms;
@@ -53,6 +59,14 @@ public class PortalApplication {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public String getModule() {
+        return module;
     }
 
     public List<PortalApplet> getApplets() {

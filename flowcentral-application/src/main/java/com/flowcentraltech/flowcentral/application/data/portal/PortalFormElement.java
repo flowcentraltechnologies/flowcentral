@@ -33,17 +33,20 @@ public class PortalFormElement {
 
     private String editor;
 
+    private String contentType;
+
     private String columnType;
 
     private int fieldColumn;
 
-    public PortalFormElement(String type, String color, String label, String name, String editor, String columnType,
-            int fieldColumn) {
+    public PortalFormElement(String type, String color, String label, String name, String editor, String contentType,
+            String columnType, int fieldColumn) {
         this.type = type;
         this.color = color;
         this.label = label;
         this.name = name;
         this.editor = editor;
+        this.contentType = contentType;
         this.columnType = columnType;
         this.fieldColumn = fieldColumn;
     }
@@ -66,6 +69,10 @@ public class PortalFormElement {
 
     public String getEditor() {
         return editor;
+    }
+
+    public String getContentType() {
+        return contentType;
     }
 
     public String getColumnType() {

@@ -401,11 +401,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected ApplicationDef create(String name, Object... params) throws Exception {
                     Application application = environment().list(new ApplicationQuery().name(name));
-                    return new ApplicationDef(application.getName(), application.getDescription(), application.getId(),
-                            application.getVersionNo(), application.isDevelopable(), application.isMenuAccess(),
-                            application.getModuleName(), application.getModuleDesc(), application.getModuleLabel(),
-                            application.getModuleShortCode(), application.getSectorShortCode(),
-                            application.getSectorColor());
+                    return new ApplicationDef(application.getName(), application.getDescription(),
+                            application.getLabel(), application.getId(), application.getVersionNo(),
+                            application.isDevelopable(), application.isMenuAccess(), application.getModuleName(),
+                            application.getModuleDesc(), application.getModuleLabel(), application.getModuleShortCode(),
+                            application.getSectorShortCode(), application.getSectorColor());
                 }
 
             };
@@ -3929,10 +3929,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                     final WidgetTypeDef widgetTypeDef = entityFieldDef.getInputWidget() != null
                             ? getWidgetTypeDef(entityFieldDef.getInputWidget())
-                            : null;
+                            : getWidgetTypeDef(
+                                    InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType()));
                     final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
                     fields.add(new PortalEntityField(entityFieldDef.getDataType().name(), entityFieldDef.getFieldName(),
-                            entityFieldDef.getFieldLabel(), editor));
+                            resolveApplicationMessage(entityFieldDef.getFieldLabel()), editor,
+                            entityFieldDef.isNullable()));
                 }
 
                 entities.put(entity, new PortalEntity(entityDef.getName(), entityDef.getDescription(),
@@ -3944,13 +3946,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final TableDef tableDef = getTableDef(table);
                 final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
                 for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
-                    columns.add(new PortalTableColumn(tableColumnDef.getFieldName(), tableColumnDef.getLabel(),
-                            tableColumnDef.getOrder().name(), tableColumnDef.getLinkAct(),
-                            tableColumnDef.getWidthRatio()));
+                    columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
+                            resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
+                                    ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
+                                    : tableColumnDef.getLabel()),
+                            tableColumnDef.getOrder() != null ? tableColumnDef.getOrder().name() : null,
+                            tableColumnDef.getLinkAct(), tableColumnDef.getWidthRatio()));
                 }
 
-                tables.put(table, new PortalTable(tableDef.getName(), tableDef.getDescription(), tableDef.getLabel(),
-                        entity, DataUtils.unmodifiableList(columns)));
+                tables.put(table, new PortalTable(tableDef.getName(), tableDef.getDescription(),
+                        resolveApplicationMessage(tableDef.getLabel()), entity, DataUtils.unmodifiableList(columns)));
             }
 
             final List<String> formList = Arrays.asList(
@@ -3962,11 +3967,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final List<PortalFormElement> elements = new ArrayList<PortalFormElement>();
                     for (FormTabDef formTabDef : formDef.getFormTabDefList()) {
                         elements.add(new PortalFormElement(FormElementType.TAB.name(), null, formTabDef.getLabel(),
-                                formTabDef.getName(), null, null, 0));
+                                formTabDef.getName(), null, formTabDef.getContentType().name(), null, 0));
                         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
                             elements.add(new PortalFormElement(FormElementType.SECTION.name(), null,
-                                    formSectionDef.getLabel(), formSectionDef.getName(), null,
-                                    formSectionDef.getColumns().name(), 0));
+                                    formSectionDef.getLabel(), formSectionDef.getName(), null, null,
+                                    formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null,
+                                    0));
                             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
                                 final WidgetTypeDef widgetTypeDef = formFieldDef.getWidgetName() != null
                                         ? getWidgetTypeDef(formFieldDef.getWidgetName())
@@ -3974,8 +3980,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 final String editor = InputWidgetUtils.constructEditor(widgetTypeDef,
                                         entityDef.getFieldDef(formFieldDef.getFieldName()));
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
-                                        formFieldDef.getFieldLabel(), formFieldDef.getFieldName(), editor, null,
-                                        formFieldDef.getColumn()));
+                                        resolveApplicationMessage(StringUtils.isBlank(formFieldDef.getFieldLabel())
+                                                ? entityDef.getFieldDef(formFieldDef.getFieldName()).getFieldLabel()
+                                                : formFieldDef.getFieldLabel()),
+                                        formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn()));
                             }
                         }
                     }
@@ -3985,13 +3993,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            applets.put(applet, new PortalApplet(appletDef.getName(), appletDef.getDescription(), appletDef.getLabel(),
-                    entity, appletDef.getIcon(), formList.get(0), formList.get(1), table));
+            applets.put(applet,
+                    new PortalApplet(appletDef.getType().name(), appletDef.getName(), appletDef.getDescription(),
+                            resolveApplicationMessage(appletDef.getLabel()), entity, appletDef.getIcon(),
+                            formList.get(0), formList.get(1), table));
         }
 
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
-                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
-                DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values())));
+                applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
+                DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
+                DataUtils.unmodifiableList(entities.values())));
     }
 
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,

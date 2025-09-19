@@ -437,7 +437,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public void sendNotifications(TaskMonitor taskMonitor) throws UnifyException {
         if (au.system().getSysParameterValue(boolean.class, NotificationModuleSysParamConstants.NOTIFICATION_ENABLED)
                 && tryGrabLock(SEND_NOTIFICATION_LOCK)) {
-            logDebug("Lock required to send notifications successfully grabbed...");
             try {
                 final int maxBatchSize = au.system().getSysParameterValue(int.class,
                         NotificationModuleSysParamConstants.NOTIFICATION_MAX_BATCH_SIZE);
@@ -449,24 +448,15 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 final Date now = environment().getNow();
                 for (NotifType notifType : NOTIFICATION_TYPE_LIST) {
                     for (Long tenantId : au.system().getPrimaryMappedTenantIds()) {
-                        logDebug("Checking [{0}] notifications for tenant with id [{1}]...", notifType, tenantId);
                         if (environment().countAll(new NotificationChannelQuery().notifType(notifType)
                                 .status(RecordStatus.ACTIVE)) > 0) {
-                            logDebug("Sending [{0}] notifications for tenant with id [{1}]...", notifType, tenantId);
                             TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(tenantId);
                             final NotifChannelDef notifChannelDef = tenantChannelInfo
                                     .getNotificationChannelDef(notifType);
                             if (notifChannelDef.isThrottled()) {
-                                logDebug("Throttling detected for [{0}] and tenant with id [{1}]...",
-                                        notifChannelDef.getName(), tenantId);
                                 if (notifChannelDef.isThrottledAndIsNotDue(now)) {
-                                    logDebug("Throttling not due an skipped for [{0}] and tenant with id [{1}].",
-                                            notifChannelDef.getName(), tenantId);
                                     continue;
                                 }
-
-                                logDebug("Applying throttle at the rate of [{0}] messages per minute...",
-                                        notifChannelDef.getMessagesPerMinute());
                             }
 
                             try {
@@ -487,16 +477,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                                 : retryMinutes;
                                 localMaxBatchSize = 5;
                                 if (localMaxBatchSize > 0) {
-                                    logDebug(
-                                            "Parameters for sending notifications extracted. MaxBatchSize = [{0}], MaxAttempts = [{1}], RetryMinutes = [{2}]",
-                                            localMaxBatchSize, localMaxAttempts, localRetryMinutes);
                                     List<Long> pendingNotificationIdList = environment().valueList(Long.class, "id",
                                             new NotificationOutboxQuery().type(notifType).due(now)
                                                     .status(NotificationOutboxStatus.NOT_SENT)
                                                     .setLimit(localMaxBatchSize));
-                                    logDebug("Sending [{0}] notifications via channel [{1}]...",
-                                            pendingNotificationIdList.size(), notifChannelDef.getDescription());
                                     if (!DataUtils.isBlank(pendingNotificationIdList)) {
+                                        logDebug("Sending [{0}] notifications via channel [{1}]...",
+                                                pendingNotificationIdList.size(), notifChannelDef.getDescription());
                                         NotificationMessagingChannel channel = getNotificationMessagingChannel(
                                                 notifType);
                                         ChannelMessage[] messages = getChannelMessages(tenantId,
@@ -549,7 +536,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 }
             } finally {
                 releaseLock(SEND_NOTIFICATION_LOCK);
-                logDebug("Lock required to send notifications successfully released...");
             }
         }
     }
