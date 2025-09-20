@@ -16,9 +16,12 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.FileAttachmentsInfo;
 
 /**
  * Entity file attachments panel.
@@ -30,4 +33,14 @@ import com.tcdng.unify.core.annotation.UplBinding;
 @UplBinding("web/application/upl/entityfileattachmentspanel.upl")
 public class EntityFileAttachmentsPanel extends BaseDialogPanel {
 
+	
+	@Override
+	public void switchState() throws UnifyException {
+		super.switchState();				
+		if(getRequestAttribute(boolean.class,AppletRequestAttributeConstants.ATTACHMENT_DISABLED)) {					
+			final EntityFileAttachments formFileAttachments = getValue(EntityFileAttachments.class);
+			formFileAttachments.setDisabled(true);			
+		}
+	}
+	
 }
