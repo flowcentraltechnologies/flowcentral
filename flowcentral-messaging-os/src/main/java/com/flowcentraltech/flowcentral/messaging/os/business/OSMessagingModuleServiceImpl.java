@@ -183,10 +183,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             String target, U request) throws UnifyException {
         request.setSource(osInfo.getServiceId());
         request.setVersion(osInfo.getServiceVersion());
-        logDebug("Sending synchronous message to service [{0}]. Request = [\n{1}]", target, prettyJsonOnDebug(request));
-        T resp = sendMessage(respClass, target, request.getProcessor(), request);
-        logDebug("Synchronous send message to service [{0}] successful. Response = [\n{1}]", target,
-                prettyJsonOnDebug(resp));
+        final String msg = DataUtils.asJsonString(request, PrintFormat.PRETTY);
+        T resp = sendMessage(respClass, target, request.getProcessor(), msg, true);
         return resp;
     }
 
@@ -200,21 +198,19 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             throws UnifyException {
         request.setSource(osInfo.getServiceId());
         request.setVersion(osInfo.getServiceVersion());
-        logDebug("Sending asynchronous message to [{0}] with delay [{1}ms]. Request = [\n{2}]", target, delayInSeconds,
-                prettyJsonOnDebug(request));
+        final String msg = DataUtils.asJsonString(request, PrintFormat.PRETTY);
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
         osMessagingAsync.setTarget(target);
         osMessagingAsync.setProcessor(request.getProcessor());
-        osMessagingAsync.setMessage(DataUtils.asJsonString(request, PrintFormat.PRETTY));
+        osMessagingAsync.setMessage(msg);
         osMessagingAsync.setNextAttemptOn(nextAttemptOn);
         environment().create(osMessagingAsync);
     }
 
     @Periodic(PeriodicType.FAST)
     public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Processing asynchronous messages...");
         if (tryGrabLock(PROCESS_MESSAGE_ASYNC)) {
             try {
                 final Date now = getNow();
@@ -230,8 +226,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 final List<Long> pendingList = environment().valueList(Long.class, "id",
                         new OSMessagingAsyncQuery().isDue(now).isResponseNull().isNotProcessing()
                                 .setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
-                logDebug("Processing asynchronous [{0}] messages...", pendingList.size());
                 if (!DataUtils.isBlank(pendingList)) {
+                    logDebug("Processing asynchronous [{0}] messages...", pendingList.size());
                     environment().updateAll(new OSMessagingAsyncQuery().idIn(pendingList),
                             new Update().add("processing", Boolean.TRUE));
                     keepThreadAndClusterSafe("processBefore",
@@ -258,7 +254,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         try {
             OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class,
                     osMessagingAsync.getTarget(), osMessagingAsync.getProcessor(),
-                    osMessagingAsync.getMessage());
+                    osMessagingAsync.getMessage(), false);
             environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
                     new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
                             .add("responseCode", resp.getResponseCode())
@@ -296,12 +292,12 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
-            Object message) throws UnifyException {
-        logDebug("Sending message [{0}\n]", message instanceof String ? message : prettyJsonOnDebug(message));
+            String msg, boolean sync) throws UnifyException {
+        logDebug(sync ? "Sending synchronous message [\n{0}]" : "Sending asynchronous message [\n{0}]", msg);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
-        PostResp<T> resp = IOUtils.postObjectToEndpointUsingJson(respClass, osPeerEndpointDef.getEndpointUrl(), message,
+        PostResp<T> resp = IOUtils.postObjectToEndpointUsingJson(respClass, osPeerEndpointDef.getEndpointUrl(), msg,
                 headers);
         T result = extractResult(resp);
         if (systemModuleService.getSysParameterValue(boolean.class,
@@ -317,6 +313,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             environment().create(log);
         }
 
+        logDebug("Response message [\n{0}]", resp.getRespJson());
         return result;
     }
 
