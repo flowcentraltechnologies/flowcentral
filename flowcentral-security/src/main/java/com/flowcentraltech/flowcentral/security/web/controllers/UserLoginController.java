@@ -16,8 +16,12 @@
 
 package com.flowcentraltech.flowcentral.security.web.controllers;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractApplicationForwarderController;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
@@ -78,6 +82,20 @@ import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
         @ResultMapping(name = "forwardwelcome", response = { "!forwardresponse path:$x{application.web.home}" }) })
 public class UserLoginController extends AbstractApplicationForwarderController<UserLoginPageBean> {
 
+    private static final Set<String> NO_LOGGING_REQUIRED_EXCEPTIONS = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD,
+                    SecurityModuleErrorConstants.INVALID_OLD_PASSWORD,
+                    SecurityModuleErrorConstants.NEW_PASSWORD_IS_STALE,
+                    SecurityModuleErrorConstants.USER_ROLE_NOT_ACTIVE_AT_CURRENTTIME,
+                    SecurityModuleErrorConstants.USER_ACCOUNT_IS_LOCKED,
+                    SecurityModuleErrorConstants.LOGIN_AS_ANONYMOUS_NOT_ALLOWED,
+                    SecurityModuleErrorConstants.USER_ACCOUNT_NOT_ACTIVE,
+                    SecurityModuleErrorConstants.INVALID_ONETIME_PASSWORD,
+                    SecurityModuleErrorConstants.USER_ROLE_HAS_NO_WORKSPACE,
+                    SecurityModuleErrorConstants.USER_ACCOUNT_NOT_APPROVED,
+                    SecurityModuleErrorConstants.TENANCY_IS_REQUIRED,
+                    SecurityModuleErrorConstants.TENANT_WITH_ID_NOT_FOUND)));
+    
     @Configurable
     private SecurityModuleService securityModuleService;
 
@@ -124,10 +142,14 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
             return twoFactorAuthCheck();
         } catch (UnifyException e) {
-            logError(e);
+            if (!NO_LOGGING_REQUIRED_EXCEPTIONS.contains(e.getErrorCode())) {
+                logError(e);
+            }
+
             UnifyError err = e.getUnifyError();
             setLoginMessage(getSessionMessage(err.getErrorCode(), err.getErrorParams()));
         }
+
         return "refreshlogin";
     }
 
@@ -237,7 +259,10 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         try {
             return openApplication(userRoleInfo);
         } catch (UnifyException e) {
-            logError(e);
+            if (!NO_LOGGING_REQUIRED_EXCEPTIONS.contains(e.getErrorCode())) {
+                logError(e);
+            }
+
             UnifyError err = e.getUnifyError();
             setLoginMessage(getSessionMessage(err.getErrorCode(), err.getErrorParams()));
         }
