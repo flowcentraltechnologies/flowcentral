@@ -35,7 +35,8 @@ public class PortalEntityField {
 
     private boolean nullable;
 
-    public PortalEntityField(String type, String name, String label, String editor, boolean basicSearch, boolean nullable) {
+    public PortalEntityField(String type, String name, String label, String editor, boolean basicSearch,
+            boolean nullable) {
         this.type = type;
         this.name = name;
         this.label = label;
