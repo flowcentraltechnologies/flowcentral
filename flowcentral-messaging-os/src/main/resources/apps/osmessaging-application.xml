@@ -290,7 +290,7 @@
 		<table name="osMessagingProcessingLogTable"
 			description="$m{osmessaging.osmessagingprocessinglog.table}"
 			label="$m{osmessaging.osmessagingprocessinglog.table.label}"
-			entity="osMessagingProcessingLog" itemsPerPage="25" serialNo="true"
+			entity="osMessagingProcessingLog" itemsPerPage="50" serialNo="true"
 			basicSearch="true">
 			<columns>
 				<column field="source"
@@ -306,7 +306,7 @@
 					widthRatio="1" />
 				<column field="modeDesc" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
+				<column field="createDate" renderWidget="application.datetime"
 					widthRatio="1" order="DESC" />
 			</columns>
 		</table>
