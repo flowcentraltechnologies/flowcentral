@@ -65,6 +65,21 @@
 				<property name="maintainForm.delete" value="false" />
 			</properties>
 		</applet>
+		<applet name="manageOSMessagingProcessingLog"
+			description="$m{osmessaging.osmessagingprocessinglog.manage}"
+			label="$m{osmessaging.osmessagingprocessinglog.manage.label}" icon="logs"
+			type="MANAGE_ENTITYLIST" entity="osMessagingProcessingLog" menuAccess="true">
+			<properties>
+				<property name="searchTable" value="osMessagingProcessingLogTable" />
+				<property name="searchTable.new" value="false" />
+				<property name="searchTable.report" value="true" />
+				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.basicSearchOnly" value="true" />
+				<property name="maintainForm" value="osMessagingProcessingLogForm" />
+				<property name="maintainForm.update" value="false" />
+				<property name="maintainForm.delete" value="false" />
+			</properties>
+		</applet>
 	</applets>
 	<!-- References -->
 	<references>
@@ -77,6 +92,9 @@
 		<reference name="osMessagingLogRef"
 			description="$m{osmessaging.osmessaginglog.reference}"
 			entity="osMessagingLog" searchField="osMessagingDesc" />
+		<reference name="osMessagingProcessingLogRef"
+			description="$m{osmessaging.osmessagingprocessinglog.reference}"
+			entity="osMessagingProcessingLog" searchField="summary" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -174,6 +192,37 @@
 					nullable="true" />
 			</fields>
 		</entity>
+		<entity name="osMessagingProcessingLog"
+			description="$m{osmessaging.osmessagingprocessinglog}"
+			label="$m{osmessaging.osmessagingprocessinglog.label}"
+			type="com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingProcessingLog">
+			<fields>
+				<field name="mode"
+					label="$m{osmessaging.osmessagingprocessinglog.mode}" type="ENUM_REF"
+					inputWidget="application.enumlist"
+					references="osmessagingmodelist" basicSearch="true" />
+				<field name="modeDesc"
+					label="$m{osmessaging.osmessagingprocessinglog.modedesc}"
+					type="LIST_ONLY" inputWidget="application.text" key="mode"
+					property="description" />
+				<field name="source"
+					label="$m{osmessaging.osmessagingprocessinglog.source}" type="STRING"
+					maxLen="32" basicSearch="true" />
+				<field name="processor"
+					label="$m{osmessaging.osmessagingprocessinglog.processor}" type="STRING"
+					maxLen="64" nullable="true" basicSearch="true"/>
+				<field name="summary"
+					label="$m{osmessaging.osmessagingprocessinglog.summary}" type="STRING" />
+				<field name="responseCode"
+					label="$m{osmessaging.osmessagingprocessinglog.responsecode}" type="STRING"
+					maxLen="10" />
+				<field name="responseMsg"
+					label="$m{osmessaging.osmessagingprocessinglog.responsemsg}" type="STRING"
+					maxLen="1024"  />
+				<field name="createDate"
+					label="$m{osmessaging.osmessagingprocessinglog.createdate}" type="TIMESTAMP"/>
+			</fields>
+		</entity>
 	</entities>
 	<!-- Tables -->
 	<tables>
@@ -236,6 +285,29 @@
 					widthRatio="1" order="DESC" />
 				<column field="updateDt" renderWidget="application.datetime"
 					widthRatio="1" />
+			</columns>
+		</table>
+		<table name="osMessagingProcessingLogTable"
+			description="$m{osmessaging.osmessagingprocessinglog.table}"
+			label="$m{osmessaging.osmessagingprocessinglog.table.label}"
+			entity="osMessagingProcessingLog" itemsPerPage="25" serialNo="true"
+			basicSearch="true">
+			<columns>
+				<column field="source"
+					renderWidget="application.text" widthRatio="1"
+					 linkAct="maintainAct" />
+				<column field="processor" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="summary" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="responseCode" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="responseMsg" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="modeDesc" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="createDt" renderWidget="application.datetime"
+					widthRatio="1" order="DESC" />
 			</columns>
 		</table>
 	</tables>
@@ -323,6 +395,37 @@
 					<section name="responseDetailsBody" columns="TYPE_1">
 						<field name="responseBody" inputWidget="application.textareamedium"
 							column="0" />
+					</section>
+				</tab>
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
+		</form>
+		<form name="osMessagingProcessingLogForm"
+			description="$m{osmessaging.osmessagingprocessinglog.form}"
+			entity="osMessagingProcessingLog">
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{osmessaging.osmessagingprocessinglog.form.basicdetails}"
+					contentType="MINIFORM">
+					<section name="basicDetails" columns="TYPE_2"
+						label="$m{osmessaging.osmessagingprocessinglog.form.basicdetails}">
+						<field name="source" column="0" required="true" />
+						<field name="processor" inputWidget="application.name"
+							column="1" required="true" />
+						<field name="mode" column="1" />
+					</section>
+					<section name="requestDetails" columns="TYPE_1"
+						label="$m{osmessaging.osmessagingprocessinglog.form.requestdetails}">
+						<field name="summary" inputWidget="application.textarea"
+							column="0" />
+					</section>
+					<section name="responseDetails" columns="TYPE_2"
+						label="$m{osmessaging.osmessagingprocessinglog.form.responsedetails}">
+						<field name="responseCode" inputWidget="application.text"
+							column="0" />
+						<field name="responseMsg" inputWidget="application.text"
+							column="1" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
