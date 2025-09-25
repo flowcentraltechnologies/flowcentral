@@ -27,6 +27,8 @@ public abstract class BaseOSMessagingReq {
 
     private String source;
 
+    private String originSource;
+
     private String version;
 
     protected BaseOSMessagingReq(String processor) {
@@ -43,6 +45,14 @@ public abstract class BaseOSMessagingReq {
 
     public final void setSource(String source) {
         this.source = source;
+    }
+
+    public final String getOriginSource() {
+        return originSource;
+    }
+
+    public final void setOriginSource(String originSource) {
+        this.originSource = originSource;
     }
 
     public String getVersion() {

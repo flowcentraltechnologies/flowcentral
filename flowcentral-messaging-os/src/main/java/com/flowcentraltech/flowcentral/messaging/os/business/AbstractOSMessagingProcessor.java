@@ -25,6 +25,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.ReflectUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Convenient abstract base class for OS messaging processors.
@@ -87,9 +88,10 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
             resp.setResponseMessage(error.getErrorMessage());
         }
 
-        osMessagingModuleService.logProcessing(messagingMode, request.getSource(), request.getProcessor(),
-                resolveApplicationMessage(summary, getSummaryParameters(request)), resp.getResponseCode(),
-                resp.getResponseMessage());
+        osMessagingModuleService.logProcessing(messagingMode,
+                !StringUtils.isBlank(request.getOriginSource()) ? request.getOriginSource() : request.getSource(),
+                request.getProcessor(), resolveApplicationMessage(summary, getSummaryParameters(request)),
+                resp.getResponseCode(), resp.getResponseMessage());
         return resp;
     }
 
