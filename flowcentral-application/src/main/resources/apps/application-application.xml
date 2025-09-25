@@ -12,7 +12,12 @@
 			description="$m{application.widgettype.mandatorylabel}"
 			dataType="BOOLEAN" inputType="BOOLEAN" listOption="true"
 			editor="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}"
-			renderer="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}" />
+			renderer="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}" />			
+		<widgetType name="symbollist"
+			description="$m{application.widgettype.symbollist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-symbolselect"
+			renderer="!ui-label" />
 		<widgetType name="restapilist"
 			description="$m{application.widgettype.restapilist}"
 			dataType="STRING" inputType="STRING"
@@ -915,6 +920,10 @@
 					type="STRING" />
 				<field name="entity" label="$m{application.appapplet.entity}"
 					type="STRING" />
+				<field name="icon"
+					label="$m{application.appapplet.icon}"
+					type="STRING" inputWidget="application.symbollist"
+					nullable="true" />
 				<field name="routeToApplet"
 					label="$m{application.appapplet.routetoapplet}"
 					type="STRING"

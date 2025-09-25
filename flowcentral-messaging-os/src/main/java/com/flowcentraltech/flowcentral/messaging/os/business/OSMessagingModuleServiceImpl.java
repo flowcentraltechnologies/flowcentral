@@ -23,6 +23,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
@@ -37,6 +38,7 @@ import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncQue
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingLog;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingProcessingLog;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -176,6 +178,14 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException {
         return osHeaderFactoryMap.get(authorization);
+    }
+
+    @Override
+    public void logProcessing(OSMessagingMode mode, String source, String processor, String summary,
+            String responseCode, String responseMsg) throws UnifyException {
+        final OSMessagingProcessingLog log = new OSMessagingProcessingLog(mode, source, processor, summary,
+                responseCode, responseMsg, getNow());
+        environment().create(log);
     }
 
     @Override
