@@ -1194,7 +1194,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public boolean matchFormBeanToAppletPropertyCondition(String conditionPropName) throws UnifyException {
         return au().formBeanMatchAppletPropertyCondition(getFormAppletDef(), form, conditionPropName);
     }
+    
+    public boolean matchFormBeanToAppletPropertyConditionWhenPresent(String conditionPropName) throws UnifyException {
+        return au().formBeanMatchAppletPropertyConditionWhenPresent(getFormAppletDef(), form, conditionPropName);
+    }
 
+    
     public void ensureCurrentAppletStruct() throws UnifyException {
         AppletDef _currFormAppletDef = getFormAppletDef();
         if (_currFormAppletDef != null) {
