@@ -3967,23 +3967,25 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final List<PortalFormElement> elements = new ArrayList<PortalFormElement>();
                     for (FormTabDef formTabDef : formDef.getFormTabDefList()) {
                         elements.add(new PortalFormElement(FormElementType.TAB.name(), null, formTabDef.getLabel(),
-                                formTabDef.getName(), null, formTabDef.getContentType().name(), null, 0));
+                                formTabDef.getName(), null, formTabDef.getContentType().name(), null, 0, false));
                         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
                             elements.add(new PortalFormElement(FormElementType.SECTION.name(), null,
                                     formSectionDef.getLabel(), formSectionDef.getName(), null, null,
                                     formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null,
-                                    0));
+                                    0, false));
                             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
                                 final WidgetTypeDef widgetTypeDef = formFieldDef.getWidgetName() != null
                                         ? getWidgetTypeDef(formFieldDef.getWidgetName())
                                         : null;
+                                final EntityFieldDef entityFieldDef = entityDef.getFieldDef(formFieldDef.getFieldName());
                                 final String editor = InputWidgetUtils.constructEditor(widgetTypeDef,
-                                        entityDef.getFieldDef(formFieldDef.getFieldName()));
+                                        entityFieldDef);
+                                final boolean required = !entityFieldDef.isNullable() || formFieldDef.isRequired();
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
                                         resolveApplicationMessage(StringUtils.isBlank(formFieldDef.getFieldLabel())
                                                 ? entityDef.getFieldDef(formFieldDef.getFieldName()).getFieldLabel()
                                                 : formFieldDef.getFieldLabel()),
-                                        formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn()));
+                                        formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn(), required));
                             }
                         }
                     }
