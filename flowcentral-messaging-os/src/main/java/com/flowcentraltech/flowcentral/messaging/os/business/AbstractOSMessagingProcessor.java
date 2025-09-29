@@ -69,6 +69,11 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
     }
 
     @Override
+    public final Class<? extends BaseOSMessagingResp> getResponseClass() {
+        return responseClass;
+    }
+
+    @Override
     public final T process(U request) throws UnifyException {
         OSMessagingError error = null;
         T resp = null;

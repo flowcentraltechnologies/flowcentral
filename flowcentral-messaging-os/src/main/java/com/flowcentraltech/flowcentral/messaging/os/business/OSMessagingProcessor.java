@@ -35,6 +35,11 @@ public interface OSMessagingProcessor<T extends BaseOSMessagingResp, U extends B
     Class<? extends BaseOSMessagingReq> getRequestClass();
 
     /**
+     * Gets the processor response class.
+     */
+    Class<? extends BaseOSMessagingResp> getResponseClass();
+
+    /**
      * Processes a gateway request.
      * 
      * @param request
