@@ -39,8 +39,10 @@ public class PortalFormElement {
 
     private int fieldColumn;
 
+    private boolean required;
+
     public PortalFormElement(String type, String color, String label, String name, String editor, String contentType,
-            String columnType, int fieldColumn) {
+            String columnType, int fieldColumn, boolean required) {
         this.type = type;
         this.color = color;
         this.label = label;
@@ -49,6 +51,7 @@ public class PortalFormElement {
         this.contentType = contentType;
         this.columnType = columnType;
         this.fieldColumn = fieldColumn;
+        this.required = required;
     }
 
     public String getType() {
@@ -81,5 +84,9 @@ public class PortalFormElement {
 
     public int getFieldColumn() {
         return fieldColumn;
+    }
+
+    public boolean isRequired() {
+        return required;
     }
 }
