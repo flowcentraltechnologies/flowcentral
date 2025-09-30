@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.messaging.os.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
@@ -109,4 +110,25 @@ public interface OSMessagingModuleService extends FlowCentralService {
      */
     <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSecs)
             throws UnifyException;
+    
+    /**
+     * Logs message processing.
+     * 
+     * @param mode
+     *                     the messaging mode
+     * @param source
+     *                     the source
+     * @param processor
+     *                     the processor
+     * @param summary
+     *                     the summary
+     * @param responseCode
+     *                     the response code
+     * @param responseMsg
+     *                     the response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void logProcessing(OSMessagingMode mode, String source, String processor, String summary, String responseCode,
+            String responseMsg) throws UnifyException;
 }

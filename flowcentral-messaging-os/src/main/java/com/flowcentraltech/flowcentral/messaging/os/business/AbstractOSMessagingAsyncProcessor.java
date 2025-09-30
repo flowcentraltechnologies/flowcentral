@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.tcdng.unify.core.UnifyException;
@@ -30,8 +31,8 @@ public abstract class AbstractOSMessagingAsyncProcessor<U extends BaseOSMessagin
 
     private static final OSMessagingAsyncResponse RESPONSE = new OSMessagingAsyncResponse();
     
-    public AbstractOSMessagingAsyncProcessor(Class<U> requestClass) {
-        super(OSMessagingAsyncResponse.class, requestClass);
+    public AbstractOSMessagingAsyncProcessor(Class<U> requestClass, String summary) {
+        super(OSMessagingAsyncResponse.class, requestClass, summary, OSMessagingMode.ASYNCHRONOUS);
     }
 
     @Override
