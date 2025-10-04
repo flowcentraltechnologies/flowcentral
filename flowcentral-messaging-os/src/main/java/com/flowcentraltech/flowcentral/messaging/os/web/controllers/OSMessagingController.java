@@ -64,11 +64,16 @@ public class OSMessagingController extends AbstractPlainJsonController {
             } else {
                 try {
                     final OSMessagingHeader header = osMessagingModuleService.getOSMessagingHeader(authorization);
-                    osMessagingAccessManager.checkAccess(header);
-                    final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
-                            OSMessagingProcessor.class, header.getProcessor());
-                    BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(), requestJson);
-                    response = _processor.process((BaseOSMessagingReq) request);
+                    if (header.isPresent()) {
+                        osMessagingAccessManager.checkAccess(header);
+                        final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
+                                OSMessagingProcessor.class, header.getProcessor());
+                        BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
+                                requestJson);
+                        response = _processor.process((BaseOSMessagingReq) request);
+                    } else {
+                        error = getOSMessagingError(OSMessagingErrorConstants.PEER_NOT_CONFIGURED);
+                    }
                 } catch (Exception e) {
                     logError(e);
                     error = new OSMessagingError(OSMessagingErrorConstants.PROCESSING_EXCEPTION,
