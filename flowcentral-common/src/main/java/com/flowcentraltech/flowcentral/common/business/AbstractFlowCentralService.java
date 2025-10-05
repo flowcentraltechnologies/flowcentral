@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPolicy;
@@ -36,6 +35,7 @@ import com.tcdng.unify.core.business.AbstractBusinessService;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.system.HeartbeatManager;
 import com.tcdng.unify.core.util.PostResp;
+import com.tcdng.unify.core.util.RandomUtils;
 
 /**
  * Base class for flowCentral service.
@@ -68,7 +68,7 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     }
 
     protected final String generateRandomUUID() {
-        return UUID.randomUUID().toString();
+        return RandomUtils.generateUUID();
     }
 
     protected final boolean isEnterprise() throws UnifyException {
