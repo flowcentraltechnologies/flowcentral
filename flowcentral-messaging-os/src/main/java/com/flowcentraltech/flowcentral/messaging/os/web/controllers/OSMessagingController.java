@@ -51,10 +51,10 @@ public class OSMessagingController extends AbstractPlainJsonController {
     @SuppressWarnings("unchecked")
     @Override
     protected final String doExecute(String actionName, String requestJson) throws UnifyException {
-        logDebug("Executing controller request. Action = [{0}], request = [{1}]...", actionName, requestJson);
+        logDebug("Executing controller request = [{0}]...", requestJson);
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
-
+        String correlationId = null;
         if (osMessagingAccessManager == null) {
             error = getOSMessagingError(OSMessagingErrorConstants.ACCESS_MANAGER_NOT_FOUND);
         } else {
@@ -70,6 +70,7 @@ public class OSMessagingController extends AbstractPlainJsonController {
                                 OSMessagingProcessor.class, header.getProcessor());
                         BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
                                 requestJson);
+                        correlationId = request.getCorrelationId();
                         response = _processor.process((BaseOSMessagingReq) request);
                     } else {
                         error = getOSMessagingError(OSMessagingErrorConstants.PEER_NOT_CONFIGURED);
@@ -86,6 +87,8 @@ public class OSMessagingController extends AbstractPlainJsonController {
             response = new OSMessagingErrorResponse(error);
         }
 
+        response.setCorrelationId(correlationId);
+        
         final String respJson = getResponseJsonFromObject(response);
         logDebug("Response message [\n{0}]", respJson);
         return respJson;

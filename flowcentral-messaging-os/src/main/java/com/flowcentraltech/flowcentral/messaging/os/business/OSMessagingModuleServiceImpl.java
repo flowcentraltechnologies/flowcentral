@@ -348,7 +348,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         logDebug("Response message [\n{0}]", resp.getRespJson());
-        result.setCorrelationId(correlationId);
+
+        if (result.getCorrelationId() == null) {
+            result.setCorrelationId(correlationId);
+        }
+
         return result;
     }
 
