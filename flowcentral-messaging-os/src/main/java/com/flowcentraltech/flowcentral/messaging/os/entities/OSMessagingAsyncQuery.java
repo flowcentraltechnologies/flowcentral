@@ -36,6 +36,10 @@ public class OSMessagingAsyncQuery extends BaseAuditEntityQuery<OSMessagingAsync
         super(OSMessagingAsync.class);
     }
 
+    public OSMessagingAsyncQuery correlationId(String correlationId) {
+        return (OSMessagingAsyncQuery) addEquals("correlationId", correlationId);
+    }
+
     public OSMessagingAsyncQuery endpoint(String endpoint) {
         return (OSMessagingAsyncQuery) addEquals("endpoint", endpoint);
     }

@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerEndpointDef;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingLog;
@@ -60,6 +61,8 @@ import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.PostResp;
+import com.tcdng.unify.core.util.RandomUtils;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 
 /**
@@ -193,21 +196,29 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             String target, U request) throws UnifyException {
+        if (StringUtils.isBlank(request.getCorrelationId())) {
+            request.setCorrelationId(RandomUtils.generateUUIDInBase64());
+        }
+
         request.setSource(osInfo.getServiceId());
         request.setVersion(osInfo.getServiceVersion());
         final String msg = DataUtils.asJsonString(request, PrintFormat.PRETTY);
-        T resp = sendMessage(respClass, target, request.getProcessor(), msg, true);
-        return resp;
+        return sendMessage(respClass, target, request.getProcessor(), request.getCorrelationId(), msg, true);
     }
 
     @Override
-    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request) throws UnifyException {
-        sendAsynchronousMessage(target, request, 0L);
-    }
-
-    @Override
-    public <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSeconds)
+    public <T extends BaseOSMessagingReq> String sendAsynchronousMessage(String target, T request)
             throws UnifyException {
+        return sendAsynchronousMessage(target, request, 0L);
+    }
+
+    @Override
+    public <T extends BaseOSMessagingReq> String sendAsynchronousMessage(String target, T request, long delayInSeconds)
+            throws UnifyException {
+        if (StringUtils.isBlank(request.getCorrelationId())) {
+            request.setCorrelationId(RandomUtils.generateUUIDInBase64());
+        }
+
         request.setSource(osInfo.getServiceId());
         request.setVersion(osInfo.getServiceVersion());
         final String msg = DataUtils.asJsonString(request, PrintFormat.PRETTY);
@@ -215,10 +226,24 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
         osMessagingAsync.setTarget(target);
+        osMessagingAsync.setCorrelationId(request.getCorrelationId());
         osMessagingAsync.setProcessor(request.getProcessor());
         osMessagingAsync.setMessage(msg);
         osMessagingAsync.setNextAttemptOn(nextAttemptOn);
         environment().create(osMessagingAsync);
+
+        return request.getCorrelationId();
+    }
+
+    @Override
+    public OSResponse getAsynchronousAck(String correlationdId) throws UnifyException {
+        OSMessagingAsync async = environment().find(
+                new OSMessagingAsyncQuery().correlationId(correlationdId).addSelect("responseCode", "responseMsg"));
+        if (async != null && async.getResponseCode() != null) {
+            return new OSResponse(async.getResponseCode(), async.getResponseMsg());
+        }
+
+        return OSResponse.BLANK;
     }
 
     @Periodic(PeriodicType.FAST)
@@ -263,7 +288,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
         try {
             OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class, osMessagingAsync.getTarget(),
-                    osMessagingAsync.getProcessor(), osMessagingAsync.getMessage(), false);
+                    osMessagingAsync.getProcessor(), osMessagingAsync.getCorrelationId(), osMessagingAsync.getMessage(),
+                    false);
             environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
                     new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
                             .add("responseCode", resp.getResponseCode()).add("responseMsg", resp.getResponseMessage()));
@@ -299,7 +325,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
-            String msg, boolean sync) throws UnifyException {
+            String correlationId, String msg, boolean sync) throws UnifyException {
         logDebug(sync ? "Sending synchronous message [\n{0}]" : "Sending asynchronous message [\n{0}]", msg);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
@@ -312,6 +338,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             OSMessagingLog log = new OSMessagingLog();
             log.setTarget(target);
             log.setProcessor(processor);
+            log.setCorrelationId(correlationId);
             log.setRequestBody(resp.getReqJson());
             log.setResponseBody(resp.getRespJson());
             log.setResponseCode(result.getResponseCode());
@@ -321,6 +348,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         logDebug("Response message [\n{0}]", resp.getRespJson());
+        result.setCorrelationId(correlationId);
         return result;
     }
 

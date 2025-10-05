@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
@@ -89,11 +90,11 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                the messaging target
      * @param request
      *                the message
-     * @return the response object
+     * @return the correlation ID
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request) throws UnifyException;
+    <T extends BaseOSMessagingReq> String sendAsynchronousMessage(String target, T request) throws UnifyException;
 
     /**
      * Sends asynchronous message with a delay.
@@ -104,12 +105,23 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                    the message
      * @param delayInSecs
      *                    the delay in seconds.
+     * @return the correlation ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends BaseOSMessagingReq> String sendAsynchronousMessage(String target, T request, long delayInSecs)
+            throws UnifyException;
+    
+    /**
+     * Get asynchronous acknowledgement.
+     * 
+     * @param correlationdId
+     *                       the message correlation ID
      * @return the response object
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> void sendAsynchronousMessage(String target, T request, long delayInSecs)
-            throws UnifyException;
+    OSResponse getAsynchronousAck(String correlationdId) throws UnifyException;
     
     /**
      * Logs message processing.
