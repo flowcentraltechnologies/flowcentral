@@ -31,6 +31,8 @@ import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
  */
 public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
+    public static final OSMessagingPeerEndpointDef BLANK = new OSMessagingPeerEndpointDef();
+    
     private Long id;
 
     private String appId;
@@ -65,6 +67,10 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         this.authentications = new HashMap<String, String>();
     }
 
+    private OSMessagingPeerEndpointDef() {
+        
+    }
+    
     @Override
     public Long getId() {
         return id;
@@ -105,6 +111,10 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     public String getSourceAppId() {
         return sourceAppId;
+    }
+
+    public boolean isPresent() {
+        return id != null;
     }
 
     public String getAuthentication(String processor) {

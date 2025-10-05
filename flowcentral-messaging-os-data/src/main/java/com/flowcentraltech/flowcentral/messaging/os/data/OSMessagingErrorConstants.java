@@ -33,5 +33,6 @@ public interface OSMessagingErrorConstants {
 
     String ACCESS_MANAGER_NOT_FOUND = "GP05";
 
+    String PEER_NOT_CONFIGURED = "GP06";
 
 }
