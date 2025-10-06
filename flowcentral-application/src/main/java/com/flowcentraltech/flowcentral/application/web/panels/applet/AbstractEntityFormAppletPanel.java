@@ -703,6 +703,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         if (applet.isPromptEnterWorkflowDraft()) {
             showPromptWorkflowDraft(WorkflowDraftType.UPDATE, IndexedTarget.BLANK);
         } else {
+        	final boolean attachmentDisabled = applet.matchFormBeanToAppletPropertyConditionWhenPresent(
+                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENT_DISABLE_CONDITION);
+        	setRequestAttribute(AppletRequestAttributeConstants.ATTACHMENT_DISABLED, attachmentDisabled);
             setCommandResultMapping(ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS);
         }
     }

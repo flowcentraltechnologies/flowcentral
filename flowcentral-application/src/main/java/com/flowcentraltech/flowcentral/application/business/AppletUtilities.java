@@ -1794,6 +1794,22 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     boolean formBeanMatchAppletPropertyCondition(AppletDef appletDef, AbstractForm form, String conditionPropName)
             throws UnifyException;
+    
+    /**
+     * Matches a form bean with applet condition property when present
+     * 
+     * @param appletDef
+     *                          the applet definition
+     * @param form
+     *                          the form
+     * @param conditionPropName
+     *                          the condition applet property name
+     * @return true if matched but false on no condition or otherwise
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean formBeanMatchAppletPropertyConditionWhenPresent(AppletDef appletDef, AbstractForm form, String conditionPropName)
+            throws UnifyException;
 
     /**
      * Bumps entity version

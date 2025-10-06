@@ -39,5 +39,6 @@ public interface AppletRequestAttributeConstants {
     String PREVIEW_FORM_INFO= "app:previewforminfo";
     
     String FORM_DIFF= "app:formdiff";
-
+    
+    String ATTACHMENT_DISABLED= "app:attachmentdisabled";
 }
