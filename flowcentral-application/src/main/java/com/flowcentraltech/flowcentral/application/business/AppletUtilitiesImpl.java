@@ -2053,7 +2053,21 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         return true;
     }
+    
+    @Override
+    public boolean formBeanMatchAppletPropertyConditionWhenPresent(AppletDef appletDef, AbstractForm form,
+            String conditionPropName) throws UnifyException {
+        String condFilterName = appletDef.getPropValue(String.class, conditionPropName, null);
+        if (condFilterName != null) {
+            return appletDef.getFilterDef(condFilterName).getFilterDef()
+                    .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(),
+                            form.getFormValueStoreReader(), getNow())
+                    .matchObject(form.getFormBean());
+        }
 
+        return false;
+    }
+    
     @SuppressWarnings("unchecked")
     @Override
     public void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException {

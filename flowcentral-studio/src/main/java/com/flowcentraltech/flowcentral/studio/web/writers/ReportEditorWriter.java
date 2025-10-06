@@ -82,7 +82,7 @@ public class ReportEditorWriter extends AbstractControlWriter {
             if (entityFieldDef.isTableViewable() && entityDef.isNotDelegateListOnly(entityFieldDef.getFieldName())) {
                 writer.write("<div class=\"fld\" id=\"").write(reportEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");
-                writer.writeWithHtmlEscape(entityFieldDef.getFieldLabel());
+                writer.writeWithHtmlEscape(resolveSessionMessage(entityFieldDef.getFieldLabel()));
                 writer.write("</span></div>");
 
                 jsonWriter.beginObject();
