@@ -42,6 +42,7 @@ import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndp
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingProcessingLog;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -294,7 +295,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
                             .add("responseCode", resp.getResponseCode()).add("responseMsg", resp.getResponseMessage()));
         } catch (UnifyException e) {
-            logError(e);
+            if (!UnifyCoreErrorConstants.IOUTIL_STREAM_RW_ERROR.equals(e.getErrorCode())) {
+                logError(e);
+            }
+            
             try {
                 final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND, 60);
                 environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
