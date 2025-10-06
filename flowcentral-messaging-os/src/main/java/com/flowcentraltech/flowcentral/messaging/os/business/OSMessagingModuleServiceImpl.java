@@ -295,7 +295,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
                             .add("responseCode", resp.getResponseCode()).add("responseMsg", resp.getResponseMessage()));
         } catch (UnifyException e) {
-            if (!UnifyCoreErrorConstants.IOUTIL_STREAM_RW_ERROR.equals(e.getErrorCode())) {
+            if (UnifyCoreErrorConstants.IOUTIL_STREAM_RW_ERROR.equals(e.getErrorCode())) {
+                logDebug(e);
+            } else {
                 logError(e);
             }
             
