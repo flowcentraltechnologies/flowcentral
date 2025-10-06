@@ -332,7 +332,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
             String correlationId, String msg, boolean sync) throws UnifyException {
-        logDebug(sync ? "Sending synchronous message [\n{0}]" : "Sending asynchronous message [\n{0}]", msg);
+        logDebug(sync ? "Sending synchronous message [\n{0}] to [{1}]..."
+                : "Sending asynchronous message [\n{0}] to [{1}]...", msg, target);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
