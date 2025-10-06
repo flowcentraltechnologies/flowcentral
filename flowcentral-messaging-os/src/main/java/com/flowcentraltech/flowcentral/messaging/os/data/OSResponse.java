@@ -16,55 +16,41 @@
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
- * Abstract base class for OS messaging responses.
- * 
+ * OS response.
+ *
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class BaseOSMessagingResp {
+public class OSResponse {
 
-    private String correlationId;
-   
+    public static final OSResponse BLANK = new OSResponse();
+    
     private String responseCode;
-
+    
     private String responseMessage;
 
-    public BaseOSMessagingResp(String responseCode, String responseMessage) {
+    public OSResponse(String responseCode, String responseMessage) {
         this.responseCode = responseCode;
         this.responseMessage = responseMessage;
     }
 
-    public BaseOSMessagingResp() {
-        this.responseCode = OSMessagingResponseConstants.SUCCESS_CODE;
-        this.responseMessage = OSMessagingResponseConstants.SUCCESS_MSG;
+    private OSResponse() {
+        
     }
-
-    public String getCorrelationId() {
-        return correlationId;
-    }
-
-    public void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
-    }
-
+    
     public String getResponseCode() {
         return responseCode;
-    }
-
-    public void setResponseCode(String responseCode) {
-        this.responseCode = responseCode;
     }
 
     public String getResponseMessage() {
         return responseMessage;
     }
-
-    public void setResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
+    
+    public boolean isPresent() {
+        return responseCode != null;
     }
     
     public boolean isSuccessful() {
         return OSMessagingResponseConstants.SUCCESS_CODE.equals(responseCode);
     }
-
 }
