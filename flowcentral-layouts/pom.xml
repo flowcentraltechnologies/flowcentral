@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.flowcentraltech.flowcentral</groupId>
 		<artifactId>flowcentral</artifactId>
-		<version>4.1.6</version>
+		<version>4.1.7-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>flowcentral-layouts</artifactId>
