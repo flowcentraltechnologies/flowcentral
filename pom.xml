@@ -59,6 +59,7 @@
     <module>flowcentral-layouts</module>
     <module>flowcentral-themes</module>
     <module>flowcentral-integration-rest</module>
+    <module>flowcentral-web</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
