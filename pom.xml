@@ -59,7 +59,8 @@
     <module>flowcentral-layouts</module>
     <module>flowcentral-themes</module>
     <module>flowcentral-integration-rest</module>
-    <module>flowcentral-web</module>
+    <module>flowcentral-web-ui</module>
+    <module>flowcentral-fontawesome</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -131,16 +132,16 @@
               </execution>
             </executions>
           </plugin>
-	        <plugin>
-	          <groupId>org.sonatype.central</groupId>
-	          <artifactId>central-publishing-maven-plugin</artifactId>
-	          <version>0.8.0</version>
-	          <extensions>true</extensions>
-	          <configuration>
-	            <publishingServerId>sonatype-nexus-staging</publishingServerId>
-	            <autoPublish>true</autoPublish>
-	          </configuration>
-	        </plugin>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.8.0</version>
+            <extensions>true</extensions>
+            <configuration>
+              <publishingServerId>sonatype-nexus-staging</publishingServerId>
+              <autoPublish>true</autoPublish>
+            </configuration>
+          </plugin>
         </plugins>
       </build>
       <distributionManagement>
