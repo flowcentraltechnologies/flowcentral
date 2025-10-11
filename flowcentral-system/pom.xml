@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-core</artifactId>
-			<version>${unify.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>

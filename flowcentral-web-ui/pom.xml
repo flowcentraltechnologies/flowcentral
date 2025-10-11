@@ -14,13 +14,13 @@
 	<name>flowcentral-web-ui</name>
 	<description>Flowcentral Web UI Module</description>
 	<url>http://www.flowcentralplatform.com</url>
-
+	
 	<dependencies>
 		<!-- Main dependencies -->
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-web-ui</artifactId>
-			<version>${unify.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

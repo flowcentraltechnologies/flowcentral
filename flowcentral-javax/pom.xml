@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-web-javax</artifactId>
-			<version>${unify.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>
