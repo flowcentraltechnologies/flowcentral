@@ -9,16 +9,16 @@
 		<version>4.1.7-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>flowcentral-jetty</artifactId>
-	<name>flowcentral-jetty</name>
-	<description>Flowcentral Jetty Module</description>
+	<artifactId>flowcentral-fontawesome</artifactId>
+	<name>flowcentral-fontawesome</name>
+	<description>Flowcentral Font Awesome Module</description>
 	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-jetty</artifactId>
+			<artifactId>unify-fontawesome</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

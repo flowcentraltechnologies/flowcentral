@@ -30,17 +30,17 @@
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-fontawesome</artifactId>
-			<version>${unify.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-jasperreports</artifactId>
-			<version>${unify.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-exp4j</artifactId>
-			<version>${unify.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>

@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.flowcentraltech.flowcentral</groupId>
@@ -9,16 +10,16 @@
 		<version>4.1.7-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>flowcentral-jetty</artifactId>
-	<name>flowcentral-jetty</name>
-	<description>Flowcentral Jetty Module</description>
+	<artifactId>flowcentral-web-ui</artifactId>
+	<name>flowcentral-web-ui</name>
+	<description>Flowcentral Web UI Module</description>
 	<url>http://www.flowcentralplatform.com</url>
-
+	
 	<dependencies>
 		<!-- Main dependencies -->
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-jetty</artifactId>
+			<artifactId>unify-web-ui</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
