@@ -126,7 +126,7 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
     }
 
     public void newEditor() throws UnifyException {
-        TableEditor.Builder teb = TableEditor.newBuilder(entityDef);
+        TableEditor.Builder teb = TableEditor.newBuilder(au(), entityDef);
         for (AppTableColumn appTableColumn : au().environment()
                 .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
             teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
