@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-fontawesome</artifactId>
-			<version>${project.version}</version>
+			<version>${unify.version}</version>
 		</dependency>
 	</dependencies>
 </project>
