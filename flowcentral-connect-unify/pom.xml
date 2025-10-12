@@ -30,12 +30,12 @@
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-core</artifactId>
-			<version>${project.version}</version>
+			<version>${unify.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
 			<artifactId>unify-web</artifactId>
-			<version>${project.version}</version>
+			<version>${unify.version}</version>
 		</dependency>
 		<!-- Test dependencies -->
 	</dependencies>
