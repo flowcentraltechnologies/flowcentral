@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
@@ -43,6 +44,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
+@EntityReferences({ "*" })
 @Component(name = "submittoworkflow-actionpolicy", description = "$m{workflow.entityactionpolicy.submittiworkflow}")
 public class SubmitToWorkflowActionPolicy extends AbstractFormActionPolicy {
 
@@ -60,7 +62,7 @@ public class SubmitToWorkflowActionPolicy extends AbstractFormActionPolicy {
     @Override
     public List<? extends Listable> getRuleList(String entityName) throws UnifyException {
         final List<Workflow> workflows = workflowModuleService.findWorkflows((WorkflowQuery) new WorkflowQuery()
-                .entity(entityName).addSelect("applicationName", "name", "description"));
+                .entity(entityName).runnable().addSelect("applicationName", "name", "description"));
         if (!DataUtils.isBlank(workflows)) {
             List<ListData> result = new ArrayList<ListData>();
             for (Workflow workflow : workflows) {
