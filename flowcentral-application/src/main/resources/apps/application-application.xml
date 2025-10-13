@@ -2347,6 +2347,8 @@
 					type="STRING" />
 				<field name="policy"
 					label="$m{application.appformaction.policy}" type="STRING" />
+				<field name="rule"
+					label="$m{application.appformaction.rule}" type="STRING" nullable="true"/>
 				<field name="orderIndex"
 					label="$m{application.appformaction.orderindex}"
 					type="INTEGER" />

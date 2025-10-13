@@ -692,7 +692,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         FormContext ctx = evaluateCurrentFormContext(
                 new FormValidationContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()), actionName));
         if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(), actionName);
+            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(),
+                    formActionDef.getRule(), actionName);
             handleEntityActionResult(entityActionResult);
         }
     }

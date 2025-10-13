@@ -16,6 +16,10 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.Collections;
+import java.util.List;
+
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -25,6 +29,11 @@ import com.tcdng.unify.core.UnifyException;
  * @since 4.1
  */
 public abstract class AbstractFormActionPolicy extends AbstractEntityActionPolicy implements FormActionPolicy {
+
+    @Override
+    public List<? extends Listable> getRuleList(String entityName) throws UnifyException {
+        return Collections.emptyList();
+    }
 
     @Override
     public String getConfirmation() throws UnifyException {
