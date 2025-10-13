@@ -998,11 +998,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return entityActionResult;
     }
 
-    public EntityActionResult formActionOnInst(String actionPolicyName, String formActionName) throws UnifyException {
+    public EntityActionResult formActionOnInst(String actionPolicyName, String actionRule, String formActionName)
+            throws UnifyException {
         AbstractForm _form = getResolvedForm();
         final FormContext formContext = _form.getCtx();
         Entity _inst = (Entity) _form.getFormBean();
         EntityActionContext efCtx = new EntityActionContext(_form.getFormDef().getEntityDef(), _inst, actionPolicyName);
+        efCtx.setActionRule(actionRule);
         efCtx.setAll(formContext);
         if (isListingView()) {
             final String listingGenerator = listingForm.getFormListing().getListingGenerator();

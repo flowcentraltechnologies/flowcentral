@@ -56,6 +56,9 @@ public class AppFormAction extends BaseConfigNamedEntity {
     @Column(name = "ACTION_POLICY", length = 64)
     private String policy;
 
+    @Column(name = "ACTION_RULE", length = 64, nullable = true)
+    private String rule;
+
     @Column
     private int orderIndex;
 
@@ -123,6 +126,14 @@ public class AppFormAction extends BaseConfigNamedEntity {
 
     public void setPolicy(String policy) {
         this.policy = policy;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 
     public int getOrderIndex() {

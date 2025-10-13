@@ -270,9 +270,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         return entityActionResult;
     }
 
-    public EntityActionResult formActionOnInst(String actionPolicyName) throws UnifyException {
+    public EntityActionResult formActionOnInst(String actionPolicyName, String actionRule) throws UnifyException {
         Entity _inst = (Entity) form.getFormBean();
         EntityActionContext efCtx = new EntityActionContext(getEntityDef(), _inst, actionPolicyName);
+        efCtx.setActionRule(actionRule);
         efCtx.setAll(form.getCtx());
         EntityActionResult entityActionResult = au().environment().performEntityAction(efCtx);
         updateSingleForm(EntitySingleForm.UpdateType.FORMACTION_ON_INST, form, reloadEntity(_inst));

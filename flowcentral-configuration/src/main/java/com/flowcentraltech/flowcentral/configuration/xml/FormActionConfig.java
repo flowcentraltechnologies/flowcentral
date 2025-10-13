@@ -52,6 +52,9 @@ public class FormActionConfig extends BaseNameConfig {
     private String policy;
 
     @JacksonXmlProperty(isAttribute = true)
+    private String rule;
+
+    @JacksonXmlProperty(isAttribute = true)
     private String symbol;
 
     @JacksonXmlProperty(isAttribute = true)
@@ -99,6 +102,14 @@ public class FormActionConfig extends BaseNameConfig {
 
     public void setPolicy(String policy) {
         this.policy = policy;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 
     public String getSymbol() {

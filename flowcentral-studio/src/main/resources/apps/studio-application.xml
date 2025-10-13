@@ -94,6 +94,11 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select blankOption:$s{} list:formactionpolicylist listParams:$l{appFormId}"
 			renderer="!ui-label" />
+		<widgetType name="formactionrulelist"
+			description="$m{studio.widgettype.formactionrulelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select blankOption:$s{} list:formactionrulelist listParams:$l{policy appFormId}"
+			renderer="!ui-label" />
 		<widgetType name="entitymatcherlist"
 			description="$m{studio.widgettype.entitymatcherlist}"
 			dataType="STRING" inputType="STRING"
@@ -5849,7 +5854,9 @@
 							inputWidget="application.enumlist" column="1" />
 						<field name="policy"
 							inputWidget="studio.formactionpolicylist" column="1"
-							required="true" />
+							switchOnChange="true" required="true" />
+						<field name="rule"
+							inputWidget="studio.formactionrulelist" column="1" />
 						<field name="orderIndex" inputWidget="application.integer"
 							required="true" column="1" />
 						<field name="showOnCreate"
