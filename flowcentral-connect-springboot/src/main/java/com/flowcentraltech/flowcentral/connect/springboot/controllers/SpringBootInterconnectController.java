@@ -22,6 +22,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,7 +75,7 @@ public class SpringBootInterconnectController {
         }
     }
 
-    @PostMapping(path = "/listEntities")
+    @PostMapping(path = "/listEntities", produces = MediaType.APPLICATION_JSON_VALUE)
     public EntityListingResponse listEntities(@RequestBody EntityListingRequest req) throws Exception {
         EntityListingResponse result = springBootInterconnectService.listEntities(req);
         EntityListingResponse resp = springBootInterconnectRedirect != null
@@ -84,7 +85,7 @@ public class SpringBootInterconnectController {
         return result;
     }
 
-    @PostMapping(path = "/detectEntity")
+    @PostMapping(path = "/detectEntity", produces = MediaType.APPLICATION_JSON_VALUE)
     public DetectEntityResponse detectEntity(@RequestBody DetectEntityRequest req) throws Exception {
         DetectEntityResponse resp = null;
         try {
@@ -106,7 +107,7 @@ public class SpringBootInterconnectController {
         return resp;
     }
 
-    @PostMapping(path = "/getEntity")
+    @PostMapping(path = "/getEntity", produces = MediaType.APPLICATION_JSON_VALUE)
     public GetEntityResponse getEntity(@RequestBody GetEntityRequest req) throws Exception {
         GetEntityResponse resp = null;
         try {
@@ -128,7 +129,7 @@ public class SpringBootInterconnectController {
         return resp;
     }
 
-    @PostMapping(path = "/dataSource")
+    @PostMapping(path = "/dataSource", produces = MediaType.APPLICATION_JSON_VALUE)
     public JsonDataSourceResponse processDataSourceRequest(@RequestBody DataSourceRequest req) {
         JsonDataSourceResponse resp = null;
         try {
@@ -150,7 +151,7 @@ public class SpringBootInterconnectController {
         return resp;
     }
 
-    @PostMapping(path = "/procedure")
+    @PostMapping(path = "/procedure", produces = MediaType.APPLICATION_JSON_VALUE)
     public JsonProcedureResponse procedureRequest(@RequestBody ProcedureRequest req) {
         JsonProcedureResponse resp = null;
         try {

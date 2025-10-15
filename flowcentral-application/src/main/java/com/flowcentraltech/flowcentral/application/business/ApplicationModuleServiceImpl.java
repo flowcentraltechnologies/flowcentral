@@ -3928,14 +3928,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             if (!entities.containsKey(entity)) {
                 List<PortalEntityField> fields = new ArrayList<PortalEntityField>();
                 for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
-                    final WidgetTypeDef widgetTypeDef = entityFieldDef.getInputWidget() != null
-                            ? getWidgetTypeDef(entityFieldDef.getInputWidget())
+                    final EntityFieldDef resolvedEntityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
+                            ? entityFieldDef.getResolvedTypeFieldDef()
+                            : entityFieldDef;
+                    final WidgetTypeDef widgetTypeDef = resolvedEntityFieldDef.getInputWidget() != null
+                            ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
-                                    InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType()));
-                    final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
-                    fields.add(new PortalEntityField(entityFieldDef.getDataType().name(), entityFieldDef.getFieldName(),
-                            resolveApplicationMessage(entityFieldDef.getFieldLabel()), editor,
-                            entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
+                                    InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
+                    final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, resolvedEntityFieldDef);
+                    fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
+                            entityFieldDef.getFieldName(), resolveApplicationMessage(entityFieldDef.getFieldLabel()),
+                            editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
                 }
 
                 entities.put(entity, new PortalEntity(entityDef.getName(), entityDef.getDescription(),
