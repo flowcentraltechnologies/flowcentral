@@ -159,6 +159,7 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DECIMAL_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.LIST_ONLY, "application.text");
         defaultFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
@@ -193,6 +194,7 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DECIMAL_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.LIST_ONLY, "application.text");
         defaultSyncFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
