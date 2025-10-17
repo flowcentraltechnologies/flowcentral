@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.business;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
+import com.flowcentraltech.flowcentral.test.AbstractFlowCentralTest;
 
 /**
  * Security module service tests.

@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
+import com.flowcentraltech.flowcentral.test.AbstractFlowCentralTest;
 
 /**
  * Validator component tests.

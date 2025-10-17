@@ -13,9 +13,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common;
+package com.flowcentraltech.flowcentral.test;
 
-import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.AbstractUnifyComponentTest;
 import com.tcdng.unify.core.ApplicationComponents;
@@ -38,7 +37,7 @@ public abstract class AbstractFlowCentralTest extends AbstractUnifyComponentTest
         super.doAddSettingsAndDependencies();
         addContainerSetting(UnifyCorePropertyConstants.APPLICATION_NAME, "flowCentral");
         addContainerSetting(UnifyCorePropertyConstants.APPLICATION_BOOT,
-                CommonModuleNameConstants.APPLICATION_BOOTSERVICE);
+                "common-bootservice");
     }
 
     @SuppressWarnings("unchecked")
