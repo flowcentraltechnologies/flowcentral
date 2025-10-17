@@ -24,11 +24,11 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachment;
+import com.flowcentraltech.flowcentral.test.AbstractFlowCentralTest;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 
 /**

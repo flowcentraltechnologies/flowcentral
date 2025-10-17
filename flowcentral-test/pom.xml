@@ -10,44 +10,38 @@
 		<version>4.1.10-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>flowcentral-application</artifactId>
-	<name>flowcentral-application</name>
-	<description>Flowcentral Application Module</description>
+	<artifactId>flowcentral-test</artifactId>
+	<name>flowcentral-test</name>
+	<description>Flowcentral Test Module</description>
 	<url>http://www.flowcentralplatform.com</url>
-
+	
 	<dependencies>
-		<!-- Main dependencies -->
-		<dependency>
-			<groupId>com.flowcentraltech.flowcentral</groupId>
-			<artifactId>flowcentral-connect-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.flowcentraltech.flowcentral</groupId>
-			<artifactId>flowcentral-system</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-fontawesome</artifactId>
-			<version>${unify.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-jasperreports</artifactId>
-			<version>${unify.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-exp4j</artifactId>
-			<version>${unify.version}</version>
-		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
-			<groupId>com.flowcentraltech.flowcentral</groupId>
-			<artifactId>flowcentral-test</artifactId>
-			<version>${project.version}</version>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-core</artifactId>
+			<version>${unify.version}</version>
 			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-web</artifactId>
+			<version>${unify.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-web-ui</artifactId>
+			<version>${unify.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-jetty</artifactId>
+			<version>${unify.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

@@ -61,6 +61,7 @@
     <module>flowcentral-integration-rest</module>
     <module>flowcentral-web-ui</module>
     <module>flowcentral-fontawesome</module>
+    <module>flowcentral-test</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

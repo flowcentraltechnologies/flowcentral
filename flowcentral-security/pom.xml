@@ -43,7 +43,7 @@
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>com.flowcentraltech.flowcentral</groupId>
-			<artifactId>flowcentral-common</artifactId>
+			<artifactId>flowcentral-test</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
