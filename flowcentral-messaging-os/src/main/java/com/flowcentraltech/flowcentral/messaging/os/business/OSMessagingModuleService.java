@@ -72,8 +72,6 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * 
      * @param respClass
      *                  the response class
-     * @param target
-     *                  the messaging target
      * @param request
      *                  the message
      * @return the response object
@@ -81,26 +79,22 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            String target, U request) throws UnifyException;
+            U request) throws UnifyException;
 
     /**
      * Sends asynchronous message.
      * 
-     * @param target
-     *                the messaging target
      * @param request
      *                the message
      * @return the correlation ID
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> String sendAsynchronousMessage(String target, T request) throws UnifyException;
+    <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request) throws UnifyException;
 
     /**
      * Sends asynchronous message with a delay.
      * 
-     * @param target
-     *                    the messaging target
      * @param request
      *                    the message
      * @param delayInSecs
@@ -109,7 +103,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseOSMessagingReq> String sendAsynchronousMessage(String target, T request, long delayInSecs)
+    <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request, long delayInSecs)
             throws UnifyException;
     
     /**
