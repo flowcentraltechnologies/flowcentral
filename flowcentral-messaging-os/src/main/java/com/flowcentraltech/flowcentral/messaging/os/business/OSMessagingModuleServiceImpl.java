@@ -196,37 +196,37 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
-            String target, U request) throws UnifyException {
+            U request) throws UnifyException {
         if (StringUtils.isBlank(request.getCorrelationId())) {
             request.setCorrelationId(RandomUtils.generateUUIDInBase64());
         }
 
         request.setSource(osInfo.getServiceId());
-        request.setVersion(osInfo.getServiceVersion());
+        request.setSourceVersion(osInfo.getServiceVersion());
         final String msg = DataUtils.asJsonString(request, PrintFormat.PRETTY);
-        return sendMessage(respClass, target, request.getProcessor(), request.getCorrelationId(), msg, true);
+        return sendMessage(respClass, request.getTarget(), request.getProcessor(), request.getCorrelationId(), msg,
+                true);
     }
 
     @Override
-    public <T extends BaseOSMessagingReq> String sendAsynchronousMessage(String target, T request)
-            throws UnifyException {
-        return sendAsynchronousMessage(target, request, 0L);
+    public <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request) throws UnifyException {
+        return sendAsynchronousMessage(request, 0L);
     }
 
     @Override
-    public <T extends BaseOSMessagingReq> String sendAsynchronousMessage(String target, T request, long delayInSeconds)
+    public <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request, long delayInSeconds)
             throws UnifyException {
         if (StringUtils.isBlank(request.getCorrelationId())) {
             request.setCorrelationId(RandomUtils.generateUUIDInBase64());
         }
 
         request.setSource(osInfo.getServiceId());
-        request.setVersion(osInfo.getServiceVersion());
+        request.setSourceVersion(osInfo.getServiceVersion());
         final String msg = DataUtils.asJsonString(request, PrintFormat.PRETTY);
         final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND,
                 delayInSeconds <= 0 ? 0 : delayInSeconds);
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
-        osMessagingAsync.setTarget(target);
+        osMessagingAsync.setTarget(request.getTarget());
         osMessagingAsync.setCorrelationId(request.getCorrelationId());
         osMessagingAsync.setProcessor(request.getProcessor());
         osMessagingAsync.setMessage(msg);
@@ -300,7 +300,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             } else {
                 logError(e);
             }
-            
+
             try {
                 final Date nextAttemptOn = CalendarUtils.getDateWithFrequencyOffset(getNow(), FrequencyUnit.SECOND, 60);
                 environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
@@ -332,8 +332,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, String target, String processor,
             String correlationId, String msg, boolean sync) throws UnifyException {
-        logDebug(sync ? "Sending synchronous message [\n{0}] to [{1}]..."
-                : "Sending asynchronous message [\n{0}] to [{1}]...", msg, target);
+        logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...", msg);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(HttpRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
