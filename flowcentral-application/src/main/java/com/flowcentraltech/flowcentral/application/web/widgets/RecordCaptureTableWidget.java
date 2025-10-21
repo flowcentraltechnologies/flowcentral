@@ -25,6 +25,8 @@ import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralVal
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.web.ui.DataTransferBlock;
+import com.tcdng.unify.web.ui.widget.Control;
 
 /**
  * Record capture table widget.
@@ -40,6 +42,17 @@ public class RecordCaptureTableWidget
 
     public String getRowId() throws UnifyException {
         return getPrefixedId("row_");
+    }
+
+    @Override
+    public void populate(DataTransferBlock transferBlock) throws UnifyException {
+        if (transferBlock != null) {
+            DataTransferBlock childBlock = transferBlock.getChildBlock();
+            ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childBlock.getId());
+            Control control = (Control) childWidgetInfo.getWidget();
+            control.setValueStore(getValueList().get(childBlock.getItemIndex()));
+            control.populate(childBlock);
+        }
     }
 
     @SuppressWarnings("unchecked")

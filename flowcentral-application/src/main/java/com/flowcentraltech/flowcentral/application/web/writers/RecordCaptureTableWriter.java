@@ -21,7 +21,6 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSy
 import com.flowcentraltech.flowcentral.application.data.AbstractRecordCapture;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureColumnDef;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureTableDef;
-import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTableWidget;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
@@ -45,7 +44,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Writes(AbstractTableWidget.class)
+@Writes(RecordCaptureTableWidget.class)
 @Component("fc-recordcapturetable-writer")
 public class RecordCaptureTableWriter extends AbstractControlWriter {
 
