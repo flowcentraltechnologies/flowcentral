@@ -839,6 +839,33 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-loadingtable {}
 
+/* Record capture */
+.fc-recordcapturetable {}
+.fc-recordcapturetable .table {table-layout:fixed; width:100%; border-collapse:collapse;}
+.fc-recordcapturetable .table tr {vertical-align: middle;}
+.fc-recordcapturetable .table .odd {background-color:#f1f4f5;}
+.fc-recordcapturetable .table .odd:hover {background-color:var(--color-tablehov);}
+.fc-recordcapturetable .table .even {}
+.fc-recordcapturetable .table .even:hover {background-color:var(--color-tablehov);}
+.fc-recordcapturetable .table th {text-align:left;font-weight: bold;padding:8px 6px;}
+.fc-recordcapturetable .table th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
+.fc-recordcapturetable .table td {vertical-align:top;height:24px; padding: 8px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;}
+.fc-recordcapturetable .table .cselh {width: 32px;}
+.fc-recordcapturetable .table .cserialh {width: 32px;}
+.fc-recordcapturetable .table .celld {text-align:center;}
+.fc-recordcapturetable .table .mselh {width: 22px;}
+.fc-recordcapturetable .table .mselh span {width:16px; height:16px;}
+.fc-recordcapturetable .table .mselh input {display:none;}
+.fc-recordcapturetable .table .mseld {background-color: #e3e7ea;}
+.fc-recordcapturetable .table .mseld span {width:16px; height:16px;}
+.fc-recordcapturetable .table .mseld input {display:none;}
+.fc-recordcapturetable .table .mserialh {width: 32px;}
+.fc-recordcapturetable .table .mnorec {display:block;text-align:center; font-size:8pt;color: #606060;}
+.fc-recordcapturetable .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
+.fc-recordcapturetable .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
+.fc-recordcapturetable .classic .mselh {width: 22px;background-color: #e3e7ea;}
+
+
 .fc-dispcounter {display:inline-block; background-color:#a6aeb9; color:#202020; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
 .fc-dispcountergreen {display:inline-block; background-color:#90d883; color:#202020; font-weight:bold; font-size:7pt;
