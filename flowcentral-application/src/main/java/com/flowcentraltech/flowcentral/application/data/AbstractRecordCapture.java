@@ -23,7 +23,17 @@ package com.flowcentraltech.flowcentral.application.data;
  */
 public abstract class AbstractRecordCapture {
 
+    private String recordNo;
+
     private String title;
+
+    public String getRecordNo() {
+        return recordNo;
+    }
+
+    public void setRecordNo(String recordNo) {
+        this.recordNo = recordNo;
+    }
 
     public void setTitle(String title) {
         this.title = title;

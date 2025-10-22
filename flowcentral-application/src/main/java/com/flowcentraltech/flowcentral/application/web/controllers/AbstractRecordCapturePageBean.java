@@ -13,65 +13,51 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.widgets;
+package com.flowcentraltech.flowcentral.application.web.controllers;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AbstractRecordCapture;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureTableDef;
+import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTable;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.BeanValueListStore;
-import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Record capture table.
+ * Abstract record capture page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class RecordCaptureTable<T extends AbstractRecordCapture> {
-    
-    private RecordCaptureTableDef tableDef;
-    
-    private List<T> records;
-    
-    private boolean editable;
+public abstract class AbstractRecordCapturePageBean<T extends AbstractRecordCapture> extends AbstractPageBean {
 
-    public RecordCaptureTable(RecordCaptureTableDef tableDef) {
-        this.tableDef = tableDef;
-        this.records = Collections.emptyList();
+    private RecordCaptureTable<T> table;
+    
+    public AbstractRecordCapturePageBean(RecordCaptureTableDef tableDef) {
+        this.table = new RecordCaptureTable<T>(tableDef);
     }
 
-    public RecordCaptureTableDef getTableDef() {
-        return tableDef;
+    public RecordCaptureTable<T> getTable() {
+        return table;
     }
 
     public boolean isEditable() {
-        return editable;
+        return table.isEditable();
     }
 
     public void setEditable(boolean editable) {
-        this.editable = editable;
+        table.setEditable(editable);
     }
 
     public void setRecords(List<T> records) {
-        this.records = records;
+        table.setRecords(records);
     }
 
     public List<T> getRecords() {
-        return records;
+        return table.getRecords();
     }
     
     public void clear() throws UnifyException {
-        if (!DataUtils.isBlank(records)) {
-            for (ValueStore valueStore: new BeanValueListStore(records)) {
-                    for(String fieldName: tableDef.getCaptureFields()) {
-                        valueStore.store(fieldName, null);
-                    }
-            }
-        }
+        table.clear();
     }
-
 }

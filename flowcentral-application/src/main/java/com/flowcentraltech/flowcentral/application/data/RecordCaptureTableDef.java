@@ -35,13 +35,16 @@ public class RecordCaptureTableDef {
 
     private List<RecordCaptureColumnDef> columnDefs;
 
+    private List<String> captureFields;
+
     private boolean serialNo;
 
     private RecordCaptureTableDef(boolean serialNo, Class<? extends AbstractRecordCapture> recordClass,
-            List<RecordCaptureColumnDef> columnDefs) {
+            List<RecordCaptureColumnDef> columnDefs, List<String> captureFields) {
         this.serialNo = serialNo;
         this.recordClass = recordClass;
         this.columnDefs = columnDefs;
+        this.captureFields = captureFields;
     }
 
     public boolean isSerialNo() {
@@ -60,11 +63,17 @@ public class RecordCaptureTableDef {
         return columnDefs.get(index);
     }
 
+    public List<String> getCaptureFields() {
+        return captureFields;
+    }
+
     public static Builder newBuilder(Class<? extends AbstractRecordCapture> recordClass) {
         return new Builder(recordClass);
     }
 
     public static class Builder {
+
+        private String recordNoCaption;
 
         private String titleCaption;
 
@@ -74,9 +83,17 @@ public class RecordCaptureTableDef {
 
         private List<RecordCaptureColumnDef> columnDefs;
 
+        private List<String> captureFields;
+
         public Builder(Class<? extends AbstractRecordCapture> recordClass) {
             this.recordClass = recordClass;
             this.columnDefs = new ArrayList<RecordCaptureColumnDef>();
+            this.captureFields = new ArrayList<String>();
+        }
+
+        public Builder recordNoCaption(String recordNoCaption) {
+            this.recordNoCaption = recordNoCaption;
+            return this;
         }
 
         public Builder titleCaption(String titleCaption) {
@@ -91,24 +108,38 @@ public class RecordCaptureTableDef {
 
         public Builder addColumnDef(String fieldName, String caption, String cellEditor, String cellRenderer)
                 throws UnifyException {
+            if ("recordNo".equals(fieldName) || "title".equals(fieldName)) {
+                throw new IllegalArgumentException("Supplied field name is reserved.");
+            }
+
             if (!ReflectUtils.isGettableField(recordClass, fieldName)
                     || !ReflectUtils.isSettableField(recordClass, fieldName)) {
                 throw new IllegalArgumentException(
                         "Record class associated with this builder has no getter and setter for supplied field.");
             }
 
+            captureFields.add(fieldName);
             columnDefs.add(new RecordCaptureColumnDef(fieldName, caption, cellEditor + " binding:" + fieldName,
                     cellRenderer + " binding:" + fieldName));
             return this;
         }
 
         public RecordCaptureTableDef build() throws UnifyException {
-            if (StringUtils.isBlank(titleCaption)) {
-                throw new IllegalArgumentException("Title caption has not been set for this builder.");
+            if (StringUtils.isBlank(recordNoCaption) && StringUtils.isBlank(titleCaption)) {
+                throw new IllegalArgumentException(
+                        "Title caption or record number caption has not been set for this builder.");
             }
 
-            columnDefs.add(0, new RecordCaptureColumnDef("title", titleCaption, "!ui-label", "!ui-label"));
-            return new RecordCaptureTableDef(serialNo, recordClass, DataUtils.unmodifiableList(columnDefs));
+            if (StringUtils.isBlank(titleCaption)) {
+                columnDefs.add(0, new RecordCaptureColumnDef("title", titleCaption, "!ui-label", "!ui-label"));
+            }
+
+            if (StringUtils.isBlank(recordNoCaption)) {
+                columnDefs.add(0, new RecordCaptureColumnDef("recordNo", recordNoCaption, "!ui-label", "!ui-label"));
+            }
+
+            return new RecordCaptureTableDef(serialNo, recordClass, DataUtils.unmodifiableList(columnDefs),
+                    DataUtils.unmodifiableList(captureFields));
         }
     }
 

@@ -132,13 +132,13 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
             }
 
             // Append table rigging
-            writer.beginFunction("fux.rigRecordCaptureTable");
-            writer.writeParam("pId", tableWidgetId);
-            writer.writeParam("pContId", tableWidget.getContainerId());
-            writer.writeParam("pRowId", tableWidget.getRowId());
-            writer.writeCommandURLParam("pCmdURL");
-            writer.writeParam("pDisabled", isTableDisabled);
-            writer.endFunction();
+//            writer.beginFunction("fux.rigRecordCaptureTable");
+//            writer.writeParam("pId", tableWidgetId);
+//            writer.writeParam("pContId", tableWidget.getContainerId());
+//            writer.writeParam("pRowId", tableWidget.getRowId());
+//            writer.writeCommandURLParam("pCmdURL");
+//            writer.writeParam("pDisabled", isTableDisabled);
+//            writer.endFunction();
         }
     }
 
