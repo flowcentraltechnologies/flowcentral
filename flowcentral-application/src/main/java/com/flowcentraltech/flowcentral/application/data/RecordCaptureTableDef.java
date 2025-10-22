@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.util.WidgetCalculationUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -105,39 +106,57 @@ public class RecordCaptureTableDef {
             this.serialNo = serialNo;
             return this;
         }
-
-        public Builder addColumnDef(String fieldName, String caption, String cellEditor, String cellRenderer)
-                throws UnifyException {
+        
+        public Builder addColumnDef(String fieldName, String caption, String editor) {
+            return addColumnDef(fieldName, caption, editor, 2);
+        }
+        
+        public Builder addColumnDef(String fieldName, String caption, String editor, int widthRatio) {
             if ("recordNo".equals(fieldName) || "title".equals(fieldName)) {
                 throw new IllegalArgumentException("Supplied field name is reserved.");
             }
 
-            if (!ReflectUtils.isGettableField(recordClass, fieldName)
-                    || !ReflectUtils.isSettableField(recordClass, fieldName)) {
+            try {
+                if (!ReflectUtils.isGettableField(recordClass, fieldName)
+                        || !ReflectUtils.isSettableField(recordClass, fieldName)) {
+                    throw new IllegalArgumentException(
+                            "Record class associated with this builder has no getter and setter for supplied field.");
+                }
+            } catch (UnifyException e) {
                 throw new IllegalArgumentException(
-                        "Record class associated with this builder has no getter and setter for supplied field.");
+                        "Reflection error.", e);
             }
 
             captureFields.add(fieldName);
-            columnDefs.add(new RecordCaptureColumnDef(fieldName, caption, cellEditor + " binding:" + fieldName,
-                    cellRenderer + " binding:" + fieldName));
+            columnDefs.add(new RecordCaptureColumnDef(fieldName, caption, editor + " binding:" + fieldName, widthRatio));
             return this;
         }
 
-        public RecordCaptureTableDef build() throws UnifyException {
+        public RecordCaptureTableDef build() {
             if (StringUtils.isBlank(recordNoCaption) && StringUtils.isBlank(titleCaption)) {
                 throw new IllegalArgumentException(
                         "Title caption or record number caption has not been set for this builder.");
             }
-
-            if (StringUtils.isBlank(titleCaption)) {
-                columnDefs.add(0, new RecordCaptureColumnDef("title", titleCaption, "!ui-label", "!ui-label"));
+            
+            if (!StringUtils.isBlank(titleCaption)) {
+                columnDefs.add(0, new RecordCaptureColumnDef("title", titleCaption, "!ui-label binding:title", 4));
             }
 
-            if (StringUtils.isBlank(recordNoCaption)) {
-                columnDefs.add(0, new RecordCaptureColumnDef("recordNo", recordNoCaption, "!ui-label", "!ui-label"));
+            if (!StringUtils.isBlank(recordNoCaption)) {
+                columnDefs.add(0, new RecordCaptureColumnDef("recordNo", recordNoCaption, "!ui-label binding:recordNo", 2));
             }
 
+            final int len = columnDefs.size();
+            int[] widths = new int[len];
+            for (int i = 0; i < len; i++) {
+                widths[i] = columnDefs.get(i).getWidthRatio();
+            }
+
+            widths = WidgetCalculationUtils.shareAsEqualAsPossible(100, widths);
+            for (int i = 0; i < len; i++) {
+                columnDefs.get(i).setHeaderStyle("width:" + widths[i] + "%;");
+            }
+            
             return new RecordCaptureTableDef(serialNo, recordClass, DataUtils.unmodifiableList(columnDefs),
                     DataUtils.unmodifiableList(captureFields));
         }

@@ -42,6 +42,7 @@ public class RecordCaptureTable<T extends AbstractRecordCapture> {
     public RecordCaptureTable(RecordCaptureTableDef tableDef) {
         this.tableDef = tableDef;
         this.records = Collections.emptyList();
+        this.editable = true;
     }
 
     public RecordCaptureTableDef getTableDef() {

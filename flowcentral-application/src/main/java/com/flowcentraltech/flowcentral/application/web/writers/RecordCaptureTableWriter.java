@@ -23,7 +23,6 @@ import com.flowcentraltech.flowcentral.application.data.RecordCaptureColumnDef;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureTableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTableWidget;
-import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -31,7 +30,6 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.AbstractMultiControl.ChildWidgetInfo;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -56,8 +54,8 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
         final RecordCaptureTableWidget tableWidget = (RecordCaptureTableWidget) widget;
         final RecordCaptureTable<? extends AbstractRecordCapture> table = tableWidget.getTable();
         if (table != null) {
-            final boolean classicMode = systemModuleService.getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.ALL_TABLE_IN_CLASSIC_MODE);
+            final boolean classicMode = true ; //emModuleService.getSysParameterValue(boolean.class,
+                    //ApplicationModuleSysParamConstants.ALL_TABLE_IN_CLASSIC_MODE);
             writer.write("<div");
             writeTagAttributes(writer, tableWidget);
             writer.write(">");
@@ -91,7 +89,6 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
         // External control behavior
         final RecordCaptureTable<? extends AbstractRecordCapture> table = tableWidget.getTable();
         if (table != null) {
-            final RecordCaptureTableDef tableDef = table.getTableDef();
             final boolean isTableEditable = table.isEditable();
             final boolean entryMode = table.isEditable();
 
@@ -99,26 +96,23 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
             final int vlen = valueList.size();
             for (int i = 0; i < vlen; i++) {
                 ValueStore valueStore = valueList.get(i);
-                final int len = tableDef.getColumnDefs().size();
-                int columnIndex = entryMode ? 0 : -len;
+                int columnIndex = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                        if (columnIndex >= 0 && columnIndex < len) {
-                            Widget chWidget = widgetInfo.getWidget();
-                            if (isTableDisabled) {
-                                chWidget.setEditable(false);
-                                chWidget.setDisabled(true);
-                            } else {
-                                chWidget.setEditable(entryMode);
-                                chWidget.setDisabled(false);
-                            }
+                        Widget chWidget = widgetInfo.getWidget();
+                        if (isTableDisabled) {
+                            chWidget.setEditable(false);
+                            chWidget.setDisabled(true);
+                        } else {
+                            chWidget.setEditable(entryMode);
+                            chWidget.setDisabled(false);
+                        }
 
-                            chWidget.setValueStore(valueStore);
-                            writer.writeBehavior(chWidget);
+                        chWidget.setValueStore(valueStore);
+                        writer.writeBehavior(chWidget);
 
-                            if (isTableEditable && columnIndex > 0) {
-                                addPageAlias(tableWidgetId, chWidget);
-                            }
+                        if (isTableEditable && columnIndex > 0) {
+                            addPageAlias(tableWidgetId, chWidget);
                         }
 
                         columnIndex++;
@@ -130,15 +124,6 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
             if (isTableEditable) {
                 getRequestContextUtil().addOnSaveContentWidget(tableWidgetId);
             }
-
-            // Append table rigging
-//            writer.beginFunction("fux.rigRecordCaptureTable");
-//            writer.writeParam("pId", tableWidgetId);
-//            writer.writeParam("pContId", tableWidget.getContainerId());
-//            writer.writeParam("pRowId", tableWidget.getRowId());
-//            writer.writeCommandURLParam("pCmdURL");
-//            writer.writeParam("pDisabled", isTableDisabled);
-//            writer.endFunction();
         }
     }
 
@@ -155,10 +140,10 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
         }
 
         final int len = tableDef.getColumnDefs().size();
-        final String headerStyle = "width:" + (100 / len) + "%;"; // TODO Use ratios
         for (int i = 0; i < len; i++) {
+            final RecordCaptureColumnDef tabelColumnDef = tableDef.getRecordCaptureColumnDef(i);
             writer.write("<col ");
-            writeTagStyle(writer, headerStyle);
+            writeTagStyle(writer, tabelColumnDef.getHeaderStyle());
             writer.write(">");
         }
         columnCount += len;
@@ -235,7 +220,7 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
                 for (int i = 0; i < vlen; i++) {
                     ValueStore valueStore = valueList.get(i);
                     // Normal row
-                    final String rowClass = resolveRowStyleClass(i, 0, null, true, even, odd, false, false);
+                    final String rowClass = resolveRowStyleClass(i, true, even, odd);
                     writer.write("<tr");
                     if (!StringUtils.isBlank(rowClass)) {
                         writeTagStyleClass(writer, rowClass);
@@ -250,28 +235,26 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
                         writer.write(".</span></td>");
                     }
 
-                    final int len = tableDef.getColumnDefs().size();
-                    int columnIndex = entryMode ? 0 : -len;
+                    int columnIndex = 0;
                     for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                         if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                            if (columnIndex >= 0 && columnIndex < len) {
-                                RecordCaptureColumnDef tabelColumnDef = tableDef.getRecordCaptureColumnDef(columnIndex);
-                                final String fieldName = tabelColumnDef.getFieldName();
-                                widgetInfo.setName(fieldName);
+                            final RecordCaptureColumnDef tabelColumnDef = tableDef.getRecordCaptureColumnDef(columnIndex);
+                            final String fieldName = tabelColumnDef.getFieldName();
+                            widgetInfo.setName(fieldName);
 
-                                Widget chWidget = widgetInfo.getWidget();
-                                chWidget.setEditable(entryMode);
-                                chWidget.setValueStore(valueStore);
-                                writer.write("<td");
-                                writeTagStyle(writer, chWidget.getColumnStyle());
-                                writer.write(">");
-                                writer.writeStructureAndContent(chWidget);
-                                if (entryMode) {
-                                    writeTargetHidden(writer, chWidget.getId(), i);
-                                }
-
-                                writer.write("</td>");
+                            Widget chWidget = widgetInfo.getWidget();
+                            chWidget.setEditable(entryMode);
+                            chWidget.setDisabled(!entryMode);
+                            chWidget.setValueStore(valueStore);
+                            writer.write("<td");
+                            writeTagStyle(writer, chWidget.getColumnStyle());
+                            writer.write(">");
+                            writer.writeStructureAndContent(chWidget);
+                            if (entryMode) {
+                                writeTargetHidden(writer, chWidget.getId(), i);
                             }
+
+                            writer.write("</td>");
 
                             columnIndex++;
                         }
@@ -284,21 +267,14 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
         }
     }
 
-    private String resolveRowStyleClass(final int i, int highlightRow, EntryTableMessage entryMessage,
-            boolean alternatingRows, String even, String odd, boolean isRowAction, boolean isDisableLinks)
+    private String resolveRowStyleClass(final int i, boolean alternatingRows, String even, String odd)
             throws UnifyException {
-        if (i == highlightRow) {
-            return MessageType.INFO.styleClass();
-        } else if (entryMessage != null && entryMessage.isMessagePresent() && entryMessage.isRowReferred(i)) {
-            return entryMessage.getMessageType().styleClass();
-        } else if (alternatingRows) {
+        if (alternatingRows) {
             if (i % 2 == 0) {
                 return even;
             }
 
             return odd;
-        } else if (isRowAction && !isDisableLinks) {
-            return "pnt";
         }
 
         return null;

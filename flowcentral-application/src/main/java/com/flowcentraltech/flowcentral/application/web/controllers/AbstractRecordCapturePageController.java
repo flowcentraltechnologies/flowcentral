@@ -64,7 +64,19 @@ public abstract class AbstractRecordCapturePageController<T extends AbstractReco
         return "refreshCapture";
     }
 
+    @Override
+    protected void onOpenPage() throws UnifyException {
+        super.onOpenPage();
+        setPageState();
+    }
+
     protected abstract List<T> doLoad() throws UnifyException;
 
     protected abstract void doSave(List<T> records) throws UnifyException;
+    
+    protected void setPageState() throws UnifyException {
+        final boolean editable = getPageBean().isEditable();
+        setPageWidgetVisible("saveCaptureBtn", editable);
+        setPageWidgetVisible("clearCaptureBtn", editable);
+    }
 }

@@ -27,6 +27,15 @@ public abstract class AbstractRecordCapture {
 
     private String title;
 
+    public AbstractRecordCapture(String recordNo, String title) {
+        this.recordNo = recordNo;
+        this.title = title;
+    }
+
+    public AbstractRecordCapture() {
+
+    }
+
     public String getRecordNo() {
         return recordNo;
     }

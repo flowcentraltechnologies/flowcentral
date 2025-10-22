@@ -70,11 +70,7 @@ public class RecordCaptureTableWidget
                 removeAllExternalChildWidgets();
                 if (table != null) {
                     for (RecordCaptureColumnDef tableColumnDef : tableDef.getColumnDefs()) {
-                        addExternalChildWidget(tableColumnDef.getCellEditor());
-                    }
-
-                    for (RecordCaptureColumnDef tableColumnDef : tableDef.getColumnDefs()) {
-                        addExternalChildWidget(tableColumnDef.getCellRenderer());
+                        addExternalChildWidget(tableColumnDef.getEditor());
                     }
                 }
             }

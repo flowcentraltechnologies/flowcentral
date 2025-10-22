@@ -17,23 +17,23 @@
 	 components:$c{searchEntriesPanel capturePanel footerActionPanel}
 
 // Search entries panel
-!ui-panel:searchEntriesPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;}}
+!ui-panel:searchEntriesPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true captionSuffix:$s{:} inlineCaption:true}
 	components:$f{searchComponents} ignoreParentState:true
 
 // Capture panel
 !ui-panel:capturePanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{recordCaptureTbl} 
-!fc-recordcapturetable:recordCaptureTbl detached:true style:$s{width:100%;} binding:captureTable
+!fc-recordcapturetable:recordCaptureTbl style:$s{width:100%;} binding:captureTable
 
 // Footer action panel
-!ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{buttonActionPanel}
-!ui-panel:buttonActionPanel layout:$d{!ui-horizontal style:$s{float:right;}} components:$c{clearCaptureBtn saveBtn}
-!ui-button:saveBtn styleClass:$e{fc-actbutton} caption:$m{button.save}
-    eventHandler:$d{!ui-event event:onclick action:$c{saveAct}}
-!ui-button:clearCaptureBtn styleClass:$e{fc-actbutton} caption:$m{button.clear}
+!ui-panel:footerActionPanel style:$s{width:100%;} components:$c{buttonActionPanel}
+!ui-panel:buttonActionPanel layout:$d{!ui-horizontal style:$s{float:right;}} components:$c{clearCaptureBtn saveCaptureBtn}
+!ui-button:saveCaptureBtn styleClass:$e{fc-actbutton} caption:$m{button.save}
+    eventHandler:$d{!ui-event event:onclick action:$c{saveCaptureAct}}
+!ui-button:clearCaptureBtn caption:$m{button.clear}
     eventHandler:$d{!ui-event event:onclick action:$c{clearCaptureAct}}
 
 // Actions
-!ui-post:loadAct  path:$n{/load} components:$c{searchEntriesPanel}
-!ui-post:saveAct  path:$n{/save} components:$c{recordCaptureTbl}
+!ui-post:loadCaptureAct  path:$n{/loadCapture} components:$c{searchEntriesPanel}
+!ui-post:saveCaptureAct  path:$n{/saveCapture} components:$c{recordCaptureTbl}
 !ui-post:clearCaptureAct  path:$n{/clearCapture} confirm:$m{recordcapturepage.confirm.clearcapture}

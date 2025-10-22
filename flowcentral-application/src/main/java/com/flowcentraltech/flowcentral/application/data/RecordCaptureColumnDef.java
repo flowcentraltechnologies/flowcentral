@@ -27,15 +27,17 @@ public class RecordCaptureColumnDef {
 
     private String caption;
 
-    private String cellEditor;
+    private String editor;
 
-    private String cellRenderer;
+    private String headerStyle;
 
-    public RecordCaptureColumnDef(String fieldName, String caption, String cellEditor, String cellRenderer) {
+    private int widthRatio;
+
+    public RecordCaptureColumnDef(String fieldName, String caption, String editor, int widthRatio) {
         this.fieldName = fieldName;
         this.caption = caption;
-        this.cellEditor = cellEditor;
-        this.cellRenderer = cellRenderer;
+        this.editor = editor;
+        this.widthRatio = widthRatio;
     }
 
     public String getFieldName() {
@@ -46,11 +48,20 @@ public class RecordCaptureColumnDef {
         return caption;
     }
 
-    public String getCellEditor() {
-        return cellEditor;
+    public String getEditor() {
+        return editor;
     }
 
-    public String getCellRenderer() {
-        return cellRenderer;
+    public int getWidthRatio() {
+        return widthRatio;
     }
+
+    public String getHeaderStyle() {
+        return headerStyle;
+    }
+
+    public void setHeaderStyle(String headerStyle) {
+        this.headerStyle = headerStyle;
+    }
+
 }
