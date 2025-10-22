@@ -1,0 +1,39 @@
+// UPL template for record capture page.
+// Copyright (c) 2021-2025 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+!ui-page captionBinding:altCaption subCaptionBinding:altSubCaption
+	 layout:$d{!ui-vertical}
+	 components:$c{searchEntriesPanel capturePanel footerActionPanel}
+
+// Search entries panel
+!ui-panel:searchEntriesPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$f{searchComponents} ignoreParentState:true
+
+// Capture panel
+!ui-panel:capturePanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{recordCaptureTbl} 
+!fc-recordcapturetable:recordCaptureTbl detached:true style:$s{width:100%;} binding:captureTable
+
+// Footer action panel
+!ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{buttonActionPanel}
+!ui-panel:buttonActionPanel layout:$d{!ui-horizontal style:$s{float:right;}} components:$c{clearCaptureBtn saveBtn}
+!ui-button:saveBtn styleClass:$e{fc-actbutton} caption:$m{button.save}
+    eventHandler:$d{!ui-event event:onclick action:$c{saveAct}}
+!ui-button:clearCaptureBtn styleClass:$e{fc-actbutton} caption:$m{button.clear}
+    eventHandler:$d{!ui-event event:onclick action:$c{clearCaptureAct}}
+
+// Actions
+!ui-post:loadAct  path:$n{/load} components:$c{searchEntriesPanel}
+!ui-post:saveAct  path:$n{/save} components:$c{recordCaptureTbl}
+!ui-post:clearCaptureAct  path:$n{/clearCapture} confirm:$m{recordcapturepage.confirm.clearcapture}

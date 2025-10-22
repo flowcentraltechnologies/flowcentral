@@ -67,9 +67,9 @@ public class RecordCaptureTable<T extends AbstractRecordCapture> {
     public void clear() throws UnifyException {
         if (!DataUtils.isBlank(records)) {
             for (ValueStore valueStore: new BeanValueListStore(records)) {
-                    for(String fieldName: tableDef.getCaptureFields()) {
-                        valueStore.store(fieldName, null);
-                    }
+                for(String fieldName: tableDef.getCaptureFields()) {
+                    valueStore.store(fieldName, null);
+                }
             }
         }
     }

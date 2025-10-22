@@ -30,34 +30,54 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  * @since 4.1
  */
 public abstract class AbstractRecordCapturePageBean<T extends AbstractRecordCapture> extends AbstractPageBean {
+    
+    private String altCaption;
+    
+    private String altSubCaption;
 
-    private RecordCaptureTable<T> table;
+    private RecordCaptureTable<T> captureTable;
     
     public AbstractRecordCapturePageBean(RecordCaptureTableDef tableDef) {
-        this.table = new RecordCaptureTable<T>(tableDef);
+        this.captureTable = new RecordCaptureTable<T>(tableDef);
     }
 
-    public RecordCaptureTable<T> getTable() {
-        return table;
+    public String getAltCaption() {
+        return altCaption;
+    }
+
+    public void setAltCaption(String altCaption) {
+        this.altCaption = altCaption;
+    }
+
+    public String getAltSubCaption() {
+        return altSubCaption;
+    }
+
+    public void setAltSubCaption(String altSubCaption) {
+        this.altSubCaption = altSubCaption;
+    }
+
+    public RecordCaptureTable<T> getCaptureTable() {
+        return this.captureTable;
     }
 
     public boolean isEditable() {
-        return table.isEditable();
+        return captureTable.isEditable();
     }
 
     public void setEditable(boolean editable) {
-        table.setEditable(editable);
+        captureTable.setEditable(editable);
     }
 
     public void setRecords(List<T> records) {
-        table.setRecords(records);
+        captureTable.setRecords(records);
     }
 
     public List<T> getRecords() {
-        return table.getRecords();
+        return captureTable.getRecords();
     }
     
     public void clear() throws UnifyException {
-        table.clear();
+        captureTable.clear();
     }
 }

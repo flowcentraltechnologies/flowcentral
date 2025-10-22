@@ -45,21 +45,21 @@ public abstract class AbstractRecordCapturePageController<T extends AbstractReco
     }
 
     @Action
-    public String load() throws UnifyException {
+    public String loadCapture() throws UnifyException {
         final List<T> records = doLoad();
         getPageBean().setRecords(records);
         return "refreshCapture";
     }
 
     @Action
-    public String save() throws UnifyException {
+    public String saveCapture() throws UnifyException {
         doSave(getPageBean().getRecords());
         hintUser("$m{recordcapturepage.hint.recordsuccessfullysaved}");
         return noResult();
     }
 
     @Action
-    public String clear() throws UnifyException {
+    public String clearCapture() throws UnifyException {
         getPageBean().clear();
         return "refreshCapture";
     }
