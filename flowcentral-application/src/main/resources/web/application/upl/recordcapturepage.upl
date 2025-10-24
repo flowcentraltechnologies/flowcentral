@@ -17,7 +17,7 @@
 	 components:$c{searchEntriesPanel capturePanel footerActionPanel}
 
 // Search entries panel
-!ui-panel:searchEntriesPanel styleClass:$e{fc-graypanel} layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true captionSuffix:$s{:} inlineCaption:true}
+!ui-panel:searchEntriesPanel styleClass:$e{fc-graypanel} layout:$d{!ui-horizontal style:$s{width:100%;} showCaption:true captionSuffix:$s{:} inlineCaption:true}
 	components:$f{searchComponents} ignoreParentState:true
 
 // Capture panel
