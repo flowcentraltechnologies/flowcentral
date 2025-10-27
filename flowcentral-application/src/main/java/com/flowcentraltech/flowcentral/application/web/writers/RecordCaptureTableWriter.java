@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AbstractRecordCapture;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureColumnDef;
+import com.flowcentraltech.flowcentral.application.data.RecordCaptureError;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureTableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTableWidget;
@@ -236,6 +237,7 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
                     }
 
                     int columnIndex = 0;
+                    final RecordCaptureError error = table.getError(i);
                     for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                         if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                             final RecordCaptureColumnDef tabelColumnDef = tableDef.getRecordCaptureColumnDef(columnIndex);
@@ -254,6 +256,15 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
                                 writeTargetHidden(writer, chWidget.getId(), i);
                             }
 
+                            if (error != null && error.isWithError(fieldName)) {
+                                final String msg = error.getError(fieldName);
+                                if (!StringUtils.isBlank(msg)) {
+                                    writer.write("<span class=\"recerr\">");
+                                    writer.writeWithHtmlEscape(msg);
+                                    writer.write("</span>");
+                                }
+                            }
+                            
                             writer.write("</td>");
 
                             columnIndex++;

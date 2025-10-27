@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AbstractRecordCapture;
+import com.flowcentraltech.flowcentral.application.data.RecordCaptureError;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureTableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTable;
 import com.tcdng.unify.core.UnifyException;
@@ -58,11 +59,19 @@ public abstract class AbstractRecordCapturePageBean<T extends AbstractRecordCapt
     }
 
     public RecordCaptureTable<T> getCaptureTable() {
-        return this.captureTable;
+        return captureTable;
+    }
+
+    public void setErrors(List<RecordCaptureError> errors) {
+        captureTable.setErrors(errors);
     }
 
     public boolean isEditable() {
         return captureTable.isEditable();
+    }
+
+    public boolean isAllowDraft() {
+        return captureTable.isAllowDraft();
     }
 
     public void setEditable(boolean editable) {

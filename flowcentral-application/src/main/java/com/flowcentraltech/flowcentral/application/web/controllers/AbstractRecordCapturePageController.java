@@ -15,18 +15,23 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AbstractRecordCapture;
+import com.flowcentraltech.flowcentral.application.data.RecordCaptureError;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Convenient abstract base class for record capture controllers.
@@ -35,8 +40,8 @@ import com.tcdng.unify.web.constant.Secured;
  * @since 4.1
  */
 @UplBinding("web/application/upl/recordcapturepage.upl")
-@ResultMappings({
-        @ResultMapping(name = "refreshCapture", response = { "!refreshpanelresponse panels:$l{capturePanel}" }) })
+    @ResultMappings({ @ResultMapping(name = "refreshCapture",
+        response = { "!refreshpanelresponse panels:$l{capturePanel footerActionPanel}" }) })
 public abstract class AbstractRecordCapturePageController<T extends AbstractRecordCapture, U extends AbstractRecordCapturePageBean<T>>
         extends AbstractFlowCentralPageController<U> {
 
@@ -48,35 +53,69 @@ public abstract class AbstractRecordCapturePageController<T extends AbstractReco
     public String loadCapture() throws UnifyException {
         final List<T> records = doLoad();
         getPageBean().setRecords(records);
+        setPageState();
         return "refreshCapture";
     }
 
     @Action
     public String saveCapture() throws UnifyException {
-        doSave(getPageBean().getRecords());
-        hintUser("$m{recordcapturepage.hint.recordsuccessfullysaved}");
-        return noResult();
+        final AbstractRecordCapturePageBean<T> pageBean = getPageBean();
+        final boolean success = validate();
+        if (success || pageBean.isAllowDraft()) {
+            doSave(pageBean.getRecords());
+            if (success) {
+                hintUser("$m{recordcapturepage.hint.recordsuccessfullysaved}");
+            } else {
+                hintUser(MODE.WARNING, "$m{recordcapturepage.hint.recordsuccessfullysavederrors}");
+            }
+        } else {
+            hintUser(MODE.ERROR, "$m{recordcapturepage.hint.recordvalidationerrors}");
+        }
+        
+        return "refreshCapture";
     }
 
     @Action
     public String clearCapture() throws UnifyException {
         getPageBean().clear();
+        setPageState();
         return "refreshCapture";
     }
 
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-        setPageState();
+        loadCapture();
     }
 
     protected abstract List<T> doLoad() throws UnifyException;
 
-    protected abstract void doSave(List<T> records) throws UnifyException;
+    protected abstract void validate(RecordCaptureError error, T record) throws UnifyException;
     
+    protected abstract void doSave(List<T> records) throws UnifyException;
+
     protected void setPageState() throws UnifyException {
-        final boolean editable = getPageBean().isEditable();
-        setPageWidgetVisible("saveCaptureBtn", editable);
-        setPageWidgetVisible("clearCaptureBtn", editable);
+        final boolean disabled = !getPageBean().isEditable() || DataUtils.isBlank(getPageBean().getRecords());
+        setPageWidgetDisabled("saveCaptureBtn", disabled);
+        setPageWidgetDisabled("clearCaptureBtn", disabled);
+    }
+    
+    private boolean validate() throws UnifyException {
+        final AbstractRecordCapturePageBean<T> pageBean = getPageBean();
+        final List<T> records = pageBean.getRecords();
+        List<RecordCaptureError> errors = Collections.emptyList();
+        boolean success = true;
+        if (!DataUtils.isBlank(records)) {
+            errors = new ArrayList<RecordCaptureError>();
+            for (T record: records) {
+                RecordCaptureError error = new RecordCaptureError();
+                validate(error, record);
+                errors.add(error);
+                success &= !error.isPresent();
+            }            
+        }
+
+        pageBean.setErrors(errors);
+        return success;
     }
 }

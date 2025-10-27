@@ -861,6 +861,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-recordcapturetable .table .mseld input {display:none;}
 .fc-recordcapturetable .table .mserialh {width: 32px;}
 .fc-recordcapturetable .table .mnorec {display:block;text-align:center; font-size:8pt;color: #606060;}
+.fc-recordcapturetable .table .recerr {display:block;background-color:#ffffff; font-size:7pt;color:#B22222;}
 .fc-recordcapturetable .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
 .fc-recordcapturetable .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
 .fc-recordcapturetable .classic .mselh {width: 22px;background-color: #e3e7ea;}
