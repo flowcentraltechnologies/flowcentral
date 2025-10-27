@@ -40,9 +40,12 @@ public class RecordCaptureTableDef {
 
     private boolean serialNo;
 
-    private RecordCaptureTableDef(boolean serialNo, Class<? extends AbstractRecordCapture> recordClass,
+    private boolean allowDraft;
+
+    private RecordCaptureTableDef(boolean serialNo, boolean allowDraft, Class<? extends AbstractRecordCapture> recordClass,
             List<RecordCaptureColumnDef> columnDefs, List<String> captureFields) {
         this.serialNo = serialNo;
+        this.allowDraft = allowDraft;
         this.recordClass = recordClass;
         this.columnDefs = columnDefs;
         this.captureFields = captureFields;
@@ -50,6 +53,10 @@ public class RecordCaptureTableDef {
 
     public boolean isSerialNo() {
         return serialNo;
+    }
+
+    public boolean isAllowDraft() {
+        return allowDraft;
     }
 
     public Class<? extends AbstractRecordCapture> getRecordClass() {
@@ -80,6 +87,8 @@ public class RecordCaptureTableDef {
 
         private boolean serialNo;
 
+        private boolean allowDraft;
+
         private Class<? extends AbstractRecordCapture> recordClass;
 
         private List<RecordCaptureColumnDef> columnDefs;
@@ -104,6 +113,11 @@ public class RecordCaptureTableDef {
 
         public Builder serialNo(boolean serialNo) {
             this.serialNo = serialNo;
+            return this;
+        }
+
+        public Builder allowDraft(boolean allowDraft) {
+            this.allowDraft = allowDraft;
             return this;
         }
         
@@ -157,7 +171,7 @@ public class RecordCaptureTableDef {
                 columnDefs.get(i).setHeaderStyle("width:" + widths[i] + "%;");
             }
             
-            return new RecordCaptureTableDef(serialNo, recordClass, DataUtils.unmodifiableList(columnDefs),
+            return new RecordCaptureTableDef(serialNo, allowDraft, recordClass, DataUtils.unmodifiableList(columnDefs),
                     DataUtils.unmodifiableList(captureFields));
         }
     }

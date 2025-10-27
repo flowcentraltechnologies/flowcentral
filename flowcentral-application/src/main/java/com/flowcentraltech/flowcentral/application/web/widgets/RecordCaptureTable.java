@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AbstractRecordCapture;
+import com.flowcentraltech.flowcentral.application.data.RecordCaptureError;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureTableDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueListStore;
@@ -32,11 +33,13 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 4.1
  */
 public class RecordCaptureTable<T extends AbstractRecordCapture> {
-    
+
     private RecordCaptureTableDef tableDef;
-    
+
     private List<T> records;
-    
+
+    private List<RecordCaptureError> errors;
+
     private boolean editable;
 
     public RecordCaptureTable(RecordCaptureTableDef tableDef) {
@@ -47,6 +50,10 @@ public class RecordCaptureTable<T extends AbstractRecordCapture> {
 
     public RecordCaptureTableDef getTableDef() {
         return tableDef;
+    }
+
+    public boolean isAllowDraft() {
+        return tableDef.isAllowDraft();
     }
 
     public boolean isEditable() {
@@ -61,14 +68,23 @@ public class RecordCaptureTable<T extends AbstractRecordCapture> {
         this.records = records;
     }
 
+    public void setErrors(List<RecordCaptureError> errors) {
+        this.errors = errors;
+    }
+
     public List<T> getRecords() {
         return records;
     }
-    
+
+    public RecordCaptureError getError(int recordIndex) {
+        return errors != null && recordIndex >= 0 && recordIndex < errors.size() ? errors.get(recordIndex) : null;
+    }
+
     public void clear() throws UnifyException {
+        errors = null;
         if (!DataUtils.isBlank(records)) {
-            for (ValueStore valueStore: new BeanValueListStore(records)) {
-                for(String fieldName: tableDef.getCaptureFields()) {
+            for (ValueStore valueStore : new BeanValueListStore(records)) {
+                for (String fieldName : tableDef.getCaptureFields()) {
                     valueStore.store(fieldName, null);
                 }
             }
