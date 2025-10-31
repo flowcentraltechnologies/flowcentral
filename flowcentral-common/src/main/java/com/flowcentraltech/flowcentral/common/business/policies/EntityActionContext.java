@@ -46,6 +46,8 @@ public class EntityActionContext extends AbstractContext {
 
     private String actionPolicyName;
 
+    private String actionRule;
+
     private FormListingOptions listingOptions;
 
     private String listingGenerator;
@@ -155,6 +157,18 @@ public class EntityActionContext extends AbstractContext {
 
     public boolean isWithActionPolicy() {
         return !StringUtils.isBlank(actionPolicyName);
+    }
+
+    public void setActionRule(String actionRule) {
+        this.actionRule = actionRule;
+    }
+
+    public String getActionRule() {
+        return actionRule;
+    }
+
+    public boolean isWithActionRule() {
+        return !StringUtils.isBlank(actionRule);
     }
 
     public SweepingCommitPolicy getSweepingCommitPolicy() {

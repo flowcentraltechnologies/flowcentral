@@ -24,6 +24,8 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  */
 public class OSMessagingHeader {
 
+    public static final OSMessagingHeader BLANK = new OSMessagingHeader();
+    
     private String source;
 
     private String processor;
@@ -36,6 +38,10 @@ public class OSMessagingHeader {
         this.versionNo = versionNo;
     }
 
+    private OSMessagingHeader() {
+        
+    }
+    
     public String getSource() {
         return source;
     }
@@ -48,4 +54,7 @@ public class OSMessagingHeader {
         return versionNo;
     }
 
+    public boolean isPresent() {
+        return source != null;
+    }
 }

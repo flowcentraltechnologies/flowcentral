@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.flowcentraltech.flowcentral</groupId>
+		<artifactId>flowcentral</artifactId>
+		<version>4.1.13-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>flowcentral-test</artifactId>
+	<name>flowcentral-test</name>
+	<description>Flowcentral Test Module</description>
+	<url>http://www.flowcentralplatform.com</url>
+	
+	<dependencies>
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-core</artifactId>
+			<version>${unify.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-web</artifactId>
+			<version>${unify.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-web-ui</artifactId>
+			<version>${unify.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tcdng.unify</groupId>
+			<artifactId>unify-jetty</artifactId>
+			<version>${unify.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

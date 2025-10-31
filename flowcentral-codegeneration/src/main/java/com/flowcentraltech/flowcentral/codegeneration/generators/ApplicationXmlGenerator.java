@@ -974,6 +974,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         formActionConfig.setSymbol(appFormAction.getSymbol());
                         formActionConfig.setStyleClass(appFormAction.getStyleClass());
                         formActionConfig.setPolicy(appFormAction.getPolicy());
+                        formActionConfig.setRule(appFormAction.getRule());
                         formActionConfig.setShowOnCreate(appFormAction.isShowOnCreate());
                         formActionConfig.setShowOnMaintain(appFormAction.isShowOnMaintain());
                         formActionConfig.setValidateForm(appFormAction.isValidateForm());

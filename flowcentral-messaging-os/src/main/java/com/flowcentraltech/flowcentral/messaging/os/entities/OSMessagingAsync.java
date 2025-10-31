@@ -29,12 +29,14 @@ import com.tcdng.unify.core.annotation.Column;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Table(name = "FC_OSMESSAGINGASYNC",
-        indexes = { @Index({ "target" }) })
+@Table(name = "FC_OSMESSAGINGASYNC", indexes = { @Index({ "target" }), @Index({ "correlationId" }) })
 public class OSMessagingAsync extends BaseAuditEntity {
 
     @Column(name = "TARGET", length = 32)
     private String target;
+
+    @Column(name = "CORRELATION_ID", length = 32, nullable = true)
+    private String correlationId;
 
     @Column(name = "PROCESSOR", length = 64)
     private String processor;
@@ -54,15 +56,15 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "RESP_CD", length = 10, nullable = true)
     private String responseCode;
 
-    @Column(name = "RESP_MSG", length=1024, nullable = true)
+    @Column(name = "RESP_MSG", length = 1024, nullable = true)
     private String responseMsg;
 
     @Column(name = "PROCESSING_FG", nullable = true)
     private Boolean processing;
-    
+
     @Override
     public String getDescription() {
-        return target + " " + processor;
+        return target + " " + processor + (correlationId != null ? " " + correlationId : "");
     }
 
     public String getTarget() {
@@ -71,6 +73,14 @@ public class OSMessagingAsync extends BaseAuditEntity {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
     }
 
     public String getProcessor() {

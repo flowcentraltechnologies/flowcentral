@@ -25,11 +25,15 @@ public abstract class BaseOSMessagingReq {
     
     private final String processor;
 
+    private String correlationId;
+
     private String source;
+
+    private String sourceVersion;
 
     private String originSource;
 
-    private String version;
+    private String target;
 
     protected BaseOSMessagingReq(String processor) {
         this.processor = processor;
@@ -37,6 +41,14 @@ public abstract class BaseOSMessagingReq {
 
     public final String getProcessor() {
         return processor;
+    }
+
+    public final String getCorrelationId() {
+        return correlationId;
+    }
+
+    public final void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
     }
 
     public final String getSource() {
@@ -55,12 +67,20 @@ public abstract class BaseOSMessagingReq {
         this.originSource = originSource;
     }
 
-    public String getVersion() {
-        return version;
+    public final String getSourceVersion() {
+        return sourceVersion;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public final void setSourceVersion(String sourceVersion) {
+        this.sourceVersion = sourceVersion;
+    }
+
+    public final String getTarget() {
+        return target;
+    }
+
+    public final void setTarget(String target) {
+        this.target = target;
     }
       
 }

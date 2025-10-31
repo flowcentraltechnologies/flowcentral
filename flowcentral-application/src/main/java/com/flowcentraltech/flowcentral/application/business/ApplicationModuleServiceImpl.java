@@ -1189,9 +1189,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         fdb.addFormAction(appFormAction.getType(), appFormAction.getHighlightType(),
                                 appFormAction.getName(), appFormAction.getDescription(),
                                 resolveApplicationMessage(appFormAction.getLabel()), appFormAction.getSymbol(),
-                                appFormAction.getStyleClass(), appFormAction.getPolicy(), appFormAction.getOrderIndex(),
-                                appFormAction.isShowOnCreate(), appFormAction.isShowOnMaintain(),
-                                appFormAction.isValidateForm(),
+                                appFormAction.getStyleClass(), appFormAction.getPolicy(), appFormAction.getRule(),
+                                appFormAction.getOrderIndex(), appFormAction.isShowOnCreate(),
+                                appFormAction.isShowOnMaintain(), appFormAction.isValidateForm(),
                                 InputWidgetUtils.getFilterDef(appletUtilities, null, appFormAction.getOnCondition()));
                     }
 
@@ -3718,6 +3718,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             for (AppFormAction appFormAction : srcAppForm.getActionList()) {
                 appFormAction.setName(ctx.nameSwap(appFormAction.getName()));
                 appFormAction.setPolicy(ctx.componentSwap(appFormAction.getPolicy()));
+                appFormAction.setRule(ctx.componentSwap(appFormAction.getRule()));
                 ApplicationReplicationUtils.applyReplicationRules(ctx, appFormAction.getOnCondition());
 
                 applicationPrivilegeManager.registerPrivilege(ConfigType.CUSTOM, destApplicationId,
@@ -3927,14 +3928,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             if (!entities.containsKey(entity)) {
                 List<PortalEntityField> fields = new ArrayList<PortalEntityField>();
                 for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
-                    final WidgetTypeDef widgetTypeDef = entityFieldDef.getInputWidget() != null
-                            ? getWidgetTypeDef(entityFieldDef.getInputWidget())
+                    final EntityFieldDef resolvedEntityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
+                            ? entityFieldDef.getResolvedTypeFieldDef()
+                            : entityFieldDef;
+                    final WidgetTypeDef widgetTypeDef = resolvedEntityFieldDef.getInputWidget() != null
+                            ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
-                                    InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType()));
-                    final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
-                    fields.add(new PortalEntityField(entityFieldDef.getDataType().name(), entityFieldDef.getFieldName(),
-                            resolveApplicationMessage(entityFieldDef.getFieldLabel()), editor, entityFieldDef.isBasicSearch(),
-                            entityFieldDef.isNullable()));
+                                    InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
+                    final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, resolvedEntityFieldDef);
+                    fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
+                            entityFieldDef.getFieldName(), resolveApplicationMessage(entityFieldDef.getFieldLabel()),
+                            editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
                 }
 
                 entities.put(entity, new PortalEntity(entityDef.getName(), entityDef.getDescription(),
@@ -3971,21 +3975,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
                             elements.add(new PortalFormElement(FormElementType.SECTION.name(), null,
                                     formSectionDef.getLabel(), formSectionDef.getName(), null, null,
-                                    formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null,
-                                    0, false));
+                                    formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null, 0,
+                                    false));
                             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
                                 final WidgetTypeDef widgetTypeDef = formFieldDef.getWidgetName() != null
                                         ? getWidgetTypeDef(formFieldDef.getWidgetName())
                                         : null;
-                                final EntityFieldDef entityFieldDef = entityDef.getFieldDef(formFieldDef.getFieldName());
-                                final String editor = InputWidgetUtils.constructEditor(widgetTypeDef,
-                                        entityFieldDef);
+                                final EntityFieldDef entityFieldDef = entityDef
+                                        .getFieldDef(formFieldDef.getFieldName());
+                                final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
                                 final boolean required = !entityFieldDef.isNullable() || formFieldDef.isRequired();
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
                                         resolveApplicationMessage(StringUtils.isBlank(formFieldDef.getFieldLabel())
                                                 ? entityDef.getFieldDef(formFieldDef.getFieldName()).getFieldLabel()
                                                 : formFieldDef.getFieldLabel()),
-                                        formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn(), required));
+                                        formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn(),
+                                        required));
                             }
                         }
                     }
@@ -6851,6 +6856,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormAction.setSymbol(formActionConfig.getSymbol());
                     appFormAction.setStyleClass(formActionConfig.getStyleClass());
                     appFormAction.setPolicy(formActionConfig.getPolicy());
+                    appFormAction.setRule(formActionConfig.getRule());
                     appFormAction.setShowOnCreate(formActionConfig.isShowOnCreate());
                     appFormAction.setShowOnMaintain(formActionConfig.isShowOnMaintain());
                     appFormAction.setValidateForm(formActionConfig.isValidateForm());
@@ -6866,6 +6872,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppFormAction.setSymbol(formActionConfig.getSymbol());
                     oldAppFormAction.setStyleClass(formActionConfig.getStyleClass());
                     oldAppFormAction.setPolicy(formActionConfig.getPolicy());
+                    oldAppFormAction.setRule(formActionConfig.getRule());
                     oldAppFormAction.setShowOnCreate(formActionConfig.isShowOnCreate());
                     oldAppFormAction.setShowOnMaintain(formActionConfig.isShowOnMaintain());
                     oldAppFormAction.setValidateForm(formActionConfig.isValidateForm());

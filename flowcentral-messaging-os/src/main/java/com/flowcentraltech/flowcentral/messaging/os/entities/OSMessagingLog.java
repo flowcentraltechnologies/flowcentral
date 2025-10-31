@@ -33,6 +33,9 @@ public class OSMessagingLog extends BaseAuditEntity {
 
     @Column(length = 32)
     private String target;
+
+    @Column(name = "CORRELATION_ID", length = 32, nullable = true)
+    private String correlationId;
     
     @Column(length = 64, nullable = true)
     private String processor;
@@ -63,6 +66,14 @@ public class OSMessagingLog extends BaseAuditEntity {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
     }
 
     public String getProcessor() {

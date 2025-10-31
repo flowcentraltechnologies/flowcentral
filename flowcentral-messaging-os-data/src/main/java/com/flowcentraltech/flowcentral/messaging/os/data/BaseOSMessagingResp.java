@@ -22,6 +22,8 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  * @since 4.1
  */
 public abstract class BaseOSMessagingResp {
+
+    private String correlationId;
    
     private String responseCode;
 
@@ -35,6 +37,14 @@ public abstract class BaseOSMessagingResp {
     public BaseOSMessagingResp() {
         this.responseCode = OSMessagingResponseConstants.SUCCESS_CODE;
         this.responseMessage = OSMessagingResponseConstants.SUCCESS_MSG;
+    }
+
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
     }
 
     public String getResponseCode() {

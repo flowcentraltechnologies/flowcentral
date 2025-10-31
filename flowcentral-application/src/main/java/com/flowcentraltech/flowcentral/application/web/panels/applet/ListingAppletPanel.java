@@ -56,14 +56,15 @@ public class ListingAppletPanel extends AbstractAppletPanel {
     }
 
     @Action
-    public void performFormAction() throws UnifyException { 
+    public void performFormAction() throws UnifyException {
         String actionName = getRequestTarget(String.class);
         final ListingApplet applet = getListEntityApplet();
         FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
         FormContext ctx = evaluateCurrentFormContext(
                 new FormValidationContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()), actionName));
         if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(), actionName);
+            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(),
+                    formActionDef.getRule(), actionName);
             handleEntityActionResult(entityActionResult);
         }
     }
