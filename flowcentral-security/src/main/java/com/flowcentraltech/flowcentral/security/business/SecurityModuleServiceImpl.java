@@ -57,6 +57,7 @@ import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
+import com.flowcentraltech.flowcentral.security.business.data.UserDetail;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleEntityConstants;
@@ -201,6 +202,24 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 minimumSpecial, minimumUppercase, minimumLowercase);
     }
 
+    @Override
+	public Long createUser(UserDetail userDetail) throws UnifyException {
+		if (environment().countAll(new UserQuery().loginId(userDetail.getLoginId())) == 0) {
+			User user = new User();
+			user.setFullName(userDetail.getFullName());
+			user.setLoginId(userDetail.getLoginId());
+			user.setPassword(passwordCryptograph.encrypt(userDetail.getPassword()));
+			user.setEmail(userDetail.getEmail());
+			user.setMobileNo(userDetail.getMobileNo());
+			// TODO set other properties
+			user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
+			user.setSupervisor(Boolean.FALSE);
+			return (Long) environment().create(user);
+		}
+
+		return null;
+	}
+    
     @Override
     public SecuredLinkInfo getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
             throws UnifyException {
