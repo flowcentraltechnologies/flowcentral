@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -53,6 +54,8 @@ import com.flowcentraltech.flowcentral.notification.business.NotificationModuleS
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
@@ -204,22 +207,80 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
 	public Long createUser(UserDetail userDetail) throws UnifyException {
-		if (environment().countAll(new UserQuery().loginId(userDetail.getLoginId())) == 0) {
+			String loginId = generateLoginId(userDetail.getFullName());
 			User user = new User();
 			user.setFullName(userDetail.getFullName());
-			user.setLoginId(userDetail.getLoginId());
-			user.setPassword(passwordCryptograph.encrypt(userDetail.getPassword()));
+			user.setLoginId(loginId);
+			user.setPassword(passwordCryptograph.encrypt(loginId.toLowerCase()));
 			user.setEmail(userDetail.getEmail());
 			user.setMobileNo(userDetail.getMobileNo());
-			// TODO set other properties
+			user.setSupervisor(userDetail.getSupervisor());
+			user.setUserRoleList(getUserRoles(userDetail.getUserRoleCode()));
+			
 			user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
-			user.setSupervisor(Boolean.FALSE);
+			user.setStatus(RecordStatus.ACTIVE);
+			
 			return (Long) environment().create(user);
-		}
-
-		return null;
 	}
     
+    private String generateLoginId(String fullName) throws UnifyException {
+		List<String> loginIds = environment().valueList(String.class,"loginId",
+				new UserQuery().ignoreEmptyCriteria(true));
+		String[] fullNameSplit = fullName.toUpperCase().split(" ");
+		StringBuilder loginIdBuilder = new StringBuilder(fullNameSplit[0]);
+		boolean haveCheckedOtherName = false;
+		while (loginIds.contains(loginIdBuilder.toString())) {
+			if (fullNameSplit.length == 1 || haveCheckedOtherName) {
+				char randomAlphabet = generateRandomAlphabet();
+				loginIdBuilder.append(randomAlphabet);
+			} else {
+				char firstLetter = fullNameSplit[1].charAt(0);
+				loginIdBuilder.append(firstLetter);
+				haveCheckedOtherName = true;
+			}
+		}
+		return loginIdBuilder.toString();
+	}
+    
+    private char generateRandomAlphabet() {
+		return (char) ('A' + new Random().nextInt(26));
+	}
+    
+    private List<UserRole> getUserRoles(List<String> roleCodes)throws UnifyException{
+    	List<UserRole> userRoles = new ArrayList<>();
+		for (String roleCode : roleCodes) {
+			roleCode = roleCode.toUpperCase();
+			Optional<Long> roleIdOpt = getRoleId(roleCode);
+			Long roleId;
+			if (roleIdOpt.isPresent()) {
+				roleId = roleIdOpt.get();
+			} else {
+				roleId = createRole(roleCode);
+			}
+			UserRole userRole = new UserRole();
+			userRole.setRoleId(roleId);
+			userRoles.add(userRole);
+		}
+		return userRoles;
+    }
+    
+    private Long createRole(String roleCode) throws UnifyException {
+		Role role = new Role();
+		role.setCode(roleCode);
+		role.setDescription(StringUtils.capitalizeFirstLetter(roleCode.toLowerCase()));
+		role.setDepartmentId(getDefaultDepartmentId()); 
+		return (Long) environment().create(role);
+	}
+
+	private Long getDefaultDepartmentId() throws UnifyException {
+		MappedDepartment departments = environment().findFirst(new MappedDepartmentQuery().ignoreEmptyCriteria(true));				
+		return departments.getId();
+	}
+
+	private Optional<Long> getRoleId(String roleCode) throws UnifyException {
+		return environment().valueOptional(Long.class,"id", new RoleQuery().code(roleCode));
+	}
+	
     @Override
     public SecuredLinkInfo getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
             throws UnifyException {
