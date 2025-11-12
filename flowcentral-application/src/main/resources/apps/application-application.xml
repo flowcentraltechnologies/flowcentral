@@ -16,7 +16,7 @@
 		<widgetType name="symbollist"
 			description="$m{application.widgettype.symbollist}"
 			dataType="STRING" inputType="STRING"
-			editor="!ui-symbolselect"
+			editor="!ui-symbolselect blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="restapilist"
 			description="$m{application.widgettype.restapilist}"
