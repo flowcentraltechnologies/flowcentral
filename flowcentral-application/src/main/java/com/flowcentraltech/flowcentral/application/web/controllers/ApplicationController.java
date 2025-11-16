@@ -195,7 +195,6 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         final boolean clientUpdateSync =  system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
         final String contentStyleClass = enableMultipleTabs ? "fc-content-tabbed" : "fc-content";
-        pageBean.setEnableStickyPaths(enableStickyPaths);
         pageBean.setEnableMultipleTabs(enableMultipleTabs);
         pageBean.setIndicateHighLatency(indicateHighLatency);
         pageBean.setContentStyleClass(contentStyleClass);
@@ -204,10 +203,14 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         UserToken userToken = getUserToken();
         final int workitemCategoryParticipationCount = userToken != null? application()
                 .getWorkitemCategoryParticipationCount(userToken.getRoleCode()) : 0;
-        String[] applicationPaths = showWorkItemsOnLogin && workitemCategoryParticipationCount > 0
+        final String[] applicationPaths = showWorkItemsOnLogin && workitemCategoryParticipationCount > 0
+                ? new String[] { "/application/dashboard/openPage", "/workflow/myworkitems/openPage" }
+                : new String[] { "/application/dashboard/openPage" };
+        final String[] stickyPaths = enableStickyPaths && workitemCategoryParticipationCount > 0
                 ? new String[] { "/application/dashboard/openPage", "/workflow/myworkitems/openPage" }
                 : new String[] { "/application/dashboard/openPage" };
         pageBean.setApplicationPaths(applicationPaths);
+        pageBean.setStickyPaths(stickyPaths);
         setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
     }
 

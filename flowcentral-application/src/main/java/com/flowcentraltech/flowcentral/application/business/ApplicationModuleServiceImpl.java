@@ -4178,6 +4178,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     RecLoadInfo recLoadInfo = resolveListOnlyRecordLoadInformation(entityDef, fieldName, listVal,
                             formatter);
                     if (recLoadInfo != null) {
+                        if (recLoadInfo.isNonUniqueListOnlyProperty()) {
+                            throw new UnifyException(
+                                    ApplicationModuleErrorConstants.UNABLE_LOAD_DATA_LISTONLY_NOT_RESOLVING_TO_UNIQUE,
+                                    entityUploadDef.getDescription(), fieldName);
+                        }
+                        
                         recMap.put(recLoadInfo.getFieldName(), recLoadInfo);
                     } else {
                         recMap.put(fieldName, new RecLoadInfo(fieldName, listVal, formatter));
@@ -4470,6 +4476,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     return new RecLoadInfo(entityFieldDef.getKey(), refId, null);
+                } else {
+                    return RecLoadInfo.NONUNIQUE_LISTONLY_PROPERTY;
                 }
             }
         }
