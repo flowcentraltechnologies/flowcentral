@@ -60,16 +60,17 @@ public abstract class AbstractRecordCapturePageController<T extends AbstractReco
     @Action
     public String saveCapture() throws UnifyException {
         final AbstractRecordCapturePageBean<T> pageBean = getPageBean();
-        final boolean success = validate();
-        if (success || pageBean.isAllowDraft()) {
-            doSave(pageBean.getRecords());
-            if (success) {
-                hintUser("$m{recordcapturepage.hint.recordsuccessfullysaved}");
-            } else {
-                hintUser(MODE.WARNING, "$m{recordcapturepage.hint.recordsuccessfullysavederrors}");
-            }
-        } else {
+        final ValidationResult result = validate();
+        if (result.isErrors() || (result.isWarning() && !pageBean.isAllowDraft())) {
             hintUser(MODE.ERROR, "$m{recordcapturepage.hint.recordvalidationerrors}");
+        } else {
+            doSave(pageBean.getRecords());
+
+            if (result.isWarning()) {
+                hintUser(MODE.WARNING, "$m{recordcapturepage.hint.recordsuccessfullysavederrors}");
+            } else {
+                hintUser("$m{recordcapturepage.hint.recordsuccessfullysaved}");
+            }
         }
         
         return "refreshCapture";
@@ -100,22 +101,44 @@ public abstract class AbstractRecordCapturePageController<T extends AbstractReco
         setPageWidgetDisabled("clearCaptureBtn", disabled);
     }
     
-    private boolean validate() throws UnifyException {
+    private ValidationResult validate() throws UnifyException {
         final AbstractRecordCapturePageBean<T> pageBean = getPageBean();
         final List<T> records = pageBean.getRecords();
         List<RecordCaptureError> errors = Collections.emptyList();
-        boolean success = true;
+        boolean _errors = false;
+        boolean _warning = false;
         if (!DataUtils.isBlank(records)) {
             errors = new ArrayList<RecordCaptureError>();
             for (T record: records) {
                 RecordCaptureError error = new RecordCaptureError();
                 validate(error, record);
                 errors.add(error);
-                success &= !error.isPresent();
+                _errors |= error.isErrorPresent();
+                _warning |= error.isWarningPresent();
             }            
         }
 
         pageBean.setErrors(errors);
-        return success;
+        return new ValidationResult(_errors, _warning);
+    }
+    
+    private class ValidationResult {
+        
+        private final boolean errors;
+        
+        private final boolean warning;
+
+        public ValidationResult(boolean errors, boolean warning) {
+            this.errors = errors;
+            this.warning = warning;
+        }
+
+        public boolean isErrors() {
+            return errors;
+        }
+
+        public boolean isWarning() {
+            return warning;
+        }
     }
 }

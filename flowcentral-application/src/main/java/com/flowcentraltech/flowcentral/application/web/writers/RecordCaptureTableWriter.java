@@ -55,8 +55,8 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
         final RecordCaptureTableWidget tableWidget = (RecordCaptureTableWidget) widget;
         final RecordCaptureTable<? extends AbstractRecordCapture> table = tableWidget.getTable();
         if (table != null) {
-            final boolean classicMode = true ; //emModuleService.getSysParameterValue(boolean.class,
-                    //ApplicationModuleSysParamConstants.ALL_TABLE_IN_CLASSIC_MODE);
+            final boolean classicMode = true; // emModuleService.getSysParameterValue(boolean.class,
+            // ApplicationModuleSysParamConstants.ALL_TABLE_IN_CLASSIC_MODE);
             writer.write("<div");
             writeTagAttributes(writer, tableWidget);
             writer.write(">");
@@ -240,7 +240,8 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
                     final RecordCaptureError error = table.getError(i);
                     for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                         if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                            final RecordCaptureColumnDef tabelColumnDef = tableDef.getRecordCaptureColumnDef(columnIndex);
+                            final RecordCaptureColumnDef tabelColumnDef = tableDef
+                                    .getRecordCaptureColumnDef(columnIndex);
                             final String fieldName = tabelColumnDef.getFieldName();
                             widgetInfo.setName(fieldName);
 
@@ -256,15 +257,25 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
                                 writeTargetHidden(writer, chWidget.getId(), i);
                             }
 
-                            if (error != null && error.isWithError(fieldName)) {
-                                final String msg = error.getError(fieldName);
-                                if (!StringUtils.isBlank(msg)) {
-                                    writer.write("<span class=\"recerr\">");
-                                    writer.writeWithHtmlEscape(msg);
-                                    writer.write("</span>");
+                            if (error != null) {
+                                if (error.isWithError(fieldName)) {
+                                    final String err = error.getError(fieldName);
+                                    if (!StringUtils.isBlank(err)) {
+                                        writer.write("<span class=\"recerr\">");
+                                        writer.writeWithHtmlEscape(resolveSessionMessage(err));
+                                        writer.write("</span>");
+                                    }
+                                } else if (error.isWithWarning(fieldName)) {
+                                    final String wrn = error.getWarning(fieldName);
+                                    if (!StringUtils.isBlank(wrn)) {
+                                        writer.write("<span class=\"recwrn\">");
+                                        writer.writeWithHtmlEscape(resolveSessionMessage(wrn));
+                                        writer.write("</span>");
+                                    }
                                 }
+
                             }
-                            
+
                             writer.write("</td>");
 
                             columnIndex++;
