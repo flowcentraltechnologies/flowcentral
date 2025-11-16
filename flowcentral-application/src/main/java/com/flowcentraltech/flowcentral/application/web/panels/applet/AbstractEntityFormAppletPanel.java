@@ -112,7 +112,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         applet.ensureFormStruct();
 
         final AppletDef formAppletDef = applet.getFormAppletDef();
-        logDebug("Switching form applet panel [{0}]...", formAppletDef != null ? formAppletDef.getLongName() : null);
         final AppletContext appCtx = applet.appletCtx();
         final boolean isCollaboration = applet.isCollaboration() && collaborationProvider() != null;
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
@@ -554,9 +553,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             default:
                 break;
         }
-
-        logDebug("Switching completed for form applet panel [{0}].",
-                formAppletDef != null ? formAppletDef.getLongName() : null);
     }
 
     @Action
