@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
+import com.flowcentraltech.flowcentral.security.business.data.UserDetail;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserRole;
@@ -70,6 +71,17 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
      */
     PasswordComplexityCheck checkPasswordComplexity(String password) throws UnifyException;
     
+    /**
+     * Create user 
+     * 
+     * @param user detail object
+     *             create user in user table
+     * @return long
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+     Long createUser(UserDetail userdetail) throws UnifyException;
+     
     /**
      * Finds users by criteria.
      * 
