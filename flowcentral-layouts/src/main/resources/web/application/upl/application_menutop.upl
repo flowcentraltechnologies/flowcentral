@@ -77,7 +77,7 @@
 
 // Content
 !ui-contentpanel:content styleClassBinding:$s{contentStyleClass}
-	pathsBinding:applicationPaths stickyPathsBinding:enableStickyPaths
+	pathsBinding:applicationPaths stickyPathsBinding:stickyPaths
 	tabbedBinding:enableMultipleTabs documentPath:$s{/application}
 	titleUppercase:false
 	
