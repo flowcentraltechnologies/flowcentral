@@ -68,10 +68,7 @@ public class AppAssignmentPageConfig extends BaseClassifiedConfig {
     private String ruleDescField;
 
     @JacksonXmlProperty(isAttribute = true)
-    private Boolean search1;
-
-    @JacksonXmlProperty(isAttribute = true)
-    private Boolean search2;
+    private Boolean search;
 
     public String getEntity() {
         return entity;
@@ -177,20 +174,12 @@ public class AppAssignmentPageConfig extends BaseClassifiedConfig {
         this.ruleDescField = ruleDescField;
     }
 
-    public Boolean getSearch1() {
-        return search1;
+    public Boolean getSearch() {
+        return search;
     }
 
-    public void setSearch1(Boolean search1) {
-        this.search1 = search1;
-    }
-
-    public Boolean getSearch2() {
-        return search2;
-    }
-
-    public void setSearch2(Boolean search2) {
-        this.search2 = search2;
+    public void setSearch(Boolean search) {
+        this.search = search;
     }
 
 }

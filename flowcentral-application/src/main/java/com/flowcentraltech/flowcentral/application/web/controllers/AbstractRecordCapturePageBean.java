@@ -42,6 +42,10 @@ public abstract class AbstractRecordCapturePageBean<T extends AbstractRecordCapt
         this.captureTable = new RecordCaptureTable<T>(tableDef);
     }
 
+    public String getHeading() {
+        return this.captureTable.getTableDef().getHeading();
+    }
+    
     public String getAltCaption() {
         return altCaption;
     }

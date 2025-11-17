@@ -1404,8 +1404,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         .setLabel(ctx.isSnapshotMode() ? appAssignmentPage.getLabel() : "$m{" + labelKey + "}");
                 appAssignmentPageConfig.setEntity(appAssignmentPage.getEntity());
                 
-                appAssignmentPageConfig.setSearch1(appAssignmentPage.getSearch1());
-                appAssignmentPageConfig.setSearch2(appAssignmentPage.getSearch2());
+                appAssignmentPageConfig.setSearch(appAssignmentPage.getSearch());
                 
                 if (appAssignmentPage.getFilterCaption1() != null) {
                     labelKey = descKey + ".filtercaption1";

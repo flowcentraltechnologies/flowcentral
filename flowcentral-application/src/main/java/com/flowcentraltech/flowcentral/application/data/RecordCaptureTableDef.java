@@ -38,17 +38,25 @@ public class RecordCaptureTableDef {
 
     private List<String> captureFields;
 
+    private String heading;
+
     private boolean serialNo;
 
     private boolean allowDraft;
 
-    private RecordCaptureTableDef(boolean serialNo, boolean allowDraft, Class<? extends AbstractRecordCapture> recordClass,
-            List<RecordCaptureColumnDef> columnDefs, List<String> captureFields) {
+    private RecordCaptureTableDef(String heading, boolean serialNo, boolean allowDraft,
+            Class<? extends AbstractRecordCapture> recordClass, List<RecordCaptureColumnDef> columnDefs,
+            List<String> captureFields) {
+        this.heading = heading;
         this.serialNo = serialNo;
         this.allowDraft = allowDraft;
         this.recordClass = recordClass;
         this.columnDefs = columnDefs;
         this.captureFields = captureFields;
+    }
+
+    public String getHeading() {
+        return heading;
     }
 
     public boolean isSerialNo() {
@@ -85,6 +93,8 @@ public class RecordCaptureTableDef {
 
         private String titleCaption;
 
+        private String heading;
+
         private boolean serialNo;
 
         private boolean allowDraft;
@@ -111,6 +121,11 @@ public class RecordCaptureTableDef {
             return this;
         }
 
+        public Builder heading(String heading) {
+            this.heading = heading;
+            return this;
+        }
+
         public Builder serialNo(boolean serialNo) {
             this.serialNo = serialNo;
             return this;
@@ -120,11 +135,11 @@ public class RecordCaptureTableDef {
             this.allowDraft = allowDraft;
             return this;
         }
-        
+
         public Builder addColumnDef(String fieldName, String caption, String editor) {
             return addColumnDef(fieldName, caption, editor, 2);
         }
-        
+
         public Builder addColumnDef(String fieldName, String caption, String editor, int widthRatio) {
             if ("recordNo".equals(fieldName) || "title".equals(fieldName)) {
                 throw new IllegalArgumentException("Supplied field name is reserved.");
@@ -137,27 +152,32 @@ public class RecordCaptureTableDef {
                             "Record class associated with this builder has no getter and setter for supplied field.");
                 }
             } catch (UnifyException e) {
-                throw new IllegalArgumentException(
-                        "Reflection error.", e);
+                throw new IllegalArgumentException("Reflection error.", e);
             }
 
             captureFields.add(fieldName);
-            columnDefs.add(new RecordCaptureColumnDef(fieldName, caption, editor + " binding:" + fieldName, widthRatio));
+            columnDefs
+                    .add(new RecordCaptureColumnDef(fieldName, caption, editor + " binding:" + fieldName, widthRatio));
             return this;
         }
 
         public RecordCaptureTableDef build() {
+            if (StringUtils.isBlank(heading)) {
+                throw new IllegalArgumentException("Page heading is required!");
+            }
+
             if (StringUtils.isBlank(recordNoCaption) && StringUtils.isBlank(titleCaption)) {
                 throw new IllegalArgumentException(
                         "Title caption or record number caption has not been set for this builder.");
             }
-            
+
             if (!StringUtils.isBlank(titleCaption)) {
                 columnDefs.add(0, new RecordCaptureColumnDef("title", titleCaption, "!ui-label binding:title", 4));
             }
 
             if (!StringUtils.isBlank(recordNoCaption)) {
-                columnDefs.add(0, new RecordCaptureColumnDef("recordNo", recordNoCaption, "!ui-label binding:recordNo", 2));
+                columnDefs.add(0,
+                        new RecordCaptureColumnDef("recordNo", recordNoCaption, "!ui-label binding:recordNo", 2));
             }
 
             final int len = columnDefs.size();
@@ -170,9 +190,9 @@ public class RecordCaptureTableDef {
             for (int i = 0; i < len; i++) {
                 columnDefs.get(i).setHeaderStyle("width:" + widths[i] + "%;");
             }
-            
-            return new RecordCaptureTableDef(serialNo, allowDraft, recordClass, DataUtils.unmodifiableList(columnDefs),
-                    DataUtils.unmodifiableList(captureFields));
+
+            return new RecordCaptureTableDef(heading, serialNo, allowDraft, recordClass,
+                    DataUtils.unmodifiableList(columnDefs), DataUtils.unmodifiableList(captureFields));
         }
     }
 

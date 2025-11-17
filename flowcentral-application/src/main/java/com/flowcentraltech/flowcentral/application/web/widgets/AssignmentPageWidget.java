@@ -46,8 +46,7 @@ public class AssignmentPageWidget extends AbstractFlowCentralMultiControl {
         if (oldAssignmentPageDef != assignmentPageDef) {
             StringBuilder dsb = new StringBuilder();
             dsb.append("!ui-assignmentbox binding:assignedIdList baseIdBinding:baseId");
-            dsb.append(" search1:").append(assignmentPageDef.isSearch1());
-            dsb.append(" search2:").append(assignmentPageDef.isSearch2());
+            dsb.append(" search:").append(assignmentPageDef.isSearch());
 
             if (assignmentPageDef.isWithFilterCaption1()) {
                 dsb.append(" filterCaption1:$s{").append(assignmentPageDef.getFilterCaption1()).append("}");

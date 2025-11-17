@@ -21,10 +21,7 @@ import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.constant.ResultMappingConstants;
-import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;
 import com.tcdng.unify.web.ui.widget.Control;
-import com.tcdng.unify.web.ui.widget.data.RefreshSection;
 
 /**
  * Applet menu widget.
@@ -110,9 +107,7 @@ public class AppletMenuWidget extends AbstractMenuWidget {
 
     private void refereshSection() throws UnifyException {
         setCollapsedInitial(StringUtils.isBlank(searchInput));
-        setRequestAttribute(UnifyWebRequestAttributeConstants.REFRESH_SECTION,
-                new RefreshSection(this, getMenuSectionId()));
-        setCommandResultMapping(ResultMappingConstants.REFRESH_SECTION);
+        commandRefreshSection(getMenuSectionId());
     }
 
 }
