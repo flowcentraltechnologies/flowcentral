@@ -448,8 +448,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final AppletType type = appApplet.getType();
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
-                            appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isPortalAccess(),
-                            appApplet.isMenuAccess(), appApplet.isSupportOpenInNewWindow(),
+                            appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isAssignSearch(),
+                            appApplet.isPortalAccess(), appApplet.isMenuAccess(), appApplet.isSupportOpenInNewWindow(),
                             appApplet.isSupportRemoteAccess(), appApplet.isAllowSecondaryTenants(), descriptiveButtons,
                             _actLongName, appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
 
@@ -4183,7 +4183,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     ApplicationModuleErrorConstants.UNABLE_LOAD_DATA_LISTONLY_NOT_RESOLVING_TO_UNIQUE,
                                     entityUploadDef.getDescription(), fieldName);
                         }
-                        
+
                         recMap.put(recLoadInfo.getFieldName(), recLoadInfo);
                     } else {
                         recMap.put(fieldName, new RecLoadInfo(fieldName, listVal, formatter));
@@ -4848,6 +4848,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setIcon(appletConfig.getIcon());
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
+                    appApplet.setAssignSearch(appletConfig.getAssignSearch());
                     appApplet.setPortalAccess(appletConfig.getPortalAccess());
                     appApplet.setMenuAccess(appletConfig.getMenuAccess());
                     appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -4874,6 +4875,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppApplet.setIcon(appletConfig.getIcon());
                     oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     oldAppApplet.setPath(appletConfig.getPath());
+                    oldAppApplet.setAssignSearch(appletConfig.getAssignSearch());
                     oldAppApplet.setPortalAccess(appletConfig.getPortalAccess());
                     oldAppApplet.setMenuAccess(appletConfig.getMenuAccess());
                     oldAppApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -5415,7 +5417,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAssignmentPage.setDescription(description);
                     appAssignmentPage.setLabel(label);
                     appAssignmentPage.setSearch(appAssignmentPageConfig.getSearch());
-                    
+
                     if (appAssignmentPageConfig.getFilterCaption1() != null) {
                         appAssignmentPage.setFilterCaption1(
                                 resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));
@@ -5645,6 +5647,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appApplet.setIcon(appletConfig.getIcon());
                 appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                 appApplet.setPath(appletConfig.getPath());
+                appApplet.setAssignSearch(appletConfig.getAssignSearch());
                 appApplet.setPortalAccess(appletConfig.getPortalAccess());
                 appApplet.setMenuAccess(appletConfig.getMenuAccess());
                 appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -5972,7 +5975,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appAssignmentPage.setDescription(description);
                 appAssignmentPage.setLabel(label);
                 appAssignmentPage.setSearch(appAssignmentPageConfig.getSearch());
-                
+
                 if (appAssignmentPageConfig.getFilterCaption1() != null) {
                     appAssignmentPage
                             .setFilterCaption1(resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));

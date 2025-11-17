@@ -225,6 +225,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public boolean isAssignSearch() {
+        return parentAppletDef.isAssignSearch();
+    }
+
+    @Override
     public boolean isPortalAccess() {
         return parentAppletDef.isPortalAccess();
     }

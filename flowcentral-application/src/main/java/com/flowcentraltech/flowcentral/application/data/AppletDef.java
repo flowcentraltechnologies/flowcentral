@@ -115,6 +115,8 @@ public interface AppletDef extends VersionedEntityDef {
 
     boolean isOpenWindow();
 
+    boolean isAssignSearch() ;
+
     boolean isPortalAccess() ;
 
     boolean isMenuAccess() ;

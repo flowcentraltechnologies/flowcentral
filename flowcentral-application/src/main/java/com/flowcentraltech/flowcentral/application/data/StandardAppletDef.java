@@ -79,6 +79,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
     private boolean openWindow;
 
+    private boolean assignSearch;
+
     private boolean portalAccess;
 
     private boolean menuAccess;
@@ -117,9 +119,10 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
             String openPath, String openDraftPath, String openDraftWorkflow, String maintainOpenPath,
             String listingOpenPath, String originApplicationName, String originName, int displayIndex,
-            boolean openWindow, boolean portalAccess, boolean menuAccess, boolean supportOpenInNewWindow,
-            boolean supportRemoteAccess, boolean allowSecondaryTenants, boolean descriptiveButtons,
-            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+            boolean openWindow, boolean assignSearch, boolean portalAccess, boolean menuAccess,
+            boolean supportOpenInNewWindow, boolean supportRemoteAccess, boolean allowSecondaryTenants,
+            boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.entity = entity;
@@ -138,6 +141,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         this.originName = originName;
         this.displayIndex = displayIndex;
         this.openWindow = openWindow;
+        this.assignSearch = assignSearch;
         this.portalAccess = portalAccess;
         this.menuAccess = menuAccess;
         this.supportOpenInNewWindow = supportOpenInNewWindow;
@@ -385,6 +389,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
+    public boolean isAssignSearch() {
+        return assignSearch;
+    }
+
+    @Override
     public boolean isPortalAccess() {
         return portalAccess;
     }
@@ -505,21 +514,21 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean portalAccess, boolean menuAccess,
+            String pseudoDeleteField, int displayIndex, boolean assignSearch, boolean portalAccess, boolean menuAccess,
             boolean supportOpenInNewWindow, boolean supportRemoteAccess, boolean allowSecondaryTenants,
             boolean descriptiveButtons, String longName, String description) {
-        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, portalAccess,
-                menuAccess, supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants, descriptiveButtons,
-                longName, description, null, 0L);
+        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, assignSearch,
+                portalAccess, menuAccess, supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants,
+                descriptiveButtons, longName, description, null, 0L);
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean portalAccess, boolean menuAccess,
+            String pseudoDeleteField, int displayIndex, boolean assignSearch, boolean portalAccess, boolean menuAccess,
             boolean supportOpenInNewWindow, boolean supportRemoteAccess, boolean allowSecondaryTenants,
             boolean descriptiveButtons, String longName, String description, Long id, long version) {
-        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, portalAccess,
-                menuAccess, supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants, descriptiveButtons,
-                longName, description, id, version);
+        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, assignSearch,
+                portalAccess, menuAccess, supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants,
+                descriptiveButtons, longName, description, id, version);
     }
 
     public static class Builder {
@@ -566,6 +575,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
         private boolean openWindow;
 
+        private boolean assignSearch;
+
         private boolean portalAccess;
 
         private boolean menuAccess;
@@ -587,9 +598,10 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         private long version;
 
         public Builder(AppletType type, String entity, String label, String icon, String assignDescField,
-                String pseudoDeleteField, int displayIndex, boolean portalAccess, boolean menuAccess,
-                boolean supportOpenInNewWindow, boolean supportRemoteAccess, boolean allowSecondaryTenants,
-                boolean descriptiveButtons, String longName, String description, Long id, long version) {
+                String pseudoDeleteField, int displayIndex, boolean assignSearch, boolean portalAccess,
+                boolean menuAccess, boolean supportOpenInNewWindow, boolean supportRemoteAccess,
+                boolean allowSecondaryTenants, boolean descriptiveButtons, String longName, String description, Long id,
+                long version) {
             this.type = type;
             this.propDefMap = new HashMap<String, AppletPropDef>();
             this.setValuesDefMap = new HashMap<String, AppletSetValuesDef>();
@@ -600,6 +612,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             this.assignDescField = assignDescField;
             this.pseudoDeleteField = pseudoDeleteField;
             this.displayIndex = displayIndex;
+            this.assignSearch = assignSearch;
             this.portalAccess = portalAccess;
             this.menuAccess = menuAccess;
             this.supportOpenInNewWindow = supportOpenInNewWindow;
@@ -718,7 +731,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
                     DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
                     routeToApplet, openPath, openDraftPath, openDraftWorkflow, maintainOpenPath, listingOpenPath,
-                    originApplicationName, originName, displayIndex, openWindow, portalAccess, menuAccess,
+                    originApplicationName, originName, displayIndex, openWindow, assignSearch, portalAccess, menuAccess,
                     supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants, descriptiveButtons, nameParts,
                     description, id, version);
         }
