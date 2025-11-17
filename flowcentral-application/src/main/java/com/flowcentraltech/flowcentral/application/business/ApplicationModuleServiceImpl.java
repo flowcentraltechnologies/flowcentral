@@ -1329,9 +1329,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appAssignmentPage.getBaseField(), appAssignmentPage.getAssignField(),
                             appAssignmentPage.getFilterCaption1(), appAssignmentPage.getFilterCaption2(),
                             appAssignmentPage.getFilterList1(), appAssignmentPage.getFilterList2(),
-                            appAssignmentPage.getAssignCaption(), appAssignmentPage.getUnassignCaption(),
-                            appAssignmentPage.getAssignList(), appAssignmentPage.getUnassignList(),
-                            appAssignmentPage.getRuleDescField());
+                            Boolean.TRUE.equals(appAssignmentPage.getSearch1()),
+                            Boolean.TRUE.equals(appAssignmentPage.getSearch2()), appAssignmentPage.getAssignCaption(),
+                            appAssignmentPage.getUnassignCaption(), appAssignmentPage.getAssignList(),
+                            appAssignmentPage.getUnassignList(), appAssignmentPage.getRuleDescField());
                 }
 
             };
@@ -5414,6 +5415,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAssignmentPage.setName(appAssignmentPageConfig.getName());
                     appAssignmentPage.setDescription(description);
                     appAssignmentPage.setLabel(label);
+                    appAssignmentPage.setSearch1(appAssignmentPageConfig.getSearch1());
+                    appAssignmentPage.setSearch2(appAssignmentPageConfig.getSearch2());
+                    
                     if (appAssignmentPageConfig.getFilterCaption1() != null) {
                         appAssignmentPage.setFilterCaption1(
                                 resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));
@@ -5447,6 +5451,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     logDebug("Upgrading application assignment page [{0}]...", appAssignmentPageConfig.getName());
                     oldAppAssignmentPage.setDescription(description);
                     oldAppAssignmentPage.setLabel(label);
+                    oldAppAssignmentPage.setSearch1(appAssignmentPageConfig.getSearch1());
+                    oldAppAssignmentPage.setSearch2(appAssignmentPageConfig.getSearch2());
+
                     if (appAssignmentPageConfig.getFilterCaption1() != null) {
                         oldAppAssignmentPage.setFilterCaption1(
                                 resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));
@@ -5967,6 +5974,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appAssignmentPage.setName(appAssignmentPageConfig.getName());
                 appAssignmentPage.setDescription(description);
                 appAssignmentPage.setLabel(label);
+                appAssignmentPage.setSearch1(appAssignmentPageConfig.getSearch1());
+                appAssignmentPage.setSearch2(appAssignmentPageConfig.getSearch2());
+                
                 if (appAssignmentPageConfig.getFilterCaption1() != null) {
                     appAssignmentPage
                             .setFilterCaption1(resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));

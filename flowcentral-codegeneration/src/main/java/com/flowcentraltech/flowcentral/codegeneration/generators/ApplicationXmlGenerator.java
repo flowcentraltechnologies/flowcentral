@@ -1403,6 +1403,10 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appAssignmentPageConfig
                         .setLabel(ctx.isSnapshotMode() ? appAssignmentPage.getLabel() : "$m{" + labelKey + "}");
                 appAssignmentPageConfig.setEntity(appAssignmentPage.getEntity());
+                
+                appAssignmentPageConfig.setSearch1(appAssignmentPage.getSearch1());
+                appAssignmentPageConfig.setSearch2(appAssignmentPage.getSearch2());
+                
                 if (appAssignmentPage.getFilterCaption1() != null) {
                     labelKey = descKey + ".filtercaption1";
                     ctx.addMessage(StaticMessageCategoryType.ASSIGNMENT_PAGE, labelKey,

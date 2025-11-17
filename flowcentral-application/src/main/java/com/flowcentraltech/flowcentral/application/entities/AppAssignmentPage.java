@@ -54,6 +54,12 @@ public class AppAssignmentPage extends BaseApplicationEntity {
     @Column(length = 128, nullable = true)
     private String filterList2;
 
+    @Column(nullable = true)
+    private Boolean search1;
+
+    @Column(nullable = true)
+    private Boolean search2;
+
     @Column(length = 128)
     private String assignCaption;
 
@@ -139,6 +145,22 @@ public class AppAssignmentPage extends BaseApplicationEntity {
 
     public void setFilterList2(String filterList2) {
         this.filterList2 = filterList2;
+    }
+
+    public Boolean getSearch1() {
+        return search1;
+    }
+
+    public void setSearch1(Boolean search1) {
+        this.search1 = search1;
+    }
+
+    public Boolean getSearch2() {
+        return search2;
+    }
+
+    public void setSearch2(Boolean search2) {
+        this.search2 = search2;
     }
 
     public String getAssignCaption() {
