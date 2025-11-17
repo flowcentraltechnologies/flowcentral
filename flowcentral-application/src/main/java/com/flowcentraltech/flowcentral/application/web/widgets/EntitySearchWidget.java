@@ -42,10 +42,6 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
-import com.tcdng.unify.web.constant.ResultMappingConstants;
-import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;
-import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.data.RefreshSection;
 
 /**
  * Entity search widget.
@@ -71,15 +67,11 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
 
     @Action
     public final void search() throws UnifyException {
-        String input = getRequestTarget(String.class);
+        final String input = getRequestTarget(String.class);
         int triggerDataIndex = getRequestTriggerDataIndex();
         recallValueStore(triggerDataIndex);
-        List<? extends Listable> result = doSearch(input, getUplAttribute(int.class, "limit"));
-        setRequestAttribute(UnifyWebRequestAttributeConstants.REFRESH_SECTION,
-                new RefreshSection(this, getResultPanelId())); // Always create new because widget Id may have changed.
-        WriteWork work = getWriteWork();
-        work.set(WORK_RESULTLIST, result);
-        setCommandResultMapping(ResultMappingConstants.REFRESH_SECTION);
+        getWriteWork().set(WORK_RESULTLIST, doSearch(input, getUplAttribute(int.class, "limit")));
+        commandRefreshSection(getResultPanelId());
     }
 
     public String getSearchPanelId() throws UnifyException {

@@ -67,6 +67,9 @@ public class AppAssignmentPageConfig extends BaseClassifiedConfig {
     @JacksonXmlProperty(isAttribute = true)
     private String ruleDescField;
 
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean search;
+
     public String getEntity() {
         return entity;
     }
@@ -169,6 +172,14 @@ public class AppAssignmentPageConfig extends BaseClassifiedConfig {
 
     public void setRuleDescField(String ruleDescField) {
         this.ruleDescField = ruleDescField;
+    }
+
+    public Boolean getSearch() {
+        return search;
+    }
+
+    public void setSearch(Boolean search) {
+        this.search = search;
     }
 
 }

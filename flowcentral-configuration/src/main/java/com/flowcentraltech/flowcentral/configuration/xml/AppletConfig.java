@@ -66,6 +66,9 @@ public class AppletConfig extends BaseClassifiedConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private int displayIndex;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private String assignSearch;
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean portalAccess;
@@ -175,6 +178,14 @@ public class AppletConfig extends BaseClassifiedConfig {
 
     public void setPseudoDeleteField(String pseudoDeleteField) {
         this.pseudoDeleteField = pseudoDeleteField;
+    }
+
+    public String getAssignSearch() {
+        return assignSearch;
+    }
+
+    public void setAssignSearch(String assignSearch) {
+        this.assignSearch = assignSearch;
     }
 
     public Boolean getPortalAccess() {

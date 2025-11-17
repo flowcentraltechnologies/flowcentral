@@ -448,8 +448,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final AppletType type = appApplet.getType();
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
-                            appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isPortalAccess(),
-                            appApplet.isMenuAccess(), appApplet.isSupportOpenInNewWindow(),
+                            appApplet.getAssignSearch(), appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(),
+                            appApplet.isPortalAccess(), appApplet.isMenuAccess(), appApplet.isSupportOpenInNewWindow(),
                             appApplet.isSupportRemoteAccess(), appApplet.isAllowSecondaryTenants(), descriptiveButtons,
                             _actLongName, appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
 
@@ -1329,9 +1329,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appAssignmentPage.getBaseField(), appAssignmentPage.getAssignField(),
                             appAssignmentPage.getFilterCaption1(), appAssignmentPage.getFilterCaption2(),
                             appAssignmentPage.getFilterList1(), appAssignmentPage.getFilterList2(),
-                            appAssignmentPage.getAssignCaption(), appAssignmentPage.getUnassignCaption(),
-                            appAssignmentPage.getAssignList(), appAssignmentPage.getUnassignList(),
-                            appAssignmentPage.getRuleDescField());
+                            Boolean.TRUE.equals(appAssignmentPage.getSearch()), appAssignmentPage.getAssignCaption(),
+                            appAssignmentPage.getUnassignCaption(), appAssignmentPage.getAssignList(),
+                            appAssignmentPage.getUnassignList(), appAssignmentPage.getRuleDescField());
                 }
 
             };
@@ -4183,7 +4183,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     ApplicationModuleErrorConstants.UNABLE_LOAD_DATA_LISTONLY_NOT_RESOLVING_TO_UNIQUE,
                                     entityUploadDef.getDescription(), fieldName);
                         }
-                        
+
                         recMap.put(recLoadInfo.getFieldName(), recLoadInfo);
                     } else {
                         recMap.put(fieldName, new RecLoadInfo(fieldName, listVal, formatter));
@@ -4848,6 +4848,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setIcon(appletConfig.getIcon());
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
+                    appApplet.setAssignSearch(appletConfig.getAssignSearch());
                     appApplet.setPortalAccess(appletConfig.getPortalAccess());
                     appApplet.setMenuAccess(appletConfig.getMenuAccess());
                     appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -4874,6 +4875,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppApplet.setIcon(appletConfig.getIcon());
                     oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     oldAppApplet.setPath(appletConfig.getPath());
+                    oldAppApplet.setAssignSearch(appletConfig.getAssignSearch());
                     oldAppApplet.setPortalAccess(appletConfig.getPortalAccess());
                     oldAppApplet.setMenuAccess(appletConfig.getMenuAccess());
                     oldAppApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -5414,6 +5416,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAssignmentPage.setName(appAssignmentPageConfig.getName());
                     appAssignmentPage.setDescription(description);
                     appAssignmentPage.setLabel(label);
+                    appAssignmentPage.setSearch(appAssignmentPageConfig.getSearch());
+
                     if (appAssignmentPageConfig.getFilterCaption1() != null) {
                         appAssignmentPage.setFilterCaption1(
                                 resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));
@@ -5447,6 +5451,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     logDebug("Upgrading application assignment page [{0}]...", appAssignmentPageConfig.getName());
                     oldAppAssignmentPage.setDescription(description);
                     oldAppAssignmentPage.setLabel(label);
+                    oldAppAssignmentPage.setSearch(appAssignmentPageConfig.getSearch());
+
                     if (appAssignmentPageConfig.getFilterCaption1() != null) {
                         oldAppAssignmentPage.setFilterCaption1(
                                 resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));
@@ -5641,6 +5647,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appApplet.setIcon(appletConfig.getIcon());
                 appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                 appApplet.setPath(appletConfig.getPath());
+                appApplet.setAssignSearch(appletConfig.getAssignSearch());
                 appApplet.setPortalAccess(appletConfig.getPortalAccess());
                 appApplet.setMenuAccess(appletConfig.getMenuAccess());
                 appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -5967,6 +5974,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appAssignmentPage.setName(appAssignmentPageConfig.getName());
                 appAssignmentPage.setDescription(description);
                 appAssignmentPage.setLabel(label);
+                appAssignmentPage.setSearch(appAssignmentPageConfig.getSearch());
+
                 if (appAssignmentPageConfig.getFilterCaption1() != null) {
                     appAssignmentPage
                             .setFilterCaption1(resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));

@@ -2870,6 +2870,8 @@
 							switchOnChange="true" required="true" visible="false" />
 						<field name="assignDescField"
 							inputWidget="studio.entityrefdesclist" column="1" visible="false" />
+						<field name="assignSearch"
+							inputWidget="studio.entityrefdesclist" column="1" visible="false" />
 						<field name="pseudoDeleteField"
 							inputWidget="studio.entitybooleanfieldlist" column="1"
 							visible="false" />
@@ -2941,7 +2943,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="name,description,entity,type,label,baseField,assignField,assignDescField,pseudoDeleteField"
+							target="name,description,entity,type,label,baseField,assignField,assignDescField,assignSearch,pseudoDeleteField"
 							disabled="TRUE" />
 					</setStates>
 				</formStatePolicy>
@@ -3005,7 +3007,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="baseField,assignField,assignDescField,pseudoDeleteField"
+							target="baseField,assignField,assignDescField,assignSearch,pseudoDeleteField"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>

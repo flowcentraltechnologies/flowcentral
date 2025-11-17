@@ -14,7 +14,12 @@
 // the License.
 !ui-page captionBinding:altCaption subCaptionBinding:altSubCaption
 	 layout:$d{!ui-vertical}
-	 components:$c{searchEntriesPanel capturePanel footerActionPanel}
+	 components:$c{headerBar searchEntriesPanel capturePanel footerActionPanel}
+
+// Header
+!ui-panel:headerBar layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom}
+	components:$c{remCaptureLabel} 
+!ui-label:remCaptureLabel styleClass:$e{fc-largelabel} binding:heading
 
 // Search entries panel
 !ui-panel:searchEntriesPanel styleClass:$e{fc-graypanel} layout:$d{!ui-grid columns:4 style:$s{width:100%;} showCaption:true captionSuffix:$s{:} inlineCaption:true}

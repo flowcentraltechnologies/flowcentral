@@ -61,6 +61,8 @@ public interface AppletDef extends VersionedEntityDef {
 
     String getEntity();
 
+    String getAssignSearch() ;
+
     String getAssignDescField();
 
     String getPseudoDeleteField();
