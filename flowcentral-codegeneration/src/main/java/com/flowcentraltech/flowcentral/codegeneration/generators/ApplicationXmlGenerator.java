@@ -284,7 +284,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appletConfig.setType(appApplet.getType());
                 appletConfig.setEntity(appApplet.getEntity());
                 appletConfig.setIcon(appApplet.getIcon());
-                appletConfig.setAssignSearch(appApplet.isAssignSearch());
+                appletConfig.setAssignSearch(appApplet.getAssignSearch());
                 appletConfig.setPortalAccess(appApplet.isPortalAccess());
                 appletConfig.setMenuAccess(appApplet.isMenuAccess());
                 appletConfig.setSupportOpenInNewWindow(appApplet.isSupportOpenInNewWindow());

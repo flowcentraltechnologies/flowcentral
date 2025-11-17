@@ -945,7 +945,8 @@
 					type="STRING"
 					nullable="true" />
 				<field name="assignSearch"
-					label="$m{application.appapplet.assignsearch}" type="BOOLEAN" />
+					label="$m{application.appapplet.assignsearch}" type="STRING"
+					nullable="true"/>
 				<field name="portalAccess"
 					label="$m{application.appapplet.portalaccess}" type="BOOLEAN" />
 				<field name="menuAccess"

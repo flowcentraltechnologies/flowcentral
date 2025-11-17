@@ -448,7 +448,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final AppletType type = appApplet.getType();
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
-                            appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isAssignSearch(),
+                            appApplet.getAssignSearch(), appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(),
                             appApplet.isPortalAccess(), appApplet.isMenuAccess(), appApplet.isSupportOpenInNewWindow(),
                             appApplet.isSupportRemoteAccess(), appApplet.isAllowSecondaryTenants(), descriptiveButtons,
                             _actLongName, appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());

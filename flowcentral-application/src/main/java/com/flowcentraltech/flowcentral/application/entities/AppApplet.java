@@ -56,6 +56,9 @@ public class AppApplet extends BaseApplicationEntity {
 
     @Column(length = 64, nullable = true)
     private String assignField;
+    
+    @Column(length = 64, nullable = true)
+    private String assignSearch;
 
     @Column(length = 64, nullable = true)
     private String assignDescField;
@@ -65,9 +68,6 @@ public class AppApplet extends BaseApplicationEntity {
 
     @Column(length = 1024, nullable = true)
     private String titleFormat;
-    
-    @Column
-    private boolean assignSearch;
     
     @Column
     private boolean portalAccess;
@@ -196,11 +196,11 @@ public class AppApplet extends BaseApplicationEntity {
         this.titleFormat = titleFormat;
     }
 
-    public boolean isAssignSearch() {
+    public String getAssignSearch() {
         return assignSearch;
     }
 
-    public void setAssignSearch(boolean assignSearch) {
+    public void setAssignSearch(String assignSearch) {
         this.assignSearch = assignSearch;
     }
 

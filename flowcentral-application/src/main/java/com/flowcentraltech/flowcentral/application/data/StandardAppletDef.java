@@ -73,13 +73,13 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
     private String assignDescField;
 
+    private String assignSearch;
+
     private String pseudoDeleteField;
 
     private int displayIndex;
 
     private boolean openWindow;
-
-    private boolean assignSearch;
 
     private boolean portalAccess;
 
@@ -116,10 +116,10 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     private StandardAppletDef(AppletType type, List<StringToken> titleFormat, List<AppletPropDef> propDefList,
             List<String> subAppletList, Map<String, AppletPropDef> propDefMap,
             Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
-            String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
-            String openPath, String openDraftPath, String openDraftWorkflow, String maintainOpenPath,
-            String listingOpenPath, String originApplicationName, String originName, int displayIndex,
-            boolean openWindow, boolean assignSearch, boolean portalAccess, boolean menuAccess,
+            String label, String icon, String assignDescField, String assignSearch, String pseudoDeleteField,
+            String routeToApplet, String openPath, String openDraftPath, String openDraftWorkflow,
+            String maintainOpenPath, String listingOpenPath, String originApplicationName, String originName,
+            int displayIndex, boolean openWindow, boolean portalAccess, boolean menuAccess,
             boolean supportOpenInNewWindow, boolean supportRemoteAccess, boolean allowSecondaryTenants,
             boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
             long version) {
@@ -389,7 +389,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
-    public boolean isAssignSearch() {
+    public String getAssignSearch() {
         return assignSearch;
     }
 
@@ -514,19 +514,19 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean assignSearch, boolean portalAccess, boolean menuAccess,
+            String assignSearch, String pseudoDeleteField, int displayIndex, boolean portalAccess, boolean menuAccess,
             boolean supportOpenInNewWindow, boolean supportRemoteAccess, boolean allowSecondaryTenants,
             boolean descriptiveButtons, String longName, String description) {
-        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, assignSearch,
+        return new Builder(type, entity, label, icon, assignDescField, assignSearch, pseudoDeleteField, displayIndex,
                 portalAccess, menuAccess, supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants,
                 descriptiveButtons, longName, description, null, 0L);
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean assignSearch, boolean portalAccess, boolean menuAccess,
+            String assignSearch, String pseudoDeleteField, int displayIndex, boolean portalAccess, boolean menuAccess,
             boolean supportOpenInNewWindow, boolean supportRemoteAccess, boolean allowSecondaryTenants,
             boolean descriptiveButtons, String longName, String description, Long id, long version) {
-        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, assignSearch,
+        return new Builder(type, entity, label, icon, assignDescField, assignSearch, pseudoDeleteField, displayIndex,
                 portalAccess, menuAccess, supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants,
                 descriptiveButtons, longName, description, id, version);
     }
@@ -553,6 +553,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
         private String assignDescField;
 
+        private String assignSearch;
+
         private String pseudoDeleteField;
 
         private String routeToApplet;
@@ -575,8 +577,6 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
         private boolean openWindow;
 
-        private boolean assignSearch;
-
         private boolean portalAccess;
 
         private boolean menuAccess;
@@ -598,7 +598,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         private long version;
 
         public Builder(AppletType type, String entity, String label, String icon, String assignDescField,
-                String pseudoDeleteField, int displayIndex, boolean assignSearch, boolean portalAccess,
+                String assignSearch, String pseudoDeleteField, int displayIndex, boolean portalAccess,
                 boolean menuAccess, boolean supportOpenInNewWindow, boolean supportRemoteAccess,
                 boolean allowSecondaryTenants, boolean descriptiveButtons, String longName, String description, Long id,
                 long version) {
@@ -729,11 +729,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             return new StandardAppletDef(type, titleFormat,
                     DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())), subAppletList,
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
-                    DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
-                    routeToApplet, openPath, openDraftPath, openDraftWorkflow, maintainOpenPath, listingOpenPath,
-                    originApplicationName, originName, displayIndex, openWindow, assignSearch, portalAccess, menuAccess,
-                    supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants, descriptiveButtons, nameParts,
-                    description, id, version);
+                    DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, assignSearch,
+                    pseudoDeleteField, routeToApplet, openPath, openDraftPath, openDraftWorkflow, maintainOpenPath,
+                    listingOpenPath, originApplicationName, originName, displayIndex, openWindow, portalAccess,
+                    menuAccess, supportOpenInNewWindow, supportRemoteAccess, allowSecondaryTenants, descriptiveButtons,
+                    nameParts, description, id, version);
         }
     }
 

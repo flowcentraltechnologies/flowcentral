@@ -301,10 +301,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String label = getApplicationMessage("workflow.applet.label", workflow.getLabel(),
                                     wfStep.getLabel());
                             final String assignDescField = null;
+                            final String assignSearch = null;
                             final String pseudoDeleteField = null;
                             StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(_reviewAppletType, null, label,
-                                    "tasks", assignDescField, pseudoDeleteField, 0, false, true, false, false, true,
-                                    descriptiveButtons, appletName, label);
+                                    "tasks", assignDescField, assignSearch, pseudoDeleteField, 0, false, true, false,
+                                    false, true, descriptiveButtons, appletName, label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
                                     : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
@@ -419,10 +420,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final boolean descriptiveButtons = appletUtil.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     final String assignDescField = null;
+                    final String assignSearch = null;
                     final String pseudoDeleteField = null;
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS,
-                            null, label, "magic", assignDescField, pseudoDeleteField, 0, false, true, false, false, true,
-                            descriptiveButtons, appletName, label);
+                            null, label, "magic", assignDescField, assignSearch, pseudoDeleteField, 0, false, true,
+                            false, false, true, descriptiveButtons, appletName, label);
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfWizardItemReviewTable");
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE_NEW, "true");
                     adb.addPropDef(WfWizardAppletPropertyConstants.WORKFLOW_WIZARD, longName);
@@ -579,7 +581,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (WfChannelStatus.SUSPENDED.equals(wfChannelDef.getStatus())) {
             throwOperationErrorException(new Exception("Workflow channel is suspended."));
         }
-        
+
         WfDef wfDef = getWfDef(wfChannelDef.getDestination());
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         if (!entityClassDef.isCompatible(inst)) {
@@ -716,7 +718,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 resolveSessionMessage(appTable.getDescription()));
         final String loadingAppletLabel = resolveSessionMessage("$m{workflow.myworkitems.loadingapplet.label}",
                 resolveSessionMessage(appTable.getLabel()));
-        
+
         AppApplet loadingApplet = environment()
                 .findLean(new AppAppletQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
         if (loadingApplet == null) {
@@ -1612,7 +1614,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall)
+            throws UnifyException {
 
     }
 
@@ -1794,7 +1797,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     if (currWfStepDef.isWithRecordAction()) {
                         switch (currWfStepDef.getRecordActionType()) {
                             case CREATE:
-                            case CREATEAS:{
+                            case CREATEAS: {
                                 WorkEntity newInst = entityClassDef.newInst(wfEntityInst);
                                 Long originWorkRecId = (Long) environment().create(newInst);
                                 fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,

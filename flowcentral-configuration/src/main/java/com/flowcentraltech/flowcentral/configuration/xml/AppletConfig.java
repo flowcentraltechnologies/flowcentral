@@ -68,7 +68,7 @@ public class AppletConfig extends BaseClassifiedConfig {
     private int displayIndex;
     
     @JacksonXmlProperty(isAttribute = true)
-    private Boolean assignSearch;
+    private String assignSearch;
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean portalAccess;
@@ -101,7 +101,6 @@ public class AppletConfig extends BaseClassifiedConfig {
     private AppletAlertsConfig alerts;
     
     public AppletConfig() {
-        this.assignSearch = Boolean.FALSE;
         this.portalAccess = Boolean.FALSE;
         this.menuAccess = Boolean.FALSE;
         this.supportOpenInNewWindow = Boolean.FALSE;
@@ -181,11 +180,11 @@ public class AppletConfig extends BaseClassifiedConfig {
         this.pseudoDeleteField = pseudoDeleteField;
     }
 
-    public Boolean getAssignSearch() {
+    public String getAssignSearch() {
         return assignSearch;
     }
 
-    public void setAssignSearch(Boolean assignSearch) {
+    public void setAssignSearch(String assignSearch) {
         this.assignSearch = assignSearch;
     }
 
