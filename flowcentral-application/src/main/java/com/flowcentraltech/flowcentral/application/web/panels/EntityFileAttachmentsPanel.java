@@ -21,7 +21,6 @@ import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.core.data.FileAttachmentsInfo;
 
 /**
  * Entity file attachments panel.
@@ -32,7 +31,6 @@ import com.tcdng.unify.core.data.FileAttachmentsInfo;
 @Component("fc-entityfileattachmentspanel")
 @UplBinding("web/application/upl/entityfileattachmentspanel.upl")
 public class EntityFileAttachmentsPanel extends BaseDialogPanel {
-
 	
 	@Override
 	public void switchState() throws UnifyException {
