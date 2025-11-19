@@ -122,7 +122,7 @@ public class EntityUploadDef implements Listable {
 
         if (fieldUploadDefList == null) {
             synchronized (this) {
-                if (fieldUploadDefList != null) {
+                if (fieldUploadDefList == null) {
                     fieldUploadDefList = new ArrayList<EntityFieldUploadDef>();
                     Map<String, List<ListProp>> listOnlyToKeyMap = new HashMap<String, List<ListProp>>();
                     for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {

@@ -4142,7 +4142,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 new InputStreamReader(new ByteArrayInputStream(uploadFile)), withHeaderFlag);
     }
 
-    @SuppressWarnings({ "unchecked"})
+    @SuppressWarnings({ "unchecked" })
     @Override
     public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, Reader uploadFile,
             boolean withHeaderFlag) throws UnifyException {
@@ -4159,7 +4159,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     .getFieldUploadDefList(appletUtilities, entityDef);
             final Entity inst = entityClassDef.newInst();
             Reader reader = new BufferedReader(uploadFile);
-            CSVFormat csvFormat =  CSVFormat.RFC4180.builder()
+            CSVFormat csvFormat = CSVFormat.RFC4180.builder()
                     .setHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
                     .setIgnoreHeaderCase(true)
                     .setIgnoreEmptyLines(true)
@@ -4175,7 +4175,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 recMap.clear();
                 for (EntityFieldUploadDef entityFieldUploadDef : entityFieldUploadDefList) {
                     final String fieldName = entityFieldUploadDef.getFieldName();
-                    Object val = csvRecord.get(fieldName);
+                    Object val = null;
                     Formatter<?> formatter = null;
                     if (entityFieldUploadDef.isResolveKeyValue()) {
                         if (entityFieldUploadDef.isEnumTypeValue()) {
@@ -4216,6 +4216,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 ? appletUtilities.formatHelper()
                                         .newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
                                 : null;
+                        val = csvRecord.get(fieldName);
                     }
 
                     recMap.put(fieldName, new RecLoadInfo(fieldName, val, formatter));
