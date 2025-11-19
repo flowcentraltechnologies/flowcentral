@@ -4184,12 +4184,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                             entityFieldUploadDef.getKeyEntityLongName(), (String) val).getListKey()
                                     : null;
                         } else {
-                            if (entityFieldUploadDef.getKeyUniqueConstraintName() == null) {
-                                throw new UnifyException(
-                                        ApplicationModuleErrorConstants.UNABLE_LOAD_DATA_LISTONLY_NOT_RESOLVING_TO_UNIQUE,
-                                        entityUploadDef.getDescription(), fieldName);
-                            }
-
                             final EntityClassDef refEntityClassDef = getEntityClassDef(
                                     entityFieldUploadDef.getKeyEntityLongName());
                             Query<?> query = Query.of((Class<? extends Entity>) refEntityClassDef.getEntityClass());

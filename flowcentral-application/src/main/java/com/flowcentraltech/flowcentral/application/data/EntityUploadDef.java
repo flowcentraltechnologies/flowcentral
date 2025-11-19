@@ -148,22 +148,8 @@ public class EntityUploadDef implements Listable {
                                     .add(new EntityFieldUploadDef(keyFieldName, refEntityFieldDef.getReferences()));
                         } else {
                             final RefDef refDef = au.getRefDef(refEntityFieldDef.getRefLongName());
-                            final EntityDef refEntityDef = au.getEntityDef(refDef.getEntity());
-                            List<String> properties = new ArrayList<String>();
-                            for (ListProp listProp: entry.getValue()) {
-                                properties.add(listProp.getProperty());
-                            }
-                            
-                            String keyUniqueConstraintName = null;
-                            for (UniqueConstraintDef uniqueConstraintDef : refEntityDef.getUniqueConstraintList()) {
-                                if (uniqueConstraintDef.isAllFieldsMatch(properties)) {
-                                    keyUniqueConstraintName = uniqueConstraintDef.getName();
-                                    break;
-                                }
-                            }
-
                             fieldUploadDefList.add(new EntityFieldUploadDef(keyFieldName, refDef.getEntity(),
-                                    keyUniqueConstraintName, entry.getValue()));
+                                    entry.getValue()));
                         }
 
                     }
