@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import java.util.List;
+
 /**
  * Entity field upload definition.
  * 
@@ -23,7 +25,7 @@ package com.flowcentraltech.flowcentral.application.data;
  */
 public class EntityFieldUploadDef {
 
-    private FieldSequenceEntryDef fieldSequenceEntryDef;
+    private String fieldName;
 
     private String keyFieldName;
 
@@ -31,26 +33,30 @@ public class EntityFieldUploadDef {
 
     private String keyUniqueConstraintName;
 
+    private List<ListProp> listProps;
+
     private boolean enumType;
-    
+
     public EntityFieldUploadDef(String keyFieldName, String keyEntityLongName) {
         this.keyFieldName = keyFieldName;
         this.keyEntityLongName = keyEntityLongName;
         this.enumType = true;
     }
 
-    public EntityFieldUploadDef(String keyFieldName, String keyEntityLongName, String keyUniqueConstraintName) {
+    public EntityFieldUploadDef(String keyFieldName, String keyEntityLongName, String keyUniqueConstraintName,
+            List<ListProp> listProps) {
         this.keyFieldName = keyFieldName;
         this.keyEntityLongName = keyEntityLongName;
         this.keyUniqueConstraintName = keyUniqueConstraintName;
+        this.listProps = listProps;
     }
 
-    public EntityFieldUploadDef(FieldSequenceEntryDef fieldSequenceEntryDef) {
-        this.fieldSequenceEntryDef = fieldSequenceEntryDef;
+    public EntityFieldUploadDef(String fieldName) {
+        this.fieldName = fieldName;
     }
 
     public String getFieldName() {
-        return fieldSequenceEntryDef != null ? fieldSequenceEntryDef.getFieldName() : keyFieldName;
+        return fieldName != null ? fieldName : keyFieldName;
     }
 
     public String getKeyFieldName() {
@@ -65,6 +71,10 @@ public class EntityFieldUploadDef {
         return keyUniqueConstraintName;
     }
 
+    public List<ListProp> getListProps() {
+        return listProps;
+    }
+
     public boolean isResolveKeyValue() {
         return keyFieldName != null;
     }
@@ -73,4 +83,23 @@ public class EntityFieldUploadDef {
         return enumType;
     }
 
+    public static class ListProp {
+
+        final private String fieldName;
+
+        final private String property;
+
+        public ListProp(String fieldName, String property) {
+            this.fieldName = fieldName;
+            this.property = property;
+        }
+
+        public String getFieldName() {
+            return fieldName;
+        }
+
+        public String getProperty() {
+            return property;
+        }
+    }
 }

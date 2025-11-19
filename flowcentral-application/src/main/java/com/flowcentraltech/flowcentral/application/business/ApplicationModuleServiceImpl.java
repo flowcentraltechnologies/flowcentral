@@ -64,6 +64,8 @@ import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldUploadDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldUploadDef.ListProp;
 import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -4140,7 +4142,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 new InputStreamReader(new ByteArrayInputStream(uploadFile)), withHeaderFlag);
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
+    @SuppressWarnings({ "unchecked"})
     @Override
     public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, Reader uploadFile,
             boolean withHeaderFlag) throws UnifyException {
@@ -4152,42 +4154,71 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         try {
             final EntityClassDef entityClassDef = getEntityClassDef(entity);
             final EntityDef entityDef = entityClassDef.getEntityDef();
-            EntityUploadDef entityUploadDef = entityClassDef.getEntityDef().getUploadDef(uploadConfig);
-            List<FieldSequenceEntryDef> fieldSequenceList = entityUploadDef.getFieldSequenceDef()
-                    .getFieldSequenceList();
-            Entity inst = entityClassDef.newInst();
+            final EntityUploadDef entityUploadDef = entityClassDef.getEntityDef().getUploadDef(uploadConfig);
+            final List<EntityFieldUploadDef> entityFieldUploadDefList = entityUploadDef
+                    .getFieldUploadDefList(appletUtilities, entityDef);
+            final Entity inst = entityClassDef.newInst();
             Reader reader = new BufferedReader(uploadFile);
-            CSVFormat csvFormat = CSVFormat.RFC4180
-                    .withHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
-                    .withIgnoreHeaderCase().withIgnoreEmptyLines().withTrim().withIgnoreSurroundingSpaces()
-                    .withNullString("");
-            if (withHeaderFlag) {
-                csvFormat = csvFormat.withSkipHeaderRecord();
-            }
+            CSVFormat csvFormat =  CSVFormat.RFC4180.builder()
+                    .setHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
+                    .setIgnoreHeaderCase(true)
+                    .setIgnoreEmptyLines(true)
+                    .setSkipHeaderRecord(withHeaderFlag)
+                    .setTrim(true)
+                    .setIgnoreSurroundingSpaces(true)
+                    .setNullString("")
+                    .build();
 
             csvFileParser = new CSVParser(reader, csvFormat);
             Map<String, RecLoadInfo> recMap = new LinkedHashMap<String, RecLoadInfo>();
             for (CSVRecord csvRecord : csvFileParser) {
                 recMap.clear();
-                for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceList) {
-                    Formatter<?> formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
-                            ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
-                            : null;
-                    String fieldName = fieldSequenceEntryDef.getFieldName();
-                    String listVal = csvRecord.get(fieldName);
-                    RecLoadInfo recLoadInfo = resolveListOnlyRecordLoadInformation(entityDef, fieldName, listVal,
-                            formatter);
-                    if (recLoadInfo != null) {
-                        if (recLoadInfo.isNonUniqueListOnlyProperty()) {
-                            throw new UnifyException(
-                                    ApplicationModuleErrorConstants.UNABLE_LOAD_DATA_LISTONLY_NOT_RESOLVING_TO_UNIQUE,
-                                    entityUploadDef.getDescription(), fieldName);
-                        }
+                for (EntityFieldUploadDef entityFieldUploadDef : entityFieldUploadDefList) {
+                    final String fieldName = entityFieldUploadDef.getFieldName();
+                    Object val = csvRecord.get(fieldName);
+                    Formatter<?> formatter = null;
+                    if (entityFieldUploadDef.isResolveKeyValue()) {
+                        if (entityFieldUploadDef.isEnumTypeValue()) {
+                            val = val != null
+                                    ? getListItemByDescription(LocaleType.APPLICATION,
+                                            entityFieldUploadDef.getKeyEntityLongName(), (String) val).getListKey()
+                                    : null;
+                        } else {
+                            if (entityFieldUploadDef.getKeyUniqueConstraintName() == null) {
+                                throw new UnifyException(
+                                        ApplicationModuleErrorConstants.UNABLE_LOAD_DATA_LISTONLY_NOT_RESOLVING_TO_UNIQUE,
+                                        entityUploadDef.getDescription(), fieldName);
+                            }
 
-                        recMap.put(recLoadInfo.getFieldName(), recLoadInfo);
+                            final EntityClassDef refEntityClassDef = getEntityClassDef(
+                                    entityFieldUploadDef.getKeyEntityLongName());
+                            Query<?> query = Query.of((Class<? extends Entity>) refEntityClassDef.getEntityClass());
+                            for (ListProp listProp : entityFieldUploadDef.getListProps()) {
+                                final EntityFieldDataType listOnlyDataType = resolveListOnlyFieldDataType(
+                                        refEntityClassDef.getEntityDef(), listProp.getProperty());
+                                final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef
+                                        .getFieldSequenceDef().getFieldSequenceEntryDef(listProp.getFieldName());
+                                formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
+                                        ? appletUtilities.formatHelper()
+                                                .newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
+                                        : null;
+                                Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
+                                        csvRecord.get(listProp.getFieldName()), formatter);
+                                query.addEquals(listProp.getProperty(), cval);
+                            }
+
+                            val = environment().value(Long.class, "id", query);
+                        }
                     } else {
-                        recMap.put(fieldName, new RecLoadInfo(fieldName, listVal, formatter));
+                        final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef.getFieldSequenceDef()
+                                .getFieldSequenceEntryDef(fieldName);
+                        formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
+                                ? appletUtilities.formatHelper()
+                                        .newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
+                                : null;
                     }
+
+                    recMap.put(fieldName, new RecLoadInfo(fieldName, val, formatter));
                 }
 
                 UniqueConstraintDef uniqueConstriantDef = null;

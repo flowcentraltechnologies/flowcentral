@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldUploadDef.ListProp;
 import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
@@ -123,23 +124,23 @@ public class EntityUploadDef implements Listable {
             synchronized (this) {
                 if (fieldUploadDefList != null) {
                     fieldUploadDefList = new ArrayList<EntityFieldUploadDef>();
-                    Map<String, List<String>> listOnlyToKeyMap = new HashMap<String, List<String>>();
+                    Map<String, List<ListProp>> listOnlyToKeyMap = new HashMap<String, List<ListProp>>();
                     for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
                         EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldSequenceEntryDef.getFieldName());
                         if (entityFieldDef.isListOnly()) {
-                            List<String> properties = listOnlyToKeyMap.get(entityFieldDef.getKey());
+                            List<ListProp> properties = listOnlyToKeyMap.get(entityFieldDef.getKey());
                             if (properties == null) {
-                                properties = new ArrayList<String>();
+                                properties = new ArrayList<ListProp>();
                                 listOnlyToKeyMap.put(entityFieldDef.getKey(), properties);
                             }
 
-                            properties.add(entityFieldDef.getProperty());
+                            properties.add(new ListProp(fieldSequenceEntryDef.getFieldName(), entityFieldDef.getProperty()));
                         } else {
-                            fieldUploadDefList.add(new EntityFieldUploadDef(fieldSequenceEntryDef));
+                            fieldUploadDefList.add(new EntityFieldUploadDef(fieldSequenceEntryDef.getFieldName()));
                         }
                     }
 
-                    for (Map.Entry<String, List<String>> entry : listOnlyToKeyMap.entrySet()) {
+                    for (Map.Entry<String, List<ListProp>> entry : listOnlyToKeyMap.entrySet()) {
                         String keyFieldName = null;
                         EntityFieldDef refEntityFieldDef = entityDef.getFieldDef(keyFieldName = entry.getKey());
                         if (refEntityFieldDef.isEnumDataType()) {
@@ -148,16 +149,21 @@ public class EntityUploadDef implements Listable {
                         } else {
                             final RefDef refDef = au.getRefDef(refEntityFieldDef.getRefLongName());
                             final EntityDef refEntityDef = au.getEntityDef(refDef.getEntity());
+                            List<String> properties = new ArrayList<String>();
+                            for (ListProp listProp: entry.getValue()) {
+                                properties.add(listProp.getProperty());
+                            }
+                            
                             String keyUniqueConstraintName = null;
                             for (UniqueConstraintDef uniqueConstraintDef : refEntityDef.getUniqueConstraintList()) {
-                                if (uniqueConstraintDef.isAllFieldsMatch(entry.getValue())) {
+                                if (uniqueConstraintDef.isAllFieldsMatch(properties)) {
                                     keyUniqueConstraintName = uniqueConstraintDef.getName();
                                     break;
                                 }
                             }
 
                             fieldUploadDefList.add(new EntityFieldUploadDef(keyFieldName, refDef.getEntity(),
-                                    keyUniqueConstraintName));
+                                    keyUniqueConstraintName, entry.getValue()));
                         }
 
                     }
