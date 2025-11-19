@@ -31,8 +31,6 @@ public class EntityFieldUploadDef {
 
     private String keyEntityLongName;
 
-    private String keyUniqueConstraintName;
-
     private List<ListProp> listProps;
 
     private boolean enumType;
@@ -43,11 +41,10 @@ public class EntityFieldUploadDef {
         this.enumType = true;
     }
 
-    public EntityFieldUploadDef(String keyFieldName, String keyEntityLongName, String keyUniqueConstraintName,
+    public EntityFieldUploadDef(String keyFieldName, String keyEntityLongName,
             List<ListProp> listProps) {
         this.keyFieldName = keyFieldName;
         this.keyEntityLongName = keyEntityLongName;
-        this.keyUniqueConstraintName = keyUniqueConstraintName;
         this.listProps = listProps;
     }
 
@@ -65,10 +62,6 @@ public class EntityFieldUploadDef {
 
     public String getKeyEntityLongName() {
         return keyEntityLongName;
-    }
-
-    public String getKeyUniqueConstraintName() {
-        return keyUniqueConstraintName;
     }
 
     public List<ListProp> getListProps() {
