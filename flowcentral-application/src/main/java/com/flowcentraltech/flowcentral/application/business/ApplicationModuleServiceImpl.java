@@ -3950,7 +3950,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
                                     InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, resolvedEntityFieldDef);
+                    final String editor = InputWidgetUtils.constructLeanEditor(widgetTypeDef, resolvedEntityFieldDef);
                     fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
                             entityFieldDef.getFieldName(), resolveApplicationMessage(entityFieldDef.getFieldLabel()),
                             editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
