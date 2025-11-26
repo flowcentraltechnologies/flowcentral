@@ -3972,13 +3972,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final FormDef formDef = getFormDef(form);
                     final List<PortalFormElement> elements = new ArrayList<PortalFormElement>();
                     for (FormTabDef formTabDef : formDef.getFormTabDefList()) {
+                        final String parentFieldName = formTabDef.isChildOrChildList()
+                                ? getParentFieldName(formDef.getEntityDef(), formTabDef.getReference())
+                                : null;
                         elements.add(new PortalFormElement(FormElementType.TAB.name(), null, formTabDef.getLabel(),
-                                formTabDef.getName(), null, formTabDef.getContentType().name(), null, 0, false));
+                                formTabDef.getName(), null, formTabDef.getContentType().name(), null,
+                                formTabDef.getApplet(), parentFieldName, 0, false));
                         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
                             elements.add(new PortalFormElement(FormElementType.SECTION.name(), null,
                                     formSectionDef.getLabel(), formSectionDef.getName(), null, null,
-                                    formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null, 0,
-                                    false));
+                                    formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null,
+                                    null, null, 0, false));
                             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
                                 final WidgetTypeDef widgetTypeDef = formFieldDef.getWidgetName() != null
                                         ? getWidgetTypeDef(formFieldDef.getWidgetName())
@@ -3991,8 +3995,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         resolveApplicationMessage(StringUtils.isBlank(formFieldDef.getFieldLabel())
                                                 ? entityDef.getFieldDef(formFieldDef.getFieldName()).getFieldLabel()
                                                 : formFieldDef.getFieldLabel()),
-                                        formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn(),
-                                        required));
+                                        formFieldDef.getFieldName(), editor, null, null, null, null,
+                                        formFieldDef.getColumn(), required));
                             }
                         }
                     }
@@ -4161,13 +4165,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             Reader reader = new BufferedReader(uploadFile);
             CSVFormat csvFormat = CSVFormat.RFC4180.builder()
                     .setHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
-                    .setIgnoreHeaderCase(true)
-                    .setIgnoreEmptyLines(true)
-                    .setSkipHeaderRecord(withHeaderFlag)
-                    .setTrim(true)
-                    .setIgnoreSurroundingSpaces(true)
-                    .setNullString("")
-                    .build();
+                    .setIgnoreHeaderCase(true).setIgnoreEmptyLines(true).setSkipHeaderRecord(withHeaderFlag)
+                    .setTrim(true).setIgnoreSurroundingSpaces(true).setNullString("").build();
 
             csvFileParser = new CSVParser(reader, csvFormat);
             Map<String, RecLoadInfo> recMap = new LinkedHashMap<String, RecLoadInfo>();
@@ -4606,6 +4605,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         } finally {
             removeSessionAttribute(FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
         }
+    }
+
+    private String getParentFieldName(final EntityDef parentEntityDef, final String childFieldName)
+            throws UnifyException {
+        EntityDef _childEntityDef = getEntityDef(
+                getRefDef(parentEntityDef.getFieldDef(childFieldName).getReferences()).getEntity());
+        return _childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName();
     }
 
     private List<AppletDef> getImportDataAppletDefs(String appletFilter) throws UnifyException {
