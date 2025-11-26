@@ -41,8 +41,10 @@ public class PortalApplet {
 
     private String table;
 
+    private boolean primary;
+    
     public PortalApplet(String type, String name, String description, String label, String entity, String icon, String createForm,
-            String maintainForm, String table) {
+            String maintainForm, String table, boolean primary) {
         this.type = type;
         this.name = name;
         this.description = description;
@@ -52,6 +54,7 @@ public class PortalApplet {
         this.createForm = createForm;
         this.maintainForm = maintainForm;
         this.table = table;
+        this.primary = primary;
     }
 
     public String getType() {
@@ -88,6 +91,10 @@ public class PortalApplet {
 
     public String getTable() {
         return table;
+    }
+
+    public boolean isPrimary() {
+        return primary;
     }
 
 }
