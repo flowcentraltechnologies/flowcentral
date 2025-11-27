@@ -535,7 +535,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void publishWorkflow(TaskMonitor taskMonitor, Long workflowId) throws UnifyException {
         final Workflow workflow = environment()
-                .find(new WorkflowQuery().id(workflowId).addSelect("applicationName", "name"));
+                .list(new WorkflowQuery().id(workflowId).addSelect("applicationName", "name"));
         publishWorkflow(taskMonitor,
                 ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(), workflow.getName()));
     }
