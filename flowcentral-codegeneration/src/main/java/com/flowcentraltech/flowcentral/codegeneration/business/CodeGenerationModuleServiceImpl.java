@@ -158,7 +158,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
                         moduleName, messageReplacements, false);
 
                 // Generate applications
@@ -260,7 +260,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
                         moduleName, messageReplacements, true);
 
                 // Generate applications
@@ -329,7 +329,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             moduleList.removeAll(EXCLUDED_UTILITIES_MODULES);
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for utilities module [{0}]", moduleName);
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
                         moduleName, Collections.emptyMap(), false);
 
                 // Generate applications

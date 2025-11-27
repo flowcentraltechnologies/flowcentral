@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.zip.ZipOutputStream;
 
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardsConfig;
@@ -44,6 +45,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfValuesSetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardStepConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
@@ -75,17 +77,32 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
     private static final String WORKFLOW_FOLDER = "apps/workflow/";
 
     @Configurable
+    private SystemModuleService systemModuleService;
+
+    @Configurable
     private WorkflowModuleService workflowModuleService;
-    
+
     public WorkflowsXmlGenerator() {
-        super(WORKFLOW_FOLDER); 
+        super(WORKFLOW_FOLDER);
     }
 
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {
-        // Workflows
-        List<Long> workflowIdList = workflowModuleService.findCustomWorkflowIdList(applicationName);
+        // Publish unpublished custom workflows
+        if (systemModuleService.getSysParameterValue(boolean.class,
+                CodeGenerationModuleSysParamConstants.PUBLISH_ALL_WORKFLOWS_ON_CODEGEN)) {
+            List<Long> workflowIdList = workflowModuleService
+                    .findUnpublishedNonRunnableCustomWorkflowIdList(applicationName);
+            if (!DataUtils.isBlank(workflowIdList)) {
+                for (Long workflowId : workflowIdList) {
+                    workflowModuleService.publishWorkflow(ctx.getTaskMonitor(), workflowId);
+                }
+            }
+        }
+
+        // Runnable Custom Workflows
+        List<Long> workflowIdList = workflowModuleService.findRunnableCustomWorkflowIdList(applicationName);
         if (!DataUtils.isBlank(workflowIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
             AppWorkflowsConfig workflowsConfig = new AppWorkflowsConfig();
@@ -104,8 +121,8 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.WORKFLOW, labelKey, workflow.getLabel());
 
                 workflowConfig.setName(workflow.getName());
-                workflowConfig.setDescription(ctx.isSnapshotMode() ? workflow.getDescription() :"$m{" + descKey + "}");
-                workflowConfig.setLabel(ctx.isSnapshotMode() ? workflow.getLabel() :"$m{" + labelKey + "}");
+                workflowConfig.setDescription(ctx.isSnapshotMode() ? workflow.getDescription() : "$m{" + descKey + "}");
+                workflowConfig.setLabel(ctx.isSnapshotMode() ? workflow.getLabel() : "$m{" + labelKey + "}");
                 workflowConfig.setLoadingTable(workflow.getLoadingTable());
                 workflowConfig.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
                 workflowConfig.setPublished(workflow.isPublished());
@@ -122,12 +139,13 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         descKey = getDescriptionKey(workflowDescKey, "workflowfilter", workflowFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.WORKFLOW, descKey, workflowFilter.getDescription());
                         filterConfig.setName(workflowFilter.getName());
-                        filterConfig.setDescription(ctx.isSnapshotMode() ? workflowFilter.getDescription() :"$m{" + descKey + "}");
+                        filterConfig.setDescription(
+                                ctx.isSnapshotMode() ? workflowFilter.getDescription() : "$m{" + descKey + "}");
                         filterList.add(filterConfig);
                     }
 
                     workflowConfig.setFilters(new WfFiltersConfig(filterList));
-                 }
+                }
 
                 // Set values
                 if (!DataUtils.isBlank(workflow.getSetValuesList())) {
@@ -135,12 +153,14 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                     for (WorkflowSetValues workflowSetValues : workflow.getSetValuesList()) {
                         WfSetValuesConfig wfSetValuesConfig = new WfSetValuesConfig();
                         wfSetValuesConfig.setName(workflowSetValues.getName());
-                        descKey = getDescriptionKey(workflowDescKey, "workflowsetvalues", workflowSetValues.getDescription());
+                        descKey = getDescriptionKey(workflowDescKey, "workflowsetvalues",
+                                workflowSetValues.getDescription());
                         ctx.addMessage(StaticMessageCategoryType.WORKFLOW, descKey, workflowSetValues.getDescription());
-                        wfSetValuesConfig.setDescription(ctx.isSnapshotMode() ? workflowSetValues.getDescription() :"$m{" + descKey + "}");
+                        wfSetValuesConfig.setDescription(
+                                ctx.isSnapshotMode() ? workflowSetValues.getDescription() : "$m{" + descKey + "}");
                         wfSetValuesConfig.setType(workflowSetValues.getType());
-                        wfSetValuesConfig
-                                .setOnCondition(InputWidgetUtils.getFilterConfig(au(), workflowSetValues.getOnCondition()));
+                        wfSetValuesConfig.setOnCondition(
+                                InputWidgetUtils.getFilterConfig(au(), workflowSetValues.getOnCondition()));
                         wfSetValuesConfig.setValueGenerator(workflowSetValues.getValueGenerator());
                         wfSetValuesConfig.setSetValues(InputWidgetUtils.getSetValuesConfig(
                                 workflowSetValues.getValueGenerator(), workflowSetValues.getSetValues()));
@@ -166,8 +186,9 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         wfStepConfig.setPriority(wfStep.getPriority());
                         wfStepConfig.setActionType(wfStep.getRecordActionType());
                         wfStepConfig.setName(wfStep.getName());
-                        wfStepConfig.setDescription(ctx.isSnapshotMode() ? wfStep.getDescription() :"$m{" + descKey + "}");
-                        wfStepConfig.setLabel(ctx.isSnapshotMode() ? wfStep.getLabel() :"$m{" + labelKey + "}");
+                        wfStepConfig
+                                .setDescription(ctx.isSnapshotMode() ? wfStep.getDescription() : "$m{" + descKey + "}");
+                        wfStepConfig.setLabel(ctx.isSnapshotMode() ? wfStep.getLabel() : "$m{" + labelKey + "}");
                         wfStepConfig.setAppletName(wfStep.getAppletName());
                         wfStepConfig.setDesignX(wfStep.getDesignX());
                         wfStepConfig.setDesignY(wfStep.getDesignY());
@@ -198,8 +219,8 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
 
                         // Set values
                         if (wfStep.getSetValues() != null) {
-                            SetValuesConfig setValuesConfig = InputWidgetUtils
-                                    .getSetValuesConfig(wfStep.getValueGenerator(), wfStep.getSetValues().getSetValues());
+                            SetValuesConfig setValuesConfig = InputWidgetUtils.getSetValuesConfig(
+                                    wfStep.getValueGenerator(), wfStep.getSetValues().getSetValues());
                             wfStepConfig.setSetValuesConfig(setValuesConfig);
                         }
 
@@ -214,7 +235,8 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                                         wfStepRouting.getDescription());
 
                                 wfRoutingConfig.setName(wfStepRouting.getName());
-                                wfRoutingConfig.setDescription(ctx.isSnapshotMode() ? wfStepRouting.getDescription() :"$m{" + descKey + "}");
+                                wfRoutingConfig.setDescription(
+                                        ctx.isSnapshotMode() ? wfStepRouting.getDescription() : "$m{" + descKey + "}");
                                 wfRoutingConfig.setCondition(wfStepRouting.getConditionName());
                                 wfRoutingConfig.setNextStepName(wfStepRouting.getNextStepName());
                                 wfRoutingConfigList.add(wfRoutingConfig);
@@ -240,8 +262,11 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                                 wfUserActionConfig.setCommentRequirement(wfStepUserAction.getCommentRequirement());
                                 wfUserActionConfig.setHighlightType(wfStepUserAction.getHighlightType());
                                 wfUserActionConfig.setName(wfStepUserAction.getName());
-                                wfUserActionConfig.setDescription(ctx.isSnapshotMode() ? wfStepUserAction.getDescription() :"$m{" + descKey + "}");
-                                wfUserActionConfig.setLabel(ctx.isSnapshotMode() ? wfStepUserAction.getLabel() :"$m{" + labelKey + "}");
+                                wfUserActionConfig
+                                        .setDescription(ctx.isSnapshotMode() ? wfStepUserAction.getDescription()
+                                                : "$m{" + descKey + "}");
+                                wfUserActionConfig.setLabel(
+                                        ctx.isSnapshotMode() ? wfStepUserAction.getLabel() : "$m{" + labelKey + "}");
                                 wfUserActionConfig.setNextStepName(wfStepUserAction.getNextStepName());
                                 wfUserActionConfig.setSetValuesName(wfStepUserAction.getSetValuesName());
                                 wfUserActionConfig.setAppletSetValuesName(wfStepUserAction.getAppletSetValuesName());
@@ -269,7 +294,8 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
 
                                 wfAlertConfig.setType(wfStepAlert.getType());
                                 wfAlertConfig.setName(wfStepAlert.getName());
-                                wfAlertConfig.setDescription(ctx.isSnapshotMode() ? wfStepAlert.getDescription() :"$m{" + descKey + "}");
+                                wfAlertConfig.setDescription(
+                                        ctx.isSnapshotMode() ? wfStepAlert.getDescription() : "$m{" + descKey + "}");
                                 wfAlertConfig.setRecipientPolicy(wfStepAlert.getRecipientPolicy());
                                 wfAlertConfig.setRecipientNameRule(wfStepAlert.getRecipientNameRule());
                                 wfAlertConfig.setRecipientContactRule(wfStepAlert.getRecipientContactRule());
@@ -323,8 +349,9 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.WORKFLOW, labelKey, wfChannel.getLabel());
 
                 wfChannelConfig.setName(wfChannel.getName());
-                wfChannelConfig.setDescription(ctx.isSnapshotMode() ? wfChannel.getDescription() :"$m{" + descKey + "}");
-                wfChannelConfig.setLabel(ctx.isSnapshotMode() ? wfChannel.getLabel() :"$m{" + labelKey + "}");
+                wfChannelConfig
+                        .setDescription(ctx.isSnapshotMode() ? wfChannel.getDescription() : "$m{" + descKey + "}");
+                wfChannelConfig.setLabel(ctx.isSnapshotMode() ? wfChannel.getLabel() : "$m{" + labelKey + "}");
                 wfChannelConfig.setEntity(wfChannel.getEntity());
                 wfChannelConfig.setDestination(wfChannel.getDestination());
                 wfChannelConfig.setRule(wfChannel.getRule());
@@ -359,8 +386,8 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.WORKFLOW, labelKey, wfWizard.getLabel());
 
                 wfWizardConfig.setName(wfWizard.getName());
-                wfWizardConfig.setDescription(ctx.isSnapshotMode() ? wfWizard.getDescription() :"$m{" + descKey + "}");
-                wfWizardConfig.setLabel(ctx.isSnapshotMode() ? wfWizard.getLabel() :"$m{" + labelKey + "}");
+                wfWizardConfig.setDescription(ctx.isSnapshotMode() ? wfWizard.getDescription() : "$m{" + descKey + "}");
+                wfWizardConfig.setLabel(ctx.isSnapshotMode() ? wfWizard.getLabel() : "$m{" + labelKey + "}");
                 wfWizardConfig.setEntity(wfWizard.getEntity());
                 wfWizardConfig.setSubmitWorkflow(wfWizard.getSubmitWorkflow());
                 wfWizardConfig.setClassified(wfWizard.isClassified());
@@ -376,8 +403,10 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         ctx.addMessage(StaticMessageCategoryType.WORKFLOW, labelKey, wfWizardStep.getLabel());
 
                         wfWizardStepConfig.setName(wfWizardStep.getName());
-                        wfWizardStepConfig.setDescription(ctx.isSnapshotMode() ? wfWizardStep.getDescription() :"$m{" + descKey + "}");
-                        wfWizardStepConfig.setLabel(ctx.isSnapshotMode() ? wfWizardStep.getLabel() :"$m{" + labelKey + "}");
+                        wfWizardStepConfig.setDescription(
+                                ctx.isSnapshotMode() ? wfWizardStep.getDescription() : "$m{" + descKey + "}");
+                        wfWizardStepConfig
+                                .setLabel(ctx.isSnapshotMode() ? wfWizardStep.getLabel() : "$m{" + labelKey + "}");
                         wfWizardStepConfig.setForm(wfWizardStep.getForm());
                         wfWizardStepConfig.setReference(wfWizardStep.getReference());
                         stepList.add(wfWizardStepConfig);
