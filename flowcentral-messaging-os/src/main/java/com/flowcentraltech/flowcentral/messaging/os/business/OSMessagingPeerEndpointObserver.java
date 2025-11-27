@@ -31,6 +31,8 @@ public interface OSMessagingPeerEndpointObserver extends  UnifyComponent {
      * 
      * @param appId
      *                     the endpoint app ID
+     * @param shortName
+     *                     the peer short name
      * @param endpointUrl
      *                     the endpoint URL
      * @param peerPassword
@@ -38,6 +40,6 @@ public interface OSMessagingPeerEndpointObserver extends  UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void observerUpdate(String appId, String endpointUrl, String peerPassword) throws UnifyException;
+    void observerUpdate(String appId, String shortName, String endpointUrl, String peerPassword) throws UnifyException;
 
 }
