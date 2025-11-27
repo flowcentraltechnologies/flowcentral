@@ -33,11 +33,14 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @since 1.0
  */
 @Table(name = "FC_OSMESSAGINGPROCLOG", indexes = {
-        @Index({ "source" }), @Index({ "processor" })})
+        @Index({ "source" }), @Index({ "processor" }), @Index({ "correlationId" })})
 public class OSMessagingProcessingLog extends BaseEntity {
 
     @ForeignKey
     private OSMessagingMode mode;
+
+    @Column(name = "CORRELATION_ID", length = 32, nullable = true)
+    private String correlationId;
 
     @Column(length = 32)
     private String source;
@@ -60,9 +63,10 @@ public class OSMessagingProcessingLog extends BaseEntity {
     @ListOnly(key = "mode", property = "description")
     private String modeDesc;
 
-    public OSMessagingProcessingLog(OSMessagingMode mode, String source, String processor, String summary,
+    public OSMessagingProcessingLog(OSMessagingMode mode, String correlationId, String source, String processor, String summary,
             String responseCode, String responseMsg, Date createDate) {
         this.mode = mode;
+        this.correlationId = correlationId;
         this.source = source;
         this.processor = processor;
         this.summary = summary;
@@ -86,6 +90,14 @@ public class OSMessagingProcessingLog extends BaseEntity {
 
     public void setMode(OSMessagingMode mode) {
         this.mode = mode;
+    }
+
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
     }
 
     public String getSource() {

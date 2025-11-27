@@ -122,6 +122,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * 
      * @param mode
      *                     the messaging mode
+     * @param correlationdId the correlation 
      * @param source
      *                     the source
      * @param processor
@@ -135,6 +136,6 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void logProcessing(OSMessagingMode mode, String source, String processor, String summary, String responseCode,
-            String responseMsg) throws UnifyException;
+    void logProcessing(OSMessagingMode mode, String correlationdId, String source, String processor, String summary,
+            String responseCode, String responseMsg) throws UnifyException;
 }

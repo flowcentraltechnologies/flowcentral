@@ -30,12 +30,16 @@ import com.tcdng.unify.core.annotation.Policy;
 @Policy("osmessagingpeerendpointpolicy")
 @Table(name = "FC_OSMESSAGINGPEERENDPOINT", uniqueConstraints = {
         @UniqueConstraint({ "appId" }),
+        @UniqueConstraint({ "shortName" }),
         @UniqueConstraint({ "name" }),
         @UniqueConstraint({ "description" }) })
 public class OSMessagingPeerEndpoint extends BaseStatusEntity {
 
     @Column(name = "ENDPOINT_APP_ID", length = 32)
     private String appId;
+
+    @Column(name = "SHORT_NM", length = 3, nullable = true)
+    private String shortName;
 
     @Column(name = "ENDPOINT_NM", length = 64)
     private String name;
@@ -60,6 +64,14 @@ public class OSMessagingPeerEndpoint extends BaseStatusEntity {
 
     public void setAppId(String appId) {
         this.appId = appId;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getName() {
