@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
@@ -44,6 +45,17 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     OSInfo getOSInfo() throws UnifyException;
+    
+    /**
+     * Gets a peer end-point short name.
+     * 
+     * @param appId
+     *              the end-point app ID
+     * @return optional short name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> getPeerEndpointShortName(String appId) throws UnifyException;
     
     /**
      * Finds OS messaging endpoints.

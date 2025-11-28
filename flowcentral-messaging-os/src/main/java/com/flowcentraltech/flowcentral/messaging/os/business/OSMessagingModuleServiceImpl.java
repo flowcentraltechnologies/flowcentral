@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
@@ -173,6 +174,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public OSInfo getOSInfo() throws UnifyException {
         return osInfo;
+    }
+
+    @Override
+    public Optional<String> getPeerEndpointShortName(String appId) throws UnifyException {
+        return environment().valueOptional(String.class, "shortName", new OSMessagingPeerEndpointQuery().appId(appId));
     }
 
     @Override
