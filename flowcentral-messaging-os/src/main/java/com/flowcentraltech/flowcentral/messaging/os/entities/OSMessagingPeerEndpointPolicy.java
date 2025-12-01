@@ -50,7 +50,8 @@ public class OSMessagingPeerEndpointPolicy extends BaseStatusEntityPolicy {
 
     private void observe(OSMessagingPeerEndpoint peerEndpoint) throws UnifyException {
         if (observer != null) {
-            observer.observerUpdate(peerEndpoint.getAppId(), peerEndpoint.getEndpointUrl(), peerEndpoint.getPeerPassword());
+            observer.observerUpdate(peerEndpoint.getAppId(), peerEndpoint.getShortName(), peerEndpoint.getEndpointUrl(),
+                    peerEndpoint.getPeerPassword());
         }
     }
 }

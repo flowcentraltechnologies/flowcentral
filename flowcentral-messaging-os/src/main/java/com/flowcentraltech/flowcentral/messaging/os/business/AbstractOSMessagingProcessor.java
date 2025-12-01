@@ -93,7 +93,7 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
             resp.setResponseMessage(error.getErrorMessage());
         }
 
-        osMessagingModuleService.logProcessing(messagingMode,
+        osMessagingModuleService.logProcessing(messagingMode, request.getCorrelationId(),
                 !StringUtils.isBlank(request.getOriginSource()) ? request.getOriginSource() : request.getSource(),
                 request.getProcessor(), resolveApplicationMessage(summary, getSummaryParameters(request)),
                 resp.getResponseCode(), resp.getResponseMessage());

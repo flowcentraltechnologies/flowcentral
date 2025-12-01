@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
@@ -114,7 +115,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                             .find(new OSMessagingPeerEndpointQuery().appId(target));
                     return osPeerEndpoint == null ? OSMessagingPeerEndpointDef.BLANK
                             : new OSMessagingPeerEndpointDef(osPeerEndpoint.getId(), osPeerEndpoint.getAppId(),
-                                    osPeerEndpoint.getName(), osPeerEndpoint.getDescription(),
+                                    osPeerEndpoint.getShortName(), osPeerEndpoint.getName(), osPeerEndpoint.getDescription(),
                                     osPeerEndpoint.getEndpointUrl(), osPeerEndpoint.getPeerPassword(),
                                     osPeerEndpoint.getStatus(), osPeerEndpoint.getVersionNo(), source);
                 }
@@ -176,6 +177,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public Optional<String> getPeerEndpointShortName(String appId) throws UnifyException {
+        return environment().valueOptional(String.class, "shortName", new OSMessagingPeerEndpointQuery().appId(appId));
+    }
+
+    @Override
     public List<OSMessagingPeerEndpoint> findOSMessagingEndpoints(OSMessagingPeerEndpointQuery query)
             throws UnifyException {
         return environment().findAll(query);
@@ -187,10 +193,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public void logProcessing(OSMessagingMode mode, String source, String processor, String summary,
-            String responseCode, String responseMsg) throws UnifyException {
-        final OSMessagingProcessingLog log = new OSMessagingProcessingLog(mode, source, processor, summary,
-                responseCode, responseMsg, getNow());
+    public void logProcessing(OSMessagingMode mode, String correlationdId, String source, String processor,
+            String summary, String responseCode, String responseMsg) throws UnifyException {
+        final OSMessagingProcessingLog log = new OSMessagingProcessingLog(mode, correlationdId, source, processor,
+                summary, responseCode, responseMsg, getNow());
         environment().create(log);
     }
 

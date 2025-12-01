@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelsConfig;
+import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
  * Extension module static file builder context.
@@ -61,9 +62,12 @@ public class ExtensionModuleStaticFileBuilderContext {
     private DynamicModuleInfo dynamicModuleInfo;
 
     private boolean snapshotMode;
+
+    private TaskMonitor taskMonitor;
     
-    public ExtensionModuleStaticFileBuilderContext(ExtensionStaticFileBuilderContext mainCtx, String moduleName,
-            Map<String, String> messageReplacements, boolean snapshotMode) {
+    public ExtensionModuleStaticFileBuilderContext(TaskMonitor taskMonitor, ExtensionStaticFileBuilderContext mainCtx,
+            String moduleName, Map<String, String> messageReplacements, boolean snapshotMode) {
+        this.taskMonitor = taskMonitor;
         this.applicationConfigs = new ArrayList<ApplicationConfig>();
         this.moduleAppsConfig = new ModuleAppsConfig();
         this.moduleAppsConfig.setModuleAppList(new ArrayList<ModuleAppConfig>());
@@ -72,6 +76,10 @@ public class ExtensionModuleStaticFileBuilderContext {
         this.moduleName = moduleName;
         this.messageReplacements = messageReplacements;
         this.snapshotMode = snapshotMode;
+    }
+
+    public TaskMonitor getTaskMonitor() {
+        return taskMonitor;
     }
 
     public String getBasePackage() {

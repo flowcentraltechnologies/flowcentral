@@ -60,5 +60,8 @@
 		<sysParameter code="CDN-0014" defaultVal="true"
 			description="$m{codegeneration.sysparam.enablesnapshotslocalfolder}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
+		<sysParameter code="CDN-0015" defaultVal="true"
+			description="$m{codegeneration.sysparam.publishallworkflowoncodegen}"
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 	</sysParameters>
 </module>

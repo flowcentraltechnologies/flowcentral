@@ -51,4 +51,6 @@ public interface CodeGenerationModuleSysParamConstants {
 
     String ENABLE_SNAPSHOT_TO_LOCAL_WORKING_FOLDER = "CDN-0014";
 
+    String PUBLISH_ALL_WORKFLOWS_ON_CODEGEN = "CDN-0015";
+
 }

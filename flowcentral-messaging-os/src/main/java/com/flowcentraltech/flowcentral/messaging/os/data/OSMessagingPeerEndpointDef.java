@@ -37,6 +37,8 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     private String appId;
 
+    private String shortName;
+
     private String name;
 
     private String description;
@@ -53,10 +55,11 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     private Map<String, String> authentications;
 
-    public OSMessagingPeerEndpointDef(Long id, String appId, String name, String description, String endpointUrl,
+    public OSMessagingPeerEndpointDef(Long id, String appId, String shortName, String name, String description, String endpointUrl,
             String peerPassword, RecordStatus status, long versionNo, String sourceAppId) {
         this.id = id;
         this.appId = appId;
+        this.shortName = shortName;
         this.name = name;
         this.description = description;
         this.endpointUrl = endpointUrl + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
@@ -83,6 +86,10 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     public String getAppId() {
         return appId;
+    }
+
+    public String getShortName() {
+        return shortName;
     }
 
     public String getName() {

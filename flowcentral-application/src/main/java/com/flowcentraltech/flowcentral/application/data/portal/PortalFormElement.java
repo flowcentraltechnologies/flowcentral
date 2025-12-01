@@ -37,12 +37,16 @@ public class PortalFormElement {
 
     private String columnType;
 
+    private String childApplet;
+
+    private String parentFieldName;
+
     private int fieldColumn;
 
     private boolean required;
 
     public PortalFormElement(String type, String color, String label, String name, String editor, String contentType,
-            String columnType, int fieldColumn, boolean required) {
+            String columnType, String childApplet, String parentFieldName, int fieldColumn, boolean required) {
         this.type = type;
         this.color = color;
         this.label = label;
@@ -50,6 +54,8 @@ public class PortalFormElement {
         this.editor = editor;
         this.contentType = contentType;
         this.columnType = columnType;
+        this.childApplet = childApplet;
+        this.parentFieldName = parentFieldName;
         this.fieldColumn = fieldColumn;
         this.required = required;
     }
@@ -80,6 +86,14 @@ public class PortalFormElement {
 
     public String getColumnType() {
         return columnType;
+    }
+
+    public String getChildApplet() {
+        return childApplet;
+    }
+
+    public String getParentFieldName() {
+        return parentFieldName;
     }
 
     public int getFieldColumn() {
