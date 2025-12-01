@@ -41,7 +41,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 @UplBinding("web/application/upl/recordcapturepage.upl")
     @ResultMappings({ @ResultMapping(name = "refreshCapture",
-        response = { "!refreshpanelresponse panels:$l{capturePanel footerActionPanel}" }) })
+        response = { "!refreshpanelresponse panels:$l{searchEntriesPanel capturePanel footerActionPanel}" }) })
 public abstract class AbstractRecordCapturePageController<T extends AbstractRecordCapture, U extends AbstractRecordCapturePageBean<T>>
         extends AbstractFlowCentralPageController<U> {
 
