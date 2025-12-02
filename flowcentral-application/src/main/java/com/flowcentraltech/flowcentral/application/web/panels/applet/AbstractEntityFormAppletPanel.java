@@ -904,7 +904,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void maintain() throws UnifyException {
         IndexedTarget target = getIndexedTarget();
-        if (target.isValidValueIndex()) {
+        if (target != null && target.isValidValueIndex()) {
             if (getEntityFormApplet().isPromptEnterWorkflowDraft()
                     && EntitySearchValueMarkerConstants.CHILD_LIST.equals(target.getTarget())) {
                 showPromptWorkflowDraft(WorkflowDraftType.MAINTAIN, target);
@@ -940,7 +940,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void listing() throws UnifyException {
         getRequestContextUtil().setContentScrollReset();
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidValueIndex()) {
+        if (target != null && target.isValidValueIndex()) {
             switch (target.getTarget()) {
                 case EntitySearchValueMarkerConstants.CHILD_LIST:
                     return;
