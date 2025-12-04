@@ -231,12 +231,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 		wrapper.setPlainPassword(loginId.toLowerCase());
 		wrapper.addTORecipient(user.getFullName(), user.getEmail());
 		notificationModuleService.sendNotification(wrapper.getMessage());
-		//
-		int ext = environment().countAll(new UserQuery().loginId(loginId));
-		if (ext == 0) {
-			return (Long) environment().create(user);
-		}
-		return null;
+
+		return (Long) environment().create(user);
 	}
 
 	private String generateLoginId(String fullName) throws UnifyException {
