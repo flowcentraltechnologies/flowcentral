@@ -83,6 +83,7 @@ import com.flowcentraltech.flowcentral.security.entities.UserQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserRole;
 import com.flowcentraltech.flowcentral.security.entities.UserRoleQuery;
 import com.flowcentraltech.flowcentral.security.templatewrappers.UserPasswordResetTemplateWrapper;
+import com.flowcentraltech.flowcentral.security.templatewrappers.UserWelcomeTemplateWrapper;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
@@ -219,6 +220,15 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 			
 			user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
 			user.setStatus(RecordStatus.ACTIVE);
+			
+			// send User Welcome Notification
+			UserWelcomeTemplateWrapper wrapper = notificationModuleService
+					.wrapperOfNotifTemplate(UserWelcomeTemplateWrapper.class);
+			wrapper.setFullName(user.getFullName());
+			wrapper.setLoginId(loginId);
+			wrapper.setPlainPassword(loginId.toLowerCase());
+			wrapper.addTORecipient(user.getFullName(), user.getEmail());
+			notificationModuleService.sendNotification(wrapper.getMessage());
 			
 			return (Long) environment().create(user);
 	}
