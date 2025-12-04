@@ -46,6 +46,7 @@ public class AssignmentPageWidget extends AbstractFlowCentralMultiControl {
         if (oldAssignmentPageDef != assignmentPageDef) {
             StringBuilder dsb = new StringBuilder();
             dsb.append("!ui-assignmentbox binding:assignedIdList baseIdBinding:baseId");
+            boolean search = assignmentPageDef.isSearch();
             if (assignmentPageDef.isWithFilterCaption1()) {
                 dsb.append(" filterCaption1:$s{").append(assignmentPageDef.getFilterCaption1()).append("}");
             }
@@ -69,10 +70,12 @@ public class AssignmentPageWidget extends AbstractFlowCentralMultiControl {
             dsb.append(" listRule:$s{").append(assignmentPageDef.getEntity()).append(':')
                     .append(assignmentPageDef.getBaseField()).append(':').append(assignmentPageDef.getAssignField());
             String descFieldName = null;
+            String searchFieldName = null;
             final int asnIndex = assignmentPageDef.getLongName().indexOf("_Asn");
             if (asnIndex > 0) {
                 final String appletName = assignmentPageDef.getLongName().substring(0, asnIndex);
                 AppletDef appletDef = applicationModuleService.getAppletDef(appletName);
+                searchFieldName = appletDef.getAssignSearch();
                 if (appletDef.isWithAssignDescField()) {
                     descFieldName = appletDef.getAssignDescField();
                 }
@@ -80,8 +83,14 @@ public class AssignmentPageWidget extends AbstractFlowCentralMultiControl {
                 descFieldName = assignmentPageDef.getRuleDescField();
             }
 
+            dsb.append(':');
+            if (searchFieldName != null) {
+                dsb.append(searchFieldName);
+                search = true; 
+            }
+            
             if (descFieldName != null) {
-                dsb.append(':').append(descFieldName);
+                dsb.append('/').append(descFieldName);
             }
             
             dsb.append("}");
@@ -90,6 +99,8 @@ public class AssignmentPageWidget extends AbstractFlowCentralMultiControl {
                 dsb.append(" assignListDesc:$s{").append(descFieldName).append("}");
                 dsb.append(" unassignListDesc:$s{").append(descFieldName).append("}");
             }
+
+            dsb.append(" search:").append(search);
 
             assignmentBoxCtrl = (Control) addInternalChildWidget(dsb.toString());
             oldAssignmentPageDef = assignmentPageDef;

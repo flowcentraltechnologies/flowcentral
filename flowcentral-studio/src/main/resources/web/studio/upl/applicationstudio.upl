@@ -60,7 +60,6 @@
 	style:$s{margin-right:14px;}
     eventHandler:$d{!ui-event event:onclick action:$c{newAppAct}}
     
-
 !ui-panel:navigationBand styleClass:$e{fc-topnavcontrol} components:$c{logoutLabel}
 !ui-button:logoutLabel caption:$m{application.logout} styleClass:$e{fc-logout}
     eventHandler:$d{!ui-event event:onclick action:$c{logoutAct}} debounce:false
@@ -71,7 +70,8 @@
 
 // Content
 !ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed}
-	paths:$s{/applicationstudio/dashboard/openPage} stickyPaths:true
+	paths:$s{/applicationstudio/dashboard/openPage}
+	stickyPaths:$s{/applicationstudio/dashboard/openPage}
 	tabbed:true documentPath:$s{/applicationstudio}
 	titleUppercase:false  
 

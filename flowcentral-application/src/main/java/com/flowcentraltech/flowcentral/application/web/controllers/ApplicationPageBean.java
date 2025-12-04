@@ -29,6 +29,8 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
     private LoginUserPhotoGenerator userPhotoGenerator;
 
     private String[] applicationPaths;
+
+    private String[] stickyPaths;
     
     private String workspaceCode;
     
@@ -37,8 +39,6 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
     private String topBannerImage;
     
     private String contentStyleClass;
-    
-    private boolean enableStickyPaths;
     
     private boolean enableMultipleTabs;
     
@@ -60,6 +60,14 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     public void setApplicationPaths(String[] applicationPaths) {
         this.applicationPaths = applicationPaths;
+    }
+
+    public String[] getStickyPaths() {
+        return stickyPaths;
+    }
+
+    public void setStickyPaths(String[] stickyPaths) {
+        this.stickyPaths = stickyPaths;
     }
 
     public String getWorkspaceCode() {
@@ -92,14 +100,6 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     public void setContentStyleClass(String contentStyleClass) {
         this.contentStyleClass = contentStyleClass;
-    }
-
-    public boolean isEnableStickyPaths() {
-        return enableStickyPaths;
-    }
-
-    public void setEnableStickyPaths(boolean enableStickyPaths) {
-        this.enableStickyPaths = enableStickyPaths;
     }
 
     public boolean isEnableMultipleTabs() {

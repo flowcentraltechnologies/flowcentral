@@ -64,6 +64,8 @@ import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldUploadDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldUploadDef.ListProp;
 import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -448,8 +450,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final AppletType type = appApplet.getType();
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
-                            appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isPortalAccess(),
-                            appApplet.isMenuAccess(), appApplet.isSupportOpenInNewWindow(),
+                            appApplet.getAssignSearch(), appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(),
+                            appApplet.isPortalAccess(), appApplet.isMenuAccess(), appApplet.isSupportOpenInNewWindow(),
                             appApplet.isSupportRemoteAccess(), appApplet.isAllowSecondaryTenants(), descriptiveButtons,
                             _actLongName, appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
 
@@ -1329,9 +1331,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appAssignmentPage.getBaseField(), appAssignmentPage.getAssignField(),
                             appAssignmentPage.getFilterCaption1(), appAssignmentPage.getFilterCaption2(),
                             appAssignmentPage.getFilterList1(), appAssignmentPage.getFilterList2(),
-                            appAssignmentPage.getAssignCaption(), appAssignmentPage.getUnassignCaption(),
-                            appAssignmentPage.getAssignList(), appAssignmentPage.getUnassignList(),
-                            appAssignmentPage.getRuleDescField());
+                            Boolean.TRUE.equals(appAssignmentPage.getSearch()), appAssignmentPage.getAssignCaption(),
+                            appAssignmentPage.getUnassignCaption(), appAssignmentPage.getAssignList(),
+                            appAssignmentPage.getUnassignList(), appAssignmentPage.getRuleDescField());
                 }
 
             };
@@ -3922,6 +3924,19 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         for (String appletName : environment().valueList(String.class, "name",
                 new AppAppletQuery().portalAccess(true).applicationName(applicationName))) {
             final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
+            extractPortalDependencies(applet, applets, tables, forms, entities);
+        }
+
+        return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
+                applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
+                DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
+                DataUtils.unmodifiableList(entities.values())));
+    }
+
+    private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,
+            Map<String, PortalTable> tables, Map<String, PortalForm> forms, Map<String, PortalEntity> entities)
+            throws UnifyException {
+        if (!applets.containsKey(applet)) {
             final AppletDef appletDef = getAppletDef(applet);
             final String entity = appletDef.getEntity();
             final EntityDef entityDef = getEntityDef(entity);
@@ -3935,7 +3950,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
                                     InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, resolvedEntityFieldDef);
+                    final String editor = InputWidgetUtils.constructLeanEditor(widgetTypeDef, resolvedEntityFieldDef);
                     fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
                             entityFieldDef.getFieldName(), resolveApplicationMessage(entityFieldDef.getFieldLabel()),
                             editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
@@ -3965,32 +3980,42 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final List<String> formList = Arrays.asList(
                     appletDef.getPropDef(AppletPropertyConstants.CREATE_FORM).getValue(),
                     appletDef.getPropDef(AppletPropertyConstants.MAINTAIN_FORM).getValue());
+            final Set<String> childApplets = new HashSet<String>();
             for (String form : formList) {
                 if (form != null && !forms.containsKey(form)) {
                     final FormDef formDef = getFormDef(form);
                     final List<PortalFormElement> elements = new ArrayList<PortalFormElement>();
                     for (FormTabDef formTabDef : formDef.getFormTabDefList()) {
+                        final String parentFieldName = formTabDef.isChildOrChildList()
+                                ? getParentFieldName(formDef.getEntityDef(), formTabDef.getReference())
+                                : null;
                         elements.add(new PortalFormElement(FormElementType.TAB.name(), null, formTabDef.getLabel(),
-                                formTabDef.getName(), null, formTabDef.getContentType().name(), null, 0, false));
+                                formTabDef.getName(), null, formTabDef.getContentType().name(), null,
+                                formTabDef.getApplet(), parentFieldName, 0, false));
+                        if (!StringUtils.isBlank(formTabDef.getApplet())) {
+                            childApplets.add(formTabDef.getApplet());
+                        }
+
                         for (FormSectionDef formSectionDef : formTabDef.getFormSectionDefList()) {
                             elements.add(new PortalFormElement(FormElementType.SECTION.name(), null,
                                     formSectionDef.getLabel(), formSectionDef.getName(), null, null,
-                                    formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null, 0,
-                                    false));
+                                    formSectionDef.getColumns() != null ? formSectionDef.getColumns().name() : null,
+                                    null, null, 0, false));
                             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
                                 final WidgetTypeDef widgetTypeDef = formFieldDef.getWidgetName() != null
                                         ? getWidgetTypeDef(formFieldDef.getWidgetName())
                                         : null;
                                 final EntityFieldDef entityFieldDef = entityDef
                                         .getFieldDef(formFieldDef.getFieldName());
-                                final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef);
+                                final String editor = InputWidgetUtils.constructLeanEditor(widgetTypeDef,
+                                        entityFieldDef);
                                 final boolean required = !entityFieldDef.isNullable() || formFieldDef.isRequired();
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
                                         resolveApplicationMessage(StringUtils.isBlank(formFieldDef.getFieldLabel())
                                                 ? entityDef.getFieldDef(formFieldDef.getFieldName()).getFieldLabel()
                                                 : formFieldDef.getFieldLabel()),
-                                        formFieldDef.getFieldName(), editor, null, null, formFieldDef.getColumn(),
-                                        required));
+                                        formFieldDef.getFieldName(), editor, null, null, null, null,
+                                        formFieldDef.getColumn(), required));
                             }
                         }
                     }
@@ -4003,13 +4028,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             applets.put(applet,
                     new PortalApplet(appletDef.getType().name(), appletDef.getName(), appletDef.getDescription(),
                             resolveApplicationMessage(appletDef.getLabel()), entity, appletDef.getIcon(),
-                            formList.get(0), formList.get(1), table));
-        }
+                            formList.get(0), formList.get(1), table, appletDef.isPortalAccess()));
 
-        return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
-                applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
-                DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
-                DataUtils.unmodifiableList(entities.values())));
+            for (String capplet : childApplets) {
+                extractPortalDependencies(capplet, applets, tables, forms, entities);
+            }
+        }
     }
 
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
@@ -4140,7 +4164,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 new InputStreamReader(new ByteArrayInputStream(uploadFile)), withHeaderFlag);
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
+    @SuppressWarnings({ "unchecked" })
     @Override
     public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, Reader uploadFile,
             boolean withHeaderFlag) throws UnifyException {
@@ -4152,36 +4176,61 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         try {
             final EntityClassDef entityClassDef = getEntityClassDef(entity);
             final EntityDef entityDef = entityClassDef.getEntityDef();
-            EntityUploadDef entityUploadDef = entityClassDef.getEntityDef().getUploadDef(uploadConfig);
-            List<FieldSequenceEntryDef> fieldSequenceList = entityUploadDef.getFieldSequenceDef()
-                    .getFieldSequenceList();
-            Entity inst = entityClassDef.newInst();
+            final EntityUploadDef entityUploadDef = entityClassDef.getEntityDef().getUploadDef(uploadConfig);
+            final List<EntityFieldUploadDef> entityFieldUploadDefList = entityUploadDef
+                    .getFieldUploadDefList(appletUtilities, entityDef);
+            final Entity inst = entityClassDef.newInst();
             Reader reader = new BufferedReader(uploadFile);
-            CSVFormat csvFormat = CSVFormat.RFC4180
-                    .withHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
-                    .withIgnoreHeaderCase().withIgnoreEmptyLines().withTrim().withIgnoreSurroundingSpaces()
-                    .withNullString("");
-            if (withHeaderFlag) {
-                csvFormat = csvFormat.withSkipHeaderRecord();
-            }
+            CSVFormat csvFormat = CSVFormat.RFC4180.builder()
+                    .setHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
+                    .setIgnoreHeaderCase(true).setIgnoreEmptyLines(true).setSkipHeaderRecord(withHeaderFlag)
+                    .setTrim(true).setIgnoreSurroundingSpaces(true).setNullString("").build();
 
             csvFileParser = new CSVParser(reader, csvFormat);
             Map<String, RecLoadInfo> recMap = new LinkedHashMap<String, RecLoadInfo>();
             for (CSVRecord csvRecord : csvFileParser) {
                 recMap.clear();
-                for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceList) {
-                    Formatter<?> formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
-                            ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
-                            : null;
-                    String fieldName = fieldSequenceEntryDef.getFieldName();
-                    String listVal = csvRecord.get(fieldName);
-                    RecLoadInfo recLoadInfo = resolveListOnlyRecordLoadInformation(entityDef, fieldName, listVal,
-                            formatter);
-                    if (recLoadInfo != null) {
-                        recMap.put(recLoadInfo.getFieldName(), recLoadInfo);
+                for (EntityFieldUploadDef entityFieldUploadDef : entityFieldUploadDefList) {
+                    final String fieldName = entityFieldUploadDef.getFieldName();
+                    Object val = null;
+                    Formatter<?> formatter = null;
+                    if (entityFieldUploadDef.isResolveKeyValue()) {
+                        if (entityFieldUploadDef.isEnumTypeValue()) {
+                            val = val != null
+                                    ? getListItemByDescription(LocaleType.APPLICATION,
+                                            entityFieldUploadDef.getKeyEntityLongName(), (String) val).getListKey()
+                                    : null;
+                        } else {
+                            final EntityClassDef refEntityClassDef = getEntityClassDef(
+                                    entityFieldUploadDef.getKeyEntityLongName());
+                            Query<?> query = Query.of((Class<? extends Entity>) refEntityClassDef.getEntityClass());
+                            for (ListProp listProp : entityFieldUploadDef.getListProps()) {
+                                final EntityFieldDataType listOnlyDataType = resolveListOnlyFieldDataType(
+                                        refEntityClassDef.getEntityDef(), listProp.getProperty());
+                                final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef
+                                        .getFieldSequenceDef().getFieldSequenceEntryDef(listProp.getFieldName());
+                                formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
+                                        ? appletUtilities.formatHelper()
+                                                .newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
+                                        : null;
+                                Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
+                                        csvRecord.get(listProp.getFieldName()), formatter);
+                                query.addEquals(listProp.getProperty(), cval);
+                            }
+
+                            val = environment().value(Long.class, "id", query);
+                        }
                     } else {
-                        recMap.put(fieldName, new RecLoadInfo(fieldName, listVal, formatter));
+                        final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef.getFieldSequenceDef()
+                                .getFieldSequenceEntryDef(fieldName);
+                        formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
+                                ? appletUtilities.formatHelper()
+                                        .newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
+                                : null;
+                        val = csvRecord.get(fieldName);
                     }
+
+                    recMap.put(fieldName, new RecLoadInfo(fieldName, val, formatter));
                 }
 
                 UniqueConstraintDef uniqueConstriantDef = null;
@@ -4470,6 +4519,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     return new RecLoadInfo(entityFieldDef.getKey(), refId, null);
+                } else {
+                    return RecLoadInfo.NONUNIQUE_LISTONLY_PROPERTY;
                 }
             }
         }
@@ -4572,6 +4623,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         } finally {
             removeSessionAttribute(FlowCentralSessionAttributeConstants.ALTERNATIVE_RESOURCES_BUNDLE);
         }
+    }
+
+    private String getParentFieldName(final EntityDef parentEntityDef, final String childFieldName)
+            throws UnifyException {
+        EntityDef _childEntityDef = getEntityDef(
+                getRefDef(parentEntityDef.getFieldDef(childFieldName).getReferences()).getEntity());
+        return _childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName();
     }
 
     private List<AppletDef> getImportDataAppletDefs(String appletFilter) throws UnifyException {
@@ -4840,6 +4898,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setIcon(appletConfig.getIcon());
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
+                    appApplet.setAssignSearch(appletConfig.getAssignSearch());
                     appApplet.setPortalAccess(appletConfig.getPortalAccess());
                     appApplet.setMenuAccess(appletConfig.getMenuAccess());
                     appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -4866,6 +4925,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppApplet.setIcon(appletConfig.getIcon());
                     oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     oldAppApplet.setPath(appletConfig.getPath());
+                    oldAppApplet.setAssignSearch(appletConfig.getAssignSearch());
                     oldAppApplet.setPortalAccess(appletConfig.getPortalAccess());
                     oldAppApplet.setMenuAccess(appletConfig.getMenuAccess());
                     oldAppApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -5406,6 +5466,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAssignmentPage.setName(appAssignmentPageConfig.getName());
                     appAssignmentPage.setDescription(description);
                     appAssignmentPage.setLabel(label);
+                    appAssignmentPage.setSearch(appAssignmentPageConfig.getSearch());
+
                     if (appAssignmentPageConfig.getFilterCaption1() != null) {
                         appAssignmentPage.setFilterCaption1(
                                 resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));
@@ -5439,6 +5501,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     logDebug("Upgrading application assignment page [{0}]...", appAssignmentPageConfig.getName());
                     oldAppAssignmentPage.setDescription(description);
                     oldAppAssignmentPage.setLabel(label);
+                    oldAppAssignmentPage.setSearch(appAssignmentPageConfig.getSearch());
+
                     if (appAssignmentPageConfig.getFilterCaption1() != null) {
                         oldAppAssignmentPage.setFilterCaption1(
                                 resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));
@@ -5633,6 +5697,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appApplet.setIcon(appletConfig.getIcon());
                 appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                 appApplet.setPath(appletConfig.getPath());
+                appApplet.setAssignSearch(appletConfig.getAssignSearch());
                 appApplet.setPortalAccess(appletConfig.getPortalAccess());
                 appApplet.setMenuAccess(appletConfig.getMenuAccess());
                 appApplet.setSupportOpenInNewWindow(appletConfig.getSupportOpenInNewWindow());
@@ -5959,6 +6024,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appAssignmentPage.setName(appAssignmentPageConfig.getName());
                 appAssignmentPage.setDescription(description);
                 appAssignmentPage.setLabel(label);
+                appAssignmentPage.setSearch(appAssignmentPageConfig.getSearch());
+
                 if (appAssignmentPageConfig.getFilterCaption1() != null) {
                     appAssignmentPage
                             .setFilterCaption1(resolveApplicationMessage(appAssignmentPageConfig.getFilterCaption1()));

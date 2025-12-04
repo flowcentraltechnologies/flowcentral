@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils.DesignType;
 import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
  * Workflow business service.
@@ -58,6 +59,18 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     void publishWorkflow(String workflowName) throws UnifyException;
+
+    /**
+     * Publishes a workflow.
+     * 
+     * @param taskMonitor
+     *                    the task monitor
+     * @param workflowId
+     *                    the workflow ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void publishWorkflow(TaskMonitor taskMonitor, Long workflowId) throws UnifyException;
 
     /**
      * Submit work entity instance to workflow by name.
@@ -167,7 +180,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     Workflow findWorkflow(Long workflowId) throws UnifyException;
 
     /**
-     * Finds workflow ID list for application.
+     * Finds unpublished non-runnable custom workflow ID list for application.
      * 
      * @param applicationName
      *                        the application name
@@ -175,7 +188,18 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Long> findCustomWorkflowIdList(String applicationName) throws UnifyException;
+    List<Long> findUnpublishedNonRunnableCustomWorkflowIdList(String applicationName) throws UnifyException;
+
+    /**
+     * Finds runnable custom workflow ID list for application.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return list of application workflow IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> findRunnableCustomWorkflowIdList(String applicationName) throws UnifyException;
 
     /**
      * Finds workflow channel by ID.

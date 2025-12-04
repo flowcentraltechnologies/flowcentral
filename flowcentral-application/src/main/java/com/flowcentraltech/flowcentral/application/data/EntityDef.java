@@ -128,6 +128,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<UniqueConstraintDef> uniqueConstraintList;
 
+    private Map<String, UniqueConstraintDef> uniqueConstraintMap;
+
     private List<IndexDef> indexList;
 
     private Map<String, EntityUploadDef> uploadMap;
@@ -1000,11 +1002,20 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public UniqueConstraintDef getUniqueConstraint(String name) {
         if (uniqueConstraintList != null) {
-            for (UniqueConstraintDef uniqueConstraintDef : uniqueConstraintList) {
-                if (uniqueConstraintDef.getName().equals(name)) {
-                    return uniqueConstraintDef;
+            if (uniqueConstraintMap == null) {
+                synchronized (this) {
+                    if (uniqueConstraintMap == null) {
+                        uniqueConstraintMap = new HashMap<String, UniqueConstraintDef>();
+                        for (UniqueConstraintDef uniqueConstraintDef : uniqueConstraintList) {
+                            uniqueConstraintMap.put(uniqueConstraintDef.getName(), uniqueConstraintDef);
+                        }
+
+                        uniqueConstraintMap = DataUtils.unmodifiableMap(uniqueConstraintMap);
+                    }
                 }
             }
+
+            return uniqueConstraintMap.get(name);
         }
 
         return null;
@@ -1619,7 +1630,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 uploadList = new ArrayList<EntityUploadDef>();
             }
 
-            uploadList.add(new EntityUploadDef(name, description, fieldSequenceDef, constraintAction));
+            uploadList.add(new EntityUploadDef(longName, name, description, fieldSequenceDef, constraintAction));
             return this;
         }
 

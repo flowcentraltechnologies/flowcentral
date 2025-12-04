@@ -135,6 +135,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public String getAssignSearch() {
+        return parentAppletDef.getAssignSearch();
+    }
+
+    @Override
     public String getPseudoDeleteField() {
         return parentAppletDef.getPseudoDeleteField();
     }

@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.util;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Application entity name parts.
  * 
@@ -30,13 +32,16 @@ public class EntityAssignRuleNameParts {
 
     private final String assignFieldName;
 
+    private final String searchField;
+
     private final String descField;
 
     public EntityAssignRuleNameParts(String entityLongName, String baseFieldName, String assignFieldName,
-            String descField) {
+            String searchField, String descField) {
         this.entityLongName = entityLongName;
         this.baseFieldName = baseFieldName;
         this.assignFieldName = assignFieldName;
+        this.searchField = searchField;
         this.descField = descField;
     }
 
@@ -52,11 +57,19 @@ public class EntityAssignRuleNameParts {
         return assignFieldName;
     }
 
+    public String getSearchField() {
+        return searchField;
+    }
+
+    public boolean isWithSearchField() {
+        return !StringUtils.isBlank(searchField);
+    }
+
     public String getDescField() {
         return descField;
     }
 
     public boolean isWithDescField() {
-        return descField != null;
+        return !StringUtils.isBlank(descField);
     }
 }

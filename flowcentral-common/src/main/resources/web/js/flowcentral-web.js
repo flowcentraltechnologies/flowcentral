@@ -320,8 +320,8 @@ fux.rigChart = function(rgp) {
 	}
 	
 	var chart = new ApexCharts(_id(id), options);
-    chart.render();
-    fux.chartList.push(chart);
+	chart.render();
+	fux.chartList.push(chart);
 }
 
 fux.clearCharts = function() {

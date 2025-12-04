@@ -16,7 +16,7 @@
 		<widgetType name="symbollist"
 			description="$m{application.widgettype.symbollist}"
 			dataType="STRING" inputType="STRING"
-			editor="!ui-symbolselect"
+			editor="!ui-symbolselect blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="restapilist"
 			description="$m{application.widgettype.restapilist}"
@@ -944,6 +944,9 @@
 					label="$m{application.appapplet.pseudodeletefield}"
 					type="STRING"
 					nullable="true" />
+				<field name="assignSearch"
+					label="$m{application.appapplet.assignsearch}" type="STRING"
+					nullable="true"/>
 				<field name="portalAccess"
 					label="$m{application.appapplet.portalaccess}" type="BOOLEAN" />
 				<field name="menuAccess"

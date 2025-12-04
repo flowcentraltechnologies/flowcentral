@@ -327,7 +327,7 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             false),
-    REF(
+    REF( 
             "RF",
             DataType.LONG,
             false,
@@ -349,7 +349,7 @@ public enum EntityFieldDataType implements EnumConst {
             false),
     REF_FILEUPLOAD(
             "CU",
-            null,
+            DataType.LONG,
             false,
             false,
             true,

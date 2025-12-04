@@ -46,10 +46,6 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
-import com.tcdng.unify.web.constant.ResultMappingConstants;
-import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;
-import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.data.RefreshSection;
 
 /**
  * Entity text search widget.
@@ -79,13 +75,9 @@ public class EntityTextSearchWidget extends AbstractFlowCentralPopupTextField {
 
     @Action
     public final void search() throws UnifyException {
-        String input = getRequestTarget(String.class);
-        List<? extends Listable> result = doSearch(input, getUplAttribute(int.class, "limit"));
-        setRequestAttribute(UnifyWebRequestAttributeConstants.REFRESH_SECTION,
-                new RefreshSection(this, getResultPanelId())); // Always create new because widget Id may have changed.
-        WriteWork work = getWriteWork();
-        work.set(WORK_RESULTLIST, result);
-        setCommandResultMapping(ResultMappingConstants.REFRESH_SECTION);
+        final String input = getRequestTarget(String.class);
+        getWriteWork().set(WORK_RESULTLIST, doSearch(input, getUplAttribute(int.class, "limit")));
+        commandRefreshSection(getResultPanelId());
     }
 
     @Override

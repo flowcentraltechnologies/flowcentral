@@ -188,11 +188,13 @@ public class ChartWriter extends AbstractWidgetWriter {
         if (chartDef.getType().isFlowCentralType()) {
 
         } else {
-            writer.beginFunction("fux.rigChart");
-            writer.writeParam("pId", chartWidget.getId());
-            writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartDetails,
-                    chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
-            writer.endFunction();
+            if (chartDetails != null) {
+                writer.beginFunction("fux.rigChart");
+                writer.writeParam("pId", chartWidget.getId());
+                writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartDetails,
+                        chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
+                writer.endFunction();
+            }
         }
     }
 

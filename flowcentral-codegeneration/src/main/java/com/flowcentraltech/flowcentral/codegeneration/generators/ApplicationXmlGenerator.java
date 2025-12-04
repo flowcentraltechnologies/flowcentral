@@ -284,6 +284,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appletConfig.setType(appApplet.getType());
                 appletConfig.setEntity(appApplet.getEntity());
                 appletConfig.setIcon(appApplet.getIcon());
+                appletConfig.setAssignSearch(appApplet.getAssignSearch());
                 appletConfig.setPortalAccess(appApplet.isPortalAccess());
                 appletConfig.setMenuAccess(appApplet.isMenuAccess());
                 appletConfig.setSupportOpenInNewWindow(appApplet.isSupportOpenInNewWindow());
@@ -1403,6 +1404,9 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appAssignmentPageConfig
                         .setLabel(ctx.isSnapshotMode() ? appAssignmentPage.getLabel() : "$m{" + labelKey + "}");
                 appAssignmentPageConfig.setEntity(appAssignmentPage.getEntity());
+                
+                appAssignmentPageConfig.setSearch(appAssignmentPage.getSearch());
+                
                 if (appAssignmentPage.getFilterCaption1() != null) {
                     labelKey = descKey + ".filtercaption1";
                     ctx.addMessage(StaticMessageCategoryType.ASSIGNMENT_PAGE, labelKey,

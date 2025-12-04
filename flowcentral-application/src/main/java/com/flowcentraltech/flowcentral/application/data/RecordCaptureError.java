@@ -29,9 +29,12 @@ import com.tcdng.unify.core.util.StringUtils;
 public class RecordCaptureError {
     
     private Map<String, String> errors;
+    
+    private Map<String, String> warning;
 
     public RecordCaptureError() {
         this.errors = null;
+        this.warning = null;
     }
 
     public void addError(String fieldName, String err) {
@@ -43,7 +46,17 @@ public class RecordCaptureError {
             errors.put(fieldName, err);
         }
     }
-   
+
+    public void addWarning(String fieldName, String warn) {
+        if (!StringUtils.isBlank(warn)) {
+            if (warning == null) {
+                warning = new HashMap<String, String>();
+            }
+            
+            warning.put(fieldName, warn);
+        }
+    }
+    
     public boolean isWithError(String fieldName) {
         return errors != null && errors.containsKey(fieldName);
     }
@@ -52,7 +65,19 @@ public class RecordCaptureError {
         return errors != null ? errors.get(fieldName) : null;
     }
  
-    public boolean isPresent() {
+    public boolean isErrorPresent() {
         return errors != null && !errors.isEmpty();
+    }
+    
+    public boolean isWithWarning(String fieldName) {
+        return warning != null && warning.containsKey(fieldName);
+    }
+    
+    public String getWarning(String fieldName) {
+        return warning != null ? warning.get(fieldName) : null;
+    }
+ 
+    public boolean isWarningPresent() {
+        return warning != null && !warning.isEmpty();
     }
 }

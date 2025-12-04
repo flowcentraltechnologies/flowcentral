@@ -301,10 +301,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String label = getApplicationMessage("workflow.applet.label", workflow.getLabel(),
                                     wfStep.getLabel());
                             final String assignDescField = null;
+                            final String assignSearch = null;
                             final String pseudoDeleteField = null;
                             StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(_reviewAppletType, null, label,
-                                    "tasks", assignDescField, pseudoDeleteField, 0, false, true, false, false, true,
-                                    descriptiveButtons, appletName, label);
+                                    "tasks", assignDescField, assignSearch, pseudoDeleteField, 0, false, true, false,
+                                    false, true, descriptiveButtons, appletName, label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
                                     : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
@@ -419,10 +420,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final boolean descriptiveButtons = appletUtil.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     final String assignDescField = null;
+                    final String assignSearch = null;
                     final String pseudoDeleteField = null;
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS,
-                            null, label, "magic", assignDescField, pseudoDeleteField, 0, false, true, false, false, true,
-                            descriptiveButtons, appletName, label);
+                            null, label, "magic", assignDescField, assignSearch, pseudoDeleteField, 0, false, true,
+                            false, false, true, descriptiveButtons, appletName, label);
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfWizardItemReviewTable");
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE_NEW, "true");
                     adb.addPropDef(WfWizardAppletPropertyConstants.WORKFLOW_WIZARD, longName);
@@ -527,10 +529,28 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void publishWorkflow(String workflowName) throws UnifyException {
+        publishWorkflow(null, workflowName);
+    }
+
+    @Override
+    public void publishWorkflow(TaskMonitor taskMonitor, Long workflowId) throws UnifyException {
+        final Workflow workflow = environment()
+                .list(new WorkflowQuery().id(workflowId).addSelect("applicationName", "name"));
+        publishWorkflow(taskMonitor,
+                ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(), workflow.getName()));
+    }
+
+    private void publishWorkflow(final TaskMonitor taskMonitor, final String workflowName) throws UnifyException {
+        logDebug(taskMonitor, "Publishing workflow [{0}]...", workflowName);
         ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
         final String runnableName = WorkflowNameUtils.getWorkflowRunnableName(anp.getEntityName());
         final Workflow workflow = environment()
                 .find(new WorkflowQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
+        if (workflow.isRunnable()) {
+            throwOperationErrorException(
+                    new IllegalArgumentException("Can not publish runnable workflow [" + workflowName + "]"));
+        }
+
         final Long workflowId = workflow.getId();
         final String runnableDesc = WorkflowNameUtils.getWorkflowRunnableDescription(workflow.getDescription());
         Workflow runWorkflow = environment()
@@ -558,6 +578,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
 
         environment().updateById(Workflow.class, workflowId, new Update().add("published", true));
+        logDebug(taskMonitor, "Workflow [{0}] successfully published.", workflowName);
     }
 
     @Override
@@ -579,7 +600,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (WfChannelStatus.SUSPENDED.equals(wfChannelDef.getStatus())) {
             throwOperationErrorException(new Exception("Workflow channel is suspended."));
         }
-        
+
         WfDef wfDef = getWfDef(wfChannelDef.getDestination());
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         if (!entityClassDef.isCompatible(inst)) {
@@ -716,7 +737,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 resolveSessionMessage(appTable.getDescription()));
         final String loadingAppletLabel = resolveSessionMessage("$m{workflow.myworkitems.loadingapplet.label}",
                 resolveSessionMessage(appTable.getLabel()));
-        
+
         AppApplet loadingApplet = environment()
                 .findLean(new AppAppletQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
         if (loadingApplet == null) {
@@ -837,9 +858,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Long> findCustomWorkflowIdList(String applicationName) throws UnifyException {
+    public List<Long> findUnpublishedNonRunnableCustomWorkflowIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id",
-                new WorkflowQuery().applicationName(applicationName).isCustom());
+                new WorkflowQuery().notPublished().notRunnable().applicationName(applicationName).isCustom());
+    }
+
+    @Override
+    public List<Long> findRunnableCustomWorkflowIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new WorkflowQuery().runnable().applicationName(applicationName).isCustom());
     }
 
     @Override
@@ -1612,7 +1639,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall)
+            throws UnifyException {
 
     }
 
@@ -1794,7 +1822,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     if (currWfStepDef.isWithRecordAction()) {
                         switch (currWfStepDef.getRecordActionType()) {
                             case CREATE:
-                            case CREATEAS:{
+                            case CREATEAS: {
                                 WorkEntity newInst = entityClassDef.newInst(wfEntityInst);
                                 Long originWorkRecId = (Long) environment().create(newInst);
                                 fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
