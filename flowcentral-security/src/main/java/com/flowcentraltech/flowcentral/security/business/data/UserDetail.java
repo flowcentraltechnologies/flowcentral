@@ -11,7 +11,7 @@ public class UserDetail {
 	private Boolean supervisor;
 	private List<String> userRoleCode;
 	
-	public UserDetail(String fullName,String loginId, String password, String email, String mobileNo,Boolean supervisor,
+	public UserDetail(String fullName, String email, String mobileNo,Boolean supervisor,
 			List<String> userRoleCode) {
 		this.fullName = fullName;
 		this.email = email;
