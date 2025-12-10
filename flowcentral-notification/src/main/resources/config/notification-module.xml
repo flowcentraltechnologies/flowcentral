@@ -35,7 +35,7 @@
 			editable="true" />
 		<sysParameter code="NOT-0006" defaultVal=""
 			description="$m{notification.sysparam.notificationtestmodeetoemail}"
-			editor="!ui-textarea" type="STRING" editable="true" />
+			editor="!ui-textarea rows:8" type="STRING" editable="true" />
 		<sysParameter code="NOT-0007" defaultVal=""
 			description="$m{notification.sysparam.notificationtestmodeeccemail}"
 			editor="!ui-textarea" type="STRING" editable="true" />
