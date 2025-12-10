@@ -89,11 +89,11 @@
 
 // Select branch popup
 !fc-selectbranchpanel:selectBranchPanel dialogCaption:$m{security.application.select.branch}
-    branchListBinding:branchInfoList selectRolePath:$n{/selectUserBranch} closeDialogPath:$n{/cancelSelectUserBranch}
+    branchListBinding:branchInfoList selectBranchPath:$n{/selectUserBranch} closeDialogPath:$n{/cancelSelectUserBranch}
 
 // Select user role popup
 !fc-selectrolepanel:selectRolePanel dialogCaption:$m{security.application.select.role}
-    roleListBinding:userRoleList selectBranchPath:$n{/selectUserRole} closeDialogPath:$n{/cancelSelectUserRole}
+    roleListBinding:userRoleList selectRolePath:$n{/selectUserRole} closeDialogPath:$n{/cancelSelectUserRole}
 
 
 // Actions

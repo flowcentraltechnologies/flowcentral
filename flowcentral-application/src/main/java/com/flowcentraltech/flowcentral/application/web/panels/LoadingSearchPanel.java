@@ -89,7 +89,7 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
     @Action
     public final void details() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidValueIndex()) {
+        if (target != null && target.isValidValueIndex()) {
             LoadingSearch loadingSearch = getLoadingSearch();
             loadingSearch.getLoadingTable().setDetailsIndex(target.getValueIndex());
         }
@@ -98,7 +98,7 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
     @Action
     public final void columns() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidValueIndex()) {
+        if (target != null && target.isValidValueIndex()) {
             LoadingSearch loadingSearch = getLoadingSearch();
             onColumnSelect(loadingSearch.getLoadingTable().getDispItemList().get(target.getValueIndex()),
                     target.getBinding());
@@ -108,7 +108,7 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
     @Action
     public final void buttons() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidValueIndex()) {
+        if (target != null && target.isValidValueIndex()) {
             LoadingSearch loadingSearch = getLoadingSearch();
             onAction(loadingSearch.getLoadingTable().getDispItemList().get(target.getValueIndex()), target.getTarget());
         }

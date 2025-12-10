@@ -461,7 +461,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     @Action
     public void maintain() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidValueIndex()) {
+        if (target != null && target.isValidValueIndex()) {
             TableActionResult result = getEntityFormApplet().maintainInst(target.getValueIndex());
             processTableActionResult(result);
         }

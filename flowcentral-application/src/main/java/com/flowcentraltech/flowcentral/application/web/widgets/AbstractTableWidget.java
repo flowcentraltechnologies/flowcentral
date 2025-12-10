@@ -803,13 +803,15 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public void handle(String target) throws UnifyException {
         AbstractTable<?, ?> table = getTable();
         IndexedTarget indexedTarget = getIndexedTarget(target);
-        TableColumnDef tableColumnDef = table.getTableDef().getVisibleColumnDef(indexedTarget.getBinding());
-        if (tableColumnDef.isWithBadgeInfo()) {
-            final String nextCode = tableColumnDef.getBadgeInfo().nextCode(indexedTarget.getTarget());
-            final Entity inst = (Entity) table.getDisplayItem(indexedTarget.getValueIndex());
-            getComponent(AppletUtilities.class).updateEntity(inst.getClass(), (Long) inst.getId(),
-                    new Update().add(indexedTarget.getBinding(), nextCode));
-            table.reset();
+        if (indexedTarget != null) {
+            TableColumnDef tableColumnDef = table.getTableDef().getVisibleColumnDef(indexedTarget.getBinding());
+            if (tableColumnDef.isWithBadgeInfo()) {
+                final String nextCode = tableColumnDef.getBadgeInfo().nextCode(indexedTarget.getTarget());
+                final Entity inst = (Entity) table.getDisplayItem(indexedTarget.getValueIndex());
+                getComponent(AppletUtilities.class).updateEntity(inst.getClass(), (Long) inst.getId(),
+                        new Update().add(indexedTarget.getBinding(), nextCode));
+                table.reset();
+            }
         }
     }
 
