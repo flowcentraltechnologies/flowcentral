@@ -45,10 +45,10 @@ public class SystemParameter extends BaseAuditEntity {
     @Column(name = "PARAMETER_DESC", length = 196)
     private String description;
 
-    @Column(name = "PARAM_VAL", length = 512, nullable = true)
+    @Column(name = "PARAM_VAL", length = 1024, nullable = true)
     private String value;
 
-    @Column(name = "DEFAULT_PARAM_VAL", length = 512, nullable = true)
+    @Column(name = "DEFAULT_PARAM_VAL", length = 1024, nullable = true)
     private String defaultValue;
 
     @Column(length = 256)
