@@ -2342,7 +2342,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         // Create workflow copy
         EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
         ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
-        wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
+        wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_WORKFLOW_BASE_FIELDS);
         final String wfCopyUpdateSetValuesName = formAppletDef.getPropValue(String.class,
                 AppletPropertyConstants.WORKFLOWCOPY_UPDATE_COPY_SETVALUES);
         if (!StringUtils.isBlank(wfCopyUpdateSetValuesName)) {
