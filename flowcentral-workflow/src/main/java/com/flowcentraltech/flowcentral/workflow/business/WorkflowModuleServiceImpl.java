@@ -474,11 +474,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void clearDefinitionsCache() throws UnifyException {
-        logDebug("Clearing definitions cache...");
+        logInfo("Clearing definitions cache...");
         wfDefFactoryMap.clear();
         wfWizardDefFactoryMap.clear();
         wfChannelDefFactoryMap.clear();
-        logDebug("Definitions cache clearing successfully completed.");
+        logInfo("Definitions cache clearing successfully completed.");
     }
 
     @Override
@@ -541,7 +541,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private void publishWorkflow(final TaskMonitor taskMonitor, final String workflowName) throws UnifyException {
-        logDebug(taskMonitor, "Publishing workflow [{0}]...", workflowName);
+        logInfo(taskMonitor, "Publishing workflow [{0}]...", workflowName);
         ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
         final String runnableName = WorkflowNameUtils.getWorkflowRunnableName(anp.getEntityName());
         final Workflow workflow = environment()
@@ -578,7 +578,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
 
         environment().updateById(Workflow.class, workflowId, new Update().add("published", true));
-        logDebug(taskMonitor, "Workflow [{0}] successfully published.", workflowName);
+        logInfo(taskMonitor, "Workflow [{0}] successfully published.", workflowName);
     }
 
     @Override
@@ -1136,12 +1136,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode,
             final boolean listing) {
-        logDebug("Applying user action [{0}] in step [{1}] and review mode [{2}]...", userAction, stepName,
+        logInfo("Applying user action [{0}] in step [{1}] and review mode [{2}]...", userAction, stepName,
                 wfReviewMode);
         try {
             final WfItem wfItem = environment().list(WfItem.class, wfItemId);
             if (!wfItem.getWfStepName().equals(stepName)) {
-                logDebug(
+                logInfo(
                         "Belaying user action [{0}] because step name disparity was detected between action step [{1}] and work item step [{2}].",
                         userAction, stepName, wfItem.getWfStepName());
                 return false;
@@ -1151,7 +1151,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final String userLoginId = getUserToken().getUserLoginId();
             final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
             if (!currentWfStepDef.isUserAction(userAction) && !currentWfStepDef.isError()) {
-                logDebug("Belaying user action [{0}] because action step [{1}] doesn't support such action.",
+                logInfo("Belaying user action [{0}] because action step [{1}] doesn't support such action.",
                         userAction, stepName);
                 return false;
             }
@@ -1362,7 +1362,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         WorkflowModuleSysParamConstants.WF_WORKITEM_ALERT_BATCH_SIZE);
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().reminderDue(now).setLimit(batchSize));
                 if (!DataUtils.isBlank(wfItemList)) {
-                    logDebug("Sending [{0}] reminder work item alerts...", wfItemList.size());
+                    logInfo("Sending [{0}] reminder work item alerts...", wfItemList.size());
                     for (WfItem wfItem : wfItemList) {
                         boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.REMINDER_NOTIFICATION);
                         environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
@@ -1375,7 +1375,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                 wfItemList = environment().listAll(new WfItemQuery().criticalDue(now).setLimit(batchSize));
                 if (!DataUtils.isBlank(wfItemList)) {
-                    logDebug("Sending [{0}] critical work item alerts...", wfItemList.size());
+                    logInfo("Sending [{0}] critical work item alerts...", wfItemList.size());
                     for (WfItem wfItem : wfItemList) {
                         boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.CRITICAL_NOTIFICATION);
                         environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
@@ -1387,7 +1387,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                 wfItemList = environment().listAll(new WfItemQuery().expirationDue(now).setLimit(batchSize));
                 if (!DataUtils.isBlank(wfItemList)) {
-                    logDebug("Sending [{0}] expiration work item alerts...", wfItemList.size());
+                    logInfo("Sending [{0}] expiration work item alerts...", wfItemList.size());
                     for (WfItem wfItem : wfItemList) {
                         boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.EXPIRATION_NOTIFICATION);
                         environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
@@ -1455,7 +1455,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).setLimit(batchSize));
                 List<Long> ejected = new ArrayList<Long>();
                 if (!DataUtils.isBlank(wfItemList)) {
-                    logDebug("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
+                    logInfo("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
                     for (WfItem wfItem : wfItemList) {
                         final Long wfItemId = wfItem.getId();
                         final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
@@ -1501,14 +1501,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                         List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
                         if (!DataUtils.isBlank(workRecIds)) {
-                            logDebug("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
+                            logInfo("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
                             List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
                                     Query.of((Class<? extends Entity>) entityDef.getEntityClass())
                                             .addAmongst("id", workRecIds).addRestriction(restriction));
                             if (!DataUtils.isBlank(actWorkRecIds)) {
                                 wfItemList = environment()
                                         .listAll(new WfItemQuery().addAmongst("workRecId", actWorkRecIds));
-                                logDebug("Ejecting [{0}] delayed work item(s) based on condition...",
+                                logInfo("Ejecting [{0}] delayed work item(s) based on condition...",
                                         wfItemList.size());
                                 for (WfItem wfItem : wfItemList) {
                                     final Long wfItemId = wfItem.getId();
@@ -1542,7 +1542,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 pendingList = environment()
                         .findAll(new WfTransitionQueueQuery().unprocessed().orderById().setLimit(batchSize));
                 if (!DataUtils.isBlank(pendingList)) {
-                    logDebug("Fetched [{0}] transition queue items...", pendingList.size());
+                    logInfo("Fetched [{0}] transition queue items...", pendingList.size());
                     List<Long> pendingIdList = new ArrayList<Long>();
                     for (WfTransitionQueue wfTransitionQueue : pendingList) {
                         pendingIdList.add(wfTransitionQueue.getId());
@@ -1557,7 +1557,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
 
         if (!DataUtils.isBlank(pendingList)) {
-            logDebug("Performing workflow transition for [{0}] items...", pendingList.size());
+            logInfo("Performing workflow transition for [{0}] items...", pendingList.size());
             for (WfTransitionQueue wfTransitionQueue : pendingList) {
                 if (performWfTransition(wfTransitionQueue)) {
                     environment().deleteById(wfTransitionQueue);
@@ -1655,7 +1655,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity workInst) throws UnifyException {
-        logDebug("Submitting item to workflow [{0}]. Item payload [{1}]", wfDef.getLongName(),
+        logInfo("Submitting item to workflow [{0}]. Item payload [{1}]", wfDef.getLongName(),
                 workInst.getWorkflowItemDesc());
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         if (!entityClassDef.isCompatible(workInst)) {
@@ -1783,8 +1783,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         setSavePoint();
         wfItem.setHeldBy(null);
         try {
-            logDebug("Transitioning item [{0}] in step [{1}] of type [{2}]...", wfItem.getWfItemDesc(),
-                    currWfStepDef.getLabel(), currWfStepDef.getType());
+            logInfo("Transitioning workflow item [{0}] with ID [{1}] in step [{2}] of type [{3}]...", wfItem.getWfItemDesc(),
+                    wfItem.getOriginWorkRecId(), currWfStepDef.getLabel(), currWfStepDef.getType());
             WfStepDef nextWfStep = currWfStepDef.isWithNextStepName()
                     ? wfDef.getWfStepDef(currWfStepDef.getNextStepName())
                     : null;
@@ -1948,7 +1948,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             new Update().add("processingStatus", nextWfStep.getProcessingStatus()));
                 }
 
+                
                 commitTransactions();
+                
+                logInfo("Workflow item [{0}] with ID [{1}] successfully transitioned from step [{2}] to step [{3}].",
+                        wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel(),
+                        nextWfStep.getLabel());
+
                 transitionItem.setFlowTransition();
                 return doWfTransition(transitionItem);
             }
@@ -1956,7 +1962,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             logError(e);
             try {
                 rollbackToSavePoint();
-                logDebug("An error has occured. Routing item [{0}] to error step...", wfItem.getWfItemDesc());
+                
                 String errorCode = null;
                 if (e instanceof UnifyException) {
                     errorCode = ((UnifyException) e).getErrorCode();
@@ -1981,11 +1987,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfEntityInst.getId()),
                         new Update().add("processingStatus", errWfStepDef.getProcessingStatus()));
 
+                logInfo("Transition of workflow item [{0}] with ID [{1}] in step [{2}] failed. Routed to error step.",
+                        wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel());
                 commitTransactions();
             } catch (Exception e1) {
                 logError(e1);
                 return false;
             }
+        } finally {
+            
         }
 
         return true;
@@ -2046,7 +2056,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendPassThroughAlerts(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String prevStepName) throws UnifyException {
-        logDebug("Sending pass through alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
+        logInfo("Sending pass through alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
                 prevStepName);
         if (wfStepDef.isUserAction()) {
             final SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(),
@@ -2055,7 +2065,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     securedLinkInfo.getLinkUrl());
             transitionItem.getReader().setTempValue(NotificationAlertSender.WFITEM_HTMLLINK_VARIABLE,
                     securedLinkInfo.getHtmlLink());
-            logDebug("Setting work item link variables [{0}] and [{1}]...", securedLinkInfo.getLinkUrl(),
+            logInfo("Setting work item link variables [{0}] and [{1}]...", securedLinkInfo.getLinkUrl(),
                     securedLinkInfo.getHtmlLink());
         }
 
@@ -2068,7 +2078,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendUserActionAlertsByPreviousStep(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String prevStepName) throws UnifyException {
-        logDebug("Sending user actions alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
+        logInfo("Sending user actions alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
                 prevStepName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnPreviousStep(prevStepName)) {
@@ -2079,7 +2089,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendUserActionAlertsByAction(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String actionName) throws UnifyException {
-        logDebug("Sending user actions alerts in step [{0}] depending on action name [{1}]...", wfStepDef.getName(),
+        logInfo("Sending user actions alerts in step [{0}] depending on action name [{1}]...", wfStepDef.getName(),
                 actionName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnAction(actionName)) {
