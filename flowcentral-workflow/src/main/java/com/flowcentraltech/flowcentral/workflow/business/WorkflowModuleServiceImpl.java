@@ -328,7 +328,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getWorkItemLoadingRestriction(), wfStep.getEjectionRestriction(),
                                 wfStep.getAttachmentProviderName(), wfStep.getNewCommentCaption(),
                                 wfStep.getAppletSetValuesName(), wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(),
-                                wfStep.getDescription(), wfStep.getLabel(),
+                                resolveApplicationMessage(wfStep.getDescription()), resolveApplicationMessage(wfStep.getLabel()),
                                 DataUtils.convert(int.class, wfStep.getReminderMinutes()),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()),
@@ -1847,10 +1847,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 if (originalCopyId != null) {
                                     WorkEntity originalInst = (WorkEntity) environment().findLean(
                                             (Class<? extends Entity>) entityClassDef.getEntityClass(), originalCopyId);
-
                                     new BeanValueStore(originalInst).copyWithExclusions(
                                             new BeanValueStore(wfEntityInst),
-                                            ApplicationEntityUtils.RESERVED_BASE_FIELDS);
+                                            ApplicationEntityUtils.RESERVED_WORKFLOW_BASE_FIELDS);
                                     environment().updateByIdVersionEditableChildren(originalInst);
                                     fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
                                             entityDef.getLongName(), originalCopyId, (Long) wfEntityInst.getId());
