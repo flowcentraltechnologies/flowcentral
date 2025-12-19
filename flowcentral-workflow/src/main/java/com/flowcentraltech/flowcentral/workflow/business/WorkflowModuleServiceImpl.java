@@ -1807,6 +1807,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 case ENRICHMENT:
                     if (currWfStepDef.isWithPolicy()) {
+                        logInfo("Executing workflow enrichment policy [{0}]...", currWfStepDef.getPolicy());
                         WfEnrichmentPolicy policy = (WfEnrichmentPolicy) getComponent(currWfStepDef.getPolicy());
                         policy.enrich(wfInstWriter, wfInstReader, currWfStepDef.getRule());
                         transitionItem.setUpdated();
@@ -1814,6 +1815,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 case PROCEDURE:
                     if (currWfStepDef.isWithPolicy()) {
+                        logInfo("Executing workflow procedure policy [{0}]...", currWfStepDef.getPolicy());
                         WfProcessPolicy policy = (WfProcessPolicy) getComponent(currWfStepDef.getPolicy());
                         policy.execute(wfInstReader, currWfStepDef.getRule());
                     }
