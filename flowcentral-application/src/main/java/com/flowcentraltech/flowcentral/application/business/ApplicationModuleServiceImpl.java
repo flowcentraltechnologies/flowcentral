@@ -111,6 +111,8 @@ import com.flowcentraltech.flowcentral.application.data.portal.PortalForm;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalFormElement;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTableColumn;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowStep;
 import com.flowcentraltech.flowcentral.application.entities.*;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -321,6 +323,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 5000;
 
+    @Configurable
+    private PortalWorkflowProvider portalWorkflowProvider;
+    
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
@@ -3912,7 +3917,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public Optional<PortalApplication> getPortalApplication(String applicationName) throws UnifyException {
-        if (environment().countAll(new AppAppletQuery().portalAccess(true).applicationName(applicationName)) == 0) {
+        final List<PortalWorkflow> workflows = portalWorkflowProvider != null
+                ? portalWorkflowProvider.getAllPortalWorkflows(applicationName)
+                : Collections.emptyList();
+
+        if (workflows.isEmpty() && environment()
+                .countAll(new AppAppletQuery().portalAccess(true).applicationName(applicationName)) == 0) {
             return Optional.empty();
         }
 
@@ -3927,10 +3937,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             extractPortalDependencies(applet, applets, tables, forms, entities);
         }
 
+        for (PortalWorkflow workflow : workflows) {
+            for (PortalWorkflowStep step : workflow.getSteps()) {
+                extractPortalDependencies(step.getApplet(), applets, tables, forms, entities);
+            }
+        }
+
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
                 applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
                 DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
-                DataUtils.unmodifiableList(entities.values())));
+                DataUtils.unmodifiableList(entities.values()), DataUtils.unmodifiableList(workflows)));
     }
 
     private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,

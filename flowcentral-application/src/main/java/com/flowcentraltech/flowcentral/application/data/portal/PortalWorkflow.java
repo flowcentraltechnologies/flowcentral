@@ -15,15 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.application.data.portal;
 
+import java.util.List;
+
 /**
- * Portal applet object.
+ * Portal workflow object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class PortalApplet {
-
-    private String type;
+public class PortalWorkflow {
 
     private String name;
 
@@ -31,34 +31,13 @@ public class PortalApplet {
 
     private String label;
 
-    private String entity;
+    private List<PortalWorkflowStep> steps;
 
-    private String icon;
-
-    private String createForm;
-
-    private String maintainForm;
-
-    private String table;
-
-    private boolean primary;
-    
-    public PortalApplet(String type, String name, String description, String label, String entity, String icon,
-            String createForm, String maintainForm, String table, boolean primary) {
-        this.type = type;
+    public PortalWorkflow(String name, String description, String label, List<PortalWorkflowStep> steps) {
         this.name = name;
         this.description = description;
         this.label = label;
-        this.entity = entity;
-        this.icon = icon;
-        this.createForm = createForm;
-        this.maintainForm = maintainForm;
-        this.table = table;
-        this.primary = primary;
-    }
-
-    public String getType() {
-        return type;
+        this.steps = steps;
     }
 
     public String getName() {
@@ -73,28 +52,7 @@ public class PortalApplet {
         return label;
     }
 
-    public String getEntity() {
-        return entity;
+    public List<PortalWorkflowStep> getSteps() {
+        return steps;
     }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public String getCreateForm() {
-        return createForm;
-    }
-
-    public String getMaintainForm() {
-        return maintainForm;
-    }
-
-    public String getTable() {
-        return table;
-    }
-
-    public boolean isPrimary() {
-        return primary;
-    }
-
 }

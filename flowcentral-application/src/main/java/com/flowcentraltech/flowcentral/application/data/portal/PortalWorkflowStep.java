@@ -15,15 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.application.data.portal;
 
+import java.util.List;
+
 /**
- * Portal applet object.
+ * Portal workflow step object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class PortalApplet {
-
-    private String type;
+public class PortalWorkflowStep {
 
     private String name;
 
@@ -31,34 +31,17 @@ public class PortalApplet {
 
     private String label;
 
-    private String entity;
+    private String applet;
 
-    private String icon;
+    private List<PortalWorkflowUserAction> userActions;
 
-    private String createForm;
-
-    private String maintainForm;
-
-    private String table;
-
-    private boolean primary;
-    
-    public PortalApplet(String type, String name, String description, String label, String entity, String icon,
-            String createForm, String maintainForm, String table, boolean primary) {
-        this.type = type;
+    public PortalWorkflowStep(String name, String description, String label, String applet,
+            List<PortalWorkflowUserAction> userActions) {
         this.name = name;
         this.description = description;
         this.label = label;
-        this.entity = entity;
-        this.icon = icon;
-        this.createForm = createForm;
-        this.maintainForm = maintainForm;
-        this.table = table;
-        this.primary = primary;
-    }
-
-    public String getType() {
-        return type;
+        this.applet = applet;
+        this.userActions = userActions;
     }
 
     public String getName() {
@@ -73,28 +56,12 @@ public class PortalApplet {
         return label;
     }
 
-    public String getEntity() {
-        return entity;
+    public String getApplet() {
+        return applet;
     }
 
-    public String getIcon() {
-        return icon;
+    public List<PortalWorkflowUserAction> getUserActions() {
+        return userActions;
     }
-
-    public String getCreateForm() {
-        return createForm;
-    }
-
-    public String getMaintainForm() {
-        return maintainForm;
-    }
-
-    public String getTable() {
-        return table;
-    }
-
-    public boolean isPrimary() {
-        return primary;
-    }
-
+    
 }

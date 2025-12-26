@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
 import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.business.EmailListProducerConsumer;
+import com.flowcentraltech.flowcentral.application.business.PortalWorkflowProvider;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
@@ -52,6 +53,9 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
 import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowStep;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowUserAction;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
@@ -129,6 +133,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfStepRole;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRoleQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserActionQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueue;
 import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueueQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizard;
@@ -192,8 +197,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(WorkflowModuleNameConstants.WORKFLOW_MODULE_SERVICE)
-public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
-        implements WorkflowModuleService, ApplicationAppletDefProvider, RolePrivilegeBackupAgent {
+public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implements WorkflowModuleService,
+        ApplicationAppletDefProvider, RolePrivilegeBackupAgent, PortalWorkflowProvider {
 
     private static final List<WorkflowStepType> USER_INTERACTIVE_STEP_TYPES = Arrays
             .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR, WorkflowStepType.DELAY);
@@ -479,6 +484,42 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         wfWizardDefFactoryMap.clear();
         wfChannelDefFactoryMap.clear();
         logInfo("Definitions cache clearing successfully completed.");
+    }
+
+    @Override
+    public List<PortalWorkflow> getAllPortalWorkflows(String applicationName) throws UnifyException {
+        Set<Long> workflowIds = environment().valueSet(Long.class, "workflowId",
+                new WfStepQuery().userActionable().workflowRunnable(true));
+        if (!DataUtils.isBlank(workflowIds)) {
+            final List<PortalWorkflow> workflows = new ArrayList<PortalWorkflow>();
+            for (Long workflowId : workflowIds) {
+                final List<PortalWorkflowStep> steps = new ArrayList<PortalWorkflowStep>();
+                for (WfStep step : environment().findAll(new WfStepQuery().workflowId(workflowId).userActionable())) {
+                    final List<PortalWorkflowUserAction> userActions = new ArrayList<PortalWorkflowUserAction>();
+                    for (WfStepUserAction userAction : environment()
+                            .findAll(new WfStepUserActionQuery().wfStepId(step.getId()))) {
+                        userActions.add(new PortalWorkflowUserAction(userAction.getName(),
+                                resolveApplicationMessage(userAction.getLabel()),
+                                userAction.getHighlightType() != null ? userAction.getHighlightType().toString()
+                                        : null));
+                    }
+
+                    steps.add(new PortalWorkflowStep(step.getName(), resolveApplicationMessage(step.getDescription()),
+                            resolveApplicationMessage(step.getLabel()), step.getAppletName(),
+                            DataUtils.unmodifiableList(userActions)));
+                }
+
+                Workflow workflow = environment()
+                        .findLean(new WorkflowQuery().id(workflowId).addSelect("name", "description", "label"));
+                workflows.add(
+                        new PortalWorkflow(workflow.getName(), resolveApplicationMessage(workflow.getDescription()),
+                                resolveApplicationMessage(workflow.getLabel()), DataUtils.unmodifiableList(steps)));
+            }
+
+            return workflows;
+        }
+
+        return Collections.emptyList();
     }
 
     @Override

@@ -24,6 +24,7 @@ import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNotNull;
 import com.tcdng.unify.core.criterion.NotEquals;
+import com.tcdng.unify.core.criterion.Or;
 
 /**
  * Workflow step query.
@@ -39,6 +40,11 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
 
     public WfStepQuery workflowId(Long workflowId) {
         return (WfStepQuery) addEquals("workflowId", workflowId);
+    }
+
+    public WfStepQuery userActionable() {
+        return (WfStepQuery) addRestriction(new Or().add(new Equals("type", WorkflowStepType.USER_ACTION))
+                .add(new Equals("type", WorkflowStepType.ERROR)));
     }
 
     public WfStepQuery routableTo() {
