@@ -505,7 +505,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     }
 
                     steps.add(new PortalWorkflowStep(step.getName(), resolveApplicationMessage(step.getDescription()),
-                            resolveApplicationMessage(step.getLabel()), step.getAppletName(),
+                            resolveApplicationMessage(step.getLabel()), step.getAppletName(), step.getType().isError(),
                             DataUtils.unmodifiableList(userActions)));
                 }
 

@@ -33,14 +33,17 @@ public class PortalWorkflowStep {
 
     private String applet;
 
+    private boolean error;
+    
     private List<PortalWorkflowUserAction> userActions;
 
     public PortalWorkflowStep(String name, String description, String label, String applet,
-            List<PortalWorkflowUserAction> userActions) {
+            boolean error, List<PortalWorkflowUserAction> userActions) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.applet = applet;
+        this.error = error;
         this.userActions = userActions;
     }
 
@@ -58,6 +61,10 @@ public class PortalWorkflowStep {
 
     public String getApplet() {
         return applet;
+    }
+
+    public boolean isError() {
+        return error;
     }
 
     public List<PortalWorkflowUserAction> getUserActions() {
