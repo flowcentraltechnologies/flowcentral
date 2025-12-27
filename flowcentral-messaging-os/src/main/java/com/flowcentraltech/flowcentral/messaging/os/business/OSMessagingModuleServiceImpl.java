@@ -89,6 +89,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
+    @Configurable
+    private OSAsyncMessagingErrorProcessor osAsyncMessagingErrorProcessor;
+    
     private final FactoryMap<String, OSMessagingPeerEndpointDef> osPeerEndpointDefFactoryMap;
 
     private final FactoryMap<String, OSMessagingHeader> osHeaderFactoryMap;
@@ -300,6 +303,13 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
                     new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
                             .add("responseCode", resp.getResponseCode()).add("responseMsg", resp.getResponseMessage()));
+            commitTransactions();
+
+            if (osAsyncMessagingErrorProcessor != null && !resp.isSuccessful()) {
+                osAsyncMessagingErrorProcessor.handleError(osMessagingAsync.getTarget(),
+                        osMessagingAsync.getProcessor(), osMessagingAsync.getCorrelationId(), resp.getResponseCode(),
+                        resp.getResponseMessage());
+            }
         } catch (UnifyException e) {
             if (UnifyCoreErrorConstants.IOUTIL_STREAM_RW_ERROR.equals(e.getErrorCode())) {
                 logDebug(e);
