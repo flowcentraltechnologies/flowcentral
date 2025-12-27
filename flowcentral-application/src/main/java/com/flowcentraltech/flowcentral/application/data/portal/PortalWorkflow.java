@@ -35,7 +35,8 @@ public class PortalWorkflow {
 
     private List<PortalWorkflowStep> steps;
 
-    public PortalWorkflow(String name, String description, String label, String entity, List<PortalWorkflowStep> steps) {
+    public PortalWorkflow(String name, String description, String label, String entity,
+            List<PortalWorkflowStep> steps) {
         this.name = name;
         this.description = description;
         this.label = label;
