@@ -325,7 +325,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private PortalWorkflowProvider portalWorkflowProvider;
-    
+
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
@@ -3952,7 +3952,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,
             Map<String, PortalTable> tables, Map<String, PortalForm> forms, Map<String, PortalEntity> entities)
             throws UnifyException {
-        if (!applets.containsKey(applet)) {
+        if (!StringUtils.isBlank(applet) && !applets.containsKey(applet)) {
             final AppletDef appletDef = getAppletDef(applet);
             final String entity = appletDef.getEntity();
             final EntityDef entityDef = getEntityDef(entity);
@@ -3994,8 +3994,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
 
             final List<String> formList = Arrays.asList(
-                    appletDef.getPropDef(AppletPropertyConstants.CREATE_FORM).getValue(),
-                    appletDef.getPropDef(AppletPropertyConstants.MAINTAIN_FORM).getValue());
+                    appletDef.isProp(AppletPropertyConstants.CREATE_FORM)
+                            ? appletDef.getPropDef(AppletPropertyConstants.CREATE_FORM).getValue()
+                            : null,
+                    appletDef.isProp(AppletPropertyConstants.MAINTAIN_FORM)
+                            ? appletDef.getPropDef(AppletPropertyConstants.MAINTAIN_FORM).getValue()
+                            : null);
             final Set<String> childApplets = new HashSet<String>();
             for (String form : formList) {
                 if (form != null && !forms.containsKey(form)) {
