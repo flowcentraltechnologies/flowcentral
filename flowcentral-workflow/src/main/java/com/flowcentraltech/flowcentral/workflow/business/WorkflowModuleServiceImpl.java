@@ -570,6 +570,17 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
+    public void publishUnpublishedWorkflows(TaskMonitor taskMonitor, String applicationName) throws UnifyException {
+        // Publish unpublished custom workflows
+        List<Long> workflowIdList = findUnpublishedNonRunnableCustomWorkflowIdList(applicationName);
+        if (!DataUtils.isBlank(workflowIdList)) {
+            for (Long workflowId : workflowIdList) {
+                publishWorkflow(taskMonitor, workflowId);
+            }
+        }
+    }
+
+    @Override
     public void publishWorkflow(String workflowName) throws UnifyException {
         publishWorkflow(null, workflowName);
     }

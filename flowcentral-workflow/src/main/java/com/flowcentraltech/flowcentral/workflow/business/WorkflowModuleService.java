@@ -51,6 +51,18 @@ import com.tcdng.unify.core.task.TaskMonitor;
 public interface WorkflowModuleService extends FlowCentralService, ApplicationWorkItemUtilities {
 
     /**
+     * Publishes all unpublished workflows of an application.
+     * 
+     * @param taskMonitor
+     *                        the task monitor
+     * @param applicationName
+     *                        the application name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void publishUnpublishedWorkflows(TaskMonitor taskMonitor, String applicationName) throws UnifyException;
+
+    /**
      * Publishes a workflow.
      * 
      * @param workflowName
