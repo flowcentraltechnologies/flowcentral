@@ -43,8 +43,9 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     }
 
     public WfStepQuery userActionable() {
-        return (WfStepQuery) addRestriction(new Or().add(new Equals("type", WorkflowStepType.USER_ACTION))
-                .add(new Equals("type", WorkflowStepType.ERROR)));
+        return (WfStepQuery) addRestriction(new And().add(new IsNotNull("applet"))
+                .add(new Or().add(new Equals("type", WorkflowStepType.USER_ACTION))
+                        .add(new Equals("type", WorkflowStepType.ERROR))));
     }
 
     public WfStepQuery routableTo() {
