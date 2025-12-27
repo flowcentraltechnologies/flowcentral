@@ -31,12 +31,15 @@ public class PortalWorkflow {
 
     private String label;
 
+    private String entity;
+
     private List<PortalWorkflowStep> steps;
 
-    public PortalWorkflow(String name, String description, String label, List<PortalWorkflowStep> steps) {
+    public PortalWorkflow(String name, String description, String label, String entity, List<PortalWorkflowStep> steps) {
         this.name = name;
         this.description = description;
         this.label = label;
+        this.entity = entity;
         this.steps = steps;
     }
 
@@ -50,6 +53,10 @@ public class PortalWorkflow {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getEntity() {
+        return entity;
     }
 
     public List<PortalWorkflowStep> getSteps() {

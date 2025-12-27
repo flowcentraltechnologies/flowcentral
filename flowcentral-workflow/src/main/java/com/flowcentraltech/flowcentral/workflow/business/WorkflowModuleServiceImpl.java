@@ -513,7 +513,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         .findLean(new WorkflowQuery().id(workflowId).addSelect("name", "description", "label"));
                 workflows.add(
                         new PortalWorkflow(workflow.getName(), resolveApplicationMessage(workflow.getDescription()),
-                                resolveApplicationMessage(workflow.getLabel()), DataUtils.unmodifiableList(steps)));
+                                resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(),
+                                DataUtils.unmodifiableList(steps)));
             }
 
             return workflows;
