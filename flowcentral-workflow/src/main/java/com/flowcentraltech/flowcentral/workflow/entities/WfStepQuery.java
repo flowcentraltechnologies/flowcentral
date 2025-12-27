@@ -43,7 +43,7 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     }
 
     public WfStepQuery userActionable() {
-        return (WfStepQuery) addRestriction(new And().add(new IsNotNull("applet"))
+        return (WfStepQuery) addRestriction(new And().add(new IsNotNull("appletName"))
                 .add(new Or().add(new Equals("type", WorkflowStepType.USER_ACTION))
                         .add(new Equals("type", WorkflowStepType.ERROR))));
     }
