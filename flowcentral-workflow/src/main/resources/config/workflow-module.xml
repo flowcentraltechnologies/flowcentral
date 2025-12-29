@@ -38,5 +38,8 @@
 		<sysParameter code="WF-0006" defaultVal="196"
 			description="$m{workflow.sysparam.itemejectionbatchsize}"
 			editor="!ui-integer precision:4" type="NUMBER" editable="true" />
+		<sysParameter code="WF-0007" defaultVal="false"
+			description="$m{workflow.sysparam.enableexternaluseraction}"
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 	</sysParameters>
 </module>

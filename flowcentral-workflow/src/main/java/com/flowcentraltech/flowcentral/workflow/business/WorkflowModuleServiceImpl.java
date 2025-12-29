@@ -230,6 +230,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
+    @Configurable
+    private WorkItemExternalAccessibilityProvider workItemExternalAccessibilityProvider;
+    
     private final FactoryMap<String, WfDef> wfDefFactoryMap;
 
     private final FactoryMap<String, WfWizardDef> wfWizardDefFactoryMap;
@@ -1180,40 +1183,63 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
-    public boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction,
+    public boolean applyUserAction(Long wfItemId, String stepName, String userAction, Date actionDate,
+            String actionBy) {
+        return applyUserAction(null, wfItemId, stepName, userAction, actionDate, actionBy, null, null,
+                WfReviewMode.NORMAL, false);
+    }
+
+    @Override
+    public boolean applyUserAction(final WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction,
             WfReviewMode wfReviewMode) {
-        return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, wfReviewMode, false);
+        return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, wfReviewMode, true);
     }
 
     @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode,
             final boolean listing) {
+        return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, comment, emails, wfReviewMode,
+                listing);
+    }
+    
+    private boolean applyUserAction(WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
+            final String userAction, Date actionDate, String actionBy, final String comment, InputArrayEntries emails,
+            WfReviewMode wfReviewMode, final boolean listing) {
         logInfo("Applying user action [{0}] in step [{1}] and review mode [{2}]...", userAction, stepName,
                 wfReviewMode);
         try {
             final WfItem wfItem = environment().list(WfItem.class, wfItemId);
             if (!wfItem.getWfStepName().equals(stepName)) {
-                logInfo(
-                        "Belaying user action [{0}] because step name disparity was detected between action step [{1}] and work item step [{2}].",
+                logInfo("Belaying user action [{0}] because step name disparity was detected between action step [{1}] and work item step [{2}].",
                         userAction, stepName, wfItem.getWfStepName());
                 return false;
             }
 
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-            final String userLoginId = getUserToken().getUserLoginId();
+            final String userLoginId = !StringUtils.isBlank(actionBy) ? actionBy : getUserToken().getUserLoginId();
             final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
             if (!currentWfStepDef.isUserAction(userAction) && !currentWfStepDef.isError()) {
-                logInfo("Belaying user action [{0}] because action step [{1}] doesn't support such action.",
-                        userAction, stepName);
+                logInfo("Belaying user action [{0}] because action step [{1}] doesn't support such action.", userAction,
+                        stepName);
                 return false;
+            }
+
+            if (wfEntityInst == null) {
+                wfEntityInst = (WorkEntity) environment().listLean(
+                        appletUtil.application().queryOf(wfDef.getEntity()).addEquals("id", wfItem.getWorkRecId()));
+                if (wfEntityInst == null) {
+                    logInfo("Belaying user action [{0}] because wo step [{1}] because entity with ID [{2}] could not be found.",
+                            userAction, stepName, wfItem.getWorkRecId());
+                    return false;
+                }
             }
 
             final WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
             // Update current event
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
-                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment)
-                            .add("wfAction", userActionDef.getLabel()));
+                    new Update().add("actor", userLoginId).add("actionDt", actionDate != null ? actionDate : getNow())
+                            .add("comment", comment).add("wfAction", userActionDef.getLabel()));
 
             // Prepare event for next step. If error step and next step is not specified
             // jump to the work item previous step
@@ -1234,13 +1260,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             wfItem.setHeldBy(userLoginId);
             environment().updateByIdVersion(wfItem);
 
-            final ValueStore wfEntityInstValueStore = new BeanValueStore(wfEntityInst);
             boolean update = !listing;
             if (userActionDef.isWithSetValues() || userActionDef.isWithAppletSetValues()) {
                 wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
                 final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
                 final Date now = getNow();
                 if (userActionDef.isWithSetValues()) {
+                    final ValueStore wfEntityInstValueStore = new BeanValueStore(wfEntityInst);
                     final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
                     if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
                             .getObjectFilter(entityDef, wfEntityInstValueStore.getReader(), now)
@@ -1264,12 +1290,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             }
 
             final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
-            if (wfReviewMode.lean()) {
-                if (emails != null) {
+            if (emails != null) {
+                if (wfReviewMode.lean()) {
                     environment().findChildren(wfEntityInst);
-                    updateEmails(wfDef, wfEntityInst, emails);
                 }
-            } else {
+
                 updateEmails(wfDef, wfEntityInst, emails);
             }
 
@@ -1943,6 +1968,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     wfItem.setEjectionDt(ejectionDt);
                 case USER_ACTION:
                 case ERROR:
+                    // External accessibility
+                    if (workItemExternalAccessibilityProvider != null && type.isExternalInteractive()
+                            && currWfStepDef.isWithStepAppletName()
+                            && appletUtil.system().getSysParameterValue(boolean.class,
+                                    WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT)) {
+                        if (workItemExternalAccessibilityProvider.transferToExternalForUserAction(wfItem)) {
+                            wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
+                        }
+                    }
+
                     // Workflow item has settled in current step. (Yes delay also settles here)
                     wfItem.setForwardTo(null);
                     environment().updateByIdVersion(wfItem);

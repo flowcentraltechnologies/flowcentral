@@ -264,6 +264,10 @@ public enum WorkflowStepType implements EnumConst {
         return USER_ACTION.equals(this) || ERROR.equals(this) || DELAY.equals(this);
     }
 
+    public boolean isExternalInteractive() {
+        return USER_ACTION.equals(this) || ERROR.equals(this);
+    }
+
     public boolean isUserAction() {
         return USER_ACTION.equals(this);
     }

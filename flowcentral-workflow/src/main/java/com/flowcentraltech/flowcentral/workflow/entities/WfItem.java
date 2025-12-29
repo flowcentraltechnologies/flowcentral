@@ -20,6 +20,7 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
+import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
@@ -33,7 +34,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @version 1.0
  */
 @Table(name = "FC_WORKITEM")
-public class WfItem extends BaseAuditEntity {
+public class WfItem extends BaseAuditEntity implements WfItemAccessible {
 
     @ForeignKey(type = WfItemEvent.class)
     private Long wfItemEventId;
@@ -178,6 +179,7 @@ public class WfItem extends BaseAuditEntity {
         this.ejectionDt = ejectionDt;
     }
 
+    @Override
     public Long getWorkRecId() {
         return workRecId;
     }
@@ -210,6 +212,7 @@ public class WfItem extends BaseAuditEntity {
         this.wfItemHistId = wfItemHistId;
     }
 
+    @Override
     public String getWfStepName() {
         return wfStepName;
     }
@@ -218,6 +221,7 @@ public class WfItem extends BaseAuditEntity {
         this.wfStepName = wfStepName;
     }
 
+    @Override
     public Date getStepDt() {
         return stepDt;
     }
@@ -234,6 +238,7 @@ public class WfItem extends BaseAuditEntity {
         this.actionDt = actionDt;
     }
 
+    @Override
     public Date getReminderDt() {
         return reminderDt;
     }
@@ -242,6 +247,7 @@ public class WfItem extends BaseAuditEntity {
         this.reminderDt = reminderDt;
     }
 
+    @Override
     public Date getExpectedDt() {
         return expectedDt;
     }
@@ -250,6 +256,7 @@ public class WfItem extends BaseAuditEntity {
         this.expectedDt = expectedDt;
     }
 
+    @Override
     public Date getCriticalDt() {
         return criticalDt;
     }
@@ -266,6 +273,7 @@ public class WfItem extends BaseAuditEntity {
         this.applicationName = applicationName;
     }
 
+    @Override
     public String getWorkflowName() {
         return workflowName;
     }
@@ -274,6 +282,7 @@ public class WfItem extends BaseAuditEntity {
         this.workflowName = workflowName;
     }
 
+    @Override
     public String getEntity() {
         return entity;
     }
@@ -290,6 +299,7 @@ public class WfItem extends BaseAuditEntity {
         this.originWorkRecId = originWorkRecId;
     }
 
+    @Override
     public String getWfItemDesc() {
         return wfItemDesc;
     }
@@ -298,6 +308,7 @@ public class WfItem extends BaseAuditEntity {
         this.wfItemDesc = wfItemDesc;
     }
 
+    @Override
     public String getBranchCode() {
         return branchCode;
     }
@@ -306,6 +317,7 @@ public class WfItem extends BaseAuditEntity {
         this.branchCode = branchCode;
     }
 
+    @Override
     public String getDepartmentCode() {
         return departmentCode;
     }
