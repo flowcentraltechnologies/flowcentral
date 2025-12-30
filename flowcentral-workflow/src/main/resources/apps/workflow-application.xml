@@ -181,6 +181,9 @@
 					type="STRING" maxLen="64" />
 				<field name="entity" label="$m{workflow.workflow.entity}"
 					type="STRING" maxLen="128" />
+				<field name="casePrefix"
+					label="$m{workflow.workflow.caseprefix}" type="STRING"
+					maxLen="3" nullable="true" />
 				<field name="loadingTable"
 					label="$m{workflow.workflow.loadingtable}" type="STRING"
 					maxLen="128" nullable="true" />
@@ -566,6 +569,9 @@
 				<field name="departmentCode"
 					label="$m{workflow.wfitemhist.departmentcode}" type="STRING"
 					maxLen="32" nullable="true" />
+				<field name="caseNo"
+					label="$m{workflow.wfitemhist.caseno}" type="STRING"
+					maxLen="16" nullable="true"/>
 				<field name="itemDesc"
 					label="$m{workflow.wfitemhist.wfitemdesc}" type="STRING"
 					maxLen="196" />
@@ -644,6 +650,9 @@
 				<field name="originWorkRecId"
 					label="$m{workflow.wfitemevent.originworkrecid}" type="LIST_ONLY"
 					key="wfItemHistId" property="originWorkRecId" />
+				<field name="wfItemCaseNo"
+					label="$m{workflow.wfitemevent.wfitemcaseno}" type="LIST_ONLY"
+					key="wfItemHistId" property="caseNo" />
 				<field name="wfItemDesc"
 					label="$m{workflow.wfitemevent.wfitemdesc}" type="LIST_ONLY"
 					key="wfItemHistId" property="itemDesc" />
@@ -690,6 +699,9 @@
 					type="LIST_ONLY" key="wfItemEventId" property="criticalDt" />
 				<field name="actionDt" label="$m{workflow.wfitem.actiondt}"
 					type="LIST_ONLY" key="wfItemEventId" property="actionDt" />
+				<field name="wfItemCaseNo"
+					label="$m{workflow.wfitem.itemcaseno}" type="LIST_ONLY"
+					key="wfItemEventId" property="wfItemCaseNo" />
 				<field name="wfItemDesc" label="$m{workflow.wfitem.itemdesc}"
 					type="LIST_ONLY" key="wfItemEventId" property="wfItemDesc" />
 				<field name="branchCode" label="$m{workflow.wfitem.branchcode}"
@@ -836,12 +848,12 @@
 			label="$m{workflow.wfitem.table.label}" entity="wfItem"
 			itemsPerPage="20" serialNo="true">
 			<columns>
-				<column field="applicationName"
-					renderWidget="application.text" widthRatio="2" />
+				<column field="wfItemCaseNo" renderWidget="application.text"
+					widthRatio="2" linkAct="maintainAct" />
+				<column field="wfItemDesc" renderWidget="application.text"
+					widthRatio="2"/>
 				<column field="workflowName" renderWidget="application.text"
 					widthRatio="2" />
-				<column field="wfItemDesc" renderWidget="application.text"
-					widthRatio="2" linkAct="maintainAct" />
 				<column field="wfStepName" renderWidget="application.text"
 					widthRatio="2" />
 				<column field="stepDt" renderWidget="application.datetime"
@@ -859,8 +871,10 @@
 			label="$m{workflow.wfitem.review.table.label}" entity="wfItem"
 			itemsPerPage="20" serialNo="true">
 			<columns>
-				<column field="wfItemDesc" renderWidget="application.text"
+				<column field="wfItemCaseNo" renderWidget="application.text"
 					widthRatio="2" linkAct="decisionAct" />
+				<column field="wfItemDesc" renderWidget="application.text"
+					widthRatio="2"/>
 				<column field="wfStepName" renderWidget="application.text"
 					widthRatio="2" />
 				<column field="stepDt" renderWidget="application.datetime"
@@ -878,8 +892,10 @@
 			label="$m{workflow.wfitem.recovery.table.label}" entity="wfItem"
 			itemsPerPage="20" serialNo="true">
 			<columns>
-				<column field="wfItemDesc" renderWidget="application.text"
+				<column field="wfItemCaseNo" renderWidget="application.text"
 					widthRatio="2" linkAct="decisionAct" />
+				<column field="wfItemDesc" renderWidget="application.text"
+					widthRatio="2" />
 				<column field="prevWfStepName" renderWidget="application.text"
 					widthRatio="2" />
 				<column field="stepDt" renderWidget="application.datetime"
@@ -1045,6 +1061,8 @@
 							column="0" required="true" />
 						<field name="wfStepName" inputWidget="application.text"
 							column="0" required="true" />
+						<field name="wfItemCaseNo" inputWidget="application.text"
+							column="0"  />
 						<field name="wfItemDesc" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="forwardedBy" inputWidget="application.text"

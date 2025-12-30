@@ -215,6 +215,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     private static final String WORKFLOW_APPLICATION = "workflow";
 
+    private static final String CASENO_OWNER_ID = "workflow-moduleservice";
+
+    private static final String CASENO_FORMAT_BASE = "{yy}{ddd}-{N:5}";
+    
     @Configurable
     private OrganizationModuleService organizationModuleService;
 
@@ -232,7 +236,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     @Configurable
     private WorkItemExternalAccessibilityProvider workItemExternalAccessibilityProvider;
-    
+
     private final FactoryMap<String, WfDef> wfDefFactoryMap;
 
     private final FactoryMap<String, WfWizardDef> wfWizardDefFactoryMap;
@@ -241,11 +245,22 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     private final Map<String, Set<WfStepInfo>> roleWfStepBackup;
 
+    private final FactoryMap<String, String> caseNoAutoFormatMap;
+
     private List<String> approvalPos;
 
     public WorkflowModuleServiceImpl() {
         this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
 
+        this.caseNoAutoFormatMap = new FactoryMap<String, String>() {
+
+            @Override
+            protected String create(String casePrefix, Object... args) throws Exception {
+                return casePrefix + CASENO_FORMAT_BASE;
+            }
+            
+        };
+        
         this.wfDefFactoryMap = new StaleableFactoryMap<String, WfDef>()
             {
 
@@ -270,7 +285,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     List<StringToken> descFormat = !StringUtils.isBlank(workflow.getDescFormat())
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
-                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(), descFormat,
+                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(),
+                            resolveApplicationMessage(workflow.getLabel()), workflow.getCasePrefix(), descFormat,
                             workflow.isSupportMultiItemAction(), longName, workflow.getDescription(), workflow.getId(),
                             workflow.getVersionNo());
 
@@ -336,7 +352,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                                 wfStep.getWorkItemLoadingRestriction(), wfStep.getEjectionRestriction(),
                                 wfStep.getAttachmentProviderName(), wfStep.getNewCommentCaption(),
                                 wfStep.getAppletSetValuesName(), wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(),
-                                resolveApplicationMessage(wfStep.getDescription()), resolveApplicationMessage(wfStep.getLabel()),
+                                resolveApplicationMessage(wfStep.getDescription()),
+                                resolveApplicationMessage(wfStep.getLabel()),
                                 DataUtils.convert(int.class, wfStep.getReminderMinutes()),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()),
@@ -512,8 +529,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             DataUtils.unmodifiableList(userActions)));
                 }
 
-                Workflow workflow = environment()
-                        .findLean(new WorkflowQuery().id(workflowId).addSelect("name", "description", "label", "entity"));
+                Workflow workflow = environment().findLean(
+                        new WorkflowQuery().id(workflowId).addSelect("name", "description", "label", "entity"));
                 workflows.add(
                         new PortalWorkflow(workflow.getName(), resolveApplicationMessage(workflow.getDescription()),
                                 resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(),
@@ -620,6 +637,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             environment().create(workflow);
         } else {
             runWorkflow.setDescription(runnableDesc);
+            runWorkflow.setCasePrefix(workflow.getCasePrefix());
             runWorkflow.setLoadingTable(workflow.getLoadingTable());
             runWorkflow.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
             runWorkflow.setEntity(workflow.getEntity());
@@ -732,6 +750,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             workflow.setDescription(workflowDesc);
             workflow.setLabel(workflowLabel);
             workflow.setEntity(entityDef.getLongName());
+            workflow.setCasePrefix(designType.casePrefix());
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
             workflow.setSupportMultiItemAction(true);
             workflow.setPublished(false);
@@ -748,6 +767,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 workflow.setConfigType(ConfigType.STATIC);
                 workflow.setDescription(workflowDesc);
                 workflow.setLabel(workflowLabel);
+                workflow.setCasePrefix(designType.casePrefix());
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 workflow.setSupportMultiItemAction(true);
                 workflow.setPublished(false);
@@ -1202,7 +1222,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, comment, emails, wfReviewMode,
                 listing);
     }
-    
+
     private boolean applyUserAction(WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
             final String userAction, Date actionDate, String actionBy, final String comment, InputArrayEntries emails,
             WfReviewMode wfReviewMode, final boolean listing) {
@@ -1586,8 +1606,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             if (!DataUtils.isBlank(actWorkRecIds)) {
                                 wfItemList = environment()
                                         .listAll(new WfItemQuery().addAmongst("workRecId", actWorkRecIds));
-                                logInfo("Ejecting [{0}] delayed work item(s) based on condition...",
-                                        wfItemList.size());
+                                logInfo("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
                                 for (WfItem wfItem : wfItemList) {
                                     final Long wfItemId = wfItem.getId();
                                     final Long wfItemEventId = createWfItemEvent(nextWfStepDef,
@@ -1798,6 +1817,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             final String userLoginId = userToken == null ? DefaultApplicationConstants.SYSTEM_LOGINID
                     : getUserToken().getUserLoginId();
             String itemDesc = workInst.getWorkflowItemDesc();
+            String caseNo = null;
             if (wfDef.isWithDescFormat()) {
                 ParameterizedStringGenerator generator = appletUtil
                         .getStringGenerator(new BeanValueStore(workInst).getReader(), wfDef.getDescFormat());
@@ -1805,7 +1825,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             }
 
             if (StringUtils.isBlank(itemDesc)) {
-                itemDesc = entityClassDef.getLongName() + " - " + workRecId;
+                itemDesc = entityDef.getLabel() + " [" + workRecId + "]";
+            }
+
+            if (wfDef.isWithCasePrefix()) {
+                final String autoFormat = caseNoAutoFormatMap.get(wfDef.getCasePrefix());
+                caseNo = appletUtil.sequenceCodeGenerator().getNextSequenceCode(CASENO_OWNER_ID, autoFormat);
             }
 
             WfItemHist wfItemHist = new WfItemHist();
@@ -1813,6 +1838,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             wfItemHist.setWorkflowName(wfDef.getLongName());
             wfItemHist.setEntity(wfDef.getEntity());
             wfItemHist.setOriginWorkRecId(workRecId);
+            wfItemHist.setCaseNo(caseNo);
             wfItemHist.setItemDesc(itemDesc);
             wfItemHist.setBranchCode(workInst.getWorkBranchCode());
             wfItemHist.setDepartmentCode(workInst.getWorkDepartmentCode());
@@ -1861,8 +1887,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         setSavePoint();
         wfItem.setHeldBy(null);
         try {
-            logInfo("Transitioning workflow item [{0}] with ID [{1}] in step [{2}] of type [{3}]...", wfItem.getWfItemDesc(),
-                    wfItem.getOriginWorkRecId(), currWfStepDef.getLabel(), currWfStepDef.getType());
+            logInfo("Transitioning workflow item [{0}] with ID [{1}] in step [{2}] of type [{3}]...",
+                    wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel(),
+                    currWfStepDef.getType());
             WfStepDef nextWfStep = currWfStepDef.isWithNextStepName()
                     ? wfDef.getWfStepDef(currWfStepDef.getNextStepName())
                     : null;
@@ -2037,9 +2064,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             new Update().add("processingStatus", nextWfStep.getProcessingStatus()));
                 }
 
-                
                 commitTransactions();
-                
+
                 logInfo("Workflow item [{0}] with ID [{1}] successfully transitioned from step [{2}] to step [{3}].",
                         wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel(),
                         nextWfStep.getLabel());
@@ -2051,7 +2077,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             logError(e);
             try {
                 rollbackToSavePoint();
-                
+
                 String errorCode = null;
                 if (e instanceof UnifyException) {
                     errorCode = ((UnifyException) e).getErrorCode();
@@ -2084,7 +2110,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 return false;
             }
         } finally {
-            
+
         }
 
         return true;

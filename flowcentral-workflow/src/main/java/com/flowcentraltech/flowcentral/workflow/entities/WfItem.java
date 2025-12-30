@@ -96,6 +96,9 @@ public class WfItem extends BaseAuditEntity implements WfItemAccessible {
     @ListOnly(key = "wfItemEventId", property = "originWorkRecId")
     private Long originWorkRecId;
 
+    @ListOnly(key = "wfItemEventId", property = "wfItemCaseNo")
+    private String wfItemCaseNo;
+
     @ListOnly(key = "wfItemEventId", property = "wfItemDesc")
     private String wfItemDesc;
 
@@ -297,6 +300,15 @@ public class WfItem extends BaseAuditEntity implements WfItemAccessible {
 
     public void setOriginWorkRecId(Long originWorkRecId) {
         this.originWorkRecId = originWorkRecId;
+    }
+
+    @Override
+    public String getWfItemCaseNo() {
+        return wfItemCaseNo;
+    }
+
+    public void setWfItemCaseNo(String wfItemCaseNo) {
+        this.wfItemCaseNo = wfItemCaseNo;
     }
 
     @Override

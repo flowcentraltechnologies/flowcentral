@@ -61,6 +61,13 @@ public interface WfItemAccessible {
     String getEntity();
 
     /**
+     * Gets workflow item case number.
+     * 
+     * @return the workflow item number
+     */
+    String getWfItemCaseNo();
+
+    /**
      * Gets workflow item description.
      * 
      * @return the workflow item description

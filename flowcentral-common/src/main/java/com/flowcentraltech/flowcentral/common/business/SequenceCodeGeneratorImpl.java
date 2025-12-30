@@ -83,6 +83,11 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
     }
 
     @Override
+    public String getNextSequenceCode(String ownerId, String sequenceDefintion) throws UnifyException {
+        return getNextSequenceCode(ownerId, sequenceDefintion, seqNumberService.getNow(), null);
+    }
+
+    @Override
     public String getNextSequenceCode(String ownerId, String sequenceDefintion, ValueStoreReader valueStoreReader)
             throws UnifyException {
         return getNextSequenceCode(ownerId, sequenceDefintion, seqNumberService.getNow(), valueStoreReader);
@@ -137,10 +142,12 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
                 }
                     break;
                 case VALUESTORE_GENERATOR: {
-                    ValueStoreNextSequenceCodeGenerator generator = (ValueStoreNextSequenceCodeGenerator) getComponent(
-                            partDef.getCode());
-                    String code = generator.getNextSequenceCode(valueStoreReader);
-                    sb.append(code);
+                    if (valueStoreReader != null) {
+                        ValueStoreNextSequenceCodeGenerator generator = (ValueStoreNextSequenceCodeGenerator) getComponent(
+                                partDef.getCode());
+                        String code = generator.getNextSequenceCode(valueStoreReader);
+                        sb.append(code);
+                    }
                 }
                     break;
                 case SYSTEM_PARAMETER:

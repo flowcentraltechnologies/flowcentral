@@ -40,6 +40,9 @@ public class Workflow extends BaseApplicationEntity {
     @Column(length = 128)
     private String entity;
     
+    @Column(length = 4, nullable = true)
+    private String casePrefix;
+    
     @Column(length = 128, nullable = true)
     private String loadingTable;
 
@@ -81,6 +84,14 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getCasePrefix() {
+        return casePrefix;
+    }
+
+    public void setCasePrefix(String casePrefix) {
+        this.casePrefix = casePrefix;
     }
 
     public String getLoadingTable() {
