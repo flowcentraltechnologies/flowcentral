@@ -67,8 +67,8 @@ public final class WorkflowDesignUtils {
                 "draftReview",
                 "draftApproval",
                 "deleteDraft",
-                " Creation Draft Workflow",
-                " Create"),
+                "$m{workflow.draft.creation.desc}",
+                "$m{workflow.draft.creation}"),
         WORKFLOW_COPY_UPDATE(
                 WorkflowCopyType.UPDATE,
                 "DFU",
@@ -77,8 +77,8 @@ public final class WorkflowDesignUtils {
                 "draftReview",
                 "draftApproval",
                 "end",
-                " Update Draft Workflow",
-                " Update"),
+                "$m{workflow.draft.update.desc}",
+                "$m{workflow.draft.update}"),
         WORKFLOW_COPY_DELETE(
                 WorkflowCopyType.DELETION,
                 "DFD",
@@ -87,8 +87,8 @@ public final class WorkflowDesignUtils {
                 "end",
                 "end",
                 "end",
-                " Deletion Draft Workflow",
-                " Delete");
+                "$m{workflow.draft.deletion.desc}",
+                "$m{workflow.draft.deletion}");
 
         private final WorkflowCopyType copyType;
 
