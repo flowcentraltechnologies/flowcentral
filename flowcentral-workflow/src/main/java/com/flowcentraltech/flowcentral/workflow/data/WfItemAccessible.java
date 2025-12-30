@@ -23,97 +23,169 @@ import java.util.Date;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface WfItemAccessible {
+public class WfItemAccessible {
 
-    /**
-     * Gets work item ID.
-     * 
-     * @return the work item ID
-     */
-    Long getId();
+    private Long wfItemId;
 
-    /**
-     * Gets item actual record ID.
-     * 
-     * @return the item actual record ID
-     */
-    Long getWorkRecId();
+    private Long workRecId;
+    
+    private String branchCode;
+    
+    private String departmentCode;
+    
+    private String wfItemCaseNo;
+    
+    private String wfItemDesc;
+    
+    private String workflowName;
+    
+    private String workflowLabel;
+    
+    private String stepName;
+    
+    private String entityName;
+    
+    private Date stepOn;
 
-    /**
-     * Gets item workflow name.
-     * 
-     * @return the workflow name
-     */
-    String getWorkflowName();
+    private Date reminderOn;
 
-    /**
-     * Gets item workflow step name.
-     * 
-     * @return the workflow step name
-     */
-    String getWfStepName();
+    private Date expectedOn;
 
-    /**
-     * Gets item entity name.
-     * 
-     * @return the item entity name
-     */
-    String getEntity();
+    private Date criticalOn;
 
-    /**
-     * Gets workflow item case number.
-     * 
-     * @return the workflow item number
-     */
-    String getWfItemCaseNo();
+    public WfItemAccessible(Long wfItemId, Long workRecId, String branchCode, String departmentCode,
+            String wfItemCaseNo, String wfItemDesc, String workflowName, String workflowLabel, String stepName,
+            String entityName, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
+        this.wfItemId = wfItemId;
+        this.workRecId = workRecId;
+        this.branchCode = branchCode;
+        this.departmentCode = departmentCode;
+        this.wfItemCaseNo = wfItemCaseNo;
+        this.wfItemDesc = wfItemDesc;
+        this.workflowName = workflowName;
+        this.workflowLabel = workflowLabel;
+        this.stepName = stepName;
+        this.entityName = entityName;
+        this.stepOn = stepOn;
+        this.reminderOn = reminderOn;
+        this.expectedOn = expectedOn;
+        this.criticalOn = criticalOn;
+    }
 
-    /**
-     * Gets workflow item description.
-     * 
-     * @return the workflow item description
-     */
-    String getWfItemDesc();
+    public WfItemAccessible() {
+        
+    }
+    
+    public Long getWfItemId() {
+        return wfItemId;
+    }
 
-    /**
-     * Gets workflow item's branch.
-     * 
-     * @return the workflow item's branch
-     */
-    String getBranchCode();
+    public void setWfItemId(Long wfItemId) {
+        this.wfItemId = wfItemId;
+    }
 
-    /**
-     * Gets workflow item's department.
-     * 
-     * @return the workflow item's department
-     */
-    String getDepartmentCode();
+    public Long getWorkRecId() {
+        return workRecId;
+    }
 
-    /**
-     * Gets the timestamp of when item settled in current step
-     * 
-     * @return the step timestamp
-     */
-    Date getStepDt();
+    public void setWorkRecId(Long workRecId) {
+        this.workRecId = workRecId;
+    }
 
-    /**
-     * Gets the time stamp for reminder
-     * 
-     * @return the reminder timestamp
-     */
-    Date getReminderDt();
+    public String getBranchCode() {
+        return branchCode;
+    }
 
-    /**
-     * Gets the time stamp for expected resolution
-     * 
-     * @return the expected timestamp for resolution
-     */
-    Date getExpectedDt();
+    public void setBranchCode(String branchCode) {
+        this.branchCode = branchCode;
+    }
 
-    /**
-     * Gets the time stamp for when no resolution goes critical.
-     * 
-     * @return the critical timestamp
-     */
-    Date getCriticalDt();
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
 
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
+
+    public String getWfItemCaseNo() {
+        return wfItemCaseNo;
+    }
+
+    public void setWfItemCaseNo(String wfItemCaseNo) {
+        this.wfItemCaseNo = wfItemCaseNo;
+    }
+
+    public String getWfItemDesc() {
+        return wfItemDesc;
+    }
+
+    public void setWfItemDesc(String wfItemDesc) {
+        this.wfItemDesc = wfItemDesc;
+    }
+
+    public String getWorkflowName() {
+        return workflowName;
+    }
+
+    public void setWorkflowName(String workflowName) {
+        this.workflowName = workflowName;
+    }
+
+    public String getWorkflowLabel() {
+        return workflowLabel;
+    }
+
+    public void setWorkflowLabel(String workflowLabel) {
+        this.workflowLabel = workflowLabel;
+    }
+
+    public String getStepName() {
+        return stepName;
+    }
+
+    public void setStepName(String stepName) {
+        this.stepName = stepName;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public Date getStepOn() {
+        return stepOn;
+    }
+
+    public void setStepOn(Date stepOn) {
+        this.stepOn = stepOn;
+    }
+
+    public Date getReminderOn() {
+        return reminderOn;
+    }
+
+    public void setReminderOn(Date reminderOn) {
+        this.reminderOn = reminderOn;
+    }
+
+    public Date getExpectedOn() {
+        return expectedOn;
+    }
+
+    public void setExpectedOn(Date expectedOn) {
+        this.expectedOn = expectedOn;
+    }
+
+    public Date getCriticalOn() {
+        return criticalOn;
+    }
+
+    public void setCriticalOn(Date criticalOn) {
+        this.criticalOn = criticalOn;
+    }
+    
 }

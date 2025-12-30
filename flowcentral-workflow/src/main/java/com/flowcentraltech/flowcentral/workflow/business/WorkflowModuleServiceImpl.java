@@ -111,6 +111,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfAlertDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfFilterDef;
+import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.flowcentraltech.flowcentral.workflow.data.WfRoutingDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfSetValuesDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
@@ -218,7 +219,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     private static final String CASENO_OWNER_ID = "workflow-moduleservice";
 
     private static final String CASENO_FORMAT_BASE = "{yy}{ddd}-{N:5}";
-    
+
     @Configurable
     private OrganizationModuleService organizationModuleService;
 
@@ -252,15 +253,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     public WorkflowModuleServiceImpl() {
         this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
 
-        this.caseNoAutoFormatMap = new FactoryMap<String, String>() {
+        this.caseNoAutoFormatMap = new FactoryMap<String, String>()
+            {
 
-            @Override
-            protected String create(String casePrefix, Object... args) throws Exception {
-                return casePrefix + CASENO_FORMAT_BASE;
-            }
-            
-        };
-        
+                @Override
+                protected String create(String casePrefix, Object... args) throws Exception {
+                    return casePrefix + CASENO_FORMAT_BASE;
+                }
+
+            };
+
         this.wfDefFactoryMap = new StaleableFactoryMap<String, WfDef>()
             {
 
@@ -2000,7 +2002,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             && currWfStepDef.isWithStepAppletName()
                             && appletUtil.system().getSysParameterValue(boolean.class,
                                     WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT)) {
-                        if (workItemExternalAccessibilityProvider.transferToExternalForUserAction(wfItem)) {
+                        final WfItemAccessible accessible = new WfItemAccessible(wfItem.getId(), wfItem.getWorkRecId(),
+                                wfItem.getBranchCode(), wfItem.getDepartmentCode(), wfItem.getWfItemCaseNo(),
+                                wfItem.getWfItemDesc(), wfItem.getWorkflowName(), wfDef.getLabel(),
+                                wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getStepDt(), wfItem.getReminderDt(),
+                                wfItem.getExpectedDt(), wfItem.getCriticalDt());
+                        if (workItemExternalAccessibilityProvider.transferToExternalForUserAction(accessible)) {
                             wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
                         }
                     }
