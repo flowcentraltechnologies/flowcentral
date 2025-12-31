@@ -150,6 +150,9 @@
 				<field name="target"
 					label="$m{osmessaging.osmessagingasync.endpoint}" type="STRING"
 					inputWidget="application.text" maxLen="64" basicSearch="true" />
+				<field name="function"
+					label="$m{osmessaging.osmessagingasync.function}" type="STRING"
+					inputWidget="application.text" maxLen="64" nullable="true" />
 				<field name="message"
 					label="$m{osmessaging.osmessagingasync.message}" type="CLOB"
 					inputWidget="application.textareamedium" />
@@ -372,6 +375,7 @@
 						label="$m{osmessaging.osmessagingasync.form.section.basicdetails}">
 						<field name="correlationId" column="0" required="true" />
 						<field name="target" column="0" required="true" />
+						<field name="function" column="1" />
 						<field name="message" column="1" required="true" />
 					</section>
 					<section name="processingDetails" columns="TYPE_2"

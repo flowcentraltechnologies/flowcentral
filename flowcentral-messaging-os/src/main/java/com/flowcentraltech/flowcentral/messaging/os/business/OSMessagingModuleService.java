@@ -80,6 +80,22 @@ public interface OSMessagingModuleService extends FlowCentralService {
     OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException;
 
     /**
+     * Relays a synchronous message to delegate.
+     * 
+     * @param header
+     *                    origin header information
+     * @param delegate
+     *                    the delegate function
+     * @param requestJson
+     *                    the request message
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String relaySynchronousMessageToDelegate(OSMessagingHeader header, String delegate, String requestJson)
+            throws UnifyException;;
+
+    /**
      * Sends synchronous message.
      * 
      * @param respClass
@@ -150,4 +166,5 @@ public interface OSMessagingModuleService extends FlowCentralService {
      */
     void logProcessing(OSMessagingMode mode, String correlationdId, String source, String processor, String summary,
             String responseCode, String responseMsg) throws UnifyException;
+
 }

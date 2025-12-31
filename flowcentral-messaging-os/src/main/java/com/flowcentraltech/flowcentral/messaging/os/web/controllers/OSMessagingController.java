@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessMa
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingModuleService;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingProcessor;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
+import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingRequestHeaderConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
@@ -66,12 +67,30 @@ public class OSMessagingController extends AbstractPlainJsonController {
                     final OSMessagingHeader header = osMessagingModuleService.getOSMessagingHeader(authorization);
                     if (header.isPresent()) {
                         osMessagingAccessManager.checkAccess(header);
-                        final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
-                                OSMessagingProcessor.class, header.getProcessor());
-                        BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
-                                requestJson);
-                        correlationId = request.getCorrelationId();
-                        response = _processor.process((BaseOSMessagingReq) request);
+                        if (isComponent(header.getProcessor())) {
+                            final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
+                                    OSMessagingProcessor.class, header.getProcessor());
+                            BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
+                                    requestJson);
+                            correlationId = request.getCorrelationId();
+                            response = _processor.process((BaseOSMessagingReq) request);
+                        } else {
+                            final String delegate = getHttpRequestHeaders()
+                                    .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
+                            if (!StringUtils.isBlank(delegate)) {
+                                logDebug("Relaying controller request to delegate function = [{0}]...", delegate);
+                                final String respJson = osMessagingModuleService.relaySynchronousMessageToDelegate(header, delegate,
+                                        requestJson);
+                                if (respJson != null) {
+                                    logDebug("Response message [\n{0}]", respJson);
+                                    return respJson;
+                                }
+
+                                error = getOSMessagingError(OSMessagingErrorConstants.DELEGATE_FUNCTION_NOT_RESOLVED);
+                            } else {
+                                error = getOSMessagingError(OSMessagingErrorConstants.PROCESSOR_NOT_FOUND);
+                            }
+                        }
                     } else {
                         error = getOSMessagingError(OSMessagingErrorConstants.PEER_NOT_CONFIGURED);
                     }
@@ -88,7 +107,7 @@ public class OSMessagingController extends AbstractPlainJsonController {
         }
 
         response.setCorrelationId(correlationId);
-        
+
         final String respJson = getResponseJsonFromObject(response);
         logDebug("Response message [\n{0}]", respJson);
         return respJson;
