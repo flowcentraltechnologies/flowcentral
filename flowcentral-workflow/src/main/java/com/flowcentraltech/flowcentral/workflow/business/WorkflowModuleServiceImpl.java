@@ -2004,7 +2004,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                                     WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT)) {
                         final WfItemAccessible accessible = new WfItemAccessible(wfItem.getId(), wfItem.getWorkRecId(),
                                 wfItem.getBranchCode(), wfItem.getDepartmentCode(), wfItem.getWfItemCaseNo(),
-                                wfItem.getWfItemDesc(), wfItem.getWorkflowName(), wfDef.getLabel(),
+                                wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
                                 wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getStepDt(), wfItem.getReminderDt(),
                                 wfItem.getExpectedDt(), wfItem.getCriticalDt());
                         if (workItemExternalAccessibilityProvider.transferToExternalForUserAction(accessible)) {

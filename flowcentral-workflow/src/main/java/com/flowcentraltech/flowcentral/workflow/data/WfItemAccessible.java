@@ -39,8 +39,6 @@ public class WfItemAccessible {
     
     private String workflowName;
     
-    private String workflowLabel;
-    
     private String stepName;
     
     private String entityName;
@@ -54,7 +52,7 @@ public class WfItemAccessible {
     private Date criticalOn;
 
     public WfItemAccessible(Long wfItemId, Long workRecId, String branchCode, String departmentCode,
-            String wfItemCaseNo, String wfItemDesc, String workflowName, String workflowLabel, String stepName,
+            String wfItemCaseNo, String wfItemDesc, String workflowName, String stepName,
             String entityName, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
         this.wfItemId = wfItemId;
         this.workRecId = workRecId;
@@ -63,7 +61,6 @@ public class WfItemAccessible {
         this.wfItemCaseNo = wfItemCaseNo;
         this.wfItemDesc = wfItemDesc;
         this.workflowName = workflowName;
-        this.workflowLabel = workflowLabel;
         this.stepName = stepName;
         this.entityName = entityName;
         this.stepOn = stepOn;
@@ -130,14 +127,6 @@ public class WfItemAccessible {
 
     public void setWorkflowName(String workflowName) {
         this.workflowName = workflowName;
-    }
-
-    public String getWorkflowLabel() {
-        return workflowLabel;
-    }
-
-    public void setWorkflowLabel(String workflowLabel) {
-        this.workflowLabel = workflowLabel;
     }
 
     public String getStepName() {
