@@ -44,6 +44,9 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "DELEGATE_FUNC", length = 64, nullable = true)
     private String function;
 
+    @Column(name = "DELEGATE_SERVICE", length = 64, nullable = true)
+    private String service;
+
     @Column(name = "ASYNC_MESSAGE", type = ColumnType.CLOB)
     private String message;
 
@@ -100,6 +103,14 @@ public class OSMessagingAsync extends BaseAuditEntity {
 
     public void setFunction(String function) {
         this.function = function;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
     }
 
     public String getMessage() {

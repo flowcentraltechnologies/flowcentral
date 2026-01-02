@@ -80,11 +80,11 @@ public interface OSMessagingModuleService extends FlowCentralService {
     OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException;
 
     /**
-     * Relays a synchronous message to delegate.
+     * Sends a synchronous message to delegate function.
      * 
      * @param header
      *                    origin header information
-     * @param delegate
+     * @param function
      *                    the delegate function
      * @param requestJson
      *                    the request message
@@ -92,8 +92,56 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    String relaySynchronousMessageToDelegate(OSMessagingHeader header, String delegate, String requestJson)
-            throws UnifyException;;
+    Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
+            String requestJson) throws UnifyException;
+
+    /**
+     * Sends a asynchronous message to delegate function.
+     * 
+     * @param header
+     *                    origin header information
+     * @param function
+     *                    the delegate function
+     * @param requestJson
+     *                    the request message
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
+            String requestJson) throws UnifyException;
+
+    /**
+     * Sends a synchronous message to delegate service.
+     * 
+     * @param header
+     *                    origin header information
+     * @param service
+     *                    the delegate service
+     * @param requestJson
+     *                    the request message
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service, String correlationId,
+            String requestJson) throws UnifyException;
+
+    /**
+     * Sends a asynchronous message to delegate service.
+     * 
+     * @param header
+     *                    origin header information
+     * @param service
+     *                    the delegate service
+     * @param requestJson
+     *                    the request message
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendAsynchronousMessageToService(OSMessagingHeader header, String service, String correlationId,
+            String requestJson) throws UnifyException;
 
     /**
      * Sends synchronous message.

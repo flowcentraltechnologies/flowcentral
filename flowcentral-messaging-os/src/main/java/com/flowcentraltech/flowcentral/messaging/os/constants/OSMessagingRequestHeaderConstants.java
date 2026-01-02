@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.constants;
 
+import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
+
 /**
  * OS messaging request header constants.
  * 
@@ -23,6 +25,14 @@ package com.flowcentraltech.flowcentral.messaging.os.constants;
  */
 public interface OSMessagingRequestHeaderConstants {
 
-    String DELEGATE_FUNCTION = "OS-DelegateFunction";
+    String AUTHORIZATION = HttpRequestHeaderConstants.AUTHORIZATION;
+    
+    String CORRELATION_ID = "X-Correlation-Id";
+    
+    String ROUTING_TYPE = "X-Routing-Type";
+
+    String DELEGATE_FUNCTION = "X-Delegate-Func";
+
+    String DELEGATE_SERVICE = "X-Delegate-Service";
     
 }

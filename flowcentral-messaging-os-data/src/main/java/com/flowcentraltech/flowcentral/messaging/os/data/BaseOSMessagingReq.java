@@ -29,6 +29,8 @@ public abstract class BaseOSMessagingReq {
 
     private String function;
 
+    private String service;
+
     private String source;
 
     private String sourceVersion;
@@ -59,6 +61,14 @@ public abstract class BaseOSMessagingReq {
 
     public final void setFunction(String function) {
         this.function = function;
+    }
+
+    public final String getService() {
+        return service;
+    }
+
+    public final void setService(String service) {
+        this.service = service;
     }
 
     public final String getSource() {

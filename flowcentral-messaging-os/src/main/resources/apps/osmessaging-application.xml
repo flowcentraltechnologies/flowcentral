@@ -196,12 +196,6 @@
 				<field name="responseBody"
 					label="$m{osmessaging.osmessaginglog.responsebody}" type="STRING"
 					nullable="true" />
-				<field name="responseCode"
-					label="$m{osmessaging.osmessaginglog.responsecode}" type="STRING"
-					maxLen="10" nullable="true" />
-				<field name="responseMsg"
-					label="$m{osmessaging.osmessaginglog.responsemsg}" type="STRING"
-					maxLen="512" nullable="true" />
 				<field name="runtimeInMilliSec"
 					label="$m{osmessaging.osmessaginglog.runtimeinmillisec}" type="LONG"
 					nullable="true" />
@@ -300,10 +294,6 @@
 				<column field="target"
 					renderWidget="application.text" widthRatio="1" />
 				<column field="processor" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="responseCode" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="responseMsg" renderWidget="application.text"
 					widthRatio="1" />
 				<column field="createDt" renderWidget="application.datetime"
 					widthRatio="1" order="DESC" />
@@ -414,13 +404,6 @@
 						label="$m{osmessaging.osmessaginglog.form.requestdetails}">
 						<field name="requestBody" inputWidget="application.textareamedium"
 							column="0" />
-					</section>
-					<section name="responseDetails" columns="TYPE_2"
-						label="$m{osmessaging.osmessaginglog.form.responsedetails}">
-						<field name="responseCode" inputWidget="application.text"
-							column="0" />
-						<field name="responseMsg" inputWidget="application.text"
-							column="1" />
 					</section>
 					<section name="responseDetailsBody" columns="TYPE_1">
 						<field name="responseBody" inputWidget="application.textareamedium"

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
+import java.util.Optional;
+
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessManager;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingModuleService;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingProcessor;
@@ -32,7 +34,6 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractPlainJsonController;
-import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
 
 /**
  * OS Messaging Controller.
@@ -55,11 +56,13 @@ public class OSMessagingController extends AbstractPlainJsonController {
         logDebug("Executing controller request = [{0}]...", requestJson);
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
-        String correlationId = null;
+        final String correlationId = getHttpRequestHeaders()
+                .getHeader(OSMessagingRequestHeaderConstants.CORRELATION_ID);
         if (osMessagingAccessManager == null) {
             error = getOSMessagingError(OSMessagingErrorConstants.ACCESS_MANAGER_NOT_FOUND);
         } else {
-            final String authorization = getHttpRequestHeaders().getHeader(HttpRequestHeaderConstants.AUTHORIZATION);
+            final String authorization = getHttpRequestHeaders()
+                    .getHeader(OSMessagingRequestHeaderConstants.AUTHORIZATION);
             if (StringUtils.isBlank(authorization)) {
                 error = getOSMessagingError(OSMessagingErrorConstants.AUTHORIZATION_REQUIRED);
             } else {
@@ -67,28 +70,51 @@ public class OSMessagingController extends AbstractPlainJsonController {
                     final OSMessagingHeader header = osMessagingModuleService.getOSMessagingHeader(authorization);
                     if (header.isPresent()) {
                         osMessagingAccessManager.checkAccess(header);
-                        if (isComponent(header.getProcessor())) {
-                            final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
-                                    OSMessagingProcessor.class, header.getProcessor());
-                            BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
-                                    requestJson);
-                            correlationId = request.getCorrelationId();
-                            response = _processor.process((BaseOSMessagingReq) request);
+                        final String service = getHttpRequestHeaders()
+                                .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
+                        if (!StringUtils.isBlank(service)) {
+                            logDebug("Relaying controller request to delegate service = [{0}]...", service);
+                            final String sync = getHttpRequestHeaders()
+                                    .getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
+                            final Optional<String> optional = "sync".equalsIgnoreCase(sync)
+                                    ? osMessagingModuleService.sendSynchronousMessageToService(header, service,
+                                            correlationId, requestJson)
+                                    : osMessagingModuleService.sendSynchronousMessageToService(header, service,
+                                            correlationId, requestJson);
+                            if (optional.isPresent()) {
+                                logDebug("Response message [\n{0}]", optional.get());
+                                return optional.get();
+                            }
+
+                            error = getOSMessagingError(OSMessagingErrorConstants.DELEGATE_FUNCTION_NOT_RESOLVED);
                         } else {
-                            final String delegate = getHttpRequestHeaders()
+                            final String function = getHttpRequestHeaders()
                                     .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
-                            if (!StringUtils.isBlank(delegate)) {
-                                logDebug("Relaying controller request to delegate function = [{0}]...", delegate);
-                                final String respJson = osMessagingModuleService.relaySynchronousMessageToDelegate(header, delegate,
-                                        requestJson);
-                                if (respJson != null) {
-                                    logDebug("Response message [\n{0}]", respJson);
-                                    return respJson;
+                            if (!StringUtils.isBlank(function)) {
+                                logDebug("Relaying controller request to delegate function = [{0}]...", function);
+                                final String sync = getHttpRequestHeaders()
+                                        .getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
+                                final Optional<String> optional = "sync".equalsIgnoreCase(sync)
+                                        ? osMessagingModuleService.sendSynchronousMessageToDelegate(header, function,
+                                                correlationId, requestJson)
+                                        : osMessagingModuleService.sendAsynchronousMessageToDelegate(header, function,
+                                                correlationId, requestJson);
+                                if (optional.isPresent()) {
+                                    logDebug("Response message [\n{0}]", optional.get());
+                                    return optional.get();
                                 }
 
                                 error = getOSMessagingError(OSMessagingErrorConstants.DELEGATE_FUNCTION_NOT_RESOLVED);
                             } else {
-                                error = getOSMessagingError(OSMessagingErrorConstants.PROCESSOR_NOT_FOUND);
+                                if (isComponent(header.getProcessor())) {
+                                    final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
+                                            OSMessagingProcessor.class, header.getProcessor());
+                                    BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
+                                            requestJson);
+                                    response = _processor.process((BaseOSMessagingReq) request);
+                                } else {
+                                    error = getOSMessagingError(OSMessagingErrorConstants.PROCESSOR_NOT_FOUND);
+                                }
                             }
                         }
                     } else {
