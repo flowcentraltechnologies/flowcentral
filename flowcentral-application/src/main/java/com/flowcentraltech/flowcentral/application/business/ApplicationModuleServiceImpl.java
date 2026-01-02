@@ -3915,8 +3915,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         if (portalWorkflowProvider != null) {
             applicationNames.addAll(portalWorkflowProvider.getPortalApplicationNames());
         }
-        
-        applicationNames.addAll(environment().valueSet(String.class, "applicationName", new AppAppletQuery().portalAccess(true)));
+
+        applicationNames.addAll(
+                environment().valueSet(String.class, "applicationName", new AppAppletQuery().portalAccess(true)));
         return new ArrayList<String>(applicationNames);
     }
 
