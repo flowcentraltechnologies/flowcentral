@@ -3911,14 +3911,19 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<String> getPortalApplicationNames() throws UnifyException {
-        return new ArrayList<String>(
-                environment().valueSet(String.class, "applicationName", new AppAppletQuery().portalAccess(true)));
+        Set<String> applicationNames = new HashSet<String>();
+        if (portalWorkflowProvider != null) {
+            applicationNames.addAll(portalWorkflowProvider.getPortalApplicationNames());
+        }
+        
+        applicationNames.addAll(environment().valueSet(String.class, "applicationName", new AppAppletQuery().portalAccess(true)));
+        return new ArrayList<String>(applicationNames);
     }
 
     @Override
     public Optional<PortalApplication> getPortalApplication(String applicationName) throws UnifyException {
         final List<PortalWorkflow> workflows = portalWorkflowProvider != null
-                ? portalWorkflowProvider.getAllPortalWorkflows(applicationName)
+                ? portalWorkflowProvider.getPortalWorkflows(applicationName)
                 : Collections.emptyList();
 
         if (workflows.isEmpty() && environment()

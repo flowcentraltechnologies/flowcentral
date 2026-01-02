@@ -31,6 +31,15 @@ import com.tcdng.unify.core.UnifyException;
 public interface PortalWorkflowProvider extends FlowCentralComponent {
 
     /**
+     * Gets list of portal application names.
+     * 
+     * @return the application name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> getPortalApplicationNames() throws UnifyException;
+    
+    /**
      * Gets all portal workflow information for particular application.
      * 
      * @param applicationName
@@ -39,6 +48,6 @@ public interface PortalWorkflowProvider extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<PortalWorkflow> getAllPortalWorkflows(String applicationName) throws UnifyException;
+    List<PortalWorkflow> getPortalWorkflows(String applicationName) throws UnifyException;
 
 }
