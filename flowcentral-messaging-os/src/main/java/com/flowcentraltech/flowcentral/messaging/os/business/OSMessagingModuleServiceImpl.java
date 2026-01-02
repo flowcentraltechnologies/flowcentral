@@ -415,7 +415,6 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             headers.put(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE, service);
         }
 
-        logDebug("Message headers [{0}]...", headers);
         PostResp<String> resp = IOUtils.postJsonToEndpoint(osPeerEndpointDef.getEndpointUrl(), reqJson, headers);
         if (resp.isError()) {
             throwOperationErrorException(new Exception(resp.getError()));
