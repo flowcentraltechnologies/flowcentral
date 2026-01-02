@@ -511,7 +511,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     @Override
     public List<PortalWorkflow> getAllPortalWorkflows(String applicationName) throws UnifyException {
         Set<Long> workflowIds = environment().valueSet(Long.class, "workflowId",
-                new WfStepQuery().userActionable().workflowRunnable(true));
+                new WfStepQuery().applicationName(applicationName).userActionable().workflowRunnable(true));
         if (!DataUtils.isBlank(workflowIds)) {
             final List<PortalWorkflow> workflows = new ArrayList<PortalWorkflow>();
             for (Long workflowId : workflowIds) {
@@ -531,12 +531,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             DataUtils.unmodifiableList(userActions)));
                 }
 
-                Workflow workflow = environment().findLean(
+                final Workflow workflow = environment().findLean(
                         new WorkflowQuery().id(workflowId).addSelect("name", "description", "label", "entity"));
-                workflows.add(
-                        new PortalWorkflow(workflow.getName(), resolveApplicationMessage(workflow.getDescription()),
-                                resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(),
-                                DataUtils.unmodifiableList(steps)));
+                final String workflowName = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        workflow.getName());
+                workflows.add(new PortalWorkflow(workflowName, resolveApplicationMessage(workflow.getDescription()),
+                        resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(),
+                        DataUtils.unmodifiableList(steps)));
             }
 
             return workflows;

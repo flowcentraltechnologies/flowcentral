@@ -3972,7 +3972,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
                 }
 
-                entities.put(entity, new PortalEntity(entityDef.getName(), entityDef.getDescription(),
+                entities.put(entity, new PortalEntity(entityDef.getLongName(), entityDef.getDescription(),
                         DataUtils.unmodifiableList(fields)));
             }
 
@@ -3989,7 +3989,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             tableColumnDef.getLinkAct(), tableColumnDef.getWidthRatio()));
                 }
 
-                tables.put(table, new PortalTable(tableDef.getName(), tableDef.getDescription(),
+                tables.put(table, new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
                         resolveApplicationMessage(tableDef.getLabel()), entity, DataUtils.unmodifiableList(columns)));
             }
 
@@ -4040,13 +4040,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
-                    forms.put(form, new PortalForm(formDef.getName(), formDef.getDescription(), entity,
+                    forms.put(form, new PortalForm(formDef.getLongName(), formDef.getDescription(), entity,
                             DataUtils.unmodifiableList(elements)));
                 }
             }
 
             applets.put(applet,
-                    new PortalApplet(appletDef.getType().name(), appletDef.getName(), appletDef.getDescription(),
+                    new PortalApplet(appletDef.getType().name(), appletDef.getLongName(), appletDef.getDescription(),
                             resolveApplicationMessage(appletDef.getLabel()), entity, appletDef.getIcon(),
                             formList.get(0), formList.get(1), table, appletDef.isPortalAccess()));
 
