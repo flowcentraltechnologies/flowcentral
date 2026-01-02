@@ -13,9 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.constants;
-
-import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
+package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
  * OS messaging request header constants.
@@ -25,7 +23,7 @@ import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
  */
 public interface OSMessagingRequestHeaderConstants {
 
-    String AUTHORIZATION = HttpRequestHeaderConstants.AUTHORIZATION;
+    String AUTHORIZATION = "Authorization";
     
     String CORRELATION_ID = "X-Correlation-Id";
     

@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingRequestHeaderConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSCredentials;
@@ -35,6 +34,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerEndpointDef;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncQuery;
@@ -415,6 +415,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             headers.put(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE, service);
         }
 
+        logDebug("Message headers [{0}]...", headers);
         PostResp<String> resp = IOUtils.postJsonToEndpoint(osPeerEndpointDef.getEndpointUrl(), reqJson, headers);
         if (resp.isError()) {
             throwOperationErrorException(new Exception(resp.getError()));
