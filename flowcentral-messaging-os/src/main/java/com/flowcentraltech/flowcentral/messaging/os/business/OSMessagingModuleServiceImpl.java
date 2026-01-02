@@ -90,7 +90,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Configurable
     private OSAsyncMessagingErrorProcessor osAsyncMessagingErrorProcessor;
-    
+
     private final FactoryMap<String, OSMessagingPeerEndpointDef> osPeerEndpointDefFactoryMap;
 
     private final FactoryMap<String, OSMessagingHeader> osHeaderFactoryMap;
@@ -117,9 +117,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                             .find(new OSMessagingPeerEndpointQuery().appId(target));
                     return osPeerEndpoint == null ? OSMessagingPeerEndpointDef.BLANK
                             : new OSMessagingPeerEndpointDef(osPeerEndpoint.getId(), osPeerEndpoint.getAppId(),
-                                    osPeerEndpoint.getShortName(), osPeerEndpoint.getName(), osPeerEndpoint.getDescription(),
-                                    osPeerEndpoint.getEndpointUrl(), osPeerEndpoint.getPeerPassword(),
-                                    osPeerEndpoint.getStatus(), osPeerEndpoint.getVersionNo(), source);
+                                    osPeerEndpoint.getShortName(), osPeerEndpoint.getName(),
+                                    osPeerEndpoint.getDescription(), osPeerEndpoint.getEndpointUrl(),
+                                    osPeerEndpoint.getPeerPassword(), osPeerEndpoint.getStatus(),
+                                    osPeerEndpoint.getVersionNo(), source);
                 }
 
             };
@@ -142,10 +143,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                             OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap
                                     .get(credentials.getSource());
                             if (osPeerEndpointDef.isPresent()
-                                    && osPeerEndpointDef.getPeerPassword().equals(credentials.getPassword())
-                                    && isComponent(credentials.getProcessor())
-                                    && getComponent(credentials.getProcessor()) instanceof OSMessagingProcessor) {
+                                    && osPeerEndpointDef.getPeerPassword().equals(credentials.getPassword())) {
                                 return new OSMessagingHeader(credentials.getSource(), credentials.getProcessor(),
+                                        isComponent(credentials.getProcessor()) && getComponent(
+                                                credentials.getProcessor()) instanceof OSMessagingProcessor,
                                         osPeerEndpointDef.getVersionNo());
                             }
                         } catch (Exception e) {
@@ -392,7 +393,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             throws UnifyException {
 
     }
-    
+
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, final String target,
             final String processor, final String function, final String service, final String correlationId,
             final String reqJson, final boolean sync) throws UnifyException {

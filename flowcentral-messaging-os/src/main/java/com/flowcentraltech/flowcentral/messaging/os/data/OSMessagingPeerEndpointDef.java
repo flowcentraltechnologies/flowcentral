@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * OS messaging peer end-point definition.
@@ -137,5 +138,9 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         }
 
         return authentication;
+    }
+    
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 }

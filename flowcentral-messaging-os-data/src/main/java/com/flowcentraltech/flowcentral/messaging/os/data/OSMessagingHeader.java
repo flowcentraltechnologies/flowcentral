@@ -30,11 +30,14 @@ public class OSMessagingHeader {
 
     private String processor;
     
+    private boolean processorPresent;
+    
     private long versionNo;
 
-    public OSMessagingHeader(String source, String processor, long versionNo) {
+    public OSMessagingHeader(String source, String processor, boolean processorPresent, long versionNo) {
         this.source = source;
         this.processor = processor;
+        this.processorPresent = processorPresent;
         this.versionNo = versionNo;
     }
 
@@ -54,7 +57,11 @@ public class OSMessagingHeader {
         return versionNo;
     }
 
-    public boolean isPresent() {
+    public boolean isSourcePresent() {
         return source != null;
+    }
+
+    public boolean isProcessorPresent() {
+        return processorPresent;
     }
 }

@@ -63,12 +63,10 @@ public class OSMessagingController extends AbstractPlainJsonController {
         } else {
             final String authorization = getHttpRequestHeaders()
                     .getHeader(OSMessagingRequestHeaderConstants.AUTHORIZATION);
-            if (StringUtils.isBlank(authorization)) {
-                error = getOSMessagingError(OSMessagingErrorConstants.AUTHORIZATION_REQUIRED);
-            } else {
+            if (!StringUtils.isBlank(authorization)) {
                 try {
                     final OSMessagingHeader header = osMessagingModuleService.getOSMessagingHeader(authorization);
-                    if (header.isPresent()) {
+                    if (header.isSourcePresent()) {
                         osMessagingAccessManager.checkAccess(header);
                         final String service = getHttpRequestHeaders()
                                 .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
@@ -106,7 +104,7 @@ public class OSMessagingController extends AbstractPlainJsonController {
 
                                 error = getOSMessagingError(OSMessagingErrorConstants.DELEGATE_FUNCTION_NOT_RESOLVED);
                             } else {
-                                if (isComponent(header.getProcessor())) {
+                                if (header.isProcessorPresent()) {
                                     final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
                                             OSMessagingProcessor.class, header.getProcessor());
                                     BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
@@ -125,6 +123,8 @@ public class OSMessagingController extends AbstractPlainJsonController {
                     error = new OSMessagingError(OSMessagingErrorConstants.PROCESSING_EXCEPTION,
                             getExceptionMessage(LocaleType.APPLICATION, e));
                 }
+            } else {
+                error = getOSMessagingError(OSMessagingErrorConstants.AUTHORIZATION_REQUIRED);
             }
         }
 
