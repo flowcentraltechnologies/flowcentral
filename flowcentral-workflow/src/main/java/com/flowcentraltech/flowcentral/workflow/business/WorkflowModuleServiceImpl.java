@@ -218,7 +218,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     private static final String CASENO_OWNER_ID = "workflow-moduleservice";
 
-    private static final String CASENO_FORMAT_BASE = "{yy}{ddd}-{N:5}";
+    private static final String CASENO_FORMAT_BASE = "{yy}{DDD}-{N:5}";
 
     @Configurable
     private OrganizationModuleService organizationModuleService;
