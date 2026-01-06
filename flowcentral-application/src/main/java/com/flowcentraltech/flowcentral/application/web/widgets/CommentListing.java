@@ -32,9 +32,9 @@ import com.tcdng.unify.core.format.Formatter;
  * @since 4.1
  */
 @Component("fc-commentlisting")
-@UplAttributes({ @UplAttribute(name = "userImageSrc", type = String.class, defaultVal = "$t{/images/user_comment.png}"),
-        @UplAttribute(name = "timestampFormatter", type = Formatter.class,
-                defaultVal = "$d{!datetimeformat style:long}") })
+@UplAttributes({
+        @UplAttribute(name = "userImageSrc", type = String.class, defaultVal = "$t{/images/user_comment.png}"),
+        @UplAttribute(name = "timestampFormatter", type = Formatter.class, defaultVal = "$d{!datetimeformat style:long}") })
 public class CommentListing extends AbstractFlowCentralControl {
 
     public Formatter<?> getTimestampFormatter() throws UnifyException {
