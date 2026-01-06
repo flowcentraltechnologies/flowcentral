@@ -53,7 +53,7 @@ public class FileAttachmentImageWidget extends AbstractFlowCentralMultiControl {
     }
 
     @Override
-    public boolean isSupportStretch() {
+    public boolean isSupportStretch() throws UnifyException {
         return false;
     }
 
