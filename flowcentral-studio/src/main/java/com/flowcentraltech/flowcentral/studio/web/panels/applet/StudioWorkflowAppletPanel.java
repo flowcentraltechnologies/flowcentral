@@ -65,7 +65,7 @@ public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
             case CUSTOM_PAGE:
                 StudioWorkflowApplet sapplet = getValue(StudioWorkflowApplet.class);
                 WorkflowEditorPage workflowEditorPage = sapplet.getWorkflowEditorPage();
-                setWidgetVisible("publishBtn", !workflowEditorPage.isPublished());
+                setWidgetVisible("publishBtn", !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
                 setWidgetVisible("saveDesignCloseBtn", !applet.appletCtx().isReadOnly());
                 switchContent("workflowEditorPagePanel");
                 break;

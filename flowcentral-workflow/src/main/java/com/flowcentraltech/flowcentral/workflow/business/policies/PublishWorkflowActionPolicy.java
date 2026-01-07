@@ -43,7 +43,8 @@ public class PublishWorkflowActionPolicy extends AbstractFormActionPolicy {
 
     @Override
     public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
-        return !((Workflow) reader.getValueObject()).isPublished();
+        return !((Workflow) reader.getValueObject()).isPublished()
+                && !((Workflow) reader.getValueObject()).isRunnable();
     }
 
     @Override

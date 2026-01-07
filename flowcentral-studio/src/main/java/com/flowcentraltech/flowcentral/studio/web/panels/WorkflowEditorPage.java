@@ -75,6 +75,10 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
     public boolean isPublished() throws UnifyException {
         return au().environment().value(boolean.class, "published", new WorkflowQuery().id(workflowId));
     }
+
+    public boolean isRunnable() throws UnifyException {
+        return au().environment().value(boolean.class, "runnable", new WorkflowQuery().id(workflowId));
+    }
     
     public void publish() throws UnifyException {
         Workflow workflow = au().environment().listLean(Workflow.class, workflowId);
