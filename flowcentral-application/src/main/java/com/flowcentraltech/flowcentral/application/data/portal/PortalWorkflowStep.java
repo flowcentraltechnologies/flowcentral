@@ -33,17 +33,17 @@ public class PortalWorkflowStep {
 
     private String applet;
 
-    private boolean error;
+    private String type;
     
     private List<PortalWorkflowUserAction> userActions;
 
     public PortalWorkflowStep(String name, String description, String label, String applet,
-            boolean error, List<PortalWorkflowUserAction> userActions) {
+            String type, List<PortalWorkflowUserAction> userActions) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.applet = applet;
-        this.error = error;
+        this.type = type;
         this.userActions = userActions;
     }
 
@@ -63,8 +63,8 @@ public class PortalWorkflowStep {
         return applet;
     }
 
-    public boolean isError() {
-        return error;
+    public String getType() {
+        return type;
     }
 
     public List<PortalWorkflowUserAction> getUserActions() {

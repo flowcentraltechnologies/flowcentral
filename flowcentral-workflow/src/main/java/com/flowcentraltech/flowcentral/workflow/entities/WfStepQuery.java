@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
@@ -24,7 +25,6 @@ import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNotNull;
 import com.tcdng.unify.core.criterion.NotEquals;
-import com.tcdng.unify.core.criterion.Or;
 
 /**
  * Workflow step query.
@@ -33,6 +33,11 @@ import com.tcdng.unify.core.criterion.Or;
  * @version 1.0
  */
 public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
+
+    private static final List<WorkflowStepType> ACTIONABLES = Arrays.asList(
+            WorkflowStepType.USER_ACTION,
+            WorkflowStepType.START,
+            WorkflowStepType.ERROR);
 
     public WfStepQuery() {
         super(WfStep.class);
@@ -43,9 +48,7 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     }
 
     public WfStepQuery userActionable() {
-        return (WfStepQuery) addRestriction(new And().add(new IsNotNull("appletName"))
-                .add(new Or().add(new Equals("type", WorkflowStepType.USER_ACTION))
-                        .add(new Equals("type", WorkflowStepType.ERROR))));
+        return (WfStepQuery) addIsNotNull("appletName").addAmongst("type", ACTIONABLES);
     }
 
     public WfStepQuery routableTo() {
@@ -98,7 +101,7 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     public WfStepQuery workflowLoadingTable(String workflowLoadingTable) {
         return (WfStepQuery) addEquals("workflowLoadingTable", workflowLoadingTable);
     }
-    
+
     public WfStepQuery isWithLoadingTable() {
         return (WfStepQuery) addIsNotNull("workflowLoadingTable");
     }

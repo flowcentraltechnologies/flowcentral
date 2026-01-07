@@ -57,7 +57,7 @@ public class WfStepEditPanel extends AbstractDialogPanel {
         setVisible("frmRule", isPolicy);
         setVisible("frmBinaryConditionName", WorkflowStepType.BINARY_ROUTING.equals(type));
         setVisible("frmActionType", WorkflowStepType.RECORD_ACTION.equals(type));
-        setVisible("frmAppletName", isUserInteractive);
+        setVisible("frmAppletName", isStart || isUserInteractive);
         setVisible("frmReminderMinutes", isUserAct);
         setVisible("frmCriticalMinutes", isUserAct);
         setVisible("frmExpiryMinutes", isUserAct);
