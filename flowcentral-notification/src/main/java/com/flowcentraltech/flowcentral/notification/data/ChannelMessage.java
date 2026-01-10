@@ -22,7 +22,9 @@ import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -187,9 +189,10 @@ public class ChannelMessage {
             return this;
         }
 
-        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline) {
-            attachments
-                    .add(Attachment.newBuilder(type, inline).name(name).fileName(name).title(title).data(data).build());
+        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline)
+                throws UnifyException {
+            attachments.add(Attachment.newBuilder(type, inline).name(name).fileName(name).title(title)
+                    .file(UploadedFile.create(name, data)).build());
             return this;
         }
 

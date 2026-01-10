@@ -33,6 +33,7 @@ import com.tcdng.unify.common.util.StringTokenUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -273,14 +274,16 @@ public class NotifMessage {
         }
 
         public Builder addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data,
-                boolean inline) {
-            attachments.add(
-                    Attachment.newBuilder(type, inline).name(name).title(title).fileName(fileName).data(data).build());
+                boolean inline) throws UnifyException {
+            attachments.add(Attachment.newBuilder(type, inline).name(name).title(title).fileName(fileName)
+                    .file(UploadedFile.create(name, data)).build());
             return this;
         }
 
-        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline) {
-            attachments.add(Attachment.newBuilder(type, inline).name(name).title(title).data(data).build());
+        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline)
+                throws UnifyException {
+            attachments.add(Attachment.newBuilder(type, inline).name(name).title(title)
+                    .file(UploadedFile.create(name, data)).build());
             return this;
         }
 

@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.entities.FileAttachment;
 import com.flowcentraltech.flowcentral.test.AbstractFlowCentralTest;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.UploadedFile;
 
 /**
  * Application file attachment provider tests.
@@ -44,7 +45,7 @@ public class FileAttachmentProviderTest extends AbstractFlowCentralTest {
     @Test
     public void testSychFileAttachments() throws Exception {
         Attachment attachment = Attachment.newBuilder(FileAttachmentType.IMAGE, false).name("disk").title("Disk")
-                .data(new byte[] { (byte) 0xbe, (byte) 0xba }).build();
+                .file(UploadedFile.create("disk", new byte[] { (byte) 0xbe, (byte) 0xba })).build();
         fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY, "application.application",
                 1L, attachment);
         boolean synched = fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
@@ -56,7 +57,7 @@ public class FileAttachmentProviderTest extends AbstractFlowCentralTest {
         assertEquals("disk", synchAttachment.getName());
         assertEquals("Disk", synchAttachment.getTitle());
         assertNull(synchAttachment.getFileName());
-        byte[] data = synchAttachment.getData();
+        final byte[] data = synchAttachment.getFile().getDataAndInvalidate();
         assertNotNull(data);
         assertEquals((byte) 0xbe, data[0]);
         assertEquals((byte) 0xba, data[1]);

@@ -36,6 +36,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.FileAttachmentInfo;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -86,13 +87,13 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
     }
 
     @Override
-    public void saveUpload(int dataIndex, FileAttachmentType type, String filename, byte[] fileData)
+    public void saveUpload(int dataIndex, FileAttachmentType type, String filename, UploadedFile file)
             throws UnifyException {
         Attachments attachments = getValue(Attachments.class);
         if (attachments != null) {
             Attachment attachment = attachments.getAttachment(dataIndex);
             AttachmentsProvider provider = getComponent(AttachmentsProvider.class, attachments.getProvider());
-            provider.saveAttachmentData(attachment, filename, fileData);
+            provider.saveAttachmentData(attachment, filename, file);
             attachment.setPresent(true);
             hintUser("$m{attachmentspanel.upload.success.hint}", attachment.getDescription());
         }

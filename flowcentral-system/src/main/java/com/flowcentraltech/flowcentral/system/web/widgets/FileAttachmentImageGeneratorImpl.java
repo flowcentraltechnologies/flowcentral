@@ -72,7 +72,7 @@ public class FileAttachmentImageGeneratorImpl extends AbstractImageGenerator imp
             Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(category, entityName, entityInstId,
                     attachmentName);
             if (attachment != null) {
-                photo = attachment.getData();
+                photo = attachment.getFile().getDataAndInvalidate();
                 return true;
             }
         }

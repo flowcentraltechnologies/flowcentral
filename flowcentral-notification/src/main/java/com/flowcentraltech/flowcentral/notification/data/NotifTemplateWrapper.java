@@ -53,25 +53,30 @@ public interface NotifTemplateWrapper {
 
     void addParam(String name, Object val);
 
-    void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data);
+    void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data)
+            throws UnifyException;
 
-    void addAttachment(FileAttachmentType type, String name, String title, byte[] data);
-
-    void addAttachment(FileAttachmentType type, String name, String title, String fileName, String provider,
-            String sourceId);
-
-    void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId);
-
-    void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data, boolean inline);
-
-    void addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline);
+    void addAttachment(FileAttachmentType type, String name, String title, byte[] data) throws UnifyException;
 
     void addAttachment(FileAttachmentType type, String name, String title, String fileName, String provider,
-            String sourceId, boolean inline);
+            String sourceId) throws UnifyException;
 
-    void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId, boolean inline);
+    void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId)
+            throws UnifyException;
 
-    void addAttachment(Attachment attachment);
+    void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data, boolean inline)
+            throws UnifyException;
+
+    void addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline)
+            throws UnifyException;
+
+    void addAttachment(FileAttachmentType type, String name, String title, String fileName, String provider,
+            String sourceId, boolean inline) throws UnifyException;
+
+    void addAttachment(FileAttachmentType type, String name, String title, String provider, String sourceId,
+            boolean inline) throws UnifyException;
+
+    void addAttachment(Attachment attachment) throws UnifyException;
 
     NotifMessage getMessage();
 

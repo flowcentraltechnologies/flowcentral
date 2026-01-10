@@ -69,7 +69,7 @@ public class FormFileAttachmentsHandler extends AbstractFileAttachmentHandler {
                         .title(!StringUtils.isBlank(fileAttachmenInfo.getDescription())
                                 ? fileAttachmenInfo.getDescription()
                                 : fileAttachmenInfo.getFilename())
-                        .fileName(fileAttachmenInfo.getFilename()).data(fileAttachmenInfo.getAttachment()).build());
+                        .fileName(fileAttachmenInfo.getFilename()).file(fileAttachmenInfo.getAttachment()).build());
     }
 
     @Override
@@ -88,7 +88,7 @@ public class FormFileAttachmentsHandler extends AbstractFileAttachmentHandler {
                 np.getEntityName(), np.getInstId(), fileAttachmenInfo.getName());
         if (attachment != null) {
             result.setFilename(attachment.getFileName());
-            result.setAttachment(attachment.getData());
+            result.setAttachment(attachment.getFile());
         }
 
         return result;

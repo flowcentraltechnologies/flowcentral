@@ -263,6 +263,7 @@ import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
@@ -2851,7 +2852,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             fileAttachment.setName(attachment.getName());
             fileAttachment.setTitle(attachment.getTitle());
             fileAttachment.setFileName(attachment.getFileName());
-            fileAttachment.setFile(new FileAttachmentDoc(attachment.getData()));
+            fileAttachment.setFile(new FileAttachmentDoc(attachment.getFile().getDataAndInvalidate()));
             environment().create(fileAttachment);
             return true;
         }
@@ -2859,7 +2860,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         oldFileAttachment.setType(attachment.getType());
         oldFileAttachment.setTitle(attachment.getTitle());
         oldFileAttachment.setFileName(attachment.getFileName());
-        oldFileAttachment.setFile(new FileAttachmentDoc(attachment.getData()));
+        oldFileAttachment.setFile(new FileAttachmentDoc(attachment.getFile().getDataAndInvalidate()));
         environment().updateByIdVersion(oldFileAttachment);
         return false;
     }
@@ -2910,7 +2911,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             return Attachment
                     .newBuilder(fileAttachment.getId(), fileAttachment.getType(), false, fileAttachment.getVersionNo())
                     .name(fileAttachment.getName()).title(fileAttachment.getTitle())
-                    .fileName(fileAttachment.getFileName()).data(fileAttachment.getFile().getData()).build();
+                    .fileName(fileAttachment.getFileName())
+                    .file(UploadedFile.create(fileAttachment.getFileName(), fileAttachment.getFile().getData()))
+                    .build();
         }
 
         return null;

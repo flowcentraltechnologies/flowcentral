@@ -764,7 +764,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY,
                 SecurityModuleEntityConstants.USER_ENTITY_NAME, userId, SecurityModuleAttachmentConstants.PHOTO);
         if (attachment != null) {
-            return attachment.getData();
+            return attachment.getFile().getDataAndInvalidate();
         }
 
         return null;
