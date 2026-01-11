@@ -1531,7 +1531,7 @@
 					label="$m{application.appentityattachment.typedesc}"
 					type="LIST_ONLY" key="type" property="description" />
 				<field name="label"
-					label="$m{application.appentityattachment.label}"
+					label="$m{application.appentityattachment.fieldlabel}"
 					type="STRING"
 					inputWidget="application.text" />
 			</fields>
