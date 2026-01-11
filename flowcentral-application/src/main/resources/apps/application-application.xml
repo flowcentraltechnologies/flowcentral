@@ -1526,7 +1526,7 @@
 					label="$m{application.appentityattachment.type}"
 					type="ENUM_REF"
 					references="fileattachmenttypelist"
-					inputWidget="application.enumlist" />
+					inputWidget="application.fileattachmenttypelist" />
 				<field name="typeDesc"
 					label="$m{application.appentityattachment.typedesc}"
 					type="LIST_ONLY" key="type" property="description" />
