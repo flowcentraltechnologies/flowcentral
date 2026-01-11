@@ -61,6 +61,7 @@ import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
+import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -106,6 +107,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplet;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityAttachment;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalForm;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalFormElement;
@@ -808,7 +810,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     for (AppEntityAttachment appEntityAttachment : appEntity.getAttachmentList()) {
                         edb.addAttachmentDef(appEntityAttachment.getType(), appEntityAttachment.getName(),
-                                appEntityAttachment.getDescription());
+                                appEntityAttachment.getDescription(), appEntityAttachment.getLabel());
                     }
 
                     for (AppEntitySeries appEntitySeries : appEntity.getSeriesList()) {
@@ -3981,8 +3983,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
                 }
 
+                List<PortalEntityAttachment> attachments = new ArrayList<PortalEntityAttachment>();
+                for (EntityAttachmentDef attachmentDef : entityDef.getAttachmentList()) {
+                    attachments.add(new PortalEntityAttachment(attachmentDef.getType().toString(),
+                            attachmentDef.getName(), attachmentDef.getLabel()));
+                }
+
                 entities.put(entity, new PortalEntity(entityDef.getLongName(), entityDef.getDescription(),
-                        DataUtils.unmodifiableList(fields)));
+                        DataUtils.unmodifiableList(fields), DataUtils.unmodifiableList(attachments)));
             }
 
             final String table = appletDef.getPropDef(AppletPropertyConstants.SEARCH_TABLE).getValue();
@@ -6555,12 +6563,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityAttachment.setName(entityAttachmentConfig.getName());
                     appEntityAttachment
                             .setDescription(resolveApplicationMessage(entityAttachmentConfig.getDescription()));
+                    appEntityAttachment.setLabel(resolveApplicationMessage(entityAttachmentConfig.getLabel()));
                     appEntityAttachment.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC);
                     attachmentList.add(appEntityAttachment);
                 } else {
                     oldAppEntityAttachment.setType(entityAttachmentConfig.getType());
                     oldAppEntityAttachment
                             .setDescription(resolveApplicationMessage(entityAttachmentConfig.getDescription()));
+                    oldAppEntityAttachment.setLabel(resolveApplicationMessage(entityAttachmentConfig.getLabel()));
                     oldAppEntityAttachment.setConfigType(ConfigType.STATIC);
                     attachmentList.add(oldAppEntityAttachment);
                 }

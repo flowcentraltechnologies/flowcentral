@@ -15,45 +15,36 @@
  */
 package com.flowcentraltech.flowcentral.application.data.portal;
 
-import java.util.List;
-
 /**
- * Portal entity object.
+ * Portal entity attachment object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class PortalEntity {
+public class PortalEntityAttachment {
+
+    private String type;
 
     private String name;
 
-    private String description;
+    private String label;
 
-    private List<PortalEntityField> fields;
-
-    private List<PortalEntityAttachment> attachments;
-
-    public PortalEntity(String name, String description, List<PortalEntityField> fields,
-            List<PortalEntityAttachment> attachments) {
+    public PortalEntityAttachment(String type, String name, String label) {
+        this.type = type;
         this.name = name;
-        this.description = description;
-        this.fields = fields;
-        this.attachments = attachments;
+        this.label = label;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getLabel() {
+        return label;
     }
 
-    public List<PortalEntityField> getFields() {
-        return fields;
-    }
-
-    public List<PortalEntityAttachment> getAttachments() {
-        return attachments;
-    }
 }

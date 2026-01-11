@@ -1552,7 +1552,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addAttachmentDef(FileAttachmentType type, String name, String description) {
+        public Builder addAttachmentDef(FileAttachmentType type, String name, String description, String label) {
             if (attachmentDefMap == null) {
                 attachmentDefMap = new LinkedHashMap<String, EntityAttachmentDef>();
             }
@@ -1561,7 +1561,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Attachment with name [" + name + "] already exists in this definition.");
             }
 
-            attachmentDefMap.put(name, new EntityAttachmentDef(type, name, description));
+            attachmentDefMap.put(name, new EntityAttachmentDef(type, name, description, label));
             return this;
         }
 
