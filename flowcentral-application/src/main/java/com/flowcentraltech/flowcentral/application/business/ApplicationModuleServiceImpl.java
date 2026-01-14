@@ -2396,9 +2396,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             Class<T> componentClazz, String filterBy, String filter) throws UnifyException {
         return StringUtils.isBlank(filter)
                 ? environment().valueList(Long.class, "id",
-                        Query.of(componentClazz).addEquals("applicationName", applicationName).addOrder("id"))
-                : environment().valueList(Long.class, "id", Query.of(componentClazz)
-                        .addEquals("applicationName", applicationName).addILike(filterBy, filter).addOrder("id"));
+                        Query.of(componentClazz).addEquals("applicationName", applicationName)
+                                .addNotEndWith("name", "_wRunnable").addOrder("id"))
+                : environment().valueList(Long.class, "id",
+                        Query.of(componentClazz).addEquals("applicationName", applicationName)
+                                .addNotEndWith("name", "_wRunnable").addILike(filterBy, filter).addOrder("id"));
     }
 
     @Override
