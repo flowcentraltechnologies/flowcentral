@@ -31,4 +31,6 @@ public interface OSMessagingModuleNameConstants {
 
     String OSMESSAGING_CONTROLLER = OSMessagingEndpointConstants.ENDPOINT_PATH;
 
+    String OSSTREAMING_CONTROLLER = OSMessagingEndpointConstants.STREAMING_PATH;
+
 }

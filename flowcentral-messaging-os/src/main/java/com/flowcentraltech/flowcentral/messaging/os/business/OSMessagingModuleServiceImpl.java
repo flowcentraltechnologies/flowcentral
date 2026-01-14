@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +66,7 @@ import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.RandomUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.http.HttpRequestHeaders;
 
 /**
  * Implementation of OS messaging module service.
@@ -145,8 +147,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                             if (osPeerEndpointDef.isPresent()
                                     && osPeerEndpointDef.getPeerPassword().equals(credentials.getPassword())) {
                                 return new OSMessagingHeader(credentials.getSource(), credentials.getProcessor(),
-                                        isComponent(credentials.getProcessor()) && getComponent(
-                                                credentials.getProcessor()) instanceof OSMessagingProcessor,
+                                        isComponent(credentials.getProcessor()) && (getComponent(
+                                                credentials.getProcessor()) instanceof OSMessagingProcessor || getComponent(
+                                                        credentials.getProcessor()) instanceof OSStreamingProcessor),
                                         osPeerEndpointDef.getVersionNo());
                             }
                         } catch (Exception e) {
@@ -216,6 +219,18 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function,
+            String correlationId, HttpRequestHeaders headers, InputStream in) throws UnifyException {
+        Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
+        if (target.isPresent()) {
+            return Optional.ofNullable(
+                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, headers, in, true));
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function,
             String correlationId, String requestJson) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
@@ -228,10 +243,29 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function,
+            String correlationId, HttpRequestHeaders headers, InputStream in) throws UnifyException {
+        Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
+        if (target.isPresent()) {
+            return Optional.ofNullable(
+                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, headers, in, false));
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service,
             String correlationId, String requestJson) throws UnifyException {
         return Optional
                 .ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, requestJson, true));
+    }
+
+    @Override
+    public Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service,
+            String correlationId, HttpRequestHeaders headers, InputStream in) throws UnifyException {
+        return Optional
+                .ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, headers, in, true));
     }
 
     @Override
@@ -417,6 +451,43 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         PostResp<String> resp = IOUtils.postJsonToEndpoint(osPeerEndpointDef.getEndpointUrl(), reqJson, headers);
+        if (resp.isError()) {
+            throwOperationErrorException(new Exception(resp.getError()));
+        }
+
+        if (systemModuleService.getSysParameterValue(boolean.class,
+                OSMessagingModuleSysParamConstants.MESSAGE_LOGGING_ENABLED)) {
+            OSMessagingLog log = new OSMessagingLog();
+            log.setTarget(target);
+            log.setProcessor(processor);
+            log.setCorrelationId(correlationId);
+            log.setRequestBody(resp.getReqJson());
+            log.setResponseBody(resp.getRespJson());
+            log.setRuntimeInMilliSec(resp.getExecMilliSec());
+            environment().create(log);
+        }
+
+        logDebug("Response message [\n{0}]", resp.getRespJson());
+        return resp.getRespJson();
+    }
+
+    private String sendMessage(final String target, final String processor, final String function, final String service,
+            final String correlationId, HttpRequestHeaders _headers, InputStream in, boolean sync) throws UnifyException {
+        logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...", correlationId);
+        final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
+        final Map<String, String> headers = new HashMap<String, String>();
+        headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
+        headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
+        headers.put(OSMessagingRequestHeaderConstants.ROUTING_TYPE, sync ? "sync" : "async");
+        if (!StringUtils.isBlank(function)) {
+            headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function);
+        }
+
+        if (!StringUtils.isBlank(service)) {
+            headers.put(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE, service);
+        }
+
+        PostResp<String> resp = IOUtils.postStreamToEndpoint(osPeerEndpointDef.getEndpointStreamUrl(), in, headers);
         if (resp.isError()) {
             throwOperationErrorException(new Exception(resp.getError()));
         }

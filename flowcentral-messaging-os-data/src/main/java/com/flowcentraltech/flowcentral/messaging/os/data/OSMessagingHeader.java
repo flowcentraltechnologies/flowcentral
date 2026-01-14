@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
-
 /**
  * OS messaging header.
  * 

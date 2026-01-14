@@ -46,6 +46,8 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     private String endpointUrl;
 
+    private String endpointStreamUrl;
+
     private String peerPassword;
 
     private RecordStatus status;
@@ -64,6 +66,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         this.name = name;
         this.description = description;
         this.endpointUrl = endpointUrl + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
+        this.endpointStreamUrl = endpointUrl + OSMessagingModuleNameConstants.OSSTREAMING_CONTROLLER; 
         this.peerPassword = peerPassword;
         this.status = status;
         this.versionNo = versionNo;
@@ -103,6 +106,10 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     public String getEndpointUrl() {
         return endpointUrl;
+    }
+
+    public String getEndpointStreamUrl() {
+        return endpointStreamUrl;
     }
 
     public String getPeerPassword() {

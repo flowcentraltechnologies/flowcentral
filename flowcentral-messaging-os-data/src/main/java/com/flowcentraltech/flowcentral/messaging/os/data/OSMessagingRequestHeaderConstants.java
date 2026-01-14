@@ -32,5 +32,7 @@ public interface OSMessagingRequestHeaderConstants {
     String DELEGATE_FUNCTION = "X-Delegate-Func";
 
     String DELEGATE_SERVICE = "X-Delegate-Service";
+
+    String UPLOAD_DETAIL = "X-Unify-Upload";
     
 }
