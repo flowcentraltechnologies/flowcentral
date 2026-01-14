@@ -27,6 +27,8 @@ public interface OSMessagingRequestHeaderConstants {
     
     String CORRELATION_ID = "X-Correlation-Id";
     
+    String FILE_ID = "X-File-Id";
+    
     String ROUTING_TYPE = "X-Routing-Type";
 
     String DELEGATE_FUNCTION = "X-Delegate-Func";

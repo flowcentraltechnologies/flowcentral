@@ -104,6 +104,8 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                    origin header information
      * @param function
      *                    the delegate function
+     * @param correlationId the correlation ID
+     * @param fileId the file ID
      * @param disposition the content disposition
      * @param in
      *                    the input stream
@@ -112,7 +114,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
-            ContentDisposition disposition, InputStream in) throws UnifyException;
+            String fileId, ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends a asynchronous message to delegate function.
@@ -137,6 +139,8 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                    origin header information
      * @param function
      *                    the delegate function
+     * @param correlationId the correlation ID
+     * @param fileId the file ID
      * @param disposition the content disposition
      * @param in
      *                    the input stream
@@ -145,7 +149,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
-            ContentDisposition disposition, InputStream in) throws UnifyException;
+            String fileId, ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends a synchronous message to delegate service.
@@ -170,6 +174,8 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                    origin header information
      * @param service
      *                    the delegate service
+     * @param correlationId the correlation ID
+     * @param fileId the file ID
      * @param disposition    the content disposition
      * @param in
      *                    the input stream
@@ -178,7 +184,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service, String correlationId,
-            ContentDisposition disposition, InputStream in) throws UnifyException;
+            String fileId, ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends a asynchronous message to delegate service.

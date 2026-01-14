@@ -221,11 +221,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function,
-            String correlationId, ContentDisposition disposition, InputStream in) throws UnifyException {
+            String correlationId, String fileId, ContentDisposition disposition, InputStream in) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(
-                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, disposition, in, true));
+                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, fileId, disposition, in, true));
         }
 
         return Optional.empty();
@@ -245,11 +245,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function,
-            String correlationId, ContentDisposition disposition, InputStream in) throws UnifyException {
+            String correlationId, String fileId, ContentDisposition disposition, InputStream in) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(
-                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, disposition, in, false));
+                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, fileId, disposition, in, false));
         }
 
         return Optional.empty();
@@ -264,9 +264,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service,
-            String correlationId,ContentDisposition disposition, InputStream in) throws UnifyException {
+            String correlationId, String fileId, ContentDisposition disposition, InputStream in) throws UnifyException {
         return Optional
-                .ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, disposition, in, true));
+                .ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, fileId, disposition, in, true));
     }
 
     @Override
@@ -473,7 +473,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private String sendMessage(final String target, final String processor, final String function, final String service,
-            final String correlationId, ContentDisposition disposition, InputStream in, boolean sync)
+            final String correlationId, final String fileId, ContentDisposition disposition, InputStream in, boolean sync)
             throws UnifyException {
         logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...",
                 correlationId);
@@ -482,6 +482,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
         headers.put(OSMessagingRequestHeaderConstants.ROUTING_TYPE, sync ? "sync" : "async");
+        if (!StringUtils.isBlank(fileId)) {
+            headers.put(OSMessagingRequestHeaderConstants.FILE_ID, fileId);
+        }
+
         if (!StringUtils.isBlank(function)) {
             headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function);
         }

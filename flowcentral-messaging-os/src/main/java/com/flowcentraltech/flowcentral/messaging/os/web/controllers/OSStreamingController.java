@@ -72,12 +72,13 @@ public class OSStreamingController extends AbstractHttpUploadController {
                         final String service = headers.getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
                         if (!StringUtils.isBlank(service)) {
                             logDebug("Relaying controller request to delegate service = [{0}]...", service);
+                            final String fileId = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_ID);
                             final String sync = headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
                             final Optional<String> optional = "sync".equalsIgnoreCase(sync)
                                     ? osMessagingModuleService.sendSynchronousMessageToService(header, service,
-                                            correlationId, disposition, in)
+                                            correlationId, fileId, disposition, in)
                                     : osMessagingModuleService.sendSynchronousMessageToService(header, service,
-                                            correlationId, disposition, in);
+                                            correlationId, fileId, disposition, in);
                             if (optional.isPresent()) {
                                 logDebug("Response message [\n{0}]", optional.get());
                                 return optional.get();
@@ -89,12 +90,13 @@ public class OSStreamingController extends AbstractHttpUploadController {
                                     .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
                             if (!StringUtils.isBlank(function)) {
                                 logDebug("Relaying controller request to delegate function = [{0}]...", function);
+                                final String fileId = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_ID);
                                 final String sync = headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
                                 final Optional<String> optional = "sync".equalsIgnoreCase(sync)
                                         ? osMessagingModuleService.sendSynchronousMessageToDelegate(header, function,
-                                                correlationId, disposition, in)
+                                                correlationId, fileId, disposition, in)
                                         : osMessagingModuleService.sendAsynchronousMessageToDelegate(header, function,
-                                                correlationId, disposition, in);
+                                                correlationId, fileId, disposition, in);
                                 if (optional.isPresent()) {
                                     logDebug("Response message [\n{0}]", optional.get());
                                     return optional.get();
