@@ -66,7 +66,8 @@ import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.RandomUtils;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.http.HttpRequestHeaders;
+import com.tcdng.unify.web.util.ContentDisposition;
+import com.tcdng.unify.web.util.HttpUtils;
 
 /**
  * Implementation of OS messaging module service.
@@ -220,11 +221,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function,
-            String correlationId, HttpRequestHeaders headers, InputStream in) throws UnifyException {
+            String correlationId, ContentDisposition disposition, InputStream in) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(
-                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, headers, in, true));
+                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, disposition, in, true));
         }
 
         return Optional.empty();
@@ -244,11 +245,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function,
-            String correlationId, HttpRequestHeaders headers, InputStream in) throws UnifyException {
+            String correlationId, ContentDisposition disposition, InputStream in) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(
-                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, headers, in, false));
+                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, disposition, in, false));
         }
 
         return Optional.empty();
@@ -263,9 +264,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service,
-            String correlationId, HttpRequestHeaders headers, InputStream in) throws UnifyException {
+            String correlationId,ContentDisposition disposition, InputStream in) throws UnifyException {
         return Optional
-                .ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, headers, in, true));
+                .ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, disposition, in, true));
     }
 
     @Override
@@ -472,8 +473,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private String sendMessage(final String target, final String processor, final String function, final String service,
-            final String correlationId, HttpRequestHeaders _headers, InputStream in, boolean sync) throws UnifyException {
-        logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...", correlationId);
+            final String correlationId, ContentDisposition disposition, InputStream in, boolean sync)
+            throws UnifyException {
+        logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...",
+                correlationId);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
@@ -485,6 +488,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
         if (!StringUtils.isBlank(service)) {
             headers.put(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE, service);
+        }
+
+        if (disposition != null) {
+            headers.put(OSMessagingRequestHeaderConstants.UPLOAD_DETAIL, HttpUtils.getUploadHeader(disposition));
         }
 
         PostResp<String> resp = IOUtils.postStreamToEndpoint(osPeerEndpointDef.getEndpointStreamUrl(), in, headers);

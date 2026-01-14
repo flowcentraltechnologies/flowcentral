@@ -29,7 +29,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.http.HttpRequestHeaders;
+import com.tcdng.unify.web.util.ContentDisposition;
 
 /**
  * OS messaging module service.
@@ -104,7 +104,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                    origin header information
      * @param function
      *                    the delegate function
-     * @param headers    the original headers
+     * @param disposition the content disposition
      * @param in
      *                    the input stream
      * @return response message
@@ -112,7 +112,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
-            HttpRequestHeaders headers, InputStream in) throws UnifyException;
+            ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends a asynchronous message to delegate function.
@@ -137,7 +137,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                    origin header information
      * @param function
      *                    the delegate function
-     * @param headers    the original headers
+     * @param disposition the content disposition
      * @param in
      *                    the input stream
      * @return response message
@@ -145,7 +145,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
-            HttpRequestHeaders headers, InputStream in) throws UnifyException;
+            ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends a synchronous message to delegate service.
@@ -170,7 +170,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                    origin header information
      * @param service
      *                    the delegate service
-     * @param headers    the original headers
+     * @param disposition    the content disposition
      * @param in
      *                    the input stream
      * @return response message
@@ -178,7 +178,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service, String correlationId,
-            HttpRequestHeaders headers, InputStream in) throws UnifyException;
+            ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends a asynchronous message to delegate service.

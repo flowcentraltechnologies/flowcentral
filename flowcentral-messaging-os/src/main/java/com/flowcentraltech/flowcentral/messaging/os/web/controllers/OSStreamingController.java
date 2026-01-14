@@ -75,9 +75,9 @@ public class OSStreamingController extends AbstractHttpUploadController {
                             final String sync = headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
                             final Optional<String> optional = "sync".equalsIgnoreCase(sync)
                                     ? osMessagingModuleService.sendSynchronousMessageToService(header, service,
-                                            correlationId, headers, in)
+                                            correlationId, disposition, in)
                                     : osMessagingModuleService.sendSynchronousMessageToService(header, service,
-                                            correlationId, headers, in);
+                                            correlationId, disposition, in);
                             if (optional.isPresent()) {
                                 logDebug("Response message [\n{0}]", optional.get());
                                 return optional.get();
@@ -92,9 +92,9 @@ public class OSStreamingController extends AbstractHttpUploadController {
                                 final String sync = headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
                                 final Optional<String> optional = "sync".equalsIgnoreCase(sync)
                                         ? osMessagingModuleService.sendSynchronousMessageToDelegate(header, function,
-                                                correlationId, headers, in)
+                                                correlationId, disposition, in)
                                         : osMessagingModuleService.sendAsynchronousMessageToDelegate(header, function,
-                                                correlationId, headers, in);
+                                                correlationId, disposition, in);
                                 if (optional.isPresent()) {
                                     logDebug("Response message [\n{0}]", optional.get());
                                     return optional.get();
