@@ -15,12 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Optional;
 
+import com.flowcentraltech.flowcentral.messaging.os.business.OSDownloadProcessor;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessManager;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingModuleService;
-import com.flowcentraltech.flowcentral.messaging.os.business.OSUploadProcessor;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
@@ -33,18 +33,17 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.AbstractHttpUploadController;
+import com.tcdng.unify.web.AbstractHttpDownloadController;
 import com.tcdng.unify.web.http.HttpRequestHeaders;
-import com.tcdng.unify.web.util.ContentDisposition;
 
 /**
- * OS Upload Controller.
+ * OS download Controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component(OSMessagingModuleNameConstants.OSMESSAGING_UPLOAD_CONTROLLER)
-public class OSUploadController extends AbstractHttpUploadController {
+@Component(OSMessagingModuleNameConstants.OSMESSAGING_DOWNLOAD_CONTROLLER)
+public class OSDownloadController extends AbstractHttpDownloadController {
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
@@ -52,11 +51,11 @@ public class OSUploadController extends AbstractHttpUploadController {
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
+    
     @SuppressWarnings("unchecked")
     @Override
-    protected String handleUpload(HttpRequestHeaders headers, ContentDisposition disposition, InputStream in)
-            throws UnifyException {
-        logDebug("Executing controller request = [{0}]...", disposition);
+    protected void handleDownload(HttpRequestHeaders headers, OutputStream out) throws UnifyException {
+        logDebug("Executing controller request ...");
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
         final String correlationId = headers.getHeader(OSMessagingRequestHeaderConstants.CORRELATION_ID);
@@ -73,11 +72,11 @@ public class OSUploadController extends AbstractHttpUploadController {
                         if (!StringUtils.isBlank(service)) {
                             logDebug("Relaying controller request to delegate service = [{0}]...", service);
                             final String fileId = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_ID);
-                            final Optional<String> optional = osMessagingModuleService.sendUploadMessageToService(
-                                    header, service, correlationId, fileId, disposition, in);
+                            final Optional<String> optional = osMessagingModuleService.sendDownloadMessageToService(
+                                    header, service, correlationId, fileId, out);
                             if (optional.isPresent()) {
                                 logDebug("Response message [\n{0}]", optional.get());
-                                return optional.get();
+                                return;
                             }
 
                             error = getOSMessagingError(OSMessagingErrorConstants.DELEGATE_FUNCTION_NOT_RESOLVED);
@@ -87,19 +86,19 @@ public class OSUploadController extends AbstractHttpUploadController {
                             if (!StringUtils.isBlank(function)) {
                                 logDebug("Relaying controller request to delegate function = [{0}]...", function);
                                 final String fileId = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_ID);
-                                final Optional<String> optional = osMessagingModuleService.sendUploadMessageToDelegate(
-                                        header, function, correlationId, fileId, disposition, in);
+                                final Optional<String> optional = osMessagingModuleService.sendDownloadMessageToDelegate(
+                                        header, function, correlationId, fileId, out);
                                 if (optional.isPresent()) {
                                     logDebug("Response message [\n{0}]", optional.get());
-                                    return optional.get();
+                                    return;
                                 }
 
                                 error = getOSMessagingError(OSMessagingErrorConstants.DELEGATE_FUNCTION_NOT_RESOLVED);
                             } else {
                                 if (header.isProcessorPresent()) {
-                                    final OSUploadProcessor<BaseOSMessagingResp> _processor = getComponent(
-                                            OSUploadProcessor.class, header.getProcessor());
-                                    response = _processor.process(headers, disposition, in);
+                                    final OSDownloadProcessor<BaseOSMessagingResp> _processor = getComponent(
+                                            OSDownloadProcessor.class, header.getProcessor());
+                                    response = _processor.process(headers, out);
                                 } else {
                                     error = getOSMessagingError(OSMessagingErrorConstants.PROCESSOR_NOT_FOUND);
                                 }
@@ -123,10 +122,6 @@ public class OSUploadController extends AbstractHttpUploadController {
         }
 
         response.setCorrelationId(correlationId);
-
-        final String respJson = getResponseJsonFromObject(response);
-        logDebug("Response message [\n{0}]", respJson);
-        return respJson;
     }
 
     private OSMessagingError getOSMessagingError(String messageKey) throws UnifyException {

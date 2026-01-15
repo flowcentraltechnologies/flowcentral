@@ -31,6 +31,8 @@ public interface OSMessagingModuleNameConstants {
 
     String OSMESSAGING_CONTROLLER = OSMessagingEndpointConstants.ENDPOINT_PATH;
 
-    String OSUPLOAD_CONTROLLER = OSMessagingEndpointConstants.UPLOAD_PATH;
+    String OSMESSAGING_UPLOAD_CONTROLLER = OSMessagingEndpointConstants.UPLOAD_PATH;
+
+    String OSMESSAGING_DOWNLOAD_CONTROLLER = OSMessagingEndpointConstants.DOWNLOAD_PATH;
 
 }

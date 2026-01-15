@@ -27,4 +27,6 @@ public interface OSMessagingEndpointConstants {
 
     String UPLOAD_PATH = "/flowcentral/os/upload";
 
+    String DOWNLOAD_PATH = "/flowcentral/os/download";
+
 }
