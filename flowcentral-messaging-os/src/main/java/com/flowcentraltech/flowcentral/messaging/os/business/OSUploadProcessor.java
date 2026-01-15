@@ -24,12 +24,12 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
 import com.tcdng.unify.web.util.ContentDisposition;
 
 /**
- * OS streaming processor.
+ * OS upload processor.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface OSStreamingProcessor<T extends BaseOSMessagingResp> extends FlowCentralComponent {
+public interface OSUploadProcessor<T extends BaseOSMessagingResp> extends FlowCentralComponent {
 
     /**
      * Gets the processor response class.

@@ -27,13 +27,13 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
 import com.tcdng.unify.web.util.ContentDisposition;
 
 /**
- * Convenient abstract base class for OS streaming processors.
+ * Convenient abstract base class for OS upload processors.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractOSStreamingProcessor<T extends BaseOSMessagingResp>
-        extends AbstractFlowCentralComponent implements OSStreamingProcessor<T> {
+public abstract class AbstractOSUploadProcessor<T extends BaseOSMessagingResp> extends AbstractFlowCentralComponent
+        implements OSUploadProcessor<T> {
 
     protected static final OSMessagingError NO_ERROR = new OSMessagingError();
 
@@ -42,7 +42,7 @@ public abstract class AbstractOSStreamingProcessor<T extends BaseOSMessagingResp
 
     private final Class<T> responseClass;
 
-    protected AbstractOSStreamingProcessor(Class<T> responseClass) {
+    protected AbstractOSUploadProcessor(Class<T> responseClass) {
         this.responseClass = responseClass;
     }
 
@@ -82,5 +82,6 @@ public abstract class AbstractOSStreamingProcessor<T extends BaseOSMessagingResp
         return new OSMessagingError(errorCode, getApplicationMessage(errorCode, params));
     }
 
-    protected abstract T doProcess(HttpRequestHeaders headers, ContentDisposition disposition, InputStream in) throws UnifyException;
+    protected abstract T doProcess(HttpRequestHeaders headers, ContentDisposition disposition, InputStream in)
+            throws UnifyException;
 }

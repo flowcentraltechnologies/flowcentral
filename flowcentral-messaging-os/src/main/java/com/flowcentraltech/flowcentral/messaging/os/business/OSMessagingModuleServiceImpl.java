@@ -151,7 +151,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                                 return new OSMessagingHeader(credentials.getSource(), credentials.getProcessor(),
                                         isComponent(credentials.getProcessor()) && (getComponent(
                                                 credentials.getProcessor()) instanceof OSMessagingProcessor || getComponent(
-                                                        credentials.getProcessor()) instanceof OSStreamingProcessor),
+                                                        credentials.getProcessor()) instanceof OSUploadProcessor),
                                         osPeerEndpointDef.getVersionNo());
                             }
                         } catch (Exception e) {

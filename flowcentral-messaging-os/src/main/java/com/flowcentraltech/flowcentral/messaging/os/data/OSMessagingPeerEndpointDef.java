@@ -67,7 +67,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         this.name = name;
         this.description = description;
         this.endpointUrl = endpointUrl + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
-        this.endpointStreamUrl = endpointUrl + OSMessagingModuleNameConstants.OSSTREAMING_CONTROLLER; 
+        this.endpointStreamUrl = endpointUrl + OSMessagingModuleNameConstants.OSUPLOAD_CONTROLLER; 
         this.peerPassword = peerPassword;
         this.status = status;
         this.versionNo = versionNo;

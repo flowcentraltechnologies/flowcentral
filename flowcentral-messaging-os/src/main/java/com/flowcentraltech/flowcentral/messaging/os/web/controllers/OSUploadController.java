@@ -20,7 +20,7 @@ import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessManager;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingModuleService;
-import com.flowcentraltech.flowcentral.messaging.os.business.OSStreamingProcessor;
+import com.flowcentraltech.flowcentral.messaging.os.business.OSUploadProcessor;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
@@ -38,13 +38,13 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
 import com.tcdng.unify.web.util.ContentDisposition;
 
 /**
- * OS Streaming Controller.
+ * OS Upload Controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component(OSMessagingModuleNameConstants.OSSTREAMING_CONTROLLER)
-public class OSStreamingController extends AbstractHttpUploadController {
+@Component(OSMessagingModuleNameConstants.OSUPLOAD_CONTROLLER)
+public class OSUploadController extends AbstractHttpUploadController {
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
@@ -105,8 +105,8 @@ public class OSStreamingController extends AbstractHttpUploadController {
                                 error = getOSMessagingError(OSMessagingErrorConstants.DELEGATE_FUNCTION_NOT_RESOLVED);
                             } else {
                                 if (header.isProcessorPresent()) {
-                                    final OSStreamingProcessor<BaseOSMessagingResp> _processor = getComponent(
-                                            OSStreamingProcessor.class, header.getProcessor());
+                                    final OSUploadProcessor<BaseOSMessagingResp> _processor = getComponent(
+                                            OSUploadProcessor.class, header.getProcessor());
                                     response = _processor.process(headers, disposition, in);
                                 } else {
                                     error = getOSMessagingError(OSMessagingErrorConstants.PROCESSOR_NOT_FOUND);

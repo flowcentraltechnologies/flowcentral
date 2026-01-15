@@ -25,6 +25,6 @@ public interface OSMessagingEndpointConstants {
 
     String ENDPOINT_PATH = "/flowcentral/os/messaging";
 
-    String STREAMING_PATH = "/flowcentral/os/streaming";
+    String UPLOAD_PATH = "/flowcentral/os/upload";
 
 }
