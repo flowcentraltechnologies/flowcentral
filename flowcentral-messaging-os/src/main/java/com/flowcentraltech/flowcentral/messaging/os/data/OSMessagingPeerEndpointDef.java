@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +76,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
     }
 
     private OSMessagingPeerEndpointDef() {
-        
+        this.authentications = Collections.emptyMap();
     }
     
     @Override

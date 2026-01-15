@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerEndpointDef;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
+import com.flowcentraltech.flowcentral.messaging.os.data.UnknownTargetResp;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsync;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingLog;
@@ -439,6 +440,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             final String correlationId, String reqJson, boolean sync) throws UnifyException {
         logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...", reqJson);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
+        if (!osPeerEndpointDef.isPresent()) {
+            return prettyJson(UnknownTargetResp.MESSAGE);
+        }
+        
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
@@ -478,6 +483,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...",
                 correlationId);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
+        if (!osPeerEndpointDef.isPresent()) {
+            return prettyJson(UnknownTargetResp.MESSAGE);
+        }
+        
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
