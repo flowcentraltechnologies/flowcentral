@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.messaging.os.util;
 
 import com.flowcentraltech.flowcentral.messaging.os.data.OSCredentials;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSFile;
 import com.tcdng.unify.core.util.EncodingUtils;
 
 /**
@@ -49,17 +48,5 @@ public final class OSMessagingUtils {
         String[] nparts = parts[0].split("\\.", 2);
         return new OSCredentials(nparts[0], nparts[1], parts[1]);
     }
-    
-    public static String getFileSignature(OSFile file) {
-        return file.getOriginalServiceCode() + ";" + file.getFileId();
-    }
-    
-    public static String getFileSignature(String source, String fileId) {
-        return source + ";" + fileId;
-    }
-    
-    public static OSFile getOSFile(String signature) {
-        String[] parts = signature.split(";");
-        return new OSFile(parts[0], parts[1]);
-    }
+
 }
