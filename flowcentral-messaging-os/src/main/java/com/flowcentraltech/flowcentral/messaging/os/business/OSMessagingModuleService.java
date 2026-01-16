@@ -154,7 +154,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @param function
      *                    the delegate function
      * @param correlationId the correlation ID
-     * @param fileId the file ID
+     * @param fileSignature the file Signature
      * @param disposition the content disposition
      * @param in
      *                    the input stream
@@ -163,7 +163,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
-            String fileId, ContentDisposition disposition, InputStream in) throws UnifyException;
+            String fileSignature, ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends an upload message to delegate service.
@@ -173,7 +173,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @param service
      *                    the delegate service
      * @param correlationId the correlation ID
-     * @param fileId the file ID
+     * @param fileSignature the file Signature
      * @param disposition    the content disposition
      * @param in
      *                    the input stream
@@ -182,7 +182,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendUploadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String fileId, ContentDisposition disposition, InputStream in) throws UnifyException;
+            String fileSignature, ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends a download message to delegate function.
@@ -192,7 +192,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @param function
      *                    the delegate function
      * @param correlationId the correlation ID
-     * @param fileId the file ID
+     * @param fileSignature the file Signature
      * @param out
      *                    the output stream
      * @return response message
@@ -200,7 +200,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendDownloadMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
-            String fileId, OutputStream out) throws UnifyException;
+            String fileSignature, OutputStream out) throws UnifyException;
 
     /**
      * Sends a download message to delegate service.
@@ -210,7 +210,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @param service
      *                    the delegate service
      * @param correlationId the correlation ID
-     * @param fileId the file ID
+     * @param fileSignature the file Signature
      * @param disposition    the content disposition
      * @param out
      *                    the output stream
@@ -219,7 +219,7 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendDownloadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String fileId, OutputStream out) throws UnifyException;
+            String fileSignature, OutputStream out) throws UnifyException;
 
     /**
      * Sends synchronous message.

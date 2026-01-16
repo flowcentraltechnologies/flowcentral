@@ -152,8 +152,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                                 return new OSMessagingHeader(credentials.getSource(), credentials.getProcessor(),
                                         isComponent(credentials.getProcessor()) && (getComponent(
                                                 credentials.getProcessor()) instanceof OSMessagingProcessor
-                                                || getComponent(
-                                                        credentials.getProcessor()) instanceof OSUploadProcessor
+                                                || getComponent(credentials.getProcessor()) instanceof OSUploadProcessor
                                                 || getComponent(
                                                         credentials.getProcessor()) instanceof OSDownloadProcessor),
                                         osPeerEndpointDef.getVersionNo());
@@ -252,11 +251,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
-            String fileId, ContentDisposition disposition, InputStream in) throws UnifyException {
+            String fileSignature, ContentDisposition disposition, InputStream in) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(sendUploadMessage(target.get(), header.getProcessor(), null, null, correlationId,
-                    fileId, disposition, in));
+                    fileSignature, disposition, in));
         }
 
         return Optional.empty();
@@ -264,18 +263,18 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendUploadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String fileId, ContentDisposition disposition, InputStream in) throws UnifyException {
-        return Optional.ofNullable(
-                sendUploadMessage(service, header.getProcessor(), null, null, correlationId, fileId, disposition, in));
+            String fileSignature, ContentDisposition disposition, InputStream in) throws UnifyException {
+        return Optional.ofNullable(sendUploadMessage(service, header.getProcessor(), null, null, correlationId,
+                fileSignature, disposition, in));
     }
 
     @Override
     public Optional<String> sendDownloadMessageToDelegate(OSMessagingHeader header, String function,
-            String correlationId, String fileId, OutputStream out) throws UnifyException {
+            String correlationId, String fileSignature, OutputStream out) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
-            return Optional.ofNullable(
-                    sendDownloadMessage(target.get(), header.getProcessor(), null, null, correlationId, fileId, out));
+            return Optional.ofNullable(sendDownloadMessage(target.get(), header.getProcessor(), null, null,
+                    correlationId, fileSignature, out));
         }
 
         return Optional.empty();
@@ -283,9 +282,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendDownloadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String fileId, OutputStream out) throws UnifyException {
+            String fileSignature, OutputStream out) throws UnifyException {
         return Optional.ofNullable(
-                sendDownloadMessage(service, header.getProcessor(), null, null, correlationId, fileId, out));
+                sendDownloadMessage(service, header.getProcessor(), null, null, correlationId, fileSignature, out));
     }
 
     @Override
@@ -489,8 +488,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private String sendUploadMessage(final String target, final String processor, final String function,
-            final String service, final String correlationId, final String fileId, ContentDisposition disposition,
-            InputStream in) throws UnifyException {
+            final String service, final String correlationId, final String fileSignature,
+            ContentDisposition disposition, InputStream in) throws UnifyException {
         logDebug("Sending upload message [\n{0}]...", correlationId);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
@@ -501,8 +500,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
         headers.put(OSMessagingRequestHeaderConstants.ROUTING_TYPE, "sync");
-        if (!StringUtils.isBlank(fileId)) {
-            headers.put(OSMessagingRequestHeaderConstants.FILE_ID, fileId);
+        if (!StringUtils.isBlank(fileSignature)) {
+            headers.put(OSMessagingRequestHeaderConstants.FILE_SIGNATURE, fileSignature);
         }
 
         if (!StringUtils.isBlank(function)) {
@@ -539,7 +538,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private String sendDownloadMessage(final String target, final String processor, final String function,
-            final String service, final String correlationId, final String fileId, OutputStream out)
+            final String service, final String correlationId, final String fileSignature, OutputStream out)
             throws UnifyException {
         logDebug("Sending download message [\n{0}]...", correlationId);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
@@ -551,8 +550,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
         headers.put(OSMessagingRequestHeaderConstants.ROUTING_TYPE, "sync");
-        if (!StringUtils.isBlank(fileId)) {
-            headers.put(OSMessagingRequestHeaderConstants.FILE_ID, fileId);
+        if (!StringUtils.isBlank(fileSignature)) {
+            headers.put(OSMessagingRequestHeaderConstants.FILE_SIGNATURE, fileSignature);
         }
 
         if (!StringUtils.isBlank(function)) {

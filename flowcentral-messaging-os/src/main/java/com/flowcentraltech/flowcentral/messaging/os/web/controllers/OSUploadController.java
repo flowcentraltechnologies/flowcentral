@@ -72,9 +72,9 @@ public class OSUploadController extends AbstractHttpUploadController {
                         final String service = headers.getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
                         if (!StringUtils.isBlank(service)) {
                             logDebug("Relaying controller request to delegate service = [{0}]...", service);
-                            final String fileId = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_ID);
+                            final String fileSignature = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
                             final Optional<String> optional = osMessagingModuleService.sendUploadMessageToService(
-                                    header, service, correlationId, fileId, disposition, in);
+                                    header, service, correlationId, fileSignature, disposition, in);
                             if (optional.isPresent()) {
                                 logDebug("Response message [\n{0}]", optional.get());
                                 return optional.get();
@@ -86,9 +86,9 @@ public class OSUploadController extends AbstractHttpUploadController {
                                     .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
                             if (!StringUtils.isBlank(function)) {
                                 logDebug("Relaying controller request to delegate function = [{0}]...", function);
-                                final String fileId = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_ID);
+                                final String fileSignature = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
                                 final Optional<String> optional = osMessagingModuleService.sendUploadMessageToDelegate(
-                                        header, function, correlationId, fileId, disposition, in);
+                                        header, function, correlationId, fileSignature, disposition, in);
                                 if (optional.isPresent()) {
                                     logDebug("Response message [\n{0}]", optional.get());
                                     return optional.get();

@@ -71,9 +71,9 @@ public class OSDownloadController extends AbstractHttpDownloadController {
                         final String service = headers.getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
                         if (!StringUtils.isBlank(service)) {
                             logDebug("Relaying controller request to delegate service = [{0}]...", service);
-                            final String fileId = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_ID);
+                            final String fileSignature = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
                             final Optional<String> optional = osMessagingModuleService.sendDownloadMessageToService(
-                                    header, service, correlationId, fileId, out);
+                                    header, service, correlationId, fileSignature, out);
                             if (optional.isPresent()) {
                                 logDebug("Response message [\n{0}]", optional.get());
                                 return;
@@ -85,9 +85,9 @@ public class OSDownloadController extends AbstractHttpDownloadController {
                                     .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
                             if (!StringUtils.isBlank(function)) {
                                 logDebug("Relaying controller request to delegate function = [{0}]...", function);
-                                final String fileId = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_ID);
+                                final String fileSignature = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
                                 final Optional<String> optional = osMessagingModuleService.sendDownloadMessageToDelegate(
-                                        header, function, correlationId, fileId, out);
+                                        header, function, correlationId, fileSignature, out);
                                 if (optional.isPresent()) {
                                     logDebug("Response message [\n{0}]", optional.get());
                                     return;

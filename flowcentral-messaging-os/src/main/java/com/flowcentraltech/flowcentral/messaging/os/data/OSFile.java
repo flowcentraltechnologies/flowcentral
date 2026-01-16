@@ -16,25 +16,27 @@
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
 /**
- * OS messaging request header constants.
- * 
+ * OS file.
+ *
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface OSMessagingRequestHeaderConstants {
+public class OSFile {
 
-    String AUTHORIZATION = "Authorization";
-
-    String UPLOAD_DETAIL = "X-Unify-Upload";
+    private String originalServiceCode;
     
-    String CORRELATION_ID = "OS-Correlation-Id";
-    
-    String FILE_SIGNATURE = "OS-File-Signature";
-    
-    String ROUTING_TYPE = "OS-Routing-Type";
+    private String fileId;
 
-    String DELEGATE_FUNCTION = "OS-Del-Function";
+    public OSFile(String originalServiceCode, String fileId) {
+        this.originalServiceCode = originalServiceCode;
+        this.fileId = fileId;
+    }
 
-    String DELEGATE_SERVICE = "OS-Del-Service";
-   
+    public String getOriginalServiceCode() {
+        return originalServiceCode;
+    }
+
+    public String getFileId() {
+        return fileId;
+    }
 }
