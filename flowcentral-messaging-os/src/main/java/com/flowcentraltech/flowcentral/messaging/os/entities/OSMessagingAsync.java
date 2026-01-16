@@ -47,6 +47,9 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "DELEGATE_SERVICE", length = 64, nullable = true)
     private String service;
 
+    @Column(name = "USER_LOGIN_ID", length = 64, nullable = true)
+    private String userLoginId;
+
     @Column(name = "ASYNC_MESSAGE", type = ColumnType.CLOB)
     private String message;
 
@@ -111,6 +114,14 @@ public class OSMessagingAsync extends BaseAuditEntity {
 
     public void setService(String service) {
         this.service = service;
+    }
+
+    public String getUserLoginId() {
+        return userLoginId;
+    }
+
+    public void setUserLoginId(String userLoginId) {
+        this.userLoginId = userLoginId;
     }
 
     public String getMessage() {

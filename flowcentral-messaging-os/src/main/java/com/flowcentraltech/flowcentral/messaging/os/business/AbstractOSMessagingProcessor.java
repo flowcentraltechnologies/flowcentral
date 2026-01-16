@@ -26,6 +26,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.http.HttpRequestHeaders;
 
 /**
  * Convenient abstract base class for OS messaging processors.
@@ -74,13 +75,13 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
     }
 
     @Override
-    public final T process(U request) throws UnifyException {
+    public final T process(HttpRequestHeaders headers, U request) throws UnifyException {
         OSMessagingError error = null;
         T resp = null;
         try {
             error = validateRequest(request);
             if (error == null || !error.isErrorPresent()) {
-                resp = doProcess(request);
+                resp = doProcess(headers, request);
             }
         } catch (Exception e) {
             logError(e);
@@ -132,5 +133,5 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
 
     protected abstract OSMessagingError validateRequest(U request) throws UnifyException;
 
-    protected abstract T doProcess(U request) throws UnifyException;
+    protected abstract T doProcess(HttpRequestHeaders headers, U request) throws UnifyException;
 }

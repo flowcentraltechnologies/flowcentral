@@ -50,7 +50,6 @@ import com.tcdng.unify.common.data.EntityDTO;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.criterion.AggregateFunction;
@@ -697,8 +696,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     private void setCreateAuditInformation(Entity entity) throws UnifyException {
         if (entity instanceof BaseAuditEntity) {
-            UserToken userToken = getUserToken();
-            String userLoginId = userToken != null ? userToken.getUserLoginId() : null;
+            String userLoginId = getUserLoginId();
             BaseAuditEntity baseAuditEntity = (BaseAuditEntity) entity;
             Date now = getNow();
             baseAuditEntity.setCreateDt(now);
@@ -710,8 +708,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     private void setUpdateAuditInformation(Entity entity) throws UnifyException {
         if (entity instanceof BaseAuditEntity) {
-            UserToken userToken = getUserToken();
-            String userLoginId = userToken != null ? userToken.getUserLoginId() : null;
+            String userLoginId = getUserLoginId();
             BaseAuditEntity baseAuditEntity = (BaseAuditEntity) entity;
             Date now = getNow();
             baseAuditEntity.setUpdateDt(now);
@@ -724,8 +721,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     private void setUpdateAuditInformation(Class<? extends Entity> entityClass, Object id, Update update)
             throws UnifyException {
         if (BaseAuditEntity.class.isAssignableFrom(entityClass)) {
-            UserToken userToken = getUserToken();
-            String userLoginId = userToken != null ? userToken.getUserLoginId() : null;
+            String userLoginId = getUserLoginId();
             Date now = getNow();
             update.add("updateDt", now);
             if (userLoginId != null) {

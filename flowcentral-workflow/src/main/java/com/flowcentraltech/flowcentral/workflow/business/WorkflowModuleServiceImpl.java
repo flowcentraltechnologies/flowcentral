@@ -1247,7 +1247,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             }
 
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-            final String userLoginId = !StringUtils.isBlank(actionBy) ? actionBy : getUserToken().getUserLoginId();
+            final String userLoginId = !StringUtils.isBlank(actionBy) ? actionBy : getUserLoginId();
             final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
             if (!currentWfStepDef.isUserAction(userAction) && !currentWfStepDef.isError()) {
                 logInfo("Belaying user action [{0}] because action step [{1}] doesn't support such action.", userAction,
@@ -1825,7 +1825,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             }
 
             final String userLoginId = userToken == null ? DefaultApplicationConstants.SYSTEM_LOGINID
-                    : getUserToken().getUserLoginId();
+                    : getUserLoginId();
             String itemDesc = workInst.getWorkflowItemDesc();
             String caseNo = null;
             if (wfDef.isWithDescFormat()) {

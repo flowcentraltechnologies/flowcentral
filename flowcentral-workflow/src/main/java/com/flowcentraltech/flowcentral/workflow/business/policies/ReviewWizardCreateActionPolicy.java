@@ -71,7 +71,7 @@ public class ReviewWizardCreateActionPolicy extends AbstractEntityActionPolicy {
             wfWizardItem.setWizard(wfWizardDef.getLongName());
             wfWizardItem.setPrimaryEntityId((Long) entityInst.getId());
             wfWizardItem.setTitle(entityInst.getDescription());
-            wfWizardItem.setOwnerId(getUserToken().getUserLoginId());
+            wfWizardItem.setOwnerId(getUserLoginId());
             wfWizardItem.setPercentCompleted(percentCompleted);
             appletUtil.environment().create(wfWizardItem);
         } else {

@@ -51,7 +51,6 @@ public class OSDownloadController extends AbstractHttpDownloadController {
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
-    
     @SuppressWarnings("unchecked")
     @Override
     protected void handleDownload(HttpRequestHeaders headers, OutputStream out) throws UnifyException {
@@ -71,9 +70,11 @@ public class OSDownloadController extends AbstractHttpDownloadController {
                         final String service = headers.getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
                         if (!StringUtils.isBlank(service)) {
                             logDebug("Relaying controller request to delegate service = [{0}]...", service);
-                            final String fileSignature = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
+                            final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
+                            final String fileSignature = headers
+                                    .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
                             final Optional<String> optional = osMessagingModuleService.sendDownloadMessageToService(
-                                    header, service, correlationId, fileSignature, out);
+                                    header, service, correlationId, userloginId, fileSignature, out);
                             if (optional.isPresent()) {
                                 logDebug("Response message [\n{0}]", optional.get());
                                 return;
@@ -85,9 +86,12 @@ public class OSDownloadController extends AbstractHttpDownloadController {
                                     .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
                             if (!StringUtils.isBlank(function)) {
                                 logDebug("Relaying controller request to delegate function = [{0}]...", function);
-                                final String fileSignature = headers.getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
-                                final Optional<String> optional = osMessagingModuleService.sendDownloadMessageToDelegate(
-                                        header, function, correlationId, fileSignature, out);
+                                final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
+                                final String fileSignature = headers
+                                        .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
+                                final Optional<String> optional = osMessagingModuleService
+                                        .sendDownloadMessageToDelegate(header, function, correlationId, userloginId,
+                                                fileSignature, out);
                                 if (optional.isPresent()) {
                                     logDebug("Response message [\n{0}]", optional.get());
                                     return;

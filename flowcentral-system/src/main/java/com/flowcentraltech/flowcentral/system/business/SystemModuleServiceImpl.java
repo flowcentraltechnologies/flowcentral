@@ -385,7 +385,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         if (param != null && param.startsWith("{{") && param.endsWith("}}")) {
             String key = param.substring(2, param.length() - 2);
             if ("u:loginId".equals(key)) {
-                return getUserToken().getUserLoginId();
+                return getUserLoginId();
             } else if (key.startsWith("s:")) {
                 return getSessionAttribute(key.substring(2));
             } else if (key.startsWith("p:")) {

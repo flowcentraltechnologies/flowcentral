@@ -62,7 +62,7 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
                     final String resourceName = ApplicationNameUtils
                             .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
                     return !getCollaborationProvider().isFrozen(type, resourceName)
-                            && !getCollaborationProvider().isLockedBy(type, resourceName, getUserToken().getUserLoginId());
+                            && !getCollaborationProvider().isLockedBy(type, resourceName, getUserLoginId());
                 }
             }
         }
@@ -81,7 +81,7 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
         final CollaborationType type = ApplicationCollaborationUtils.getCollaborationType(_appInst.getClass());
         final String resourceName = ApplicationNameUtils.getApplicationEntityLongName(_appInst.getApplicationName(),
                 _appInst.getName());
-        if (!getCollaborationProvider().lock(type, resourceName, getUserToken().getUserLoginId())) {
+        if (!getCollaborationProvider().lock(type, resourceName, getUserLoginId())) {
             CollaborationLockInfo collaborationLockInfo = getCollaborationProvider().getLockInfo(type, resourceName);
             if (collaborationLockInfo != null) {
                 User user = securityModuleService.findUser(collaborationLockInfo.getLockedBy());

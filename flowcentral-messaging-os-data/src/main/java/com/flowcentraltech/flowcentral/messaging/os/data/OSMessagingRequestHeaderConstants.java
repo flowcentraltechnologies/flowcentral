@@ -29,6 +29,8 @@ public interface OSMessagingRequestHeaderConstants {
     
     String CORRELATION_ID = "OS-Correlation-Id";
     
+    String USER_ID = "OS-User-Id";
+    
     String FILE_SIGNATURE = "OS-File-Signature";
     
     String ROUTING_TYPE = "OS-Routing-Type";

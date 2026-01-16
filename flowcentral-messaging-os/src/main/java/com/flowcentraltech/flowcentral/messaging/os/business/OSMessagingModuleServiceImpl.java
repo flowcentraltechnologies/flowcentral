@@ -213,11 +213,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function,
-            String correlationId, String requestJson) throws UnifyException {
+            String correlationId, String userLoginId, String requestJson) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
-            return Optional.ofNullable(
-                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, requestJson, true));
+            return Optional.ofNullable(sendMessage(target.get(), header.getProcessor(), null, null, correlationId,
+                    userLoginId, requestJson, true));
         }
 
         return Optional.empty();
@@ -225,18 +225,18 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service,
-            String correlationId, String requestJson) throws UnifyException {
-        return Optional
-                .ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, requestJson, true));
+            String correlationId, String userLoginId, String requestJson) throws UnifyException {
+        return Optional.ofNullable(
+                sendMessage(service, header.getProcessor(), null, null, correlationId, userLoginId, requestJson, true));
     }
 
     @Override
     public Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function,
-            String correlationId, String requestJson) throws UnifyException {
+            String correlationId, String userLoginId, String requestJson) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
-            return Optional.ofNullable(
-                    sendMessage(target.get(), header.getProcessor(), null, null, correlationId, requestJson, false));
+            return Optional.ofNullable(sendMessage(target.get(), header.getProcessor(), null, null, correlationId,
+                    userLoginId, requestJson, false));
         }
 
         return Optional.empty();
@@ -244,18 +244,19 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendAsynchronousMessageToService(OSMessagingHeader header, String service,
-            String correlationId, String requestJson) throws UnifyException {
-        return Optional
-                .ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, requestJson, false));
+            String correlationId, String userLoginId, String requestJson) throws UnifyException {
+        return Optional.ofNullable(sendMessage(service, header.getProcessor(), null, null, correlationId, userLoginId,
+                requestJson, false));
     }
 
     @Override
     public Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
-            String fileSignature, ContentDisposition disposition, InputStream in) throws UnifyException {
+            String userLoginId, String fileSignature, ContentDisposition disposition, InputStream in)
+            throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(sendUploadMessage(target.get(), header.getProcessor(), null, null, correlationId,
-                    fileSignature, disposition, in));
+                    userLoginId, fileSignature, disposition, in));
         }
 
         return Optional.empty();
@@ -263,18 +264,19 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendUploadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String fileSignature, ContentDisposition disposition, InputStream in) throws UnifyException {
+            String userLoginId, String fileSignature, ContentDisposition disposition, InputStream in)
+            throws UnifyException {
         return Optional.ofNullable(sendUploadMessage(service, header.getProcessor(), null, null, correlationId,
-                fileSignature, disposition, in));
+                userLoginId, fileSignature, disposition, in));
     }
 
     @Override
     public Optional<String> sendDownloadMessageToDelegate(OSMessagingHeader header, String function,
-            String correlationId, String fileSignature, OutputStream out) throws UnifyException {
+            String correlationId, String userLoginId, String fileSignature, OutputStream out) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(sendDownloadMessage(target.get(), header.getProcessor(), null, null,
-                    correlationId, fileSignature, out));
+                    correlationId, userLoginId, fileSignature, out));
         }
 
         return Optional.empty();
@@ -282,9 +284,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendDownloadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String fileSignature, OutputStream out) throws UnifyException {
-        return Optional.ofNullable(
-                sendDownloadMessage(service, header.getProcessor(), null, null, correlationId, fileSignature, out));
+            String userLoginId, String fileSignature, OutputStream out) throws UnifyException {
+        return Optional.ofNullable(sendDownloadMessage(service, header.getProcessor(), null, null, userLoginId,
+                correlationId, fileSignature, out));
     }
 
     @Override
@@ -292,6 +294,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             U request) throws UnifyException {
         if (StringUtils.isBlank(request.getCorrelationId())) {
             request.setCorrelationId(RandomUtils.generateUUIDInBase64());
+        }
+
+        if (StringUtils.isBlank(request.getUserId())) {
+            request.setUserId(getUserLoginId());
         }
 
         request.setSource(osInfo.getServiceId());
@@ -302,7 +308,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
         final String reqJson = prettyJson(request);
         return sendMessage(respClass, request.getTarget(), request.getProcessor(), request.getFunction(),
-                request.getService(), request.getCorrelationId(), reqJson, true);
+                request.getService(), request.getCorrelationId(), request.getUserId(), reqJson, true);
     }
 
     @Override
@@ -317,6 +323,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             request.setCorrelationId(RandomUtils.generateUUIDInBase64());
         }
 
+        if (StringUtils.isBlank(request.getUserId())) {
+            request.setUserId(getUserLoginId());
+        }
+
         request.setSource(osInfo.getServiceId());
         request.setSourceVersion(osInfo.getServiceVersion());
         if (request.getOriginSource() == null) {
@@ -329,6 +339,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         OSMessagingAsync osMessagingAsync = new OSMessagingAsync();
         osMessagingAsync.setTarget(request.getTarget());
         osMessagingAsync.setCorrelationId(request.getCorrelationId());
+        osMessagingAsync.setUserLoginId(request.getUserId());
         osMessagingAsync.setProcessor(request.getProcessor());
         osMessagingAsync.setFunction(request.getFunction());
         osMessagingAsync.setService(request.getService());
@@ -393,7 +404,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         try {
             OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class, osMessagingAsync.getTarget(),
                     osMessagingAsync.getProcessor(), osMessagingAsync.getFunction(), osMessagingAsync.getService(),
-                    osMessagingAsync.getCorrelationId(), osMessagingAsync.getMessage(), false);
+                    osMessagingAsync.getCorrelationId(), osMessagingAsync.getUserLoginId(),
+                    osMessagingAsync.getMessage(), false);
             environment().updateById(OSMessagingAsync.class, osMessagingAsyncId,
                     new Update().add("processing", Boolean.FALSE).add("sentOn", getNow())
                             .add("responseCode", resp.getResponseCode()).add("responseMsg", resp.getResponseMessage()));
@@ -442,12 +454,13 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, final String target,
             final String processor, final String function, final String service, final String correlationId,
-            final String reqJson, final boolean sync) throws UnifyException {
-        return fromJson(respClass, sendMessage(target, processor, function, service, correlationId, reqJson, sync));
+            final String userLoginId, final String reqJson, final boolean sync) throws UnifyException {
+        return fromJson(respClass,
+                sendMessage(target, processor, function, service, correlationId, userLoginId, reqJson, sync));
     }
 
     private String sendMessage(final String target, final String processor, final String function, final String service,
-            final String correlationId, String reqJson, boolean sync) throws UnifyException {
+            final String correlationId, final String userLoginId, String reqJson, boolean sync) throws UnifyException {
         logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...", reqJson);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
@@ -458,6 +471,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
         headers.put(OSMessagingRequestHeaderConstants.ROUTING_TYPE, sync ? "sync" : "async");
+        if (!StringUtils.isBlank(userLoginId)) {
+            headers.put(OSMessagingRequestHeaderConstants.USER_ID, userLoginId);
+        }
+
         if (!StringUtils.isBlank(function)) {
             headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function);
         }
@@ -488,7 +505,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private String sendUploadMessage(final String target, final String processor, final String function,
-            final String service, final String correlationId, final String fileSignature,
+            final String service, final String correlationId, final String userLoginId, final String fileSignature,
             ContentDisposition disposition, InputStream in) throws UnifyException {
         logDebug("Sending upload message [\n{0}]...", correlationId);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
@@ -500,6 +517,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
         headers.put(OSMessagingRequestHeaderConstants.ROUTING_TYPE, "sync");
+        if (!StringUtils.isBlank(userLoginId)) {
+            headers.put(OSMessagingRequestHeaderConstants.USER_ID, userLoginId);
+        }
+
         if (!StringUtils.isBlank(fileSignature)) {
             headers.put(OSMessagingRequestHeaderConstants.FILE_SIGNATURE, fileSignature);
         }
@@ -538,8 +559,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private String sendDownloadMessage(final String target, final String processor, final String function,
-            final String service, final String correlationId, final String fileSignature, OutputStream out)
-            throws UnifyException {
+            final String service, final String correlationId, final String userLoginId, final String fileSignature,
+            OutputStream out) throws UnifyException {
         logDebug("Sending download message [\n{0}]...", correlationId);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
@@ -550,6 +571,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
         headers.put(OSMessagingRequestHeaderConstants.ROUTING_TYPE, "sync");
+        if (!StringUtils.isBlank(userLoginId)) {
+            headers.put(OSMessagingRequestHeaderConstants.USER_ID, userLoginId);
+        }
+
         if (!StringUtils.isBlank(fileSignature)) {
             headers.put(OSMessagingRequestHeaderConstants.FILE_SIGNATURE, fileSignature);
         }

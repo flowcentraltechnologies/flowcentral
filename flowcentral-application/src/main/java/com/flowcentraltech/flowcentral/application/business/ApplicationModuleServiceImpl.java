@@ -2995,7 +2995,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appAppletFilter.setDescription(description);
             appAppletFilter.setOwnershipType(ownershipType);
             if (OwnershipType.USER.equals(ownershipType)) {
-                appAppletFilter.setOwner(getUserToken().getUserLoginId());
+                appAppletFilter.setOwner(getUserLoginId());
             }
 
             appAppletFilter.setQuickFilter(true);

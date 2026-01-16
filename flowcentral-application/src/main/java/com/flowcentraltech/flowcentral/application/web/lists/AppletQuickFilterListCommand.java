@@ -44,7 +44,7 @@ public class AppletQuickFilterListCommand extends AbstractApplicationListCommand
         if (longParams.isPresent()) {
             return application().findAppAppletFilters(
                     (AppAppletFilterQuery) new AppAppletFilterQuery().appAppletId(longParams.getValue())
-                            .byOwner(getUserToken().getUserLoginId()).quickFilter(true).orderById());
+                            .byOwner(getUserLoginId()).quickFilter(true).orderById());
         }
 
         return Collections.emptyList();

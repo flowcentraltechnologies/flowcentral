@@ -63,7 +63,7 @@ public class ReviewSingleFormWorkItemsAppletController extends
         ReviewSingleFormWorkItemsAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
             ReviewSingleFormWorkItemsApplet applet = new ReviewSingleFormWorkItemsApplet(getPage(), au(), workflowModuleService,
-                    getPathVariables(), getUserToken().getUserLoginId());
+                    getPathVariables(), getUserLoginId());
             applet.appletCtx().setReview(true);
             pageBean.setApplet(applet);
         }
