@@ -70,6 +70,10 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
         return (WfStepQuery) addEquals("workflowRunnable", workflowRunnable);
     }
 
+    public WfStepQuery workflowDevelopable(boolean workflowDevelopable) {
+        return (WfStepQuery) addEquals("workflowDevelopable", workflowDevelopable);
+    }
+
     public WfStepQuery withEjectionRestriction() {
         return (WfStepQuery) addIsNotNull("ejectionRestriction");
     }
