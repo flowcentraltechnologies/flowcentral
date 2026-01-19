@@ -120,7 +120,13 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
     }
 
     protected final boolean enterSystemRestoreMode() throws UnifyException {
-        return tryGrabLock(SYSTEM_RESTORE_LOCK);
+        try {
+            return tryGrabLock(SYSTEM_RESTORE_LOCK);
+        } catch (Exception e) {
+            logDebug(e);
+        }
+        
+        return false;
     }
 
     protected final void exitSystemRestoreMode() throws UnifyException {
