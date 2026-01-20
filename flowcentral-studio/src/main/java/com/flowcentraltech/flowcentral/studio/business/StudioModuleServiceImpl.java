@@ -433,7 +433,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         logDebug(taskMonitor, "Uploading studio snapshot [{0}]...", snapshotUploadFile.getFilename());
         logDebug(taskMonitor, "Validating uploaded snapshot file...");
         if (snapshotConfig == null) {
-            snapshotConfig = ConfigurationUtils.getSnapshotConfig(snapshotUploadFile.getData());
+            snapshotConfig = ConfigurationUtils.getSnapshotConfig(snapshotUploadFile);
             if (snapshotConfig == null) {
                 throwOperationErrorException(new IllegalArgumentException("Invalid snapshot file."));
             }
@@ -456,6 +456,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         studioSnapshot.setSnapshot(snapshotUploadFile.getData());
         environment().create(studioSnapshot);
         logDebug(taskMonitor, "Snapshot file [{0}] upload successfully completed.", snapshotUploadFile.getFilename());
+        
+        snapshotUploadFile.invalidate();
         return 0;
     }
 

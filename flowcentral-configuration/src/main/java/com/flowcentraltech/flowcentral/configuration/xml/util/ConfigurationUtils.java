@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.tcdng.unify.core.UnifyError;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.XmlConfig;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.XmlConfigUtils;
@@ -82,7 +83,7 @@ public final class ConfigurationUtils {
         return IOUtils.readAllLines(fileResource, workingPath);
     }
 
-    public static SnapshotConfig getSnapshotConfig(byte[] snapshot) throws UnifyException {
+    public static SnapshotConfig getSnapshotConfig(UploadedFile snapshotFile) throws UnifyException {
         SnapshotConfig snapshotConfig = null;
         File tempFile = null;
         FileOutputStream fos = null;
@@ -91,7 +92,7 @@ public final class ConfigurationUtils {
         try {
             tempFile = File.createTempFile("flowsnapshot", ".zip");
             fos = new FileOutputStream(tempFile);
-            IOUtils.writeAll(fos, snapshot);
+            snapshotFile.writeAll(fos);
             IOUtils.close(fos);
 
             zipFile = new ZipFile(tempFile);
@@ -107,7 +108,7 @@ public final class ConfigurationUtils {
             if (ios != null) {
                 IOUtils.close(ios);
             }
-            
+
             if (zipFile != null) {
                 try {
                     zipFile.close();
@@ -123,7 +124,7 @@ public final class ConfigurationUtils {
                 tempFile.delete();
             }
         }
-        
+
         return snapshotConfig;
     }
     
