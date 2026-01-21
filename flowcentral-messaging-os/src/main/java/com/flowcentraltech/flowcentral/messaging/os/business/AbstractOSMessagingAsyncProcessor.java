@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.http.HttpRequestHeaders;
 
 /**
  * Convenient abstract base class for OS messaging asynchronous processors.
@@ -36,10 +37,10 @@ public abstract class AbstractOSMessagingAsyncProcessor<U extends BaseOSMessagin
     }
 
     @Override
-    protected final OSMessagingAsyncResponse doProcess(U request) throws UnifyException {
-        doAsyncProcess(request);
+    protected final OSMessagingAsyncResponse doProcess(HttpRequestHeaders headers, U request) throws UnifyException {
+        doAsyncProcess( headers, request);
         return RESPONSE;
     }
 
-    protected abstract void doAsyncProcess(U request) throws UnifyException;
+    protected abstract void doAsyncProcess(HttpRequestHeaders headers, U request) throws UnifyException;
 }

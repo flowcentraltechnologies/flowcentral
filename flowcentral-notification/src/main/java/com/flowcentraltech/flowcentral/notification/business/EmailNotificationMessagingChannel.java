@@ -181,13 +181,13 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         final boolean isHTML = NotifMessageFormat.HTML.equals(channelMessage.getFormat());
         final String msg = isHTML ? HtmlUtils.formatEmailHTML(channelMessage.getMessage())
                 : channelMessage.getMessage();
-        eb.fromSender(notifChannelDef.getSenderContact(), channelMessage.getFrom()).withSubject(channelMessage.getSubject())
-                .containingMessage(msg).asHTML(isHTML);
+        eb.fromSender(notifChannelDef.getSenderContact(), channelMessage.getFrom())
+                .withSubject(channelMessage.getSubject()).containingMessage(msg).asHTML(isHTML);
 
         for (Attachment attachment : channelMessage.getAttachments()) {
-            if (attachment.getData() != null) {
-                eb.withAttachment(attachment.getFileName(), attachment.getData(), attachment.getType(),
-                        attachment.isInline());
+            if (attachment.getFile() != null) {
+                eb.withAttachment(attachment.getFileName(), attachment.getFile().getDataAndInvalidate(),
+                        attachment.getType(), attachment.isInline());
             } else {
                 eb.withAttachment(attachment.getFileName(), attachment.getProvider(), attachment.getSourceId(),
                         attachment.getType(), attachment.isInline());

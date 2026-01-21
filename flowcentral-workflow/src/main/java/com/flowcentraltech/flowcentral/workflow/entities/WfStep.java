@@ -142,6 +142,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @ListOnly(key = "priority", property = "description")
     private String priorityDesc;
 
+    @ListOnly(key = "workflowId", property = "developable")
+    private boolean workflowDevelopable;
+
     @ListOnly(key = "workflowId", property = "runnable")
     private boolean workflowRunnable;
 
@@ -460,6 +463,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setPriorityDesc(String priorityDesc) {
         this.priorityDesc = priorityDesc;
+    }
+
+    public boolean isWorkflowDevelopable() {
+        return workflowDevelopable;
+    }
+
+    public void setWorkflowDevelopable(boolean workflowDevelopable) {
+        this.workflowDevelopable = workflowDevelopable;
     }
 
     public boolean isWorkflowRunnable() {

@@ -92,13 +92,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
         // Publish unpublished custom workflows
         if (systemModuleService.getSysParameterValue(boolean.class,
                 CodeGenerationModuleSysParamConstants.PUBLISH_ALL_WORKFLOWS_ON_CODEGEN)) {
-            List<Long> workflowIdList = workflowModuleService
-                    .findUnpublishedNonRunnableCustomWorkflowIdList(applicationName);
-            if (!DataUtils.isBlank(workflowIdList)) {
-                for (Long workflowId : workflowIdList) {
-                    workflowModuleService.publishWorkflow(ctx.getTaskMonitor(), workflowId);
-                }
-            }
+            workflowModuleService.publishUnpublishedWorkflows(ctx.getTaskMonitor(), applicationName);
         }
 
         // Runnable Custom Workflows
@@ -123,6 +117,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 workflowConfig.setName(workflow.getName());
                 workflowConfig.setDescription(ctx.isSnapshotMode() ? workflow.getDescription() : "$m{" + descKey + "}");
                 workflowConfig.setLabel(ctx.isSnapshotMode() ? workflow.getLabel() : "$m{" + labelKey + "}");
+                workflowConfig.setCasePrefix(workflow.getCasePrefix());
                 workflowConfig.setLoadingTable(workflow.getLoadingTable());
                 workflowConfig.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
                 workflowConfig.setPublished(workflow.isPublished());

@@ -35,4 +35,8 @@ public interface OSMessagingErrorConstants {
 
     String PEER_NOT_CONFIGURED = "GP06";
 
+    String PROCESSOR_NOT_FOUND = "GP07";
+
+    String DELEGATE_FUNCTION_NOT_RESOLVED = "GP08";
+
 }

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
+import java.util.Optional;
+
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.tcdng.unify.core.UnifyException;
@@ -37,4 +39,14 @@ public interface OSMessagingAccessManager extends  FlowCentralService {
      */
     void checkAccess(OSMessagingHeader header) throws UnifyException;
 
+    /**
+     * Resolves a delegate function to target service.
+     * 
+     * @param delegate
+     *                 the delegate function
+     * @return the optional target
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> resolveDelegateFunctionTarget(String delegate) throws UnifyException;
 }

@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.common.annotation.Index;
 import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 
 /**
@@ -28,7 +29,10 @@ import com.tcdng.unify.core.annotation.Column;
  * @version 1.0
  */
 @Table(name = "FC_WORKITEMHISTORY",
-        indexes = { @Index("applicationName"), @Index("workflowName"), @Index("entity"), @Index("branchCode") })
+        uniqueConstraints = {@UniqueConstraint("caseNo")},
+        indexes = {
+                @Index("caseNo"), @Index("applicationName"), @Index("workflowName"),
+                @Index("entity"), @Index("branchCode") })
 public class WfItemHist extends BaseAuditEntity {
 
     @Column(name = "APPLICATION_NM", length = 64)
@@ -42,6 +46,9 @@ public class WfItemHist extends BaseAuditEntity {
 
     @Column(nullable = true)
     private Long originWorkRecId;
+
+    @Column(name = "CASE_NO", length = 16, nullable = true)
+    private String caseNo;
 
     @Column(name = "BRANCH_CD", nullable = true)
     private String branchCode;
@@ -90,6 +97,14 @@ public class WfItemHist extends BaseAuditEntity {
 
     public void setOriginWorkRecId(Long originWorkRecId) {
         this.originWorkRecId = originWorkRecId;
+    }
+
+    public String getCaseNo() {
+        return caseNo;
+    }
+
+    public void setCaseNo(String caseNo) {
+        this.caseNo = caseNo;
     }
 
     public String getBranchCode() {

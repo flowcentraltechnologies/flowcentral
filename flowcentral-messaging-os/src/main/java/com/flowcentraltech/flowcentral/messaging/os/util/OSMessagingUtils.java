@@ -48,4 +48,5 @@ public final class OSMessagingUtils {
         String[] nparts = parts[0].split("\\.", 2);
         return new OSCredentials(nparts[0], nparts[1], parts[1]);
     }
+
 }

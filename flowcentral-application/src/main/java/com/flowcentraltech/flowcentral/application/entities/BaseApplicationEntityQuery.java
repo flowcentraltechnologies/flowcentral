@@ -73,6 +73,10 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
         return (BaseApplicationEntityQuery<T>) addEquals("classified", classified);
     }
 
+    public final BaseApplicationEntityQuery<T> developable(boolean developable) {
+        return (BaseApplicationEntityQuery<T>) addEquals("developable", developable);
+    }
+
     public final BaseApplicationEntityQuery<T> deprecated(boolean deprecated) {
         return (BaseApplicationEntityQuery<T>) addEquals("deprecated", deprecated);
     }

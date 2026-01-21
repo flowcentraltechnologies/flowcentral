@@ -43,7 +43,7 @@ public class EntityAuditSnapshotViewWidget extends AbstractWidget {
     }
 
     @Override
-    public boolean isSupportStretch() {
+    public boolean isSupportStretch() throws UnifyException {
         return false;
     }
 }

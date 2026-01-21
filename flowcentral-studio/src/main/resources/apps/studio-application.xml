@@ -1967,9 +1967,11 @@
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
-					widthRatio="1" linkAct="maintainAct" />
+					widthRatio="2" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
-					widthRatio="1" />
+					widthRatio="3" />
+				<column field="label" renderWidget="application.text"
+					widthRatio="2" />
 				<column field="typeDesc" renderWidget="application.text"
 					widthRatio="1" />
 			</columns>
@@ -3815,6 +3817,7 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
+						<field name="label" column="0" required="true" />
 						<field name="configType" inputWidget="application.enumlist"
 							column="1" disabled="true" required="true" />
 						<field name="type" column="1" required="true" />
@@ -6330,6 +6333,8 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
+						<field name="casePrefix" inputWidget="application.wordwithupper"
+							column="0"/>
 						<field name="configType" inputWidget="application.enumlist"
 							column="1" disabled="true" required="true" />
 						<field name="entity"

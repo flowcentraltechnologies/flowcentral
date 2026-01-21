@@ -577,7 +577,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public String getSessionUserLoginId() throws UnifyException {
-        return getSessionContext().getUserToken().getUserLoginId();
+        return getUserLoginId();
     }
 
     @SuppressWarnings("unchecked")
@@ -2808,7 +2808,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 final String resourceName = ApplicationNameUtils
                         .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
                 enterReadOnlyMode = !collaborationProvider.isLockedBy(type, resourceName,
-                        getUserToken().getUserLoginId());
+                        getUserLoginId());
             }
         }
 

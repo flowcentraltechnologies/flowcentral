@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +30,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.util.ContentDisposition;
 
 /**
  * OS messaging module service.
@@ -78,6 +81,169 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     OSMessagingHeader getOSMessagingHeader(String authorization) throws UnifyException;
+
+    /**
+     * Sends a synchronous message to delegate function.
+     * 
+     * @param header
+     *                    origin header information
+     * @param function
+     *                    the delegate function
+     * @param correlationId
+     *                    the correlation ID
+     * @param userloginId
+     *                    the user login ID
+     * @param requestJson
+     *                    the request message
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
+            String userloginId, String requestJson) throws UnifyException;
+
+    /**
+     * Sends a synchronous message to delegate service.
+     * 
+     * @param header
+     *                    origin header information
+     * @param service
+     *                    the delegate service
+     * @param correlationId
+     *                    the correlation ID
+     * @param userloginId
+     *                    the user login ID
+     * @param requestJson
+     *                    the request message
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendSynchronousMessageToService(OSMessagingHeader header, String service, String correlationId,
+            String userloginId, String requestJson) throws UnifyException;
+
+    /**
+     * Sends a asynchronous message to delegate function.
+     * 
+     * @param header
+     *                    origin header information
+     * @param function
+     *                    the delegate function
+     * @param correlationId
+     *                    the correlation ID
+     * @param userloginId
+     *                    the user login ID
+     * @param requestJson
+     *                    the request message
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
+            String userloginId, String requestJson) throws UnifyException;
+
+    /**
+     * Sends a asynchronous message to delegate service.
+     * 
+     * @param header
+     *                    origin header information
+     * @param service
+     *                    the delegate service
+     * @param correlationId
+     *                    the correlation ID
+     * @param userloginId
+     *                    the user login ID
+     * @param requestJson
+     *                    the request message
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendAsynchronousMessageToService(OSMessagingHeader header, String service, String correlationId,
+            String userloginId, String requestJson) throws UnifyException;
+
+    /**
+     * Sends an upload message to delegate function.
+     * 
+     * @param header
+     *                    origin header information
+     * @param function
+     *                    the delegate function
+     * @param correlationId the correlation ID
+     * @param userloginId
+     *                    the user login ID
+     * @param fileSignature the file Signature
+     * @param disposition the content disposition
+     * @param in
+     *                    the input stream
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
+            String userloginId, String fileSignature, ContentDisposition disposition, InputStream in) throws UnifyException;
+
+    /**
+     * Sends an upload message to delegate service.
+     * 
+     * @param header
+     *                    origin header information
+     * @param service
+     *                    the delegate service
+     * @param correlationId the correlation ID
+     * @param userloginId
+     *                    the user login ID
+     * @param fileSignature the file Signature
+     * @param disposition    the content disposition
+     * @param in
+     *                    the input stream
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendUploadMessageToService(OSMessagingHeader header, String service, String correlationId,
+            String userloginId, String fileSignature, ContentDisposition disposition, InputStream in) throws UnifyException;
+
+    /**
+     * Sends a download message to delegate function.
+     * 
+     * @param header
+     *                    origin header information
+     * @param function
+     *                    the delegate function
+     * @param correlationId the correlation ID
+     * @param userloginId
+     *                    the user login ID
+     * @param fileSignature the file Signature
+     * @param out
+     *                    the output stream
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendDownloadMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
+            String userloginId, String fileSignature, OutputStream out) throws UnifyException;
+
+    /**
+     * Sends a download message to delegate service.
+     * 
+     * @param header
+     *                    origin header information
+     * @param service
+     *                    the delegate service
+     * @param correlationId the correlation ID
+     * @param userloginId
+     *                    the user login ID
+     * @param fileSignature the file Signature
+     * @param disposition    the content disposition
+     * @param out
+     *                    the output stream
+     * @return response message
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> sendDownloadMessageToService(OSMessagingHeader header, String service, String correlationId,
+            String userloginId, String fileSignature, OutputStream out) throws UnifyException;
 
     /**
      * Sends synchronous message.
@@ -150,4 +316,5 @@ public interface OSMessagingModuleService extends FlowCentralService {
      */
     void logProcessing(OSMessagingMode mode, String correlationdId, String source, String processor, String summary,
             String responseCode, String responseMsg) throws UnifyException;
+
 }

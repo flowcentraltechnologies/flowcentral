@@ -16,9 +16,6 @@
 
 package com.flowcentraltech.flowcentral.application.business;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
@@ -27,6 +24,7 @@ import com.flowcentraltech.flowcentral.system.constants.SystemFileResourceConsta
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.file.AbstractFileResourceProvider;
 
 /**
@@ -42,17 +40,16 @@ public class ApplicationFileResourceProviderImpl extends AbstractFileResourcePro
     private FileAttachmentProvider fileAttachmentProvider;
 
     @Override
-    public InputStream openFileResourceInputStream(String category, String resourceName) throws UnifyException {
-        byte[] resource = readFileResource(category, resourceName);
-        return resource != null ? new ByteArrayInputStream(resource) : null;
+    public UploadedFile getFileResourceInputStream(String category, String resourceName) throws UnifyException {
+        return readFileResource(category, resourceName);
     }
 
     @Override
-    public byte[] readFileResource(String category, String resourceName) throws UnifyException {
+    public UploadedFile readFileResource(String category, String resourceName) throws UnifyException {
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(
                 FileAttachmentCategoryType.fromCode(category), SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
                 SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, resourceName);
-        return attachment != null ? attachment.getData() : null;
+        return attachment != null ? attachment.getFile() : null;
     }
 
 }

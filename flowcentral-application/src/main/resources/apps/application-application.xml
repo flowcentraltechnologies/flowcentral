@@ -581,7 +581,7 @@
 		<widgetType name="fileattachmenttypelist"
 			description="$m{application.widgettype.fileattachmenttypelist}"
 			dataType="STRING" inputType="STRING"
-			editor="!ui-select list:fileattachmenttypelist blankOption:$m{blank.none}"
+			editor="!ui-select list:fileattachmenttypelist blankOption:$m{blank.none} exclude:$l{PNG JPG GIF BMP}"
 			renderer="!ui-listlabel list:fileattachmenttypelist" />
 		<widgetType name="fileupload"
 			description="$m{application.widgettype.fileupload}"
@@ -1526,10 +1526,14 @@
 					label="$m{application.appentityattachment.type}"
 					type="ENUM_REF"
 					references="fileattachmenttypelist"
-					inputWidget="application.enumlist" />
+					inputWidget="application.fileattachmenttypelist" />
 				<field name="typeDesc"
 					label="$m{application.appentityattachment.typedesc}"
 					type="LIST_ONLY" key="type" property="description" />
+				<field name="label"
+					label="$m{application.appentityattachment.fieldlabel}"
+					type="STRING"
+					inputWidget="application.text" />
 			</fields>
 		</entity>
 		<entity name="appEntityExpression"

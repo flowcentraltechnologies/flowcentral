@@ -41,6 +41,15 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "PROCESSOR", length = 64)
     private String processor;
 
+    @Column(name = "DELEGATE_FUNC", length = 64, nullable = true)
+    private String function;
+
+    @Column(name = "DELEGATE_SERVICE", length = 64, nullable = true)
+    private String service;
+
+    @Column(name = "USER_LOGIN_ID", length = 64, nullable = true)
+    private String userLoginId;
+
     @Column(name = "ASYNC_MESSAGE", type = ColumnType.CLOB)
     private String message;
 
@@ -89,6 +98,30 @@ public class OSMessagingAsync extends BaseAuditEntity {
 
     public void setProcessor(String processor) {
         this.processor = processor;
+    }
+
+    public String getFunction() {
+        return function;
+    }
+
+    public void setFunction(String function) {
+        this.function = function;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    public String getUserLoginId() {
+        return userLoginId;
+    }
+
+    public void setUserLoginId(String userLoginId) {
+        this.userLoginId = userLoginId;
     }
 
     public String getMessage() {

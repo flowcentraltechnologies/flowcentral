@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * OS credentials.
  *
@@ -47,4 +49,7 @@ public class OSCredentials {
         return password;
     }
     
+    public String toString() {
+        return StringUtils.toXmlString(this);
+    }
 }

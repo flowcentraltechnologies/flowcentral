@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.common.data;
 
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.UploadedFile;
 
 /**
  * Attachment.
@@ -26,16 +27,16 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
  */
 public class Attachment extends AttachmentDetails {
 
-    private byte[] data;
+    private UploadedFile file;
 
     private String sourceId;
 
     private String provider;
 
-    public Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, byte[] data,
+    public Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, UploadedFile file,
             boolean inline, long versionNo) {
         super(id, type, name, title, fileName, inline, versionNo);
-        this.data = data;
+        this.file = file;
     }
 
     public Attachment(Long id, FileAttachmentType type, String name, String title, String fileName, String provider,
@@ -45,8 +46,8 @@ public class Attachment extends AttachmentDetails {
         this.sourceId = sourceId;
     }
 
-    public byte[] getData() {
-        return data;
+    public UploadedFile getFile() {
+        return file;
     }
 
     public String getSourceId() {
@@ -77,7 +78,7 @@ public class Attachment extends AttachmentDetails {
 
         private String fileName;
 
-        private byte[] data;
+        private UploadedFile file;
 
         private String sourceId;
 
@@ -109,8 +110,8 @@ public class Attachment extends AttachmentDetails {
             return this;
         }
 
-        public Builder data(byte[] data) {
-            this.data = data;
+        public Builder file(UploadedFile file) {
+            this.file = file;
             return this;
         }
 
@@ -133,8 +134,8 @@ public class Attachment extends AttachmentDetails {
                 throw new RuntimeException("Attachment title is required.");
             }
 
-            if (data == null && provider == null) {
-                throw new RuntimeException("Attachment data source is required.");
+            if (file == null && provider == null) {
+                throw new RuntimeException("Attachment file source is required.");
             }
 
             if (provider != null && sourceId == null) {
@@ -143,7 +144,7 @@ public class Attachment extends AttachmentDetails {
 
             return provider != null
                     ? new Attachment(id, type, name, title, fileName, provider, sourceId, inline, versionNo)
-                    : new Attachment(id, type, name, title, fileName, data, inline, versionNo);
+                    : new Attachment(id, type, name, title, fileName, file, inline, versionNo);
         }
     }
 

@@ -31,10 +31,14 @@ public class PortalEntity {
 
     private List<PortalEntityField> fields;
 
-    public PortalEntity(String name, String description, List<PortalEntityField> fields) {
+    private List<PortalEntityAttachment> attachments;
+
+    public PortalEntity(String name, String description, List<PortalEntityField> fields,
+            List<PortalEntityAttachment> attachments) {
         this.name = name;
         this.description = description;
         this.fields = fields;
+        this.attachments = attachments;
     }
 
     public String getName() {
@@ -47,5 +51,9 @@ public class PortalEntity {
 
     public List<PortalEntityField> getFields() {
         return fields;
+    }
+
+    public List<PortalEntityAttachment> getAttachments() {
+        return attachments;
     }
 }

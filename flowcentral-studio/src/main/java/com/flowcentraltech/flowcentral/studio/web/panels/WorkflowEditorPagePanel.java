@@ -48,7 +48,7 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
                     getWidgetByShortName("stepUserActionsCrudPanel").getLongName());
         }
         
-        setWidgetVisible("publishBtn", !workflowEditorPage.isPublished());
+        setWidgetVisible("publishBtn", !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
 
         boolean isEditable = !readOnly;
         setWidgetVisible("saveBtn", isEditable);

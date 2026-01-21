@@ -51,6 +51,7 @@ public final class WorkflowDesignUtils {
     public enum DesignType {
         DEFAULT_WORKFLOW(
                 null,
+                null,
                 "end",
                 "end",
                 "end",
@@ -60,33 +61,38 @@ public final class WorkflowDesignUtils {
                 ""),
         WORKFLOW_COPY_CREATE(
                 WorkflowCopyType.CREATION,
+                "DFC",
                 "draftApproval",
                 "end",
                 "draftReview",
                 "draftApproval",
                 "deleteDraft",
-                " Creation Draft Workflow",
-                " Create"),
+                "$m{workflow.draft.creation.desc}",
+                "$m{workflow.draft.creation}"),
         WORKFLOW_COPY_UPDATE(
                 WorkflowCopyType.UPDATE,
+                "DFU",
                 "draftApproval",
                 "updateOriginal",
                 "draftReview",
                 "draftApproval",
                 "end",
-                " Update Draft Workflow",
-                " Update"),
+                "$m{workflow.draft.update.desc}",
+                "$m{workflow.draft.update}"),
         WORKFLOW_COPY_DELETE(
                 WorkflowCopyType.DELETION,
+                "DFD",
                 "draftApproval",
                 "deleteOriginal",
                 "end",
                 "end",
                 "end",
-                " Deletion Draft Workflow",
-                " Delete");
+                "$m{workflow.draft.deletion.desc}",
+                "$m{workflow.draft.deletion}");
 
         private final WorkflowCopyType copyType;
+
+        private final String casePrefix;
 
         private final String startNext;
 
@@ -102,9 +108,10 @@ public final class WorkflowDesignUtils {
 
         private final String labelSuffix;
 
-        private DesignType(WorkflowCopyType copyType, String startNext, String approvalNext, String reviewNext,
-                String resubmitNext, String discardNext, String descSuffix, String labelSuffix) {
+        private DesignType(WorkflowCopyType copyType, String casePrefix, String startNext, String approvalNext,
+                String reviewNext, String resubmitNext, String discardNext, String descSuffix, String labelSuffix) {
             this.copyType = copyType;
+            this.casePrefix = casePrefix;
             this.startNext = startNext;
             this.approvalNext = approvalNext;
             this.reviewNext = reviewNext;
@@ -116,6 +123,10 @@ public final class WorkflowDesignUtils {
 
         public WorkflowCopyType copyType() {
             return copyType;
+        }
+
+        public String casePrefix() {
+            return casePrefix;
         }
 
         public String startNext() {

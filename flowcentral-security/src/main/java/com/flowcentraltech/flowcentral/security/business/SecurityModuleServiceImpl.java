@@ -360,7 +360,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                         final boolean expired = now.after(securedLink.getExpiresOn());
                         Update update = new Update().add("lastAccessedOn", now);
                         if (isUserLoggedIn()) {
-                            update.add("lastAccessedBy", getUserToken().getUserLoginId());
+                            update.add("lastAccessedBy", getUserLoginId());
                         }
 
                         environment().updateById(SecuredLink.class, securedLink.getId(), update);
@@ -571,7 +571,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 SecurityModuleSysParamConstants.KEEP_USER_LOGIN_EVENTS);
         if (keepUserLoginEvents) {
             Long userId = environment().value(Long.class, "id",
-                    new UserQuery().loginId(getUserToken().getUserLoginId()));
+                    new UserQuery().loginId(getUserLoginId()));
             SessionContext ctx = getSessionContext();
             UserLoginEvent userLoginEvent = new UserLoginEvent();
             userLoginEvent.setEventType(LoginEventType.LOGOUT);
@@ -588,7 +588,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void changeUserPassword(String oldPassword, String newPassword) throws UnifyException {
         oldPassword = passwordCryptograph.encrypt(oldPassword);
-        User user = environment().find(new UserQuery().password(oldPassword).loginId(getUserToken().getUserLoginId()));
+        User user = environment().find(new UserQuery().password(oldPassword).loginId(getUserLoginId()));
         if (user == null) {
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_OLD_PASSWORD);
         }
@@ -764,7 +764,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY,
                 SecurityModuleEntityConstants.USER_ENTITY_NAME, userId, SecurityModuleAttachmentConstants.PHOTO);
         if (attachment != null) {
-            return attachment.getData();
+            return attachment.getFile().getDataAndInvalidate();
         }
 
         return null;

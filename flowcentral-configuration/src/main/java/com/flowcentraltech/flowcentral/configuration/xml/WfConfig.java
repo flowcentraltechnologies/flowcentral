@@ -38,6 +38,9 @@ public class WfConfig extends BaseRootAppConfig {
     private String entity;
 
     @JacksonXmlProperty(isAttribute = true)
+    private String casePrefix;
+
+    @JacksonXmlProperty(isAttribute = true)
     private String loadingTable;
     
     @JacksonXmlProperty(isAttribute = true)
@@ -79,6 +82,14 @@ public class WfConfig extends BaseRootAppConfig {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getCasePrefix() {
+        return casePrefix;
+    }
+
+    public void setCasePrefix(String casePrefix) {
+        this.casePrefix = casePrefix;
     }
 
     public String getLoadingTable() {

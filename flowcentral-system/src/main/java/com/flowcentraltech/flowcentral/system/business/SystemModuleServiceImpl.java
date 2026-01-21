@@ -108,6 +108,7 @@ import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
@@ -384,7 +385,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         if (param != null && param.startsWith("{{") && param.endsWith("}}")) {
             String key = param.substring(2, param.length() - 2);
             if ("u:loginId".equals(key)) {
-                return getUserToken().getUserLoginId();
+                return getUserLoginId();
             } else if (key.startsWith("s:")) {
                 return getSessionAttribute(key.substring(2));
             } else if (key.startsWith("p:")) {
@@ -547,7 +548,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             String encLicense = cryptograph.encrypt(license);
 
             final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT, false).name(licenseName)
-                    .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
+                    .title(licenseName).fileName(licenseName).file(UploadedFile.create(licenseName, encLicense.getBytes())).build();
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
                     0L, _attachment);
             attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY,
@@ -594,7 +595,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
             final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT, false).name(licenseName)
-                    .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
+                    .title(licenseName).fileName(licenseName).file(UploadedFile.create(licenseName, encLicense.getBytes())).build();
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
                     0L, _attachment);
             logDebug(taskMonitor, "...license file successfully loaded...");
@@ -713,7 +714,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
         TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
                 new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
-        String license = cryptograph.decrypt(new String(attachment.getData()));
+        String license = cryptograph.decrypt(new String(attachment.getFile().getDataAndInvalidate()));
 
         try (BufferedReader reader = new BufferedReader(new StringReader(license));) {
             String type = reader.readLine();

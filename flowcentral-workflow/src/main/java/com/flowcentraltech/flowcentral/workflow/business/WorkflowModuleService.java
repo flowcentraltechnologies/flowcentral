@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.business;
 
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationWorkItemUtilities;
@@ -49,6 +50,18 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * @since 4.1
  */
 public interface WorkflowModuleService extends FlowCentralService, ApplicationWorkItemUtilities {
+
+    /**
+     * Publishes all unpublished workflows of an application.
+     * 
+     * @param taskMonitor
+     *                        the task monitor
+     * @param applicationName
+     *                        the application name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void publishUnpublishedWorkflows(TaskMonitor taskMonitor, String applicationName) throws UnifyException;
 
     /**
      * Publishes a workflow.
@@ -347,6 +360,24 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     WorkEntityItem getWfItemWorkEntityFromWorkItemId(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException;
+
+    /**
+     * Applies user action on workflow item.
+     * 
+     * @param wfItemId
+     *                   the workflow item ID
+     * @param stepName
+     *                   the workflow step name
+     * @param userAction
+     *                   the user action to apply
+     * @param actionDate
+     *                   action date
+     * @param actionBy
+     *                   action by
+     * @return true if successfully applied otherwise false when workflow item is
+     *         not in step
+     */
+    boolean applyUserAction(Long wfItemId, String stepName, String userAction, Date actionDate, String actionBy);
 
     /**
      * Applies user action on workflow item.

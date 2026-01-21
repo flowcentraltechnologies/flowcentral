@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * OS messaging peer end-point definition.
@@ -45,6 +47,10 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     private String endpointUrl;
 
+    private String endpointUploadUrl;
+
+    private String endpointDownloadUrl;
+
     private String peerPassword;
 
     private RecordStatus status;
@@ -63,6 +69,8 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         this.name = name;
         this.description = description;
         this.endpointUrl = endpointUrl + OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER;
+        this.endpointUploadUrl = endpointUrl + OSMessagingModuleNameConstants.OSMESSAGING_UPLOAD_CONTROLLER; 
+        this.endpointDownloadUrl = endpointUrl + OSMessagingModuleNameConstants.OSMESSAGING_DOWNLOAD_CONTROLLER; 
         this.peerPassword = peerPassword;
         this.status = status;
         this.versionNo = versionNo;
@@ -71,7 +79,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
     }
 
     private OSMessagingPeerEndpointDef() {
-        
+        this.authentications = Collections.emptyMap();
     }
     
     @Override
@@ -102,6 +110,14 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     public String getEndpointUrl() {
         return endpointUrl;
+    }
+
+    public String getEndpointUploadUrl() {
+        return endpointUploadUrl;
+    }
+
+    public String getEndpointDownloadUrl() {
+        return endpointDownloadUrl;
     }
 
     public String getPeerPassword() {
@@ -137,5 +153,9 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         }
 
         return authentication;
+    }
+    
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 }

@@ -359,6 +359,10 @@ public final class ApplicationEntityUtils {
                         "applicationDesc",
                         "$m{baseapplicationentity.field.label.applicationdesc}",
                         null, "applicationId", "description", null, null, null, null, null, configType, false));
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY,
+                        "developable",
+                        "$m{baseapplicationentity.field.label.developable}",
+                        null, "applicationId", "developable", null, null, null, null, null, configType, false));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM, "devVersionType",
                         "$m{baseapplicationentity.field.label.devversiontype}",
                         "developmentversiontypelist", null, null, null, null, "application.enumlist", null, null,

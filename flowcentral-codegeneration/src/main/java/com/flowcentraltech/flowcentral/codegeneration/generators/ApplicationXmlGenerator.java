@@ -635,6 +635,8 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         entityAttachmentConfig.setName(appEntityAttachment.getName());
                         entityAttachmentConfig.setDescription(
                                 ctx.isSnapshotMode() ? appEntityAttachment.getDescription() : "$m{" + descKey + "}");
+                        entityAttachmentConfig.setLabel(
+                                ctx.isSnapshotMode() ? appEntityAttachment.getLabel() : "$m{" + descKey + "}");
                         attachmentConfigList.add(entityAttachmentConfig);
                     }
 

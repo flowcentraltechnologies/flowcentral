@@ -365,7 +365,7 @@ public enum StudioAppComponentType implements EnumConst {
             "studioonupdateworkflow-policy",
             null,
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
-                    | StudioAppComponentFlags.SUPPORTS_SAVEAS,
+            | StudioAppComponentFlags.SUPPORTS_SAVEAS| StudioAppComponentFlags.SHOW_CLASSIFIED,
             AppletType.STUDIO_FC_COMPONENT,
             Workflow.class);
 

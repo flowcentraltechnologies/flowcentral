@@ -919,15 +919,15 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final EntityDef _entityDef = form.getFormDef().getEntityDef();
         EntityActionResult entityActionResult = null;
         if (isWorkflowCopy()) {
-            final WorkEntity workEntity = (WorkEntity) inst;
-            final String workflowName = viewMode.isCreateForm()
-                    ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(_currFormAppletDef.getLongName())
-                    : (actionMode.isDelete()
-                            ? ApplicationNameUtils.getWorkflowCopyDeleteWorkflowName(_currFormAppletDef.getLongName())
+            final WorkEntity workEntity = (WorkEntity) inst; 
+            final String workflowName = actionMode.isDelete()
+                    ? ApplicationNameUtils.getWorkflowCopyDeleteWorkflowName(_currFormAppletDef.getLongName())
+                    : (workEntity.getOriginalCopyId() == null
+                            ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(_currFormAppletDef.getLongName())
                             : ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(_currFormAppletDef.getLongName()));
-    
+
             final String policy = actionMode.isDelete() ? null
-                    : (viewMode.isCreateForm()
+                    : (workEntity.getOriginalCopyId() == null
                             ? _currFormAppletDef.getPropValue(String.class,
                                     AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY)
                             : _currFormAppletDef.getPropValue(String.class,

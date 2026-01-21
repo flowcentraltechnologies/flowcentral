@@ -109,12 +109,12 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
     }
 
     @Override
-    public void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data) {
+    public void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data) throws UnifyException {
         nmb.addAttachment(type, name, title, fileName, data, false);
     }
 
     @Override
-    public void addAttachment(FileAttachmentType type, String name, String title, byte[] data) {
+    public void addAttachment(FileAttachmentType type, String name, String title, byte[] data) throws UnifyException {
         nmb.addAttachment(type, name, title, data, false);
     }
 
@@ -131,12 +131,12 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
 
     @Override
     public void addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data,
-            boolean inline) {
+            boolean inline) throws UnifyException {
         nmb.addAttachment(type, name, title, fileName, data, inline);
     }
 
     @Override
-    public void addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline) {
+    public void addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline) throws UnifyException {
         nmb.addAttachment(type, name, title, data, inline);
     }
 

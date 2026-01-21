@@ -104,6 +104,9 @@ public class WfItemEvent extends BaseEntity {
     @ListOnly(key = "wfItemHistId", property = "originWorkRecId")
     private Long originWorkRecId;
 
+    @ListOnly(key = "wfItemHistId", property = "caseNo")
+    private String wfItemCaseNo;
+
     @ListOnly(key = "wfItemHistId", property = "itemDesc")
     private String wfItemDesc;
 
@@ -319,6 +322,14 @@ public class WfItemEvent extends BaseEntity {
 
     public void setWfItemDesc(String wfItemDesc) {
         this.wfItemDesc = wfItemDesc;
+    }
+
+    public String getWfItemCaseNo() {
+        return wfItemCaseNo;
+    }
+
+    public void setWfItemCaseNo(String wfItemCaseNo) {
+        this.wfItemCaseNo = wfItemCaseNo;
     }
 
     public WorkflowStepPriority getPriority() {

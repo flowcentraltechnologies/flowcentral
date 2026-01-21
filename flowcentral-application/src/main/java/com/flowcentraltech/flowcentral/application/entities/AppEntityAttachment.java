@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.common.annotation.Table;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.constant.FileAttachmentType;
@@ -36,6 +37,9 @@ public class AppEntityAttachment extends BaseConfigNamedEntity {
     @ForeignKey
     private FileAttachmentType type;
 
+    @Column(length = 64, nullable = true)
+    private String label;
+    
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
 
@@ -53,6 +57,14 @@ public class AppEntityAttachment extends BaseConfigNamedEntity {
 
     public void setType(FileAttachmentType type) {
         this.type = type;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getTypeDesc() {

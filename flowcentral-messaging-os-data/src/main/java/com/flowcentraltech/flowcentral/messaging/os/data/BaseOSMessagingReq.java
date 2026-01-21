@@ -27,6 +27,12 @@ public abstract class BaseOSMessagingReq {
 
     private String correlationId;
 
+    private String userId;
+
+    private String function;
+
+    private String service;
+
     private String source;
 
     private String sourceVersion;
@@ -49,6 +55,30 @@ public abstract class BaseOSMessagingReq {
 
     public final void setCorrelationId(String correlationId) {
         this.correlationId = correlationId;
+    }
+
+    public final String getUserId() {
+        return userId;
+    }
+
+    public final void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public final String getFunction() {
+        return function;
+    }
+
+    public final void setFunction(String function) {
+        this.function = function;
+    }
+
+    public final String getService() {
+        return service;
+    }
+
+    public final void setService(String service) {
+        this.service = service;
     }
 
     public final String getSource() {

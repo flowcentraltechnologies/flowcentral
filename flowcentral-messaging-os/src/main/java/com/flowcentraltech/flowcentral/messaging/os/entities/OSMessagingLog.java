@@ -45,12 +45,6 @@ public class OSMessagingLog extends BaseAuditEntity {
 
     @Column(type = ColumnType.CLOB, nullable = true)
     private String responseBody;
-
-    @Column(length = 10, nullable = true)
-    private String responseCode;
-
-    @Column(length = 1024, nullable = true)
-    private String responseMsg;
     
     @Column(nullable = true)
     private Long runtimeInMilliSec;
@@ -98,22 +92,6 @@ public class OSMessagingLog extends BaseAuditEntity {
 
 	public void setResponseBody(String responseBody) {
 		this.responseBody = responseBody;
-	}
-
-	public String getResponseCode() {
-		return responseCode;
-	}
-
-	public void setResponseCode(String responseCode) {
-		this.responseCode = responseCode;
-	}
-
-	public String getResponseMsg() {
-		return responseMsg;
-	}
-
-	public void setResponseMsg(String responseMsg) {
-		this.responseMsg = responseMsg;
 	}
 
 	public Long getRuntimeInMilliSec() {

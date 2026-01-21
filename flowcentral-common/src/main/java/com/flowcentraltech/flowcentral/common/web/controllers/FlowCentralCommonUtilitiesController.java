@@ -76,7 +76,7 @@ public class FlowCentralCommonUtilitiesController
         if (collaborationProvider != null) {
             Popup popup = getCurrentPopup();
             CollaborationLockedResourceInfo info = (CollaborationLockedResourceInfo) popup.getBackingBean();
-            collaborationProvider.grabLock(info.getType(), info.getResourceName(), getUserToken().getUserLoginId());
+            collaborationProvider.grabLock(info.getType(), info.getResourceName(), getUserLoginId());
             removeCurrentPopup();
         }
 

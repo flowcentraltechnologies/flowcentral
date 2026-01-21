@@ -144,6 +144,7 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.TIMESTAMP_UTC, "application.datetime");
         map.put(EntityFieldDataType.TIMESTAMP, "application.datetime");
         map.put(EntityFieldDataType.STRING, "application.text");
+        map.put(EntityFieldDataType.SCRATCH, "application.text");
         map.put(EntityFieldDataType.ENUM, "application.enumlist");
         map.put(EntityFieldDataType.ENUM_REF, "application.enumlist");
         map.put(EntityFieldDataType.ENUM_DYN, "application.enumlist");
@@ -160,6 +161,8 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.LIST_ONLY, "application.text");
+        map.put(EntityFieldDataType.CHILD, "application.textarea");
+        map.put(EntityFieldDataType.CHILD_LIST, "application.textarea");
         defaultFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
@@ -177,6 +180,7 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DECIMAL, "application.decimal");
         map.put(EntityFieldDataType.DATE, "application.date");
         map.put(EntityFieldDataType.STRING, "application.text");
+        map.put(EntityFieldDataType.SCRATCH, "application.text");
         map.put(EntityFieldDataType.TIMESTAMP_UTC, "application.datetime");
         map.put(EntityFieldDataType.TIMESTAMP, "application.datetime");
         map.put(EntityFieldDataType.ENUM, "application.text");
@@ -195,6 +199,8 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.LIST_ONLY, "application.text");
+        map.put(EntityFieldDataType.CHILD, "application.textarea");
+        map.put(EntityFieldDataType.CHILD_LIST, "application.textarea");
         defaultSyncFormInputWidgets = Collections.unmodifiableMap(map);
     }
 

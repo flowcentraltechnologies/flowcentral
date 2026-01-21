@@ -43,8 +43,8 @@ public class PortalApplet {
 
     private boolean primary;
     
-    public PortalApplet(String type, String name, String description, String label, String entity, String icon, String createForm,
-            String maintainForm, String table, boolean primary) {
+    public PortalApplet(String type, String name, String description, String label, String entity, String icon,
+            String createForm, String maintainForm, String table, boolean primary) {
         this.type = type;
         this.name = name;
         this.description = description;

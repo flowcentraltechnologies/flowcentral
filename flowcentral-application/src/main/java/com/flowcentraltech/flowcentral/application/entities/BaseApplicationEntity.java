@@ -65,6 +65,9 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
     @ListOnly(key = "applicationId", property = "moduleName")
     private String moduleName;
 
+    @ListOnly(key = "applicationId", property = "developable")
+    private boolean developable;
+
     public final Long getApplicationId() {
         return applicationId;
     }
@@ -127,6 +130,14 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     public final void setModuleName(String moduleName) {
         this.moduleName = moduleName;
+    }
+
+    public boolean isDevelopable() {
+        return developable;
+    }
+
+    public void setDevelopable(boolean developable) {
+        this.developable = developable;
     }
 
 }

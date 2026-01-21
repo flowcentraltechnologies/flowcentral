@@ -61,6 +61,7 @@ import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
+import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -106,11 +107,14 @@ import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplet;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityAttachment;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalForm;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalFormElement;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTableColumn;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowStep;
 import com.flowcentraltech.flowcentral.application.entities.*;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -261,6 +265,7 @@ import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
@@ -320,6 +325,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private static final int MAX_LIST_DEPTH = 8;
 
     private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 5000;
+
+    @Configurable
+    private PortalWorkflowProvider portalWorkflowProvider;
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
@@ -802,7 +810,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     for (AppEntityAttachment appEntityAttachment : appEntity.getAttachmentList()) {
                         edb.addAttachmentDef(appEntityAttachment.getType(), appEntityAttachment.getName(),
-                                appEntityAttachment.getDescription());
+                                appEntityAttachment.getDescription(), appEntityAttachment.getLabel());
                     }
 
                     for (AppEntitySeries appEntitySeries : appEntity.getSeriesList()) {
@@ -2388,9 +2396,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             Class<T> componentClazz, String filterBy, String filter) throws UnifyException {
         return StringUtils.isBlank(filter)
                 ? environment().valueList(Long.class, "id",
-                        Query.of(componentClazz).addEquals("applicationName", applicationName).addOrder("id"))
-                : environment().valueList(Long.class, "id", Query.of(componentClazz)
-                        .addEquals("applicationName", applicationName).addILike(filterBy, filter).addOrder("id"));
+                        Query.of(componentClazz).addEquals("applicationName", applicationName)
+                                .addNotEndWith("name", "_wRunnable").addOrder("id"))
+                : environment().valueList(Long.class, "id",
+                        Query.of(componentClazz).addEquals("applicationName", applicationName)
+                                .addNotEndWith("name", "_wRunnable").addILike(filterBy, filter).addOrder("id"));
     }
 
     @Override
@@ -2846,7 +2856,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             fileAttachment.setName(attachment.getName());
             fileAttachment.setTitle(attachment.getTitle());
             fileAttachment.setFileName(attachment.getFileName());
-            fileAttachment.setFile(new FileAttachmentDoc(attachment.getData()));
+            fileAttachment.setFile(new FileAttachmentDoc(attachment.getFile().getDataAndInvalidate()));
             environment().create(fileAttachment);
             return true;
         }
@@ -2854,7 +2864,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         oldFileAttachment.setType(attachment.getType());
         oldFileAttachment.setTitle(attachment.getTitle());
         oldFileAttachment.setFileName(attachment.getFileName());
-        oldFileAttachment.setFile(new FileAttachmentDoc(attachment.getData()));
+        oldFileAttachment.setFile(new FileAttachmentDoc(attachment.getFile().getDataAndInvalidate()));
         environment().updateByIdVersion(oldFileAttachment);
         return false;
     }
@@ -2905,7 +2915,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             return Attachment
                     .newBuilder(fileAttachment.getId(), fileAttachment.getType(), false, fileAttachment.getVersionNo())
                     .name(fileAttachment.getName()).title(fileAttachment.getTitle())
-                    .fileName(fileAttachment.getFileName()).data(fileAttachment.getFile().getData()).build();
+                    .fileName(fileAttachment.getFileName())
+                    .file(UploadedFile.create(fileAttachment.getFileName(), fileAttachment.getFile().getData()))
+                    .build();
         }
 
         return null;
@@ -2983,7 +2995,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appAppletFilter.setDescription(description);
             appAppletFilter.setOwnershipType(ownershipType);
             if (OwnershipType.USER.equals(ownershipType)) {
-                appAppletFilter.setOwner(getUserToken().getUserLoginId());
+                appAppletFilter.setOwner(getUserLoginId());
             }
 
             appAppletFilter.setQuickFilter(true);
@@ -3906,13 +3918,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<String> getPortalApplicationNames() throws UnifyException {
-        return new ArrayList<String>(
-                environment().valueSet(String.class, "applicationName", new AppAppletQuery().portalAccess(true)));
+        Set<String> applicationNames = new HashSet<String>();
+        if (portalWorkflowProvider != null) {
+            applicationNames.addAll(portalWorkflowProvider.getPortalApplicationNames());
+        }
+
+        applicationNames.addAll(environment().valueSet(String.class, "applicationName",
+                new AppAppletQuery().portalAccess(true).developable(true)));
+        return new ArrayList<String>(applicationNames);
     }
 
     @Override
     public Optional<PortalApplication> getPortalApplication(String applicationName) throws UnifyException {
-        if (environment().countAll(new AppAppletQuery().portalAccess(true).applicationName(applicationName)) == 0) {
+        final List<PortalWorkflow> workflows = portalWorkflowProvider != null
+                ? portalWorkflowProvider.getPortalWorkflows(applicationName)
+                : Collections.emptyList();
+
+        if (workflows.isEmpty() && environment()
+                .countAll(new AppAppletQuery().portalAccess(true).applicationName(applicationName)) == 0) {
             return Optional.empty();
         }
 
@@ -3927,16 +3950,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             extractPortalDependencies(applet, applets, tables, forms, entities);
         }
 
+        for (PortalWorkflow workflow : workflows) {
+            for (PortalWorkflowStep step : workflow.getSteps()) {
+                extractPortalDependencies(step.getApplet(), applets, tables, forms, entities);
+            }
+        }
+
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
                 applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
                 DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
-                DataUtils.unmodifiableList(entities.values())));
+                DataUtils.unmodifiableList(entities.values()), DataUtils.unmodifiableList(workflows)));
     }
 
     private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,
             Map<String, PortalTable> tables, Map<String, PortalForm> forms, Map<String, PortalEntity> entities)
             throws UnifyException {
-        if (!applets.containsKey(applet)) {
+        if (!StringUtils.isBlank(applet) && !applets.containsKey(applet)) {
             final AppletDef appletDef = getAppletDef(applet);
             final String entity = appletDef.getEntity();
             final EntityDef entityDef = getEntityDef(entity);
@@ -3956,8 +3985,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
                 }
 
-                entities.put(entity, new PortalEntity(entityDef.getName(), entityDef.getDescription(),
-                        DataUtils.unmodifiableList(fields)));
+                List<PortalEntityAttachment> attachments = new ArrayList<PortalEntityAttachment>();
+                for (EntityAttachmentDef attachmentDef : entityDef.getAttachmentList()) {
+                    attachments.add(new PortalEntityAttachment(attachmentDef.getType().toString(),
+                            attachmentDef.getName(), attachmentDef.getLabel()));
+                }
+
+                entities.put(entity, new PortalEntity(entityDef.getLongName(), entityDef.getDescription(),
+                        DataUtils.unmodifiableList(fields), DataUtils.unmodifiableList(attachments)));
             }
 
             final String table = appletDef.getPropDef(AppletPropertyConstants.SEARCH_TABLE).getValue();
@@ -3973,13 +4008,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             tableColumnDef.getLinkAct(), tableColumnDef.getWidthRatio()));
                 }
 
-                tables.put(table, new PortalTable(tableDef.getName(), tableDef.getDescription(),
+                tables.put(table, new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
                         resolveApplicationMessage(tableDef.getLabel()), entity, DataUtils.unmodifiableList(columns)));
             }
 
             final List<String> formList = Arrays.asList(
-                    appletDef.getPropDef(AppletPropertyConstants.CREATE_FORM).getValue(),
-                    appletDef.getPropDef(AppletPropertyConstants.MAINTAIN_FORM).getValue());
+                    appletDef.isProp(AppletPropertyConstants.CREATE_FORM)
+                            ? appletDef.getPropDef(AppletPropertyConstants.CREATE_FORM).getValue()
+                            : null,
+                    appletDef.isProp(AppletPropertyConstants.MAINTAIN_FORM)
+                            ? appletDef.getPropDef(AppletPropertyConstants.MAINTAIN_FORM).getValue()
+                            : null);
             final Set<String> childApplets = new HashSet<String>();
             for (String form : formList) {
                 if (form != null && !forms.containsKey(form)) {
@@ -4020,13 +4059,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
-                    forms.put(form, new PortalForm(formDef.getName(), formDef.getDescription(), entity,
+                    forms.put(form, new PortalForm(formDef.getLongName(), formDef.getDescription(), entity,
                             DataUtils.unmodifiableList(elements)));
                 }
             }
 
             applets.put(applet,
-                    new PortalApplet(appletDef.getType().name(), appletDef.getName(), appletDef.getDescription(),
+                    new PortalApplet(appletDef.getType().name(), appletDef.getLongName(), appletDef.getDescription(),
                             resolveApplicationMessage(appletDef.getLabel()), entity, appletDef.getIcon(),
                             formList.get(0), formList.get(1), table, appletDef.isPortalAccess()));
 
@@ -6526,12 +6565,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityAttachment.setName(entityAttachmentConfig.getName());
                     appEntityAttachment
                             .setDescription(resolveApplicationMessage(entityAttachmentConfig.getDescription()));
+                    appEntityAttachment.setLabel(resolveApplicationMessage(entityAttachmentConfig.getLabel()));
                     appEntityAttachment.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC);
                     attachmentList.add(appEntityAttachment);
                 } else {
                     oldAppEntityAttachment.setType(entityAttachmentConfig.getType());
                     oldAppEntityAttachment
                             .setDescription(resolveApplicationMessage(entityAttachmentConfig.getDescription()));
+                    oldAppEntityAttachment.setLabel(resolveApplicationMessage(entityAttachmentConfig.getLabel()));
                     oldAppEntityAttachment.setConfigType(ConfigType.STATIC);
                     attachmentList.add(oldAppEntityAttachment);
                 }
