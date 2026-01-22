@@ -29,6 +29,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordGenerator;
+import com.tcdng.unify.core.security.SecurityComponents;
 
 /**
  * User new action policy.
@@ -40,12 +41,10 @@ import com.tcdng.unify.core.security.PasswordGenerator;
 @Component(name = "user-newactionpolicy", description = "$m{security.entityactionpolicy.newuser}")
 public class UserNewActionPolicy extends AbstractAppletActionPolicy {
 
-//    private static final String USER_PASSWORD = "USER_PASSWORD";
-
     @Configurable
     private SystemModuleService systemModuleService;
 
-    @Configurable("oneway-stringcryptograph")
+    @Configurable(SecurityComponents.ONEWAY_STRING_CRYPTOGRAPH)
     private OneWayStringCryptograph passwordCryptograph;
 
     @Override
@@ -65,7 +64,6 @@ public class UserNewActionPolicy extends AbstractAppletActionPolicy {
 
             String password = passwordGenerator.generatePassword(user.getLoginId(), passwordLength);
             user.setPassword(passwordCryptograph.encrypt(password));
-//        ctx.setAttribute(USER_PASSWORD, password);
         }
 
         return null;

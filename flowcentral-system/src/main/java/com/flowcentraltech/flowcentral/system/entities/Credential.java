@@ -22,6 +22,7 @@ import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.Policy;
+import com.tcdng.unify.core.security.SecurityComponents;
 
 /**
  * Credential entity.
@@ -45,7 +46,7 @@ public class Credential extends BaseStatusEntity {
     @Column(length = 64)
     private String userName;
 
-    @Column(length = 2048, transformer = "twoway-stringcryptograph", nullable = true)
+    @Column(length = 2048, transformer = SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH, nullable = true)
     private String password;
 
     @Column(type = ColumnType.CLOB, nullable = true)
