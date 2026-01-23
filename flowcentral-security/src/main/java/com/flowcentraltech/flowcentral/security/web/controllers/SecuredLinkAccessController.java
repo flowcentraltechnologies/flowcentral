@@ -36,6 +36,7 @@ import com.tcdng.unify.core.constant.MimeType;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
+import com.tcdng.unify.web.constant.BundledCatType;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -63,6 +64,11 @@ public class SecuredLinkAccessController extends AbstractForwarderController<Sec
 
     public SecuredLinkAccessController() {
         super(SecuredLinkAccessPageBean.class, Secured.FALSE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    }
+
+    @Override
+    public final BundledCatType getBundledCategory() throws UnifyException {
+        return BundledCatType.ALL;
     }
 
     @Override
