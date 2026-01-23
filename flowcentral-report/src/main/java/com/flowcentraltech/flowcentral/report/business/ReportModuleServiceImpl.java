@@ -998,7 +998,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     FilterConditionType type = restrictionDef.getType();
-                    SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getFieldInfo(restrictionDef.getFieldName());
+                    SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getListFieldInfo(restrictionDef.getFieldName());                   
                     ColumnType columnType = sqlFieldInfo.getColumnType();
                     if (columnType.isDate() || columnType.isTimestamp()) {
                         ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(
