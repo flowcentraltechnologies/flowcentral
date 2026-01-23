@@ -193,6 +193,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public Optional<String> getPeerEndpointURL(String appId) throws UnifyException {
+        return environment().valueOptional(String.class, "endpointUrl", new OSMessagingPeerEndpointQuery().appId(appId));
+    }
+
+    @Override
     public List<OSMessagingPeerEndpoint> findOSMessagingEndpoints(OSMessagingPeerEndpointQuery query)
             throws UnifyException {
         return environment().findAll(query);
