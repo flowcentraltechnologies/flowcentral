@@ -1609,7 +1609,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
                         List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
                         if (!DataUtils.isBlank(workRecIds)) {
-                            logInfo("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
                             List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
                                     Query.of((Class<? extends Entity>) entityDef.getEntityClass())
                                             .addAmongst("id", workRecIds).addRestriction(restriction));
