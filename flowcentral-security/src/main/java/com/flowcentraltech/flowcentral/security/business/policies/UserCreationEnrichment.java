@@ -32,6 +32,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordGenerator;
+import com.tcdng.unify.core.security.SecurityComponents;
 
 /**
  * User creation enrichment.
@@ -46,7 +47,7 @@ public class UserCreationEnrichment extends AbstractWfEnrichmentPolicy {
     @Configurable
     private SystemModuleService systemModuleService;
 
-    @Configurable("oneway-stringcryptograph")
+    @Configurable(SecurityComponents.ONEWAY_STRING_CRYPTOGRAPH)
     private OneWayStringCryptograph passwordCryptograph;
 
     @Override

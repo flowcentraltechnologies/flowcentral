@@ -111,6 +111,7 @@ import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
+import com.tcdng.unify.core.security.SecurityComponents;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskManager;
@@ -415,7 +416,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
         pw.flush();
 
-        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph");
+        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent(SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH);
         String request = cryptograph.encrypt(writer.toString());
         String[] lines = StringUtils.splitIntoLengths(request, 40);
         writer = new StringWriter();
@@ -542,7 +543,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
             pw.flush();
 
-            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
+            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent(SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
                     new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
             String license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
@@ -567,7 +568,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         try {
             Feature deploymentID = environment().find(new FeatureQuery().code("deploymentID"));
             Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
-            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
+            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent(SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
                     new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
             BufferedReader reader = new BufferedReader(new StringReader(new String(licenseFile, "UTF-8")));
             String license = cryptograph.decrypt(IOUtils.readAll(reader));
@@ -712,7 +713,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         Date now = getNow();
         Feature deploymentID = environment().find(new FeatureQuery().code("deploymentID"));
         Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
-        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
+        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent(SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
                 new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
         String license = cryptograph.decrypt(new String(attachment.getFile().getDataAndInvalidate()));
 

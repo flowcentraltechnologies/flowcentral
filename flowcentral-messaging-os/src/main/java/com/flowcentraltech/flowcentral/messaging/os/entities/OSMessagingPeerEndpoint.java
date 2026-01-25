@@ -20,6 +20,7 @@ import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.Policy;
+import com.tcdng.unify.core.security.SecurityComponents;
 
 /**
  * OS messaging peer end-point.
@@ -50,7 +51,7 @@ public class OSMessagingPeerEndpoint extends BaseStatusEntity {
     @Column(name = "ENDPOINT_URL", length = 256)
     private String endpointUrl;
 
-    @Column(name = "PEER_AUTH", length = 256, transformer = "twoway-stringcryptograph")
+    @Column(name = "PEER_AUTH", length = 256, transformer = SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH)
     private String peerPassword;
 
     @Override

@@ -106,6 +106,7 @@ import com.tcdng.unify.core.data.StringComposition;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordAutenticationService;
 import com.tcdng.unify.core.security.PasswordGenerator;
+import com.tcdng.unify.core.security.SecurityComponents;
 import com.tcdng.unify.core.security.UserProfile;
 import com.tcdng.unify.core.system.UserSessionManager;
 import com.tcdng.unify.core.util.CalendarUtils;
@@ -143,7 +144,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private NotificationModuleService notificationModuleService;
 
-    @Configurable("oneway-stringcryptograph")
+    @Configurable(SecurityComponents.ONEWAY_STRING_CRYPTOGRAPH)
     private OneWayStringCryptograph passwordCryptograph;
 
     @Override

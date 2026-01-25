@@ -61,6 +61,17 @@ public interface OSMessagingModuleService extends FlowCentralService {
     Optional<String> getPeerEndpointShortName(String appId) throws UnifyException;
     
     /**
+     * Gets a peer end-point URL.
+     * 
+     * @param appId
+     *              the end-point app ID
+     * @return optional endpoint URL
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> getPeerEndpointURL(String appId) throws UnifyException;
+    
+    /**
      * Finds OS messaging endpoints.
      * 
      * @param query
