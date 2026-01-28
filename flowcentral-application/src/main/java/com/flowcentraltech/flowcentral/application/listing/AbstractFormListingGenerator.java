@@ -196,6 +196,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
                 formListing.nextIndex();
             }
         }
+        
+        rb.outputSettings(getFileOutputSettings(reader));
     }
 
     @Override
@@ -222,6 +224,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         }
 
         rb.customObject(workbook);
+        rb.outputSettings(getFileOutputSettings(reader));
         return rb.build();
     }
 

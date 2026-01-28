@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.common.web.responses;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.FileOutputSettings;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.ReportFormat;
 import com.tcdng.unify.web.ui.AbstractOpenWindowPageControllerResponse;
@@ -38,18 +39,20 @@ public class CommonListingReportResponse extends AbstractOpenWindowPageControlle
 
     @Override
     protected WindowResourceInfo prepareWindowResource() throws UnifyException {
-        Report report = (Report) getRequestAttribute(FlowCentralRequestAttributeConstants.REPORT);
+        final Report report = (Report) getRequestAttribute(FlowCentralRequestAttributeConstants.REPORT);
+        final FileOutputSettings outputSettings = report.getOutputSettings();
         if (report.isWorkbookXLS()) {
-            String resourceName = getTimestampedResourceName(report.getTitle()) + ReportFormat.XLS.fileExt();
+            String resourceName = (outputSettings != null ? outputSettings.getBaseName()
+                    : getTimestampedResourceName(report.getTitle())) + ReportFormat.XLS.fileExt();
             logDebug("Preparing window resource for listing report [{0}]...", resourceName);
             return new WindowResourceInfo(report, "/common/resource/listingreport", resourceName,
                     ReportFormat.XLS.mimeType().template(), true);
         }
 
-        String resourceName = getTimestampedResourceName(report.getTitle()) + ReportFormat.PDF.fileExt();
+        String resourceName = (outputSettings != null ? outputSettings.getBaseName()
+                : getTimestampedResourceName(report.getTitle())) + ReportFormat.PDF.fileExt();
         logDebug("Preparing window resource for listing report [{0}]...", resourceName);
         return new WindowResourceInfo(report, "/common/resource/listingreport", resourceName,
-                ReportFormat.PDF.mimeType().template(),
-                false);
+                ReportFormat.PDF.mimeType().template(), outputSettings != null && outputSettings.isDownloadOnly());
     }
 }
