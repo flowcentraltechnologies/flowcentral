@@ -31,8 +31,11 @@ import com.tcdng.unify.core.annotation.Column;
 @Table(name = "FC_WORKITEMHISTORY",
         uniqueConstraints = {@UniqueConstraint("caseNo")},
         indexes = {
-                @Index("caseNo"), @Index("applicationName"), @Index("workflowName"),
-                @Index("entity"), @Index("branchCode") })
+//                @Index("caseNo"),
+                @Index("applicationName"), 
+                @Index("workflowName"),
+                @Index("entity"), 
+                @Index("branchCode") })
 public class WfItemHist extends BaseAuditEntity {
 
     @Column(name = "APPLICATION_NM", length = 64)
