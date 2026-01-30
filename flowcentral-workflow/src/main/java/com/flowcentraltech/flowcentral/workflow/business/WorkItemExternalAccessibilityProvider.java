@@ -31,6 +31,28 @@ import com.tcdng.unify.core.UnifyException;
 public interface WorkItemExternalAccessibilityProvider extends FlowCentralComponent {
 
     /**
+     * Notify external system for start.
+     * 
+     * @param item
+     *             the workflow item
+     * @return true if transferred otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean notifyExternalForStart(WfItemAccessible item) throws UnifyException;
+
+    /**
+     * Notify external system for end.
+     * 
+     * @param item
+     *             the workflow item
+     * @return true if transferred otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean notifyExternalForEnd(WfItemAccessible item) throws UnifyException;
+
+    /**
      * Transfers workflow item to external system for user action.
      * 
      * @param item

@@ -116,6 +116,9 @@ public class WfItemEvent extends BaseEntity {
     @ListOnly(key = "wfItemHistId", property = "departmentCode")
     private String departmentCode;
 
+    @ListOnly(key = "wfItemHistId", property = "initiatedBy")
+    private String initiatedBy;
+
     @ListOnly(key = "priority", property = "description")
     private String priorityDesc;
 
@@ -314,6 +317,14 @@ public class WfItemEvent extends BaseEntity {
 
     public void setDepartmentCode(String departmentCode) {
         this.departmentCode = departmentCode;
+    }
+
+    public String getInitiatedBy() {
+        return initiatedBy;
+    }
+
+    public void setInitiatedBy(String initiatedBy) {
+        this.initiatedBy = initiatedBy;
     }
 
     public String getWfItemDesc() {

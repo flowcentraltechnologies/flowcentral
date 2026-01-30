@@ -128,6 +128,9 @@ public class WfItem extends BaseAuditEntity {
     @ListOnly(key = "wfItemEventId", property = "priorityDesc")
     private String priorityDesc;
 
+    @ListOnly(key = "wfItemEventId", property = "initiatedBy")
+    private String initiatedBy;
+
     @Override
     public String getDescription() {
         return wfItemDesc;
@@ -379,6 +382,14 @@ public class WfItem extends BaseAuditEntity {
 
     public void setPriorityDesc(String priorityDesc) {
         this.priorityDesc = priorityDesc;
+    }
+
+    public String getInitiatedBy() {
+        return initiatedBy;
+    }
+
+    public void setInitiatedBy(String initiatedBy) {
+        this.initiatedBy = initiatedBy;
     }
 
 }

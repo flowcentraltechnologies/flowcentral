@@ -43,6 +43,10 @@ public class WfItemAccessible {
     
     private String entityName;
     
+    private String requestedBy;
+    
+    private Date requestedOn;
+    
     private Date stepOn;
 
     private Date reminderOn;
@@ -52,8 +56,8 @@ public class WfItemAccessible {
     private Date criticalOn;
 
     public WfItemAccessible(Long wfItemId, Long workRecId, String branchCode, String departmentCode,
-            String wfItemCaseNo, String wfItemDesc, String workflowName, String stepName,
-            String entityName, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
+            String wfItemCaseNo, String wfItemDesc, String workflowName, String stepName, String entityName,
+            String requestedBy, Date requestedOn, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
         this.wfItemId = wfItemId;
         this.workRecId = workRecId;
         this.branchCode = branchCode;
@@ -63,6 +67,8 @@ public class WfItemAccessible {
         this.workflowName = workflowName;
         this.stepName = stepName;
         this.entityName = entityName;
+        this.requestedBy = requestedBy;
+        this.requestedOn = requestedOn;
         this.stepOn = stepOn;
         this.reminderOn = reminderOn;
         this.expectedOn = expectedOn;
@@ -143,6 +149,22 @@ public class WfItemAccessible {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public String getRequestedBy() {
+        return requestedBy;
+    }
+
+    public void setRequestedBy(String requestedBy) {
+        this.requestedBy = requestedBy;
+    }
+
+    public Date getRequestedOn() {
+        return requestedOn;
+    }
+
+    public void setRequestedOn(Date requestedOn) {
+        this.requestedOn = requestedOn;
     }
 
     public Date getStepOn() {

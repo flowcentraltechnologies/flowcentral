@@ -218,7 +218,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     private static final String CASENO_OWNER_ID = "workflow-moduleservice";
 
-    private static final String CASENO_FORMAT_BASE = "{yy}{DDD}-{N:5}";
+    private static final String CASENO_FORMAT_BASE = "{yy}{DDD}-{N:4}";
 
     @Configurable
     private OrganizationModuleService organizationModuleService;
@@ -1841,6 +1841,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 final String autoFormat = caseNoAutoFormatMap.get(wfDef.getCasePrefix());
                 caseNo = appletUtil.sequenceCodeGenerator().getNextSequenceCode(CASENO_OWNER_ID, autoFormat);
             }
+            
+            final boolean isPerformExternal = workItemExternalAccessibilityProvider != null
+                    && appletUtil.system().getSysParameterValue(boolean.class,
+                            WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT);
 
             WfItemHist wfItemHist = new WfItemHist();
             wfItemHist.setApplicationName(wfDef.getApplicationName());
@@ -1851,7 +1855,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             wfItemHist.setItemDesc(itemDesc);
             wfItemHist.setBranchCode(workInst.getWorkBranchCode());
             wfItemHist.setDepartmentCode(workInst.getWorkDepartmentCode());
-            wfItemHist.setInitiatedBy(userLoginId);
+            wfItemHist.setInitiatedBy(isPerformExternal ? workInst.getCreatedBy() :  userLoginId);
             Long wfItemHistId = (Long) environment().create(wfItemHist);
             Long wfItemEventId = createWfItemEvent(startStepDef, wfItemHistId);
 
@@ -1891,6 +1895,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
 
+        final boolean isPerformExternal = workItemExternalAccessibilityProvider != null
+                && appletUtil.system().getSysParameterValue(boolean.class,
+                        WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT);
+        final WfItemAccessible accessible = isPerformExternal ? createWfItemAccessible(wfItem) : null;
+
         transitionItem.setVariables(getTransitionVariables(wfItem, entityDef));
 
         setSavePoint();
@@ -1914,6 +1923,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             final WorkflowStepType type = currWfStepDef.getType();
             switch (type) {
                 case START:
+                    if (isPerformExternal) {
+                        workItemExternalAccessibilityProvider.notifyExternalForStart(accessible);
+                    }
+                    
                     break;
                 case SET_VALUES:
                     break;
@@ -1926,6 +1939,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         policy.enrich(wfInstWriter, wfInstReader, currWfStepDef.getRule());
                         transitionItem.setUpdated();
                     }
+                    
                     break;
                 case PROCEDURE:
                     if (currWfStepDef.isWithPolicy()) {
@@ -1933,6 +1947,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         WfProcessPolicy policy = (WfProcessPolicy) getComponent(currWfStepDef.getPolicy());
                         policy.execute(wfInstReader, currWfStepDef.getRule());
                     }
+                    
                     break;
                 case RECORD_ACTION:
                     if (currWfStepDef.isWithRecordAction()) {
@@ -1976,6 +1991,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                                 break;
                         }
                     }
+                    
                     break;
                 case BINARY_ROUTING:
                     if (wfDef.getFilterDef(currWfStepDef.getBinaryConditionName()).getFilterDef()
@@ -1985,6 +2001,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
                     }
+                    
                     break;
                 case POLICY_ROUTING:
                     WfBinaryPolicy policy = (WfBinaryPolicy) getComponent(currWfStepDef.getPolicy());
@@ -1993,6 +2010,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
                     }
+                    
                     break;
                 case MULTI_ROUTING:
                     WfStepDef routeToWfStep = resolveMultiRouting(wfDef, currWfStepDef, wfInstReader);
@@ -2005,15 +2023,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 case USER_ACTION:
                 case ERROR:
                     // External accessibility
-                    if (workItemExternalAccessibilityProvider != null && type.isExternalInteractive()
-                            && currWfStepDef.isWithStepAppletName()
-                            && appletUtil.system().getSysParameterValue(boolean.class,
-                                    WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT)) {
-                        final WfItemAccessible accessible = new WfItemAccessible(wfItem.getId(), wfItem.getWorkRecId(),
-                                wfItem.getBranchCode(), wfItem.getDepartmentCode(), wfItem.getWfItemCaseNo(),
-                                wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
-                                wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getStepDt(), wfItem.getReminderDt(),
-                                wfItem.getExpectedDt(), wfItem.getCriticalDt());
+                    if (isPerformExternal && type.isExternalInteractive() && currWfStepDef.isWithStepAppletName()) {
                         if (workItemExternalAccessibilityProvider.transferToExternalForUserAction(accessible)) {
                             wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
                         }
@@ -2024,6 +2034,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     environment().updateByIdVersion(wfItem);
                     break;
                 case END: {
+                    if (isPerformExternal) {
+                        workItemExternalAccessibilityProvider.notifyExternalForEnd(accessible);
+                    }
+                    
                     environment().delete(WfItem.class, wfItemId);
                     final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                     if (originalCopyId != null) {
@@ -2128,6 +2142,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         }
 
         return true;
+    }
+
+    private WfItemAccessible createWfItemAccessible(WfItem wfItem) {
+        return new WfItemAccessible(wfItem.getId(), wfItem.getWorkRecId(), wfItem.getBranchCode(),
+                wfItem.getDepartmentCode(), wfItem.getWfItemCaseNo(), wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
+                wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getInitiatedBy(), wfItem.getCreateDt(),
+                wfItem.getStepDt(), wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());
     }
 
     private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
