@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.workflow.data;
 
 import java.util.Date;
 
+import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
+
 /**
  * Workflow item accessible definition.
  * 
@@ -25,6 +27,8 @@ import java.util.Date;
  */
 public class WfItemAccessible {
 
+    private WfAccessState state;
+    
     private Long wfItemId;
 
     private Long workRecId;
@@ -79,6 +83,14 @@ public class WfItemAccessible {
         
     }
     
+    public WfAccessState getState() {
+        return state;
+    }
+
+    public void setState(WfAccessState state) {
+        this.state = state;
+    }
+
     public Long getWfItemId() {
         return wfItemId;
     }

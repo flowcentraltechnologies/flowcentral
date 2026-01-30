@@ -99,6 +99,7 @@ import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleS
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelErrorConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
@@ -1841,7 +1842,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 final String autoFormat = caseNoAutoFormatMap.get(wfDef.getCasePrefix());
                 caseNo = appletUtil.sequenceCodeGenerator().getNextSequenceCode(CASENO_OWNER_ID, autoFormat);
             }
-            
+
             final boolean isPerformExternal = workItemExternalAccessibilityProvider != null
                     && appletUtil.system().getSysParameterValue(boolean.class,
                             WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT);
@@ -1855,7 +1856,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             wfItemHist.setItemDesc(itemDesc);
             wfItemHist.setBranchCode(workInst.getWorkBranchCode());
             wfItemHist.setDepartmentCode(workInst.getWorkDepartmentCode());
-            wfItemHist.setInitiatedBy(isPerformExternal ? workInst.getCreatedBy() :  userLoginId);
+            wfItemHist.setInitiatedBy(isPerformExternal ? workInst.getCreatedBy() : userLoginId);
             Long wfItemHistId = (Long) environment().create(wfItemHist);
             Long wfItemEventId = createWfItemEvent(startStepDef, wfItemHistId);
 
@@ -1924,9 +1925,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             switch (type) {
                 case START:
                     if (isPerformExternal) {
+                        accessible.setState(WfAccessState.START);
                         workItemExternalAccessibilityProvider.notifyExternalForStart(accessible);
                     }
-                    
+
                     break;
                 case SET_VALUES:
                     break;
@@ -1939,7 +1941,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         policy.enrich(wfInstWriter, wfInstReader, currWfStepDef.getRule());
                         transitionItem.setUpdated();
                     }
-                    
+
                     break;
                 case PROCEDURE:
                     if (currWfStepDef.isWithPolicy()) {
@@ -1947,7 +1949,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         WfProcessPolicy policy = (WfProcessPolicy) getComponent(currWfStepDef.getPolicy());
                         policy.execute(wfInstReader, currWfStepDef.getRule());
                     }
-                    
+
                     break;
                 case RECORD_ACTION:
                     if (currWfStepDef.isWithRecordAction()) {
@@ -1991,7 +1993,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                                 break;
                         }
                     }
-                    
+
                     break;
                 case BINARY_ROUTING:
                     if (wfDef.getFilterDef(currWfStepDef.getBinaryConditionName()).getFilterDef()
@@ -2001,7 +2003,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
                     }
-                    
+
                     break;
                 case POLICY_ROUTING:
                     WfBinaryPolicy policy = (WfBinaryPolicy) getComponent(currWfStepDef.getPolicy());
@@ -2010,7 +2012,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
                     }
-                    
+
                     break;
                 case MULTI_ROUTING:
                     WfStepDef routeToWfStep = resolveMultiRouting(wfDef, currWfStepDef, wfInstReader);
@@ -2024,6 +2026,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 case ERROR:
                     // External accessibility
                     if (isPerformExternal && type.isExternalInteractive() && currWfStepDef.isWithStepAppletName()) {
+                        accessible.setState(WfAccessState.USER_ACTION);
                         if (workItemExternalAccessibilityProvider.transferToExternalForUserAction(accessible)) {
                             wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
                         }
@@ -2035,9 +2038,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     break;
                 case END: {
                     if (isPerformExternal) {
+                        accessible.setState(WfAccessState.END);
                         workItemExternalAccessibilityProvider.notifyExternalForEnd(accessible);
                     }
-                    
+
                     environment().delete(WfItem.class, wfItemId);
                     final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                     if (originalCopyId != null) {
