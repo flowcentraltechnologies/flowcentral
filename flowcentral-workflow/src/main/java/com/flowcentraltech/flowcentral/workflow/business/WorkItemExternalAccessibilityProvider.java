@@ -16,9 +16,10 @@
 
 package com.flowcentraltech.flowcentral.workflow.business;
 
-import java.util.Date;
+import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.workflow.data.UserAction;
 import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.tcdng.unify.core.UnifyException;
 
@@ -70,15 +71,11 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
      *                   the work item ID
      * @param stepName
      *                   the step name
-     * @param actionName
-     *                   the name of action performed by user
-     * @param actionDate
-     *                   the action time stamp
-     * @param actionBy
-     *                   the actors user ID
+     * @param actions
+     *                   the action list
      * @return true if successfully
      * @throws UnifyException
      */
-    boolean releaseFromExternalWithUserAction(Long workItemId, String stepName, String actionName, Date actionDate,
-            String actionBy) throws UnifyException;
+    boolean releaseFromExternalWithUserAction(Long workItemId, String stepName, List<? extends UserAction> actions)
+            throws UnifyException;
 }
