@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
-import com.flowcentraltech.flowcentral.workflow.data.UserAction;
+import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 

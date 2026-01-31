@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.workflow.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.flowcentraltech.flowcentral.workflow.data.UserAction;
+import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
 import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.tcdng.unify.core.UnifyException;
 

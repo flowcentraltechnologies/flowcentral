@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.workflow.data;
+package com.flowcentraltech.flowcentral.messaging.os.data;
 
 import java.util.Date;
 
