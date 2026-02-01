@@ -26,19 +26,27 @@ public class PortalTableColumn {
     private String field;
 
     private String label;
-    
+
     private String order;
-    
+
     private String linkAct;
-    
+
+    private String renderer;
+
     private int widthRatio;
 
-    public PortalTableColumn(String field, String label, String order, String linkAct, int widthRatio) {
+    public PortalTableColumn(String field, String label, String order, String linkAct, String renderer,
+            int widthRatio) {
         this.field = field;
         this.label = label;
         this.order = order;
         this.linkAct = linkAct;
+        this.renderer = renderer;
         this.widthRatio = widthRatio;
+    }
+
+    public String getRenderer() {
+        return renderer;
     }
 
     public String getField() {

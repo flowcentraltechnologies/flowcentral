@@ -4005,7 +4005,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
                                     : tableColumnDef.getLabel()),
                             tableColumnDef.getOrder() != null ? tableColumnDef.getOrder().name() : null,
-                            tableColumnDef.getLinkAct(), tableColumnDef.getWidthRatio()));
+                            tableColumnDef.getLinkAct(), tableColumnDef.getRenderer(), tableColumnDef.getWidthRatio()));
                 }
 
                 tables.put(table, new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
