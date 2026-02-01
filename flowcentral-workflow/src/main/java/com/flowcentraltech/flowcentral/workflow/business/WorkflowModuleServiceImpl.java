@@ -1895,8 +1895,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         final String prevStepName = wfItem.getPrevWfStepName();
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
+        final WorkflowStepType type = currWfStepDef.getType();
 
-        final boolean isPerformExternal = workItemExternalAccessibilityProvider != null
+        final boolean isPerformExternal = workItemExternalAccessibilityProvider != null && type.supportExternal()
                 && appletUtil.system().getSysParameterValue(boolean.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT);
         final WfItemAccessible accessible = isPerformExternal ? createWfItemAccessible(wfItem) : null;
@@ -1921,7 +1922,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 }
             }
 
-            final WorkflowStepType type = currWfStepDef.getType();
             switch (type) {
                 case START:
                     if (isPerformExternal) {
