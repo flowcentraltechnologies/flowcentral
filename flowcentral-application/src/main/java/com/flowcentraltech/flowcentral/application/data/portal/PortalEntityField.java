@@ -31,9 +31,13 @@ public class PortalEntityField {
 
     private String editor;
 
+    private String entity;
+
     private boolean basicSearch;
 
     private boolean nullable;
+
+    private boolean array;
 
     public PortalEntityField(String type, String name, String label, String editor, boolean basicSearch,
             boolean nullable) {
@@ -43,6 +47,15 @@ public class PortalEntityField {
         this.editor = editor;
         this.basicSearch = basicSearch;
         this.nullable = nullable;
+        this.array = false;
+    }
+
+    public PortalEntityField(String type, String name, String label, String entity, boolean array) {
+        this.type = type;
+        this.name = name;
+        this.label = label;
+        this.entity = entity;
+        this.array = array;
     }
 
     public String getType() {
@@ -67,6 +80,14 @@ public class PortalEntityField {
 
     public boolean isNullable() {
         return nullable;
+    }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public boolean isArray() {
+        return array;
     }
 
 }
