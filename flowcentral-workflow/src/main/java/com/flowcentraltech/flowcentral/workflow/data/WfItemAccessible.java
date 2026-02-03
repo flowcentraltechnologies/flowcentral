@@ -37,8 +37,6 @@ public class WfItemAccessible {
     
     private String departmentCode;
     
-    private String wfItemCaseNo;
-    
     private String wfItemDesc;
     
     private String workflowName;
@@ -60,13 +58,12 @@ public class WfItemAccessible {
     private Date criticalOn;
 
     public WfItemAccessible(Long wfItemId, Long workRecId, String branchCode, String departmentCode,
-            String wfItemCaseNo, String wfItemDesc, String workflowName, String stepName, String entityName,
+            String wfItemDesc, String workflowName, String stepName, String entityName,
             String requestedBy, Date requestedOn, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
         this.wfItemId = wfItemId;
         this.workRecId = workRecId;
         this.branchCode = branchCode;
         this.departmentCode = departmentCode;
-        this.wfItemCaseNo = wfItemCaseNo;
         this.wfItemDesc = wfItemDesc;
         this.workflowName = workflowName;
         this.stepName = stepName;
@@ -121,14 +118,6 @@ public class WfItemAccessible {
 
     public void setDepartmentCode(String departmentCode) {
         this.departmentCode = departmentCode;
-    }
-
-    public String getWfItemCaseNo() {
-        return wfItemCaseNo;
-    }
-
-    public void setWfItemCaseNo(String wfItemCaseNo) {
-        this.wfItemCaseNo = wfItemCaseNo;
     }
 
     public String getWfItemDesc() {

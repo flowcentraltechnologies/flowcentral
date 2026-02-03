@@ -48,9 +48,6 @@ public class WfItemHist extends BaseAuditEntity {
     @Column(nullable = true)
     private Long originWorkRecId;
 
-    @Column(name = "CASE_NO", length = 32, nullable = true)
-    private String caseNo;
-
     @Column(name = "BRANCH_CD", nullable = true)
     private String branchCode;
 
@@ -98,14 +95,6 @@ public class WfItemHist extends BaseAuditEntity {
 
     public void setOriginWorkRecId(Long originWorkRecId) {
         this.originWorkRecId = originWorkRecId;
-    }
-
-    public String getCaseNo() {
-        return caseNo;
-    }
-
-    public void setCaseNo(String caseNo) {
-        this.caseNo = caseNo;
     }
 
     public String getBranchCode() {

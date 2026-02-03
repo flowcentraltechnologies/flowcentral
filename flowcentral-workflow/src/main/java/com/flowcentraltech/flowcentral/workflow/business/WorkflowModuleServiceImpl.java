@@ -1832,7 +1832,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             wfItemHist.setWorkflowName(wfDef.getLongName());
             wfItemHist.setEntity(wfDef.getEntity());
             wfItemHist.setOriginWorkRecId(workRecId);
-            wfItemHist.setCaseNo(null);
             wfItemHist.setItemDesc(itemDesc);
             wfItemHist.setBranchCode(workInst.getWorkBranchCode());
             wfItemHist.setDepartmentCode(workInst.getWorkDepartmentCode());
@@ -2130,7 +2129,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     private WfItemAccessible createWfItemAccessible(WfItem wfItem) {
         return new WfItemAccessible(wfItem.getId(), wfItem.getWorkRecId(), wfItem.getBranchCode(),
-                wfItem.getDepartmentCode(), wfItem.getWfItemCaseNo(), wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
+                wfItem.getDepartmentCode(), wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
                 wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getInitiatedBy(), wfItem.getCreateDt(),
                 wfItem.getStepDt(), wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());
     }
