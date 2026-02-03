@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.common.annotation.Index;
 import com.tcdng.unify.common.annotation.Table;
-import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 
 /**
@@ -29,9 +28,8 @@ import com.tcdng.unify.core.annotation.Column;
  * @version 1.0
  */
 @Table(name = "FC_WORKITEMHISTORY",
-        uniqueConstraints = {@UniqueConstraint("caseNo")},
         indexes = {
-//                @Index("caseNo"),
+                @Index("caseNo"),
                 @Index("applicationName"), 
                 @Index("workflowName"),
                 @Index("entity"), 
@@ -50,7 +48,7 @@ public class WfItemHist extends BaseAuditEntity {
     @Column(nullable = true)
     private Long originWorkRecId;
 
-    @Column(name = "CASE_NO", length = 16, nullable = true)
+    @Column(name = "CASE_NO", length = 32, nullable = true)
     private String caseNo;
 
     @Column(name = "BRANCH_CD", nullable = true)

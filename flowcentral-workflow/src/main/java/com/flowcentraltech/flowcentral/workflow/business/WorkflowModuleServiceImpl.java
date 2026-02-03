@@ -217,10 +217,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     private static final String WORKFLOW_APPLICATION = "workflow";
 
-    private static final String CASENO_OWNER_ID = "workflow-moduleservice";
-
-    private static final String CASENO_FORMAT_BASE = "{yy}{DDD}-{N:4}";
-
     @Configurable
     private OrganizationModuleService organizationModuleService;
 
@@ -247,26 +243,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     private final Map<String, Set<WfStepInfo>> roleWfStepBackup;
 
-    private final FactoryMap<String, String> caseNoAutoFormatMap;
-
     private List<String> approvalPos;
 
     public WorkflowModuleServiceImpl() {
         this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
 
-        this.caseNoAutoFormatMap = new FactoryMap<String, String>()
-            {
-
-                @Override
-                protected String create(String casePrefix, Object... args) throws Exception {
-                    return casePrefix + CASENO_FORMAT_BASE;
-                }
-
-            };
-
         this.wfDefFactoryMap = new StaleableFactoryMap<String, WfDef>()
             {
-
                 @Override
                 protected boolean stale(String longName, WfDef wfDef) throws Exception {
                     return isStale(new WorkflowQuery(), wfDef);
@@ -544,7 +527,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 final String workflowName = ApplicationNameUtils.ensureLongNameReference(applicationName,
                         workflow.getName());
                 workflows.add(new PortalWorkflow(workflowName, resolveApplicationMessage(workflow.getDescription()),
-                        resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(),
+                        resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(), workflow.getCasePrefix(),
                         DataUtils.unmodifiableList(steps)));
             }
 
@@ -1827,7 +1810,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             final String userLoginId = userToken == null ? DefaultApplicationConstants.SYSTEM_LOGINID
                     : getUserLoginId();
             String itemDesc = workInst.getWorkflowItemDesc();
-            String caseNo = null;
             if (wfDef.isWithDescFormat()) {
                 ParameterizedStringGenerator generator = appletUtil
                         .getStringGenerator(new BeanValueStore(workInst).getReader(), wfDef.getDescFormat());
@@ -1839,8 +1821,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             }
 
             if (wfDef.isWithCasePrefix()) {
-                final String autoFormat = caseNoAutoFormatMap.get(wfDef.getCasePrefix());
-                caseNo = appletUtil.sequenceCodeGenerator().getNextSequenceCode(CASENO_OWNER_ID, autoFormat);
             }
 
             final boolean isPerformExternal = workItemExternalAccessibilityProvider != null
@@ -1852,7 +1832,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             wfItemHist.setWorkflowName(wfDef.getLongName());
             wfItemHist.setEntity(wfDef.getEntity());
             wfItemHist.setOriginWorkRecId(workRecId);
-            wfItemHist.setCaseNo(caseNo);
+            wfItemHist.setCaseNo(null);
             wfItemHist.setItemDesc(itemDesc);
             wfItemHist.setBranchCode(workInst.getWorkBranchCode());
             wfItemHist.setDepartmentCode(workInst.getWorkDepartmentCode());
