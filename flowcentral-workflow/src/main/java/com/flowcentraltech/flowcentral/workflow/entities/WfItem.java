@@ -21,6 +21,7 @@ import java.util.Date;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.tcdng.unify.common.annotation.ColumnType;
+import com.tcdng.unify.common.annotation.Index;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -32,7 +33,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-@Table(name = "FC_WORKITEM")
+@Table(name = "FC_WORKITEM", indexes = {@Index({"workRecId"})})
 public class WfItem extends BaseAuditEntity {
 
     @ForeignKey(type = WfItemEvent.class)

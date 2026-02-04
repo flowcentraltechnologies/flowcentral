@@ -1197,8 +1197,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
-    public boolean applyUserAction(Long wfItemId, String stepName, String userAction, Date actionDate,
-            String actionBy) {
+    public boolean applyUserAction(Long workRecId, String workflowName, String stepName, String userAction,
+            Date actionDate, String actionBy) throws UnifyException {
+        final Long wfItemId = environment().value(Long.class, "id",
+                new WfItemQuery().workRecId(workRecId).workflowName(workflowName).wfStepName(stepName));
         return applyUserAction(null, wfItemId, stepName, userAction, actionDate, actionBy, null, null,
                 WfReviewMode.NORMAL, false);
     }
@@ -2128,7 +2130,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     private WfItemAccessible createWfItemAccessible(WfItem wfItem) {
-        return new WfItemAccessible(wfItem.getId(), wfItem.getWorkRecId(), wfItem.getBranchCode(),
+        return new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getBranchCode(),
                 wfItem.getDepartmentCode(), wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
                 wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getInitiatedBy(), wfItem.getCreateDt(),
                 wfItem.getStepDt(), wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());

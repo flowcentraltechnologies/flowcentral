@@ -35,11 +35,11 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
     private WorkflowModuleService workflowModuleService;
 
     @Override
-    public boolean releaseFromExternalWithUserAction(Long workItemId, String stepName, List<? extends UserAction> actions)
-            throws UnifyException {
+    public boolean releaseFromExternalWithUserAction(Long workRecId, String workflowName, String stepName,
+            List<? extends UserAction> actions) throws UnifyException {
         // For now just do single action
         final UserAction action = actions.get(0);
-        return workflowModuleService.applyUserAction(workItemId, stepName, action.getActionName(),
+        return workflowModuleService.applyUserAction(workRecId, workflowName, stepName, action.getActionName(),
                 action.getActionDate(), action.getActionBy());
     }
 

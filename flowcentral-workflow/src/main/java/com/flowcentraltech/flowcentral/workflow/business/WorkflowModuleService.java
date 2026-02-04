@@ -364,20 +364,25 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     /**
      * Applies user action on workflow item.
      * 
-     * @param wfItemId
-     *                   the workflow item ID
+     * @param workRecId
+     *                     the workflow record ID
+     * @param workflowName
+     *                     the workflow name
      * @param stepName
-     *                   the workflow step name
+     *                     the workflow step name
      * @param userAction
-     *                   the user action to apply
+     *                     the user action to apply
      * @param actionDate
-     *                   action date
+     *                     action date
      * @param actionBy
-     *                   action by
+     *                     action by
      * @return true if successfully applied otherwise false when workflow item is
      *         not in step
+     * @throws UnifyException
+     *                        if an error occurs
      */
-    boolean applyUserAction(Long wfItemId, String stepName, String userAction, Date actionDate, String actionBy);
+    boolean applyUserAction(Long workRecId, String workflowName, String stepName, String userAction, Date actionDate,
+            String actionBy) throws UnifyException;
 
     /**
      * Applies user action on workflow item.

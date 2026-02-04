@@ -28,8 +28,6 @@ import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
 public class WfItemAccessible {
 
     private WfAccessState state;
-    
-    private Long wfItemId;
 
     private Long workRecId;
     
@@ -57,10 +55,9 @@ public class WfItemAccessible {
 
     private Date criticalOn;
 
-    public WfItemAccessible(Long wfItemId, Long workRecId, String branchCode, String departmentCode,
-            String wfItemDesc, String workflowName, String stepName, String entityName,
-            String requestedBy, Date requestedOn, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
-        this.wfItemId = wfItemId;
+    public WfItemAccessible(Long workRecId, String branchCode, String departmentCode, String wfItemDesc,
+            String workflowName, String stepName, String entityName, String requestedBy, Date requestedOn, Date stepOn,
+            Date reminderOn, Date expectedOn, Date criticalOn) {
         this.workRecId = workRecId;
         this.branchCode = branchCode;
         this.departmentCode = departmentCode;
@@ -86,14 +83,6 @@ public class WfItemAccessible {
 
     public void setState(WfAccessState state) {
         this.state = state;
-    }
-
-    public Long getWfItemId() {
-        return wfItemId;
-    }
-
-    public void setWfItemId(Long wfItemId) {
-        this.wfItemId = wfItemId;
     }
 
     public Long getWorkRecId() {

@@ -65,17 +65,19 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
     boolean transferToExternalForUserAction(WfItemAccessible item) throws UnifyException;
 
     /**
-     * Releases workflow item from external system.
+     * Releases work record ID from external system.
      * 
-     * @param workItemId
-     *                   the work item ID
+     * @param workflowName
+     *                     the work record ID
+     * @param workflowName
+     *                     the workflow name
      * @param stepName
-     *                   the step name
+     *                     the step name
      * @param actions
-     *                   the action list
+     *                     the action list
      * @return true if successfully
      * @throws UnifyException
      */
-    boolean releaseFromExternalWithUserAction(Long workItemId, String stepName, List<? extends UserAction> actions)
-            throws UnifyException;
+    boolean releaseFromExternalWithUserAction(Long workRecId, String workflowName, String stepName,
+            List<? extends UserAction> actions) throws UnifyException;
 }
