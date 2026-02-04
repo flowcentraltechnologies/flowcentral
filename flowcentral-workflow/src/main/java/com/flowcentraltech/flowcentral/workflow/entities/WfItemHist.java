@@ -29,7 +29,6 @@ import com.tcdng.unify.core.annotation.Column;
  */
 @Table(name = "FC_WORKITEMHISTORY",
         indexes = {
-                @Index("caseNo"),
                 @Index("applicationName"), 
                 @Index("workflowName"),
                 @Index("entity"), 
