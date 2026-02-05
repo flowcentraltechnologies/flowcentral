@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.business;
 
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
@@ -33,6 +34,13 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
+
+    @Override
+    public boolean submitFromExternal(Long workRecId, String workflowName, String entityName, String requestedBy,
+            Date requestedOn) throws UnifyException {
+        workflowModuleService.submitToWorkflowByName(workflowName, entityName, workRecId, requestedBy, requestedOn);
+        return true;
+    }
 
     @Override
     public boolean releaseFromExternalWithUserAction(Long workRecId, String workflowName, String stepName,

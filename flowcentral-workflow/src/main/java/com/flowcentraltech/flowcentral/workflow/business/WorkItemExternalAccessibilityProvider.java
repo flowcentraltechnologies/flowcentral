@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.workflow.business;
 
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
@@ -30,6 +31,25 @@ import com.tcdng.unify.core.UnifyException;
  * @since 4.1
  */
 public interface WorkItemExternalAccessibilityProvider extends FlowCentralComponent {
+
+    /**
+     * Submits work record ID from external system.
+     * 
+     * @param workRecId
+     *                     the work record ID
+     * @param workflowName
+     *                     the workflow name
+     * @param entityName
+     *                     the entity name
+     * @param requestedBy
+     *                     the requester
+     * @param requestedOn
+     *                     requested on
+     * @return true if successfully submitted
+     * @throws UnifyException if an error occurs
+     */
+    boolean submitFromExternal(Long workRecId, String workflowName, String entityName,
+            String requestedBy, Date requestedOn) throws UnifyException;
 
     /**
      * Notify external system for start.
@@ -67,7 +87,7 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
     /**
      * Releases work record ID from external system.
      * 
-     * @param workflowName
+     * @param workRecId
      *                     the work record ID
      * @param workflowName
      *                     the workflow name

@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.common.annotation.Index;
 import com.tcdng.unify.common.annotation.Table;
@@ -58,6 +60,9 @@ public class WfItemHist extends BaseAuditEntity {
 
     @Column(length = 96)
     private String initiatedBy;
+
+    @Column(nullable = true)
+    private Date initiatedOn;
 
     @Override
     public String getDescription() {
@@ -126,6 +131,14 @@ public class WfItemHist extends BaseAuditEntity {
 
     public void setInitiatedBy(String initiatedBy) {
         this.initiatedBy = initiatedBy;
+    }
+
+    public Date getInitiatedOn() {
+        return initiatedOn;
+    }
+
+    public void setInitiatedOn(Date initiatedOn) {
+        this.initiatedOn = initiatedOn;
     }
 
 }
