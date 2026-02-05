@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.workflow.constants;
 
+import com.tcdng.unify.common.annotation.StaticList;
+import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.util.EnumUtils;
 
@@ -25,11 +27,14 @@ import com.tcdng.unify.core.util.EnumUtils;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
+@Table("FC_WFACCESSSTATE")
+@StaticList(name = "wfaccessstatelist", description = "$m{staticlist.wfaccessstatelist}")
 public enum WfAccessState implements EnumConst {
 
     START("S"),
     USER_ACTION("U"),
-    END("E");
+    END("E"),
+    ERROR("R");
 
     private final String code;
 
