@@ -34,16 +34,19 @@ public class PortalWorkflow {
     private String entity;
 
     private String prefix;
+    
+    private String descFormat;
 
     private List<PortalWorkflowStep> steps;
 
     public PortalWorkflow(String name, String description, String label, String entity, String prefix,
-            List<PortalWorkflowStep> steps) {
+            String descFormat, List<PortalWorkflowStep> steps) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.entity = entity;
         this.prefix = prefix;
+        this.descFormat = descFormat;
         this.steps = steps;
     }
 
@@ -65,6 +68,10 @@ public class PortalWorkflow {
 
     public String getPrefix() {
         return prefix;
+    }
+
+    public String getDescFormat() {
+        return descFormat;
     }
 
     public List<PortalWorkflowStep> getSteps() {

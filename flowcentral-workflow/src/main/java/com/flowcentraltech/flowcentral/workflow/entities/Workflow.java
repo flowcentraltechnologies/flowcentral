@@ -46,7 +46,7 @@ public class Workflow extends BaseApplicationEntity {
     @Column(length = 128, nullable = true)
     private String loadingTable;
 
-    @Column(length = 128, nullable = true)
+    @Column(length = 256, nullable = true)
     private String descFormat;
     
     @Column
