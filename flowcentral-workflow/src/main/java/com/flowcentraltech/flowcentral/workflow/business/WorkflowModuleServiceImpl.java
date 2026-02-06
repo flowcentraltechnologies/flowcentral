@@ -99,7 +99,6 @@ import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleS
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelErrorConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
@@ -1913,7 +1912,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             switch (type) {
                 case START:
                     if (isPerformExternal) {
-                        accessible.setState(WfAccessState.START);
                         workItemExternalAccessibilityProvider.notifyExternalForStart(accessible);
                     }
 
@@ -2013,10 +2011,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 case USER_ACTION:
                 case ERROR:
                     // External accessibility
-                    if (isPerformExternal && type.isExternalInteractive() && currWfStepDef.isWithStepAppletName()) {
-                        accessible.setState(WfAccessState.USER_ACTION);
-                        if (workItemExternalAccessibilityProvider.transferToExternalForUserAction(accessible)) {
-                            wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
+                    if (isPerformExternal && currWfStepDef.isWithStepAppletName()) {
+                        if (type.isUserAction()) {
+                            if (workItemExternalAccessibilityProvider.transferToExternalForUserAction(accessible)) {
+                                wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
+                            }
+                        } else {
+                            workItemExternalAccessibilityProvider.notifyExternalForError(accessible);
                         }
                     }
 
@@ -2026,7 +2027,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     break;
                 case END: {
                     if (isPerformExternal) {
-                        accessible.setState(WfAccessState.END);
                         workItemExternalAccessibilityProvider.notifyExternalForEnd(accessible);
                     }
 

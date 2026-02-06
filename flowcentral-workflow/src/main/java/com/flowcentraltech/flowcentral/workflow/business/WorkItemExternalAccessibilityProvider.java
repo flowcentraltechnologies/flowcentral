@@ -74,6 +74,17 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
     boolean notifyExternalForEnd(WfItemAccessible item) throws UnifyException;
 
     /**
+     * Notify external system for error.
+     * 
+     * @param item
+     *             the workflow item
+     * @return true if transferred otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean notifyExternalForError(WfItemAccessible item) throws UnifyException;
+
+    /**
      * Transfers workflow item to external system for user action.
      * 
      * @param item
