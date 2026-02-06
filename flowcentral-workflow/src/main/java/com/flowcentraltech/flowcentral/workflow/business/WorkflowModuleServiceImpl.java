@@ -522,8 +522,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             DataUtils.unmodifiableList(userActions)));
                 }
 
-                final Workflow workflow = environment().findLean(
-                        new WorkflowQuery().id(workflowId).addSelect("name", "description", "label", "entity"));
+                final Workflow workflow = environment().findLean(new WorkflowQuery().id(workflowId));
                 final String workflowName = ApplicationNameUtils.ensureLongNameReference(applicationName,
                         workflow.getName());
                 workflows.add(new PortalWorkflow(workflowName, resolveApplicationMessage(workflow.getDescription()),
