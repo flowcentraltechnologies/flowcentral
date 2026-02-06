@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
+import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
 import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.tcdng.unify.core.UnifyException;
 
@@ -31,6 +32,18 @@ import com.tcdng.unify.core.UnifyException;
  * @since 4.1
  */
 public interface WorkItemExternalAccessibilityProvider extends FlowCentralComponent {
+
+    /**
+     * Notify external system.
+     * 
+     * @param state the access state
+     * @param item
+     *             the workflow item
+     * @return true if transferred otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean notifyExternal(WfAccessState state, WfItemAccessible item) throws UnifyException;
 
     /**
      * Submits work record ID from external system.
@@ -50,50 +63,6 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
      */
     boolean submitFromExternal(Long workRecId, String workflowName, String entityName,
             String requestedBy, Date requestedOn) throws UnifyException;
-
-    /**
-     * Notify external system for start.
-     * 
-     * @param item
-     *             the workflow item
-     * @return true if transferred otherwise false
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean notifyExternalForStart(WfItemAccessible item) throws UnifyException;
-
-    /**
-     * Notify external system for end.
-     * 
-     * @param item
-     *             the workflow item
-     * @return true if transferred otherwise false
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean notifyExternalForEnd(WfItemAccessible item) throws UnifyException;
-
-    /**
-     * Notify external system for error.
-     * 
-     * @param item
-     *             the workflow item
-     * @return true if transferred otherwise false
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean notifyExternalForError(WfItemAccessible item) throws UnifyException;
-
-    /**
-     * Transfers workflow item to external system for user action.
-     * 
-     * @param item
-     *             the workflow item
-     * @return true if transferred otherwise false
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean transferToExternalForUserAction(WfItemAccessible item) throws UnifyException;
 
     /**
      * Releases work record ID from external system.
