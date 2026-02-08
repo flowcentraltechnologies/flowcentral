@@ -366,7 +366,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         return OSResponse.BLANK;
     }
 
-    @Periodic(PeriodicType.FAST)
+    @Periodic(PeriodicType.FASTER)
     public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
         if (tryGrabLock(PROCESS_MESSAGE_ASYNC)) {
             try {
