@@ -135,7 +135,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected boolean stale(String authorization, OSMessagingHeader osHeader) throws Exception {
-                    if (StringUtils.isBlank(osHeader.getSource())) {
+                    if (!StringUtils.isBlank(osHeader.getSource())) {
                         OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap
                                 .get(osHeader.getSource());
                         return osPeerEndpointDef.isPresent()
