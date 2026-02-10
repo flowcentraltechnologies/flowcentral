@@ -102,6 +102,27 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     void submitToWorkflowByName(String workflowName, String entity, Long id) throws UnifyException;
 
     /**
+     * Submit work entity instance to workflow by name.
+     * 
+     * @param workflowName
+     *                     the workflow name
+     * @param entity
+     *                     the entity long name
+     * @param id
+     *                     the entity ID
+     * @param requestedBy
+     *                     the requested by
+     * @param requestedOn
+     *                     the requested on
+     * @throws UnifyException
+     *                        if workflow channel is unknown. If instance type does
+     *                        not match workflow entity definition. If an error
+     *                        occurs
+     */
+    void submitToWorkflowByName(String workflowName, String entity, Long id, String requestedBy, Date requestedOn)
+            throws UnifyException;
+    
+    /**
      * Submit entity instance to workflow by workflow name.
      * 
      * @param workflowName
@@ -364,20 +385,25 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     /**
      * Applies user action on workflow item.
      * 
-     * @param wfItemId
-     *                   the workflow item ID
+     * @param workRecId
+     *                     the workflow record ID
+     * @param workflowName
+     *                     the workflow name
      * @param stepName
-     *                   the workflow step name
+     *                     the workflow step name
      * @param userAction
-     *                   the user action to apply
+     *                     the user action to apply
      * @param actionDate
-     *                   action date
+     *                     action date
      * @param actionBy
-     *                   action by
+     *                     action by
      * @return true if successfully applied otherwise false when workflow item is
      *         not in step
+     * @throws UnifyException
+     *                        if an error occurs
      */
-    boolean applyUserAction(Long wfItemId, String stepName, String userAction, Date actionDate, String actionBy);
+    boolean applyUserAction(Long workRecId, String workflowName, String stepName, String userAction, Date actionDate,
+            String actionBy) throws UnifyException;
 
     /**
      * Applies user action on workflow item.

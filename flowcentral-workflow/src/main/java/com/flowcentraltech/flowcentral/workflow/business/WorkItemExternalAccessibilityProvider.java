@@ -17,8 +17,11 @@
 package com.flowcentraltech.flowcentral.workflow.business;
 
 import java.util.Date;
+import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
+import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
 import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.tcdng.unify.core.UnifyException;
 
@@ -31,32 +34,50 @@ import com.tcdng.unify.core.UnifyException;
 public interface WorkItemExternalAccessibilityProvider extends FlowCentralComponent {
 
     /**
-     * Transfers workflow item to external system for user action.
+     * Notify external system.
      * 
+     * @param state the access state
      * @param item
      *             the workflow item
      * @return true if transferred otherwise false
      * @throws UnifyException
      *                        if an error occurs
      */
-    boolean transferToExternalForUserAction(WfItemAccessible item) throws UnifyException;
+    boolean notifyExternal(WfAccessState state, WfItemAccessible item) throws UnifyException;
 
     /**
-     * Releases workflow item from external system.
+     * Submits work record ID from external system.
      * 
-     * @param workItemId
-     *                   the work item ID
+     * @param workRecId
+     *                     the work record ID
+     * @param workflowName
+     *                     the workflow name
+     * @param entityName
+     *                     the entity name
+     * @param requestedBy
+     *                     the requester
+     * @param requestedOn
+     *                     requested on
+     * @return true if successfully submitted
+     * @throws UnifyException if an error occurs
+     */
+    boolean submitFromExternal(Long workRecId, String workflowName, String entityName,
+            String requestedBy, Date requestedOn) throws UnifyException;
+
+    /**
+     * Releases work record ID from external system.
+     * 
+     * @param workRecId
+     *                     the work record ID
+     * @param workflowName
+     *                     the workflow name
      * @param stepName
-     *                   the step name
-     * @param actionName
-     *                   the name of action performed by user
-     * @param actionDate
-     *                   the action time stamp
-     * @param actionBy
-     *                   the actors user ID
+     *                     the step name
+     * @param actions
+     *                     the action list
      * @return true if successfully
      * @throws UnifyException
      */
-    boolean releaseFromExternalWithUserAction(Long workItemId, String stepName, String actionName, Date actionDate,
-            String actionBy) throws UnifyException;
+    boolean releaseFromExternalWithUserAction(Long workRecId, String workflowName, String stepName,
+            List<? extends UserAction> actions) throws UnifyException;
 }

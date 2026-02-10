@@ -16,8 +16,10 @@
 package com.flowcentraltech.flowcentral.workflow.business;
 
 import java.util.Date;
+import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 
@@ -32,11 +34,21 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
-    
+
     @Override
-    public boolean releaseFromExternalWithUserAction(Long workItemId, String stepName, String actionName,
-            Date actionDate, String actionBy) throws UnifyException {
-        return workflowModuleService.applyUserAction(workItemId, stepName, actionName, actionDate, actionBy);
+    public boolean submitFromExternal(Long workRecId, String workflowName, String entityName, String requestedBy,
+            Date requestedOn) throws UnifyException {
+        workflowModuleService.submitToWorkflowByName(workflowName, entityName, workRecId, requestedBy, requestedOn);
+        return true;
+    }
+
+    @Override
+    public boolean releaseFromExternalWithUserAction(Long workRecId, String workflowName, String stepName,
+            List<? extends UserAction> actions) throws UnifyException {
+        // For now just do single action
+        final UserAction action = actions.get(0);
+        return workflowModuleService.applyUserAction(workRecId, workflowName, stepName, action.getActionName(),
+                action.getActionDate(), action.getActionBy());
     }
 
     @Override

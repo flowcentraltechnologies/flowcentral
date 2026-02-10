@@ -3980,9 +3980,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             : getWidgetTypeDef(
                                     InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
                     final String editor = InputWidgetUtils.constructLeanEditor(widgetTypeDef, resolvedEntityFieldDef);
+                    if (entityFieldDef.isChildRef()) {
+                        final RefDef refDef = getRefDef(entityFieldDef.getRefLongName());
+                        fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
+                                entityFieldDef.getFieldName(), resolveApplicationMessage(entityFieldDef.getFieldLabel()),
+                                refDef.getEntity(), entityFieldDef.isChildList()));
+                    } else {
                     fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
                             entityFieldDef.getFieldName(), resolveApplicationMessage(entityFieldDef.getFieldLabel()),
                             editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
+                    }
                 }
 
                 List<PortalEntityAttachment> attachments = new ArrayList<PortalEntityAttachment>();
@@ -4005,7 +4012,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
                                     : tableColumnDef.getLabel()),
                             tableColumnDef.getOrder() != null ? tableColumnDef.getOrder().name() : null,
-                            tableColumnDef.getLinkAct(), tableColumnDef.getWidthRatio()));
+                            tableColumnDef.getLinkAct(), tableColumnDef.getRenderer(), tableColumnDef.getWidthRatio()));
                 }
 
                 tables.put(table, new PortalTable(tableDef.getLongName(), tableDef.getDescription(),

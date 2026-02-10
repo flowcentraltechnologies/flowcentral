@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.workflow.data;
 
 import java.util.Date;
 
+import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
+
 /**
  * Workflow item accessible definition.
  * 
@@ -25,15 +27,13 @@ import java.util.Date;
  */
 public class WfItemAccessible {
 
-    private Long wfItemId;
+    private WfAccessState state;
 
     private Long workRecId;
     
     private String branchCode;
     
     private String departmentCode;
-    
-    private String wfItemCaseNo;
     
     private String wfItemDesc;
     
@@ -43,6 +43,10 @@ public class WfItemAccessible {
     
     private String entityName;
     
+    private String requestedBy;
+    
+    private Date requestedOn;
+    
     private Date stepOn;
 
     private Date reminderOn;
@@ -51,18 +55,18 @@ public class WfItemAccessible {
 
     private Date criticalOn;
 
-    public WfItemAccessible(Long wfItemId, Long workRecId, String branchCode, String departmentCode,
-            String wfItemCaseNo, String wfItemDesc, String workflowName, String stepName,
-            String entityName, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
-        this.wfItemId = wfItemId;
+    public WfItemAccessible(Long workRecId, String branchCode, String departmentCode, String wfItemDesc,
+            String workflowName, String stepName, String entityName, String requestedBy, Date requestedOn, Date stepOn,
+            Date reminderOn, Date expectedOn, Date criticalOn) {
         this.workRecId = workRecId;
         this.branchCode = branchCode;
         this.departmentCode = departmentCode;
-        this.wfItemCaseNo = wfItemCaseNo;
         this.wfItemDesc = wfItemDesc;
         this.workflowName = workflowName;
         this.stepName = stepName;
         this.entityName = entityName;
+        this.requestedBy = requestedBy;
+        this.requestedOn = requestedOn;
         this.stepOn = stepOn;
         this.reminderOn = reminderOn;
         this.expectedOn = expectedOn;
@@ -73,12 +77,12 @@ public class WfItemAccessible {
         
     }
     
-    public Long getWfItemId() {
-        return wfItemId;
+    public WfAccessState getState() {
+        return state;
     }
 
-    public void setWfItemId(Long wfItemId) {
-        this.wfItemId = wfItemId;
+    public void setState(WfAccessState state) {
+        this.state = state;
     }
 
     public Long getWorkRecId() {
@@ -103,14 +107,6 @@ public class WfItemAccessible {
 
     public void setDepartmentCode(String departmentCode) {
         this.departmentCode = departmentCode;
-    }
-
-    public String getWfItemCaseNo() {
-        return wfItemCaseNo;
-    }
-
-    public void setWfItemCaseNo(String wfItemCaseNo) {
-        this.wfItemCaseNo = wfItemCaseNo;
     }
 
     public String getWfItemDesc() {
@@ -143,6 +139,22 @@ public class WfItemAccessible {
 
     public void setEntityName(String entityName) {
         this.entityName = entityName;
+    }
+
+    public String getRequestedBy() {
+        return requestedBy;
+    }
+
+    public void setRequestedBy(String requestedBy) {
+        this.requestedBy = requestedBy;
+    }
+
+    public Date getRequestedOn() {
+        return requestedOn;
+    }
+
+    public void setRequestedOn(Date requestedOn) {
+        this.requestedOn = requestedOn;
     }
 
     public Date getStepOn() {

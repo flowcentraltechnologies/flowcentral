@@ -42,6 +42,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             false,
             false,
+            true,
             0),
     ENRICHMENT(
             ProcessingStatus.NORMAL,
@@ -50,6 +51,7 @@ public enum WorkflowStepType implements EnumConst {
             WorkflowStepColor.CYAN,
             true,
             true,
+            false,
             false,
             1),
     PROCEDURE(
@@ -60,6 +62,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             true,
             false,
+            false,
             2),
     RECORD_ACTION(
             ProcessingStatus.NORMAL,
@@ -68,6 +71,7 @@ public enum WorkflowStepType implements EnumConst {
             WorkflowStepColor.NAVY,
             true,
             true,
+            false,
             false,
             3),
     BINARY_ROUTING(
@@ -78,6 +82,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             true,
             false,
+            false,
             4),
     POLICY_ROUTING(
             ProcessingStatus.NORMAL,
@@ -86,6 +91,7 @@ public enum WorkflowStepType implements EnumConst {
             WorkflowStepColor.BLUE,
             false,
             true,
+            false,
             false,
             5),
     MULTI_ROUTING(
@@ -96,12 +102,14 @@ public enum WorkflowStepType implements EnumConst {
             false,
             true,
             false,
+            false,
             6),
     USER_ACTION(
             ProcessingStatus.NORMAL,
             "USR",
             "user-check",
             WorkflowStepColor.ORANGE,
+            true,
             true,
             true,
             true,
@@ -114,6 +122,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             true,
             false,
+            false,
             8),
     NOTIFICATION(
             ProcessingStatus.NORMAL,
@@ -123,6 +132,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             true,
             true,
+            false,
             9),
     DELAY(
             ProcessingStatus.NORMAL,
@@ -132,12 +142,14 @@ public enum WorkflowStepType implements EnumConst {
             true,
             true,
             false,
+            false,
             10),
     ERROR(
             ProcessingStatus.ERROR,
             "ERR",
             "exclamation-circle",
             WorkflowStepColor.RED,
+            true,
             true,
             true,
             true,
@@ -150,6 +162,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             false,
             false,
+            true,
             12);
 
     private final ProcessingStatus processingStatus;
@@ -166,12 +179,14 @@ public enum WorkflowStepType implements EnumConst {
 
     private final boolean sendUserActionAlert;
 
+    private final boolean supportExternal;
+
     private final int index;
 
     private static final List<WorkflowStepType> list = Arrays.asList(values());
 
     private WorkflowStepType(ProcessingStatus processingStatus, String code, String icon, WorkflowStepColor color,
-            boolean supportSetValues, boolean sendPassThrough, boolean sendUserActionAlert, int index) {
+            boolean supportSetValues, boolean sendPassThrough, boolean sendUserActionAlert, boolean supportExternal, int index) {
         this.processingStatus = processingStatus;
         this.code = code;
         this.icon = icon;
@@ -179,6 +194,7 @@ public enum WorkflowStepType implements EnumConst {
         this.supportSetValues = supportSetValues;
         this.sendPassThroughAlert = sendPassThrough;
         this.sendUserActionAlert = sendUserActionAlert;
+        this.supportExternal = supportExternal;
         this.index = index;
     }
 
@@ -206,9 +222,13 @@ public enum WorkflowStepType implements EnumConst {
     public boolean sendPassThroughAlert() {
         return sendPassThroughAlert;
     }
-
+    
     public boolean sendUserActionAlert() {
         return sendUserActionAlert;
+    }
+
+    public boolean supportExternal() {
+        return supportExternal;
     }
 
     public int index() {

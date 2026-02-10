@@ -135,9 +135,14 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected boolean stale(String authorization, OSMessagingHeader osHeader) throws Exception {
-                    OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap
-                            .get(osHeader.getSource());
-                    return osPeerEndpointDef.isPresent() && osHeader.getVersionNo() != osPeerEndpointDef.getVersionNo();
+                    if (!StringUtils.isBlank(osHeader.getSource())) {
+                        OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap
+                                .get(osHeader.getSource());
+                        return osPeerEndpointDef.isPresent()
+                                && osHeader.getVersionNo() != osPeerEndpointDef.getVersionNo();
+                    }
+
+                    return true;
                 }
 
                 @Override
@@ -194,7 +199,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> getPeerEndpointURL(String appId) throws UnifyException {
-        return environment().valueOptional(String.class, "endpointUrl", new OSMessagingPeerEndpointQuery().appId(appId));
+        return environment().valueOptional(String.class, "endpointUrl",
+                new OSMessagingPeerEndpointQuery().appId(appId));
     }
 
     @Override
@@ -366,7 +372,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         return OSResponse.BLANK;
     }
 
-    @Periodic(PeriodicType.FAST)
+    @Periodic(PeriodicType.FASTER)
     public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
         if (tryGrabLock(PROCESS_MESSAGE_ASYNC)) {
             try {
