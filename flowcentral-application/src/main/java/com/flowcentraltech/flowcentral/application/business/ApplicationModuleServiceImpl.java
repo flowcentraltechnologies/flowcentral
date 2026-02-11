@@ -111,6 +111,7 @@ import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityAttac
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalForm;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalFormElement;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReference;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTableColumn;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
@@ -350,6 +351,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private TwoWayStringCryptograph twoWayStringCryptograph;
 
+    @Configurable
+    private ApplicationExternalAccessibilityProvider appExternalAccessibilityProvider;
+    
     @Configurable("application-usagelistprovider")
     private UsageListProvider usageListProvider;
 
@@ -878,7 +882,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.entityDefByClassFactoryMap = new StaleableFactoryMap<String, EntityDef>()
+        this.entityDefByClassFactoryMap = new StaleableFactoryMap<String, EntityDef>() 
             {
 
                 @Override
@@ -907,11 +911,25 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, RefDef refDef) throws Exception {
+                    if (appExternalAccessibilityProvider != null) {
+                        Optional<Boolean> optional = appExternalAccessibilityProvider.stale(longName, refDef);
+                        if (optional.isPresent()) {
+                            return optional.get();
+                        }
+                    }
+
                     return isStale(new AppRefQuery(), refDef);
                 }
 
                 @Override
                 protected RefDef create(String longName, Object... arg1) throws Exception {
+                    if (appExternalAccessibilityProvider != null) {
+                        Optional<RefDef> optional = appExternalAccessibilityProvider.createRefDef(longName);
+                        if (optional.isPresent()) {
+                            return optional.get();
+                        }
+                    }
+
                     AppRef appRef = getApplicationEntity(AppRef.class, longName);
                     FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, appRef.getFilterGenerator(),
                             appRef.getFilter());
@@ -919,8 +937,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? StringUtils.breakdownParameterizedString(appRef.getListFormat())
                             : null;
                     return new RefDef(appRef.getEntity(), appRef.getOrderField(), appRef.getSearchField(),
-                            appRef.getSearchTable(), appRef.getSelectHandler(), filterDef, listFormat, longName,
-                            appRef.getDescription(), appRef.getId(), appRef.getVersionNo());
+                            appRef.getSearchTable(), appRef.getSelectHandler(), appRef.getListFormat(), filterDef,
+                            listFormat, longName, appRef.getDescription(), appRef.getId(), appRef.getVersionNo());
                 }
 
             };
@@ -3944,27 +3962,29 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final Map<String, PortalTable> tables = new HashMap<String, PortalTable>();
         final Map<String, PortalForm> forms = new HashMap<String, PortalForm>();
         final Map<String, PortalEntity> entities = new HashMap<String, PortalEntity>();
+        final Map<String, PortalReference> references = new HashMap<String, PortalReference>();
         for (String appletName : environment().valueList(String.class, "name",
                 new AppAppletQuery().portalAccess(true).applicationName(applicationName))) {
             final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
-            extractPortalDependencies(applet, applets, tables, forms, entities);
+            extractPortalDependencies(applet, applets, tables, forms, entities, references);
         }
 
         for (PortalWorkflow workflow : workflows) {
             for (PortalWorkflowStep step : workflow.getSteps()) {
-                extractPortalDependencies(step.getApplet(), applets, tables, forms, entities);
+                extractPortalDependencies(step.getApplet(), applets, tables, forms, entities, references);
             }
         }
 
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
                 applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
                 DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
-                DataUtils.unmodifiableList(entities.values()), DataUtils.unmodifiableList(workflows)));
+                DataUtils.unmodifiableList(entities.values()), DataUtils.unmodifiableList(references.values()),
+                DataUtils.unmodifiableList(workflows)));
     }
 
     private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,
-            Map<String, PortalTable> tables, Map<String, PortalForm> forms, Map<String, PortalEntity> entities)
-            throws UnifyException {
+            Map<String, PortalTable> tables, Map<String, PortalForm> forms, Map<String, PortalEntity> entities,
+            Map<String, PortalReference> references) throws UnifyException {
         if (!StringUtils.isBlank(applet) && !applets.containsKey(applet)) {
             final AppletDef appletDef = getAppletDef(applet);
             final String entity = appletDef.getEntity();
@@ -3983,12 +4003,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (entityFieldDef.isChildRef()) {
                         final RefDef refDef = getRefDef(entityFieldDef.getRefLongName());
                         fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
-                                entityFieldDef.getFieldName(), resolveApplicationMessage(entityFieldDef.getFieldLabel()),
-                                refDef.getEntity(), entityFieldDef.isChildList()));
+                                entityFieldDef.getFieldName(),
+                                resolveApplicationMessage(entityFieldDef.getFieldLabel()), refDef.getEntity(),
+                                entityFieldDef.isChildList()));
                     } else {
-                    fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
-                            entityFieldDef.getFieldName(), resolveApplicationMessage(entityFieldDef.getFieldLabel()),
-                            editor, entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
+                        fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
+                                entityFieldDef.getFieldName(),
+                                resolveApplicationMessage(entityFieldDef.getFieldLabel()), editor,
+                                entityFieldDef.isBasicSearch(), entityFieldDef.isNullable()));
                     }
                 }
 
@@ -4000,6 +4022,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 entities.put(entity, new PortalEntity(entityDef.getLongName(), entityDef.getDescription(),
                         DataUtils.unmodifiableList(fields), DataUtils.unmodifiableList(attachments)));
+
+                for (String refName : environment().valueList(String.class, "name", new AppRefQuery().entity(entity))) {
+                    final String reference = ApplicationNameUtils
+                            .ensureLongNameReference(entityDef.getApplicationName(), refName);
+                    if (!references.containsKey(reference)) {
+                        final RefDef refDef = getRefDef(reference);
+                        references.put(reference,
+                                new PortalReference(refDef.getLongName(), refDef.getDescription(), entity,
+                                        refDef.getOrderField(), refDef.getSearchField(), refDef.getSearchTable(),
+                                        refDef.getSelectHandler(), refDef.getListDescFormat()));
+                    }
+                }
             }
 
             final String table = appletDef.getPropDef(AppletPropertyConstants.SEARCH_TABLE).getValue();
@@ -4077,7 +4111,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             formList.get(0), formList.get(1), table, appletDef.isPortalAccess()));
 
             for (String capplet : childApplets) {
-                extractPortalDependencies(capplet, applets, tables, forms, entities);
+                extractPortalDependencies(capplet, applets, tables, forms, entities, references);
             }
         }
     }
