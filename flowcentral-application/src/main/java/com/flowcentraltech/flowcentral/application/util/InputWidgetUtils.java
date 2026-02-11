@@ -541,7 +541,7 @@ public final class InputWidgetUtils {
                     }
 
                     if (!StringUtils.isBlank(serviceId)) {
-                        reference = serviceId + "." + reference;
+                        reference = reference + "." + serviceId; //Service ID as minor name
                     }
                     
                     editor = String.format(editor, reference,
