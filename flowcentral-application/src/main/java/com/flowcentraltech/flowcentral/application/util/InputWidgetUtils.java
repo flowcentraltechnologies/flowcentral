@@ -329,7 +329,7 @@ public final class InputWidgetUtils {
     }
 
     public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) throws UnifyException {
-        String editor = InputWidgetUtils.resolveEditor(widgetTypeDef.getEditor(), widgetTypeDef, efa, null, null);
+        String editor = InputWidgetUtils.resolveEditor(widgetTypeDef.getEditor(), widgetTypeDef, efa, null, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
             esb.append(" style:$s{width:100%;}");
@@ -341,7 +341,7 @@ public final class InputWidgetUtils {
 
     public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa)
             throws UnifyException {
-        String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null);
+        String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(renderer);
             esb.append(" style:$s{width:100%;}");
@@ -353,7 +353,7 @@ public final class InputWidgetUtils {
 
     public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
             throws UnifyException {
-        final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, false);
+        final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, null, false);
         if (widgetTypeDef != null && widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
             esb.append(" style:$s{width:100%;");
@@ -369,9 +369,9 @@ public final class InputWidgetUtils {
         return editor;
     }
 
-    public static String constructLeanEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
+    public static String constructPortalEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef, String serviceId)
             throws UnifyException {
-        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, false);
+        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, serviceId, false);
     }
 
     public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
@@ -381,7 +381,7 @@ public final class InputWidgetUtils {
 
     public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,
             String reference, WidgetColor color) throws UnifyException {
-        String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, reference, false);
+        String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, reference, null, false);
         StringBuilder esb = new StringBuilder(editor);
         esb.append(" binding:").append(entityFieldDef.getFieldName());
         boolean isWithStyling = widgetTypeDef.isStretch() || color != null;
@@ -403,24 +403,24 @@ public final class InputWidgetUtils {
 
     public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
             throws UnifyException {
-        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, true);
+        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, null, true);
     }
 
     private static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef, String reference,
-            boolean renderer) throws UnifyException {
+            String serviceId, boolean renderer) throws UnifyException {
         if (widgetTypeDef != null) {
             final EntityFieldAttributes efa = entityFieldDef.isWithResolvedTypeFieldDef()
                     ? entityFieldDef.getResolvedTypeFieldDef()
                     : entityFieldDef;
             final String editor = renderer ? widgetTypeDef.getRenderer() : widgetTypeDef.getEditor();
-            return InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference);
+            return InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference, serviceId);
         }
 
         return null;
     }
 
     private static String resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,
-            EntityFieldDef entityFieldDef, String reference) throws UnifyException {
+            EntityFieldDef entityFieldDef, String reference, String serviceId) throws UnifyException {
         switch (widgetTypeDef.getLongName()) {
             case "application.richtexteditor":
             case "application.richtexteditormedium":
@@ -533,13 +533,17 @@ public final class InputWidgetUtils {
             case "application.entitylist":
             case "application.entitysearch":
             case "application.entityselect":
-            case "application.caseentitysearch":
+            case "application.caseentitysearch": 
                 if (entityFieldDef != null) {
                     if (StringUtils.isBlank(reference)) {
                         reference = entityFieldDef.isEntityRef() ? entityFieldDef.getRefLongName()
                                 : entityFieldDef.getReferences();
                     }
 
+                    if (!StringUtils.isBlank(serviceId)) {
+                        reference = serviceId + "." + reference;
+                    }
+                    
                     editor = String.format(editor, reference,
                             StringUtils.toNonNullString(entityFieldDef.getInputListKey(), ""));
                 }

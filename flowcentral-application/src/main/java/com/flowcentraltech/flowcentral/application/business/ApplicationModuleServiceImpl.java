@@ -3989,6 +3989,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final AppletDef appletDef = getAppletDef(applet);
             final String entity = appletDef.getEntity();
             final EntityDef entityDef = getEntityDef(entity);
+            final String serviceId = getContainerSetting(String.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
             if (!entities.containsKey(entity)) {
                 List<PortalEntityField> fields = new ArrayList<PortalEntityField>();
                 for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
@@ -3999,7 +4000,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
                                     InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String editor = InputWidgetUtils.constructLeanEditor(widgetTypeDef, resolvedEntityFieldDef);
+                    final String editor = InputWidgetUtils.constructPortalEditor(widgetTypeDef, resolvedEntityFieldDef, serviceId);
                     if (entityFieldDef.isChildRef()) {
                         final RefDef refDef = getRefDef(entityFieldDef.getRefLongName());
                         fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
@@ -4087,8 +4088,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         : null;
                                 final EntityFieldDef entityFieldDef = entityDef
                                         .getFieldDef(formFieldDef.getFieldName());
-                                final String editor = InputWidgetUtils.constructLeanEditor(widgetTypeDef,
-                                        entityFieldDef);
+                                final String editor = InputWidgetUtils.constructPortalEditor(widgetTypeDef,
+                                        entityFieldDef, serviceId);
                                 final boolean required = !entityFieldDef.isNullable() || formFieldDef.isRequired();
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
                                         resolveApplicationMessage(StringUtils.isBlank(formFieldDef.getFieldLabel())
