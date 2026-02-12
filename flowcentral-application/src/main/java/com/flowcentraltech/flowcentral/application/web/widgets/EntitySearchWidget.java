@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
@@ -93,14 +94,26 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
     @SuppressWarnings("unchecked")
     protected final List<? extends Listable> getResultByRef(String input, int limit) throws UnifyException {
         final ApplicationModuleService applicationModuleService = application();
-        RefDef[] refDefs = getRefDefs();
+        final RefDef[] refDefs = getRefDefs();
         if (refDefs != null) {
             List<Listable> fullResult = new ArrayList<Listable>();
+            final String[] refs = getRef();
+            final boolean extAccessibility = isWithExternalAccessibility();
+            final boolean caseInsensitive = getUplAttribute(boolean.class, "caseInsensitive");
             final boolean encode = refDefs.length > 1;
             final ValueStore _valueStore = getValueStore();
             final String listKey = getListkey();
             final boolean isListKey = !StringUtils.isBlank(listKey);
             for (int i = 0; i < refDefs.length; i++) {
+                if (extAccessibility) {
+                    Optional<List<Listable>> optional = externalAccessibility().getRefListables(refs[i], listKey, input,
+                            limit, caseInsensitive);
+                    if (optional.isPresent()) {
+                        fullResult.addAll(optional.get());
+                        continue;
+                    }
+                }
+
                 RefDef refDef = refDefs[i];
                 final boolean listFormat = refDef.isWithListFormat();
                 EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
@@ -115,8 +128,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 }
 
                 if (!StringUtils.isBlank(input)) {
-                    Restriction like = getUplAttribute(boolean.class, "caseInsensitive")
-                            ? new ILike(searchField, input.trim())
+                    Restriction like = caseInsensitive ? new ILike(searchField, input.trim())
                             : new Like(searchField, input.trim());
                     query.addRestriction(like);
                 }
@@ -131,10 +143,10 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                     if (query.isSelect()) {
                         query.addSelect(refDef.getOrderField());
                     }
-               } else {
+                } else {
                     query.addOrder(searchField);
                 }
-                
+
                 List<? extends Listable> result = environment().listAll(query);
                 if (encode || listFormat) {
                     ParameterizedStringGenerator generator = null;

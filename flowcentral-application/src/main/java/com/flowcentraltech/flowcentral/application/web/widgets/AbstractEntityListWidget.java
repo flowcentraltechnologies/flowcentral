@@ -16,7 +16,10 @@
 
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.Optional;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.ApplicationExternalAccessibilityProvider;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
@@ -62,6 +65,9 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
     @Configurable
     private AppletUtilities au;
 
+    @Configurable
+    private ApplicationExternalAccessibilityProvider appExternalAccessibilityProvider;
+
     @Override
     public ExtensionType getExtensionType() {
         return ExtensionType.FACADE_HIDDEN;
@@ -82,18 +88,27 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
         return false;
     }
 
-    public final Listable getCurrentSelect() throws UnifyException {
-        Object keyVal = getValue(Object.class);
-        if (keyVal != null) {
-            Listable select = doCurrentSelect(keyVal);
-            if (select != null) {
-                return select;
-            }
+    @Override
+    public String getStringValue() throws UnifyException {
+        Listable listable = getCurrentSelect();
+        return listable != null ? listable.getListDescription() : null;
+    }
 
-            setValue(null);
+    public final Listable getCurrentSelect() throws UnifyException {
+        Listable listable = getWriteWork().get(Listable.class, "keyListable");
+        if (listable == null) {
+            Object keyVal = getValue(Object.class);
+            if (keyVal != null) {
+                listable = doCurrentSelect(keyVal);
+                if (listable == null) {
+                    setValue(null);
+                } else {
+                    getWriteWork().set("keyListable", listable);
+                }
+            }
         }
 
-        return null;
+        return listable;
     }
 
     public String getListkey() throws UnifyException {
@@ -110,6 +125,14 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
 
     public boolean isDirect() throws UnifyException {
         return getUplAttribute(boolean.class, "direct");
+    }
+
+    protected ApplicationExternalAccessibilityProvider externalAccessibility() {
+        return appExternalAccessibilityProvider;
+    }
+
+    protected boolean isWithExternalAccessibility() {
+        return appExternalAccessibilityProvider != null;
     }
 
     protected Listable doCurrentSelect(Object keyVal) throws UnifyException {
@@ -146,6 +169,15 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
             }
         }
 
+        final String listKey = getListkey();
+        if (appExternalAccessibilityProvider != null) {
+            Optional<Listable> optional = appExternalAccessibilityProvider
+                    .getRefObjectListable(getRefDefLongName(decodedKey.getIndex()), listKey, decodedKey.getValue());
+            if (optional.isPresent()) {
+                return optional.get();
+            }
+        }
+
         final EntityClassDef entityClassDef = application().getEntityClassDef(entityName);
         Query<? extends Entity> query = null;
         if (br != null) {
@@ -154,7 +186,6 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
             query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
         }
 
-        String listKey = getListkey();
         if (StringUtils.isBlank(listKey)) {
             query.addEquals("id", decodedKey.getValue());
         } else {
@@ -206,6 +237,15 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
         String[] ref = getRef();
         if (ref != null && index >= 0 && index < ref.length) {
             return application().getRefDef(ref[index]);
+        }
+
+        return null;
+    }
+
+    protected String getRefDefLongName(int index) throws UnifyException {
+        String[] ref = getRef();
+        if (ref != null && index >= 0 && index < ref.length) {
+            return ref[index];
         }
 
         return null;
