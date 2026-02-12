@@ -91,6 +91,12 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
         return getResultByRef(input, limit);
     }
 
+    @Override
+    public final String getStringValue() throws UnifyException {
+        Listable listable = getCurrentSelect();
+        return listable != null ? listable.getListDescription() : null;
+    }
+
     @SuppressWarnings("unchecked")
     protected final List<? extends Listable> getResultByRef(String input, int limit) throws UnifyException {
         final ApplicationModuleService applicationModuleService = application();

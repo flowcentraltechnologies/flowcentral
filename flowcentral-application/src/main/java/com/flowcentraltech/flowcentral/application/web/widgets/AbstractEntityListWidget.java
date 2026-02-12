@@ -88,22 +88,14 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
         return false;
     }
 
-    @Override
-    public String getStringValue() throws UnifyException {
-        Listable listable = getCurrentSelect();
-        return listable != null ? listable.getListDescription() : null;
-    }
-
     public final Listable getCurrentSelect() throws UnifyException {
-        Listable listable = getWriteWork().get(Listable.class, "keyListable");
+        Listable listable = getWriteWork().get(Listable.class, "listable_");
         if (listable == null) {
             Object keyVal = getValue(Object.class);
             if (keyVal != null) {
                 listable = doCurrentSelect(keyVal);
-                if (listable == null) {
-                    setValue(null);
-                } else {
-                    getWriteWork().set("keyListable", listable);
+                if (listable != null) {
+                    getWriteWork().set("listable_", listable);
                 }
             }
         }
