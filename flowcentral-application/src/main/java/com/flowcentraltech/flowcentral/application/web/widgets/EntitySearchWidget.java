@@ -66,6 +66,12 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
         return ExtensionType.FACADE_HIDDEN_EDIT;
     }
 
+    @Override
+    public String getFacadeStringValue() throws UnifyException {
+        Listable listable = getCurrentSelect();
+        return listable != null ? listable.getListDescription() : null;
+     }
+
     @Action
     public final void search() throws UnifyException {
         final String input = getRequestTarget(String.class);
@@ -89,12 +95,6 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
 
     protected List<? extends Listable> doSearch(String input, int limit) throws UnifyException {
         return getResultByRef(input, limit);
-    }
-
-    @Override
-    public final String getStringValue() throws UnifyException {
-        Listable listable = getCurrentSelect();
-        return listable != null ? listable.getListDescription() : null;
     }
 
     @SuppressWarnings("unchecked")
