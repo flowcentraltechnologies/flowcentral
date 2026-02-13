@@ -109,9 +109,12 @@ import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityAttachment;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalEnum;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalEnumItem;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalForm;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalFormElement;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalReference;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReport;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTableColumn;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
@@ -330,6 +333,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private PortalWorkflowProvider portalWorkflowProvider;
 
+    @Configurable
+    private PortalReportProvider portalReportProvider;
+    
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
@@ -3951,12 +3957,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final List<PortalWorkflow> workflows = portalWorkflowProvider != null
                 ? portalWorkflowProvider.getPortalWorkflows(applicationName)
                 : Collections.emptyList();
-
         if (workflows.isEmpty() && environment()
                 .countAll(new AppAppletQuery().portalAccess(true).applicationName(applicationName)) == 0) {
             return Optional.empty();
         }
 
+        final List<PortalReport> reports = portalReportProvider != null
+                ? portalReportProvider.getPortalReports(applicationName)
+                : Collections.emptyList();
+   
         final ApplicationDef applicationDef = getApplicationDef(applicationName);
         final Map<String, PortalApplet> applets = new HashMap<String, PortalApplet>();
         final Map<String, PortalTable> tables = new HashMap<String, PortalTable>();
@@ -3975,11 +3984,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
         }
 
+        final List<PortalEnum> enums = new ArrayList<PortalEnum>();
+        for (Long enumId: environment().valueList(Long.class, "id",
+                new AppEnumerationQuery().applicationName(applicationName))) {
+            final AppEnumeration appEnumeration = environment().find(AppEnumeration.class, enumId);
+            final List<PortalEnumItem> items = new ArrayList<PortalEnumItem>();
+            for(AppEnumerationItem appEnumerationItem: appEnumeration.getItemList()) {
+                items.add(new PortalEnumItem(appEnumerationItem.getCode(), appEnumerationItem.getLabel(), appEnumerationItem.getColor().name()));
+            }
+            
+            final String enumName = ApplicationNameUtils.ensureLongNameReference(applicationName, appEnumeration.getName());
+            enums.add(new PortalEnum(enumName, appEnumeration.getDescription(), appEnumeration.getLabel(), true, items));
+        }
+
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
                 applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
                 DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
                 DataUtils.unmodifiableList(entities.values()), DataUtils.unmodifiableList(references.values()),
-                DataUtils.unmodifiableList(workflows)));
+                DataUtils.unmodifiableList(enums), DataUtils.unmodifiableList(workflows), DataUtils.unmodifiableList(reports)));
     }
 
     private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,

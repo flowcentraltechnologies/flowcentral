@@ -30,12 +30,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.PortalReportProvider;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReport;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReportParam;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
@@ -132,7 +135,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ReportModuleNameConstants.REPORT_MODULE_SERVICE)
 public class ReportModuleServiceImpl extends AbstractFlowCentralService
-        implements ReportModuleService, RolePrivilegeBackupAgent {
+        implements ReportModuleService, RolePrivilegeBackupAgent, PortalReportProvider {
 
     @Configurable
     private ThemeManager themeManager;
@@ -165,6 +168,29 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void unregisterCustomApplicationRolePrivileges(Long applicationId) throws UnifyException {
         environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId).isCustom());
+    }
+
+    @Override
+    public List<PortalReport> getPortalReports(String applicationName) throws UnifyException {
+        final List<PortalReport> reports = new ArrayList<PortalReport>();
+        for (Long reportConfigId : environment().valueList(Long.class, "id",
+                new ReportConfigurationQuery().applicationName(applicationName))) {
+            final ReportConfiguration reportConfiguration = environment().find(new ReportConfigurationQuery()
+                    .id(reportConfigId).addSelect("name", "description", "title", "parameterList"));
+            final List<PortalReportParam> params = new ArrayList<PortalReportParam>();
+            for (ReportParameter reportParameter : reportConfiguration.getParameterList()) {
+                params.add(new PortalReportParam(reportParameter.getType().name(), reportParameter.getName(),
+                        reportParameter.getDescription(), reportParameter.getLabel(), reportParameter.getDefaultVal(),
+                        reportParameter.getEditor(), reportParameter.getMandatory()));
+            }
+
+            final String reportName = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                    reportConfiguration.getName());
+            reports.add(new PortalReport(reportName, reportConfiguration.getDescription(),
+                    reportConfiguration.getTitle(), params));
+        }
+
+        return reports;
     }
 
     @Override

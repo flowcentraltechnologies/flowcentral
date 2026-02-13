@@ -40,14 +40,19 @@ public class PortalApplication {
     private List<PortalForm> forms;
 
     private List<PortalEntity> entities;
-    
+
     private List<PortalReference> references;
 
+    private List<PortalEnum> enums;
+
     private List<PortalWorkflow> workflows;
+
+    private List<PortalReport> reports;
     
     public PortalApplication(String name, String description, String label, String module, List<PortalApplet> applets,
             List<PortalTable> tables, List<PortalForm> forms, List<PortalEntity> entities,
-            List<PortalReference> references, List<PortalWorkflow> workflows) {
+            List<PortalReference> references, List<PortalEnum> enums, List<PortalWorkflow> workflows,
+            List<PortalReport> reports) {
         this.name = name;
         this.description = description;
         this.label = label;
@@ -56,8 +61,10 @@ public class PortalApplication {
         this.tables = tables;
         this.forms = forms;
         this.entities = entities;
-        this.workflows = workflows;
         this.references = references;
+        this.enums = enums;
+        this.workflows = workflows;
+        this.reports = reports;
     }
 
     public String getName() {
@@ -96,7 +103,15 @@ public class PortalApplication {
         return references;
     }
 
+    public List<PortalEnum> getEnums() {
+        return enums;
+    }
+
     public List<PortalWorkflow> getWorkflows() {
         return workflows;
+    }
+
+    public List<PortalReport> getReports() {
+        return reports;
     }
 }
