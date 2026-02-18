@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.ReportColumn;
 
@@ -73,6 +74,17 @@ public interface ReportProvider extends FlowCentralComponent {
     void generateDynamicReport(ReportOptions reportOptions, OutputStream outputStream) throws UnifyException;
 
     /**
+     * Generates a dynamic report based on supplied report options into uploaded file.
+     * 
+     * @param reportOptions
+     *                      the report options
+     * @return the uploaded file
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    UploadedFile generateDynamicReport(ReportOptions reportOptions) throws UnifyException;
+
+    /**
      * Generates a report.
      * 
      * @param report
@@ -83,6 +95,17 @@ public interface ReportProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     void generateReport(Report report, OutputStream outputStream) throws UnifyException;
+
+    /**
+     * Generates a report into uploaded file..
+     * 
+     * @param report
+     *                      the report to generate
+     * @return the uploaded file
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    UploadedFile generateReport(Report report) throws UnifyException;
 
     /**
      * Generates a report to a byte array.

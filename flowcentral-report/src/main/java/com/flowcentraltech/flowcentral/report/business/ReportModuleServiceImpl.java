@@ -107,6 +107,7 @@ import com.tcdng.unify.core.criterion.ZeroParamRestriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Input;
 import com.tcdng.unify.core.data.Inputs;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Query;
@@ -436,6 +437,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public UploadedFile generateDynamicReport(ReportOptions reportOptions) throws UnifyException {
+        UploadedFile uploadedFile = UploadedFile.create(reportOptions.getFilename());
+        try {
+            generateDynamicReport(reportOptions, uploadedFile.getOut());
+        } finally {
+            uploadedFile.closeOut(); 
+        }
+        
+        return uploadedFile;
+    }
+
+    @Override
     public void generateDynamicReport(ReportOptions reportOptions, OutputStream outputStream) throws UnifyException {
         ReportPageProperties pageProperties = ReportPageProperties.newBuilder().size(reportOptions.getSizeType())
                 .marginBottom(reportOptions.getMarginBottom()).marginLeft(reportOptions.getMarginLeft())
@@ -636,6 +649,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         Report report = rb.build();
         setCommonReportParameters(report);
         reportServer.generateReport(report, outputStream);
+    }
+
+    @Override
+    public UploadedFile generateReport(Report report) throws UnifyException {
+        UploadedFile uploadedFile = UploadedFile.create(report.getTitle());
+        try {
+            generateReport(report, uploadedFile.getOut());
+        } finally {
+            uploadedFile.closeOut(); 
+        }
+        
+        return uploadedFile;
     }
 
     @Override
