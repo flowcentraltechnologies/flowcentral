@@ -258,16 +258,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 @Override
                 protected WfDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    final String workflowName = WorkflowNameUtils.getWorkflowRunnableName(nameParts.getEntityName());
+                    final String workflowRunnableName = WorkflowNameUtils.getWorkflowRunnableName(nameParts.getEntityName());
                     Workflow workflow = environment().list(new WorkflowQuery().runnable()
-                            .applicationName(nameParts.getApplicationName()).name(workflowName));
+                            .applicationName(nameParts.getApplicationName()).nameIn(Arrays.asList(workflowRunnableName, nameParts.getEntityName())));
                     if (workflow == null) {
                         throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_FIND_RUNNABLE_APPLICATION_WORKFLOW,
                                 longName);
                     }
 
                     longName = ApplicationNameUtils.getApplicationEntityLongName(nameParts.getApplicationName(),
-                            workflowName);
+                            workflow.getName());
                     List<StringToken> descFormat = !StringUtils.isBlank(workflow.getDescFormat())
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
