@@ -2139,9 +2139,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     private WfItemAccessible createWfItemAccessible(WfItem wfItem) {
         return new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getBranchCode(), wfItem.getDepartmentCode(),
-                wfItem.getWfItemDesc(), wfItem.getWorkflowName(), wfItem.getWfStepName(), wfItem.getEntity(),
-                wfItem.getInitiatedBy(), wfItem.getCreateDt(), wfItem.getStepDt(), wfItem.getReminderDt(),
-                wfItem.getExpectedDt(), wfItem.getCriticalDt());
+                wfItem.getWfItemDesc(), wfItem.getWorkflowName(), wfItem.getWorkflowName(), wfItem.getWfStepName(),
+                wfItem.getEntity(), wfItem.getInitiatedBy(), wfItem.getCreateDt(), wfItem.getStepDt(),
+                wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());
     }
 
     private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
