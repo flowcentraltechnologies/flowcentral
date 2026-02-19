@@ -1888,7 +1888,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         final boolean isPerformExternal = workItemExternalAccessibilityProvider != null && type.supportExternal()
                 && appletUtil.system().getSysParameterValue(boolean.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT);
-        final WfItemAccessible accessible = isPerformExternal ? createWfItemAccessible(wfItem) : null;
+        final WfItemAccessible accessible = isPerformExternal ? createWfItemAccessible(wfItem, wfEntityInst) : null;
 
         transitionItem.setVariables(getTransitionVariables(wfItem, entityDef));
 
@@ -2137,11 +2137,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         return true;
     }
 
-    private WfItemAccessible createWfItemAccessible(WfItem wfItem) {
+    private WfItemAccessible createWfItemAccessible(WfItem wfItem, WorkEntity wfEntityInst) {
         return new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getBranchCode(), wfItem.getDepartmentCode(),
-                wfItem.getWfItemDesc(), wfItem.getWorkflowName(), wfItem.getWorkflowName(), wfItem.getWfStepName(),
-                wfItem.getEntity(), wfItem.getInitiatedBy(), wfItem.getCreateDt(), wfItem.getStepDt(),
-                wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());
+                wfItem.getWfItemDesc(), wfItem.getWorkflowName(), wfEntityInst.getPreferredWorkflowName(),
+                wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getInitiatedBy(), wfItem.getCreateDt(),
+                wfItem.getStepDt(), wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());
     }
 
     private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
