@@ -1654,8 +1654,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @SuppressWarnings("unchecked")
     @Override
     public Query<? extends Entity> queryOf(String entityName) throws UnifyException {
-        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
-        return Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+        if (entityClassDefFactoryMap.isKey(entityName)) {
+            final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+            return Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+        }
+
+        return Query.of((Class<? extends Entity>) ReflectUtils.classForName(entityName));
     }
 
     @SuppressWarnings("unchecked")
