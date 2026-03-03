@@ -20,6 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.PortalDashboardProvider;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalDashboard;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalDashboardOption;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
@@ -58,7 +61,7 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(DashboardModuleNameConstants.DASHBOARD_MODULE_SERVICE)
-public class DashboardModuleServiceImpl extends AbstractFlowCentralService implements DashboardModuleService {
+public class DashboardModuleServiceImpl extends AbstractFlowCentralService implements DashboardModuleService, PortalDashboardProvider {
 
     @Configurable
     private ChartModuleService chartModuleService;
@@ -132,6 +135,25 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
     @Override
     public void clearDashboardCache() throws UnifyException {
         chartModuleService.clearChartCache();
+    }
+
+    @Override
+    public List<PortalDashboard> getPortalDashboards(String applicationName) throws UnifyException {
+        final List<PortalDashboard> dashboards = new ArrayList<PortalDashboard>();
+        for (Long dashboardId : environment().valueList(Long.class, "id",
+                new DashboardQuery().applicationName(applicationName))) {
+            final Dashboard dashboard = environment().list(new DashboardQuery().id(dashboardId));
+            final List<PortalDashboardOption> options = new ArrayList<PortalDashboardOption>();
+            for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
+                options.add(new PortalDashboardOption(dashboardOption.getName(), dashboardOption.getLabel()));
+            }
+
+            final String dashboardName = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                    dashboard.getName());
+            dashboards.add(new PortalDashboard(dashboardName, dashboard.getDescription(), options));
+        }
+
+        return dashboards;
     }
 
     @Override

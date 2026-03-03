@@ -33,6 +33,8 @@ public class PortalApplication {
 
     private String module;
 
+    private List<PortalDashboard> dashboards;
+
     private List<PortalApplet> applets;
 
     private List<PortalTable> tables;
@@ -48,15 +50,16 @@ public class PortalApplication {
     private List<PortalWorkflow> workflows;
 
     private List<PortalReport> reports;
-    
-    public PortalApplication(String name, String description, String label, String module, List<PortalApplet> applets,
-            List<PortalTable> tables, List<PortalForm> forms, List<PortalEntity> entities,
-            List<PortalReference> references, List<PortalEnum> enums, List<PortalWorkflow> workflows,
-            List<PortalReport> reports) {
+
+    public PortalApplication(String name, String description, String label, String module,
+            List<PortalDashboard> dashboards, List<PortalApplet> applets, List<PortalTable> tables,
+            List<PortalForm> forms, List<PortalEntity> entities, List<PortalReference> references,
+            List<PortalEnum> enums, List<PortalWorkflow> workflows, List<PortalReport> reports) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.module = module;
+        this.dashboards = dashboards;
         this.applets = applets;
         this.tables = tables;
         this.forms = forms;
@@ -81,6 +84,10 @@ public class PortalApplication {
 
     public String getModule() {
         return module;
+    }
+
+    public List<PortalDashboard> getDashboards() {
+        return dashboards;
     }
 
     public List<PortalApplet> getApplets() {

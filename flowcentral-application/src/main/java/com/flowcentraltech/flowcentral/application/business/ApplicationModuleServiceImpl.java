@@ -106,6 +106,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplet;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalDashboard;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityAttachment;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField;
@@ -335,7 +336,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private PortalReportProvider portalReportProvider;
-    
+
+    @Configurable
+    private PortalDashboardProvider portalDashboardProvider;
+
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
@@ -359,7 +363,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private ApplicationExternalAccessibilityProvider appExternalAccessibilityProvider;
-    
+
     @Configurable("application-usagelistprovider")
     private UsageListProvider usageListProvider;
 
@@ -888,7 +892,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.entityDefByClassFactoryMap = new StaleableFactoryMap<String, EntityDef>() 
+        this.entityDefByClassFactoryMap = new StaleableFactoryMap<String, EntityDef>()
             {
 
                 @Override
@@ -3975,7 +3979,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final List<PortalReport> reports = portalReportProvider != null
                 ? portalReportProvider.getPortalReports(applicationName)
                 : Collections.emptyList();
-   
+
+        final List<PortalDashboard> dashboards = portalDashboardProvider != null
+                ? portalDashboardProvider.getPortalDashboards(applicationName)
+                : Collections.emptyList();
+
         final ApplicationDef applicationDef = getApplicationDef(applicationName);
         final Map<String, PortalApplet> applets = new HashMap<String, PortalApplet>();
         final Map<String, PortalTable> tables = new HashMap<String, PortalTable>();
@@ -3995,23 +4003,27 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         final List<PortalEnum> enums = new ArrayList<PortalEnum>();
-        for (Long enumId: environment().valueList(Long.class, "id",
+        for (Long enumId : environment().valueList(Long.class, "id",
                 new AppEnumerationQuery().applicationName(applicationName))) {
             final AppEnumeration appEnumeration = environment().find(AppEnumeration.class, enumId);
             final List<PortalEnumItem> items = new ArrayList<PortalEnumItem>();
-            for(AppEnumerationItem appEnumerationItem: appEnumeration.getItemList()) {
-                items.add(new PortalEnumItem(appEnumerationItem.getCode(), appEnumerationItem.getLabel(), appEnumerationItem.getColor().name()));
+            for (AppEnumerationItem appEnumerationItem : appEnumeration.getItemList()) {
+                items.add(new PortalEnumItem(appEnumerationItem.getCode(), appEnumerationItem.getLabel(),
+                        appEnumerationItem.getColor().name()));
             }
-            
-            final String enumName = ApplicationNameUtils.ensureLongNameReference(applicationName, appEnumeration.getName());
-            enums.add(new PortalEnum(enumName, appEnumeration.getDescription(), appEnumeration.getLabel(), true, items));
+
+            final String enumName = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                    appEnumeration.getName());
+            enums.add(
+                    new PortalEnum(enumName, appEnumeration.getDescription(), appEnumeration.getLabel(), true, items));
         }
 
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
-                applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
-                DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
-                DataUtils.unmodifiableList(entities.values()), DataUtils.unmodifiableList(references.values()),
-                DataUtils.unmodifiableList(enums), DataUtils.unmodifiableList(workflows), DataUtils.unmodifiableList(reports)));
+                applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(dashboards),
+                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
+                DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values()),
+                DataUtils.unmodifiableList(references.values()), DataUtils.unmodifiableList(enums),
+                DataUtils.unmodifiableList(workflows), DataUtils.unmodifiableList(reports)));
     }
 
     private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,
@@ -4021,7 +4033,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final AppletDef appletDef = getAppletDef(applet);
             final String entity = appletDef.getEntity();
             final EntityDef entityDef = getEntityDef(entity);
-            final String serviceId = getContainerSetting(String.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+            final String serviceId = getContainerSetting(String.class,
+                    FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
             if (!entities.containsKey(entity)) {
                 List<PortalEntityField> fields = new ArrayList<PortalEntityField>();
                 for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
@@ -4032,7 +4045,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
                                     InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String editor = InputWidgetUtils.constructPortalEditor(widgetTypeDef, resolvedEntityFieldDef, serviceId);
+                    final String editor = InputWidgetUtils.constructPortalEditor(widgetTypeDef, resolvedEntityFieldDef,
+                            serviceId);
                     if (entityFieldDef.isChildRef()) {
                         final RefDef refDef = getRefDef(entityFieldDef.getRefLongName());
                         fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
