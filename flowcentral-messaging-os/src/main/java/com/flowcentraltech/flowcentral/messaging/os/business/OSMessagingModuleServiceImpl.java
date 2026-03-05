@@ -19,23 +19,28 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.InactiveTargetResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSCredentials;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerEndpointDef;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.UnknownTargetResp;
@@ -201,6 +206,42 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     public Optional<String> getPeerEndpointURL(String appId) throws UnifyException {
         return environment().valueOptional(String.class, "endpointUrl",
                 new OSMessagingPeerEndpointQuery().appId(appId));
+    }
+
+    @Override
+    public void updateOSMessagingEndpoints(List<OSMessagingPeerInfo> messagingPeerInfoList) throws UnifyException {
+        final Set<String> names = new HashSet<String>();
+        for (OSMessagingPeerInfo osMessagingPeerInfo : messagingPeerInfoList) {
+            OSMessagingPeerEndpoint osMessagingPeerEndpoint = environment()
+                    .find(new OSMessagingPeerEndpointQuery().name(osMessagingPeerInfo.getName()));
+            if (osMessagingPeerEndpoint == null) {
+                osMessagingPeerEndpoint = new OSMessagingPeerEndpoint();
+                osMessagingPeerEndpoint.setAppId(osMessagingPeerInfo.getAppId());
+                osMessagingPeerEndpoint.setName(osMessagingPeerInfo.getName());
+                osMessagingPeerEndpoint.setDescription(osMessagingPeerInfo.getDescription());
+                osMessagingPeerEndpoint.setEndpointUrl(osMessagingPeerInfo.getEndpointUrl());
+                osMessagingPeerEndpoint.setPeerPassword(osMessagingPeerInfo.getPeerPassword());
+                osMessagingPeerEndpoint.setShortName(osMessagingPeerInfo.getShortName());
+                osMessagingPeerEndpoint.setStatus(RecordStatus.ACTIVE);
+                environment().create(osMessagingPeerEndpoint);
+            } else {
+                osMessagingPeerEndpoint.setAppId(osMessagingPeerInfo.getAppId());
+                osMessagingPeerEndpoint.setName(osMessagingPeerInfo.getName());
+                osMessagingPeerEndpoint.setDescription(osMessagingPeerInfo.getDescription());
+                osMessagingPeerEndpoint.setEndpointUrl(osMessagingPeerInfo.getEndpointUrl());
+                osMessagingPeerEndpoint.setPeerPassword(osMessagingPeerInfo.getPeerPassword());
+                osMessagingPeerEndpoint.setShortName(osMessagingPeerInfo.getShortName());
+                osMessagingPeerEndpoint.setStatus(RecordStatus.ACTIVE);
+                environment().updateByIdVersion(osMessagingPeerEndpoint);
+            }
+
+            names.add(osMessagingPeerInfo.getName());
+        }
+
+        if (!DataUtils.isBlank(names)) {
+            environment().updateAll(new OSMessagingPeerEndpointQuery().nameNotIn(names),
+                    new Update().add("status", RecordStatus.INACTIVE));
+        }
     }
 
     @Override
@@ -477,7 +518,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         if (!osPeerEndpointDef.isPresent()) {
             return prettyJson(UnknownTargetResp.MESSAGE);
         }
-
+        
+        if (!osPeerEndpointDef.isActive()) {
+            return prettyJson(InactiveTargetResp.MESSAGE);
+        }
+        
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
@@ -524,6 +569,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             return prettyJson(UnknownTargetResp.MESSAGE);
         }
 
+        if (!osPeerEndpointDef.isActive()) {
+            return prettyJson(InactiveTargetResp.MESSAGE);
+        }
+        
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
@@ -577,7 +626,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         if (!osPeerEndpointDef.isPresent()) {
             return prettyJson(UnknownTargetResp.MESSAGE);
         }
-
+        
+        if (!osPeerEndpointDef.isActive()) {
+            return prettyJson(InactiveTargetResp.MESSAGE);
+        }
+        
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);

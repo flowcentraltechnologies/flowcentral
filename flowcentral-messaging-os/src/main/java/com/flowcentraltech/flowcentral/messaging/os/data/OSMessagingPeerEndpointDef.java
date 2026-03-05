@@ -23,7 +23,6 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * OS messaging peer end-point definition.
@@ -140,6 +139,10 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         return id != null;
     }
 
+    public boolean isActive() {
+        return RecordStatus.ACTIVE.equals(status);
+    }
+    
     public String getAuthentication(String processor) {
         String authentication = authentications.get(processor);
         if (authentication == null) {
@@ -154,8 +157,5 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
         return authentication;
     }
-    
-    public String toString() {
-        return StringUtils.toXmlString(this);
-    }
+
 }
