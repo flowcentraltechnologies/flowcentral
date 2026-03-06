@@ -212,6 +212,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     public void updateOSMessagingEndpoints(List<OSMessagingPeerInfo> messagingPeerInfoList) throws UnifyException {
         final Set<String> names = new HashSet<String>();
         for (OSMessagingPeerInfo osMessagingPeerInfo : messagingPeerInfoList) {
+            if ("localEndpoint".equals(osMessagingPeerInfo.getName())) {
+                continue;
+            }
+            
             OSMessagingPeerEndpoint osMessagingPeerEndpoint = environment()
                     .find(new OSMessagingPeerEndpointQuery().name(osMessagingPeerInfo.getName()));
             if (osMessagingPeerEndpoint == null) {
@@ -238,9 +242,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             names.add(osMessagingPeerInfo.getName());
         }
 
-        if (!DataUtils.isBlank(names)) {
-            environment().deleteAll(new OSMessagingPeerEndpointQuery().nameNotIn(names));
-        }
+        names.add("localEndpoint");
+        environment().deleteAll(new OSMessagingPeerEndpointQuery().nameNotIn(names));
     }
 
     @Override
