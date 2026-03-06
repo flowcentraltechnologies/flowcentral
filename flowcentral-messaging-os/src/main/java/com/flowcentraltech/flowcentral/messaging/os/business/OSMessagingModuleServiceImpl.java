@@ -239,8 +239,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         if (!DataUtils.isBlank(names)) {
-            environment().updateAll(new OSMessagingPeerEndpointQuery().nameNotIn(names),
-                    new Update().add("status", RecordStatus.INACTIVE));
+            environment().deleteAll(new OSMessagingPeerEndpointQuery().nameNotIn(names));
         }
     }
 
