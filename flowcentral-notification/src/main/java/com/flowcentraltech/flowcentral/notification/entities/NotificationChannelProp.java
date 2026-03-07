@@ -39,6 +39,15 @@ public class NotificationChannelProp extends BaseEntity {
     @Column(name = "CHANNELPROP_VAL", length = 256, nullable = true)
     private String value;
 
+    public NotificationChannelProp(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
+    public NotificationChannelProp() {
+
+    }
+
     @Override
     public String getDescription() {
         return name;

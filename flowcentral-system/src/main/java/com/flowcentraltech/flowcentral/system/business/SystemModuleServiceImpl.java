@@ -67,6 +67,7 @@ import com.flowcentraltech.flowcentral.system.data.CredentialDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseEntryDef;
 import com.flowcentraltech.flowcentral.system.data.ScheduledTaskDef;
+import com.flowcentraltech.flowcentral.system.data.SysParamInfo;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
@@ -367,6 +368,13 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return result;
+    }
+
+    @Override
+    public void updateSystemParameters(List<SysParamInfo> params) throws UnifyException {
+        for (SysParamInfo param : params) {
+            setSysParameterValue(param.getCode(), param.getVal());
+        }
     }
 
     @Override

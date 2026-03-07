@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.system.data.CredentialDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseDef;
+import com.flowcentraltech.flowcentral.system.data.SysParamInfo;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
@@ -333,4 +334,14 @@ public interface SystemModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<? extends Listable> getFilterSystemParameters() throws UnifyException;
+    
+    /**
+     * Updates system parameters.
+     * 
+     * @param params
+     *               the system parameter update values
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateSystemParameters(List<SysParamInfo> params) throws UnifyException;
 }

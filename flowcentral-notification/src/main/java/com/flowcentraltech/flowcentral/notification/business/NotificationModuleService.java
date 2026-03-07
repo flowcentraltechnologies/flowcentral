@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.notification.data.EmailSettings;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
@@ -254,4 +255,13 @@ public interface NotificationModuleService extends FlowCentralService {
      */
     void sendNotification(NotifMessage notifMessage) throws UnifyException;
 
+    /**
+     * Updates email settings.
+     * 
+     * @param settings
+     *                 the email settings to use
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateEmailSettings(EmailSettings settings) throws UnifyException;
 }
