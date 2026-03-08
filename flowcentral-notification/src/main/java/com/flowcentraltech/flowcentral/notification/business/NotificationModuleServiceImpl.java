@@ -447,7 +447,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.USERNAME_PROPERTY,
                 settings.getSmtpUsername()));
         channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.PASSWORD_PROPERTY,
-                settings.getSmtpPassword()));
+                twoWayStringCryptograph.encrypt(settings.getSmtpPassword())));
         channelPropList.add(new NotificationChannelProp(NotificationChannelPropertyConstants.MAX_BATCH_SIZE,
                 settings.getMaxBatchSize() > 0 ? String.valueOf(settings.getMaxBatchSize()) : null));
         channelPropList.add(new NotificationChannelProp(NotificationChannelPropertyConstants.MAX_TRIES,
