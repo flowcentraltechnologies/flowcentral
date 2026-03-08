@@ -21,7 +21,7 @@ package com.flowcentraltech.flowcentral.notification.data;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class EmailSettings {
+public class EmailSettingsInfo {
     
     private String senderName;
     
@@ -45,7 +45,7 @@ public class EmailSettings {
     
     private int retriesInMinutes;
 
-    public EmailSettings(String senderName, String senderEmail, int messagesPerMinute, String smtpHostAddress,
+    public EmailSettingsInfo(String senderName, String senderEmail, int messagesPerMinute, String smtpHostAddress,
             String smtpUsername, String smtpPassword, String smtpSecurityType, int smtpHostPort, int maxBatchSize,
             int maxRetries, int retriesInMinutes) {
         this.senderName = senderName;

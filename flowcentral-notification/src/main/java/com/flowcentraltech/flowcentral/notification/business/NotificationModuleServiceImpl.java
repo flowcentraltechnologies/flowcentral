@@ -44,7 +44,7 @@ import com.flowcentraltech.flowcentral.notification.constants.NotificationModule
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
-import com.flowcentraltech.flowcentral.notification.data.EmailSettings;
+import com.flowcentraltech.flowcentral.notification.data.EmailSettingsInfo;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextParamDef;
@@ -435,7 +435,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
-    public void updateEmailSettings(EmailSettings settings) throws UnifyException {
+    public void updateEmailSettings(EmailSettingsInfo settings) throws UnifyException {
         NotificationChannel channel = environment().find(new NotificationChannelQuery().notifType(NotifType.EMAIL));
         List<NotificationChannelProp> channelPropList = new ArrayList<NotificationChannelProp>();
         channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.ADDRESS_PROPERTY,
