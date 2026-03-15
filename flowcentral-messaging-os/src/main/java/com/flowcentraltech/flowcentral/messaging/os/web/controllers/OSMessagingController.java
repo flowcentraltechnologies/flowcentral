@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
 import java.util.Optional;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessManager;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingModuleService;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingProcessor;
@@ -51,10 +52,22 @@ public class OSMessagingController extends AbstractPlainJsonController {
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
+    private boolean debugging;
+
+    @Override
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
+        debugging = getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected final String doExecute(String actionName, String requestJson) throws UnifyException {
-        logDebug("Executing controller request = [{0}]...", requestJson);
+        if (debugging) {
+            logDebug("Executing controller request = [{0}]...", requestJson);
+        }
+
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
         final HttpRequestHeaders headers = getHttpRequestHeaders();
@@ -79,7 +92,10 @@ public class OSMessagingController extends AbstractPlainJsonController {
                                     : osMessagingModuleService.sendSynchronousMessageToService(header, service,
                                             correlationId, userloginId, requestJson);
                             if (optional.isPresent()) {
-                                logDebug("Response message [\n{0}]", optional.get());
+                                if (debugging) {
+                                    logDebug("Response message [\n{0}]", optional.get());
+                                }
+
                                 return optional.get();
                             }
 
@@ -97,7 +113,10 @@ public class OSMessagingController extends AbstractPlainJsonController {
                                         : osMessagingModuleService.sendAsynchronousMessageToDelegate(header, function,
                                                 correlationId, userloginId, requestJson);
                                 if (optional.isPresent()) {
-                                    logDebug("Response message [\n{0}]", optional.get());
+                                    if (debugging) {
+                                        logDebug("Response message [\n{0}]", optional.get());
+                                    }
+
                                     return optional.get();
                                 }
 
@@ -134,7 +153,10 @@ public class OSMessagingController extends AbstractPlainJsonController {
         response.setCorrelationId(correlationId);
 
         final String respJson = getResponseJsonFromObject(response);
-        logDebug("Response message [\n{0}]", respJson);
+        if (debugging) {
+            logDebug("Response message [\n{0}]", respJson);
+        }
+
         return respJson;
     }
 
