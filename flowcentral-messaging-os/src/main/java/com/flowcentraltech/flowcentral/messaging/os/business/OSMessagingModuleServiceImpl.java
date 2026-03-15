@@ -491,8 +491,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORNAME);
         final String vendorDomain = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORDOMAIN);
+        final boolean debugging = getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
         final String serviceVersion = getDeploymentVersion();
-        osInfo = new OSInfo(serviceId, serviceVersion, vendorName, vendorDomain);
+        osInfo = new OSInfo(serviceId, serviceVersion, vendorName, vendorDomain, debugging);
     }
 
     @Override
@@ -510,16 +512,20 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private String sendMessage(final String target, final String processor, final String function, final String service,
             final String correlationId, final String userLoginId, String reqJson, boolean sync) throws UnifyException {
-        logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...", reqJson);
+        if (osInfo.isDebugging()) {
+            logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...",
+                    reqJson);
+        }
+
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
             return prettyJson(UnknownTargetResp.MESSAGE);
         }
-        
+
         if (!osPeerEndpointDef.isActive()) {
             return prettyJson(InactiveTargetResp.MESSAGE);
         }
-        
+
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
@@ -553,7 +559,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             environment().create(log);
         }
 
-        logDebug("Response message [\n{0}]", resp.getRespJson());
+        if (osInfo.isDebugging()) {
+            logDebug("Response message [\n{0}]", resp.getRespJson());
+        }
+
         return resp.getRespJson();
     }
 
@@ -569,7 +578,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         if (!osPeerEndpointDef.isActive()) {
             return prettyJson(InactiveTargetResp.MESSAGE);
         }
-        
+
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
@@ -611,7 +620,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             environment().create(log);
         }
 
-        logDebug("Response message [\n{0}]", resp.getRespJson());
+        if (osInfo.isDebugging()) {
+            logDebug("Response message [\n{0}]", resp.getRespJson());
+        }
+
         return resp.getRespJson();
     }
 
@@ -623,11 +635,11 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         if (!osPeerEndpointDef.isPresent()) {
             return prettyJson(UnknownTargetResp.MESSAGE);
         }
-        
+
         if (!osPeerEndpointDef.isActive()) {
             return prettyJson(InactiveTargetResp.MESSAGE);
         }
-        
+
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(OSMessagingRequestHeaderConstants.AUTHORIZATION, osPeerEndpointDef.getAuthentication(processor));
         headers.put(OSMessagingRequestHeaderConstants.CORRELATION_ID, correlationId);
@@ -666,7 +678,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             environment().create(log);
         }
 
-        logDebug("Response message [\n{0}]", resp.getRespJson());
+        if (osInfo.isDebugging()) {
+            logDebug("Response message [\n{0}]", resp.getRespJson());
+        }
+
         return resp.getRespJson();
     }
 
