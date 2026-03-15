@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 import java.io.InputStream;
 import java.util.Optional;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessManager;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingModuleService;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSUploadProcessor;
@@ -52,6 +53,15 @@ public class OSUploadController extends AbstractHttpUploadController {
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
+    private boolean debugging;
+
+    @Override
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
+        debugging = getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected String handleUpload(HttpRequestHeaders headers, ContentDisposition disposition, InputStream in)
@@ -78,7 +88,10 @@ public class OSUploadController extends AbstractHttpUploadController {
                             final Optional<String> optional = osMessagingModuleService.sendUploadMessageToService(
                                     header, service, correlationId, userloginId, fileSignature, disposition, in);
                             if (optional.isPresent()) {
-                                logDebug("Response message [\n{0}]", optional.get());
+                                if (debugging) {
+                                    logDebug("Response message [\n{0}]", optional.get());
+                                }
+
                                 return optional.get();
                             }
 
@@ -94,7 +107,10 @@ public class OSUploadController extends AbstractHttpUploadController {
                                 final Optional<String> optional = osMessagingModuleService.sendUploadMessageToDelegate(
                                         header, function, correlationId, userloginId, fileSignature, disposition, in);
                                 if (optional.isPresent()) {
-                                    logDebug("Response message [\n{0}]", optional.get());
+                                    if (debugging) {
+                                        logDebug("Response message [\n{0}]", optional.get());
+                                    }
+
                                     return optional.get();
                                 }
 
@@ -129,7 +145,10 @@ public class OSUploadController extends AbstractHttpUploadController {
         response.setCorrelationId(correlationId);
 
         final String respJson = getResponseJsonFromObject(response);
-        logDebug("Response message [\n{0}]", respJson);
+        if (debugging) {
+            logDebug("Response message [\n{0}]", respJson);
+        }
+
         return respJson;
     }
 

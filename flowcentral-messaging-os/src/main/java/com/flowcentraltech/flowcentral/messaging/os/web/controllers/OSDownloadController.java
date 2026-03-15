@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 import java.io.OutputStream;
 import java.util.Optional;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSDownloadProcessor;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingAccessManager;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingModuleService;
@@ -51,6 +52,15 @@ public class OSDownloadController extends AbstractHttpDownloadController {
     @Configurable
     private OSMessagingAccessManager osMessagingAccessManager;
 
+    private boolean debugging;
+
+    @Override
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
+        debugging = getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected void handleDownload(HttpRequestHeaders headers, OutputStream out) throws UnifyException {
@@ -76,7 +86,10 @@ public class OSDownloadController extends AbstractHttpDownloadController {
                             final Optional<String> optional = osMessagingModuleService.sendDownloadMessageToService(
                                     header, service, correlationId, userloginId, fileSignature, out);
                             if (optional.isPresent()) {
+                                if (debugging) {
                                 logDebug("Response message [\n{0}]", optional.get());
+                                }
+                                
                                 return;
                             }
 
@@ -93,7 +106,10 @@ public class OSDownloadController extends AbstractHttpDownloadController {
                                         .sendDownloadMessageToDelegate(header, function, correlationId, userloginId,
                                                 fileSignature, out);
                                 if (optional.isPresent()) {
-                                    logDebug("Response message [\n{0}]", optional.get());
+                                    if (debugging) {
+                                        logDebug("Response message [\n{0}]", optional.get());
+                                    }
+                                    
                                     return;
                                 }
 
