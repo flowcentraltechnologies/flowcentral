@@ -528,6 +528,10 @@ public final class InputWidgetUtils {
             case "application.enumreadonlytext":
             case "application.enumlistlabel":
                 String _references = entityFieldDef != null ? entityFieldDef.getReferences() : efa.getReferences();
+                if (_references.indexOf('.') > 0 && !StringUtils.isBlank(serviceId)) {
+                    _references = _references + "." + serviceId; //Service ID as minor name
+                }
+                
                 editor = String.format(editor, _references);
                 break;
             case "application.entitylist":

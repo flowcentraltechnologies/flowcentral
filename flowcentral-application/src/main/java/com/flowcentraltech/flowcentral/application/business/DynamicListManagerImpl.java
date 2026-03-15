@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.EnumerationDef;
@@ -49,6 +50,9 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager implement
     @Configurable
     private EnvironmentService environmentService;
     
+    @Configurable
+    private DynamicListExternalAccessibilityProvider dynamicListProvider;
+    
     private FactoryMap<String, EnumerationDef> enumDefFactoryMap;
     
     public DynamicListManagerImpl() {
@@ -57,12 +61,26 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager implement
             {
                 @Override
                 protected boolean stale(String longName, EnumerationDef enumerationDef) throws Exception {
+                    if (dynamicListProvider != null) {
+                        Optional<Boolean> option =  dynamicListProvider.isStale(longName, enumerationDef);
+                        if (option.isPresent()) {
+                            return option.get();
+                        }
+                    }
+                    
                     return environmentService.value(long.class, "versionNo",
                             new AppEnumerationQuery().id(enumerationDef.getId())) > enumerationDef.getVersion();
                 }
 
                 @Override
-                protected EnumerationDef create(String longName, Object... arg1) throws Exception {
+                protected EnumerationDef create(String longName, Object... params) throws Exception {
+                    if (dynamicListProvider != null) {
+                        Optional<EnumerationDef> optional = dynamicListProvider.getEnumerationDef(longName);
+                        if (optional.isPresent()) {
+                            return optional.get();
+                        }
+                    }
+                    
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
                     AppEnumeration appEnumeration = environmentService
                             .list(Query.of(AppEnumeration.class).addEquals("name", nameParts.getEntityName())
