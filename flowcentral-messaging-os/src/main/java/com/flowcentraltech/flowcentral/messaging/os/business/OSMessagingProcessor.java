@@ -44,7 +44,7 @@ public interface OSMessagingProcessor<T extends BaseOSMessagingResp, U extends B
      * Processes a gateway request.
      * 
      * @param headers
-     *                    the request headers
+     *                the request headers
      * @param request
      *                the request to process
      * @return the gateway response
