@@ -250,7 +250,8 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
                             chWidget.setDisabled(!entryMode);
                             chWidget.setValueStore(valueStore);
                             writer.write("<td");
-                            writeTagStyle(writer, chWidget.getColumnStyle());
+                            writeTagStyle(writer,
+                                    tabelColumnDef.isNumber() ? "text-align:right;" : chWidget.getColumnStyle() );
                             writer.write(">");
                             writer.writeStructureAndContent(chWidget);
                             if (entryMode) {

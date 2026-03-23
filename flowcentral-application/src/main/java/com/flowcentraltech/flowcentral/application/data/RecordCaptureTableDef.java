@@ -140,7 +140,15 @@ public class RecordCaptureTableDef {
             return addColumnDef(fieldName, caption, editor, 2);
         }
 
+        public Builder addColumnDef(String fieldName, String caption, String editor, boolean number) {
+            return addColumnDef(fieldName, caption, editor, 2, number);
+        }
+
         public Builder addColumnDef(String fieldName, String caption, String editor, int widthRatio) {
+            return addColumnDef(fieldName, caption, editor, 2, false);
+        }
+        
+        public Builder addColumnDef(String fieldName, String caption, String editor, int widthRatio, boolean number) {
             if ("recordNo".equals(fieldName) || "title".equals(fieldName)) {
                 throw new IllegalArgumentException("Supplied field name is reserved.");
             }
@@ -156,8 +164,8 @@ public class RecordCaptureTableDef {
             }
 
             captureFields.add(fieldName);
-            columnDefs
-                    .add(new RecordCaptureColumnDef(fieldName, caption, editor + " binding:" + fieldName, widthRatio));
+            columnDefs.add(new RecordCaptureColumnDef(fieldName, caption, editor + " binding:" + fieldName, widthRatio,
+                    number));
             return this;
         }
 
@@ -172,12 +180,12 @@ public class RecordCaptureTableDef {
             }
 
             if (!StringUtils.isBlank(titleCaption)) {
-                columnDefs.add(0, new RecordCaptureColumnDef("title", titleCaption, "!ui-label binding:title", 4));
+                columnDefs.add(0, new RecordCaptureColumnDef("title", titleCaption, "!ui-label binding:title", 4, false));
             }
 
             if (!StringUtils.isBlank(recordNoCaption)) {
                 columnDefs.add(0,
-                        new RecordCaptureColumnDef("recordNo", recordNoCaption, "!ui-label binding:recordNo", 2));
+                        new RecordCaptureColumnDef("recordNo", recordNoCaption, "!ui-label binding:recordNo", 2, false));
             }
 
             final int len = columnDefs.size();

@@ -33,11 +33,14 @@ public class RecordCaptureColumnDef {
 
     private int widthRatio;
 
-    public RecordCaptureColumnDef(String fieldName, String caption, String editor, int widthRatio) {
+    private boolean number;
+    
+    public RecordCaptureColumnDef(String fieldName, String caption, String editor, int widthRatio, boolean number) {
         this.fieldName = fieldName;
         this.caption = caption;
         this.editor = editor;
         this.widthRatio = widthRatio;
+        this.number = number;
     }
 
     public String getFieldName() {
@@ -54,6 +57,10 @@ public class RecordCaptureColumnDef {
 
     public int getWidthRatio() {
         return widthRatio;
+    }
+
+    public boolean isNumber() {
+        return number;
     }
 
     public String getHeaderStyle() {
