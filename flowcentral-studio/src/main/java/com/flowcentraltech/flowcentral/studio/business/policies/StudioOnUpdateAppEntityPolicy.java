@@ -18,8 +18,10 @@ package com.flowcentraltech.flowcentral.studio.business.policies;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.EntitySchemaManager;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -27,6 +29,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Query;
 
 /**
@@ -37,6 +40,9 @@ import com.tcdng.unify.core.database.Query;
  */
 @Component("studioonupdateappentity-policy")
 public class StudioOnUpdateAppEntityPolicy extends StudioOnCreateComponentPolicy {
+
+    @Configurable
+    private EntitySchemaManager entitySchemaManager;
 
     @Override
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
@@ -63,6 +69,16 @@ public class StudioOnUpdateAppEntityPolicy extends StudioOnCreateComponentPolicy
         }
         
         return null;
+    }
+
+    @Override
+    protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
+        EntityActionResult result = super.doExecutePostAction(ctx);
+        final AppEntity appEntity = (AppEntity) ctx.getInst();
+        final String applicationName = application().getApplicationName(appEntity.getApplicationId());
+        final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
+        entitySchemaManager.updateDefaultComponents(entity, appEntity);
+        return result;
     }
 
 }
