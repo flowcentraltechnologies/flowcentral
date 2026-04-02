@@ -64,15 +64,15 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager implement
             {
                 @Override
                 protected boolean stale(String longName, EnumerationDef enumerationDef) throws Exception {
-                    if (dynamicListProvider != null) {
-                        Optional<Boolean> option =  dynamicListProvider.isStale(longName, enumerationDef);
+                    if (staticListProvider != null) {
+                        Optional<Boolean> option =  staticListProvider.isStale(longName, enumerationDef);
                         if (option.isPresent()) {
                             return option.get();
                         }
                     }
                     
-                    if (staticListProvider != null) {
-                        Optional<Boolean> option =  staticListProvider.isStale(longName, enumerationDef);
+                    if (dynamicListProvider != null) {
+                        Optional<Boolean> option =  dynamicListProvider.isStale(longName, enumerationDef);
                         if (option.isPresent()) {
                             return option.get();
                         }
@@ -84,15 +84,15 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager implement
 
                 @Override
                 protected EnumerationDef create(String longName, Object... params) throws Exception {
-                    if (dynamicListProvider != null) {
-                        Optional<EnumerationDef> optional = dynamicListProvider.getEnumerationDef(longName);
+                    if (staticListProvider != null) {
+                        Optional<EnumerationDef> optional = staticListProvider.getEnumerationDef(longName);
                         if (optional.isPresent()) {
                             return optional.get();
                         }
                     }
                     
-                    if (staticListProvider != null) {
-                        Optional<EnumerationDef> optional = staticListProvider.getEnumerationDef(longName);
+                    if (dynamicListProvider != null) {
+                        Optional<EnumerationDef> optional = dynamicListProvider.getEnumerationDef(longName);
                         if (optional.isPresent()) {
                             return optional.get();
                         }
