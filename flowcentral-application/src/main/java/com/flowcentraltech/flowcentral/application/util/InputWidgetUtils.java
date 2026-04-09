@@ -528,7 +528,7 @@ public final class InputWidgetUtils {
             case "application.enumreadonlytext":
             case "application.enumlistlabel":
                 String _references = entityFieldDef != null ? entityFieldDef.getReferences() : efa.getReferences();
-                if (_references.indexOf('.') > 0 && !StringUtils.isBlank(serviceId)) {
+                if (!StringUtils.isBlank(serviceId) && !StringUtils.isBlank(_references) && _references.indexOf('.') > 0) {
                     _references = _references + "." + serviceId; //Service ID as minor name
                 }
                 
@@ -544,7 +544,7 @@ public final class InputWidgetUtils {
                                 : entityFieldDef.getReferences();
                     }
 
-                    if (!StringUtils.isBlank(serviceId)) {
+                    if (!StringUtils.isBlank(serviceId) && !StringUtils.isBlank(reference)) {
                         reference = reference + "." + serviceId; //Service ID as minor name
                     }
                     
