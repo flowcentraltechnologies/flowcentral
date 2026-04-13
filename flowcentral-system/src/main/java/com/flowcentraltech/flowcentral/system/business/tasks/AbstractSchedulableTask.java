@@ -50,11 +50,21 @@ public abstract class AbstractSchedulableTask extends AbstractTask implements Sc
             environmentService.create(scheduledTaskHist);            
         }
         
-        doExecute(tm, input);
+        Exception ex = null;
+        try {
+            doExecute(tm, input);
+        } catch (Exception e) {
+            logError(e);
+            ex = e;
+        }
         
         if (QueryUtils.isValidLongCriteria(scheduledTaskId)) {
             scheduledTaskHist.setFinishedOn(environmentService.getNow());
-            if (tm.isExceptions()) {
+            
+            if (ex != null) {
+                scheduledTaskHist.setTaskStatus(TaskStatus.FAILED);
+                scheduledTaskHist.setErrorMsg(getExceptionMessage(LocaleType.APPLICATION, ex));
+            } else if (tm.isExceptions()) {
                 scheduledTaskHist.setTaskStatus(TaskStatus.FAILED);
                 scheduledTaskHist.setErrorMsg(getExceptionMessage(LocaleType.APPLICATION, tm.getExceptions()[0]));
             } else if (tm.isCancelled()) {
