@@ -4009,7 +4009,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final List<PortalEnumItem> items = new ArrayList<PortalEnumItem>();
             for (AppEnumerationItem appEnumerationItem : appEnumeration.getItemList()) {
                 items.add(new PortalEnumItem(appEnumerationItem.getCode(), appEnumerationItem.getLabel(),
-                        appEnumerationItem.getColor().name()));
+                        appEnumerationItem.getColor() != null ? appEnumerationItem.getColor().name(): null));
             }
 
             final String enumName = ApplicationNameUtils.ensureLongNameReference(applicationName,
