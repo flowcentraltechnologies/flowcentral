@@ -4088,12 +4088,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final TableDef tableDef = getTableDef(table);
                 final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
                 for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
+                    final EntityFieldDef entityFieldDef = entityDef.getFieldDef(tableColumnDef.getFieldName());
+                    final EntityFieldDef resolvedEntityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
+                            ? entityFieldDef.getResolvedTypeFieldDef()
+                            : entityFieldDef;
+                    final WidgetTypeDef widgetTypeDef = resolvedEntityFieldDef.getInputWidget() != null
+                            ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
+                            : getWidgetTypeDef(
+                                    InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
+                    final String renderer = InputWidgetUtils.constructPortalRenderer(widgetTypeDef, resolvedEntityFieldDef,
+                            serviceId);
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
                             resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
                                     : tableColumnDef.getLabel()),
                             tableColumnDef.getOrder() != null ? tableColumnDef.getOrder().name() : null,
-                            tableColumnDef.getLinkAct(), tableColumnDef.getRenderer(), tableColumnDef.getWidthRatio()));
+                            tableColumnDef.getLinkAct(), renderer, tableColumnDef.getWidthRatio()));
                 }
 
                 tables.put(table, new PortalTable(tableDef.getLongName(), tableDef.getDescription(),

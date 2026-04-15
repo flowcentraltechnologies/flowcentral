@@ -406,6 +406,11 @@ public final class InputWidgetUtils {
         return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, null, true);
     }
 
+    public static String constructPortalRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,  String serviceId)
+            throws UnifyException {
+        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, serviceId, true);
+    }
+
     private static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef, String reference,
             String serviceId, boolean renderer) throws UnifyException {
         if (widgetTypeDef != null) {
