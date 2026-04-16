@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -41,6 +42,8 @@ public class SearchInputs {
 
     private List<SearchInputEntry> entryList;
 
+    private List<SearchInputEntry> viewEntryList;
+
     public SearchInputs(AppletUtilities au, EntityDef entityDef, SearchInputsDef searchInputsDef)
             throws UnifyException {
         this(au, entityDef, searchInputsDef, Editable.TRUE);
@@ -51,6 +54,7 @@ public class SearchInputs {
         this.au = au;
         this.entityDef = entityDef;
         this.entryList = new ArrayList<SearchInputEntry>();
+        this.viewEntryList = Collections.unmodifiableList(entryList);
         loadEntryList(searchInputsDef, editable);
     }
 
@@ -63,8 +67,7 @@ public class SearchInputs {
     }
 
     public void clear() throws UnifyException {
-        entryList = new ArrayList<SearchInputEntry>();
-        entryList.add(new SearchInputEntry(au, entityDef, true));
+        entryList.clear();
     }
 
     public void moveUpEntry(int index) throws UnifyException {
@@ -94,7 +97,7 @@ public class SearchInputs {
     }
 
     public List<SearchInputEntry> getEntryList() {
-        return entryList;
+        return viewEntryList;
     }
 
     public int size() {

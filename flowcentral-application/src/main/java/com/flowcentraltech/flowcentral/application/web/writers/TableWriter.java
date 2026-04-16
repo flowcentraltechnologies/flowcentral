@@ -208,9 +208,10 @@ public class TableWriter extends AbstractControlWriter {
             String focusWidgetId = focusManagement ? (String) work.get("focusWidgetId") : null;
             TableStateOverride[] tableStateOverride = (TableStateOverride[]) work.get("overrides");
 
-            final int len = tableWidget.getValueListSize();
+            List<ValueStore> valueList = tableWidget.getValueList();
+            int len = valueList.size();
             for (int i = 0; i < len; i++) {
-                final ValueStore valueStore = tableWidget.getValueListStoreAt(i);                
+                ValueStore valueStore = valueList.get(i);                
                 boolean matchRowFocus = focusWidgetId == null && lastRowChangeInfo != null
                         && lastRowChangeInfo.matchRowIndex(i);
                 int columnIndex = 0;
@@ -649,7 +650,8 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
             final boolean isActionColumn = /* isContainerEditable && */tableWidget.isActionColumn();
             final boolean isMultiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
-            final int len = tableWidget.getValueListSize();
+            List<ValueStore> valueList = tableWidget.getValueList();
+            final int len = valueList.size();
             if (len == 0) {
                 writeNoRecordsFoundRow(writer, tableWidget, entryMode, isMultiSelect, isSerialNo);
             } else {
@@ -681,7 +683,7 @@ public class TableWriter extends AbstractControlWriter {
                 Section currentSection = null;
                 int sectionIndex = -1;
                 for (int i = 0; i < len; i++) {
-                    final ValueStore valueStore = tableWidget.getValueListStoreAt(i);
+                    ValueStore valueStore = valueList.get(i);
                     valueStore.setTempValue("parentReader", table.getParentReader());
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);

@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.DataTransferBlock;
 import com.tcdng.unify.web.ui.widget.Control;
 
@@ -28,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractValueListWidget<T> extends AbstractFlowCentralValueListMultiControl<T> {
+public abstract class AbstractValueListWidget<T> extends AbstractFlowCentralValueListMultiControl<ValueStore, T> {
 
     @Override
     public void populate(DataTransferBlock transferBlock) throws UnifyException {
@@ -38,19 +39,14 @@ public abstract class AbstractValueListWidget<T> extends AbstractFlowCentralValu
             final int index = ctrlBlock.getChildBlock() == null ? ctrlBlock.getItemIndex()
                     : ctrlBlock.getChildBlock().getItemIndex();
             if (index >= 0) {
-                control.setValueStore(getValueListStoreAt(index));
+                control.setValueStore(getValueList().get(index));
                 control.populate(ctrlBlock);
             }
         }
     }
 
     @Override
-    protected final T newValue(T item, int index) throws UnifyException {
-        return item;
-    }
-
-    @Override
-    protected void onCreateValueList(List<T> items) throws UnifyException {
+    protected void onCreateValueList(List<ValueStore> valueStoreList) throws UnifyException {
 
     }
 

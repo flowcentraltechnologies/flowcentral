@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Widget;
 
@@ -37,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * @since 4.1
  */
 @Component("fc-tabsheet")
-public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<TabSheetItem> {
+public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<ValueStore, TabSheetItem> {
 
     @Configurable
     private AppletUtilities appletUtilities;
@@ -80,9 +81,9 @@ public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<Tab
                     for (int i = 0; i < tabWidgets.length; i++) {
                         TabDef tabDef = tabDefList.get(i);
                         if (RendererType.STANDALONE_PANEL.equals(tabDef.getRendererType())) {
-                            tabWidgets[i] = addExternalChildStandalonePanel(tabDef.getTabRenderer(), getId() + i, "valObject");
+                            tabWidgets[i] = addExternalChildStandalonePanel(tabDef.getTabRenderer(), getId() + i);
                         } else {
-                            tabWidgets[i] = addExternalChildWidget(tabDef.getTabRenderer() +  " binding:valObject");
+                            tabWidgets[i] = addExternalChildWidget(tabDef.getTabRenderer());
                         }
                         
                         if (tabSheet.isExpanded()) {
@@ -126,12 +127,12 @@ public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<Tab
     }
 
     @Override
-    protected TabSheetItem newValue(TabSheetItem object, int index) throws UnifyException {
-        return object;
+    protected ValueStore newValue(TabSheetItem object, int index) throws UnifyException {
+        return createValueStore(object.getValObject(), index);
     }
 
     @Override
-    protected void onCreateValueList(List<TabSheetItem> items) throws UnifyException {
+    protected void onCreateValueList(List<ValueStore> arg0) throws UnifyException {
 
     }
 

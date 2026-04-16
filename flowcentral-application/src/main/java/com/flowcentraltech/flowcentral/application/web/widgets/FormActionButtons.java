@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.WriteWork;
 
@@ -32,7 +33,7 @@ import com.tcdng.unify.web.ui.widget.WriteWork;
  * @since 4.1
  */
 @Component("fc-formactionbuttons")
-public class FormActionButtons extends AbstractFlowCentralValueListMultiControl<FormActionDef> {
+public class FormActionButtons extends AbstractFlowCentralValueListMultiControl<ValueStore, FormActionDef> {
 
     public static final String WORK_SHOWACTIONSET = "showActionSet";
 
@@ -82,12 +83,12 @@ public class FormActionButtons extends AbstractFlowCentralValueListMultiControl<
     }
 
     @Override
-    protected FormActionDef newValue(FormActionDef item, int index) throws UnifyException {
-        return item;
+    protected ValueStore newValue(FormActionDef item, int index) throws UnifyException {
+        return createValueStore(item, index);
     }
 
     @Override
-    protected void onCreateValueList(List<FormActionDef> valueList) throws UnifyException {
+    protected void onCreateValueList(List<ValueStore> valueList) throws UnifyException {
 
     }
 }

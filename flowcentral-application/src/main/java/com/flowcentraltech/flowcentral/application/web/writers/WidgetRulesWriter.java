@@ -48,15 +48,16 @@ public class WidgetRulesWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, widgetRulesWidget);
         writer.write(">");
-        final int len = widgetRulesWidget.getValueListSize();
-        if (len > 0) {
+        List<ValueStore> valueStoreList = widgetRulesWidget.getValueList();
+        if (valueStoreList != null) {
             Control fieldSelectCtrl = widgetRulesWidget.getFieldSelectCtrl();
             Control widgetCtrl = widgetRulesWidget.getWidgetCtrl();
             Control deleteCtrl = widgetRulesWidget.getDeleteCtrl();
+            int len = valueStoreList.size();
 
             final String usesLabel = resolveSessionMessage("$m{widgetrules.renderedwith}");
             for (int i = 0; i < len; i++) {
-                final ValueStore lineValueStore = widgetRulesWidget.getValueListStoreAt(i);
+                ValueStore lineValueStore = valueStoreList.get(i);
                 WidgetRuleEntry fso = (WidgetRuleEntry) lineValueStore.getValueObject();
                 writer.write("<div class=\"line\">");
                 final String columnLabel = resolveSessionMessage("$m{widgetrules.field}");
@@ -79,14 +80,14 @@ public class WidgetRulesWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         WidgetRulesWidget widgetRulesWidget = (WidgetRulesWidget) widget;
+        List<ValueStore> valueStoreList = widgetRulesWidget.getValueList();
         List<String> csb = new ArrayList<String>();
-
-        final int len = widgetRulesWidget.getValueListSize();
-        if (len > 0) {
-           Control fieldSelectCtrl = widgetRulesWidget.getFieldSelectCtrl();
+        if (valueStoreList != null) {
+            Control fieldSelectCtrl = widgetRulesWidget.getFieldSelectCtrl();
             Control widgetCtrl = widgetRulesWidget.getWidgetCtrl();
+            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                final ValueStore lineValueStore = widgetRulesWidget.getValueListStoreAt(i);
+                ValueStore lineValueStore = valueStoreList.get(i);
                 WidgetRuleEntry fso = (WidgetRuleEntry) lineValueStore.getValueObject();
                 writeBehavior(writer, widgetRulesWidget, lineValueStore, fieldSelectCtrl);
                 csb.add(fieldSelectCtrl.getId());

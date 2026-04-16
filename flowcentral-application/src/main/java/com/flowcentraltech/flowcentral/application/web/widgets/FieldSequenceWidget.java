@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
 
@@ -113,6 +114,11 @@ public class FieldSequenceWidget extends AbstractValueListWidget<FieldSequenceEn
         }
 
         return Collections.emptyList();
+    }
+
+    @Override
+    protected ValueStore newValue(FieldSequenceEntry fieldSequenceEntry, int index) throws UnifyException {
+        return createValueStore(fieldSequenceEntry, index);
     }
 
 }

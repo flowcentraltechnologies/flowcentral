@@ -49,15 +49,15 @@ public class SetValuesWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, setValuesWidget);
         writer.write(">");
-        
-        final int len = setValuesWidget.getValueListSize();
-        if (len > 0) {
+        List<ValueStore> valueStoreList = setValuesWidget.getValueList();
+        if (valueStoreList != null) {
             Control fieldSelectCtrl = setValuesWidget.getFieldSelectCtrl();
             Control typeSelectCtrl = setValuesWidget.getTypeSelectCtrl();
             DynamicField paramCtrl = setValuesWidget.getParamCtrl();
             Control deleteCtrl = setValuesWidget.getDeleteCtrl();
+            int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                final ValueStore lineValueStore = setValuesWidget.getValueListStoreAt(i);
+                ValueStore lineValueStore = valueStoreList.get(i);
                 SetValueEntry svo = (SetValueEntry) lineValueStore.getValueObject();
                 writer.write("<div class=\"line\">");
                 writeValuesItem(writer, lineValueStore, fieldSelectCtrl);
@@ -77,7 +77,6 @@ public class SetValuesWriter extends AbstractControlWriter {
             }
 
         }
-        
         writer.write("</div>");
     }
 
@@ -86,14 +85,15 @@ public class SetValuesWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         SetValuesWidget setValuesWidget = (SetValuesWidget) widget;
+        List<ValueStore> valueStoreList = setValuesWidget.getValueList();
         List<String> csb = new ArrayList<String>();
-        final int len = setValuesWidget.getValueListSize();
-        if (len > 0) {
+        if (valueStoreList != null) {
             Control fieldSelectCtrl = setValuesWidget.getFieldSelectCtrl();
             Control typeSelectCtrl = setValuesWidget.getTypeSelectCtrl();
             DynamicField paramCtrl = setValuesWidget.getParamCtrl();
+            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                final ValueStore lineValueStore = setValuesWidget.getValueListStoreAt(i);
+                ValueStore lineValueStore = valueStoreList.get(i);
                 SetValueEntry svo = (SetValueEntry) lineValueStore.getValueObject();
                 writeBehavior(writer, setValuesWidget, lineValueStore, fieldSelectCtrl);
                 csb.add(fieldSelectCtrl.getId());

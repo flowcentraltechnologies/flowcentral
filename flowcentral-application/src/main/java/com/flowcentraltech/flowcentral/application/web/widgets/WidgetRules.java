@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -38,6 +39,8 @@ public class WidgetRules {
 
     private List<WidgetRuleEntry> entryList;
 
+    private List<WidgetRuleEntry> viewEntryList;
+
     public WidgetRules(EntityDef entityDef) {
         this(entityDef, Editable.TRUE);
     }
@@ -46,6 +49,7 @@ public class WidgetRules {
         this.entityDef = entityDef;
         this.entryList = new ArrayList<WidgetRuleEntry>();
         this.entryList.add(new WidgetRuleEntry(entityDef, rootEditable.isTrue()));
+        this.viewEntryList = Collections.unmodifiableList(entryList);
     }
 
     public WidgetRules(EntityDef entityDef, WidgetRulesDef widgetRulesDef) throws UnifyException {
@@ -55,6 +59,7 @@ public class WidgetRules {
     public WidgetRules(EntityDef entityDef, WidgetRulesDef widgetRulesDef, Editable editable) throws UnifyException {
         this.entityDef = entityDef;
         this.entryList = new ArrayList<WidgetRuleEntry>();
+        this.viewEntryList = Collections.unmodifiableList(entryList);
         loadEntryList(widgetRulesDef, editable);
     }
 
@@ -66,8 +71,7 @@ public class WidgetRules {
     }
 
     public void clear() throws UnifyException {
-        entryList = new ArrayList<WidgetRuleEntry>();
-        entryList.add(new WidgetRuleEntry(entityDef, true));
+        entryList.clear();
     }
 
     public void moveUpEntry(int index) throws UnifyException {
@@ -97,7 +101,7 @@ public class WidgetRules {
     }
 
     public List<WidgetRuleEntry> getEntryList() {
-        return entryList;
+        return viewEntryList;
     }
 
     public int size() {

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AbstractRecordCapture;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureColumnDef;
@@ -91,9 +93,10 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
             final boolean isTableEditable = table.isEditable();
             final boolean entryMode = table.isEditable();
 
-            final int vlen = tableWidget.getValueListSize();
+            final List<ValueStore> valueList = tableWidget.getValueList();
+            final int vlen = valueList.size();
             for (int i = 0; i < vlen; i++) {
-                final ValueStore valueStore = tableWidget.getValueListStoreAt(i);
+                ValueStore valueStore = valueList.get(i);
                 int columnIndex = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
@@ -208,16 +211,15 @@ public class RecordCaptureTableWriter extends AbstractControlWriter {
             final boolean entryMode = table.isEditable();
             final boolean isSerialNo = tableDef.isSerialNo();
             final int pageIndex = 1;
-            
-            final int vlen = tableWidget.getValueListSize();
+            List<ValueStore> valueList = tableWidget.getValueList();
+            final int vlen = valueList.size();
             if (vlen == 0) {
                 writeNoRecordsFoundRow(writer, tableWidget, entryMode, false, isSerialNo);
             } else {
                 final String even = "even";
                 final String odd = "odd";
                 for (int i = 0; i < vlen; i++) {
-                    final ValueStore valueStore = tableWidget.getValueListStoreAt(i);
-                    
+                    ValueStore valueStore = valueList.get(i);
                     // Normal row
                     final String rowClass = resolveRowStyleClass(i, true, even, odd);
                     writer.write("<tr");

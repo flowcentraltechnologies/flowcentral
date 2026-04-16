@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -41,15 +42,15 @@ public class PropertySequence {
 
     private List<PropertySequenceEntry> entryList;
 
-    private final boolean editable;
+    private List<PropertySequenceEntry> viewEntryList;
 
     public PropertySequence(PropertySequenceType type, EntityDef entityDef,
             PropertySequenceDef propertySequenceDef, Editable editable) throws UnifyException {
         this.type = type;
         this.entityDef = entityDef;
         this.entryList = new ArrayList<PropertySequenceEntry>();
-        this.editable = editable.isTrue();
-        loadEntryList(propertySequenceDef);
+        this.viewEntryList = Collections.unmodifiableList(entryList);
+        loadEntryList(propertySequenceDef, editable);
     }
 
     public int addSequenceEntry(String property, String label, Editable editable) throws UnifyException {
@@ -60,8 +61,7 @@ public class PropertySequence {
     }
 
     public void clear() throws UnifyException {
-        entryList = new ArrayList<PropertySequenceEntry>();
-        entryList.add(new PropertySequenceEntry(entityDef, type, editable));
+        entryList.clear();
     }
 
     public void moveUpEntry(int index) throws UnifyException {
@@ -95,7 +95,7 @@ public class PropertySequence {
     }
 
     public List<PropertySequenceEntry> getEntryList() {
-        return entryList;
+        return viewEntryList;
     }
 
     public int size() {
@@ -139,16 +139,16 @@ public class PropertySequence {
         return null;
     }
 
-    private void loadEntryList(PropertySequenceDef propertySequenceDef) throws UnifyException {
+    private void loadEntryList(PropertySequenceDef propertySequenceDef, Editable editable) throws UnifyException {
         if (propertySequenceDef != null) {
             for (PropertySequenceEntryDef propertySequenceEntryDef : propertySequenceDef.getSequenceList()) {
-                PropertySequenceEntry fso = new PropertySequenceEntry(entityDef, type, editable);
+                PropertySequenceEntry fso = new PropertySequenceEntry(entityDef, type, editable.isTrue());
                 setProperty(fso, propertySequenceEntryDef.getProperty(), propertySequenceEntryDef.getLabel());
                 entryList.add(fso);
             }
         }
 
-        entryList.add(new PropertySequenceEntry(entityDef, type, editable));
+        entryList.add(new PropertySequenceEntry(entityDef, type, editable.isTrue()));
     }
 
     private void setProperty(PropertySequenceEntry so, String property, String label) throws UnifyException {

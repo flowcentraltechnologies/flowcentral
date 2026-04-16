@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -38,8 +39,8 @@ public class FieldSequence {
 
     private List<FieldSequenceEntry> entryList;
 
-    private final boolean editable;
-    
+    private List<FieldSequenceEntry> viewEntryList;
+
     public FieldSequence(EntityDef entityDef, FieldSequenceDef fieldSequenceDef) throws UnifyException {
         this(entityDef, fieldSequenceDef, Editable.TRUE);
     }
@@ -48,8 +49,8 @@ public class FieldSequence {
             throws UnifyException {
         this.entityDef = entityDef;
         this.entryList = new ArrayList<FieldSequenceEntry>();
-        this.editable = editable.isTrue();
-        loadEntryList(fieldSequenceDef);
+        this.viewEntryList = Collections.unmodifiableList(entryList);
+        loadEntryList(fieldSequenceDef, editable);
     }
 
     public int addFieldSequenceEntry(String fieldName, String param, Editable editable) throws UnifyException {
@@ -60,8 +61,7 @@ public class FieldSequence {
     }
 
     public void clear() throws UnifyException {
-        entryList = new ArrayList<FieldSequenceEntry>();
-        entryList.add(new FieldSequenceEntry(entityDef, editable));
+        entryList.clear();
     }
 
     public void moveUpEntry(int index) throws UnifyException {
@@ -91,7 +91,7 @@ public class FieldSequence {
     }
 
     public List<FieldSequenceEntry> getEntryList() {
-        return entryList;
+        return viewEntryList;
     }
 
     public int size() {
@@ -135,17 +135,17 @@ public class FieldSequence {
         return null;
     }
 
-    private void loadEntryList(FieldSequenceDef fieldSequenceDef) throws UnifyException {
+    private void loadEntryList(FieldSequenceDef fieldSequenceDef, Editable editable) throws UnifyException {
         if (fieldSequenceDef != null) {
             for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
-                FieldSequenceEntry fso = new FieldSequenceEntry(entityDef, editable);
+                FieldSequenceEntry fso = new FieldSequenceEntry(entityDef, editable.isTrue());
                 setFieldAndInputParams(fso, fieldSequenceEntryDef.getFieldName(),
                         fieldSequenceEntryDef.getStandardFormatCode());
                 entryList.add(fso);
             }
         }
 
-        entryList.add(new FieldSequenceEntry(entityDef, editable));
+        entryList.add(new FieldSequenceEntry(entityDef, editable.isTrue()));
     }
 
     private void setFieldAndInputParams(FieldSequenceEntry fso, String fieldName, String param) throws UnifyException {

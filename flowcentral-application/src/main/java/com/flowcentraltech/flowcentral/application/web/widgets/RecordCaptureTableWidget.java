@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.data.RecordCaptureTableDef;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.DataTransferBlock;
 import com.tcdng.unify.web.ui.widget.Control;
 
@@ -35,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  */
 @Component("fc-recordcapturetable")
 public class RecordCaptureTableWidget
-        extends AbstractFlowCentralValueListMultiControl<AbstractRecordCapture> {
+        extends AbstractFlowCentralValueListMultiControl<ValueStore, AbstractRecordCapture> {
 
     private RecordCaptureTable<? extends AbstractRecordCapture> oldTable;
 
@@ -49,7 +50,7 @@ public class RecordCaptureTableWidget
             DataTransferBlock childBlock = transferBlock.getChildBlock();
             ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childBlock.getId());
             Control control = (Control) childWidgetInfo.getWidget();
-            control.setValueStore(getValueListStoreAt(childBlock.getItemIndex()));
+            control.setValueStore(getValueList().get(childBlock.getItemIndex()));
             control.populate(childBlock);
         }
     }
@@ -92,12 +93,12 @@ public class RecordCaptureTableWidget
     }
 
     @Override
-    protected AbstractRecordCapture newValue(AbstractRecordCapture item, int index) throws UnifyException {
-        return item;
+    protected ValueStore newValue(AbstractRecordCapture item, int index) throws UnifyException {
+        return createValueStore(item, index);
     }
 
     @Override
-    protected void onCreateValueList(List<AbstractRecordCapture> valueList) throws UnifyException {
+    protected void onCreateValueList(List<ValueStore> valueList) throws UnifyException {
 
     }
 

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetWidget;
@@ -45,14 +47,14 @@ public class TabSheetWriter extends AbstractControlWriter {
         writeTagAttributes(writer, tabSheetWidget);
         writer.write(">");
         writer.write("<div>");
-        
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
         if (tabSheet != null && tabSheet.isInStateForDisplay()) {
-            final int len = tabSheetWidget.getValueListSize();
+            final List<TabDef> tabDefList = tabSheet.getTabDefList();
+            final int len = tabDefList.size();
             if (tabSheet.isExpanded()) {
                 for (int i = 0; i < len; i++) {
-                    if (tabSheetWidget.getValueListItem(i).isVisible()) {
-                        final TabDef tabDef = tabSheet.getTabDef(i);
+                    if (tabSheet.getTabSheetItem(i).isVisible()) {
+                        TabDef tabDef = tabDefList.get(i);
                         writer.write("<div class=\"ttabx\">");
                         writer.write("<div class=\"ttabxc\">");
                         writer.write("<span>");
@@ -63,7 +65,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                         writer.write("<div class=\"ttabxb\">");
                         Widget tabWidget = tabSheetWidget.getTabWidget(i);
                         if (tabWidget != null) {
-                            tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(i));
+                            tabWidget.setValueStore(tabSheetWidget.getValueList().get(i));
                             writer.writeStructureAndContent(tabWidget);
                         }
                         writer.write("</div>");
@@ -75,8 +77,8 @@ public class TabSheetWriter extends AbstractControlWriter {
                 final String tabPrefix = tabSheetWidget.getPrefixedId("tab_");
                 int currentIndex = tabSheet.getCurrentTabIndex();
                 for (int i = 0; i < len; i++) {
-                    if (tabSheetWidget.getValueListItem(i).isVisible()) {
-                        final TabDef tabDef = tabSheet.getTabDef(i);
+                    if (tabSheet.getTabSheetItem(i).isVisible()) {
+                        TabDef tabDef = tabDefList.get(i);
                         final String tabLabel = resolveSessionMessage(tabDef.getTabLabel());
                         MessageType messageType = tabSheet.getReviewMessageType(tabDef.getTabName());
                         writer.write("<li id=\"").write(tabPrefix).write(i).write("\" class=\"");
@@ -102,7 +104,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                 writer.write("</div><div class=\"tbody\">");
                 Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
                 if (tabWidget != null) {
-                    tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(tabSheet.getCurrentTabIndex()));
+                    tabWidget.setValueStore(tabSheetWidget.getValueList().get(tabSheet.getCurrentTabIndex()));
                     writer.writeStructureAndContent(tabWidget);
                 }
             }
@@ -121,22 +123,22 @@ public class TabSheetWriter extends AbstractControlWriter {
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
         if (tabSheet != null && tabSheet.isInStateForDisplay()) {
             if (tabSheet.isExpanded()) {
-                final int len = tabSheetWidget.getValueListSize();
+                final int len = tabSheet.getTabCount();
                 for (int i = 0; i < len; i++) {
-                    if (tabSheetWidget.getValueListItem(i).isVisible()) {
+                    if (tabSheet.getTabSheetItem(i).isVisible()) {
                         Widget tabWidget = tabSheetWidget.getTabWidget(i);
                         if (tabWidget != null) {
-                            tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(i));
+                            tabWidget.setValueStore(tabSheetWidget.getValueList().get(i));
                             writer.writeBehavior(tabWidget);
                             addPageAlias(tabSheetWidget.getId(), tabWidget);
                         }
                     }
                 }
             } else {
-                if (tabSheetWidget.getValueListItem(tabSheet.getCurrentTabIndex()).isVisible()) {
+                if (tabSheet.getTabSheetItem(tabSheet.getCurrentTabIndex()).isVisible()) {
                     Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
                     if (tabWidget != null) {
-                        tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(tabSheet.getCurrentTabIndex()));
+                        tabWidget.setValueStore(tabSheetWidget.getValueList().get(tabSheet.getCurrentTabIndex()));
                         writer.writeBehavior(tabWidget);
                         addPageAlias(tabSheetWidget.getId(), tabWidget);
                     }

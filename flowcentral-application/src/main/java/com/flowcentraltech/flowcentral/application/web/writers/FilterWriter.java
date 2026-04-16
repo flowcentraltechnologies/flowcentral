@@ -49,9 +49,8 @@ public class FilterWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, filterWidget);
         writer.write(">");
-
-        final int len = filterWidget.getValueListSize();
-        if (len > 0) {
+        List<ValueStore> valueStoreList = filterWidget.getValueList();
+        if (valueStoreList != null) {
             Control fieldSelectCtrl = filterWidget.getFieldSelectCtrl();
             DynamicField conditionTypeCtrl = filterWidget.getConditionTypeCtrl();
             DynamicField paramCtrlA = filterWidget.getParamCtrlA();
@@ -62,9 +61,9 @@ public class FilterWriter extends AbstractControlWriter {
             Control orCtrl = filterWidget.getOrCtrl();
             Control addCtrl = filterWidget.getAddCtrl();
             Control deleteCtrl = filterWidget.getDeleteCtrl();
-
+            int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                final ValueStore lineValueStore = filterWidget.getValueListStoreAt(i);
+                ValueStore lineValueStore = valueStoreList.get(i);
                 FilterCondition fo = (FilterCondition) lineValueStore.getValueObject();
                 writer.write("<div class=\"line\">");
                 // Write depth tabs
@@ -123,18 +122,17 @@ public class FilterWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         FilterWidget filterWidget = (FilterWidget) widget;
-
+        List<ValueStore> valueStoreList = filterWidget.getValueList();
         List<String> csb = new ArrayList<String>();
-        final int len = filterWidget.getValueListSize();
-        if (len > 0) {
+        if (valueStoreList != null) {
             Control fieldSelectCtrl = filterWidget.getFieldSelectCtrl();
             DynamicField conditionTypeCtrl = filterWidget.getConditionTypeCtrl();
             DynamicField paramCtrlA = filterWidget.getParamCtrlA();
             DynamicField paramCtrlB = filterWidget.getParamCtrlB();
             Control fieldParamCtrlA = filterWidget.getFieldParamCtrlA();
-
+            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                final ValueStore lineValueStore = filterWidget.getValueListStoreAt(i);
+                ValueStore lineValueStore = valueStoreList.get(i);
                 FilterCondition fo = (FilterCondition) lineValueStore.getValueObject();
                 writeBehavior(writer, filterWidget, lineValueStore, fieldSelectCtrl);
                 csb.add(fieldSelectCtrl.getId());
