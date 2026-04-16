@@ -92,7 +92,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
-        extends AbstractFlowCentralValueListMultiControl<ValueStore, U> implements TableSelect<U>, TargetControlHandler {
+        extends AbstractFlowCentralValueListMultiControl<U> implements TableSelect<U>, TargetControlHandler {
 
     public static final int ATTACH_SELECTED_INDEX = 0;
 
@@ -179,7 +179,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childBlock.getId());
             if (childWidgetInfo.isPanel()) {
                 StandalonePanel summaryPanel = (StandalonePanel) childWidgetInfo.getWidget();
-                summaryPanel.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                summaryPanel.setValueStore(getValueListStoreAt(childBlock.getItemIndex()));
                 summaryPanel.populate(childBlock);
             } else {
                 Control control = (Control) childWidgetInfo.getWidget();
@@ -191,10 +191,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                     sortColumnCtrl.populate(childBlock);
                 } else if (control == uploadCtrl) {
                     childBlock = childBlock.getChildBlock();
-                    uploadCtrl.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                    uploadCtrl.setValueStore(getValueListStoreAt(childBlock.getItemIndex()));
                     uploadCtrl.populate(childBlock);
                 } else {
-                    control.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                    control.setValueStore(getValueListStoreAt(childBlock.getItemIndex()));
                     control.populate(childBlock);
                 }
             }
@@ -505,10 +505,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public void validate(EvaluationMode evaluationMode, FormValidationErrors errors) throws UnifyException {
-        List<ValueStore> valueList = getValueList();
-        final int len = valueList.size();
+        final int len = getValueListSize();
         for (int i = 0; i < len; i++) {
-            ValueStore valueStore = valueList.get(i);
+            final ValueStore valueStore = getValueListStoreAt(i);
             SummaryPanel summaryPanel = getSummaryPanel(i);
             if (summaryPanel != null) {
                 summaryPanel.setValueStore(valueStore);
@@ -761,22 +760,20 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             if (view || edit) {
                 final String viewBinding = getViewButtonCaptionBinding();
                 final String editBinding = getEditButtonCaptionBinding();
-                for (ValueStore valueStore : getValueList()) {
-                    if (view) {
-                        valueStore.setTempValue(viewBinding, viewCaption);
-                    }
+                if (view) {
+                    getValueListStore().setTempValue(viewBinding, viewCaption);
+                }
 
-                    if (edit) {
-                        valueStore.setTempValue(editBinding, editCaption);
-                    }
+                if (edit) {
+                    getValueListStore().setTempValue(editBinding, editCaption);
                 }
             }
         }
     }
 
     @Override
-    public List<ValueStore> getValueList() throws UnifyException {
-        List<ValueStore> valueList = super.getValueList();
+    public List<U> getValueList() throws UnifyException {
+        List<U> valueList = super.getValueList();
         if (valueList == null) {
             summaryPanelList = null;
         } else {
@@ -889,12 +886,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
     
     @Override
-    protected ValueStore newValue(U object, int index) throws UnifyException {
-        return createValueStore(object, index);
+    protected U newValue(U object, int index) throws UnifyException {
+        return object;
     }
 
     @Override
-    protected void onCreateValueList(List<ValueStore> valueStoreList) throws UnifyException {
+    protected void onCreateValueList(List<U> valueList) throws UnifyException {
 
     }
 
@@ -911,7 +908,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     protected Class<U> getItemClass() {
         return itemClass;
     }
-
+    
     private String getDetails() throws UnifyException {
         return oldTable != null && oldTable.getTableDef().isWithDetailsPanelName()
                 ? oldTable.getTableDef().getDetailsPanelName()
@@ -922,7 +919,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         int target = getRequestTarget(int.class);
         T table = getTable();
         if (table != null) {
-            table.applyFixedAction(getValueList().get(target), target, fixedActionType);
+            table.applyFixedAction(getValueListStoreAt(target), target, fixedActionType);
             table.reset();
             table.clearSelected();
         }
@@ -932,7 +929,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         T table = getTable();
         if (table != null) {
             for (int i : table.getSelectedRows()) {
-                table.applyFixedAction(getValueList().get(i), i, fixedActionType);
+                table.applyFixedAction(getValueListStoreAt(i), i, fixedActionType);
             }
 
             table.reset();
@@ -943,9 +940,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     private void applyFixedActionAll(FixedRowActionType fixedActionType) throws UnifyException {
         T table = getTable();
         if (table != null) {
-            final int len = getValueList().size();
+            final int len = getValueListSize();
             for (int i = 0; i < len; i++) {
-                table.applyFixedAction(getValueList().get(i), i, fixedActionType);
+                table.applyFixedAction(getValueListStoreAt(i), i, fixedActionType);
             }
 
             table.reset();

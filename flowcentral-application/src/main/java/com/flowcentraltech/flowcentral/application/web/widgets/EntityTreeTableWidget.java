@@ -26,7 +26,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.Widget;
@@ -39,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @Component("fc-entitytreetable")
 @UplAttributes({ @UplAttribute(name = "multiSelDependentList", type = UplElementReferences.class) })
-public class EntityTreeTableWidget extends AbstractFlowCentralValueListMultiControl<ValueStore, EntityTreeItem> {
+public class EntityTreeTableWidget extends AbstractFlowCentralValueListMultiControl<EntityTreeItem> {
 
     private Control selectCtrl;
 
@@ -143,12 +142,12 @@ public class EntityTreeTableWidget extends AbstractFlowCentralValueListMultiCont
     }
 
     @Override
-    protected ValueStore newValue(EntityTreeItem item, int index) throws UnifyException {
-        return createValueStore(item, index);
+    protected EntityTreeItem newValue(EntityTreeItem item, int index) throws UnifyException {
+        return item;
     }
 
     @Override
-    protected void onCreateValueList(List<ValueStore> valueStoreList) throws UnifyException {
+    protected void onCreateValueList(List<EntityTreeItem> valueStoreList) throws UnifyException {
 
     }
 }

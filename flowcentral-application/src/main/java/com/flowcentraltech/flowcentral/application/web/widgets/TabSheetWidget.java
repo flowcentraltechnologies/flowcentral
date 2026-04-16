@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Widget;
 
@@ -38,7 +37,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * @since 4.1
  */
 @Component("fc-tabsheet")
-public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<ValueStore, TabSheetItem> {
+public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<TabSheetItem> {
 
     @Configurable
     private AppletUtilities appletUtilities;
@@ -127,12 +126,12 @@ public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<Val
     }
 
     @Override
-    protected ValueStore newValue(TabSheetItem object, int index) throws UnifyException {
-        return createValueStore(object.getValObject(), index);
+    protected TabSheetItem newValue(TabSheetItem object, int index) throws UnifyException {
+        return object;
     }
 
     @Override
-    protected void onCreateValueList(List<ValueStore> arg0) throws UnifyException {
+    protected void onCreateValueList(List<TabSheetItem> items) throws UnifyException {
 
     }
 

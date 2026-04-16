@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractValueListWidget<T> extends AbstractFlowCentralValueListMultiControl<T, T> {
+public abstract class AbstractValueListWidget<T> extends AbstractFlowCentralValueListMultiControl<T> {
 
     @Override
     public void populate(DataTransferBlock transferBlock) throws UnifyException {

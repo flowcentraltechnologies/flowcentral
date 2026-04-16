@@ -26,7 +26,7 @@ import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractFlowCentralValueListMultiControl<T, U> extends AbstractValueListMultiControl<T, U> {
+public abstract class AbstractFlowCentralValueListMultiControl<T> extends AbstractValueListMultiControl<T, T> {
 
     protected final boolean isEnterprise() throws UnifyException {
         return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
