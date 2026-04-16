@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetWidget;
@@ -47,14 +45,14 @@ public class TabSheetWriter extends AbstractControlWriter {
         writeTagAttributes(writer, tabSheetWidget);
         writer.write(">");
         writer.write("<div>");
+        
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
         if (tabSheet != null && tabSheet.isInStateForDisplay()) {
-            final List<TabDef> tabDefList = tabSheet.getTabDefList();
-            final int len = tabDefList.size();
+            final int len = tabSheetWidget.getValueListSize();
             if (tabSheet.isExpanded()) {
                 for (int i = 0; i < len; i++) {
-                    if (tabSheet.getTabSheetItem(i).isVisible()) {
-                        TabDef tabDef = tabDefList.get(i);
+                    if (tabSheetWidget.getValueListItem(i).isVisible()) {
+                        final TabDef tabDef = tabSheet.getTabDef(i);
                         writer.write("<div class=\"ttabx\">");
                         writer.write("<div class=\"ttabxc\">");
                         writer.write("<span>");
@@ -77,8 +75,8 @@ public class TabSheetWriter extends AbstractControlWriter {
                 final String tabPrefix = tabSheetWidget.getPrefixedId("tab_");
                 int currentIndex = tabSheet.getCurrentTabIndex();
                 for (int i = 0; i < len; i++) {
-                    if (tabSheet.getTabSheetItem(i).isVisible()) {
-                        TabDef tabDef = tabDefList.get(i);
+                    if (tabSheetWidget.getValueListItem(i).isVisible()) {
+                        final TabDef tabDef = tabSheet.getTabDef(i);
                         final String tabLabel = resolveSessionMessage(tabDef.getTabLabel());
                         MessageType messageType = tabSheet.getReviewMessageType(tabDef.getTabName());
                         writer.write("<li id=\"").write(tabPrefix).write(i).write("\" class=\"");
@@ -123,9 +121,9 @@ public class TabSheetWriter extends AbstractControlWriter {
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
         if (tabSheet != null && tabSheet.isInStateForDisplay()) {
             if (tabSheet.isExpanded()) {
-                final int len = tabSheet.getTabCount();
+                final int len = tabSheetWidget.getValueListSize();
                 for (int i = 0; i < len; i++) {
-                    if (tabSheet.getTabSheetItem(i).isVisible()) {
+                    if (tabSheetWidget.getValueListItem(i).isVisible()) {
                         Widget tabWidget = tabSheetWidget.getTabWidget(i);
                         if (tabWidget != null) {
                             tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(i));
@@ -135,7 +133,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                     }
                 }
             } else {
-                if (tabSheet.getTabSheetItem(tabSheet.getCurrentTabIndex()).isVisible()) {
+                if (tabSheetWidget.getValueListItem(tabSheet.getCurrentTabIndex()).isVisible()) {
                     Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
                     if (tabWidget != null) {
                         tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(tabSheet.getCurrentTabIndex()));

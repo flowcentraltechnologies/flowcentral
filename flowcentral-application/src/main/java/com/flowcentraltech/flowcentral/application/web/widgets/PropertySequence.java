@@ -118,7 +118,6 @@ public class PropertySequence {
         }
 
         PropertySequenceEntry last = entryList.get(entryList.size() - 1);
-        System.out.println("@kawasaki: last.getProperty() = " + last.getProperty());
         if (last.isWithProperty()) {
             entryList.add(new PropertySequenceEntry(entityDef, type, true));
         }

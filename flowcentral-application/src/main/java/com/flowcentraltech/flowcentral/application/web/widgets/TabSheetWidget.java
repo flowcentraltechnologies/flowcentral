@@ -80,9 +80,9 @@ public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<Tab
                     for (int i = 0; i < tabWidgets.length; i++) {
                         TabDef tabDef = tabDefList.get(i);
                         if (RendererType.STANDALONE_PANEL.equals(tabDef.getRendererType())) {
-                            tabWidgets[i] = addExternalChildStandalonePanel(tabDef.getTabRenderer(), getId() + i);
+                            tabWidgets[i] = addExternalChildStandalonePanel(tabDef.getTabRenderer(), getId() + i, "valObject");
                         } else {
-                            tabWidgets[i] = addExternalChildWidget(tabDef.getTabRenderer());
+                            tabWidgets[i] = addExternalChildWidget(tabDef.getTabRenderer() +  " binding:valObject");
                         }
                         
                         if (tabSheet.isExpanded()) {
