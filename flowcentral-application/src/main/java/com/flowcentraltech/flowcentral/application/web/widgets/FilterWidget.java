@@ -23,7 +23,6 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.constant.Editable;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
@@ -183,11 +182,6 @@ public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(FilterCondition filterCondition, int index) throws UnifyException {
-        return createValueStore(filterCondition, index);
     }
 
     private void ensureFieldParamControls() throws UnifyException {

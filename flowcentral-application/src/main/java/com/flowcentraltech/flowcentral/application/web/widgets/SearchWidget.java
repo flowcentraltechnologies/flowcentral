@@ -22,7 +22,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
 
@@ -78,11 +77,6 @@ public class SearchWidget extends AbstractValueListWidget<SearchEntry> {
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(SearchEntry searchEntry, int index) throws UnifyException {
-        return createValueStore(searchEntry, index);
     }
 
 }

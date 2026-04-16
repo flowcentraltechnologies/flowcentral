@@ -518,8 +518,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public DetailsPanel getDetailsPanel(int index) throws UnifyException {
-        final List<ValueStore> valueList = super.getValueList();
-        if (valueList == null) {
+        final int len = getValueListSize();
+        if (len == 0) {
             detailsPanelList = null;
         } else {
             detailsPanelList = Collections.emptyList();
@@ -528,7 +528,6 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 final T table = getValue(tableClass);
                 detailsPanelList = new ArrayList<DetailsPanel>();
                 if (table != null && table.isExpandAllDetails()) {
-                    final int len = valueList.size();
                     for (int i = 0; i < len; i++) {
                         DetailsPanel detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details,
                                 getId() + "_" + detailsPanelList.size() + "_dtl");

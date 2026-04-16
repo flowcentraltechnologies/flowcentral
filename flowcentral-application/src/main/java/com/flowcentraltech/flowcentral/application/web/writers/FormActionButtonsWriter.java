@@ -71,8 +71,8 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
         final Set<String> showActionSet = (Set<String>) formActionButtons.getWriteWork()
                 .get(FormActionButtons.WORK_SHOWACTIONSET);
         Control actionCtrl = formActionButtons.getActionCtrl();
-        for (ValueStore valueStore : formActionButtons.getValueList()) {
-            FormActionDef formActionDef = (FormActionDef) valueStore.getValueObject();
+        for (ValueStore valueStore : formActionButtons.getValueListStore()) {
+            FormActionDef formActionDef = (FormActionDef) valueStore.getValueObjectAtDataIndex();
             if (formActionDef.isButtonType()) {
                 if (formActionDef.isWithCondition()) {
                     ObjectFilter filter = formActionDef.getOnCondition().getObjectFilter(formContext.getEntityDef(),
@@ -114,8 +114,8 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
             Control actionCtrl = formActionButtons.getActionCtrl();
             final Set<String> showActionSet = (Set<String>) formActionButtons.getWriteWork()
                     .get(FormActionButtons.WORK_SHOWACTIONSET);
-            for (ValueStore valueStore : formActionButtons.getValueList()) {
-                FormActionDef formActionDef = (FormActionDef) valueStore.getValueObject();
+            for (ValueStore valueStore : formActionButtons.getValueListStore()) {
+                FormActionDef formActionDef = (FormActionDef) valueStore.getValueObjectAtDataIndex();
                 if (showActionSet.contains(formActionDef.getName())) {
                     String confirmation = formActionDef.isWithPolicy()
                             ? getComponent(FormActionPolicy.class, formActionDef.getPolicy()).getConfirmation()

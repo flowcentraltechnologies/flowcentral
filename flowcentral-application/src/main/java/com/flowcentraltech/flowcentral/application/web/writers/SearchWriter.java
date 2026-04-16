@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntry;
@@ -50,12 +49,12 @@ public class SearchWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, searchWidget);
         writer.write(">");
-        List<ValueStore> valueStoreList = searchWidget.getValueList();
-        if (valueStoreList != null) {
-            SearchEntries searchEntries = searchWidget.getSearchEntries();
+        
+        final int len = searchWidget.getValueListSize();
+        if (len > 0) {
+           SearchEntries searchEntries = searchWidget.getSearchEntries();
             DynamicField paramCtrl = searchWidget.getParamCtrl();
             final String captionSuffix = searchWidget.getCaptionSuffix();
-            final int len = valueStoreList.size();
             final boolean vertical = searchWidget.isVertical();
             final int columns = !vertical && searchEntries.getColumns() > 0 ? searchEntries.getColumns() : 1;
             writer.write("<div class=\"sftable\">");
@@ -68,7 +67,7 @@ public class SearchWriter extends AbstractControlWriter {
                 int j = 0;
                 for (j = 0; j < columns && i < len; j++, i++) {
                     writer.write("<div class=\"sfcol\">");
-                    ValueStore itemValueStore = valueStoreList.get(i);
+                    final ValueStore itemValueStore = searchWidget.getValueListStoreAt(i);
                     writeFieldCell(writer, searchEntries, itemValueStore, paramCtrl, captionSuffix, vertical);
                     writer.write("</div>");
                 }
@@ -84,6 +83,7 @@ public class SearchWriter extends AbstractControlWriter {
             writer.write("</div>");
 
         }
+        
         writer.write("</div>");
     }
 
@@ -91,13 +91,12 @@ public class SearchWriter extends AbstractControlWriter {
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
             throws UnifyException {
         SearchWidget searchWidget = (SearchWidget) widget;
-        List<ValueStore> valueStoreList = searchWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = searchWidget.getValueListSize();
+        if (len > 0) {
             final String searchId = searchWidget.getId();
             DynamicField paramCtrlA = searchWidget.getParamCtrl();
-            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore inputValueStore = valueStoreList.get(i);
+                final ValueStore inputValueStore = searchWidget.getValueListStoreAt(i);
                 writeBehavior(writer, searchId, handlers, inputValueStore, paramCtrlA);
             }
         }

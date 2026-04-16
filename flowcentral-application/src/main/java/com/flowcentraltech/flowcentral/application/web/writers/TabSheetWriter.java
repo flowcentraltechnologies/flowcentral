@@ -65,7 +65,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                         writer.write("<div class=\"ttabxb\">");
                         Widget tabWidget = tabSheetWidget.getTabWidget(i);
                         if (tabWidget != null) {
-                            tabWidget.setValueStore(tabSheetWidget.getValueList().get(i));
+                            tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(i));
                             writer.writeStructureAndContent(tabWidget);
                         }
                         writer.write("</div>");
@@ -104,7 +104,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                 writer.write("</div><div class=\"tbody\">");
                 Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
                 if (tabWidget != null) {
-                    tabWidget.setValueStore(tabSheetWidget.getValueList().get(tabSheet.getCurrentTabIndex()));
+                    tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(tabSheet.getCurrentTabIndex()));
                     writer.writeStructureAndContent(tabWidget);
                 }
             }
@@ -128,7 +128,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                     if (tabSheet.getTabSheetItem(i).isVisible()) {
                         Widget tabWidget = tabSheetWidget.getTabWidget(i);
                         if (tabWidget != null) {
-                            tabWidget.setValueStore(tabSheetWidget.getValueList().get(i));
+                            tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(i));
                             writer.writeBehavior(tabWidget);
                             addPageAlias(tabSheetWidget.getId(), tabWidget);
                         }
@@ -138,7 +138,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                 if (tabSheet.getTabSheetItem(tabSheet.getCurrentTabIndex()).isVisible()) {
                     Widget tabWidget = tabSheetWidget.getCurrentTabWidget();
                     if (tabWidget != null) {
-                        tabWidget.setValueStore(tabSheetWidget.getValueList().get(tabSheet.getCurrentTabIndex()));
+                        tabWidget.setValueStore(tabSheetWidget.getValueListStoreAt(tabSheet.getCurrentTabIndex()));
                         writer.writeBehavior(tabWidget);
                         addPageAlias(tabSheetWidget.getId(), tabWidget);
                     }

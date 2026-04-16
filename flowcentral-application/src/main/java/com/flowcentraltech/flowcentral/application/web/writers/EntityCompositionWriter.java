@@ -48,8 +48,8 @@ public class EntityCompositionWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, entityCompositionWidget);
         writer.write(">");
-        List<ValueStore> valueStoreList = entityCompositionWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = entityCompositionWidget.getValueListSize();
+        if (len > 0) {
             final Control entityNameCtrl = entityCompositionWidget.getEntityNameCtrl();
             final Control entityTableCtrl = entityCompositionWidget.getEntityTableCtrl();
             final Control fieldTypeCtrl = entityCompositionWidget.getFieldTypeCtrl();
@@ -58,7 +58,6 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final Control columnCtrl = entityCompositionWidget.getColumnCtrl();
             final Control referencesCtrl = entityCompositionWidget.getReferencesCtrl();
             
-            final int len = valueStoreList.size();
             final String entityLabel = resolveSessionMessage("$m{entitycomposition.entity}");
             final String tableLabel = resolveSessionMessage("$m{entitycomposition.table}");
             final String fieldLabel = resolveSessionMessage("$m{entitycomposition.field}");
@@ -67,7 +66,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final String colLabel = resolveSessionMessage("$m{entitycomposition.column}");
             final String referencesLabel = resolveSessionMessage("$m{entitycomposition.references}");
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
+                final ValueStore lineValueStore = entityCompositionWidget.getValueListStoreAt(i);
                 EntityCompositionEntry entry = (EntityCompositionEntry) lineValueStore.getValueObject();
                 final DynamicEntityFieldType fieldType = entry.getFieldType();
                 writer.write("<div");
@@ -131,9 +130,9 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         final EntityCompositionWidget entityCompositionWidget = (EntityCompositionWidget) widget;
-        List<ValueStore> valueStoreList = entityCompositionWidget.getValueList();
         List<String> csb = new ArrayList<String>();
-        if (valueStoreList != null) {
+        final int len = entityCompositionWidget.getValueListSize();
+        if (len > 0) {
             final Control entityNameCtrl = entityCompositionWidget.getEntityNameCtrl();
             final Control entityTableCtrl = entityCompositionWidget.getEntityTableCtrl();
             final Control fieldTypeCtrl = entityCompositionWidget.getFieldTypeCtrl();
@@ -142,9 +141,8 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final Control columnCtrl = entityCompositionWidget.getColumnCtrl();
             final Control referencesCtrl = entityCompositionWidget.getReferencesCtrl();
 
-            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
+                final ValueStore lineValueStore = entityCompositionWidget.getValueListStoreAt(i);
                 EntityCompositionEntry entry = (EntityCompositionEntry) lineValueStore.getValueObject();
 
                 final DynamicEntityFieldType fieldType = entry.getFieldType();

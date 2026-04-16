@@ -50,7 +50,7 @@ public class RecordCaptureTableWidget
             DataTransferBlock childBlock = transferBlock.getChildBlock();
             ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childBlock.getId());
             Control control = (Control) childWidgetInfo.getWidget();
-            control.setValueStore(getValueList().get(childBlock.getItemIndex()));
+            control.setValueStore(getValueListStoreAt(childBlock.getItemIndex()));
             control.populate(childBlock);
         }
     }

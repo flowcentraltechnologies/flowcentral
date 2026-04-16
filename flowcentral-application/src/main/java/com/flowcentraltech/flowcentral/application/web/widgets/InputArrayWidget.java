@@ -22,7 +22,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
 
@@ -84,11 +83,6 @@ public class InputArrayWidget extends AbstractValueListWidget<InputArrayEntry> {
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(InputArrayEntry inputArrayEntry, int index) throws UnifyException {
-        return createValueStore(inputArrayEntry, index);
     }
 
 }

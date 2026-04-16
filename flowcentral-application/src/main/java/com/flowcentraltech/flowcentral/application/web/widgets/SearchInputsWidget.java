@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
@@ -146,11 +145,6 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(SearchInputEntry searchInputEntry, int index) throws UnifyException {
-        return createValueStore(searchInputEntry, index);
     }
 
 }
