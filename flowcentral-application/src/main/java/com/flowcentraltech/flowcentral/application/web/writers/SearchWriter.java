@@ -105,7 +105,7 @@ public class SearchWriter extends AbstractControlWriter {
     @SuppressWarnings("unchecked")
     private void writeFieldCell(ResponseWriter writer, SearchEntries searchEntries, ValueStore lineValueStore,
             Control ctrl, String captionSuffix, boolean vertical) throws UnifyException {
-        SearchEntry searchEntry = (SearchEntry) lineValueStore.getValueObject();
+        SearchEntry searchEntry = (SearchEntry) lineValueStore.getValueObjectAtDataIndex();
         writer.write("<div class=\"sffield\">");
         writer.write("<div class=\"sffieldrow\">");
 
