@@ -106,12 +106,16 @@ import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplet;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalDashboard;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityAttachment;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalEnum;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalEnumItem;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalForm;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalFormElement;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalReference;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReport;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTableColumn;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
@@ -331,6 +335,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private PortalWorkflowProvider portalWorkflowProvider;
 
     @Configurable
+    private PortalReportProvider portalReportProvider;
+
+    @Configurable
+    private PortalDashboardProvider portalDashboardProvider;
+
+    @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Configurable
@@ -353,7 +363,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private ApplicationExternalAccessibilityProvider appExternalAccessibilityProvider;
-    
+
     @Configurable("application-usagelistprovider")
     private UsageListProvider usageListProvider;
 
@@ -882,7 +892,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             };
 
-        this.entityDefByClassFactoryMap = new StaleableFactoryMap<String, EntityDef>() 
+        this.entityDefByClassFactoryMap = new StaleableFactoryMap<String, EntityDef>()
             {
 
                 @Override
@@ -1648,8 +1658,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @SuppressWarnings("unchecked")
     @Override
     public Query<? extends Entity> queryOf(String entityName) throws UnifyException {
-        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
-        return Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+        try {
+            final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+            return Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+        } catch (UnifyException e) {
+            try {
+                return Query.of((Class<? extends Entity>) ReflectUtils.classForName(entityName));
+            } catch (UnifyException e1) {
+                logDebug(e1);
+            }
+
+            throw e;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -3951,11 +3971,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final List<PortalWorkflow> workflows = portalWorkflowProvider != null
                 ? portalWorkflowProvider.getPortalWorkflows(applicationName)
                 : Collections.emptyList();
-
         if (workflows.isEmpty() && environment()
                 .countAll(new AppAppletQuery().portalAccess(true).applicationName(applicationName)) == 0) {
             return Optional.empty();
         }
+
+        final List<PortalReport> reports = portalReportProvider != null
+                ? portalReportProvider.getPortalReports(applicationName)
+                : Collections.emptyList();
+
+        final List<PortalDashboard> dashboards = portalDashboardProvider != null
+                ? portalDashboardProvider.getPortalDashboards(applicationName)
+                : Collections.emptyList();
 
         final ApplicationDef applicationDef = getApplicationDef(applicationName);
         final Map<String, PortalApplet> applets = new HashMap<String, PortalApplet>();
@@ -3975,11 +4002,28 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
         }
 
+        final List<PortalEnum> enums = new ArrayList<PortalEnum>();
+        for (Long enumId : environment().valueList(Long.class, "id",
+                new AppEnumerationQuery().applicationName(applicationName))) {
+            final AppEnumeration appEnumeration = environment().find(AppEnumeration.class, enumId);
+            final List<PortalEnumItem> items = new ArrayList<PortalEnumItem>();
+            for (AppEnumerationItem appEnumerationItem : appEnumeration.getItemList()) {
+                items.add(new PortalEnumItem(appEnumerationItem.getCode(), appEnumerationItem.getLabel(),
+                        appEnumerationItem.getColor() != null ? appEnumerationItem.getColor().name(): null));
+            }
+
+            final String enumName = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                    appEnumeration.getName());
+            enums.add(
+                    new PortalEnum(enumName, appEnumeration.getDescription(), appEnumeration.getLabel(), true, items));
+        }
+
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
-                applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(applets.values()),
-                DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
-                DataUtils.unmodifiableList(entities.values()), DataUtils.unmodifiableList(references.values()),
-                DataUtils.unmodifiableList(workflows)));
+                applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(dashboards),
+                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
+                DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values()),
+                DataUtils.unmodifiableList(references.values()), DataUtils.unmodifiableList(enums),
+                DataUtils.unmodifiableList(workflows), DataUtils.unmodifiableList(reports)));
     }
 
     private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,
@@ -3989,6 +4033,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final AppletDef appletDef = getAppletDef(applet);
             final String entity = appletDef.getEntity();
             final EntityDef entityDef = getEntityDef(entity);
+            final String serviceId = getContainerSetting(String.class,
+                    FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
             if (!entities.containsKey(entity)) {
                 List<PortalEntityField> fields = new ArrayList<PortalEntityField>();
                 for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
@@ -3999,7 +4045,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
                                     InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String editor = InputWidgetUtils.constructLeanEditor(widgetTypeDef, resolvedEntityFieldDef);
+                    final String editor = InputWidgetUtils.constructPortalEditor(widgetTypeDef, resolvedEntityFieldDef,
+                            serviceId);
                     if (entityFieldDef.isChildRef()) {
                         final RefDef refDef = getRefDef(entityFieldDef.getRefLongName());
                         fields.add(new PortalEntityField(resolvedEntityFieldDef.getDataType().name(),
@@ -4041,12 +4088,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final TableDef tableDef = getTableDef(table);
                 final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
                 for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
+                    final EntityFieldDef entityFieldDef = entityDef.getFieldDef(tableColumnDef.getFieldName());
+                    final EntityFieldDef resolvedEntityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
+                            ? entityFieldDef.getResolvedTypeFieldDef()
+                            : entityFieldDef;
+                    final WidgetTypeDef widgetTypeDef = resolvedEntityFieldDef.getInputWidget() != null
+                            ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
+                            : getWidgetTypeDef(
+                                    InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
+                    final String renderer = InputWidgetUtils.constructPortalRenderer(widgetTypeDef, resolvedEntityFieldDef,
+                            serviceId);
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
                             resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
                                     : tableColumnDef.getLabel()),
                             tableColumnDef.getOrder() != null ? tableColumnDef.getOrder().name() : null,
-                            tableColumnDef.getLinkAct(), tableColumnDef.getRenderer(), tableColumnDef.getWidthRatio()));
+                            tableColumnDef.getLinkAct(), renderer, tableColumnDef.getWidthRatio()));
                 }
 
                 tables.put(table, new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
@@ -4087,8 +4144,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         : null;
                                 final EntityFieldDef entityFieldDef = entityDef
                                         .getFieldDef(formFieldDef.getFieldName());
-                                final String editor = InputWidgetUtils.constructLeanEditor(widgetTypeDef,
-                                        entityFieldDef);
+                                final String editor = InputWidgetUtils.constructPortalEditor(widgetTypeDef,
+                                        entityFieldDef, serviceId);
                                 final boolean required = !entityFieldDef.isNullable() || formFieldDef.isRequired();
                                 elements.add(new PortalFormElement(FormElementType.FIELD.name(), null,
                                         resolveApplicationMessage(StringUtils.isBlank(formFieldDef.getFieldLabel())

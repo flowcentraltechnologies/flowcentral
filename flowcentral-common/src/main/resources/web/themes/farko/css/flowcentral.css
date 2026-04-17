@@ -110,6 +110,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Text Area */
 .ui-textarea {padding: 4px;/*border-radius: 4px;*/border-color: #b0b0b0;}
+.ui-textarea:disabled {background: #eaeaea;color:#000000;}
 
 .ui-text-popup .tread {padding-left: 4px;  border-right:none;}
 .ui-text-popup .tread:disabled {background: #eaeaea;color:#000000;}

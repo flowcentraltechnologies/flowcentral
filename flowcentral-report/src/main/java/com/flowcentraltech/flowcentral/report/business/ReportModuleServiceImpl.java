@@ -30,12 +30,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.PortalReportProvider;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReport;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReportParam;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
@@ -104,6 +107,7 @@ import com.tcdng.unify.core.criterion.ZeroParamRestriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Input;
 import com.tcdng.unify.core.data.Inputs;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Query;
@@ -132,7 +136,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ReportModuleNameConstants.REPORT_MODULE_SERVICE)
 public class ReportModuleServiceImpl extends AbstractFlowCentralService
-        implements ReportModuleService, RolePrivilegeBackupAgent {
+        implements ReportModuleService, RolePrivilegeBackupAgent, PortalReportProvider {
 
     @Configurable
     private ThemeManager themeManager;
@@ -165,6 +169,29 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void unregisterCustomApplicationRolePrivileges(Long applicationId) throws UnifyException {
         environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId).isCustom());
+    }
+
+    @Override
+    public List<PortalReport> getPortalReports(String applicationName) throws UnifyException {
+        final List<PortalReport> reports = new ArrayList<PortalReport>();
+        for (Long reportConfigId : environment().valueList(Long.class, "id",
+                new ReportConfigurationQuery().applicationName(applicationName))) {
+            final ReportConfiguration reportConfiguration = environment().find(new ReportConfigurationQuery()
+                    .id(reportConfigId).addSelect("name", "description", "title", "parameterList"));
+            final List<PortalReportParam> params = new ArrayList<PortalReportParam>();
+            for (ReportParameter reportParameter : reportConfiguration.getParameterList()) {
+                params.add(new PortalReportParam(reportParameter.getType().name(), reportParameter.getName(),
+                        reportParameter.getDescription(), reportParameter.getLabel(), reportParameter.getDefaultVal(),
+                        reportParameter.getEditor(), reportParameter.getMandatory()));
+            }
+
+            final String reportName = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                    reportConfiguration.getName());
+            reports.add(new PortalReport(reportName, reportConfiguration.getDescription(),
+                    reportConfiguration.getTitle(), params));
+        }
+
+        return reports;
     }
 
     @Override
@@ -410,6 +437,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public UploadedFile generateDynamicReport(ReportOptions reportOptions) throws UnifyException {
+        UploadedFile uploadedFile = UploadedFile.create(reportOptions.getFilename());
+        try {
+            generateDynamicReport(reportOptions, uploadedFile.getOut());
+        } finally {
+            uploadedFile.closeOut(); 
+        }
+        
+        return uploadedFile;
+    }
+
+    @Override
     public void generateDynamicReport(ReportOptions reportOptions, OutputStream outputStream) throws UnifyException {
         ReportPageProperties pageProperties = ReportPageProperties.newBuilder().size(reportOptions.getSizeType())
                 .marginBottom(reportOptions.getMarginBottom()).marginLeft(reportOptions.getMarginLeft())
@@ -610,6 +649,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         Report report = rb.build();
         setCommonReportParameters(report);
         reportServer.generateReport(report, outputStream);
+    }
+
+    @Override
+    public UploadedFile generateReport(Report report) throws UnifyException {
+        UploadedFile uploadedFile = UploadedFile.create(report.getTitle());
+        try {
+            generateReport(report, uploadedFile.getOut());
+        } finally {
+            uploadedFile.closeOut(); 
+        }
+        
+        return uploadedFile;
     }
 
     @Override

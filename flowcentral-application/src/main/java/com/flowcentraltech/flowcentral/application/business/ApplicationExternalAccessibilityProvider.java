@@ -15,10 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.application.business;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -52,4 +54,39 @@ public interface ApplicationExternalAccessibilityProvider extends FlowCentralCom
      *                        if an error occurs
      */
     Optional<RefDef> createRefDef(String longName) throws UnifyException;
+
+    /**
+     * Gets reference object as listable.
+     * 
+     * @param refDefLongName
+     *                       the reference definition long name
+     * @param listKey
+     *                       the list key
+     * @param value
+     *                       the object ID
+     * @return listable if present
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<Listable> getRefObjectListable(String refDefLongName, String listKey, Object value) throws UnifyException;
+
+    /**
+     * Gets listables based on reference definition
+     * 
+     * @param refDefLongName
+     *                        the reference definition long name
+     * @param listKey
+     *                        the list key
+     * @param input
+     *                        the input filter (optional)
+     * @param limit
+     *                        the limit
+     * @param caseInsensitive
+     *                        case sensitivity
+     * @return the listables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<List<Listable>> getRefListables(String refDefLongName, String listKey, String input, int limit,
+            boolean caseInsensitive) throws UnifyException;
 }

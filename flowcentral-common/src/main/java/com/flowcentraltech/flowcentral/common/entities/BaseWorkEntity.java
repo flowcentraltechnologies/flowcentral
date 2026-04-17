@@ -70,6 +70,11 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
     }
 
     @Override
+    public String getPreferredWorkflowName() {
+        return null;
+    }
+
+    @Override
     public Long getTenantId() {
         return null;
     }

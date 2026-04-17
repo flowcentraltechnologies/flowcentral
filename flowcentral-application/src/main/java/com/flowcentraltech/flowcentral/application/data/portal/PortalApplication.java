@@ -33,6 +33,8 @@ public class PortalApplication {
 
     private String module;
 
+    private List<PortalDashboard> dashboards;
+
     private List<PortalApplet> applets;
 
     private List<PortalTable> tables;
@@ -40,24 +42,32 @@ public class PortalApplication {
     private List<PortalForm> forms;
 
     private List<PortalEntity> entities;
-    
+
     private List<PortalReference> references;
 
+    private List<PortalEnum> enums;
+
     private List<PortalWorkflow> workflows;
-    
-    public PortalApplication(String name, String description, String label, String module, List<PortalApplet> applets,
-            List<PortalTable> tables, List<PortalForm> forms, List<PortalEntity> entities,
-            List<PortalReference> references, List<PortalWorkflow> workflows) {
+
+    private List<PortalReport> reports;
+
+    public PortalApplication(String name, String description, String label, String module,
+            List<PortalDashboard> dashboards, List<PortalApplet> applets, List<PortalTable> tables,
+            List<PortalForm> forms, List<PortalEntity> entities, List<PortalReference> references,
+            List<PortalEnum> enums, List<PortalWorkflow> workflows, List<PortalReport> reports) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.module = module;
+        this.dashboards = dashboards;
         this.applets = applets;
         this.tables = tables;
         this.forms = forms;
         this.entities = entities;
-        this.workflows = workflows;
         this.references = references;
+        this.enums = enums;
+        this.workflows = workflows;
+        this.reports = reports;
     }
 
     public String getName() {
@@ -74,6 +84,10 @@ public class PortalApplication {
 
     public String getModule() {
         return module;
+    }
+
+    public List<PortalDashboard> getDashboards() {
+        return dashboards;
     }
 
     public List<PortalApplet> getApplets() {
@@ -96,7 +110,15 @@ public class PortalApplication {
         return references;
     }
 
+    public List<PortalEnum> getEnums() {
+        return enums;
+    }
+
     public List<PortalWorkflow> getWorkflows() {
         return workflows;
+    }
+
+    public List<PortalReport> getReports() {
+        return reports;
     }
 }

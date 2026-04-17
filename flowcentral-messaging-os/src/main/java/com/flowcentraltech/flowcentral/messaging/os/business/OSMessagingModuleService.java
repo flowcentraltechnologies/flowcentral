@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
@@ -70,6 +71,16 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> getPeerEndpointURL(String appId) throws UnifyException;
+    
+    /**
+     * Update OS messaging endpoints.
+     * 
+     * @param messagingPeerInfoList
+     *                              the peer update list
+     * @throws UnifyException
+     *                        if an errpr occurs
+     */
+    void updateOSMessagingEndpoints(List<OSMessagingPeerInfo> messagingPeerInfoList) throws UnifyException;
     
     /**
      * Finds OS messaging endpoints.

@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.notification.constants.NotificationModule
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.EmailSettingsInfo;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextParamDef;
@@ -420,7 +421,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 notifAttachment.setName(attachment.getName());
                 notifAttachment.setTitle(attachment.getTitle());
                 notifAttachment.setType(attachment.getType());
-                notifAttachment.setData(attachment.getFile().getDataAndInvalidate());
+                notifAttachment.setData(attachment.getFile().getData());
                 notifAttachment.setProvider(attachment.getProvider());
                 notifAttachment.setSourceId(attachment.getSourceId());
                 attachmentList.add(notifAttachment);
@@ -430,6 +431,48 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
             // Create outgoing notification
             environment().create(notification);
+        }
+    }
+
+    @Override
+    public void updateEmailSettings(EmailSettingsInfo settings) throws UnifyException {
+        NotificationChannel channel = environment().find(new NotificationChannelQuery().notifType(NotifType.EMAIL));
+        List<NotificationChannelProp> channelPropList = new ArrayList<NotificationChannelProp>();
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.ADDRESS_PROPERTY,
+                settings.getSmtpHostAddress()));
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.PORT_PROPERTY,
+                String.valueOf(settings.getSmtpHostPort())));
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.SECURITYTYPE_PROPERTY,
+                settings.getSmtpSecurityType()));
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.USERNAME_PROPERTY,
+                settings.getSmtpUsername()));
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.PASSWORD_PROPERTY,
+                twoWayStringCryptograph.encrypt(settings.getSmtpPassword())));
+        channelPropList.add(new NotificationChannelProp(NotificationChannelPropertyConstants.MAX_BATCH_SIZE,
+                settings.getMaxBatchSize() > 0 ? String.valueOf(settings.getMaxBatchSize()) : null));
+        channelPropList.add(new NotificationChannelProp(NotificationChannelPropertyConstants.MAX_TRIES,
+                settings.getMaxRetries() > 0 ? String.valueOf(settings.getMaxRetries()) : null));
+        channelPropList.add(new NotificationChannelProp(NotificationChannelPropertyConstants.RETRY_MINUTES,
+                settings.getRetriesInMinutes() > 0 ? String.valueOf(settings.getRetriesInMinutes()) : null));
+
+        if (channel == null) {
+            channel = new NotificationChannel();
+            channel.setNotificationType(NotifType.EMAIL);
+            channel.setName("emailNotifChannel");
+            channel.setDescription("Email Notification Channel");
+            channel.setSenderName(settings.getSenderName());
+            channel.setSenderContact(settings.getSenderEmail());
+            channel.setMessagesPerMinute(settings.getMessagesPerMinute() > 0 ? settings.getMessagesPerMinute() : null);
+            channel.setStatus(RecordStatus.ACTIVE);
+            channel.setChannelPropList(channelPropList);
+            environment().create(channel);
+        } else {
+            channel.setSenderName(settings.getSenderName());
+            channel.setSenderContact(settings.getSenderEmail());
+            channel.setMessagesPerMinute(settings.getMessagesPerMinute() > 0 ? settings.getMessagesPerMinute() : null);
+            channel.setStatus(RecordStatus.ACTIVE);
+            channel.setChannelPropList(channelPropList);
+            environment().updateByIdVersion(channel);
         }
     }
 

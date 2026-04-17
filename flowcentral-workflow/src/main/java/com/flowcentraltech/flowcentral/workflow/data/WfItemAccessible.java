@@ -30,23 +30,25 @@ public class WfItemAccessible {
     private WfAccessState state;
 
     private Long workRecId;
-    
+
     private String branchCode;
-    
+
     private String departmentCode;
-    
+
     private String wfItemDesc;
-    
+
     private String workflowName;
-    
+
+    private String preferredWorkflowName;
+
     private String stepName;
-    
+
     private String entityName;
-    
+
     private String requestedBy;
-    
+
     private Date requestedOn;
-    
+
     private Date stepOn;
 
     private Date reminderOn;
@@ -56,13 +58,14 @@ public class WfItemAccessible {
     private Date criticalOn;
 
     public WfItemAccessible(Long workRecId, String branchCode, String departmentCode, String wfItemDesc,
-            String workflowName, String stepName, String entityName, String requestedBy, Date requestedOn, Date stepOn,
-            Date reminderOn, Date expectedOn, Date criticalOn) {
+            String workflowName, String preferredWorkflowName, String stepName, String entityName, String requestedBy,
+            Date requestedOn, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
         this.workRecId = workRecId;
         this.branchCode = branchCode;
         this.departmentCode = departmentCode;
         this.wfItemDesc = wfItemDesc;
         this.workflowName = workflowName;
+        this.preferredWorkflowName = preferredWorkflowName;
         this.stepName = stepName;
         this.entityName = entityName;
         this.requestedBy = requestedBy;
@@ -74,9 +77,9 @@ public class WfItemAccessible {
     }
 
     public WfItemAccessible() {
-        
+
     }
-    
+
     public WfAccessState getState() {
         return state;
     }
@@ -123,6 +126,14 @@ public class WfItemAccessible {
 
     public void setWorkflowName(String workflowName) {
         this.workflowName = workflowName;
+    }
+
+    public String getPreferredWorkflowName() {
+        return preferredWorkflowName;
+    }
+
+    public void setPreferredWorkflowName(String preferredWorkflowName) {
+        this.preferredWorkflowName = preferredWorkflowName;
     }
 
     public String getStepName() {
@@ -188,5 +199,5 @@ public class WfItemAccessible {
     public void setCriticalOn(Date criticalOn) {
         this.criticalOn = criticalOn;
     }
-    
+
 }

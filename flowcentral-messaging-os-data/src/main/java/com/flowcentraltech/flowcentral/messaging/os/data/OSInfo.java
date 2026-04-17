@@ -31,11 +31,14 @@ public class OSInfo {
 
     private String vendorDomain;
 
-    public OSInfo(String serviceId, String serviceVersion, String vendorName, String vendorDomain) {
+    private boolean debugging;
+
+    public OSInfo(String serviceId, String serviceVersion, String vendorName, String vendorDomain, boolean debugging) {
         this.serviceId = serviceId;
         this.serviceVersion = serviceVersion;
         this.vendorName = vendorName;
         this.vendorDomain = vendorDomain;
+        this.debugging = debugging;
     }
 
     public String getServiceId() {
@@ -52,5 +55,9 @@ public class OSInfo {
 
     public String getVendorDomain() {
         return vendorDomain;
+    }
+
+    public boolean isDebugging() {
+        return debugging;
     }
 }

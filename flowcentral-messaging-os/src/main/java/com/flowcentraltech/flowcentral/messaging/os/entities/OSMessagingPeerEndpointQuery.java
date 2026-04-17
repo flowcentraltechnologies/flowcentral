@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.entities;
 
+import java.util.Collection;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 
 /**
@@ -35,6 +37,10 @@ public class OSMessagingPeerEndpointQuery extends BaseStatusEntityQuery<OSMessag
 
     public OSMessagingPeerEndpointQuery name(String name) {
         return (OSMessagingPeerEndpointQuery) addEquals("name", name);
+    }
+
+    public OSMessagingPeerEndpointQuery nameNotIn(Collection<String> names) {
+        return (OSMessagingPeerEndpointQuery) addNotAmongst("name", names);
     }
 
     public OSMessagingPeerEndpointQuery descriptionLike(String description) {
