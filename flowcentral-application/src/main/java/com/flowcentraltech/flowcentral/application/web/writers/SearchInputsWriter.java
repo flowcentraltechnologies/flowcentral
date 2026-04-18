@@ -49,8 +49,8 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writeTagAttributes(writer, searchInputsWidget);
         writer.write(">");
 
-        List<ValueStore> valueStoreList = searchInputsWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = searchInputsWidget.getItemCount();
+        if (len > 0) {
             Control labelCtrl = searchInputsWidget.getLabelCtrl();
             Control fieldSelectCtrl = searchInputsWidget.getFieldSelectCtrl();
             Control widgetCtrl = searchInputsWidget.getWidgetCtrl();
@@ -60,7 +60,6 @@ public class SearchInputsWriter extends AbstractControlWriter {
             Control moveUpCtrl = searchInputsWidget.getMoveUpCtrl();
             Control moveDownCtrl = searchInputsWidget.getMoveDownCtrl();
             Control deleteCtrl = searchInputsWidget.getDeleteCtrl();
-            final int len = valueStoreList.size();
             final int last = len - 1;
 
             final String labelLabel = resolveSessionMessage("$m{searchinputs.label}");
@@ -71,8 +70,8 @@ public class SearchInputsWriter extends AbstractControlWriter {
             final String fixedLabel = resolveSessionMessage("$m{searchinputs.fixed}");
             writer.write("<table class=\"editor\" style=\"display: block;width:100%;table-layout:fixed;\">");
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                SearchInputEntry sie = (SearchInputEntry) lineValueStore.getValueObject();
+                ValueStore lineValueStore = searchInputsWidget.getItemValueStoreAt(i);
+                SearchInputEntry sie = searchInputsWidget.getItemAt();
                 writer.write("<tr class=\"line\">");
                 writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
                 if (sie.isWithFieldName()) {
@@ -130,19 +129,19 @@ public class SearchInputsWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         SearchInputsWidget searchInputsWidget = (SearchInputsWidget) widget;
-        List<ValueStore> valueStoreList = searchInputsWidget.getValueList();
         List<String> csb = new ArrayList<String>();
-        if (valueStoreList != null) {
+        final int len = searchInputsWidget.getItemCount();
+        if (len > 0) {
             Control labelCtrl = searchInputsWidget.getLabelCtrl();
             Control fieldSelectCtrl = searchInputsWidget.getFieldSelectCtrl();
             Control widgetCtrl = searchInputsWidget.getWidgetCtrl();
             Control conditionTypeCtrl = searchInputsWidget.getConditionTypeCtrl();
             DynamicField defValCtrl = searchInputsWidget.getDefValCtrl();
             Control fixedCtrl = searchInputsWidget.getFixedCtrl();
-            final int len = valueStoreList.size();
+
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                SearchInputEntry sie = (SearchInputEntry) lineValueStore.getValueObject();
+                ValueStore lineValueStore = searchInputsWidget.getItemValueStoreAt(i);
+                SearchInputEntry sie = searchInputsWidget.getItemAt();
                 writeBehavior(writer, searchInputsWidget, lineValueStore, fieldSelectCtrl);
                 csb.add(fieldSelectCtrl.getId());
                 if (sie.isWithFieldName()) {

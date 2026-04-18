@@ -49,8 +49,8 @@ public class PropertySequenceWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, propertySequenceWidget);
         writer.write(">");
-        List<ValueStore> valueStoreList = propertySequenceWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = propertySequenceWidget.getItemCount();
+        if (len > 0) {
             final PropertySequence propertySequence = propertySequenceWidget.getPropertySequence();
             final String lineTypeLabel = resolveSessionMessage(
                     propertySequence.getType() != null ? propertySequence.getType().label()
@@ -61,11 +61,10 @@ public class PropertySequenceWriter extends AbstractControlWriter {
             Control moveUpCtrl = propertySequenceWidget.getMoveUpCtrl();
             Control moveDownCtrl = propertySequenceWidget.getMoveDownCtrl();
             Control deleteCtrl = propertySequenceWidget.getDeleteCtrl();
-            int len = valueStoreList.size();
 
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                PropertySequenceEntry pso = (PropertySequenceEntry) lineValueStore.getValueObject();
+                ValueStore lineValueStore = propertySequenceWidget.getItemValueStoreAt(i);
+                PropertySequenceEntry pso = (PropertySequenceEntry) propertySequenceWidget.getItemAt();
                 writer.write("<div class=\"line\">");
                 writeValuesItem(writer, lineValueStore, propertySelectCtrl, lineTypeLabel);
                 if (!StringUtils.isBlank(pso.getProperty())) {
@@ -90,15 +89,14 @@ public class PropertySequenceWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         PropertySequenceWidget propertySequenceWidget = (PropertySequenceWidget) widget;
-        List<ValueStore> valueStoreList = propertySequenceWidget.getValueList();
         List<String> csb = new ArrayList<String>();
-        if (valueStoreList != null) {
+        final int len = propertySequenceWidget.getItemCount();
+        if (len > 0) {
             Control propertySelectCtrl = propertySequenceWidget.getPropertySelectCtrl();
             Control labelCtrl = propertySequenceWidget.getLabelCtrl();
-            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                PropertySequenceEntry fso = (PropertySequenceEntry) lineValueStore.getValueObject();
+                ValueStore lineValueStore = propertySequenceWidget.getItemValueStoreAt(i);
+                PropertySequenceEntry fso = (PropertySequenceEntry) propertySequenceWidget.getItemAt();
                 writeBehavior(writer, propertySequenceWidget, lineValueStore, propertySelectCtrl);
                 csb.add(propertySelectCtrl.getId());
 

@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
 
 /**
@@ -30,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  * @since 4.1
  */
 @Component("fc-paramvalues")
-public class ParamValuesWidget extends AbstractValueListWidget<ParamValueEntry> {
+public class ParamValuesWidget extends AbstractItemListWidget<ParamValueEntry> {
 
     private DynamicField paramCtrl;
 
@@ -56,11 +55,6 @@ public class ParamValuesWidget extends AbstractValueListWidget<ParamValueEntry> 
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(ParamValueEntry paramValueEntry, int index) throws UnifyException {
-        return createValueStore(paramValueEntry, index);
     }
 
 }

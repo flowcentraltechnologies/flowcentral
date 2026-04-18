@@ -48,19 +48,18 @@ public class FieldSequenceWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, fieldSequenceWidget);
         writer.write(">");
-        List<ValueStore> valueStoreList = fieldSequenceWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = fieldSequenceWidget.getItemCount();
+        if (len > 0) {
             Control fieldSelectCtrl = fieldSequenceWidget.getFieldSelectCtrl();
             Control paramCtrl = fieldSequenceWidget.getParamCtrl();
             Control moveUpCtrl = fieldSequenceWidget.getMoveUpCtrl();
             Control moveDownCtrl = fieldSequenceWidget.getMoveDownCtrl();
             Control deleteCtrl = fieldSequenceWidget.getDeleteCtrl();
-            int len = valueStoreList.size();
 
             final String usesLabel = resolveSessionMessage("$m{fieldsequence.usesformatter}");
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                FieldSequenceEntry fso = (FieldSequenceEntry) lineValueStore.getValueObject();
+                ValueStore lineValueStore = fieldSequenceWidget.getItemValueStoreAt(i);
+                FieldSequenceEntry fso = fieldSequenceWidget.getItemAt();
                 writer.write("<div class=\"line\">");
                 final String columnLabel = resolveSessionMessage("$m{fieldsequence.column}", i + 1);
                 writeValuesItem(writer, lineValueStore, fieldSelectCtrl, columnLabel);
@@ -86,15 +85,14 @@ public class FieldSequenceWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         FieldSequenceWidget fieldSequenceWidget = (FieldSequenceWidget) widget;
-        List<ValueStore> valueStoreList = fieldSequenceWidget.getValueList();
         List<String> csb = new ArrayList<String>();
-        if (valueStoreList != null) {
+        final int len = fieldSequenceWidget.getItemCount();
+        if (len > 0) {
             Control fieldSelectCtrl = fieldSequenceWidget.getFieldSelectCtrl();
             Control paramCtrl = fieldSequenceWidget.getParamCtrl();
-            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                FieldSequenceEntry fso = (FieldSequenceEntry) lineValueStore.getValueObject();
+                ValueStore lineValueStore = fieldSequenceWidget.getItemValueStoreAt(i);
+                FieldSequenceEntry fso = (FieldSequenceEntry) fieldSequenceWidget.getItemAt();
                 writeBehavior(writer, fieldSequenceWidget, lineValueStore, fieldSelectCtrl);
                 csb.add(fieldSelectCtrl.getId());
 

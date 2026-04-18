@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
@@ -32,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  * @since 4.1
  */
 @Component("fc-setvalues")
-public class SetValuesWidget extends AbstractValueListWidget<SetValueEntry> {
+public class SetValuesWidget extends AbstractItemListWidget<SetValueEntry> {
 
     private Control fieldSelectCtrl;
 
@@ -95,11 +94,6 @@ public class SetValuesWidget extends AbstractValueListWidget<SetValueEntry> {
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(SetValueEntry setValueEntry, int index) throws UnifyException {
-        return createValueStore(setValueEntry, index);
     }
 
 }

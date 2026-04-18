@@ -29,6 +29,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
+@Deprecated
 public abstract class AbstractValueListWidget<T> extends AbstractFlowCentralValueListMultiControl<ValueStore, T> {
 
     @Override
