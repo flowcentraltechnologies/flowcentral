@@ -40,11 +40,11 @@ public class InputArrayWriter extends AbstractControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
-        InputArrayWidget inputArrayWidget = (InputArrayWidget) widget;        
+        InputArrayWidget inputArrayWidget = (InputArrayWidget) widget;
         writer.write("<table");
         writeTagAttributes(writer, inputArrayWidget);
         writer.write(">");
-        
+
         final int columns = inputArrayWidget.getColumns() <= 0 ? 1 : inputArrayWidget.getColumns();
         final String caption = inputArrayWidget.getCaption();
         if (!StringUtils.isBlank(caption)) {
@@ -53,13 +53,13 @@ public class InputArrayWriter extends AbstractControlWriter {
             writer.writeWithHtmlEscape(caption);
             writer.write("</span></tr>");
         }
-        
+
         final int len = inputArrayWidget.getItemCount();
         if (len > 0) {
             DynamicField editCtrl = inputArrayWidget.getEditCtrl();
             DynamicField viewCtrl = inputArrayWidget.getViewCtrl();
             Control selectCtrl = inputArrayWidget.getSelectCtrl();
-           final String sectionStyle = "width:" + 100 / columns + "%;";
+            final String sectionStyle = "width:" + 100 / columns + "%;";
             for (int i = 0; i < len;) {
                 writer.write("<tr class=\"line\">");
                 int j = 0;
