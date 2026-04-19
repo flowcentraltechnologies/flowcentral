@@ -23,8 +23,10 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -50,6 +52,8 @@ public class FilterDef implements Listable {
 
     private String filterGenerator;
 
+    private TimeResolutionType maxTimeResolution;
+    
     public FilterDef(FilterDef _filterDef) {
         this.au = _filterDef.au;
         this.filterRestrictionDefList = _filterDef.filterRestrictionDefList;
@@ -129,6 +133,27 @@ public class FilterDef implements Listable {
         return filterRestrictionDefList == null || filterRestrictionDefList.isEmpty();
     }
 
+    public TimeResolutionType getMaxTimeResolution() {
+        if (maxTimeResolution == null) {
+            maxTimeResolution = TimeResolutionType.YEAR;
+            if (!DataUtils.isBlank(filterRestrictionDefList)) {
+                for (FilterRestrictionDef filterRestrictionDef: filterRestrictionDefList) {
+                    if (FilterConditionType.EQUALS_LINGUAL.equals(filterRestrictionDef.getType())) {
+                        LingualDateType lingualType = LingualDateType.fromCode(filterRestrictionDef.getParamA());
+                        if (lingualType != null) {
+                            maxTimeResolution = maxTimeResolution.max(lingualType.maxResolution());
+                            if (maxTimeResolution.isMinute()) {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return maxTimeResolution;
+    }
+    
     public static Builder newBuilder(AppletUtilities au) {
         return new Builder(au);
     }
