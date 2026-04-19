@@ -115,7 +115,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
 
         final FilterDef catBaseFilterDef = chartDataSourceDef.getCategoryBase();
         if (catBaseFilterDef != null) {
-            maxResolution = maxResolution != null ? maxResolution.max(catBaseFilterDef.getMaxTimeResolution())
+            maxResolution = maxResolution != null ? maxResolution.min(catBaseFilterDef.getMaxTimeResolution())
                     : catBaseFilterDef.getMaxTimeResolution();
         }
 
@@ -134,7 +134,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     
                     final FilterDef enFilterDef =  entityCategoryDef.getFilterDef();
                     if (enFilterDef != null) {
-                        maxResolution = maxResolution != null ? maxResolution.max(enFilterDef.getMaxTimeResolution())
+                        maxResolution = maxResolution != null ? maxResolution.min(enFilterDef.getMaxTimeResolution())
                                 : enFilterDef.getMaxTimeResolution();
                     }
 
@@ -189,8 +189,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         if (chartDataSourceDef.isWithGroupingFieldsAndOrTimeSeries()) {
             final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldNames();
             final ChartTimeSeriesType timeSeriesType = chartDataSourceDef.getTimeSeriesType() != null
-                    ? chartDataSourceDef.getTimeSeriesType().bestAlternative(maxResolution)
-                    : ChartTimeSeriesType.DAY_OVER_WEEK.bestAlternative(maxResolution);
+                    ? ChartUtils.getBestAlternative(chartDataSourceDef.getTimeSeriesType(), maxResolution)
+                    : ChartUtils.getBestAlternative(ChartTimeSeriesType.DAY_OVER_WEEK, maxResolution);
 
             List<GroupingFunction> groupingFunction = new ArrayList<GroupingFunction>();
             final int glen = groupingFieldNames.size();

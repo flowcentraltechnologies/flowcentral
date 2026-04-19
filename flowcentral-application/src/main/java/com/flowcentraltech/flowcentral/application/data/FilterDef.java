@@ -141,7 +141,7 @@ public class FilterDef implements Listable {
                     if (FilterConditionType.EQUALS_LINGUAL.equals(filterRestrictionDef.getType())) {
                         LingualDateType lingualType = LingualDateType.fromCode(filterRestrictionDef.getParamA());
                         if (lingualType != null) {
-                            maxTimeResolution = maxTimeResolution.max(lingualType.maxResolution());
+                            maxTimeResolution = maxTimeResolution.min(lingualType.maxResolution());
                             if (maxTimeResolution.isMinute()) {
                                 break;
                             }

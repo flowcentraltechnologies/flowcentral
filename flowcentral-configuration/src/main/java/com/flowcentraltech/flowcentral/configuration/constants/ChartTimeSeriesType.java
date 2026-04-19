@@ -48,7 +48,7 @@ public enum ChartTimeSeriesType implements EnumConst {
     MONTH_MERGED("MNDG", TimeSeriesType.MONTH, true, true),
     YEAR("YRD", TimeSeriesType.YEAR, false, false),
     YEAR_MERGED("YRDG", TimeSeriesType.YEAR, true, false);
-
+    
     private final String code;
 
     private final TimeSeriesType type;
@@ -88,14 +88,6 @@ public enum ChartTimeSeriesType implements EnumConst {
 
     public boolean fill() {
         return fill;
-    }
-    
-    public ChartTimeSeriesType bestAlternative(TimeResolutionType maxResolution) {
-        if (maxResolution != null) {
-            // TODO
-        }
-
-        return this;
     }
     
     public static ChartTimeSeriesType fromCode(String code) {
