@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityCategoryDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntitySeriesDef;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -44,6 +45,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.GroupingFunction;
@@ -65,11 +67,17 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
 
     @Override
     public ChartDetails provide(String rule, Restriction restriction) throws UnifyException {
+        return provide(rule, restriction, null);
+    }
+
+    @Override
+    public ChartDetails provide(String rule, Restriction restriction, TimeResolutionType maxResolution)
+            throws UnifyException {
         if (!StringUtils.isBlank(rule)) {
-        ChartDataSourceDef chartDataSourceDef = chart().getChartDataSourceDef(rule);
-        return getChartData(chartDataSourceDef, restriction);
+            ChartDataSourceDef chartDataSourceDef = chart().getChartDataSourceDef(rule);
+            return getChartData(chartDataSourceDef, restriction, maxResolution);
         }
-        
+
         return ChartDetails.newBuilder(ChartCategoryDataType.STRING).build();
     }
 
@@ -86,8 +94,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         return true;
     }
 
-    private ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef, Restriction erestriction)
-            throws UnifyException {
+    private ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef, Restriction erestriction,
+            TimeResolutionType maxResolution) throws UnifyException {
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
         final EntityFieldDef preferredCategoryEntityFieldDef = chartDataSourceDef.getCategoryEntityFieldDef();
         final ChartCategoryDataType chartCategoryType = preferredCategoryEntityFieldDef != null
@@ -96,7 +104,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                         : ChartCategoryDataType.STRING;
         ChartDetails.Builder cdb = ChartDetails.newBuilder(chartCategoryType);
         cdb.dynamicCategories(chartDataSourceDef.isWithGroupingFields());
-        
+
         final Date now = au().getNow();
         final PropertySequenceDef series = chartDataSourceDef.getSeries();
         final List<AggregateFunction> aggregateFunction = new ArrayList<AggregateFunction>();
@@ -105,8 +113,14 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             aggregateFunction.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
         }
 
-        Restriction baseRestriction = InputWidgetUtils.getRestriction(au(), entityDef, null, chartDataSourceDef.getCategoryBase(),
-                now);
+        final FilterDef catBaseFilterDef = chartDataSourceDef.getCategoryBase();
+        if (catBaseFilterDef != null) {
+            maxResolution = maxResolution != null ? maxResolution.max(catBaseFilterDef.getMaxTimeResolution())
+                    : catBaseFilterDef.getMaxTimeResolution();
+        }
+
+        Restriction baseRestriction = InputWidgetUtils.getRestriction(au(), entityDef, null, catBaseFilterDef, now);
+        
         if (chartDataSourceDef.isWithCategories()) {
             final PropertySequenceDef categories = chartDataSourceDef.getCategories();
             if (!categories.isBlank()) {
@@ -117,8 +131,15 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     final String catlabel = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
                             ? propertySequenceEntryDef.getLabel()
                             : entityCategoryDef.getLabel();
-                    Restriction restriction = InputWidgetUtils.getRestriction(au(), entityDef, null,
-                            entityCategoryDef.getFilterDef(), now);
+                    
+                    final FilterDef enFilterDef =  entityCategoryDef.getFilterDef();
+                    if (enFilterDef != null) {
+                        maxResolution = maxResolution != null ? maxResolution.max(enFilterDef.getMaxTimeResolution())
+                                : enFilterDef.getMaxTimeResolution();
+                    }
+
+                   Restriction restriction = InputWidgetUtils.getRestriction(au(), entityDef, null,
+                           enFilterDef, now);
                     if (restriction != null) {
                         if (baseRestriction != null) {
                             restriction = new And().add(baseRestriction).add(restriction);
@@ -136,11 +157,13 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     }
 
                     cdb.setCategoryLabel(cat, catlabel);
-                    performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, restriction, cat);
+                    performAggregation(cdb, chartDataSourceDef, maxResolution, aggregateFunction, now, restriction,
+                            cat);
                 }
             }
         } else {
-            final Object cat = preferredCategoryEntityFieldDef != null ? preferredCategoryEntityFieldDef.getFieldName() : null;
+            final Object cat = preferredCategoryEntityFieldDef != null ? preferredCategoryEntityFieldDef.getFieldName()
+                    : null;
             if (erestriction != null) {
                 if (baseRestriction != null) {
                     baseRestriction = new And().add(baseRestriction).add(erestriction);
@@ -149,15 +172,15 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                 }
             }
 
-            performAggregation(cdb, chartDataSourceDef, aggregateFunction, now, baseRestriction, cat);
+            performAggregation(cdb, chartDataSourceDef, maxResolution, aggregateFunction, now, baseRestriction, cat);
         }
 
         return cdb.build();
     }
 
     private void performAggregation(ChartDetails.Builder cdb, ChartDataSourceDef chartDataSourceDef,
-            List<AggregateFunction> aggregateFunction, Date now, Restriction restriction, Object cat)
-            throws UnifyException {
+            TimeResolutionType maxResolution, List<AggregateFunction> aggregateFunction, Date now,
+            Restriction restriction, Object cat) throws UnifyException {
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
         final PropertySequenceDef series = chartDataSourceDef.getSeries();
         final int slen = series.getSequenceList().size();
@@ -166,8 +189,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         if (chartDataSourceDef.isWithGroupingFieldsAndOrTimeSeries()) {
             final List<String> groupingFieldNames = chartDataSourceDef.getGroupingFieldNames();
             final ChartTimeSeriesType timeSeriesType = chartDataSourceDef.getTimeSeriesType() != null
-                    ? chartDataSourceDef.getTimeSeriesType()
-                    : ChartTimeSeriesType.DAY_OVER_WEEK;
+                    ? chartDataSourceDef.getTimeSeriesType().bestAlternative(maxResolution)
+                    : ChartTimeSeriesType.DAY_OVER_WEEK.bestAlternative(maxResolution);
 
             List<GroupingFunction> groupingFunction = new ArrayList<GroupingFunction>();
             final int glen = groupingFieldNames.size();
@@ -251,11 +274,12 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                 for (int i = 0; i < len; i++) {
                     String fieldName = groupingFieldNames.get(i);
                     EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                    headers.add(new ChartTableColumn(
-                            (i == 0 && chartDataSourceDef.isMerged()) || entityFieldDef.isListOnly()
-                                    ? EntityFieldDataType.STRING
-                                    : entityFieldDef.getDataType(),
-                            fieldName, entityFieldDef.getFieldLabel(), true));
+                    headers.add(
+                            new ChartTableColumn(
+                                    (i == 0 && chartDataSourceDef.isMerged()) || entityFieldDef.isListOnly()
+                                            ? EntityFieldDataType.STRING
+                                            : entityFieldDef.getDataType(),
+                                    fieldName, entityFieldDef.getFieldLabel(), true));
                 }
             }
 
@@ -267,7 +291,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                 }
 
                 headers.add(new ChartTableColumn(
-                        /*entityFieldDef.isListOnly() ? EntityFieldDataType.STRING : */entityFieldDef.getDataType(),
+                        /* entityFieldDef.isListOnly() ? EntityFieldDataType.STRING : */entityFieldDef.getDataType(),
                         entitySeriesDef.getFieldName(), entitySeriesDef.getLabel(), false));
             }
 

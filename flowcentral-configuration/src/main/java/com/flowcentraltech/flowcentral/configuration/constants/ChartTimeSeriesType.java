@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.configuration.constants;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.constant.TimeSeriesType;
 import com.tcdng.unify.core.util.EnumUtils;
 
@@ -73,6 +74,10 @@ public enum ChartTimeSeriesType implements EnumConst {
         return HOUR.code;
     }
 
+    public TimeResolutionType maxResolution() {
+        return type.maxResolution();
+    }
+    
     public TimeSeriesType type() {
         return type;
     }
@@ -83,6 +88,14 @@ public enum ChartTimeSeriesType implements EnumConst {
 
     public boolean fill() {
         return fill;
+    }
+    
+    public ChartTimeSeriesType bestAlternative(TimeResolutionType maxResolution) {
+        if (maxResolution != null) {
+            // TODO
+        }
+
+        return this;
     }
     
     public static ChartTimeSeriesType fromCode(String code) {
