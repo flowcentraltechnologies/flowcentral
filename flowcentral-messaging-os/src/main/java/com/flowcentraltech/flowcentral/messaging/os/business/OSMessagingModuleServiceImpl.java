@@ -519,7 +519,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
-            return prettyJson(UnknownTargetResp.MESSAGE);
+            return prettyJson(new UnknownTargetResp(target));
         }
 
         if (!osPeerEndpointDef.isActive()) {
@@ -572,7 +572,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         logDebug("Sending upload message [\n{0}]...", correlationId);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
-            return prettyJson(UnknownTargetResp.MESSAGE);
+            return prettyJson(new UnknownTargetResp(target));
         }
 
         if (!osPeerEndpointDef.isActive()) {
@@ -633,7 +633,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         logDebug("Sending download message [\n{0}]...", correlationId);
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
-            return prettyJson(UnknownTargetResp.MESSAGE);
+            return prettyJson(new UnknownTargetResp(target));
         }
 
         if (!osPeerEndpointDef.isActive()) {

@@ -23,10 +23,23 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  */
 public class UnknownTargetResp extends BaseOSMessagingResp {
 
-    public static final UnknownTargetResp MESSAGE = new UnknownTargetResp();
+    private String target;
     
-    private UnknownTargetResp() {
+    public UnknownTargetResp(String target) {
+        super(OSMessagingResponseConstants.ERROR_CODE, "Unknown target [" + target + "].");
+        this.target = target;
+    }
+
+    public UnknownTargetResp() {
         super(OSMessagingResponseConstants.ERROR_CODE, "Unknown target.");
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 
 }
