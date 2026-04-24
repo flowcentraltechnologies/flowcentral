@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.data.portal;
 
+import java.util.List;
+
 /**
  * Portal applet object.
  * 
@@ -42,9 +44,11 @@ public class PortalApplet {
     private String table;
 
     private boolean primary;
-    
+
+    private List<PortalAppletOption> options;
+
     public PortalApplet(String type, String name, String description, String label, String entity, String icon,
-            String createForm, String maintainForm, String table, boolean primary) {
+            String createForm, String maintainForm, String table, boolean primary, List<PortalAppletOption> options) {
         this.type = type;
         this.name = name;
         this.description = description;
@@ -55,6 +59,7 @@ public class PortalApplet {
         this.maintainForm = maintainForm;
         this.table = table;
         this.primary = primary;
+        this.options = options;
     }
 
     public String getType() {
@@ -95,6 +100,10 @@ public class PortalApplet {
 
     public boolean isPrimary() {
         return primary;
+    }
+
+    public List<PortalAppletOption> getOptions() {
+        return options;
     }
 
 }

@@ -105,6 +105,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplet;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalAppletOption;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalDashboard;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
@@ -4009,7 +4010,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final List<PortalEnumItem> items = new ArrayList<PortalEnumItem>();
             for (AppEnumerationItem appEnumerationItem : appEnumeration.getItemList()) {
                 items.add(new PortalEnumItem(appEnumerationItem.getCode(), appEnumerationItem.getLabel(),
-                        appEnumerationItem.getColor() != null ? appEnumerationItem.getColor().name(): null));
+                        appEnumerationItem.getColor() != null ? appEnumerationItem.getColor().name() : null));
             }
 
             final String enumName = ApplicationNameUtils.ensureLongNameReference(applicationName,
@@ -4096,8 +4097,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
                                     InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String renderer = InputWidgetUtils.constructPortalRenderer(widgetTypeDef, resolvedEntityFieldDef,
-                            serviceId);
+                    final String renderer = InputWidgetUtils.constructPortalRenderer(widgetTypeDef,
+                            resolvedEntityFieldDef, serviceId);
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
                             resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
@@ -4162,10 +4163,20 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
+            List<PortalAppletOption> options = Collections.emptyList();
+            final List<AppAppletFilter> quickFilters = environment().findAll(new AppAppletFilterQuery()
+                    .appAppletId(appletDef.getId()).quickFilter(true).addSelect("name", "description"));
+            if (!DataUtils.isBlank(quickFilters)) {
+                options = new ArrayList<PortalAppletOption>();
+                for (AppAppletFilter filter : quickFilters) {
+                    options.add(new PortalAppletOption(filter.getName(), filter.getDescription()));
+                }
+            }
+
             applets.put(applet,
                     new PortalApplet(appletDef.getType().name(), appletDef.getLongName(), appletDef.getDescription(),
                             resolveApplicationMessage(appletDef.getLabel()), entity, appletDef.getIcon(),
-                            formList.get(0), formList.get(1), table, appletDef.isPortalAccess()));
+                            formList.get(0), formList.get(1), table, appletDef.isPortalAccess(), options));
 
             for (String capplet : childApplets) {
                 extractPortalDependencies(capplet, applets, tables, forms, entities, references);
