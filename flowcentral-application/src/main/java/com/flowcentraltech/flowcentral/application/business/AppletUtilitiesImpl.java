@@ -120,10 +120,12 @@ import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPol
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ParamConfigListProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
@@ -132,6 +134,7 @@ import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityFieldAudit;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormattedEntityAudit;
 import com.flowcentraltech.flowcentral.common.data.FormattedFieldAudit;
@@ -2068,6 +2071,15 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return false;
     }
     
+    @Override
+    public List<FormMessage> validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
+            throws UnifyException {
+        final FormContext ctx = new FormContext(null, getFormDef(formName), null, inst);
+        final FormValidationContext vCtx = new FormValidationContext(evaluationMode);
+        formContextEvaluator.evaluateFormContextComponentValidation(ctx, vCtx);
+        return ctx.getValidationErrors();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException {

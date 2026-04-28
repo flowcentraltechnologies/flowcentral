@@ -84,10 +84,12 @@ import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
@@ -1809,6 +1811,22 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     boolean formBeanMatchAppletPropertyConditionWhenPresent(AppletDef appletDef, AbstractForm form, String conditionPropName)
+            throws UnifyException;
+    
+    /**
+     * Validate form using component validation.
+     * 
+     * @param formName
+     *                       the form name
+     * @param inst
+     *                       the entity instance
+     * @param evaluationMode
+     *                       the evaluation mode
+     * @return list of form messages
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<FormMessage> validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
             throws UnifyException;
 
     /**

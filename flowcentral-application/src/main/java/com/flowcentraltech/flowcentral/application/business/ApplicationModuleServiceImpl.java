@@ -147,6 +147,7 @@ import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.business.policies.FormWizardTaskProcessor;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
@@ -155,6 +156,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
+import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
@@ -1442,6 +1444,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return prdb.build();
                 }
             };
+    }
+
+    @Override
+    public List<FormMessage> validateFormUsingComponentValidation(String formName, Object inst,
+            EvaluationMode evaluationMode) throws UnifyException {
+        return appletUtilities.validateFormUsingComponentValidation(formName, inst, evaluationMode);
     }
 
     @Override

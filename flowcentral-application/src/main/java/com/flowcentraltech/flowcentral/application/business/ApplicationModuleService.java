@@ -88,7 +88,9 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
@@ -116,6 +118,22 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * @since 4.1
  */
 public interface ApplicationModuleService extends FlowCentralService {
+    
+    /**
+     * Validate form using component validation.
+     * 
+     * @param formName
+     *                       the form name
+     * @param inst
+     *                       the entity instance
+     * @param evaluationMode
+     *                       the evaluation mode
+     * @return list of form messages
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<FormMessage> validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
+            throws UnifyException;
 
     /**
      * Gets process variables.
