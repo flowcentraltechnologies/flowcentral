@@ -30,14 +30,18 @@ public class PortalForm {
     private String description;
 
     private String entity;
-
+    
     private List<PortalFormElement> elements;
 
-    public PortalForm(String name, String description, String entity, List<PortalFormElement> elements) {
+    private boolean remoteValidation;
+
+    public PortalForm(String name, String description, String entity, List<PortalFormElement> elements,
+            boolean remoteValidation) {
         this.name = name;
         this.description = description;
         this.entity = entity;
         this.elements = elements;
+        this.remoteValidation = remoteValidation;
     }
 
     public String getName() {
@@ -54,5 +58,9 @@ public class PortalForm {
 
     public List<PortalFormElement> getElements() {
         return elements;
+    }
+
+    public boolean isRemoteValidation() {
+        return remoteValidation;
     }
 }

@@ -4166,8 +4166,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
+                    final boolean remoteValidation = formDef.isWithFieldValidationPolicy()
+                            || formDef.isWithConsolidatedFormValidation() || formDef.isWithFormValidationPolicy();
                     forms.put(form, new PortalForm(formDef.getLongName(), formDef.getDescription(), entity,
-                            DataUtils.unmodifiableList(elements)));
+                            DataUtils.unmodifiableList(elements), remoteValidation));
                 }
             }
 
