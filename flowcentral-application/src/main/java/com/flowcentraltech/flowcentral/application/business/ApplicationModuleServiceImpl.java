@@ -156,7 +156,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
-import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.flowcentraltech.flowcentral.common.data.FormError;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
@@ -1447,7 +1447,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<FormMessage> validateFormUsingComponentValidation(String formName, Object inst,
+    public List<FormError> validateFormUsingComponentValidation(String formName, Object inst,
             EvaluationMode evaluationMode) throws UnifyException {
         return appletUtilities.validateFormUsingComponentValidation(formName, inst, evaluationMode);
     }

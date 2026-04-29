@@ -90,7 +90,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
-import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.flowcentraltech.flowcentral.common.data.FormError;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
@@ -128,11 +128,11 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                       the entity instance
      * @param evaluationMode
      *                       the evaluation mode
-     * @return list of form messages
+     * @return list of form errors
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<FormMessage> validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
+    List<FormError> validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
             throws UnifyException;
 
     /**

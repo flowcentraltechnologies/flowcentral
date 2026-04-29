@@ -119,6 +119,8 @@ public class FormContext extends AbstractContext implements ValidationErrors {
 
     private EntityAudit entityAudit;
 
+    private AppletUtilities au;
+
     private String altFormTitle;
 
     private String fixedReference;
@@ -146,26 +148,31 @@ public class FormContext extends AbstractContext implements ValidationErrors {
     private Mode mode;
 
     public FormContext(AppletContext appletContext) throws UnifyException {
-        this(appletContext, null, null, null, null);
+        this(appletContext, appletContext.au(), null, null, null, null);
     }
 
     public FormContext(AppletContext appletContext, EntityDef entityDef, Object inst) throws UnifyException {
-        this(appletContext, null, null, entityDef, inst);
+        this(appletContext, appletContext.au(), null, null, entityDef, inst);
     }
 
     public FormContext(AppletContext appletContext, FormDef formDef, EntityFormEventHandlers formEventHandlers,
             Object inst) throws UnifyException {
-        this(appletContext, formDef, formEventHandlers, formDef.getEntityDef(), inst);
+        this(appletContext, appletContext.au(), formDef, formEventHandlers, formDef.getEntityDef(), inst);
     }
 
     public FormContext(AppletContext appletContext, FormDef formDef, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        this(appletContext, formDef, formEventHandlers, formDef.getEntityDef(), null);
+        this(appletContext, appletContext.au(), formDef, formEventHandlers, formDef.getEntityDef(), null);
     }
 
-    private FormContext(AppletContext appletContext, FormDef formDef, EntityFormEventHandlers formEventHandlers,
-            EntityDef entityDef, Object inst) throws UnifyException {
+    public FormContext(AppletUtilities au, FormDef formDef, Object inst) throws UnifyException {
+        this(null, au, formDef, null, formDef.getEntityDef(), inst);
+    }
+
+    private FormContext(AppletContext appletContext, AppletUtilities au, FormDef formDef,
+            EntityFormEventHandlers formEventHandlers, EntityDef entityDef, Object inst) throws UnifyException {
         this.appletContext = appletContext;
+        this.au = au;
         this.formEventHandlers = formEventHandlers;
         this.entityDef = entityDef;
         this.inst = inst;
@@ -194,7 +201,7 @@ public class FormContext extends AbstractContext implements ValidationErrors {
     }
 
     public AppletUtilities au() {
-        return appletContext.au();
+        return au;
     }
 
     public EntityAudit getEntityAudit() throws UnifyException {
@@ -298,9 +305,12 @@ public class FormContext extends AbstractContext implements ValidationErrors {
     }
 
     public void setInst(Object inst) throws UnifyException {
-        appletContext.extractReference(entityDef, inst);
+        if (appletContext != null) {
+            appletContext.extractReference(entityDef, inst);
+        }
+
         this.inst = inst;
-        altFormTitle = (formDef != null && isWithInst() && formDef.isWithTitleFormat())
+        altFormTitle = (appletContext != null && formDef != null && isWithInst() && formDef.isWithTitleFormat())
                 ? appletContext.specialParamProvider()
                         .getStringGenerator(getFormValueStore().getReader(), getFormValueStore().getReader(),
                                 formDef.getTitleFormat())
@@ -439,6 +449,10 @@ public class FormContext extends AbstractContext implements ValidationErrors {
 
     public List<String> getFieldError(String fieldName) {
         return formValidationErrors.getFieldError(fieldName);
+    }
+
+    public Map<String, List<String>> getFieldErrors() {
+        return formValidationErrors.getFieldErrors();
     }
 
     public boolean isWithSectionErrors() {

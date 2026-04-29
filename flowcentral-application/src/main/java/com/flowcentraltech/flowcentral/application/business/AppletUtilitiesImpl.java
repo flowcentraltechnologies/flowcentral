@@ -133,6 +133,7 @@ import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityFieldAudit;
+import com.flowcentraltech.flowcentral.common.data.FormError;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
@@ -197,6 +198,7 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.font.FontSymbolManager;
 import com.tcdng.unify.web.ui.PageRequestContextUtil;
+import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
@@ -2072,12 +2074,29 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
     
     @Override
-    public List<FormMessage> validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
-            throws UnifyException {
-        final FormContext ctx = new FormContext(null, getFormDef(formName), null, inst);
+    public List<FormError> validateFormUsingComponentValidation(String formName, Object inst,
+            EvaluationMode evaluationMode) throws UnifyException {
+        final List<FormError> list = new ArrayList<FormError>();
+        final FormContext ctx = new FormContext(this, getFormDef(formName), inst);
         final FormValidationContext vCtx = new FormValidationContext(evaluationMode);
         formContextEvaluator.evaluateFormContextComponentValidation(ctx, vCtx);
-        return ctx.getValidationErrors();
+        if (ctx.isWithValidationErrors()) {
+            for (FormMessage formMessage : ctx.getValidationErrors()) {
+                list.add(new FormError(formMessage.getType(), formMessage.getMessage()));
+            }
+        }
+
+        if (ctx.isWithFieldErrors()) {
+            for (Map.Entry<String, List<String>> entry : ctx.getFieldErrors().entrySet()) {
+                if (!DataUtils.isBlank(entry.getValue())) {
+                    for (String message : entry.getValue()) {
+                        list.add(new FormError(MessageType.ERROR, entry.getKey(), message));
+                    }
+                }
+            }
+        }
+
+        return list;
     }
 
     @SuppressWarnings("unchecked")
