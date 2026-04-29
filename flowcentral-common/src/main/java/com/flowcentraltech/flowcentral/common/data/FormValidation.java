@@ -13,34 +13,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.flowcentraltech.flowcentral.common.data;
 
-import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.Target;
+import java.util.List;
 
 /**
- * FormValidation errors.
+ * Form validation.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface ValidationErrors {
+public class FormValidation {
     
-    /**
-     * Adds a validation error.
-     * @param message the error message
-     */
-    void addValidationError(String message);
+    private List<FormError> formErrors;
     
-    /**
-     * Adds a validation error.
-     * @param message the error message
-     */
-   void addValidationError(FormMessage message);
+    private List<FieldError> fieldErrors;
 
-   /**
-    * Adds a validation error.
-    * @param target the target
-    * @param message the error message
-    */
-    void addValidationError(Target target, String message);
+    public FormValidation(List<FormError> formErrors, List<FieldError> fieldErrors) {
+        this.formErrors = formErrors;
+        this.fieldErrors = fieldErrors;
+    }
+
+    public List<FormError> getFormErrors() {
+        return formErrors;
+    }
+
+    public List<FieldError> getFieldErrors() {
+        return fieldErrors;
+    }
+
 }

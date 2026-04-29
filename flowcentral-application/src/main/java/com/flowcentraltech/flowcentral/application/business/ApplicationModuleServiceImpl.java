@@ -156,7 +156,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
-import com.flowcentraltech.flowcentral.common.data.FormError;
+import com.flowcentraltech.flowcentral.common.data.FormValidation;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
@@ -1447,7 +1447,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<FormError> validateFormUsingComponentValidation(String formName, Object inst,
+    public FormValidation validateFormUsingComponentValidation(String formName, Object inst,
             EvaluationMode evaluationMode) throws UnifyException {
         return appletUtilities.validateFormUsingComponentValidation(formName, inst, evaluationMode);
     }
@@ -3830,14 +3830,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 ApplicationReplicationUtils.applyReplicationRules(ctx, appFormWidgetRulesPolicy.getWidgetRules());
             }
 
-            // Field Validation Policies
+            // Field FormValidation Policies
             for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : srcAppForm.getFieldValidationList()) {
                 appFormFieldValidationPolicy.setFieldName(ctx.fieldSwap(appFormFieldValidationPolicy.getFieldName()));
                 appFormFieldValidationPolicy
                         .setValidation(ctx.componentSwap(appFormFieldValidationPolicy.getValidation()));
             }
 
-            // Form Validation Policies
+            // Form FormValidation Policies
             for (AppFormValidationPolicy appFormValidationPolicy : srcAppForm.getFormValidationList()) {
                 appFormValidationPolicy.setErrorMatcher(ctx.componentSwap(appFormValidationPolicy.getErrorMatcher()));
                 ApplicationReplicationUtils.applyReplicationRules(ctx, appFormValidationPolicy.getErrorCondition());

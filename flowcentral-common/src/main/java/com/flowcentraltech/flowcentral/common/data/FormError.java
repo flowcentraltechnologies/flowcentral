@@ -28,15 +28,7 @@ public class FormError {
     
     private MessageType type;
     
-    private String target;
-    
     private String message;
-
-    public FormError(MessageType type, String target, String message) {
-        this.type = type;
-        this.target = target;
-        this.message = message;
-    }
 
     public FormError(MessageType type, String message) {
         this.type = type;
@@ -45,10 +37,6 @@ public class FormError {
 
     public MessageType getType() {
         return type;
-    }
-
-    public String getTarget() {
-        return target;
     }
 
     public String getMessage() {

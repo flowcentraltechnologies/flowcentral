@@ -88,8 +88,8 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
-import com.flowcentraltech.flowcentral.common.data.FormError;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.FormValidation;
 import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
@@ -596,7 +596,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @return the provider
      */
     DynamicEnumProvider enumProvider();
-    
+
     /**
      * Gets the application privilege manager.
      * 
@@ -1796,7 +1796,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     boolean formBeanMatchAppletPropertyCondition(AppletDef appletDef, AbstractForm form, String conditionPropName)
             throws UnifyException;
-    
+
     /**
      * Matches a form bean with applet condition property when present
      * 
@@ -1810,9 +1810,9 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    boolean formBeanMatchAppletPropertyConditionWhenPresent(AppletDef appletDef, AbstractForm form, String conditionPropName)
-            throws UnifyException;
-    
+    boolean formBeanMatchAppletPropertyConditionWhenPresent(AppletDef appletDef, AbstractForm form,
+            String conditionPropName) throws UnifyException;
+
     /**
      * Validate form using component validation.
      * 
@@ -1822,11 +1822,11 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                       the entity instance
      * @param evaluationMode
      *                       the evaluation mode
-     * @return list of form errors
+     * @return validation result
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<FormError> validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
+    FormValidation validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
             throws UnifyException;
 
     /**
@@ -2099,7 +2099,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                        if an error occurs
      */
     int updateEntity(Class<? extends Entity> entityClass, Long id, Update update) throws UnifyException;
-    
+
     /**
      * Performs on form construction.
      * 
