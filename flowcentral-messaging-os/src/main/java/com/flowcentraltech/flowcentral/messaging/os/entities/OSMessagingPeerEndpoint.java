@@ -48,11 +48,15 @@ public class OSMessagingPeerEndpoint extends BaseStatusEntity {
     @Column(name = "ENDPOINT_DESC", length = 256)
     private String description;
 
-    @Column(name = "ENDPOINT_URL", length = 512)
+    @Column(name = "ENDPOINT_URL", length = 512, nullable = true)
     private String endpointUrl;
 
-    @Column(name = "PEER_AUTH", length = 512, transformer = SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH)
+    @Column(name = "PEER_AUTH", length = 512, transformer = SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
+            nullable = true)
     private String peerPassword;
+
+    @Column(name = "LOCAL_TARGET")
+    private boolean localTarget;
 
     @Override
     public String getDescription() {
@@ -101,6 +105,14 @@ public class OSMessagingPeerEndpoint extends BaseStatusEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isLocalTarget() {
+        return localTarget;
+    }
+
+    public void setLocalTarget(boolean localTarget) {
+        this.localTarget = localTarget;
     }
 
 }

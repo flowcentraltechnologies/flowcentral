@@ -51,6 +51,9 @@ import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndp
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingProcessingLog;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
+import com.flowcentraltech.flowcentral.messaging.os.web.controllers.OSDownloadLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.web.controllers.OSMessagingLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.web.controllers.OSUploadLocalController;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -93,6 +96,15 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     private static final int MAX_PROCESSING_BATCH_SIZE = 512;
 
     @Configurable
+    private OSUploadLocalController osUploadLocalController;
+
+    @Configurable
+    private OSDownloadLocalController osDownloadLocalController;
+    
+    @Configurable
+    private OSMessagingLocalController osMessagingLocalController;
+    
+    @Configurable
     private SystemModuleService systemModuleService;
 
     @Configurable
@@ -130,7 +142,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                                     osPeerEndpoint.getShortName(), osPeerEndpoint.getName(),
                                     osPeerEndpoint.getDescription(), osPeerEndpoint.getEndpointUrl(),
                                     osPeerEndpoint.getPeerPassword(), osPeerEndpoint.getStatus(),
-                                    osPeerEndpoint.getVersionNo(), source);
+                                    osPeerEndpoint.isLocalTarget(), osPeerEndpoint.getVersionNo(), source);
                 }
 
             };
@@ -542,7 +554,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             headers.put(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE, service);
         }
 
-        PostResp<String> resp = IOUtils.postJsonToEndpoint(osPeerEndpointDef.getEndpointUrl(), reqJson, headers);
+        PostResp<String> resp = osPeerEndpointDef.isLocalTarget()
+                ? osMessagingLocalController.handleLocalMessaging(headers, reqJson)
+                : IOUtils.postJsonToEndpoint(osPeerEndpointDef.getEndpointUrl(), reqJson, headers);
         if (resp.isError()) {
             throwOperationErrorException(new Exception(resp.getError()));
         }
@@ -603,7 +617,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             headers.put(OSMessagingRequestHeaderConstants.UPLOAD_DETAIL, HttpUtils.getUploadHeader(disposition));
         }
 
-        PostResp<String> resp = IOUtils.postStreamToEndpoint(osPeerEndpointDef.getEndpointUploadUrl(), in, headers);
+        final PostResp<String> resp = osPeerEndpointDef.isLocalTarget()
+                ? osUploadLocalController.handleLocalUpload(headers, disposition, in)
+                : IOUtils.postStreamToEndpoint(osPeerEndpointDef.getEndpointUploadUrl(), in, headers);
         if (resp.isError()) {
             throwOperationErrorException(new Exception(resp.getError()));
         }
@@ -660,8 +676,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             headers.put(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE, service);
         }
 
-        PostResp<String> resp = IOUtils.postGetStreamFromEndpoint(osPeerEndpointDef.getEndpointDownloadUrl(), out,
-                headers);
+        final PostResp<String> resp = osPeerEndpointDef.isLocalTarget()
+                ? osDownloadLocalController.handleLocalDownload(headers, out)
+                : IOUtils.postGetStreamFromEndpoint(osPeerEndpointDef.getEndpointDownloadUrl(), out, headers);
         if (resp.isError()) {
             throwOperationErrorException(new Exception(resp.getError()));
         }

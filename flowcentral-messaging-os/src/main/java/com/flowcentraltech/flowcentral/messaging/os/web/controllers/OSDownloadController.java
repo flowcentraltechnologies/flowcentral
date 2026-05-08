@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
@@ -33,6 +34,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
+import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractHttpDownloadController;
 import com.tcdng.unify.web.http.HttpRequestHeaders;
@@ -44,7 +46,7 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
  * @since 4.1
  */
 @Component(OSMessagingModuleNameConstants.OSMESSAGING_DOWNLOAD_CONTROLLER)
-public class OSDownloadController extends AbstractHttpDownloadController {
+public class OSDownloadController extends AbstractHttpDownloadController implements OSDownloadLocalController {
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
@@ -59,6 +61,12 @@ public class OSDownloadController extends AbstractHttpDownloadController {
         super.onInitialize();
         debugging = getContainerSetting(boolean.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
+    }
+
+    @Override
+    public PostResp<String> handleLocalDownload(Map<String, String> headers, OutputStream out) throws UnifyException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @SuppressWarnings("unchecked")
