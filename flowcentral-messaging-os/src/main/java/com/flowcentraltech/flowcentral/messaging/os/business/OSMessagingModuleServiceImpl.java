@@ -50,10 +50,10 @@ import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingLog;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingProcessingLog;
+import com.flowcentraltech.flowcentral.messaging.os.local.OSDownloadLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.local.OSMessagingLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.local.OSUploadLocalController;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
-import com.flowcentraltech.flowcentral.messaging.os.web.controllers.OSDownloadLocalController;
-import com.flowcentraltech.flowcentral.messaging.os.web.controllers.OSMessagingLocalController;
-import com.flowcentraltech.flowcentral.messaging.os.web.controllers.OSUploadLocalController;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -507,8 +507,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_VENDORDOMAIN);
         final boolean debugging = getContainerSetting(boolean.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
+        final String hubServiceId = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_INTEGRATION_SERVICE_ID);
         final String serviceVersion = getDeploymentVersion();
-        osInfo = new OSInfo(serviceId, serviceVersion, vendorName, vendorDomain, debugging);
+        osInfo = new OSInfo(serviceId, serviceVersion, vendorName, vendorDomain, hubServiceId, debugging);
     }
 
     @Override

@@ -30,10 +30,12 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstan
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.local.OSDownloadLocalController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractHttpDownloadController;
@@ -63,6 +65,13 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
         super.onInitialize();
         debugging = getContainerSetting(boolean.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
+    }
+
+    @Override
+    public UploadedFile handleLocalDownload(Map<String, String> headers) throws UnifyException {
+        final UploadedFile uploadedFile = UploadedFile.create("file");
+        handleLocalDownload(headers, uploadedFile.getOut());
+        return uploadedFile;
     }
 
     @Override

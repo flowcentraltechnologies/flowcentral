@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstan
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.local.OSMessagingLocalController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;

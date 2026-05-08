@@ -13,13 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
+package com.flowcentraltech.flowcentral.messaging.os.local;
 
 import java.io.OutputStream;
 import java.util.Map;
 
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.util.PostResp;
 
 /**
@@ -42,4 +43,15 @@ public interface OSDownloadLocalController extends UnifyComponent {
      *                        if an error occurs
      */
     PostResp<String> handleLocalDownload(Map<String, String> headers, OutputStream out) throws UnifyException;
+    
+    /**
+     * Handles local download
+     * 
+     * @param headers
+     *                the headers
+     * @return the uploaded file
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    UploadedFile handleLocalDownload(Map<String, String> headers) throws UnifyException;
 }

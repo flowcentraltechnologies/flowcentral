@@ -13,37 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
+package com.flowcentraltech.flowcentral.messaging.os.local;
 
-import java.io.InputStream;
 import java.util.Map;
 
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.PostResp;
-import com.tcdng.unify.web.util.ContentDisposition;
 
 /**
- * OS Upload Local Controller.
+ * OS Messaging Local Controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface OSUploadLocalController extends UnifyComponent {
+public interface OSMessagingLocalController extends UnifyComponent {
 
     /**
-     * Handles local upload.
+     * Handles local messaging.
      * 
      * @param headers
-     *                    the headers
-     * @param disposition
-     *                    the content disposition
-     * @param in
-     *                    the payload input stream
-     * @return the response
+     *                    the post headers
+     * @param requestJson
+     *                    the request JSON message
+     * @return the response message
      * @throws UnifyException
      *                        if an error occurs
      */
-    PostResp<String> handleLocalUpload(Map<String, String> headers, ContentDisposition disposition, InputStream in)
-            throws UnifyException;
+    PostResp<String> handleLocalMessaging(Map<String, String> headers, String requestJson) throws UnifyException;
 }
