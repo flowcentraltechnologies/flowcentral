@@ -35,14 +35,17 @@ public class OSMessagingPeerInfo {
 
     private String peerPassword;
 
+    private boolean localTarget;
+
     public OSMessagingPeerInfo(String appId, String shortName, String name, String description, String endpointUrl,
-            String peerPassword) {
+            String peerPassword, boolean localTarget) {
         this.appId = appId;
         this.shortName = shortName;
         this.name = name;
         this.description = description;
         this.endpointUrl = endpointUrl;
         this.peerPassword = peerPassword;
+        this.localTarget = localTarget;
     }
 
     public String getAppId() {
@@ -67,5 +70,9 @@ public class OSMessagingPeerInfo {
 
     public String getPeerPassword() {
         return peerPassword;
+    }
+
+    public boolean isLocalTarget() {
+        return localTarget;
     }
 }

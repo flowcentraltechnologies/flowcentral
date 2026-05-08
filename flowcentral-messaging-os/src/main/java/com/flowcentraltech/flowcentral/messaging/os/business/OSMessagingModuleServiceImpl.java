@@ -234,6 +234,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 osMessagingPeerEndpoint.setEndpointUrl(osMessagingPeerInfo.getEndpointUrl());
                 osMessagingPeerEndpoint.setPeerPassword(osMessagingPeerInfo.getPeerPassword());
                 osMessagingPeerEndpoint.setShortName(osMessagingPeerInfo.getShortName());
+                osMessagingPeerEndpoint.setLocalTarget(osMessagingPeerInfo.isLocalTarget());
                 osMessagingPeerEndpoint.setStatus(RecordStatus.ACTIVE);
                 environment().create(osMessagingPeerEndpoint);
             } else {
@@ -243,6 +244,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 osMessagingPeerEndpoint.setEndpointUrl(osMessagingPeerInfo.getEndpointUrl());
                 osMessagingPeerEndpoint.setPeerPassword(osMessagingPeerInfo.getPeerPassword());
                 osMessagingPeerEndpoint.setShortName(osMessagingPeerInfo.getShortName());
+                osMessagingPeerEndpoint.setLocalTarget(osMessagingPeerInfo.isLocalTarget());
                 osMessagingPeerEndpoint.setStatus(RecordStatus.ACTIVE);
                 environment().updateByIdVersion(osMessagingPeerEndpoint);
             }
