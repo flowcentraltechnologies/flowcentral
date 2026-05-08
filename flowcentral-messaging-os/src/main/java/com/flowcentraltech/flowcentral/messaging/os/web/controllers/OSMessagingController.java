@@ -38,6 +38,7 @@ import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractPlainJsonController;
 import com.tcdng.unify.web.http.HttpRequestHeaders;
+import com.tcdng.unify.web.util.HttpUtils;
 
 /**
  * OS Messaging Controller.
@@ -66,8 +67,19 @@ public class OSMessagingController extends AbstractPlainJsonController implement
     @Override
     public PostResp<String> handleLocalMessaging(Map<String, String> headers, String requestJson)
             throws UnifyException {
-        // TODO Auto-generated method stub
-        return null;
+        final long start = System.currentTimeMillis();
+        boolean success = true;
+        String jsonResponse = null;
+        try {
+            setHttpRequestHeaders(headers);
+            jsonResponse = doExecute(null, requestJson);
+        } catch (Exception e) {
+            jsonResponse = HttpUtils.getJsonErrorResponse(e);
+            success = false;
+        }
+
+        return new PostResp<String>(success ? jsonResponse : null, success ? null : jsonResponse, requestJson,
+                jsonResponse, 200, System.currentTimeMillis() - start);
     }
 
     @SuppressWarnings("unchecked")

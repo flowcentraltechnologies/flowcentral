@@ -38,7 +38,9 @@ import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractHttpUploadController;
 import com.tcdng.unify.web.http.HttpRequestHeaders;
+import com.tcdng.unify.web.http.SimpleHttpRequestHeaders;
 import com.tcdng.unify.web.util.ContentDisposition;
+import com.tcdng.unify.web.util.HttpUtils;
 
 /**
  * OS Upload Controller.
@@ -67,8 +69,18 @@ public class OSUploadController extends AbstractHttpUploadController implements 
     @Override
     public PostResp<String> handleLocalUpload(Map<String, String> headers, ContentDisposition disposition,
             InputStream in) throws UnifyException {
-        // TODO Auto-generated method stub
-        return null;
+        final long start = System.currentTimeMillis();
+        boolean success = true;
+        String jsonResponse = null;
+        try {
+            jsonResponse = handleUpload(new SimpleHttpRequestHeaders(headers), disposition, in);
+        } catch (Exception e) {
+            jsonResponse = HttpUtils.getJsonErrorResponse(e);
+            success = false;
+        }
+
+        return new PostResp<String>(success ? jsonResponse : null, success ? null : jsonResponse, "",
+                jsonResponse, 200, System.currentTimeMillis() - start);
     }
 
     @SuppressWarnings("unchecked")

@@ -38,6 +38,8 @@ import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractHttpDownloadController;
 import com.tcdng.unify.web.http.HttpRequestHeaders;
+import com.tcdng.unify.web.http.SimpleHttpRequestHeaders;
+import com.tcdng.unify.web.util.HttpUtils;
 
 /**
  * OS download Controller.
@@ -65,8 +67,18 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
 
     @Override
     public PostResp<String> handleLocalDownload(Map<String, String> headers, OutputStream out) throws UnifyException {
-        // TODO Auto-generated method stub
-        return null;
+        final long start = System.currentTimeMillis();
+        boolean success = true;
+        String jsonResponse = null;
+        try {
+            handleDownload(new SimpleHttpRequestHeaders(headers), out);
+        } catch (Exception e) {
+            jsonResponse = HttpUtils.getJsonErrorResponse(e);
+            success = false;
+        }
+
+        return new PostResp<String>(success ? jsonResponse : null, success ? null : jsonResponse, "", jsonResponse, 200,
+                System.currentTimeMillis() - start);
     }
 
     @SuppressWarnings("unchecked")
