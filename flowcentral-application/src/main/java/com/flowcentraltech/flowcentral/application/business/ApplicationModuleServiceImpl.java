@@ -4133,8 +4133,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             tableColumnDef.getLinkAct(), renderer, tableColumnDef.getWidthRatio()));
                 }
 
-                tables.put(table, new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
-                        resolveApplicationMessage(tableDef.getLabel()), entity, DataUtils.unmodifiableList(columns)));
+                tables.put(table,
+                        new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
+                                resolveApplicationMessage(tableDef.getLabel()), entity,
+                                DataUtils.unmodifiableList(columns), tableDef.isRowColorFilters()));
             }
 
             final List<String> formList = Arrays.asList(
