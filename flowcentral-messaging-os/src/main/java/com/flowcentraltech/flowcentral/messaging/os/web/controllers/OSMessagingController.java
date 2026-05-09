@@ -68,9 +68,12 @@ public class OSMessagingController extends AbstractPlainJsonController implement
     @Override
     public PostResp<String> handleLocalMessaging(Map<String, String> headers, String requestJson)
             throws UnifyException {
-        final String function = headers.get(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
-        logDebug("Performing local messaging to [{0}]...", !StringUtils.isBlank(function) ? function
-                : headers.get(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE));
+        String target = headers.get(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
+        target = !StringUtils.isBlank(target) ? target
+                : headers.get(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
+        target = !StringUtils.isBlank(target) ? target
+                : getApplicationName();
+       logDebug("Performing local messaging to [{0}]...", target);
         final long start = System.currentTimeMillis();
         boolean success = true;
         String jsonResponse = null;
