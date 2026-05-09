@@ -70,6 +70,7 @@ public class OSUploadController extends AbstractHttpUploadController implements 
     @Override
     public PostResp<String> handleLocalUpload(Map<String, String> headers, ContentDisposition disposition,
             InputStream in) throws UnifyException {
+        logDebug("Performing local upload using signature [{0}]...", headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
         final long start = System.currentTimeMillis();
         boolean success = true;
         String jsonResponse = null;

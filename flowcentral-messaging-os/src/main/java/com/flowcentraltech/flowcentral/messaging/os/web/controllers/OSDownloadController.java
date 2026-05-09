@@ -76,6 +76,7 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
 
     @Override
     public PostResp<String> handleLocalDownload(Map<String, String> headers, OutputStream out) throws UnifyException {
+        logDebug("Performing local download using signature [{0}]...", headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
         final long start = System.currentTimeMillis();
         boolean success = true;
         String jsonResponse = null;
