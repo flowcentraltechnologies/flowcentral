@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
@@ -400,6 +401,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public Optional<String> getTableRowColor(String tableName, ValueStore row) throws UnifyException {
+        return applicationModuleService.getTableRowColor(tableName, row);
     }
 
     @Override

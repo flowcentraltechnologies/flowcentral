@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -1444,6 +1445,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return prdb.build();
                 }
             };
+    }
+
+    @Override
+    public Optional<String> getTableRowColor(String tableName, ValueStore row) throws UnifyException {
+        final TableDef tableDef = getTableDef(tableName);
+        if (tableDef.isRowColorFilters()) {
+            final Date now = getNow();
+            for (TableFilterDef tableFilterDef: tableDef.getRowColorFilterList()) {
+                if (tableFilterDef.getFilterDef()
+                        .getObjectFilter(tableDef.getEntityDef(), row.getReader(), now)
+                        .matchReader(row.getReader())) {
+                    return Optional.of(tableFilterDef.getRowColor());
+                }
+            }
+        }
+        
+        return Optional.empty();
     }
 
     @Override

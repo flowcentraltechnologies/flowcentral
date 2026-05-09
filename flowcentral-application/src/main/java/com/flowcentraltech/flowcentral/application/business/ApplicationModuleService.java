@@ -118,6 +118,19 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * @since 4.1
  */
 public interface ApplicationModuleService extends FlowCentralService {
+
+    /**
+     * Gets table row color.
+     * 
+     * @param tableName
+     *                  the table name
+     * @param row
+     *                  the row value store
+     * @return the color in HEX
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> getTableRowColor(String tableName, ValueStore row) throws UnifyException;
     
     /**
      * Validate form using component validation.

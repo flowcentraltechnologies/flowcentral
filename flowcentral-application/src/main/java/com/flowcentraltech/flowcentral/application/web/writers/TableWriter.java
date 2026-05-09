@@ -719,7 +719,7 @@ public class TableWriter extends AbstractControlWriter {
 
                     writeTagName(writer, tableWidget.getRowId());
 
-                    if (rowColors) {
+                    if (rowColors) { 
                         for (TableFilterDef tableFilterDef : tableDef.getRowColorFilterList()) {
                             if (tableFilterDef.getFilterDef()
                                     .getObjectFilter(tableDef.getEntityDef(), valueStore.getReader(), now)

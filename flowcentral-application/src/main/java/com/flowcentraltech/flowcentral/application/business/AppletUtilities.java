@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -130,6 +131,19 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 public interface AppletUtilities extends FlowCentralComponent {
 
+    /**
+     * Gets table row color.
+     * 
+     * @param tableName
+     *                  the table name
+     * @param row
+     *                  the row value store
+     * @return the color in HEX
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> getTableRowColor(String tableName, ValueStore row) throws UnifyException;
+    
     /**
      * Gets formatted audit. Uses default formatter options.
      * 
