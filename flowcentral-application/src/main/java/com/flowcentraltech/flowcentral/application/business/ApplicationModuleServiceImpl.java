@@ -120,6 +120,7 @@ import com.flowcentraltech.flowcentral.application.data.portal.PortalReference;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalReport;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTableColumn;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalTableLegend;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowStep;
 import com.flowcentraltech.flowcentral.application.entities.*;
@@ -1452,15 +1453,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final TableDef tableDef = getTableDef(tableName);
         if (tableDef.isRowColorFilters()) {
             final Date now = getNow();
-            for (TableFilterDef tableFilterDef: tableDef.getRowColorFilterList()) {
-                if (tableFilterDef.getFilterDef()
-                        .getObjectFilter(tableDef.getEntityDef(), row.getReader(), now)
+            for (TableFilterDef tableFilterDef : tableDef.getRowColorFilterList()) {
+                if (tableFilterDef.getFilterDef().getObjectFilter(tableDef.getEntityDef(), row.getReader(), now)
                         .matchReader(row.getReader())) {
                     return Optional.of(tableFilterDef.getRowColor());
                 }
             }
         }
-        
+
         return Optional.empty();
     }
 
@@ -4133,10 +4133,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             tableColumnDef.getLinkAct(), renderer, tableColumnDef.getWidthRatio()));
                 }
 
+                final List<PortalTableLegend> legends = new ArrayList<PortalTableLegend>();
+                for (TableFilterDef tableFilterDef : tableDef.getRowColorFilterList()) {
+                    legends.add(
+                            new PortalTableLegend(tableFilterDef.isWithLegendLabel() ? tableFilterDef.getLegendLabel()
+                                    : tableFilterDef.getListDescription(), tableFilterDef.getRowColor()));
+                }
+
                 tables.put(table,
                         new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
                                 resolveApplicationMessage(tableDef.getLabel()), entity,
-                                DataUtils.unmodifiableList(columns), tableDef.isRowColorFilters()));
+                                DataUtils.unmodifiableList(columns), legends));
             }
 
             final List<String> formList = Arrays.asList(

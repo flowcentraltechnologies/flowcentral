@@ -35,16 +35,16 @@ public class PortalTable {
 
     private List<PortalTableColumn> columns;
 
-    private boolean rowColored;
+    private List<PortalTableLegend> legends;
     
     public PortalTable(String name, String description, String label, String entity, List<PortalTableColumn> columns,
-            boolean rowColored) {
+            List<PortalTableLegend> legends) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.entity = entity;
         this.columns = columns;
-        this.rowColored = rowColored;
+        this.legends = legends;
     }
 
     public String getName() {
@@ -67,7 +67,8 @@ public class PortalTable {
         return columns;
     }
 
-    public boolean isRowColored() {
-        return rowColored;
+    public List<PortalTableLegend> getLegends() {
+        return legends;
     }
+
 }
