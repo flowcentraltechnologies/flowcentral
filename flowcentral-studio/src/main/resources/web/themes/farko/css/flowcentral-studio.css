@@ -330,3 +330,15 @@
 
 .fc-wfstepsetvaluespanel {width:820px;}
 .fc-wfstepsetvaluespanel .llabelinl {vertical-align:top;}
+
+/** Studio */
+.studiodetail {max-width:482px;}
+.studiodetail input[type="text"],
+.studiodetail input[type="password"] {font-size: 8pt;height: 22px;}
+.studiodetail .ui-text-popup .tpbutton {font-size: 8pt;height: 22px;}
+.studiodetail .ui-button {font-size:7pt;min-height: 22px;}
+.studiodetail .fc-miniform .mfcon {min-height: 32px;}
+.studiodetail .fc-miniform .mfclabel {font-size: 8pt;}
+.studiodetail .fc-miniform .mflabel {font-size: 8pt;}
+.studiodetail .fc-miniform .mflabel span{font-size: 8pt;}
+

@@ -3230,7 +3230,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentity.form.basicdetails}" editable="false"
 					contentType="MINIFORM">
-					<section name="entityDetails" columns="TYPE_2">
+					<section name="entityDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -3243,35 +3243,35 @@
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
+							column="0" disabled="true" required="true" />
 						<field name="baseType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
+							column="0" disabled="true" required="true" />
 						<field name="entityClass" inputWidget="application.text"
-							column="1" editable="false" required="true" saveAs="true" />
+							column="0" editable="false" required="true" saveAs="true" />
 						<field name="tableName" inputWidget="application.text"
-							column="1" required="true" saveAs="true" />
+							column="0" required="true" saveAs="true" />
 						<field name="dateFormatter"
-							inputWidget="studio.dateformatterlist" column="1"
+							inputWidget="studio.dateformatterlist" column="0"
 							required="false" />
 						<field name="dateTimeFormatter"
-							inputWidget="studio.datetimeformatterlist" column="1"
+							inputWidget="studio.datetimeformatterlist" column="0"
 							required="false" />
 						<field name="emailProducerConsumer"
-							inputWidget="application.emailproducerconsumerlist" column="1" />
+							inputWidget="application.emailproducerconsumerlist" column="0" />
 						<field name="delegate" inputWidget="environmentdelegatelist"
-							column="1" switchOnChange="true" />
+							column="0" switchOnChange="true" />
 						<field name="dataSourceName" inputWidget="application.text"
-							column="1" required="true" visible="false" />
+							column="0" required="true" visible="false" />
 					</section>
-					<section name="optionDetails" columns="TYPE_1_2">
+					<section name="optionDetails" columns="TYPE_2">
 						<field name="auditable" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="reportable" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="supportsChangeEvents"
-							inputWidget="application.checkbox" column="2" />
+							inputWidget="application.checkbox" column="1" />
 						<field name="actionPolicy"
-							inputWidget="application.checkbox" column="2" disabled="true" />
+							inputWidget="application.checkbox" column="1" disabled="true" />
 					</section>
 				</tab>
 				<tab name="fields" label="$m{studio.appentity.form.fields}"

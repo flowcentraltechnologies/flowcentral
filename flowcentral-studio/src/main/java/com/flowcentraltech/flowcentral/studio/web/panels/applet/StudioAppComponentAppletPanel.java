@@ -40,6 +40,15 @@ public class StudioAppComponentAppletPanel extends AbstractEntityFormAppletPanel
             setVisible("prevBtn", false);
             setVisible("nextBtn", false);
         }
+        
+        setVisible("formPanel.altActionPanel", false);
+        setVisible("formPanel.headerLeftPanel", false);
+        setVisible("formPanel.headerCenterPanel", false);
+        
+        setVisible("submitCloseBtn", false);
+        setVisible("saveCloseBtn", false);
+        setVisible("updateCloseBtn", false);
+        setVisible("cancelBtn", false);
     }
 
 }
