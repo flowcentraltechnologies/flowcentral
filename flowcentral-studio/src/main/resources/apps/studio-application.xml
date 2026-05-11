@@ -1883,20 +1883,6 @@
 					label="$m{application.appentityfield.datatype}" widthRatio="1" />
 				<column field="columnName" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="references" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="nullable" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="minLen" renderWidget="application.integer"
-					widthRatio="1" />
-				<column field="maxLen" renderWidget="application.integer"
-					widthRatio="1" />
-				<column field="key" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="property" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="typeDesc" renderWidget="application.text"
-					label="$m{application.appentityfield.type}" widthRatio="1" />
 			</columns>
 		</table>
 		<table name="appEntityFieldQuickEditTable"
@@ -1936,8 +1922,6 @@
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
-				<column field="description" renderWidget="application.text"
-					widthRatio="2" />
 				<column field="label" renderWidget="application.text"
 					widthRatio="1" />
 				<column field="fieldName" renderWidget="application.text"
@@ -2042,10 +2026,6 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
 		<table name="appAppletRouteToAppletTable"
@@ -2076,10 +2056,6 @@
 					renderWidget="application.text"
 					label="$m{application.appappletfilter.ownershiptype}"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
 		<table name="appAppletSetValuesTable"
@@ -2091,10 +2067,6 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
 		<table name="appAppletAlertTable"
@@ -2105,10 +2077,6 @@
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
 					widthRatio="1" />
 			</columns>
 		</table>
@@ -2166,12 +2134,6 @@
 					label="$m{application.apptablefilter.rowcolor}" widthRatio="1" />
 				<column field="legendLabel" renderWidget="application.text"
 					label="$m{application.apptablefilter.legendlabel}" widthRatio="1" />
-				<column field="executionIndex"
-					renderWidget="application.text" widthRatio="1" order="ASC" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
 		<table name="appFormElementTable"
