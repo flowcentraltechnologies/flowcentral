@@ -749,7 +749,7 @@
 				<property name="searchTable" value="appEntityFieldTable" />
 				<property name="searchTable.new" value="true" />
 				<property name="searchTable.report" value="false" />
-				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.quickFilter" value="false" />
 				<property name="searchTable.quickFilter.default"
 					value="customFieldFilter" />
 				<property name="createForm" value="appEntityFieldForm" />
@@ -856,7 +856,7 @@
 				<property name="searchTable" value="appEntitySeriesTable" />
 				<property name="searchTable.new" value="true" />
 				<property name="searchTable.report" value="false" />
-				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.quickFilter" value="false" />
 				<property name="createForm" value="appEntitySeriesForm" />
 				<property name="createForm.save" value="true" />
 				<property name="createForm.save.next" value="true" />
@@ -875,7 +875,7 @@
 				<property name="searchTable" value="appEntityCategoryTable" />
 				<property name="searchTable.new" value="true" />
 				<property name="searchTable.report" value="false" />
-				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.quickFilter" value="false" />
 				<property name="createForm" value="appEntityCategoryForm" />
 				<property name="createForm.save" value="true" />
 				<property name="createForm.save.next" value="true" />

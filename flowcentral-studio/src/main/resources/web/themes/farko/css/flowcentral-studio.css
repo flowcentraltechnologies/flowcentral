@@ -13,7 +13,8 @@
  	--color-formsec: #6e819d !important;
  	--color-icon: #525e6d !important;
  	--color-tablesel: #bfd6ff !important;
- 	--color-tablehov: #d5e7fb !important;
+	--color-tablehov: #d5e7fb !important;
+	--studiodetail-fontsize:7.5pt;
  }
 
 /* flowCentral studio CSS */
@@ -334,11 +335,18 @@
 /** Studio */
 .studiodetail {max-width:482px;}
 .studiodetail input[type="text"],
-.studiodetail input[type="password"] {font-size: 8pt;height: 22px;}
-.studiodetail .ui-text-popup .tpbutton {font-size: 8pt;height: 22px;}
-.studiodetail .ui-button {font-size:7pt;min-height: 22px;}
+.studiodetail input[type="password"] {height: 24px;}
+.studiodetail td,
+.studiodetail th,
+.studiodetail button,
+.studiodetail input,
+.studiodetail select, 
+.studiodetail textarea {font-size:var(--studiodetail-fontsize);}
+.studiodetail .ui-text-popup .tpbutton {font-size:var(--studiodetail-fontsize);height: 24px;}
+.studiodetail .ui-button {font-size:7pt;min-height: 24px;}
 .studiodetail .fc-miniform .mfcon {min-height: 32px;}
-.studiodetail .fc-miniform .mfclabel {font-size: 8pt;}
-.studiodetail .fc-miniform .mflabel {font-size: 8pt;}
-.studiodetail .fc-miniform .mflabel span{font-size: 8pt;}
-
+.studiodetail .fc-miniform .mfclabel {font-size:var(--studiodetail-fontsize);}
+.studiodetail .fc-miniform .mflabel {font-size:var(--studiodetail-fontsize);}
+.studiodetail .fc-miniform .mflabel span{font-size:var(--studiodetail-fontsize);}
+.studiodetail .fc-filter .item { width: 86px;margin-right:4px;}
+.studiodetail .fc-tabsheet {font-size:var(--studiodetail-fontsize);}

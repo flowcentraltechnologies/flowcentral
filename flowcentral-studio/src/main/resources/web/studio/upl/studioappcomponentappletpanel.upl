@@ -14,3 +14,24 @@
 // the License.
 
 !fc-studioappcomponentappletpanel
+
+// Form
+!fc-studioheaderwithtabsformpanel:formPanel binding:form
+	moreActionButtons:$c{saveAsBtn saveBtn saveNextBtn}
+	moreActionButtons:$c{updateBtn deleteBtn cancelBtn}
+	moreMemoryComponents:$c{focusMemory tabMemory}
+	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{switchOnChangeAct}}
+!ui-hidden:focusMemory binding:focusWidgetId	
+!ui-hidden:tabMemory binding:tabWidgetId	
+!ui-button:saveBtn caption:$m{button.save}
+	eventHandler:$d{!ui-event event:onclick action:$c{saveAct}}
+!ui-button:saveNextBtn caption:$m{button.savenext}
+	eventHandler:$d{!ui-event event:onclick action:$c{saveNextAct}}
+!ui-button:saveAsBtn caption:$m{button.saveas.ellipsis}
+	eventHandler:$d{!ui-event event:onclick action:$c{prepareEntitySaveAsAct}}
+!ui-button:updateBtn caption:$m{button.update}
+	eventHandler:$d{!ui-event event:onclick action:$c{updateAct}}
+!ui-button:deleteBtn caption:$m{button.delete}
+	eventHandler:$d{!ui-event event:onclick action:$c{deleteAct}}
+!ui-button:cancelBtn caption:$m{button.close}
+	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
