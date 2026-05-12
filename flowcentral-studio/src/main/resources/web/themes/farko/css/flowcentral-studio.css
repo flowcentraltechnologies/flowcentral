@@ -254,9 +254,6 @@
 
 .fc-dashboardsectioneditorpanel {}			
 
-/* Studio application component applet panel*/
-.fc-studioappcomponentappletpanel {}
-
 /* Switch application dialog panel */
 .fc-switchapplicationdialogpanel {}	
 .fc-switchapplicationdialogpanel .createtitle {display: block;font-weight:bold; padding: 4px 4px; color: #24303f;
@@ -333,7 +330,9 @@
 .fc-wfstepsetvaluespanel .llabelinl {vertical-align:top;}
 
 /** Studio */
-.studiodetail {max-width:482px;}
+.fc-studioappcomponentappletpanel {box-sizing: border-box;padding:2px;border-left:solid 1px #c0c0c0;background-color:#f7f9fa;}
+
+.studiodetail {width:100%;}
 .studiodetail input[type="text"],
 .studiodetail input[type="password"] {height: 24px;}
 .studiodetail td,
@@ -342,8 +341,10 @@
 .studiodetail input,
 .studiodetail select, 
 .studiodetail textarea {font-size:var(--studiodetail-fontsize);}
+.studiodetail .cltabsection {margin-top:6px;}
 .studiodetail .ui-text-popup .tpbutton {font-size:var(--studiodetail-fontsize);height: 24px;}
 .studiodetail .ui-button {font-size:7pt;min-height: 24px;}
+.studiodetail .ui-checkbox {width: 14px; height: 14px;}
 .studiodetail .fc-miniform .mfcon {min-height: 32px;}
 .studiodetail .fc-miniform .mfclabel {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-miniform .mflabel {font-size:var(--studiodetail-fontsize);}
