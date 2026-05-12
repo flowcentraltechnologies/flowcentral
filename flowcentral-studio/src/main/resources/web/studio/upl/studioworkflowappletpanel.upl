@@ -14,3 +14,7 @@
 // the License.
 
 !fc-studioworkflowappletpanel
+	morePreActionButtons:$c{publishBtn}
+	
+!ui-button:publishBtn styleClass:$e{fc-orangebutton} caption:$m{button.publish}
+	eventHandler:$f{publishEventHandler}

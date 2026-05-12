@@ -17,6 +17,7 @@
 
 // Form
 !fc-studioheaderwithtabsformpanel:formPanel binding:form
+	moreActionButtons:$f{morePreActionButtons}
 	moreActionButtons:$c{saveAsBtn saveBtn saveNextBtn}
 	moreActionButtons:$c{updateBtn deleteBtn cancelBtn}
 	moreMemoryComponents:$c{focusMemory tabMemory}
@@ -29,7 +30,7 @@
 	eventHandler:$d{!ui-event event:onclick action:$c{saveNextAct}}
 !ui-button:saveAsBtn caption:$m{button.saveas.ellipsis}
 	eventHandler:$d{!ui-event event:onclick action:$c{prepareEntitySaveAsAct}}
-!ui-button:updateBtn caption:$m{button.update}
+!ui-button:updateBtn caption:$m{button.save}
 	eventHandler:$d{!ui-event event:onclick action:$c{updateAct}}
 !ui-button:deleteBtn caption:$m{button.delete}
 	eventHandler:$d{!ui-event event:onclick action:$c{deleteAct}}

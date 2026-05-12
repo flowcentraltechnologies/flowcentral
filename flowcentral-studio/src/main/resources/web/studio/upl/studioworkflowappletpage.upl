@@ -24,17 +24,12 @@
 	
 // Applet panel
 !fc-studioworkflowappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
-	binding:applet
+	binding:applet 
+	publishEventHandler:$d{!ui-event event:onclick action:$c{publishAct}}
+	additionalUpdateComponents:$c{workflowEditorPagePanel}
 
 // Workflow Editor Page
 !fc-workfloweditorpagepanel:workflowEditorPagePanel binding:applet.workflowEditorPage
-	preMoreActionButtons:$c{publishBtn}
-	moreActionButtons:$c{saveDesignCloseBtn}
-!ui-button:publishBtn styleClass:$e{fc-orangebutton} caption:$m{button.publish}
-	eventHandler:$d{!ui-event event:onclick action:$c{publishAct}}
-!ui-button:saveDesignCloseBtn caption:$m{button.saveclose}
-	eventHandler:$d{!ui-event event:onclick action:$c{saveDesignCloseAct}}
 
 // Actions
 !ui-post:publishAct path:$n{/publish}
-!ui-post:saveDesignCloseAct path:$n{/saveDesignAndClose} components:$c{workflowEditorPagePanel}
