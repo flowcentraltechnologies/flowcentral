@@ -303,7 +303,7 @@
 
 /** Workflow Editor */
 .fc-workfloweditor {width:100%;height:100%;}
-.fc-workfloweditor .tools {position: absolute;top:0px;right:4px;width:120px;z-index:420;}
+.fc-workfloweditor .tools {position: absolute;top:0px;right:14px;width:120px;z-index:420;}
 .fc-workfloweditor .tools .hdr {/*position:-webkit-sticky; position:sticky; top:0px; left:0px;*/ padding:4px;background-color: #e3e7ea;
 	text-align:center;color:#000000;font-size:8pt;}
 .fc-workfloweditor .tools .bdy {background-color: #f7f9fa;border: solid 1px #c8c8c8; height:100%; overflow:auto;}
@@ -312,7 +312,7 @@
 .fc-workfloweditor .tools .symcat {display:block;padding: 4px;font-size: 16px;}
 .fc-workfloweditor .tools .labelcat {display:block;font-size: 10px;font-style: italic;word-wrap: break-word;}
 
-.fc-workfloweditor .design {display:block;width:100%;max-width:100%;height:100%;max-height: calc(100vh - 134px); overflow:scroll;}
+.fc-workfloweditor .design {display:block;width:100%;max-width:100%;height:100%;max-height: calc(100vh - 86px); overflow:scroll;}
 .fc-workfloweditor .designbase {display:block;padding:4px;width: 100%;height:100%;box-sizing: border-box;}
 .fc-workfloweditor .drag {position:fixed;zIndex:400;opacity:0.7;}
 .fc-workfloweditor .canvas {}
