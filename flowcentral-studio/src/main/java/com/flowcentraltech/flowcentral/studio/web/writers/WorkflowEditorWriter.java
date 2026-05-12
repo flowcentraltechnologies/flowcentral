@@ -67,21 +67,10 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
         // Body
         writer.write(
                 "<div style=\"display:table;table-layout: fixed;width:100%;height:100%;\"><div style=\"display:table-row;\">");
-        // Design
-        writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
-        writer.write("<div class=\"design\" style=\"display:block;overflow:scroll;\">");
-        writer.write("<div id=\"").write(workflowEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");
-        writer.write("<canvas id=\"").write(workflowEditorWidget.getDesignCanvasId())
-                .write("\" class=\"canvas\"></canvas>");
-        writer.write("</div>");
-        writer.write("</div>");
-        writer.write("</div>");
-        jsonWriter.writeObject("design", workflowEditor.getDesign());
-        // End design
-
+        writer.write("<div style=\"display:table-cell;vertical-align:top;position:relative;\">");
+        
         // Tools
-        writer.write("<div class=\"tools\" style=\"display:table-cell;vertical-align:top;width:")
-                .write(workflowEditorWidget.getChoiceWidth()).write(";\">");
+        writer.write("<div class=\"tools\">");
         writer.write("<div class=\"bdy\" id=\"").write(workflowEditorWidget.getToolBaseId()).write("\">");
         writer.write("<div class=\"hdr\">").write(getSessionMessage("workfloweditor.components")).write("</div>");
         jsonWriter.beginArray("tools");
@@ -104,9 +93,23 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
             }
         }
         jsonWriter.endArray();
-        writer.write("</div></div>");
+        writer.write("</div>");
+        writer.write("</div>");
         // End tools
 
+        // Design
+        writer.write("<div class=\"design\">");
+
+        writer.write("<div id=\"").write(workflowEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");
+        writer.write("<canvas id=\"").write(workflowEditorWidget.getDesignCanvasId())
+                .write("\" class=\"canvas\"></canvas>");
+        writer.write("</div>");
+
+        writer.write("</div>");
+        // End design
+        jsonWriter.writeObject("design", workflowEditor.getDesign());
+
+        writer.write("</div>");
         writer.write("</div></div>");
         // End body
 
