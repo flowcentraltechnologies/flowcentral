@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntit
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.studio.web.panels.WorkflowEditorPage;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioWorkflowApplet;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -53,12 +54,24 @@ public class StudioWorkflowAppletController
     }
 
     @Action
-    public String designChildItem() throws UnifyException {
+    public String publish() throws UnifyException {
         StudioWorkflowAppletPageBean pageBean = getPageBean();
         StudioWorkflowApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        applet.designChildItem(childTabIndex);
-        return "refreshapplet";
+        WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
+        workflowEditorPage.publish();
+        hintUser("$m{studioworkflowapplet.workfloweditor.publish.hint}", workflowEditorPage.getSubTitle());
+        return noResult();
+    }
+
+    @Action
+    public String saveDesignAndClose() throws UnifyException {
+        StudioWorkflowAppletPageBean pageBean = getPageBean();
+        StudioWorkflowApplet applet = pageBean.getApplet();
+        WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
+        workflowEditorPage.commitDesign();
+        applet.navBackToPrevious();
+        hintUser("$m{studioworkflowapplet.workfloweditor.success.hint}", workflowEditorPage.getSubTitle());
+        return noResult();
     }
 
     @Override

@@ -20,7 +20,6 @@ import com.flowcentraltech.flowcentral.studio.web.panels.WorkflowEditorPage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Studio workflow applet panel.
@@ -72,23 +71,6 @@ public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
             default:
                 break;
         }
-    }
-
-    @Action
-    public void publish() throws UnifyException {
-        StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
-        WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
-        workflowEditorPage.publish();
-        hintUser("$m{studioworkflowapplet.workfloweditor.publish.hint}", workflowEditorPage.getSubTitle());
-    }
-
-    @Action
-    public void saveDesignAndClose() throws UnifyException {
-        StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
-        WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
-        workflowEditorPage.commitDesign();
-        applet.navBackToPrevious();
-        hintUser("$m{studioworkflowapplet.workfloweditor.success.hint}", workflowEditorPage.getSubTitle());
     }
 
 }

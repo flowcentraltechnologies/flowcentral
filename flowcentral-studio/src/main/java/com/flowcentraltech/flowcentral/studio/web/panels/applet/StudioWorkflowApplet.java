@@ -48,20 +48,21 @@ public class StudioWorkflowApplet extends StudioAppComponentApplet {
             throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         this.workflowModuleService = workflowModuleService;
+        createDesign();
     }
 
     public WorkflowEditorPage getWorkflowEditorPage() {
         return workflowEditorPage;
     }
 
-    public void designChildItem(int childTabIndex) throws UnifyException {
+    public void createDesign() throws UnifyException {
         Workflow workflow = (Workflow) form.getFormBean();
         Long workflowId = workflow.getId();
-        String subTitle = workflow.getDescription();
-        setTabDefAndSaveCurrentForm(childTabIndex);
-        workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId, subTitle);
-        workflowEditorPage.newEditor();
-        viewMode = ViewMode.CUSTOM_PAGE;
+        if (workflowId != null) {
+            String subTitle = workflow.getDescription();
+            workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId, subTitle);
+            workflowEditorPage.newEditor();
+        }
     }
 
     private WorkflowEditorPage constructNewWorkflowEditorPage(String entityName, Long workflowId, String subTitle)

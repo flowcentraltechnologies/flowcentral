@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletPageBean;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioWorkflowApplet;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Studio workflow component applet page bean.
@@ -25,6 +26,15 @@ import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioWorkflowAp
  * @since 4.1
  */
 public class StudioWorkflowAppletPageBean extends AbstractEntityFormAppletPageBean<StudioWorkflowApplet> {
+
+    public StudioWorkflowApplet getApplet() {
+        return super.getApplet();
+    }
+
+    @Override
+    public void setApplet(StudioWorkflowApplet applet) throws UnifyException {
+        super.setApplet(applet);
+    }
 
     public String getInstTitle() {
         return getApplet().getInstTitle();

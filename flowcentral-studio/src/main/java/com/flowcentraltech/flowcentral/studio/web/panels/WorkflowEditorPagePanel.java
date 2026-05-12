@@ -33,8 +33,6 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     public void switchState() throws UnifyException {
-        super.switchState();
-
         final boolean readOnly = isAppletContextReadOnly();
         final WorkflowEditorPage workflowEditorPage = getWorkflowEditorPage();
         final WorkflowEditor workflowEditor = workflowEditorPage.getWorkflowEditor();
@@ -88,6 +86,11 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
     @Action
     public void cancelSetValues() throws UnifyException {
         commandHidePopup();
+    }
+
+    protected boolean isAppletContextReadOnly() throws UnifyException {
+        // TODO
+        return false;
     }
 
     private WorkflowEditorPage getWorkflowEditorPage() throws UnifyException {

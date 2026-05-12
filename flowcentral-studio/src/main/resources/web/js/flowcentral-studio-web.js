@@ -1966,7 +1966,7 @@ const WD_ROUTE_CONN_COLOR1 = "#dd0";
 const WD_ROUTE_CONN_COLOR2 = "#ff0";
 const WD_STEP_BORDER_COLOR = "#ccc";
 const WD_STEP_EDIT_COLOR = "#34495e"; //"#6699cc"
-const WD_STEP_WIDTH = 164;
+const WD_STEP_WIDTH = 124;
 const WD_STEP_FONT =  "Arial";
 const WD_STEP_ICON_COLOR =  "#888";
 const WD_STEP_ICON_FONT = "FontSymbolMngr0";
@@ -2049,7 +2049,9 @@ fuxstudio.wfdesign = {
 	
 	addStep: function(step) {
 				const typeInfo = this.steptypes[step.typeIndex];
-				const totalheadheight = typeInfo.edits.length > 0 ? 40 + 1 * 16: 40;
+				const edits_len = typeInfo.edits.length;
+				const edits_rows = (edits_len + 1) >> 1;
+				const totalheadheight = 40 + edits_rows * 16;
 				const info = {stepId:step.name, acceptInflow:typeInfo.acceptInflow, origin:step};
 				const layout = [];
 				const _self = this;
@@ -2068,7 +2070,7 @@ fuxstudio.wfdesign = {
 				
 
 				layout.push(new fabric.Text(JSON.parse("\"" + typeInfo.icon + "\""), {
-				  fontSize: 12,
+				  fontSize: 10,
 				  fontWeight: "bold",
 				  fontFamily: WD_STEP_ICON_FONT,
 				  top: 4,
@@ -2085,7 +2087,7 @@ fuxstudio.wfdesign = {
 				});
 				
 				layout.push(new fabric.Text(typeInfo.typeDesc.toUpperCase(), {
-				  fontSize: 10,
+				  fontSize: 8,
 				  fontFamily: WD_STEP_FONT,
 				  top: 4,
 				  left: 24,
@@ -2093,20 +2095,20 @@ fuxstudio.wfdesign = {
 				}));
 
 				layout.push(new fabric.Text(step.description, {
-				  fontSize: 10,
+				  fontSize: 8,
 				  fontFamily: WD_STEP_FONT,
 				  top: 24,
 				  left: 4,
 				  width: WD_STEP_WIDTH - 4 - 4
 				}));
 
-				var acleft = 4;
-				for(var i = 0; i < typeInfo.edits.length; i++) {
+				var acleft = 4; var r = 0;
+				for(var i = 0; i < edits_len;) {
 					const etype = this.edittypes[typeInfo.edits[i]];
 					layout.push(new fabric.Text(etype.caption.toUpperCase() + " (" + step.census[i] + ")", {
 						  fontSize: 7,
 						  fontFamily: WD_STEP_FONT,
-						  top: 40,
+						  top: 40 + r * 16,
 						  left: acleft,
 						  hoverCursor: "pointer",
 				          fill:"#fff",
@@ -2120,16 +2122,22 @@ fuxstudio.wfdesign = {
 						"mousedown": _self._callEditStep,
 					});
 					
-					acleft += editbtn.getBoundingRect().width - 2;
+					i++;
+					if (i % 2 == 0) {
+						acleft = 4;
+						r++;
+					} else {
+						acleft += editbtn.getBoundingRect().width - 2;
+					}
 				}
 				
 				info.inLeft = [];
 				info.inTop =  [];
 				info.inBottom = [];
 				info.outGrip = [];
-				for(var i = 0; i < step.routings.length; i++) {
-					const routing = step.routings[i];
-					const top_offset = i * 20;
+				for(var j = 0; j < step.routings.length; j++) {
+					const routing = step.routings[j];
+					const top_offset = j * 20;
 					layout.push(new fabric.Rect({
 					  top: totalheadheight + top_offset,
 					  left: 0,
@@ -2143,7 +2151,7 @@ fuxstudio.wfdesign = {
 					layout.push(new fabric.Text(routing.label, {
 					  top: totalheadheight + top_offset + 5,
 					  left: (WD_STEP_WIDTH - 4 - 10)/2,
-					  fontSize: 10,
+					  fontSize: 8,
 					  fontFamily: WD_STEP_FONT,
 					  textAlign: "center",
 					  originX: "center",
