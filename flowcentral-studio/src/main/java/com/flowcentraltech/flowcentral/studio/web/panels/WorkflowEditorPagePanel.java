@@ -33,29 +33,31 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     public void switchState() throws UnifyException {
-        final boolean readOnly = isAppletContextReadOnly();
         final WorkflowEditorPage workflowEditorPage = getWorkflowEditorPage();
-        final WorkflowEditor workflowEditor = workflowEditorPage.getWorkflowEditor();
-        workflowEditor.setReadOnly(readOnly);
-        if (!workflowEditor.isInitialized()) {
-            workflowEditor.init(getWidgetByShortName("createStepPanel").getLongName(),
-                    getWidgetByShortName("editStepPanel").getLongName(),
-                    getWidgetByShortName("stepSetValuesPanel").getLongName(),
-                    getWidgetByShortName("stepAlertsCrudPanel").getLongName(),
-                    getWidgetByShortName("stepRoutingsCrudPanel").getLongName(),
-                    getWidgetByShortName("stepUserActionsCrudPanel").getLongName());
-        }
-        
-        setWidgetVisible("publishBtn", !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
+        if (workflowEditorPage != null) {
+            final WorkflowEditor workflowEditor = workflowEditorPage.getWorkflowEditor();
+            final boolean readOnly = isAppletContextReadOnly();
+            workflowEditor.setReadOnly(readOnly);
+            if (!workflowEditor.isInitialized()) {
+                workflowEditor.init(getWidgetByShortName("createStepPanel").getLongName(),
+                        getWidgetByShortName("editStepPanel").getLongName(),
+                        getWidgetByShortName("stepSetValuesPanel").getLongName(),
+                        getWidgetByShortName("stepAlertsCrudPanel").getLongName(),
+                        getWidgetByShortName("stepRoutingsCrudPanel").getLongName(),
+                        getWidgetByShortName("stepUserActionsCrudPanel").getLongName());
+            }
 
-        boolean isEditable = !readOnly;
-        setWidgetVisible("saveBtn", isEditable);
-        setWidgetEditable("createStepPanel", isEditable);
-        setWidgetEditable("editStepPanel", isEditable);
-        setWidgetEditable("stepSetValuesPanel", isEditable);
-        setWidgetEditable("stepAlertsCrudPanel", isEditable);
-        setWidgetEditable("stepRoutingsCrudPanel", isEditable);
-        setWidgetEditable("stepUserActionsCrudPanel", isEditable);
+            setWidgetVisible("publishBtn", !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
+
+            boolean isEditable = !readOnly;
+            setWidgetVisible("saveBtn", isEditable);
+            setWidgetEditable("createStepPanel", isEditable);
+            setWidgetEditable("editStepPanel", isEditable);
+            setWidgetEditable("stepSetValuesPanel", isEditable);
+            setWidgetEditable("stepAlertsCrudPanel", isEditable);
+            setWidgetEditable("stepRoutingsCrudPanel", isEditable);
+            setWidgetEditable("stepUserActionsCrudPanel", isEditable);
+        }
     }
 
     @Action
