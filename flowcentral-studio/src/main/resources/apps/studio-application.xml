@@ -1818,10 +1818,10 @@
 	</entities>
 	<!-- Tables -->
 	<tables>
-		<table name="switchApplicationTable"
+		<table itemsPerPage="20" name="switchApplicationTable"
 			description="$m{studio.application.switch.table}"
 			label="$m{studio.application.switch.table.label}"
-			entity="application.application" itemsPerPage="20" serialNo="true">
+			entity="application.application" serialNo="true">
 			<columns>
 				<column field="moduleLabel" renderWidget="application.text"
 					widthRatio="1" label="$m{application.application.module}" />
@@ -1833,10 +1833,10 @@
 					widthRatio="1" linkAct="dialogMaintainAct" order="ASC" />
 			</columns>
 		</table>
-		<table name="appApplicationTable"
+		<table itemsPerPage="20" name="appApplicationTable"
 			description="$m{studio.application.table}"
 			label="$m{studio.application.table.label}"
-			entity="application.application" itemsPerPage="20" serialNo="true">
+			entity="application.application" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
@@ -1854,10 +1854,10 @@
 					renderWidget="application.text" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEnumerationItemTable"
+		<table itemsPerPage="10" name="appEnumerationItemTable"
 			description="$m{studio.appenumerationitem.table}"
 			label="$m{studio.appenumerationitem.table.label}"
-			entity="application.appEnumerationItem" itemsPerPage="20"
+			entity="application.appEnumerationItem"
 			serialNo="true">
 			<columns>
 				<column field="code" renderWidget="application.text"
@@ -1870,10 +1870,10 @@
 					widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appEntityFieldTable"
+		<table itemsPerPage="10" name="appEntityFieldTable"
 			description="$m{studio.appentityfield.table}"
 			label="$m{studio.appentityfield.table.label}"
-			entity="application.appEntityField" itemsPerPage="20" serialNo="true">
+			entity="application.appEntityField" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
@@ -1885,10 +1885,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityFieldQuickEditTable"
+		<table itemsPerPage="-1" name="appEntityFieldQuickEditTable"
 			description="$m{studio.appentityfield.table.quickedit}"
 			label="$m{studio.appentityfield.table.quickedit.label}"
-			entity="application.appEntityField" itemsPerPage="-1" serialNo="true">
+			entity="application.appEntityField" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="3" />
@@ -1914,10 +1914,10 @@
 					widthRatio="2" editable="true" />
 			</columns>
 		</table>
-		<table name="appEntitySeriesTable"
+		<table itemsPerPage="10" name="appEntitySeriesTable"
 			description="$m{studio.appentityseries.table}"
 			label="$m{studio.appentityseries.table.label}"
-			entity="application.appEntitySeries" itemsPerPage="20"
+			entity="application.appEntitySeries"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -1930,10 +1930,10 @@
 					label="$m{application.appentityseries.type}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityCategoryTable"
+		<table itemsPerPage="10" name="appEntityCategoryTable"
 			description="$m{studio.appentitycategory.table}"
 			label="$m{studio.appentitycategory.table.label}"
-			entity="application.appEntityCategory" itemsPerPage="20"
+			entity="application.appEntityCategory"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -1944,10 +1944,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityAttachmentTable"
+		<table itemsPerPage="10" name="appEntityAttachmentTable"
 			description="$m{studio.appentityattachment.table}"
 			label="$m{studio.appentityattachment.table.label}"
-			entity="application.appEntityAttachment" itemsPerPage="20"
+			entity="application.appEntityAttachment"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -1960,10 +1960,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityExpressionTable"
+		<table itemsPerPage="10" name="appEntityExpressionTable"
 			description="$m{studio.appentityexpression.table}"
 			label="$m{studio.appentityexpression.table.label}"
-			entity="application.appEntityExpression" itemsPerPage="20"
+			entity="application.appEntityExpression"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -1974,10 +1974,10 @@
 					renderWidget="application.textarea" widthRatio="2" />
 			</columns>
 		</table>
-		<table name="appEntityUniqueConstraintTable"
+		<table itemsPerPage="10" name="appEntityUniqueConstraintTable"
 			description="$m{studio.appentityuniqueconstraint.table}"
 			label="$m{studio.appentityuniqueconstraint.table.label}"
-			entity="application.appEntityUniqueConstraint" itemsPerPage="20"
+			entity="application.appEntityUniqueConstraint"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -1988,10 +1988,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityIndexTable"
+		<table itemsPerPage="10" name="appEntityIndexTable"
 			description="$m{studio.appentityindex.table}"
 			label="$m{studio.appentityindex.table.label}"
-			entity="application.appEntityIndex" itemsPerPage="20" serialNo="true">
+			entity="application.appEntityIndex" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
@@ -2001,10 +2001,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityUploadTable"
+		<table itemsPerPage="10" name="appEntityUploadTable"
 			description="$m{studio.appentityupload.table}"
 			label="$m{studio.appentityupload.table.label}"
-			entity="application.appEntityUpload" itemsPerPage="20"
+			entity="application.appEntityUpload"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -2017,7 +2017,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntitySearchInputTable"
+		<table itemsPerPage="10" name="appEntitySearchInputTable"
 			description="$m{studio.appentitysearchinput.table}"
 			label="$m{studio.appentitysearchinput.table.label}"
 			entity="application.appEntitySearchInput">
@@ -2028,20 +2028,16 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appAppletRouteToAppletTable"
+		<table itemsPerPage="10" name="appAppletRouteToAppletTable"
 			description="$m{studio.appappletroutetoapplet.table}"
 			label="$m{studio.appappletroutetoapplet.table.label}"
 			entity="application.appAppletRouteToApplet">
 			<columns>
 				<column field="routeToApplet" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appAppletFilterTable"
+		<table itemsPerPage="10" name="appAppletFilterTable"
 			description="$m{studio.appappletfilter.table}"
 			label="$m{studio.appappletfilter.table.label}"
 			entity="application.appAppletFilter">
@@ -2058,7 +2054,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appAppletSetValuesTable"
+		<table itemsPerPage="10" name="appAppletSetValuesTable"
 			description="$m{studio.appappletsetvalues.table}"
 			label="$m{studio.appappletsetvalues.table.label}"
 			entity="application.appAppletSetValues">
@@ -2069,7 +2065,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appAppletAlertTable"
+		<table itemsPerPage="10" name="appAppletAlertTable"
 			description="$m{studio.appappletalert.table}"
 			label="$m{studio.appappletalert.table.label}"
 			entity="application.appAppletAlert">
@@ -2080,7 +2076,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appTableColumnTable"
+		<table itemsPerPage="10" name="appTableColumnTable"
 			description="$m{studio.apptablecolumn.table}"
 			label="$m{studio.apptablecolumn.table.label}"
 			entity="application.appTableColumn">
@@ -2095,7 +2091,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appTableActionTable"
+		<table itemsPerPage="10" name="appTableActionTable"
 			description="$m{studio.apptableaction.table}"
 			label="$m{studio.apptableaction.table.label}"
 			entity="application.appTableAction">
@@ -2108,7 +2104,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appTableLoadingTable"
+		<table itemsPerPage="10" name="appTableLoadingTable"
 			description="$m{studio.apptableloading.table}"
 			label="$m{studio.apptableloading.table.label}"
 			entity="application.appTableLoading">
@@ -2121,7 +2117,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appTableFilterTable"
+		<table itemsPerPage="10" name="appTableFilterTable"
 			description="$m{studio.apptablefilter.table}"
 			label="$m{studio.apptablefilter.table.label}"
 			entity="application.appTableFilter">
@@ -2136,7 +2132,7 @@
 					label="$m{application.apptablefilter.legendlabel}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormElementTable"
+		<table itemsPerPage="10" name="appFormElementTable"
 			description="$m{studio.appformelement.table}"
 			label="$m{studio.appformelement.table.label}"
 			entity="application.appFormElement">
@@ -2161,7 +2157,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormAnnotationTable"
+		<table itemsPerPage="10" name="appFormAnnotationTable"
 			description="$m{studio.appformannotation.table}"
 			label="$m{studio.appformannotation.table.label}"
 			entity="application.appFormAnnotation">
@@ -2172,16 +2168,13 @@
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{application.appformannotation.type}" widthRatio="1" />
-				<column field="visibilityDesc"
-					renderWidget="application.text"
-					label="$m{application.appformannotation.visibility}" widthRatio="1" />
 				<column field="html" renderWidget="application.checkbox"
 					widthRatio="1" />
 				<column field="directPlacement"
 					renderWidget="application.checkbox" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormFilterTable"
+		<table itemsPerPage="10" name="appFormFilterTable"
 			description="$m{studio.appformfilter.table}"
 			label="$m{studio.appformfilter.table.label}"
 			entity="application.appFormFilter">
@@ -2190,13 +2183,9 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormActionTable"
+		<table itemsPerPage="10" name="appFormActionTable"
 			description="$m{studio.appformaction.table}"
 			label="$m{studio.appformaction.table.label}"
 			entity="application.appFormAction">
@@ -2205,19 +2194,11 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="label" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="policy" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{application.appformaction.type}" widthRatio="1" />
-				<column field="highlightTypeDesc"
-					renderWidget="application.text"
-					label="$m{application.appformaction.highlighttypedesc}"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormRelatedListTable"
+		<table itemsPerPage="10" name="appFormRelatedListTable"
 			description="$m{studio.appformrelatedlist.table}"
 			label="$m{studio.appformrelatedlist.table.label}"
 			entity="application.appFormRelatedList">
@@ -2226,13 +2207,11 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="label" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="applet" renderWidget="application.text"
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormStatePolicyTable"
+		<table itemsPerPage="10" name="appFormStatePolicyTable"
 			description="$m{studio.appformstatepolicy.table}"
 			label="$m{studio.appformstatepolicy.table.label}"
 			entity="application.appFormStatePolicy">
@@ -2247,7 +2226,7 @@
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appFormWidgetRulesPolicyTable"
+		<table itemsPerPage="10" name="appFormWidgetRulesPolicyTable"
 			description="$m{studio.appformwidgetrulespolicy.table}"
 			label="$m{studio.appformwidgetrulespolicy.table.label}"
 			entity="application.appFormWidgetRulesPolicy">
@@ -2260,7 +2239,7 @@
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appFormSetStateTable"
+		<table itemsPerPage="10" name="appFormSetStateTable"
 			description="$m{studio.appformsetstate.table}"
 			label="$m{studio.appformsetstate.table.label}"
 			entity="application.appFormSetState">
@@ -2279,7 +2258,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormFieldValidationPolicyTable"
+		<table itemsPerPage="10" name="appFormFieldValidationPolicyTable"
 			description="$m{studio.appformfieldvalidationpolicy.table}"
 			label="$m{studio.appformfieldvalidationpolicy.table.label}"
 			entity="application.appFormFieldValidationPolicy">
@@ -2298,7 +2277,7 @@
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appFormValidationPolicyTable"
+		<table itemsPerPage="10" name="appFormValidationPolicyTable"
 			description="$m{studio.appformvalidationpolicy.table}"
 			label="$m{studio.appformvalidationpolicy.table.label}"
 			entity="application.appFormValidationPolicy">
@@ -2313,7 +2292,7 @@
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appFormReviewPolicyTable"
+		<table itemsPerPage="10" name="appFormReviewPolicyTable"
 			description="$m{studio.appformreviewpolicy.table}"
 			label="$m{studio.appformreviewpolicy.table.label}"
 			entity="application.appFormReviewPolicy">
@@ -2324,26 +2303,20 @@
 					widthRatio="1" />
 				<column field="messageTypeDesc"
 					renderWidget="application.text" widthRatio="1" />
-				<column field="message" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="executionIndex"
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appHelpEntryTable"
+		<table itemsPerPage="10" name="appHelpEntryTable"
 			description="$m{studio.apphelpentry.table}"
 			label="$m{studio.apphelpentry.table.label}"
 			entity="application.appHelpEntry">
 			<columns>
 				<column field="fieldName" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="workflowFilterTable"
+		<table itemsPerPage="10" name="workflowFilterTable"
 			description="$m{studio.workflowfilter.table}"
 			label="$m{studio.workflowfilter.table.label}"
 			entity="workflow.workflowFilter">
@@ -2352,13 +2325,9 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="workflowSetValuesTable"
+		<table itemsPerPage="10" name="workflowSetValuesTable"
 			description="$m{studio.workflowsetvalues.table}"
 			label="$m{studio.workflowsetvalues.table.label}"
 			entity="workflow.workflowSetValues">
@@ -2367,16 +2336,12 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="wfStepTable"
+		<table itemsPerPage="10" name="wfStepTable"
 			description="$m{studio.workflow.step.table}"
 			label="$m{studio.workflow.step.table.label}" entity="workflow.wfStep"
-			itemsPerPage="20" serialNo="true">
+			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
@@ -2386,14 +2351,12 @@
 					label="$m{workflow.step.workflow}" widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{workflow.step.type}" widthRatio="1" />
-				<column field="priorityDesc" renderWidget="application.text"
-					label="$m{workflow.step.priority}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="wfStepRoutingTable"
+		<table itemsPerPage="10" name="wfStepRoutingTable"
 			description="$m{studio.workflow.steprouting.table}"
 			label="$m{studio.workflow.steprouting.table.label}"
-			entity="workflow.wfStepRouting" itemsPerPage="20" serialNo="true">
+			entity="workflow.wfStepRouting" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
@@ -2401,38 +2364,25 @@
 					widthRatio="1" />
 				<column field="wfStepDesc" renderWidget="application.text"
 					label="$m{workflow.steprouting.step}" widthRatio="1" />
-				<column field="nextStepName" renderWidget="application.text"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="wfStepUserActionTable"
+		<table itemsPerPage="10" name="wfStepUserActionTable"
 			description="$m{studio.workflow.stepuseraction.table}"
 			label="$m{studio.workflow.stepuseraction.table.label}"
-			entity="workflow.wfStepUserAction" itemsPerPage="20" serialNo="true">
+			entity="workflow.wfStepUserAction" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="label" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="wfStepDesc" renderWidget="application.text"
 					label="$m{workflow.stepuseraction.step}" widthRatio="1" />
-				<column field="nextStepName" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="commentRequirementDesc"
-					renderWidget="application.text"
-					label="$m{workflow.stepuseraction.commentrequirement}"
-					widthRatio="1" />
-				<column field="highlightTypeDesc"
-					renderWidget="application.text"
-					label="$m{workflow.stepuseraction.highlighttype}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="wfStepAlertTable"
+		<table itemsPerPage="10" name="wfStepAlertTable"
 			description="$m{studio.workflow.stepalert.table}"
 			label="$m{studio.workflow.stepalert.table.label}"
-			entity="workflow.wfStepAlert" itemsPerPage="20" serialNo="true">
+			entity="workflow.wfStepAlert" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
@@ -2444,7 +2394,7 @@
 					label="$m{workflow.stepalert.type}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="dashboardTileTable"
+		<table itemsPerPage="10" name="dashboardTileTable"
 			description="$m{studio.dashboardtile.table}"
 			label="$m{studio.dashboardtile.table.label}"
 			entity="dashboard.dashboardTile">
@@ -2455,17 +2405,9 @@
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{dashboard.dashboardtile.type}" widthRatio="1" />
-				<column field="section" renderWidget="application.integer"
-					widthRatio="1" />
-				<column field="index" renderWidget="application.integer"
-					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="dashboardOptionTable"
+		<table itemsPerPage="10" name="dashboardOptionTable"
 			description="$m{studio.dashboardoption.table}"
 			label="$m{studio.dashboardoption.table.label}"
 			entity="dashboard.dashboardOption">
@@ -2476,13 +2418,9 @@
 					widthRatio="1" />
 				<column field="label" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="dashboardOptionCatBaseTable"
+		<table itemsPerPage="10" name="dashboardOptionCatBaseTable"
 			description="$m{studio.dashboardoptioncatbase.table}"
 			label="$m{studio.dashboardoptioncatbase.table.label}"
 			entity="dashboard.dashboardOptionCatBase">
@@ -2490,13 +2428,9 @@
 				<column field="chartDataSource"
 					renderWidget="application.text" widthRatio="1"
 					linkAct="maintainAct" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="notifTemplateParamTable"
+		<table itemsPerPage="10" name="notifTemplateParamTable"
 			description="$m{studio.notificationtemplateparam.table}"
 			label="$m{studio.notificationtemplateparam.table.label}"
 			entity="notification.notifTemplateParam">
@@ -2507,7 +2441,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="notifLargeTextParamTable"
+		<table itemsPerPage="10" name="notifLargeTextParamTable"
 			description="$m{studio.notificationlargetextparam.table}"
 			label="$m{studio.notificationlargetextparam.table.label}"
 			entity="notification.notifLargeTextParam">
@@ -2518,7 +2452,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="reportColumnTable"
+		<table itemsPerPage="10" name="reportColumnTable"
 			description="$m{studio.reportcolumn.table}"
 			label="$m{studio.reportcolumn.table.label}"
 			entity="report.reportColumn">
@@ -2532,15 +2466,9 @@
 				<column field="columnOrderDesc"
 					renderWidget="application.text" widthRatio="1"
 					label="$m{report.reportcolumn.columnorder}" />
-				<column field="horizAlignTypeDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportcolumn.horizaligntype}" />
-				<column field="vertAlignTypeDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportcolumn.vertaligntype}" />
 			</columns>
 		</table>
-		<table name="reportPlacementTable"
+		<table itemsPerPage="10" name="reportPlacementTable"
 			description="$m{studio.reportplacement.table}"
 			label="$m{studio.reportplacement.table.label}"
 			entity="report.reportPlacement">
@@ -2551,15 +2479,9 @@
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					widthRatio="1" label="$m{report.reportplacement.type}" />
-				<column field="horizAlignTypeDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportplacement.horizaligntype}" />
-				<column field="vertAlignTypeDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportplacement.vertaligntype}" />
 			</columns>
 		</table>
-		<table name="reportParameterTable"
+		<table itemsPerPage="10" name="reportParameterTable"
 			description="$m{studio.reportparameter.table}"
 			label="$m{studio.reportparameter.table.label}"
 			entity="report.reportParameter">
