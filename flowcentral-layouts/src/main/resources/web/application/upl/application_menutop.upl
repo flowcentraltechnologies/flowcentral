@@ -17,6 +17,7 @@
     headerPanel:$c{topBanner} contentPanel:$c{content}
     menuPanel:$c{menuPanel}
     favicon:$s{web/images/favicon_enduser.png}
+    resourcePrefix:flo
 	styleSheet:$t{css/flowcentral.css}
 	styleSheet:$t{css/flowcentral-slim.css}
 	styleSheet:$t{css/flowcentral-theme.css}
