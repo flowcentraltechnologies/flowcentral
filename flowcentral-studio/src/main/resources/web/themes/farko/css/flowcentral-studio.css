@@ -351,5 +351,6 @@
 .studiodetail .fc-miniform .mfclabel {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-miniform .mflabel {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-miniform .mflabel span{font-size:var(--studiodetail-fontsize);}
-.studiodetail .fc-filter .item { width: 86px;margin-right:4px;}
+.studiodetail .fc-filter .item,
+.studiodetail .fc-setvalues .item {width:86px;margin-right:4px;}
 .studiodetail .fc-tabsheet {font-size:var(--studiodetail-fontsize);}
