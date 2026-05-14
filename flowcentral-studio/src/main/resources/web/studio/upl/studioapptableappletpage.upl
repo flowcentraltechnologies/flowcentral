@@ -13,11 +13,21 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-page captionBinding:$s{instTitle} subCaptionBinding:$s{typeTitle} components:$c{appletPanel}
+!ui-page captionBinding:$s{instTitle} subCaptionBinding:$s{typeTitle}
+	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{none 480px}}
+	components:$c{designPanel}
+	components:$c{appletPanel}
 
+// Design panel
+!ui-panel:designPanel style:$s{width:100%;height:100%;}
+	components:$c{tableEditorPagePanel}
+	
 // Applet panel
-!fc-studioapptableappletpanel:appletPanel style:$s{width:100%;height:100%;}
+!fc-studioapptableappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
 	binding:applet
+	additionalUpdateComponents:$c{tableEditorPagePanel}
 
+// Table Editor Page
+!fc-tableeditorpagepanel:tableEditorPagePanel binding:applet.tableEditorPage
 
 // Actions

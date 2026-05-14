@@ -35,9 +35,9 @@ public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
     public void switchState() throws UnifyException {
         super.switchState();
 
-        final StudioWorkflowApplet sapplet = getValue(StudioWorkflowApplet.class);
-        final WorkflowEditorPage workflowEditorPage = sapplet.getWorkflowEditorPage();
-        setWidgetVisible("publishBtn", sapplet.isRootForm() && workflowEditorPage != null
+        final StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
+        final WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
+        setWidgetVisible("publishBtn", applet.isRootForm() && workflowEditorPage != null
                 && !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
     }
 
@@ -46,10 +46,10 @@ public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
     public void update() throws UnifyException {
         super.update();
 
-        final StudioWorkflowApplet sapplet = getValue(StudioWorkflowApplet.class);
-        if (sapplet.isRootForm()) {
-            sapplet.getWorkflowEditorPage().commitDesign();
-            sapplet.reload();
+        final StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
+        if (applet.isRootForm()) {
+            applet.getWorkflowEditorPage().commitDesign();
+            applet.reload();
         }
     }
 

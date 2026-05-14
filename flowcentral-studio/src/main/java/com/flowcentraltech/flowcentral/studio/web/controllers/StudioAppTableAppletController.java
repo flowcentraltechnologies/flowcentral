@@ -25,7 +25,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -46,15 +45,6 @@ public class StudioAppTableAppletController
 
     public StudioAppTableAppletController() {
         super(StudioAppTableAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
-    }
-
-    @Action
-    public String designChildItem() throws UnifyException {
-        StudioAppTableAppletPageBean pageBean = getPageBean();
-        StudioAppTableApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        applet.designChildItem(childTabIndex);
-        return "refreshapplet";
     }
 
     @Override
