@@ -14,6 +14,7 @@
  	--color-icon: #525e6d !important;
  	--color-tablesel: #bfd6ff !important;
 	--color-tablehov: #d5e7fb !important;
+	--color-slate:#f7f9fa;
 	--studiodetail-fontsize:7.5pt;
  }
 
@@ -126,7 +127,7 @@
 .fc-formeditor .fields {width:160px;height:100%;}
 .fc-formeditor .fields .hdr {position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
 	text-align:center;color:#ffffff;font-weight:bold;font-size:8pt;}
-.fc-formeditor .fields .bdy {background-color:#f0f0f0;border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-formeditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-formeditor .fields .fld {display:none;border: solid 1px #909090; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-formeditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;font-size:10px;font-weight:bold;}
 .fc-formeditor .design {height:100%;}
@@ -265,7 +266,7 @@
 .fc-reporteditor .fields {height:100%;}
 .fc-reporteditor .fields .hdr {position:-webkit-sticky; position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
 	text-align:center;color:#ffffff;font-weight:bold;}
-.fc-reporteditor .fields .bdy {background-color:#f0f0f0;border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-reporteditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-reporteditor .fields .fld {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-reporteditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;}
 .fc-reporteditor .design {height:100%;}
@@ -307,7 +308,7 @@
 .fc-workfloweditor .tools {position: absolute;top:0px;right:14px;width:120px;z-index:420;}
 .fc-workfloweditor .tools .hdr {/*position:-webkit-sticky; position:sticky; top:0px; left:0px;*/ padding:4px;background-color: #e3e7ea;
 	text-align:center;color:#000000;font-size:8pt;}
-.fc-workfloweditor .tools .bdy {background-color: #f7f9fa;border: solid 1px #c8c8c8; height:100%; overflow:auto;}
+.fc-workfloweditor .tools .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8; height:100%; overflow:auto;}
 .fc-workfloweditor .tools .item {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-workfloweditor .tools .item span {font-weight:bold; color:#404040;pointer-events:none;}
 .fc-workfloweditor .tools .symcat {display:block;padding: 4px;font-size: 16px;}
