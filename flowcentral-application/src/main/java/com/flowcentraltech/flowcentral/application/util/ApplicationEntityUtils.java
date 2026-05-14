@@ -74,6 +74,12 @@ public final class ApplicationEntityUtils {
                     "workBranchCode", "workDepartmentCode", "processingStatus", "processingStatusDesc", "configType",
                     "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
 
+    public static final Set<String> RESERVED_EDITOR_FIELDS = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo",
+                    "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow",
+                    "workBranchCode", "workDepartmentCode", "processingStatus", "processingStatusDesc", "configType",
+                    "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
+
     public static final Set<String> AUDITABLE_BASE_FIELDS = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("createDt", "createdBy", "updateDt", "updatedBy")));
 

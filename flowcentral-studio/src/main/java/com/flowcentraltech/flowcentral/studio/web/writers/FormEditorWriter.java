@@ -80,7 +80,7 @@ public class FormEditorWriter extends AbstractControlWriter {
         int i = 0;
         for (EntityFieldDef entityFieldDef : formEditor.getFormDef().getEntityDef().getSortedFieldDefList()) {
             if (entityFieldDef.isFormViewable()
-                    && !ApplicationEntityUtils.RESERVED_WORKFLOW_BASE_FIELDS.contains(entityFieldDef.getFieldName())) {
+                    && !ApplicationEntityUtils.RESERVED_EDITOR_FIELDS.contains(entityFieldDef.getFieldName())) {
                 writer.write("<div class=\"fld\" id=\"").write(formEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");
                 writer.writeWithHtmlEscape(resolveSessionMessage(entityFieldDef.getFieldLabel()));
