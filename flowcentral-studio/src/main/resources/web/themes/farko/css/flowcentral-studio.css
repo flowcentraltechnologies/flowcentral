@@ -37,6 +37,7 @@
 .fc-topbannerswitch {float: right;margin-right: 40px;}
 
 /* Tab sheet */
+.fc-tabsheet {font-size: var(--studiodetail-fontsize);}
 .fc-tabsheet .tactive {border-top: 5px solid #e36209;}
 
 /* Studio */
@@ -122,12 +123,12 @@
 
 /** Form Editor */
 .fc-formeditor {height:100%;}
-.fc-formeditor .fields {height:100%;}
-.fc-formeditor .fields .hdr {position:-webkit-sticky; position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
-	text-align:center;color:#ffffff;font-weight:bold;}
+.fc-formeditor .fields {width:160px;height:100%;}
+.fc-formeditor .fields .hdr {position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
+	text-align:center;color:#ffffff;font-weight:bold;font-size:8pt;}
 .fc-formeditor .fields .bdy {background-color:#f0f0f0;border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-formeditor .fields .fld {display:none;border: solid 1px #909090; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
-.fc-formeditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;}
+.fc-formeditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;font-size:10px;font-weight:bold;}
 .fc-formeditor .design {height:100%;}
 .fc-formeditor .designbase {display:block;padding:4px;width: 100%;box-sizing: border-box;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-formeditor .drag {position:fixed;zIndex:400;opacity:0.7;}

@@ -31,6 +31,16 @@ import com.tcdng.unify.web.annotation.Action;
 @UplBinding("web/studio/upl/studioworkflowappletpanel.upl")
 public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
 
+    @Override
+    public void switchState() throws UnifyException {
+        super.switchState();
+
+        final StudioWorkflowApplet sapplet = getValue(StudioWorkflowApplet.class);
+        final WorkflowEditorPage workflowEditorPage = sapplet.getWorkflowEditorPage();
+        setWidgetVisible("publishBtn", sapplet.isRootForm() && workflowEditorPage != null
+                && !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
+    }
+
     @Action
     @Override
     public void update() throws UnifyException {
@@ -41,16 +51,6 @@ public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
             sapplet.getWorkflowEditorPage().commitDesign();
             sapplet.reload();
         }
-    }
-
-    @Override
-    public void switchState() throws UnifyException {
-        super.switchState();
-
-        final StudioWorkflowApplet sapplet = getValue(StudioWorkflowApplet.class);
-        final WorkflowEditorPage workflowEditorPage = sapplet.getWorkflowEditorPage();
-        setWidgetVisible("publishBtn", sapplet.isRootForm() && workflowEditorPage != null
-                && !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
     }
 
 }

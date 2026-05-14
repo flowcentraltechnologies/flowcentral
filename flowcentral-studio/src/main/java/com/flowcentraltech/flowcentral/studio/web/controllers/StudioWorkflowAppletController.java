@@ -63,17 +63,6 @@ public class StudioWorkflowAppletController
         return noResult();
     }
 
-    @Action
-    public String saveDesignAndClose() throws UnifyException {
-        StudioWorkflowAppletPageBean pageBean = getPageBean();
-        StudioWorkflowApplet applet = pageBean.getApplet();
-        WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
-        workflowEditorPage.commitDesign();
-        applet.navBackToPrevious();
-        hintUser("$m{studioworkflowapplet.workfloweditor.success.hint}", workflowEditorPage.getSubTitle());
-        return noResult();
-    }
-
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();

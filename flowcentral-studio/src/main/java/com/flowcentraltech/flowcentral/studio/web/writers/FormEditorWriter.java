@@ -72,8 +72,7 @@ public class FormEditorWriter extends AbstractControlWriter {
         writer.write(
                 "<div style=\"display:table;table-layout: fixed;width:100%;height:100%;\"><div style=\"display:table-row;\">");
         // Fields
-        writer.write("<div class=\"fields\" style=\"display:table-cell;vertical-align:top;width:")
-                .write(formEditorWidget.getChoiceWidth()).write(";\">");
+        writer.write("<div class=\"fields\" style=\"display:table-cell;vertical-align:top;\">");
         writer.write("<div class=\"bdy\" id=\"").write(formEditorWidget.getFieldBaseId()).write("\">");
         writer.write("<div class=\"hdr\">").write(getSessionMessage("formeditor.availablefields")).write("</div>");
         jsonWriter.beginArray("fields");

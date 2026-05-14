@@ -44,22 +44,23 @@ public class StudioAppFormApplet extends StudioAppComponentApplet {
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        createDesign();
     }
 
     public FormEditorPage getFormEditorPage() {
         return formEditorPage;
     }
 
-    public void designChildItem(int childTabIndex) throws UnifyException {
+    public void createDesign() throws UnifyException {
         AppForm appForm = (AppForm) form.getFormBean();
-        Object id = appForm.getId();
-        String subTitle = appForm.getDescription();
-        setTabDefAndSaveCurrentForm(childTabIndex);
-        formEditorPage = constructNewFormEditorPage(
-                ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()), id,
-                subTitle);
-        formEditorPage.newEditor();
-        viewMode = ViewMode.CUSTOM_PAGE;
+        Long formId = appForm.getId();
+        if (formId != null) {
+            String subTitle = appForm.getDescription();
+            formEditorPage = constructNewFormEditorPage(
+                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()), formId,
+                    subTitle);
+            formEditorPage.newEditor();
+        }
     }
 
     private FormEditorPage constructNewFormEditorPage(String formName, Object id, String subTitle)

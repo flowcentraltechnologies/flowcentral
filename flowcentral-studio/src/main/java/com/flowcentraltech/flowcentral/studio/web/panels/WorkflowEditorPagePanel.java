@@ -90,6 +90,7 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
         commandHidePopup();
     }
 
+    @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
         // TODO
         return false;

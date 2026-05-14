@@ -74,7 +74,7 @@
 	documentPath:$s{/applicationstudio}
 	paths:$s{/applicationstudio/dashboard/openPage}
 	stickyPaths:$s{/applicationstudio/dashboard/openPage}
-	tabbed:true
+	tabbed:false
 	titleUppercase:false  
 
 // New application dialog

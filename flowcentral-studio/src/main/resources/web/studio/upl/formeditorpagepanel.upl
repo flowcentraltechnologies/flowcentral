@@ -13,8 +13,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-formeditorpagepanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;} heights:$l{none 100%}}
-	components:$c{headerBar formEditorBodyPanel}
+!fc-formeditorpagepanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
+	components:$c{formEditorBodyPanel}
 
 // Form editor panel
 !ui-panel:formEditorBodyPanel style:$s{height:100%;}

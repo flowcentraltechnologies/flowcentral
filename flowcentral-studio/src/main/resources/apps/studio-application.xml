@@ -4466,9 +4466,6 @@
 							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
-				<tab name="design" label="$m{studio.dashboard.form.design}"
-					contentType="CHILD_LIST" applet="manageDashboardTile"
-					reference="tileList" editAction="/designChildItem" />
 				<tab name="options" label="$m{studio.dashboard.form.options}"
 					contentType="CHILD_LIST" applet="manageDashboardOption"
 					reference="optionsList" />
@@ -4931,10 +4928,6 @@
 							column="0" required="true" visible="true" />
 					</section>
 				</tab>
-				<tab name="design"
-					label="$m{studio.reportconfiguration.form.design}"
-					contentType="CHILD_LIST" applet="manageReportColumn"
-					reference="columnList" editAction="/designChildItem" />
 				<tab name="placements"
 					label="$m{studio.reportconfiguration.form.placements}"
 					contentType="CHILD_LIST" applet="manageReportPlacement"
@@ -5272,9 +5265,6 @@
 							column="1" />
 					</section>
 				</tab>
-				<tab name="design" label="$m{studio.apptable.form.design}"
-					contentType="CHILD_LIST" applet="manageAppTableColumn"
-					reference="columnList" editAction="/designChildItem" />
 				<tab name="filters" label="$m{studio.apptable.form.filters}"
 					quickOrder="true" contentType="CHILD_LIST"
 					applet="manageAppTableFilter" reference="filterList" />
@@ -5491,10 +5481,6 @@
 							visible="false" />
 					</section>
 				</tab>
-				<tab name="design" label="$m{studio.appform.form.design}"
-					contentType="CHILD_LIST" applet="manageAppFormElement"
-					reference="elementList" editAction="/designChildItem"
-					visible="false" />
 				<tab name="filters" label="$m{studio.appform.form.filters}"
 					contentType="CHILD_LIST" applet="manageAppFormFilter"
 					reference="filterList" visible="false" />
