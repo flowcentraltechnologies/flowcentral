@@ -122,9 +122,9 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
             writer.writeStructureAndContent(workflowEditorWidget.getCreateTypeCtrl());
             writer.writeStructureAndContent(workflowEditorWidget.getCreateXCtrl());
             writer.writeStructureAndContent(workflowEditorWidget.getCreateYCtrl());
-
-            writer.write("</div>");
         }
+
+        writer.write("</div>");
 
         jsonWriter.endObject();
 
