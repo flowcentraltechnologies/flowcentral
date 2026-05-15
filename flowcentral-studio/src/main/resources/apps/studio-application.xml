@@ -2726,7 +2726,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appapplet.form.basicdetails}" editable="false"
 					contentType="MINIFORM">
-					<section name="appletDetails" columns="TYPE_2">
+					<section name="appletDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -2743,41 +2743,41 @@
 						<field name="icon" inputWidget="application.symbollist"
 							column="0" />
 						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
+							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
-							column="1" required="true" switchOnChange="true" visible="false" />
+							column="0" required="true" switchOnChange="true" visible="false" />
 						<field name="titleFormat"
-							inputWidget="application.texttemplate" column="1" />
+							inputWidget="application.texttemplate" column="0" />
 						<field name="baseField"
-							inputWidget="studio.entityreffieldlist" column="1"
+							inputWidget="studio.entityreffieldlist" column="0"
 							required="true" visible="false" />
 						<field name="assignField"
-							inputWidget="studio.entityreffieldlist" column="1"
+							inputWidget="studio.entityreffieldlist" column="0"
 							switchOnChange="true" required="true" visible="false" />
 						<field name="assignDescField"
-							inputWidget="studio.entityrefdesclist" column="1" visible="false" />
+							inputWidget="studio.entityrefdesclist" column="0" visible="false" />
 						<field name="assignSearch"
-							inputWidget="studio.entityrefdesclist" column="1" visible="false" />
+							inputWidget="studio.entityrefdesclist" column="0" visible="false" />
 						<field name="pseudoDeleteField"
-							inputWidget="studio.entitybooleanfieldlist" column="1"
+							inputWidget="studio.entitybooleanfieldlist" column="0"
 							visible="false" />
 						<field name="routeToApplet"
-							inputWidget="studio.facadeappletroutetoappletlist" column="1"
+							inputWidget="studio.facadeappletroutetoappletlist" column="0"
 							required="true" visible="false" />
-						<field name="path" inputWidget="application.text" column="1"
+						<field name="path" inputWidget="application.text" column="0"
 							visible="false" />
 						<field name="displayIndex" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 						<field name="portalAccess"
-							inputWidget="application.checkbox" column="1" visible="false" />
+							inputWidget="application.checkbox" column="0" visible="false" />
 						<field name="menuAccess" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="supportOpenInNewWindow"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="supportRemoteAccess"
-							inputWidget="application.checkbox" column="1" visible="false" />
+							inputWidget="application.checkbox" column="0" visible="false" />
 						<field name="allowSecondaryTenants"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
 				<tab name="properties"
@@ -2993,26 +2993,26 @@
 				<tab name="basicDetails"
 					label="$m{studio.appappletfilter.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="filterDetails" columns="TYPE_2">
+					<section name="filterDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="ownershipType"
-							inputWidget="application.enumlist" column="1" required="true" />
+							inputWidget="application.enumlist" column="0" required="true" />
 						<field name="owner" inputWidget="application.text"
-							column="1" disabled="true" />
+							column="0" disabled="true" />
 						<field name="preferredForm"
-							inputWidget="studio.appletformlist" column="1" />
+							inputWidget="studio.appletformlist" column="0" />
 						<field name="preferredChildListApplet" switchOnChange="true"
-							inputWidget="studio.appletchildlistappletlist" column="1" />
+							inputWidget="studio.appletchildlistappletlist" column="0" />
 						<field name="childListActionType"
-							inputWidget="application.enumlist" column="1" visible="false" />
+							inputWidget="application.enumlist" column="0" visible="false" />
 						<field name="filterGenerator"
 							inputWidget="studio.appletfiltergeneratorlist"
-							switchOnChange="true" column="1" />
+							switchOnChange="true" column="0" />
 						<field name="quickFilter" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 				<tab name="condition"
@@ -3043,13 +3043,13 @@
 				<tab name="basicDetails"
 					label="$m{studio.appappletsetvalues.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="setValuesDetails" columns="TYPE_2">
+					<section name="setValuesDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="valueGenerator"
-							inputWidget="studio.appletentitysetvaluesgenlist" column="1" />
+							inputWidget="studio.appletentitysetvaluesgenlist" column="0" />
 					</section>
 				</tab>
 				<tab name="setValues"
@@ -3066,23 +3066,23 @@
 				<tab name="basicDetails"
 					label="$m{studio.appappletalert.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="setVaalertDetails" columns="TYPE_2">
+					<section name="setVaalertDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="sender"
 							inputWidget="studio.appletentitynotifsenderlist" required="true"
-							column="1" />
+							column="0" />
 						<field name="template"
-							inputWidget="studio.appletalerttemplatelist" column="1" />
+							inputWidget="studio.appletalerttemplatelist" column="0" />
 						<field name="recipientPolicy"
-							inputWidget="studio.wfrecipientpolicylist" column="1"
+							inputWidget="studio.wfrecipientpolicylist" column="0"
 							switchOnChange="true" />
 						<field name="recipientNameRule"
-							inputWidget="studio.wfrecipientnamerulelist" column="1" />
+							inputWidget="studio.wfrecipientnamerulelist" column="0" />
 						<field name="recipientContactRule"
-							inputWidget="studio.wfrecipientcontactrulelist" column="1" />
+							inputWidget="studio.wfrecipientcontactrulelist" column="0" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"

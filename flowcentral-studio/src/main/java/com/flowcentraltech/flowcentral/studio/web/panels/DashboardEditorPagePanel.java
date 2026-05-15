@@ -33,21 +33,22 @@ public class DashboardEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     public void switchState() throws UnifyException {
-        super.switchState();
+        final DashboardEditorPage dashboardEditorPage = getDashboardEditorPage();
+        if (dashboardEditorPage != null) {
+            final boolean readOnly = isAppletContextReadOnly();
+            DashboardEditor dashboardEditor = dashboardEditorPage.getDashboardEditor();
+            dashboardEditor.setReadOnly(readOnly);
+            if (!dashboardEditor.isInitialized()) {
+                dashboardEditor.init(getWidgetByShortName("dashboardEditorBodyPanel").getLongName(),
+                        getWidgetByShortName("editSectionPanel").getLongName(),
+                        getWidgetByShortName("editTilePanel").getLongName());
+            }
 
-        final boolean readOnly = isAppletContextReadOnly();
-        DashboardEditor dashboardEditor = getDashboardEditorPage().getDashboardEditor();
-        dashboardEditor.setReadOnly(readOnly);
-        if (!dashboardEditor.isInitialized()) {
-            dashboardEditor.init(getWidgetByShortName("dashboardEditorBodyPanel").getLongName(),
-                    getWidgetByShortName("editSectionPanel").getLongName(),
-                    getWidgetByShortName("editTilePanel").getLongName());
+            boolean isEditable = !readOnly;
+            setWidgetVisible("saveBtn", isEditable);
+            setWidgetEditable("editSectionPanel", isEditable);
+            setWidgetEditable("editTilePanel", isEditable);
         }
-
-        boolean isEditable = !readOnly;
-        setWidgetVisible("saveBtn", isEditable);
-        setWidgetEditable("editSectionPanel", isEditable);
-        setWidgetEditable("editTilePanel", isEditable);
     }
 
     @Action
@@ -55,6 +56,10 @@ public class DashboardEditorPagePanel extends AbstractStudioEditorPagePanel {
         DashboardEditorPage dashboardEditorPage = getDashboardEditorPage();
         dashboardEditorPage.commitDesign();
         hintUser("$m{studiodashboardapplet.dashboardeditor.success.hint}", dashboardEditorPage.getSubTitle());
+    }
+
+    protected boolean isAppletContextReadOnly() throws UnifyException {
+        return false;
     }
 
     private DashboardEditorPage getDashboardEditorPage() throws UnifyException {

@@ -53,22 +53,23 @@ public class StudioDashboardApplet extends StudioAppComponentApplet {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         this.cms = cms;
         this.dms = dms;
+        createDesign();
     }
 
     public DashboardEditorPage getDashboardEditorPage() {
         return dashboardEditorPage;
     }
 
-    public void designChildItem(int childTabIndex) throws UnifyException {
+    public void createDesign() throws UnifyException {
         Dashboard dashboard = (Dashboard) form.getFormBean();
-        Object id = dashboard.getId();
-        String subTitle = dashboard.getDescription();
-        setTabDefAndSaveCurrentForm(childTabIndex);
-        dashboardEditorPage = constructNewDashboardEditorPage(
-                ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), dashboard.getName()), id,
-                subTitle);
-        dashboardEditorPage.newEditor();
-        viewMode = ViewMode.CUSTOM_PAGE;
+        Long dashboardId = dashboard.getId();
+        if (dashboardId != null) {
+            String subTitle = dashboard.getDescription();
+            dashboardEditorPage = constructNewDashboardEditorPage(
+                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), dashboard.getName()),
+                    dashboardId, subTitle);
+            dashboardEditorPage.newEditor();
+        }
     }
 
     private DashboardEditorPage constructNewDashboardEditorPage(String dashboardName, Object id, String subTitle)
