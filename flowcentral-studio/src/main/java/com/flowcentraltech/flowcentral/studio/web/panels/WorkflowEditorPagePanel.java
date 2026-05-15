@@ -92,7 +92,6 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        // TODO
         return false;
     }
 

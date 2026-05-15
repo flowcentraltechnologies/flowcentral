@@ -14,12 +14,7 @@
 // the License.
 
 !fc-reporteditorpagepanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;} heights:$l{none 100% none}}
-	components:$c{headerBar reportEditorBodyPanel editColumnPanel}
-
-// Override
-!ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{saveBtn}
-	components:$f{moreActionButtons}
+	components:$c{reportEditorBodyPanel editColumnPanel}
 
 // Report editor panel
 !ui-panel:reportEditorBodyPanel style:$s{height:100%;}
