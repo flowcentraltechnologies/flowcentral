@@ -28,7 +28,7 @@ import com.tcdng.unify.web.annotation.Action;
  */
 @Component("fc-studioappformappletpanel")
 @UplBinding("web/studio/upl/studioappformappletpanel.upl")
-public class StudioAppFormAppletPanel extends StudioAppComponentAppletPanel {
+public class StudioAppFormAppletPanel extends AbstractStudioAppComponentAppletPanel {
 
     @Action
     @Override

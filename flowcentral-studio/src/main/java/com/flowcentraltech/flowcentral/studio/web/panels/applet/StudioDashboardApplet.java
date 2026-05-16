@@ -38,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioDashboardApplet extends StudioAppComponentApplet {
+public class StudioDashboardApplet extends AbstractStudioAppComponentApplet {
 
     private DashboardEditorPage dashboardEditorPage;
 

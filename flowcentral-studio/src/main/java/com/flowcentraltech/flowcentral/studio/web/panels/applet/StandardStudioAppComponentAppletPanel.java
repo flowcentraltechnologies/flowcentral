@@ -13,27 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.studio.web.controllers;
+package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
-import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioReportConfigurationApplet;
-import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Component;
 
 /**
- * Studio report configuration component applet page bean.
+ * Standard studio application component applet panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioReportConfigurationAppletPageBean
-        extends AbstractStudioAppComponentAppletPageBean<StudioReportConfigurationApplet> {
-
-    public StudioReportConfigurationApplet getApplet() {
-        return super.getApplet();
-    }
-
-    @Override
-    public void setApplet(StudioReportConfigurationApplet applet) throws UnifyException {
-        super.setApplet(applet);
-    }
+@Component("fc-studioappcomponentappletpanel")
+public class StandardStudioAppComponentAppletPanel extends AbstractStudioAppComponentAppletPanel {
 
 }

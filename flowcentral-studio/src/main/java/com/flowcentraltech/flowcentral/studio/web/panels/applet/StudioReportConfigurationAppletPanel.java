@@ -28,7 +28,7 @@ import com.tcdng.unify.web.annotation.Action;
  */
 @Component("fc-studioreportconfigurationappletpanel")
 @UplBinding("web/studio/upl/studioreportconfigurationappletpanel.upl")
-public class StudioReportConfigurationAppletPanel extends StudioAppComponentAppletPanel {
+public class StudioReportConfigurationAppletPanel extends AbstractStudioAppComponentAppletPanel {
 
     @Action
     @Override

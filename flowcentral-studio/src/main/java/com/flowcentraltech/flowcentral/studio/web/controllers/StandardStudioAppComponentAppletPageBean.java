@@ -15,24 +15,25 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
-import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioReportConfigurationApplet;
+import com.flowcentraltech.flowcentral.studio.web.panels.applet.StandardStudioAppComponentApplet;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Studio report configuration component applet page bean.
+ * Standard studio application component applet page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioReportConfigurationAppletPageBean
-        extends AbstractStudioAppComponentAppletPageBean<StudioReportConfigurationApplet> {
+public class StandardStudioAppComponentAppletPageBean
+        extends AbstractStudioAppComponentAppletPageBean<StandardStudioAppComponentApplet> {
 
-    public StudioReportConfigurationApplet getApplet() {
+    @Override
+    public StandardStudioAppComponentApplet getApplet() {
         return super.getApplet();
     }
 
     @Override
-    public void setApplet(StudioReportConfigurationApplet applet) throws UnifyException {
+    public void setApplet(StandardStudioAppComponentApplet applet) throws UnifyException {
         super.setApplet(applet);
     }
 

@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioWorkflowApplet extends StudioAppComponentApplet {
+public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet {
 
     private WorkflowEditorPage workflowEditorPage;
 

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.studio.web.controllers;
+package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
 import java.util.List;
 
@@ -21,33 +21,22 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
-import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioReportConfigurationApplet;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.ui.widget.Page;
 
+
 /**
- * Studio application report configuration applet controller.
+ * Standard studio applet object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component("/studioreportconfigurationapplet")
-@UplBinding("web/studio/upl/studioreportconfigurationappletpage.upl")
-public class StudioReportConfigurationAppletController extends
-        AbstractStudioAppComponentAppletController<StudioReportConfigurationApplet, StudioReportConfigurationAppletPageBean> {
+public class StandardStudioAppComponentApplet extends AbstractStudioAppComponentApplet {
 
-    public StudioReportConfigurationAppletController() {
-        super(StudioReportConfigurationAppletPageBean.class);
-    }
-
-    @Override
-    protected StudioReportConfigurationApplet createApplet(Page page, StudioModuleService studio, AppletUtilities au,
+    public StandardStudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        return new StudioReportConfigurationApplet(page, studio, au, pathVariables, applicationName,
-                appletWidgetReferences, formEventHandlers);
+        super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
     }
 
 }

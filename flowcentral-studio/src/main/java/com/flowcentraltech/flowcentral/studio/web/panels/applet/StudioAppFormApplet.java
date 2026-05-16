@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppFormApplet extends StudioAppComponentApplet {
+public class StudioAppFormApplet extends AbstractStudioAppComponentApplet {
 
     private FormEditorPage formEditorPage;
 

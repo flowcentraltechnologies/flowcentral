@@ -15,31 +15,31 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
+import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormAppletPanel;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 
 /**
- * Studio application dashboard applet panel.
+ * Abstract base class for studio application component applet panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component("fc-studiodashboardappletpanel")
-@UplBinding("web/studio/upl/studiodashboardappletpanel.upl")
-public class StudioDashboardAppletPanel extends AbstractStudioAppComponentAppletPanel {
+@UplBinding("web/studio/upl/studioappcomponentappletpanel.upl")
+public abstract class AbstractStudioAppComponentAppletPanel extends AbstractEntityFormAppletPanel {
 
-    @Action
     @Override
-    public void update() throws UnifyException {
-        super.update();
+    public void switchState() throws UnifyException {
+        super.switchState();
 
-        final StudioDashboardApplet applet = getValue(StudioDashboardApplet.class);
-        if (applet.isRootForm()) {
-            applet.getDashboardEditorPage().commitDesign();
-            applet.reload();
+        final AbstractStudioAppComponentApplet applet = getValue(AbstractStudioAppComponentApplet.class);
+        final boolean isRootForm = applet.isRootForm();
+        if (isRootForm) {
+            setVisible("cancelBtn", false);
         }
+        
+        setVisible("formPanel.headerLeftPanel", false);
+        setVisible("formPanel.headerCenterPanel", false);
     }
 
 }

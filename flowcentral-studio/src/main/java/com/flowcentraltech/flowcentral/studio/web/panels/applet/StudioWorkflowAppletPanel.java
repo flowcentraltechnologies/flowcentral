@@ -29,7 +29,7 @@ import com.tcdng.unify.web.annotation.Action;
  */
 @Component("fc-studioworkflowappletpanel")
 @UplBinding("web/studio/upl/studioworkflowappletpanel.upl")
-public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
+public class StudioWorkflowAppletPanel extends AbstractStudioAppComponentAppletPanel {
 
     @Override
     public void switchState() throws UnifyException {

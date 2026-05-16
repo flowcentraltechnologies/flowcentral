@@ -13,10 +13,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-page captionBinding:$s{instTitle} subCaptionBinding:$s{typeTitle}
-	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{none 480px}}
-	components:$c{designPanel}
-	components:$c{appletPanel}
+!ui-page
 
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}
@@ -26,7 +23,6 @@
 !fc-studioappformappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
 	binding:applet
 	additionalUpdateComponents:$c{formEditorPagePanel}
-
 
 // Form Editor Page
 !fc-formeditorpagepanel:formEditorPagePanel binding:applet.formEditorPage

@@ -21,32 +21,30 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
-import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioReportConfigurationApplet;
+import com.flowcentraltech.flowcentral.studio.web.panels.applet.StandardStudioAppComponentApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
- * Studio application report configuration applet controller.
+ * Standard studio application applet controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component("/studioreportconfigurationapplet")
-@UplBinding("web/studio/upl/studioreportconfigurationappletpage.upl")
-public class StudioReportConfigurationAppletController extends
-        AbstractStudioAppComponentAppletController<StudioReportConfigurationApplet, StudioReportConfigurationAppletPageBean> {
+@Component("/studioappcomponentapplet")
+public class StandardStudioAppComponentAppletController extends
+        AbstractStudioAppComponentAppletController<StandardStudioAppComponentApplet, StandardStudioAppComponentAppletPageBean> {
 
-    public StudioReportConfigurationAppletController() {
-        super(StudioReportConfigurationAppletPageBean.class);
+    public StandardStudioAppComponentAppletController() {
+        super(StandardStudioAppComponentAppletPageBean.class);
     }
 
     @Override
-    protected StudioReportConfigurationApplet createApplet(Page page, StudioModuleService studio, AppletUtilities au,
+    protected StandardStudioAppComponentApplet createApplet(Page page, StudioModuleService studio, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        return new StudioReportConfigurationApplet(page, studio, au, pathVariables, applicationName,
+        return new StandardStudioAppComponentApplet(page, studio, au, pathVariables, applicationName,
                 appletWidgetReferences, formEventHandlers);
     }
 

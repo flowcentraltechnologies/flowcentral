@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
-import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletPageBean;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioDashboardApplet;
 import com.tcdng.unify.core.UnifyException;
 
@@ -25,7 +24,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioDashboardAppletPageBean extends AbstractEntityFormAppletPageBean<StudioDashboardApplet> {
+public class StudioDashboardAppletPageBean extends AbstractStudioAppComponentAppletPageBean<StudioDashboardApplet> {
 
     public StudioDashboardApplet getApplet() {
         return super.getApplet();

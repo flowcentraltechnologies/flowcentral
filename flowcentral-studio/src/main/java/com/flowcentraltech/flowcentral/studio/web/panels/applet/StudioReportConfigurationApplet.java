@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioReportConfigurationApplet extends StudioAppComponentApplet {
+public class StudioReportConfigurationApplet extends AbstractStudioAppComponentApplet {
 
     private ReportEditorPage reportEditorPage;
 
