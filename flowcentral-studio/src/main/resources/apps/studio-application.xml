@@ -2742,8 +2742,6 @@
 							column="0" required="true" />
 						<field name="icon" inputWidget="application.symbollist"
 							column="0" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" switchOnChange="true" visible="false" />
 						<field name="titleFormat"
@@ -3126,8 +3124,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="baseType" inputWidget="application.enumlist"
 							column="0" disabled="true" required="true" />
 						<field name="entityClass" inputWidget="application.text"
@@ -3702,8 +3698,6 @@
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
 						<field name="label" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="type" column="0" required="true" />
 					</section>
 				</tab>
@@ -3746,8 +3740,6 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="expression" column="0" required="true" />
 					</section>
 				</tab>
@@ -3791,8 +3783,6 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="fieldList"
 							inputWidget="entityfieldmultiselectlist" column="0"
 							required="true" />
@@ -3837,8 +3827,6 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="fieldList"
 							inputWidget="entityfieldmultiselectlist" column="0"
 							required="true" />
@@ -3883,8 +3871,6 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="constraintAction" column="0" required="true" />
 					</section>
 				</tab>
@@ -3926,8 +3912,6 @@
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="restrictionResolver"
 							inputWidget="searchentriesrestrictionresolverlist" column="0" />
 					</section>
@@ -4034,8 +4018,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" switchOnChange="true" required="true" />
 						<field name="searchField"
@@ -4131,8 +4113,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="type" inputWidget="application.enumlist"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" switchOnChange="true" required="true" />
 						<field name="applet" inputWidget="studio.apiappletlist"
@@ -4204,8 +4184,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="title" column="0" />
 						<field name="subTitle" column="0" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="type" column="0" required="true"
 							switchOnChange="true" />
 						<field name="paletteType" column="0" required="true"
@@ -4351,8 +4329,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="type" column="0" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" switchOnChange="true" required="true" />
@@ -4459,8 +4435,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="sections" column="0" disabled="true" />
 						<field name="allowSecondaryTenants"
 							inputWidget="application.checkbox" column="0" />
@@ -4624,8 +4598,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" />
 						<field name="notificationType"
@@ -4771,8 +4743,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" />
 						<field name="fontFamily" column="0" />
@@ -4881,8 +4851,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="title" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="reportable"
 							inputWidget="studio.reportablebynamelist" column="0"
 							required="true" switchOnChange="true" />
@@ -5223,8 +5191,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" required="true" switchOnChange="true" />
 						<field name="loadingSearchInput"
@@ -5457,8 +5423,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" required="true" switchOnChange="true" />
 						<field name="type" inputWidget="application.enumlist"
@@ -6015,8 +5979,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" required="true" switchOnChange="true" />
 						<field name="helpOverview"
@@ -6088,8 +6050,6 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="dataType" inputWidget="application.enumlist"
 							column="0" required="true" />
 						<field name="inputType" inputWidget="application.enumlist"
@@ -6202,8 +6162,6 @@
 							column="0" required="true" />
 						<field name="casePrefix" inputWidget="application.wordwithupper"
 							column="0"/>
-						<field name="configType" inputWidget="application.enumlist"
-							column="0" disabled="true" required="true" />
 						<field name="entity"
 							inputWidget="studio.workentitybynamelist" column="0"
 							required="true" saveAs="true" switchOnChange="true" />

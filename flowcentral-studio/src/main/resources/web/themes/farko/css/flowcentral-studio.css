@@ -78,7 +78,7 @@
 .fc-tableeditor .fields {height:100%;}
 .fc-tableeditor .fields .hdr {position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
 	text-align:center;color:#ffffff;font-weight:bold;}
-.fc-tableeditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-tableeditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 116px);}
 .fc-tableeditor .fields .fld {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-tableeditor .fields .fld span {font-weight:bold; color:var(--color-pencil);pointer-events:none;}
 .fc-tableeditor .design {height:100%;}
@@ -131,11 +131,11 @@
 .fc-formeditor .fields {width:160px;height:100%;}
 .fc-formeditor .fields .hdr {position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
 	text-align:center;color:#ffffff;font-weight:bold;font-size:8pt;}
-.fc-formeditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-formeditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 116px);}
 .fc-formeditor .fields .fld {display:none;border: solid 1px #909090; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-formeditor .fields .fld span {font-weight:bold; color:var(--color-pencil);pointer-events:none;font-size:10px;font-weight:bold;}
 .fc-formeditor .design {height:100%;}
-.fc-formeditor .designbase {display:block;padding:4px;width: 100%;box-sizing: border-box;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-formeditor .designbase {display:block;padding:4px;width: 100%;box-sizing: border-box;height:100%;overflow-y:scroll;max-height:calc(100vh - 116px);}
 .fc-formeditor .drag {position:fixed;zIndex:400;opacity:0.7;}
 .fc-formeditor .grab {cursor:grab;}
 
@@ -200,11 +200,11 @@
 .fc-dashboardeditor .charts {height:100%;}
 .fc-dashboardeditor .charts .hdr {position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
 	text-align:center;color:#ffffff;font-weight:bold;}
-.fc-dashboardeditor .charts .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-dashboardeditor .charts .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 116px);}
 .fc-dashboardeditor .charts .tle {display:none;border: solid 1px #909090; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-dashboardeditor .charts .tle span {font-weight:bold; color:var(--color-pencil);pointer-events:none;}
 .fc-dashboardeditor .design {height:100%;}
-.fc-dashboardeditor .designbase {display:block;padding:4px;width: 100%;box-sizing: border-box;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-dashboardeditor .designbase {display:block;padding:4px;width: 100%;box-sizing: border-box;height:100%;overflow-y:scroll;max-height:calc(100vh - 116px);}
 .fc-dashboardeditor .drag {position:fixed;zIndex:400;opacity:0.7;}
 .fc-dashboardeditor .grab {cursor:grab;}
 
@@ -270,7 +270,7 @@
 .fc-reporteditor .fields {height:100%;}
 .fc-reporteditor .fields .hdr {position:-webkit-sticky; position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
 	text-align:center;color:#ffffff;font-weight:bold;}
-.fc-reporteditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-reporteditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 116px);}
 .fc-reporteditor .fields .fld {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
 .fc-reporteditor .fields .fld span {font-weight:bold; color:var(--color-pencil);pointer-events:none;}
 .fc-reporteditor .design {height:100%;}
