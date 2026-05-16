@@ -15,6 +15,7 @@
  	--color-tablesel: #bfd6ff !important;
 	--color-tablehov: #d5e7fb !important;
 	--color-slate:#f7f9fa;
+	--color-pencil:#484848;
 	--studiodetail-fontsize:7.5pt;
  }
 
@@ -69,6 +70,9 @@
 .fc-studiomenu .msearch span {display: inline-block; padding: 4px; font-size: 10px; width: 14px;}
 .fc-studiomenu .search {display: inline-block;padding-left: 4px;font-size: 8pt;height: 22px;width: calc(100% - 48px);}
 
+/** Editor */
+.fc-designtitle {font-size:18px;color:var(--color-pencil);font-weight:bold;text-align:center;}
+
 /** Table Editor */
 .fc-tableeditor {height:100%;}
 .fc-tableeditor .fields {height:100%;}
@@ -76,7 +80,7 @@
 	text-align:center;color:#ffffff;font-weight:bold;}
 .fc-tableeditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-tableeditor .fields .fld {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
-.fc-tableeditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;}
+.fc-tableeditor .fields .fld span {font-weight:bold; color:var(--color-pencil);pointer-events:none;}
 .fc-tableeditor .design {height:100%;}
 .fc-tableeditor .designbase {display:flex;flex-wrap:nowrap;padding:16px;height: 452px; width: 100%; box-sizing: border-box; overflow-x: auto;}
 .fc-tableeditor .drag {position:fixed;zIndex:400;opacity:0.7;}
@@ -89,7 +93,7 @@
 .fc-tableeditor .actbtn {padding:2px 2px; min-height:14px; min-width:14px; color:#ffffff; font-size:8px;cursor: pointer;}
 .fc-tableeditor .itm {width:124px; margin:2px; padding: 2px 1px;font-size:7pt;}
 .fc-tableeditor .itmlabel {display:block; font-weight:bold; color:#000000;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.fc-tableeditor .itmval {display:block; color:#404040;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.fc-tableeditor .itmval {display:block; color:var(--color-pencil);white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
 .fc-tableeditor .placeslot {display:inline-block; box-sizing: border-box; width:122px; min-width:122px; height:184px;
 	margin:0px 2px;border: dashed 2px #8090f0;background-color:#b7c1f6;color:#8090f0;}
@@ -129,7 +133,7 @@
 	text-align:center;color:#ffffff;font-weight:bold;font-size:8pt;}
 .fc-formeditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-formeditor .fields .fld {display:none;border: solid 1px #909090; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
-.fc-formeditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;font-size:10px;font-weight:bold;}
+.fc-formeditor .fields .fld span {font-weight:bold; color:var(--color-pencil);pointer-events:none;font-size:10px;font-weight:bold;}
 .fc-formeditor .design {height:100%;}
 .fc-formeditor .designbase {display:block;padding:4px;width: 100%;box-sizing: border-box;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-formeditor .drag {position:fixed;zIndex:400;opacity:0.7;}
@@ -158,11 +162,11 @@
 .fc-formeditor .flddesign {display:block;padding:4px;min-height:80px;box-sizing: border-box;}
 .fc-formeditor .fld {display:block;padding:2px; margin-bottom:4px; box-sizing: border-box; background-color:#ffffff;border: solid 1px #c8c8c8;}
 .fc-formeditor .fldhdr {font-weight:bold; font-size:8pt;}
-.fc-formeditor .fldcap {display: inline-block; background-color: #efefef; color: #404040; width: calc(100% - 48px); border: 1px solid #dfdfdf;}
+.fc-formeditor .fldcap {display: inline-block; background-color: #efefef; color: var(--color-pencil); width: calc(100% - 48px); border: 1px solid #dfdfdf;}
 .fc-formeditor .fldcap span {display:block; text-align:left;margin:2px 4px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;pointer-events:none;}
 .fc-formeditor .fldcapz {width:100%;box-sizing: border-box;}
 .fc-formeditor .fldact {display:inline-block; width:42px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
-.fc-formeditor .fldbtn {color:#404040; padding:2px 2px; min-height:14px; min-width:14px; font-size:10px; cursor: pointer !important;}
+.fc-formeditor .fldbtn {color:var(--color-pencil); padding:2px 2px; min-height:14px; min-width:14px; font-size:10px; cursor: pointer !important;}
 
 .fc-formeditor .placefield {display:block; box-sizing: border-box; height:28px;
 	margin:2px;border: dashed 2px #8090f0;background-color:#b7c1f6;color:#8090f0;}
@@ -198,7 +202,7 @@
 	text-align:center;color:#ffffff;font-weight:bold;}
 .fc-dashboardeditor .charts .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-dashboardeditor .charts .tle {display:none;border: solid 1px #909090; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
-.fc-dashboardeditor .charts .tle span {font-weight:bold; color:#404040;pointer-events:none;}
+.fc-dashboardeditor .charts .tle span {font-weight:bold; color:var(--color-pencil);pointer-events:none;}
 .fc-dashboardeditor .design {height:100%;}
 .fc-dashboardeditor .designbase {display:block;padding:4px;width: 100%;box-sizing: border-box;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-dashboardeditor .drag {position:fixed;zIndex:400;opacity:0.7;}
@@ -268,7 +272,7 @@
 	text-align:center;color:#ffffff;font-weight:bold;}
 .fc-reporteditor .fields .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
 .fc-reporteditor .fields .fld {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
-.fc-reporteditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;}
+.fc-reporteditor .fields .fld span {font-weight:bold; color:var(--color-pencil);pointer-events:none;}
 .fc-reporteditor .design {height:100%;}
 .fc-reporteditor .designbase {display:flex;flex-wrap:nowrap;padding:16px;height: 452px; width: 100%; box-sizing: border-box; overflow-x: auto;}
 .fc-reporteditor .drag {position:fixed;zIndex:400;opacity:0.7;}
@@ -281,7 +285,7 @@
 .fc-reporteditor .actbtn {padding:2px 2px; min-height:14px; min-width:14px; color:#ffffff; font-size:8px;cursor: pointer;}
 .fc-reporteditor .itm {width:124px; margin:2px; padding: 2px 1px;font-size:7pt;}
 .fc-reporteditor .itmlabel {display:block; font-weight:bold; color:#000000;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-.fc-reporteditor .itmval {display:block; color:#404040;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.fc-reporteditor .itmval {display:block; color:var(--color-pencil);white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
 .fc-reporteditor .placeslot {display:inline-block; box-sizing: border-box; width:122px; min-width:122px; height:184px;
 	margin:0px 2px;border: dashed 2px #8090f0;background-color:#b7c1f6;color:#8090f0;}
@@ -310,7 +314,7 @@
 	text-align:center;color:#000000;font-size:8pt;}
 .fc-workfloweditor .tools .bdy {background-color:var(--color-slate);border: solid 1px #c8c8c8; height:100%; overflow:auto;}
 .fc-workfloweditor .tools .item {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
-.fc-workfloweditor .tools .item span {font-weight:bold; color:#404040;pointer-events:none;}
+.fc-workfloweditor .tools .item span {font-weight:bold; color:var(--color-pencil);pointer-events:none;}
 .fc-workfloweditor .tools .symcat {display:block;padding: 4px;font-size: 16px;}
 .fc-workfloweditor .tools .labelcat {display:block;font-size: 10px;font-style: italic;word-wrap: break-word;}
 
