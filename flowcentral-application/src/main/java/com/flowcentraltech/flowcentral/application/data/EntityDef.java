@@ -86,6 +86,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> stringFieldDefList;
 
+    private List<EntityFieldDef> baseFieldDefList;
+
+    private List<EntityFieldDef> actFieldDefList;
+
     private List<EntityFieldDef> fkFieldDefList;
 
     private List<EntityFieldDef> columnFieldDefList;
@@ -848,6 +852,45 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return fkFieldDefList;
+    }
+
+    public List<EntityFieldDef> getBaseFieldDefList() {
+        if (baseFieldDefList == null) {
+            synchronized (this) {
+                if (baseFieldDefList == null) {
+                    baseFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isBase() && !entityFieldDef.isListOnly()) {
+                            baseFieldDefList.add(entityFieldDef);
+                        }
+                    }
+                    
+                    baseFieldDefList = DataUtils.unmodifiableList(baseFieldDefList);
+                }
+            }
+        }
+
+        return baseFieldDefList;
+    }
+
+    public List<EntityFieldDef> getActFieldDefList() {
+        if (actFieldDefList == null) {
+            synchronized (this) {
+                if (actFieldDefList == null) {
+                    actFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (!entityFieldDef.isBase() && !entityFieldDef.isChild() && !entityFieldDef.isChildList()
+                                && !entityFieldDef.isListOnly()) {
+                            actFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    actFieldDefList = DataUtils.unmodifiableList(actFieldDefList);
+                }
+            }
+        }
+
+        return actFieldDefList;
     }
 
     public List<EntityFieldDef> getColumnFieldDefList() {

@@ -244,6 +244,7 @@ import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamCons
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.entities.Module;
+import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
@@ -284,6 +285,7 @@ import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlEntityLoader;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
+import com.tcdng.unify.core.database.sql.SqlFieldTypeInfo;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.list.ListManager;
 import com.tcdng.unify.core.message.MessageResolver;
@@ -1446,6 +1448,19 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return prdb.build();
                 }
             };
+    }
+
+    @Override
+    public Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException {
+        return listManager.getStaticListEnumType(listName);
+    }
+
+    @Override
+    public Optional<String> generateFieldTypeSql(String entity, SqlFieldTypeInfo info) throws UnifyException {
+        return ((SqlDataSourceDialect) db().getDataSource().getDialect()).generateFieldTypeSql(info); // TODO Detect
+                                                                                                      // datasource from
+                                                                                                      // entity
+                                                                                                      // definition
     }
 
     @Override

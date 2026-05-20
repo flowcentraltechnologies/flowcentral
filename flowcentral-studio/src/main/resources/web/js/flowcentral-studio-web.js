@@ -1893,7 +1893,7 @@ fuxstudio.dshTileDragEnd = function(uEv) {
 
 
 /********************************************************************************/
-/************************* WORKFLOW EDITOR **************************************/
+/************************* COMMON FABRIC EDITOR **************************************/
 /********************************************************************************/
 /** Fabric extension */
 const FAB_EXTENSION_HALF_PI = Math.PI/2;
@@ -1952,6 +1952,379 @@ fabric.Text.prototype.set({
 	  }
 	});
 
+/********************************************************************************/
+/************************* ENTITY EDITOR **************************************/
+/********************************************************************************/
+	
+/** Entity designer */
+const ED_CONNECT_START_GAP = 8;
+const ED_CONNECT_END_GAP = 8;
+const ED_ARROW_CUT = 20;
+const ED_ARROW_GAP = 8;
+const ED_ARROW_GAP_HALF = Math.floor(ED_ARROW_GAP/2);
+const ED_ARROW_OFFSET = -2;
+const ED_NORMAL_COLOR = "#444";
+const ED_SELECT_COLOR = "#3498db";
+const ED_MODEL_BORDER_COLOR = "#bbb";
+const ED_MODEL_HEADER_COLOR = "#617C9C";
+const ED_MODEL_HEADER_COLOR2 = "#787878";
+const ED_MODEL_BASE_COLOR = "#f8f8f8";
+const ED_MODEL_BODY_COLOR = "#fffff0";
+const ED_MODEL_WIDTH = 264;
+const ED_MODEL_GAP = 74;
+const ED_MODEL_LINE = 22;
+const ED_MODEL_FONT =  "Arial";
+const ED_MODEL_ICON_COLOR =  "#888";
+const ED_MODEL_ICON_FONT = "FontSymbolMngr0";
+const ED_CANVAS_WIDTH = 3840;
+const ED_CANVAS_HEIGHT= 2160;
+
+fuxstudio.etdesign = {
+	editor: null,
+	entity: null,
+	canvas: null,
+	ref:false,
+	widgets:null,
+	startp:null,
+	endp:null,
+	gd:0,
+	gy:0,
+	
+	init: function(editor) {
+		this.editor = editor;
+		this.entity = editor.entity;
+		this.ref = false;
+		this.link = [];
+		this.startp = [];
+		this.endp = new Map();
+		this.widgets = new Map();
+		this.gd = 0;
+		this.gy = 0;
+		const _self = this;
+		if (this.canvas) {
+			this.canvas.clear();
+			this.canvas.dispose();
+		}
+		
+		this.canvas = new fabric.Canvas(editor.canvasId, {selection:false});
+		this.canvas.setWidth(ED_CANVAS_WIDTH);
+		this.canvas.setHeight(ED_CANVAS_HEIGHT);
+	},
+	
+	refresh: function() {
+		this.canvas.renderAll();
+	},
+	
+	resize:	function() {
+		const _editor = _id(this.editor.panelId);
+		this.canvas.setWidth(ED_CANVAS_WIDTH);
+		this.canvas.setHeight(ED_CANVAS_HEIGHT);
+		this.refresh();
+	},
+
+	wire:	function() {
+		this._connectAll();
+		this.refresh();
+	},
+
+	addChildren: function(entities) {
+		if (entities && entities.length) {
+			this.ref =  true;
+			for (var i = 0; i < entities.length; i++) {
+				this.addEntity(entities[i]);
+				this._ensureDepth();
+			}
+			
+			if (this.gy > 0) {
+				this.gd++;
+				this.gy = 0;
+			}
+
+			this.ref =  false;
+		}
+	},
+
+	addParents: function(entities) {
+		if (entities && entities.length) {
+			this.ref =  true;
+			this.gd++;
+			this.gy = 0;
+
+			for (var i = 0; i < entities.length; i++) {
+				this.addEntity(entities[i]);
+				this._ensureDepth();
+			}
+			
+			this.ref =  false;
+		}
+	},
+	
+	addEntity: function(entity) {
+				const nm = entity.name;
+				const info = {};
+				const layout = [];
+				const _self = this;
+				layout.push(new fabric.Rect({
+				  top: 0,
+				  left: 0,
+				  width: ED_MODEL_WIDTH,
+				  height: 200,
+				  fill: "#fff",
+				  stroke: ED_MODEL_BORDER_COLOR,
+				  strokeWidth: 1
+				}));
+				const bdy = layout[layout.length - 1];
+
+				layout.push(new fabric.Rect({
+				  top: 0,
+				  left: 0,
+				  width: ED_MODEL_WIDTH,
+				  height: ED_MODEL_LINE,
+				  fill: this.ref ? ED_MODEL_HEADER_COLOR2: ED_MODEL_HEADER_COLOR
+				}));
+
+				layout.push(new fabric.Text(entity.caption, {
+				  fontSize: 10,
+				  fontFamily: ED_MODEL_FONT,
+				  top: 4,
+				  left: 0,
+				  fill: "#fff",
+				  fontWeight: 'bold'
+				}));
+				const txt = layout[layout.length - 1];
+				this._center(txt, ED_MODEL_WIDTH);
+				
+				const bdcol = this.ref ? '#fff':ED_MODEL_BODY_COLOR;
+				var y = ED_MODEL_LINE;
+				y = this._fieldSection(nm, layout, y, entity.bfields, ED_MODEL_BASE_COLOR);
+				y = this._fieldSection(nm, layout, y, entity.afields, bdcol);
+				y = this._fieldSection(nm, layout, y, entity.cfields, bdcol);
+				y = this._fieldSection(nm, layout, y, entity.clfields, bdcol);
+				y = this._fieldSection(nm, layout, y, entity.lfields, bdcol);
+					
+				bdy.set({
+				  height: y + 2
+				});
+				
+				info.widget = new fabric.Group(layout, {
+				  left: 20 + this.gd * (ED_MODEL_WIDTH + ED_MODEL_GAP),
+				  top: 20 + this.gy,
+				  subTargetCheck:true,
+				  hasBorders: true
+				});
+				info.widget.on({
+					'moving': _self._stepMoving,
+				});
+				
+				this.widgets.set(nm, info.widget);
+				this.canvas.add(info.widget);
+				//this.refresh();
+				
+				this.gy += (y + 20);
+	},
+	
+	_ensureDepth: function() {
+		if (this.gy > ED_CANVAS_HEIGHT) {
+			this.gd++;
+			this.gy = 0;
+		}
+	},
+	
+	_fieldSection: function(nm, layout, y, fields, bcol) {
+			if(fields.length > 0) {
+				// TODO Draw line
+				y++;
+				for (var i = 0; i < fields.length; i++) {
+					const fld = fields[i];
+					const pk = fld.pk;
+					const fk = fld.fk;
+					
+					layout.push(new fabric.Rect({
+					  top: y,
+					  left: 0,
+					  width: ED_MODEL_WIDTH,
+					  height: ED_MODEL_LINE,
+					  fill: pk ? '#fff' :bcol
+					}));
+
+					layout.push(new fabric.Text(fld.name + fld.type, {
+					  fontSize: 10,
+					  fontFamily: ED_MODEL_FONT,
+					  top: y + 5,
+					  left: 8,
+					  fill: "#000"
+					}));
+					
+					if (fld.schema) {
+						layout.push(new fabric.Text(fld.schema, {
+						  fontSize: 10,
+						  fontFamily: ED_MODEL_FONT,
+						  top: y + 5,
+						  left: 8,
+						  fill: "#000"
+						}));
+						
+						const txt = layout[layout.length - 1];
+						this._right(txt, ED_MODEL_WIDTH);
+					}
+
+					y += ED_MODEL_LINE;
+					
+					if (pk) {
+						layout.push(new fabric.Line([0, y, ED_MODEL_WIDTH, y], {
+						  stroke: ED_MODEL_BORDER_COLOR,
+						  strokeWidth: 1
+						}));
+						
+						layout.push(new fabric.Rect({
+						  top: y - 16,
+						  left: 0,
+						  width: 5,
+						  height: 10,
+						  fill: '#404040',
+						  stroke: ED_MODEL_BORDER_COLOR,
+						  strokeWidth: 1
+						}));
+						
+						this.endp.set(pk, {
+										  nm:nm,
+										  x: 0 - ED_ARROW_CUT,
+										  y: y - 16,
+										  cons: 0
+										});
+					}
+					
+					if (fk) {
+						layout.push(new fabric.Rect({
+						  top: y - 16,
+						  left: ED_MODEL_WIDTH - 5,
+						  width: 5,
+						  height: 10,
+						  fill: '#404040',
+						  stroke: ED_MODEL_BORDER_COLOR,
+						  strokeWidth: 1
+						}));
+						
+						this.startp.push({
+										nm:nm,
+										trg:fk,
+										x: ED_MODEL_WIDTH + ED_ARROW_CUT,
+										y: y - 10
+						});
+					}
+				}
+			}
+			
+			return y;
+	},
+
+	_connectAll: function() {
+			for (var i = 0; i < this.startp.length; i++) {
+				const start = this.startp[i];
+				const end = this.endp.get(start.trg);
+				if (end) {
+					const wid1 = this.widgets.get(start.nm);
+					const wid2 = this.widgets.get(end.nm);
+					
+					const ey = end.y + end.cons * 6;
+					end.cons++;
+					
+					const pnt = {x2:end.x, y2:ey};
+					pnt.x2 += ED_ARROW_OFFSET;
+					pnt.y2 += ED_ARROW_GAP_HALF + ED_ARROW_GAP * 0;
+					pnt.x1 = pnt.x2 - ED_CONNECT_END_GAP;
+					pnt.y1 = pnt.y2;
+					const estub = new fabric.LineArrow([wid2.left +pnt.x1 + ED_ARROW_CUT, wid2.top + pnt.y1 - 4, wid2.left + pnt.x2 + ED_ARROW_CUT, wid2.top + pnt.y2 -4], {
+						fill: "",
+						stroke: ED_SELECT_COLOR,
+						hasBorders: false,
+						perPixelTargetFind:true,
+						targetFindTolerance:4
+					});
+
+					var pathDef = "M " + (wid1.left + start.x - ED_ARROW_CUT) + "," + (wid1.top + start.y);
+					pathDef += " L" + (wid1.left + start.x) + "," + (wid1.top + start.y);
+					pathDef += " L" + (wid2.left + end.x) + "," + (wid2.top + ey);
+					pathDef += " L" + (wid2.left + end.x + ED_ARROW_CUT) + "," + (wid2.top + ey);
+					const path = new fabric.Path(pathDef, {
+						fill: "",
+						stroke: ED_SELECT_COLOR,
+						hasBorders: false,
+						perPixelTargetFind:true,
+						targetFindTolerance:4
+					});
+					
+					this.link.push(estub, path);
+					this.canvas.add(estub, path);
+				}
+			}
+	},
+
+	_disconnectAll: function() {
+			for (var i = 0; i < this.startp.length; i++) {
+				const start = this.startp[i];
+				const end = this.endp.get(start.trg);
+				if (end) {
+					end.cons = 0;
+				}
+			}
+		
+			for (var i = 0; i < this.link.length; i++) {
+				this.canvas.remove(this.link[i]);
+			}
+			
+			this.link = [];
+	},
+	
+	_center: function(item, maxwidth) {
+			item.initDimensions();
+			var x = Math.floor((maxwidth - item.width)/2);
+			item.set({
+			  left: x > 0 ? x : 0
+			});
+	},
+
+	_right: function(item, maxwidth) {
+			item.initDimensions();
+			item.set({
+			  left: maxwidth - item.width - 6
+			});
+	},
+
+	_stepMoving: function(e) {
+		const etdesign = fuxstudio.etdesign;
+		etdesign._disconnectAll();
+		etdesign._connectAll();
+	}
+	
+};
+
+
+/** Entity editor */
+fuxstudio.rigEntityEditor = function(rgp) {
+	const id = rgp.pId;
+	const content = rgp.pContent;
+
+	const editor = {};
+	editor.panelId = id;
+	editor.designId = rgp.pDsnBaseId;
+	editor.canvasId = rgp.pDsnCanvasId;
+	editor.stateId = rgp.pStateId;
+	editor.entity = content.design.entity
+
+	const etdesign = fuxstudio.etdesign;
+	etdesign.init(editor);
+	etdesign.resize();
+	etdesign.addChildren(content.design.children);
+	etdesign.addEntity(editor.entity);
+	etdesign.addParents(content.design.parents);
+	etdesign.wire();
+}
+
+/********************************************************************************/
+/************************* WORKFLOW EDITOR **************************************/
+/********************************************************************************/
+	
 /** Workflow designer */
 const WD_CONNECT_START_GAP = 8;
 const WD_CONNECT_END_GAP = 8;
@@ -1965,7 +2338,7 @@ const WD_ROUTE_FILL_COLOR = "#eee";
 const WD_ROUTE_CONN_COLOR1 = "#dd0";
 const WD_ROUTE_CONN_COLOR2 = "#ff0";
 const WD_STEP_BORDER_COLOR = "#ccc";
-const WD_STEP_EDIT_COLOR = "#34495e"; //"#6699cc"
+const WD_STEP_EDIT_COLOR = "#34495e";
 const WD_STEP_WIDTH = 124;
 const WD_STEP_FONT =  "Arial";
 const WD_STEP_ICON_COLOR =  "#888";
@@ -3036,6 +3409,7 @@ fuxstudio.init = function() {
 	ux.setfn(fuxstudio.rigReportColumnEditorPanel, "fuxstudio06");  
 	ux.setfn(fuxstudio.rigReportEditor, "fuxstudio07");  
 	ux.setfn(fuxstudio.rigDashboardEditor, "fuxstudio08");  
+	ux.setfn(fuxstudio.rigEntityEditor, "fuxstudio09");  
 }
 
 fuxstudio.init();

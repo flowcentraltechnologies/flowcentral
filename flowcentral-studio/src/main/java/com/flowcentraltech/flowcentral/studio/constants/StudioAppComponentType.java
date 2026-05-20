@@ -186,7 +186,7 @@ public enum StudioAppComponentType implements EnumConst {
             "$m{studio.application.component.type.entities}",
             "studio.menu.label.entity",
             "database",
-            "/studioappcomponentapplet",
+            "/studioappentityapplet",
             "studiooncreateappentity-policy",
             "studioonupdateappentity-policy",
             null,

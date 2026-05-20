@@ -97,6 +97,7 @@ import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.database.WorkEntity;
@@ -115,6 +116,7 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.database.sql.SqlFieldTypeInfo;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.system.SequenceNumberService;
@@ -130,6 +132,30 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 4.1
  */
 public interface AppletUtilities extends FlowCentralComponent {
+
+    /**
+     * Gets a static list enumeration type.
+     * 
+     * @param listName
+     *                 the list name
+     * @return the list enumeration type
+     * @throws UnifyException
+     *                        if static list with name is unknown. if an error occurs
+     */
+    Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException;
+    
+    /**
+     * Generates a field type SQL
+     * 
+     * @param entity
+     *               the entity name
+     * @param info
+     *               the field type information
+     * @return the field type SQL
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> generateFieldTypeSql(String entity, SqlFieldTypeInfo info) throws UnifyException;
 
     /**
      * Gets table row color.

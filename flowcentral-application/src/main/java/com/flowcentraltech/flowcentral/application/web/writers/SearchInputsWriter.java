@@ -72,7 +72,7 @@ public class SearchInputsWriter extends AbstractControlWriter {
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = searchInputsWidget.getItemValueStoreAt(i);
                 SearchInputEntry sie = searchInputsWidget.getItemAt();
-                writer.write("<tr class=\"line\">");
+                writer.write("<tr class=\"line\"><td>");
                 writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
                 if (sie.isWithFieldName()) {
                     writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel);
@@ -106,7 +106,7 @@ public class SearchInputsWriter extends AbstractControlWriter {
                     writeBlankValuesItem(writer);
                 }
 
-                writer.write("<td class=\"atab\">");
+                writer.write("</td><td class=\"atab\">");
                 moveUpCtrl.setDisabled(i == 0);
                 moveDownCtrl.setDisabled(i >= (len - 2));
                 writeActionItem(writer, lineValueStore, moveUpCtrl);
@@ -178,7 +178,7 @@ public class SearchInputsWriter extends AbstractControlWriter {
 
     private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
             throws UnifyException {
-        writer.write("<td class=\"vitem\">");
+        writer.write("<div class=\"vitem\">");
         writer.write("<div style=\"display:table;width:100%;\">");
         writer.write("<div style=\"display:table-row;\">");
         writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
@@ -192,12 +192,12 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writer.write("</div>");
         writer.write("</div>");
         writer.write("</div>");
-        writer.write("</td>");
+        writer.write("</div>");
     }
 
     private void writeBlankValuesItem(ResponseWriter writer) throws UnifyException {
-        writer.write("<td class=\"vitem\">");
-        writer.write("</td>");
+        writer.write("<div class=\"vitem\">");
+        writer.write("</div>");
     }
 
     private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {

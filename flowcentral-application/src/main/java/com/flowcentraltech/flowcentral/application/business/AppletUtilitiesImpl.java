@@ -187,6 +187,7 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.database.sql.SqlFieldTypeInfo;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.message.MessageResolver;
@@ -401,6 +402,16 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException {
+        return applicationModuleService.getStaticListEnumType(listName);
+    }
+
+    @Override
+    public Optional<String> generateFieldTypeSql(String entity, SqlFieldTypeInfo info) throws UnifyException {
+        return applicationModuleService.generateFieldTypeSql(entity, info);
     }
 
     @Override

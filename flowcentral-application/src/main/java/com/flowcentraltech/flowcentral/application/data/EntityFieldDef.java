@@ -18,9 +18,11 @@ package com.flowcentraltech.flowcentral.application.data;
 import com.flowcentraltech.flowcentral.common.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.TextCase;
+import com.tcdng.unify.core.database.sql.SqlFieldTypeInfo;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -30,7 +32,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class EntityFieldDef implements Listable, EntityFieldAttributes {
+public class EntityFieldDef implements SqlFieldTypeInfo, Listable, EntityFieldAttributes {
 
     private EntityFieldDef resolvedTypeFieldDef;
 
@@ -256,6 +258,21 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     public boolean isWithInputLabel() {
         return !StringUtils.isBlank(inputLabel);
+    }
+
+    @Override
+    public ColumnType getColumnType() {
+        return dataType.isPrimitive() ? dataType.dataType().columnType() : null;
+    }
+
+    @Override
+    public int getLength() {
+        return maxLen;
+    }
+
+    @Override
+    public String getName() {
+        return fieldName;
     }
 
     @Override
