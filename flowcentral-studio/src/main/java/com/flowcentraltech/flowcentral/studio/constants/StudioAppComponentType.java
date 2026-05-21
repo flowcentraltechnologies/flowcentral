@@ -302,7 +302,7 @@ public enum StudioAppComponentType implements EnumConst {
             "$m{studio.application.component.type.notificationtemplates}",
             "studio.menu.label.notificationtemplate",
             "mail",
-            "/studioappcomponentapplet",
+            "/studionotiftemplateapplet",
             "studiooncreatecomponent-policy",
             null,
             null,

@@ -142,6 +142,32 @@ public class FormTabDef {
         this.listOnlyCheck = srcFormTabDef.listOnlyCheck;
     }
 
+    public FormTabDef(String name, String label, String icon, List<FormSectionDef> formSectionDefList) {
+        this.formSectionDefList = formSectionDefList;
+        this.contentType = TabContentType.MINIFORM;
+        this.filterGroupDef = null;
+        this.name = name;
+        this.label = label;
+        this.icon = icon;
+        this.applet = null;
+        this.reference = null;
+        this.mappedFieldName = null;
+        this.mappedForm = null;
+        this.editAction = null;
+        this.editViewOnly = null;
+        this.editAllowAddition = null;
+        this.editFixedRows = null;
+        this.ignoreParentCondition = false;
+        this.includeSysParam = false;
+        this.showSearch = false;
+        this.quickEdit = false;
+        this.quickOrder = false;
+        this.visible = true;
+        this.editable = true;
+        this.disabled = false;
+        this.listOnlyCheck = 0;
+    }
+
     private FormTabDef(FormTabDef srcFormTabDef, String name, String label, String icon, List<FormSectionDef> formSectionDefList) {
         this.formSectionDefList = formSectionDefList;
         this.contentType = srcFormTabDef.contentType;
