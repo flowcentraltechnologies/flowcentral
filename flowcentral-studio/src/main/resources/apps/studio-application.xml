@@ -4669,20 +4669,6 @@
 					</setValues>
 				</formStatePolicy>
 			</formStatePolicies>
-			<formWidgetRulesPolicies>
-				<formWidgetRulesPolicy
-					name="templateWidgetRule"
-					description="$m{studio.notificationtemplate.form.formwidgetrulespolicy.template}">
-					<onCondition>
-						<restriction type="NOT_EQUALS"
-							field="notificationType" paramA="SMS" />
-					</onCondition>
-					<widgetRules>
-						<entry field="template"
-							widget="application.richtexteditorlarge" />
-					</widgetRules>
-				</formWidgetRulesPolicy>
-			</formWidgetRulesPolicies>
 		</form>
 		<form name="notifTemplateParamForm"
 			description="$m{studio.notificationtemplateparam.form}"

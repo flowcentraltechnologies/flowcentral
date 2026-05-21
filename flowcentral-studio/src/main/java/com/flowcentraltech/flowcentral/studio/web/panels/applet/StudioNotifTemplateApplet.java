@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormSectionDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
@@ -67,17 +68,21 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet 
                     final List<FormFieldDef> fieldDefs = new ArrayList<FormFieldDef>();
                     EntityFieldDef entityFieldDef = entityDef.getFieldDef("subject");
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef("application.text");
+                    String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
+                            entityFieldDef, null, null);
                     fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null,
-                            null, entityFieldDef.getFieldLabel(), null, 0, false, false,
+                            null, entityFieldDef.getFieldLabel(), renderer, 0, false, false,
                             true, true, true, false));
                     entityFieldDef = entityDef.getFieldDef("template");
-                    widgetTypeDef = au.getWidgetTypeDef("application.textarealarge");
+                    widgetTypeDef = au.getWidgetTypeDef("application.richtexteditorlarge");
+                    renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
+                            entityFieldDef, null, null);
                     fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null,
-                            null, entityFieldDef.getFieldLabel(), null, 0, false, false,
+                            null, entityFieldDef.getFieldLabel(), renderer, 0, false, false,
                             true, true, true, false));
                     
                     formTabDef = new FormTabDef("template", "Template", "email",
-                            Arrays.asList(new FormSectionDef(fieldDefs, "details", "Details",
+                            Arrays.asList(new FormSectionDef(fieldDefs, "details", null,
                                     FormColumnsType.TYPE_1, null, null, true, true, false)));
                 }
             }
