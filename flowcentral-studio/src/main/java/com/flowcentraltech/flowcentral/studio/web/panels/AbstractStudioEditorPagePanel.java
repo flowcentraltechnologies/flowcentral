@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
-import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppComponentApplet;
+import com.flowcentraltech.flowcentral.studio.web.panels.applet.AbstractStudioAppComponentApplet;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -43,7 +43,7 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralP
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
-        final StudioAppComponentApplet applet = (StudioAppComponentApplet) getValueStore().getValueObject();
+        final AbstractStudioAppComponentApplet applet = (AbstractStudioAppComponentApplet) getValueStore().getValueObject();
         final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null;
         final boolean isEditable = !applet.appletCtx().isReadOnly();
         if (isCollaboration) {
@@ -69,7 +69,7 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralP
     }
 
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        return ((StudioAppComponentApplet) getValueStore().getValueObject()).appletCtx().isReadOnly();
+        return ((AbstractStudioAppComponentApplet) getValueStore().getValueObject()).appletCtx().isReadOnly();
     }
     
     private boolean checkFrozen(Entity inst) throws UnifyException {

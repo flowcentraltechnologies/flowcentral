@@ -28,6 +28,12 @@ import java.util.Map;
  */
 public enum LingualDateType {
 
+    THIS_HOUR(
+            "THO"),
+    LAST_HOUR(
+            "LHO"),
+    NEXT_HOUR(
+            "NHO"),
     TODAY(
             "TDY"),
     YESTERDAY(

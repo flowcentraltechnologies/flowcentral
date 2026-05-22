@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditorWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -72,14 +73,14 @@ public class FormEditorWriter extends AbstractControlWriter {
         writer.write(
                 "<div style=\"display:table;table-layout: fixed;width:100%;height:100%;\"><div style=\"display:table-row;\">");
         // Fields
-        writer.write("<div class=\"fields\" style=\"display:table-cell;vertical-align:top;width:")
-                .write(formEditorWidget.getChoiceWidth()).write(";\">");
+        writer.write("<div class=\"fields\" style=\"display:table-cell;vertical-align:top;\">");
         writer.write("<div class=\"bdy\" id=\"").write(formEditorWidget.getFieldBaseId()).write("\">");
         writer.write("<div class=\"hdr\">").write(getSessionMessage("formeditor.availablefields")).write("</div>");
         jsonWriter.beginArray("fields");
         int i = 0;
         for (EntityFieldDef entityFieldDef : formEditor.getFormDef().getEntityDef().getSortedFieldDefList()) {
-            if (entityFieldDef.isFormViewable()) {
+            if (entityFieldDef.isFormViewable()
+                    && !ApplicationEntityUtils.RESERVED_EDITOR_FIELDS.contains(entityFieldDef.getFieldName())) {
                 writer.write("<div class=\"fld\" id=\"").write(formEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");
                 writer.writeWithHtmlEscape(resolveSessionMessage(entityFieldDef.getFieldLabel()));
@@ -87,7 +88,7 @@ public class FormEditorWriter extends AbstractControlWriter {
 
                 jsonWriter.beginObject();
                 jsonWriter.write("fldLabel", resolveSessionMessage(entityFieldDef.getFieldLabel()));
-                jsonWriter.write("fldNm", entityFieldDef.getFieldName());                
+                jsonWriter.write("fldNm", entityFieldDef.getFieldName());
                 jsonWriter.endObject();
 
                 i++;

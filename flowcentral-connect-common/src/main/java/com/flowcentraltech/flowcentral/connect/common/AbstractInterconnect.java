@@ -230,10 +230,10 @@ public abstract class AbstractInterconnect {
 
                     entities = detectAndApplyImplicitFields(_entitiesbyclassname);
                     entitiesByImplClass = new HashMap<Class<?>, EntityInfo>();
-                    for (Map.Entry<String, EntityInfo> entry: entities.entrySet()) {
+                    for (Map.Entry<String, EntityInfo> entry : entities.entrySet()) {
                         entitiesByImplClass.put(entry.getValue().getImplClass(), entry.getValue());
                     }
-                    
+
                     this.entityInstFinder = entityInstFinder;
                     initialized = true;
                     LOGGER.log(Level.INFO, "Total of [{0}] entity information loaded.", entities.size());
@@ -387,7 +387,7 @@ public abstract class AbstractInterconnect {
         public boolean isWithReferences() {
             return references != null;
         }
-        
+
         public boolean isArray() {
             return type.isArray();
         }
@@ -540,6 +540,9 @@ public abstract class AbstractInterconnect {
         cal1.setTime(now);
         cal1.setTime(now);
         switch (type) {
+            case LAST_HOUR:
+                cal1.add(Calendar.HOUR_OF_DAY, -1);
+                return new DateRange(getZeroMinuteDate(cal1.getTime()), getLastMinuteDate(cal1.getTime()));
             case LAST_12MONTHS:
                 cal1.add(Calendar.MONTH, -12);
                 break;
@@ -570,6 +573,9 @@ public abstract class AbstractInterconnect {
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
                 cal2.set(Calendar.DAY_OF_YEAR, cal2.getActualMaximum(Calendar.DAY_OF_YEAR));
                 break;
+            case NEXT_HOUR:
+                cal1.add(Calendar.HOUR_OF_DAY, 1);
+                return new DateRange(getZeroMinuteDate(cal1.getTime()), getLastMinuteDate(cal1.getTime()));
             case NEXT_12MONTHS:
                 cal2.add(Calendar.MONTH, 12);
                 break;
@@ -600,6 +606,8 @@ public abstract class AbstractInterconnect {
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
                 cal2.set(Calendar.DAY_OF_YEAR, cal2.getActualMaximum(Calendar.DAY_OF_YEAR));
                 break;
+            case THIS_HOUR:
+                return new DateRange(getZeroMinuteDate(cal1.getTime()), getLastMinuteDate(cal1.getTime()));
             case THIS_MONTH:
                 cal1.set(Calendar.DAY_OF_MONTH, 1);
                 cal2.set(Calendar.DAY_OF_MONTH, cal2.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -632,6 +640,9 @@ public abstract class AbstractInterconnect {
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(now);
         switch (type) {
+            case LAST_HOUR:
+                cal1.add(Calendar.HOUR_OF_DAY, -1);
+                return getZeroMinuteDate(cal1.getTime());
             case LAST_12MONTHS:
                 cal1.add(Calendar.MONTH, -12);
                 break;
@@ -656,6 +667,9 @@ public abstract class AbstractInterconnect {
                 cal1.add(Calendar.YEAR, -1);
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
                 break;
+            case NEXT_HOUR:
+                cal1.add(Calendar.HOUR_OF_DAY, 1);
+                return getZeroMinuteDate(cal1.getTime());
             case NEXT_12MONTHS:
                 cal1.add(Calendar.MONTH, 12);
                 break;
@@ -680,6 +694,8 @@ public abstract class AbstractInterconnect {
                 cal1.add(Calendar.YEAR, 1);
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
                 break;
+            case THIS_HOUR:
+                return getZeroMinuteDate(cal1.getTime());
             case THIS_MONTH:
                 cal1.set(Calendar.DAY_OF_MONTH, 1);
                 break;
@@ -701,6 +717,23 @@ public abstract class AbstractInterconnect {
         }
 
         return getMidnightDate(cal1.getTime());
+    }
+
+    public Date getZeroMinuteDate(Date date) {
+        return getZeroMinuteDate(date, Locale.getDefault());
+    }
+
+    public Date getZeroMinuteDate(Date date, Locale locale) {
+        if (date == null) {
+            return null;
+        }
+
+        Calendar cal = Calendar.getInstance(locale);
+        cal.setTime(date);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 
     public Date getMidnightDate(Date date) {
@@ -732,6 +765,22 @@ public abstract class AbstractInterconnect {
         Calendar cal = Calendar.getInstance(locale);
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        return cal.getTime();
+    }
+
+    public Date getLastMinuteDate(Date date) {
+        return getLastMinuteDate(date, Locale.getDefault());
+    }
+
+    public Date getLastMinuteDate(Date date, Locale locale) {
+        if (date == null) {
+            return null;
+        }
+        Calendar cal = Calendar.getInstance(locale);
+        cal.setTime(date);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
         cal.set(Calendar.MILLISECOND, 999);
@@ -837,7 +886,7 @@ public abstract class AbstractInterconnect {
 
         return new QueryLoadingParams(_params);
     }
-    
+
     public List<OrderDef> getOrderDef(EntityInfo entityInfo, String order) throws Exception {
         checkInitialized();
         if (order != null) {

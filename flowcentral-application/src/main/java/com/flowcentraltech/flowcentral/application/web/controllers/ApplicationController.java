@@ -218,7 +218,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
     protected void onIndexPage() throws UnifyException {
         super.onIndexPage();
         ApplicationPageBean pageBean = getPageBean();
-
+        
         final boolean isWorkspaceEnabled = wkspPrivilegeManager != null;
         setPageWidgetVisible("wkspSelPanel", isWorkspaceEnabled);
         if (isWorkspaceEnabled) {

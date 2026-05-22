@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryData
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.GroupingAggregation.Grouping;
@@ -63,6 +64,54 @@ public final class ChartUtils {
 
     private ChartUtils() {
 
+    }
+    
+    private static final List<ChartTimeSeriesType> mergedTypeList =
+            Arrays.asList(
+                    ChartTimeSeriesType.YEAR_MERGED,
+                    ChartTimeSeriesType.MONTH_MERGED,
+                    ChartTimeSeriesType.WEEK_MERGED,
+                    ChartTimeSeriesType.DAY_OVER_YEAR_MERGED,
+                    ChartTimeSeriesType.DAY_OVER_MONTH_MERGED,
+                    ChartTimeSeriesType.DAY_OVER_WEEK_MERGED,
+                    ChartTimeSeriesType.HOUR_OVER_DAY_MERGED);
+    
+    private static final List<ChartTimeSeriesType> fillTypeList =
+            Arrays.asList(
+                    ChartTimeSeriesType.DAY_OVER_YEAR,
+                    ChartTimeSeriesType.DAY_OVER_MONTH,
+                    ChartTimeSeriesType.DAY_OVER_WEEK,
+                    ChartTimeSeriesType.HOUR_OVER_DAY);
+    
+    private static final List<ChartTimeSeriesType> defaultTypeList =
+            Arrays.asList(
+                    ChartTimeSeriesType.YEAR,
+                    ChartTimeSeriesType.MONTH,
+                    ChartTimeSeriesType.WEEK,
+                    ChartTimeSeriesType.DAY,
+                    ChartTimeSeriesType.HOUR);
+    
+    public static ChartTimeSeriesType getBestAlternative(ChartTimeSeriesType type, TimeResolutionType maxResolution) {
+        if (maxResolution != null) {
+            final List<ChartTimeSeriesType> list = type.merged() ? mergedTypeList
+                    : (type.fill() ? fillTypeList : defaultTypeList);
+            final int len = list.size();
+            int i = 0;
+            while (i < len) {
+                if (type.equals(list.get(i++))) {
+                    break;
+                }
+            }
+
+            while (i < len) {
+                ChartTimeSeriesType alternative = list.get(i++);
+                if (alternative.maxResolution().less(type.maxResolution())) {
+                    return alternative;
+                }
+            }
+        }
+
+        return type;
     }
 
     public static String getFormattedCardValue(Number num) {

@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
@@ -32,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  * @since 4.1
  */
 @Component("fc-searchinputs")
-public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry> {
+public class SearchInputsWidget extends AbstractItemListWidget<SearchInputEntry> {
 
     private Control labelCtrl;
 
@@ -84,13 +83,11 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
     @Action
     public void moveUp() throws UnifyException {
         getSearchInputs().moveUpEntry(getRequestTarget(int.class));
-        invalidateValueList();
     }
 
     @Action
     public void moveDown() throws UnifyException {
         getSearchInputs().moveDownEntry(getRequestTarget(int.class));
-        invalidateValueList();
     }
 
     @Action
@@ -146,11 +143,6 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(SearchInputEntry searchInputEntry, int index) throws UnifyException {
-        return createValueStore(searchInputEntry, index);
     }
 
 }

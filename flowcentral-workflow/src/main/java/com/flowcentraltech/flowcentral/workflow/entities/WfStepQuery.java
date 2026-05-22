@@ -47,6 +47,10 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
         return (WfStepQuery) addEquals("workflowId", workflowId);
     }
 
+    public WfStepQuery startActionable() {
+        return (WfStepQuery) addIsNotNull("appletName").addEquals("type",  WorkflowStepType.START);
+    }
+
     public WfStepQuery userActionable() {
         return (WfStepQuery) addIsNotNull("appletName").addAmongst("type", ACTIONABLES);
     }
@@ -72,6 +76,10 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
 
     public WfStepQuery workflowDevelopable(boolean workflowDevelopable) {
         return (WfStepQuery) addEquals("workflowDevelopable", workflowDevelopable);
+    }
+    
+    public WfStepQuery withCasePrefix() {
+        return (WfStepQuery) addIsNotNull("workflowCasePrefix");
     }
 
     public WfStepQuery withEjectionRestriction() {

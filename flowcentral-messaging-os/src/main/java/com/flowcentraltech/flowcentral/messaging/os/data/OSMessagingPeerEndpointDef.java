@@ -54,6 +54,8 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     private RecordStatus status;
 
+    private boolean localTarget;
+
     private long versionNo;
 
     private String sourceAppId;
@@ -61,7 +63,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
     private Map<String, String> authentications;
 
     public OSMessagingPeerEndpointDef(Long id, String appId, String shortName, String name, String description, String endpointUrl,
-            String peerPassword, RecordStatus status, long versionNo, String sourceAppId) {
+            String peerPassword, RecordStatus status, boolean localTarget, long versionNo, String sourceAppId) {
         this.id = id;
         this.appId = appId;
         this.shortName = shortName;
@@ -72,6 +74,7 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
         this.endpointDownloadUrl = endpointUrl + OSMessagingModuleNameConstants.OSMESSAGING_DOWNLOAD_CONTROLLER; 
         this.peerPassword = peerPassword;
         this.status = status;
+        this.localTarget = localTarget;
         this.versionNo = versionNo;
         this.sourceAppId = sourceAppId;
         this.authentications = new HashMap<String, String>();
@@ -125,6 +128,10 @@ public class OSMessagingPeerEndpointDef implements VersionedEntityDef {
 
     public RecordStatus getStatus() {
         return status;
+    }
+
+    public boolean isLocalTarget() {
+        return localTarget;
     }
 
     public long getVersionNo() {

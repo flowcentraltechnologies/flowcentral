@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
+import com.tcdng.unify.core.util.DataUtils;
+
 /**
  * OS information.
  *
@@ -31,13 +33,16 @@ public class OSInfo {
 
     private String vendorDomain;
 
+    private String hubServiceId;
+
     private boolean debugging;
 
-    public OSInfo(String serviceId, String serviceVersion, String vendorName, String vendorDomain, boolean debugging) {
+    public OSInfo(String serviceId, String serviceVersion, String vendorName, String vendorDomain, String hubServiceId, boolean debugging) {
         this.serviceId = serviceId;
         this.serviceVersion = serviceVersion;
         this.vendorName = vendorName;
         this.vendorDomain = vendorDomain;
+        this.hubServiceId = hubServiceId;
         this.debugging = debugging;
     }
 
@@ -57,7 +62,15 @@ public class OSInfo {
         return vendorDomain;
     }
 
+    public String getHubServiceId() {
+        return hubServiceId;
+    }
+
     public boolean isDebugging() {
         return debugging;
+    }
+
+    public boolean isLocalHub() {
+        return DataUtils.equals(serviceId, hubServiceId);
     }
 }

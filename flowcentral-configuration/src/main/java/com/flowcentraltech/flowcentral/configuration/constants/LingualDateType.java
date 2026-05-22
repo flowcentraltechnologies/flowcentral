@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.configuration.constants;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -31,72 +32,81 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum LingualDateType implements EnumConst {
 
     NOW(
-            "NOW"),
+            "NOW", TimeResolutionType.MINUTE),
+    THIS_HOUR(
+            "THO", TimeResolutionType.MINUTE),
+    LAST_HOUR(
+            "LHO", TimeResolutionType.MINUTE),
+    NEXT_HOUR(
+            "NHO", TimeResolutionType.MINUTE),
     TODAY(
-            "TDY"),
+            "TDY", TimeResolutionType.HOUR),
     YESTERDAY(
-            "YST"),
+            "YST", TimeResolutionType.HOUR),
     TOMORROW(
-            "TMR"),
+            "TMR", TimeResolutionType.HOUR),
     LAST_15_DAYS(
-            "L15"),
+            "L15", TimeResolutionType.DAY),
     NEXT_15_DAYS(
-            "N15"),
+            "N15", TimeResolutionType.DAY),
     LAST_30_DAYS(
-            "L30"),
+            "L30", TimeResolutionType.DAY),
     NEXT_30_DAYS(
-            "N30"),
+            "N30", TimeResolutionType.DAY),
     LAST_45_DAYS(
-            "L45"),
+            "L45", TimeResolutionType.DAY),
     NEXT_45_DAYS(
-            "N45"),
+            "N45", TimeResolutionType.DAY),
     LAST_60_DAYS(
-            "L60"),
+            "L60", TimeResolutionType.DAY),
     NEXT_60_DAYS(
-            "N60"),
+            "N60", TimeResolutionType.DAY),
     LAST_90_DAYS(
-            "L90"),
+            "L90", TimeResolutionType.DAY),
     NEXT_90_DAYS(
-            "N90"),
+            "N90", TimeResolutionType.DAY),
     THIS_WEEK(
-            "TWK"),
+            "TWK", TimeResolutionType.DAY),
     LAST_WEEK(
-            "LWK"),
+            "LWK", TimeResolutionType.DAY),
     NEXT_WEEK(
-            "NWK"),
+            "NWK", TimeResolutionType.DAY),
     THIS_MONTH(
-            "TMN"),
+            "TMN", TimeResolutionType.WEEK),
     LAST_MONTH(
-            "LMN"),
+            "LMN", TimeResolutionType.WEEK),
     NEXT_MONTH(
-            "NMN"),
+            "NMN", TimeResolutionType.WEEK),
     LAST_3MONTHS(
-            "L3M"),
+            "L3M", TimeResolutionType.MONTH),
     NEXT_3MONTHS(
-            "N3M"),
+            "N3M", TimeResolutionType.MONTH),
     LAST_6MONTHS(
-            "L6M"),
+            "L6M", TimeResolutionType.MONTH),
     NEXT_6MONTHS(
-            "N6M"),
+            "N6M", TimeResolutionType.MONTH),
     LAST_9MONTHS(
-            "L9M"),
+            "L9M", TimeResolutionType.MONTH),
     NEXT_9MONTHS(
-            "N9M"),
+            "N9M", TimeResolutionType.MONTH),
     LAST_12MONTHS(
-            "L1M"),
+            "L1M", TimeResolutionType.MONTH),
     NEXT_12MONTHS(
-            "N1M"),
+            "N1M", TimeResolutionType.MONTH),
     THIS_YEAR(
-            "TYR"),
+            "TYR", TimeResolutionType.MONTH),
     LAST_YEAR(
-            "LYR"),
+            "LYR", TimeResolutionType.MONTH),
     NEXT_YEAR(
-            "NYR");
+            "NYR", TimeResolutionType.MONTH);
 
     private final String code;
 
-    private LingualDateType(String code) {
+    private final TimeResolutionType maxResolution;
+
+    private LingualDateType(String code, TimeResolutionType maxResolution) {
         this.code = code;
+        this.maxResolution = maxResolution;
     }
 
     @Override
@@ -107,6 +117,10 @@ public enum LingualDateType implements EnumConst {
     @Override
     public String defaultCode() {
         return TODAY.code;
+    }
+
+    public TimeResolutionType maxResolution() {
+        return maxResolution;
     }
 
     public boolean isNow() {

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.configuration.constants;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.constant.TimeSeriesType;
 import com.tcdng.unify.core.util.EnumUtils;
 
@@ -47,7 +48,7 @@ public enum ChartTimeSeriesType implements EnumConst {
     MONTH_MERGED("MNDG", TimeSeriesType.MONTH, true, true),
     YEAR("YRD", TimeSeriesType.YEAR, false, false),
     YEAR_MERGED("YRDG", TimeSeriesType.YEAR, true, false);
-
+    
     private final String code;
 
     private final TimeSeriesType type;
@@ -73,6 +74,10 @@ public enum ChartTimeSeriesType implements EnumConst {
         return HOUR.code;
     }
 
+    public TimeResolutionType maxResolution() {
+        return type.maxResolution();
+    }
+    
     public TimeSeriesType type() {
         return type;
     }

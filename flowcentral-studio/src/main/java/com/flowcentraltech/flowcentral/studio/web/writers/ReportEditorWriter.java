@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.studio.web.writers;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.studio.web.widgets.ReportEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.ReportEditorWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -79,7 +80,8 @@ public class ReportEditorWriter extends AbstractControlWriter {
         final EntityDef entityDef = reportEditor.getEntityDef();
         int i = 0;
         for (EntityFieldDef entityFieldDef : entityDef.getSortedFieldDefList()) {
-            if (entityFieldDef.isTableViewable() && entityDef.isNotDelegateListOnly(entityFieldDef.getFieldName())) {
+            if (entityFieldDef.isTableViewable() && entityDef.isNotDelegateListOnly(entityFieldDef.getFieldName())
+                    && !ApplicationEntityUtils.RESERVED_EDITOR_FIELDS.contains(entityFieldDef.getFieldName())) {
                 writer.write("<div class=\"fld\" id=\"").write(reportEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");
                 writer.writeWithHtmlEscape(resolveSessionMessage(entityFieldDef.getFieldLabel()));

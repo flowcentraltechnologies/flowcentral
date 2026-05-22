@@ -14,6 +14,21 @@
 	</helpSheets>
 	<!-- Widget Types -->
 	<widgetTypes>
+		<widgetType name="entitybasetypelist"
+			description="$m{studio.widgettype.entitybasetypelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select blankOption:$s{} list:entitybasetypelist exclude:$l{STA SWK NME CGE CNE APE}"
+			renderer="!ui-label" />
+		<widgetType name="entitytemplatetext" listOption="true"
+			description="$m{studio.widgettype.templatetext}" dataType="STRING"
+			inputType="STRING"
+			editor="!ui-text options:$s{entitytemplateoptionslist}"
+			renderer="!ui-label" />
+		<widgetType name="entitytemplaterichtexteditor" listOption="true"
+			description="$m{studio.widgettype.templaterichtexteditor}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-richtexteditor rows:16 options:$s{entitytemplateoptionslist}"
+			renderer="!ui-label" />
 		<widgetType name="environmentdelegatelist"
 			description="$m{studio.widgettype.environmentdelegatelist}"
 			dataType="STRING" inputType="STRING"
@@ -749,7 +764,7 @@
 				<property name="searchTable" value="appEntityFieldTable" />
 				<property name="searchTable.new" value="true" />
 				<property name="searchTable.report" value="false" />
-				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.quickFilter" value="false" />
 				<property name="searchTable.quickFilter.default"
 					value="customFieldFilter" />
 				<property name="createForm" value="appEntityFieldForm" />
@@ -856,7 +871,7 @@
 				<property name="searchTable" value="appEntitySeriesTable" />
 				<property name="searchTable.new" value="true" />
 				<property name="searchTable.report" value="false" />
-				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.quickFilter" value="false" />
 				<property name="createForm" value="appEntitySeriesForm" />
 				<property name="createForm.save" value="true" />
 				<property name="createForm.save.next" value="true" />
@@ -875,7 +890,7 @@
 				<property name="searchTable" value="appEntityCategoryTable" />
 				<property name="searchTable.new" value="true" />
 				<property name="searchTable.report" value="false" />
-				<property name="searchTable.quickFilter" value="true" />
+				<property name="searchTable.quickFilter" value="false" />
 				<property name="createForm" value="appEntityCategoryForm" />
 				<property name="createForm.save" value="true" />
 				<property name="createForm.save.next" value="true" />
@@ -1818,10 +1833,10 @@
 	</entities>
 	<!-- Tables -->
 	<tables>
-		<table name="switchApplicationTable"
+		<table itemsPerPage="20" name="switchApplicationTable"
 			description="$m{studio.application.switch.table}"
 			label="$m{studio.application.switch.table.label}"
-			entity="application.application" itemsPerPage="20" serialNo="true">
+			entity="application.application" serialNo="true">
 			<columns>
 				<column field="moduleLabel" renderWidget="application.text"
 					widthRatio="1" label="$m{application.application.module}" />
@@ -1833,10 +1848,10 @@
 					widthRatio="1" linkAct="dialogMaintainAct" order="ASC" />
 			</columns>
 		</table>
-		<table name="appApplicationTable"
+		<table itemsPerPage="20" name="appApplicationTable"
 			description="$m{studio.application.table}"
 			label="$m{studio.application.table.label}"
-			entity="application.application" itemsPerPage="20" serialNo="true">
+			entity="application.application" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
@@ -1854,10 +1869,10 @@
 					renderWidget="application.text" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEnumerationItemTable"
+		<table itemsPerPage="10" name="appEnumerationItemTable"
 			description="$m{studio.appenumerationitem.table}"
 			label="$m{studio.appenumerationitem.table.label}"
-			entity="application.appEnumerationItem" itemsPerPage="20"
+			entity="application.appEnumerationItem"
 			serialNo="true">
 			<columns>
 				<column field="code" renderWidget="application.text"
@@ -1870,10 +1885,10 @@
 					widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appEntityFieldTable"
+		<table itemsPerPage="10" name="appEntityFieldTable"
 			description="$m{studio.appentityfield.table}"
 			label="$m{studio.appentityfield.table.label}"
-			entity="application.appEntityField" itemsPerPage="20" serialNo="true">
+			entity="application.appEntityField" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
@@ -1883,26 +1898,12 @@
 					label="$m{application.appentityfield.datatype}" widthRatio="1" />
 				<column field="columnName" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="references" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="nullable" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="minLen" renderWidget="application.integer"
-					widthRatio="1" />
-				<column field="maxLen" renderWidget="application.integer"
-					widthRatio="1" />
-				<column field="key" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="property" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="typeDesc" renderWidget="application.text"
-					label="$m{application.appentityfield.type}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityFieldQuickEditTable"
+		<table itemsPerPage="-1" name="appEntityFieldQuickEditTable"
 			description="$m{studio.appentityfield.table.quickedit}"
 			label="$m{studio.appentityfield.table.quickedit.label}"
-			entity="application.appEntityField" itemsPerPage="-1" serialNo="true">
+			entity="application.appEntityField" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="3" />
@@ -1928,16 +1929,14 @@
 					widthRatio="2" editable="true" />
 			</columns>
 		</table>
-		<table name="appEntitySeriesTable"
+		<table itemsPerPage="10" name="appEntitySeriesTable"
 			description="$m{studio.appentityseries.table}"
 			label="$m{studio.appentityseries.table.label}"
-			entity="application.appEntitySeries" itemsPerPage="20"
+			entity="application.appEntitySeries"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
-				<column field="description" renderWidget="application.text"
-					widthRatio="2" />
 				<column field="label" renderWidget="application.text"
 					widthRatio="1" />
 				<column field="fieldName" renderWidget="application.text"
@@ -1946,10 +1945,10 @@
 					label="$m{application.appentityseries.type}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityCategoryTable"
+		<table itemsPerPage="10" name="appEntityCategoryTable"
 			description="$m{studio.appentitycategory.table}"
 			label="$m{studio.appentitycategory.table.label}"
-			entity="application.appEntityCategory" itemsPerPage="20"
+			entity="application.appEntityCategory"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -1960,10 +1959,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityAttachmentTable"
+		<table itemsPerPage="10" name="appEntityAttachmentTable"
 			description="$m{studio.appentityattachment.table}"
 			label="$m{studio.appentityattachment.table.label}"
-			entity="application.appEntityAttachment" itemsPerPage="20"
+			entity="application.appEntityAttachment"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -1976,10 +1975,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityExpressionTable"
+		<table itemsPerPage="10" name="appEntityExpressionTable"
 			description="$m{studio.appentityexpression.table}"
 			label="$m{studio.appentityexpression.table.label}"
-			entity="application.appEntityExpression" itemsPerPage="20"
+			entity="application.appEntityExpression"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -1990,10 +1989,10 @@
 					renderWidget="application.textarea" widthRatio="2" />
 			</columns>
 		</table>
-		<table name="appEntityUniqueConstraintTable"
+		<table itemsPerPage="10" name="appEntityUniqueConstraintTable"
 			description="$m{studio.appentityuniqueconstraint.table}"
 			label="$m{studio.appentityuniqueconstraint.table.label}"
-			entity="application.appEntityUniqueConstraint" itemsPerPage="20"
+			entity="application.appEntityUniqueConstraint"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -2004,10 +2003,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityIndexTable"
+		<table itemsPerPage="10" name="appEntityIndexTable"
 			description="$m{studio.appentityindex.table}"
 			label="$m{studio.appentityindex.table.label}"
-			entity="application.appEntityIndex" itemsPerPage="20" serialNo="true">
+			entity="application.appEntityIndex" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
@@ -2017,10 +2016,10 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntityUploadTable"
+		<table itemsPerPage="10" name="appEntityUploadTable"
 			description="$m{studio.appentityupload.table}"
 			label="$m{studio.appentityupload.table.label}"
-			entity="application.appEntityUpload" itemsPerPage="20"
+			entity="application.appEntityUpload"
 			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.name"
@@ -2033,7 +2032,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appEntitySearchInputTable"
+		<table itemsPerPage="10" name="appEntitySearchInputTable"
 			description="$m{studio.appentitysearchinput.table}"
 			label="$m{studio.appentitysearchinput.table.label}"
 			entity="application.appEntitySearchInput">
@@ -2042,26 +2041,18 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appAppletRouteToAppletTable"
+		<table itemsPerPage="10" name="appAppletRouteToAppletTable"
 			description="$m{studio.appappletroutetoapplet.table}"
 			label="$m{studio.appappletroutetoapplet.table.label}"
 			entity="application.appAppletRouteToApplet">
 			<columns>
 				<column field="routeToApplet" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appAppletFilterTable"
+		<table itemsPerPage="10" name="appAppletFilterTable"
 			description="$m{studio.appappletfilter.table}"
 			label="$m{studio.appappletfilter.table.label}"
 			entity="application.appAppletFilter">
@@ -2076,13 +2067,9 @@
 					renderWidget="application.text"
 					label="$m{application.appappletfilter.ownershiptype}"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appAppletSetValuesTable"
+		<table itemsPerPage="10" name="appAppletSetValuesTable"
 			description="$m{studio.appappletsetvalues.table}"
 			label="$m{studio.appappletsetvalues.table.label}"
 			entity="application.appAppletSetValues">
@@ -2091,13 +2078,9 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appAppletAlertTable"
+		<table itemsPerPage="10" name="appAppletAlertTable"
 			description="$m{studio.appappletalert.table}"
 			label="$m{studio.appappletalert.table.label}"
 			entity="application.appAppletAlert">
@@ -2106,13 +2089,9 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appTableColumnTable"
+		<table itemsPerPage="10" name="appTableColumnTable"
 			description="$m{studio.apptablecolumn.table}"
 			label="$m{studio.apptablecolumn.table.label}"
 			entity="application.appTableColumn">
@@ -2127,7 +2106,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appTableActionTable"
+		<table itemsPerPage="10" name="appTableActionTable"
 			description="$m{studio.apptableaction.table}"
 			label="$m{studio.apptableaction.table.label}"
 			entity="application.appTableAction">
@@ -2140,7 +2119,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appTableLoadingTable"
+		<table itemsPerPage="10" name="appTableLoadingTable"
 			description="$m{studio.apptableloading.table}"
 			label="$m{studio.apptableloading.table.label}"
 			entity="application.appTableLoading">
@@ -2153,7 +2132,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appTableFilterTable"
+		<table itemsPerPage="10" name="appTableFilterTable"
 			description="$m{studio.apptablefilter.table}"
 			label="$m{studio.apptablefilter.table.label}"
 			entity="application.appTableFilter">
@@ -2166,15 +2145,9 @@
 					label="$m{application.apptablefilter.rowcolor}" widthRatio="1" />
 				<column field="legendLabel" renderWidget="application.text"
 					label="$m{application.apptablefilter.legendlabel}" widthRatio="1" />
-				<column field="executionIndex"
-					renderWidget="application.text" widthRatio="1" order="ASC" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormElementTable"
+		<table itemsPerPage="10" name="appFormElementTable"
 			description="$m{studio.appformelement.table}"
 			label="$m{studio.appformelement.table.label}"
 			entity="application.appFormElement">
@@ -2199,7 +2172,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormAnnotationTable"
+		<table itemsPerPage="10" name="appFormAnnotationTable"
 			description="$m{studio.appformannotation.table}"
 			label="$m{studio.appformannotation.table.label}"
 			entity="application.appFormAnnotation">
@@ -2210,16 +2183,13 @@
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{application.appformannotation.type}" widthRatio="1" />
-				<column field="visibilityDesc"
-					renderWidget="application.text"
-					label="$m{application.appformannotation.visibility}" widthRatio="1" />
 				<column field="html" renderWidget="application.checkbox"
 					widthRatio="1" />
 				<column field="directPlacement"
 					renderWidget="application.checkbox" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormFilterTable"
+		<table itemsPerPage="10" name="appFormFilterTable"
 			description="$m{studio.appformfilter.table}"
 			label="$m{studio.appformfilter.table.label}"
 			entity="application.appFormFilter">
@@ -2228,13 +2198,9 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormActionTable"
+		<table itemsPerPage="10" name="appFormActionTable"
 			description="$m{studio.appformaction.table}"
 			label="$m{studio.appformaction.table.label}"
 			entity="application.appFormAction">
@@ -2243,19 +2209,11 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="label" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="policy" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{application.appformaction.type}" widthRatio="1" />
-				<column field="highlightTypeDesc"
-					renderWidget="application.text"
-					label="$m{application.appformaction.highlighttypedesc}"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormRelatedListTable"
+		<table itemsPerPage="10" name="appFormRelatedListTable"
 			description="$m{studio.appformrelatedlist.table}"
 			label="$m{studio.appformrelatedlist.table.label}"
 			entity="application.appFormRelatedList">
@@ -2264,13 +2222,11 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="label" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="applet" renderWidget="application.text"
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormStatePolicyTable"
+		<table itemsPerPage="10" name="appFormStatePolicyTable"
 			description="$m{studio.appformstatepolicy.table}"
 			label="$m{studio.appformstatepolicy.table.label}"
 			entity="application.appFormStatePolicy">
@@ -2285,7 +2241,7 @@
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appFormWidgetRulesPolicyTable"
+		<table itemsPerPage="10" name="appFormWidgetRulesPolicyTable"
 			description="$m{studio.appformwidgetrulespolicy.table}"
 			label="$m{studio.appformwidgetrulespolicy.table.label}"
 			entity="application.appFormWidgetRulesPolicy">
@@ -2298,7 +2254,7 @@
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appFormSetStateTable"
+		<table itemsPerPage="10" name="appFormSetStateTable"
 			description="$m{studio.appformsetstate.table}"
 			label="$m{studio.appformsetstate.table.label}"
 			entity="application.appFormSetState">
@@ -2317,7 +2273,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="appFormFieldValidationPolicyTable"
+		<table itemsPerPage="10" name="appFormFieldValidationPolicyTable"
 			description="$m{studio.appformfieldvalidationpolicy.table}"
 			label="$m{studio.appformfieldvalidationpolicy.table.label}"
 			entity="application.appFormFieldValidationPolicy">
@@ -2336,7 +2292,7 @@
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appFormValidationPolicyTable"
+		<table itemsPerPage="10" name="appFormValidationPolicyTable"
 			description="$m{studio.appformvalidationpolicy.table}"
 			label="$m{studio.appformvalidationpolicy.table.label}"
 			entity="application.appFormValidationPolicy">
@@ -2351,7 +2307,7 @@
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appFormReviewPolicyTable"
+		<table itemsPerPage="10" name="appFormReviewPolicyTable"
 			description="$m{studio.appformreviewpolicy.table}"
 			label="$m{studio.appformreviewpolicy.table.label}"
 			entity="application.appFormReviewPolicy">
@@ -2362,26 +2318,20 @@
 					widthRatio="1" />
 				<column field="messageTypeDesc"
 					renderWidget="application.text" widthRatio="1" />
-				<column field="message" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="executionIndex"
 					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
-		<table name="appHelpEntryTable"
+		<table itemsPerPage="10" name="appHelpEntryTable"
 			description="$m{studio.apphelpentry.table}"
 			label="$m{studio.apphelpentry.table.label}"
 			entity="application.appHelpEntry">
 			<columns>
 				<column field="fieldName" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="workflowFilterTable"
+		<table itemsPerPage="10" name="workflowFilterTable"
 			description="$m{studio.workflowfilter.table}"
 			label="$m{studio.workflowfilter.table.label}"
 			entity="workflow.workflowFilter">
@@ -2390,13 +2340,9 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="workflowSetValuesTable"
+		<table itemsPerPage="10" name="workflowSetValuesTable"
 			description="$m{studio.workflowsetvalues.table}"
 			label="$m{studio.workflowsetvalues.table.label}"
 			entity="workflow.workflowSetValues">
@@ -2405,16 +2351,12 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="wfStepTable"
+		<table itemsPerPage="10" name="wfStepTable"
 			description="$m{studio.workflow.step.table}"
 			label="$m{studio.workflow.step.table.label}" entity="workflow.wfStep"
-			itemsPerPage="20" serialNo="true">
+			serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
@@ -2424,14 +2366,12 @@
 					label="$m{workflow.step.workflow}" widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{workflow.step.type}" widthRatio="1" />
-				<column field="priorityDesc" renderWidget="application.text"
-					label="$m{workflow.step.priority}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="wfStepRoutingTable"
+		<table itemsPerPage="10" name="wfStepRoutingTable"
 			description="$m{studio.workflow.steprouting.table}"
 			label="$m{studio.workflow.steprouting.table.label}"
-			entity="workflow.wfStepRouting" itemsPerPage="20" serialNo="true">
+			entity="workflow.wfStepRouting" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
@@ -2439,38 +2379,25 @@
 					widthRatio="1" />
 				<column field="wfStepDesc" renderWidget="application.text"
 					label="$m{workflow.steprouting.step}" widthRatio="1" />
-				<column field="nextStepName" renderWidget="application.text"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="wfStepUserActionTable"
+		<table itemsPerPage="10" name="wfStepUserActionTable"
 			description="$m{studio.workflow.stepuseraction.table}"
 			label="$m{studio.workflow.stepuseraction.table.label}"
-			entity="workflow.wfStepUserAction" itemsPerPage="20" serialNo="true">
+			entity="workflow.wfStepUserAction" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="label" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="wfStepDesc" renderWidget="application.text"
 					label="$m{workflow.stepuseraction.step}" widthRatio="1" />
-				<column field="nextStepName" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="commentRequirementDesc"
-					renderWidget="application.text"
-					label="$m{workflow.stepuseraction.commentrequirement}"
-					widthRatio="1" />
-				<column field="highlightTypeDesc"
-					renderWidget="application.text"
-					label="$m{workflow.stepuseraction.highlighttype}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="wfStepAlertTable"
+		<table itemsPerPage="10" name="wfStepAlertTable"
 			description="$m{studio.workflow.stepalert.table}"
 			label="$m{studio.workflow.stepalert.table.label}"
-			entity="workflow.wfStepAlert" itemsPerPage="20" serialNo="true">
+			entity="workflow.wfStepAlert" serialNo="true">
 			<columns>
 				<column field="name" renderWidget="application.text"
 					widthRatio="1" linkAct="maintainAct" />
@@ -2482,7 +2409,7 @@
 					label="$m{workflow.stepalert.type}" widthRatio="1" />
 			</columns>
 		</table>
-		<table name="dashboardTileTable"
+		<table itemsPerPage="10" name="dashboardTileTable"
 			description="$m{studio.dashboardtile.table}"
 			label="$m{studio.dashboardtile.table.label}"
 			entity="dashboard.dashboardTile">
@@ -2493,17 +2420,9 @@
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{dashboard.dashboardtile.type}" widthRatio="1" />
-				<column field="section" renderWidget="application.integer"
-					widthRatio="1" />
-				<column field="index" renderWidget="application.integer"
-					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="dashboardOptionTable"
+		<table itemsPerPage="10" name="dashboardOptionTable"
 			description="$m{studio.dashboardoption.table}"
 			label="$m{studio.dashboardoption.table.label}"
 			entity="dashboard.dashboardOption">
@@ -2514,13 +2433,9 @@
 					widthRatio="1" />
 				<column field="label" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="dashboardOptionCatBaseTable"
+		<table itemsPerPage="10" name="dashboardOptionCatBaseTable"
 			description="$m{studio.dashboardoptioncatbase.table}"
 			label="$m{studio.dashboardoptioncatbase.table.label}"
 			entity="dashboard.dashboardOptionCatBase">
@@ -2528,13 +2443,9 @@
 				<column field="chartDataSource"
 					renderWidget="application.text" widthRatio="1"
 					linkAct="maintainAct" />
-				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="notifTemplateParamTable"
+		<table itemsPerPage="10" name="notifTemplateParamTable"
 			description="$m{studio.notificationtemplateparam.table}"
 			label="$m{studio.notificationtemplateparam.table.label}"
 			entity="notification.notifTemplateParam">
@@ -2545,7 +2456,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="notifLargeTextParamTable"
+		<table itemsPerPage="10" name="notifLargeTextParamTable"
 			description="$m{studio.notificationlargetextparam.table}"
 			label="$m{studio.notificationlargetextparam.table.label}"
 			entity="notification.notifLargeTextParam">
@@ -2556,7 +2467,7 @@
 					widthRatio="1" />
 			</columns>
 		</table>
-		<table name="reportColumnTable"
+		<table itemsPerPage="10" name="reportColumnTable"
 			description="$m{studio.reportcolumn.table}"
 			label="$m{studio.reportcolumn.table.label}"
 			entity="report.reportColumn">
@@ -2570,15 +2481,9 @@
 				<column field="columnOrderDesc"
 					renderWidget="application.text" widthRatio="1"
 					label="$m{report.reportcolumn.columnorder}" />
-				<column field="horizAlignTypeDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportcolumn.horizaligntype}" />
-				<column field="vertAlignTypeDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportcolumn.vertaligntype}" />
 			</columns>
 		</table>
-		<table name="reportPlacementTable"
+		<table itemsPerPage="10" name="reportPlacementTable"
 			description="$m{studio.reportplacement.table}"
 			label="$m{studio.reportplacement.table.label}"
 			entity="report.reportPlacement">
@@ -2589,15 +2494,9 @@
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					widthRatio="1" label="$m{report.reportplacement.type}" />
-				<column field="horizAlignTypeDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportplacement.horizaligntype}" />
-				<column field="vertAlignTypeDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportplacement.vertaligntype}" />
 			</columns>
 		</table>
-		<table name="reportParameterTable"
+		<table itemsPerPage="10" name="reportParameterTable"
 			description="$m{studio.reportparameter.table}"
 			label="$m{studio.reportparameter.table.label}"
 			entity="report.reportParameter">
@@ -2842,7 +2741,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appapplet.form.basicdetails}" editable="false"
 					contentType="MINIFORM">
-					<section name="appletDetails" columns="TYPE_2">
+					<section name="appletDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -2858,42 +2757,40 @@
 							column="0" required="true" />
 						<field name="icon" inputWidget="application.symbollist"
 							column="0" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
-							column="1" required="true" switchOnChange="true" visible="false" />
+							column="0" required="true" switchOnChange="true" visible="false" />
 						<field name="titleFormat"
-							inputWidget="application.texttemplate" column="1" />
+							inputWidget="application.texttemplate" column="0" />
 						<field name="baseField"
-							inputWidget="studio.entityreffieldlist" column="1"
+							inputWidget="studio.entityreffieldlist" column="0"
 							required="true" visible="false" />
 						<field name="assignField"
-							inputWidget="studio.entityreffieldlist" column="1"
+							inputWidget="studio.entityreffieldlist" column="0"
 							switchOnChange="true" required="true" visible="false" />
 						<field name="assignDescField"
-							inputWidget="studio.entityrefdesclist" column="1" visible="false" />
+							inputWidget="studio.entityrefdesclist" column="0" visible="false" />
 						<field name="assignSearch"
-							inputWidget="studio.entityrefdesclist" column="1" visible="false" />
+							inputWidget="studio.entityrefdesclist" column="0" visible="false" />
 						<field name="pseudoDeleteField"
-							inputWidget="studio.entitybooleanfieldlist" column="1"
+							inputWidget="studio.entitybooleanfieldlist" column="0"
 							visible="false" />
 						<field name="routeToApplet"
-							inputWidget="studio.facadeappletroutetoappletlist" column="1"
+							inputWidget="studio.facadeappletroutetoappletlist" column="0"
 							required="true" visible="false" />
-						<field name="path" inputWidget="application.text" column="1"
+						<field name="path" inputWidget="application.text" column="0"
 							visible="false" />
 						<field name="displayIndex" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 						<field name="portalAccess"
-							inputWidget="application.checkbox" column="1" visible="false" />
+							inputWidget="application.checkbox" column="0" visible="false" />
 						<field name="menuAccess" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="supportOpenInNewWindow"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="supportRemoteAccess"
-							inputWidget="application.checkbox" column="1" visible="false" />
+							inputWidget="application.checkbox" column="0" visible="false" />
 						<field name="allowSecondaryTenants"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
 				<tab name="properties"
@@ -3109,26 +3006,26 @@
 				<tab name="basicDetails"
 					label="$m{studio.appappletfilter.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="filterDetails" columns="TYPE_2">
+					<section name="filterDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="ownershipType"
-							inputWidget="application.enumlist" column="1" required="true" />
+							inputWidget="application.enumlist" column="0" required="true" />
 						<field name="owner" inputWidget="application.text"
-							column="1" disabled="true" />
+							column="0" disabled="true" />
 						<field name="preferredForm"
-							inputWidget="studio.appletformlist" column="1" />
+							inputWidget="studio.appletformlist" column="0" />
 						<field name="preferredChildListApplet" switchOnChange="true"
-							inputWidget="studio.appletchildlistappletlist" column="1" />
+							inputWidget="studio.appletchildlistappletlist" column="0" />
 						<field name="childListActionType"
-							inputWidget="application.enumlist" column="1" visible="false" />
+							inputWidget="application.enumlist" column="0" visible="false" />
 						<field name="filterGenerator"
 							inputWidget="studio.appletfiltergeneratorlist"
-							switchOnChange="true" column="1" />
+							switchOnChange="true" column="0" />
 						<field name="quickFilter" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 				<tab name="condition"
@@ -3159,13 +3056,13 @@
 				<tab name="basicDetails"
 					label="$m{studio.appappletsetvalues.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="setValuesDetails" columns="TYPE_2">
+					<section name="setValuesDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="valueGenerator"
-							inputWidget="studio.appletentitysetvaluesgenlist" column="1" />
+							inputWidget="studio.appletentitysetvaluesgenlist" column="0" />
 					</section>
 				</tab>
 				<tab name="setValues"
@@ -3182,23 +3079,23 @@
 				<tab name="basicDetails"
 					label="$m{studio.appappletalert.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="setVaalertDetails" columns="TYPE_2">
+					<section name="setVaalertDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="sender"
 							inputWidget="studio.appletentitynotifsenderlist" required="true"
-							column="1" />
+							column="0" />
 						<field name="template"
-							inputWidget="studio.appletalerttemplatelist" column="1" />
+							inputWidget="studio.appletalerttemplatelist" column="0" />
 						<field name="recipientPolicy"
-							inputWidget="studio.wfrecipientpolicylist" column="1"
+							inputWidget="studio.wfrecipientpolicylist" column="0"
 							switchOnChange="true" />
 						<field name="recipientNameRule"
-							inputWidget="studio.wfrecipientnamerulelist" column="1" />
+							inputWidget="studio.wfrecipientnamerulelist" column="0" />
 						<field name="recipientContactRule"
-							inputWidget="studio.wfrecipientcontactrulelist" column="1" />
+							inputWidget="studio.wfrecipientcontactrulelist" column="0" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -3230,7 +3127,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentity.form.basicdetails}" editable="false"
 					contentType="MINIFORM">
-					<section name="entityDetails" columns="TYPE_2">
+					<section name="entityDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -3242,36 +3139,32 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
-						<field name="baseType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
-						<field name="entityClass" inputWidget="application.text"
-							column="1" editable="false" required="true" saveAs="true" />
+						<field name="baseType" inputWidget="entitybasetypelist"
+							column="0" disabled="true" required="true" />
 						<field name="tableName" inputWidget="application.text"
-							column="1" required="true" saveAs="true" />
+							column="0" required="true" saveAs="true" />
 						<field name="dateFormatter"
-							inputWidget="studio.dateformatterlist" column="1"
+							inputWidget="studio.dateformatterlist" column="0"
 							required="false" />
 						<field name="dateTimeFormatter"
-							inputWidget="studio.datetimeformatterlist" column="1"
+							inputWidget="studio.datetimeformatterlist" column="0"
 							required="false" />
 						<field name="emailProducerConsumer"
-							inputWidget="application.emailproducerconsumerlist" column="1" />
+							inputWidget="application.emailproducerconsumerlist" column="0" />
 						<field name="delegate" inputWidget="environmentdelegatelist"
-							column="1" switchOnChange="true" />
+							column="0" switchOnChange="true" />
 						<field name="dataSourceName" inputWidget="application.text"
-							column="1" required="true" visible="false" />
+							column="0" required="true" visible="false" />
 					</section>
-					<section name="optionDetails" columns="TYPE_1_2">
+					<section name="optionDetails" columns="TYPE_2">
 						<field name="auditable" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="reportable" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="supportsChangeEvents"
-							inputWidget="application.checkbox" column="2" />
+							inputWidget="application.checkbox" column="1" />
 						<field name="actionPolicy"
-							inputWidget="application.checkbox" column="2" disabled="true" />
+							inputWidget="application.checkbox" column="1" disabled="true" />
 					</section>
 				</tab>
 				<tab name="fields" label="$m{studio.appentity.form.fields}"
@@ -3442,7 +3335,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentityfield.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="entityFieldDetails" columns="TYPE_2">
+					<section name="entityFieldDetails" columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentityfield.appentity}" column="0"
@@ -3459,37 +3352,43 @@
 							visible="false" switchOnChange="true" />
 						<field name="property" inputWidget="entitypropertylist"
 							column="0" visible="false" switchOnChange="true" />
-						<field name="type" inputWidget="application.enumlist"
-							column="1" required="true" disabled="true" />
 						<field name="columnName"
-							inputWidget="application.columnname" column="1" required="false" />
-						<field name="jsonName" inputWidget="application.text"
-							column="1" />
-						<field name="jsonFormatter"
-							inputWidget="studio.jsonformatterlist" column="1" />
+							inputWidget="application.columnname" column="0" required="false" />
 						<field name="inputLabel" inputWidget="application.text"
-							column="1" required="false" />
+							column="0" required="false" />
 						<field name="inputWidget"
-							inputWidget="entityfieldwidgetlist" column="1"
+							inputWidget="entityfieldwidgetlist" column="0"
 							switchOnChange="true" />
 						<field name="suggestionType"
-							inputWidget="suggestiontypelist" column="1" visible="false" />
+							inputWidget="suggestiontypelist" column="0" visible="false" />
 						<field name="inputListKey" inputWidget="application.text"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="minLen" inputWidget="application.integer"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="maxLen" inputWidget="application.integer"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="precision" inputWidget="application.integer"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="scale" inputWidget="application.integer"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="autoFormat" inputWidget="application.text"
-							column="1" visible="false" />
+							column="0" visible="false" />
+						<field name="jsonName" inputWidget="application.text"
+							column="0" />
+						<field name="jsonFormatter"
+							inputWidget="studio.jsonformatterlist" column="0" />
 						<field name="defaultVal" inputWidget="application.text"
-							column="1" visible="false" />
+							column="0" visible="false" />
 					</section>
-					<section name="optionDetails" columns="TYPE_1_2">
+					<section name="optionDetails" columns="TYPE_2">
+						<field name="basicSearch" inputWidget="application.checkbox"
+							column="0" visible="false" />
+						<field name="maintainLink"
+							inputWidget="application.checkbox" column="0" visible="false" />
+						<field name="descriptive" inputWidget="application.checkbox"
+							column="0" visible="false" />
+						<field name="branchScoping"
+							inputWidget="application.checkbox" column="0" visible="false" />
 						<field name="auditable" inputWidget="application.checkbox"
 							column="1" visible="false" />
 						<field name="reportable" inputWidget="application.checkbox"
@@ -3502,14 +3401,6 @@
 							column="1" visible="false" />
 						<field name="nullable" inputWidget="application.checkbox"
 							column="1" visible="false" />
-						<field name="maintainLink"
-							inputWidget="application.checkbox" column="2" visible="false" />
-						<field name="descriptive" inputWidget="application.checkbox"
-							column="2" visible="false" />
-						<field name="basicSearch" inputWidget="application.checkbox"
-							column="2" visible="false" />
-						<field name="branchScoping"
-							inputWidget="application.checkbox" column="2" visible="false" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -3590,6 +3481,18 @@
 						<setState type="FIELD"
 							target="minLen,maxLen,trim,autoFormat,defaultVal,nullable,auditable,reportable,maintainLink,descriptive,basicSearch"
 							visible="TRUE" />
+					</setStates>
+				</formStatePolicy>
+				<formStatePolicy type="ON_SWITCH"
+					name="pvFieldPolicy"
+					description="$m{studio.appentityfield.form.formstatepolicy.processvariablefield}">
+					<onCondition>
+						<restriction type="AMONGST" field="dataType"
+							paramA="ST" />
+					</onCondition>
+					<setStates>
+						<setState type="FIELD"
+							target="defaultVal" visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
 				<formStatePolicy type="ON_SWITCH"
@@ -3745,7 +3648,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentityseries.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="entitySeriesDetails" columns="TYPE_2">
+					<section name="entitySeriesDetails" columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentityseries.appentity}" column="0"
@@ -3756,9 +3659,9 @@
 							column="0" required="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="type" column="1" required="true" />
+						<field name="type" column="0" required="true" />
 						<field name="fieldName" inputWidget="seriesentityfieldlist"
-							column="1" required="true" />
+							column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -3777,7 +3680,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentitycategory.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="entityCategoryDetails" columns="TYPE_2">
+					<section name="entityCategoryDetails" columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentitycategory.appentity}" column="0"
@@ -3787,7 +3690,7 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="label" inputWidget="application.text"
-							column="1" required="true" />
+							column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="condition"
@@ -3809,7 +3712,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentityattachment.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="entityAttachmentDetails" columns="TYPE_2">
+					<section name="entityAttachmentDetails" columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentityattachment.appentity}" column="0"
@@ -3818,9 +3721,7 @@
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
 						<field name="label" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
-						<field name="type" column="1" required="true" />
+						<field name="type" column="0" required="true" />
 					</section>
 				</tab>
 			</tabs>
@@ -3854,7 +3755,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentityexpression.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="entityExpressionDetails" columns="TYPE_2">
+					<section name="entityExpressionDetails" columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentityexpression.appentity}" column="0"
@@ -3862,9 +3763,7 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
-						<field name="expression" column="1" required="true" />
+						<field name="expression" column="0" required="true" />
 					</section>
 				</tab>
 			</tabs>
@@ -3899,7 +3798,7 @@
 					label="$m{studio.appentityuniqueconstraint.form.basicdetails}"
 					contentType="MINIFORM">
 					<section name="entityUniqueConstraintDetails"
-						columns="TYPE_2">
+						columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentityuniqueconstraint.appentity}"
@@ -3907,10 +3806,8 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="fieldList"
-							inputWidget="entityfieldmultiselectlist" column="1"
+							inputWidget="entityfieldmultiselectlist" column="0"
 							required="true" />
 					</section>
 				</tab>
@@ -3945,7 +3842,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentityindex.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="entityIndexDetails" columns="TYPE_2">
+					<section name="entityIndexDetails" columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentityindex.appentity}" column="0"
@@ -3953,10 +3850,8 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="fieldList"
-							inputWidget="entityfieldmultiselectlist" column="1"
+							inputWidget="entityfieldmultiselectlist" column="0"
 							required="true" />
 					</section>
 				</tab>
@@ -3991,7 +3886,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentityupload.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="entityUploadDetails" columns="TYPE_2">
+					<section name="entityUploadDetails" columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentityupload.appentity}" column="0"
@@ -3999,9 +3894,7 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
-						<field name="constraintAction" column="1" required="true" />
+						<field name="constraintAction" column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="fieldSequence"
@@ -4033,7 +3926,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appentitysearchinput.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="searchInputDetails" columns="TYPE_2">
+					<section name="searchInputDetails" columns="TYPE_1">
 						<field name="appEntityId"
 							inputWidget="application.entitysearch"
 							label="$m{application.appentitysearchinput.appentity}" column="0"
@@ -4042,10 +3935,8 @@
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="restrictionResolver"
-							inputWidget="searchentriesrestrictionresolverlist" column="1" />
+							inputWidget="searchentriesrestrictionresolverlist" column="0" />
 					</section>
 				</tab>
 				<tab name="inputs"
@@ -4079,7 +3970,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appapplet.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="appletDetails" columns="TYPE_2">
+					<section name="appletDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -4088,9 +3979,9 @@
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
-							column="1" required="true" saveAs="true" />
+							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
-							column="1" required="true" />
+							column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="items" label="$m{studio.appenumeration.form.items}"
@@ -4105,7 +3996,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appenumerationitem.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="filterDetails" columns="TYPE_2">
+					<section name="filterDetails" columns="TYPE_1">
 						<field name="code" inputWidget="application.name" column="0"
 							required="true" />
 						<field name="label" inputWidget="application.text"
@@ -4140,7 +4031,7 @@
 			<tabs>
 				<tab name="basicDetails"
 					label="$m{studio.appref.form.basicdetails}" contentType="MINIFORM">
-					<section name="refFormDetails" columns="TYPE_2">
+					<section name="refFormDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -4150,25 +4041,23 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
-							column="1" switchOnChange="true" required="true" />
+							column="0" switchOnChange="true" required="true" />
 						<field name="searchField"
-							inputWidget="studio.entitysearchfieldlist" column="1" />
+							inputWidget="studio.entitysearchfieldlist" column="0" />
 						<field name="searchTable"
-							inputWidget="studio.entitysearchtablelist" column="1" />
+							inputWidget="studio.entitysearchtablelist" column="0" />
 						<field name="selectHandler"
-							inputWidget="studio.entityselecthandlerlist" column="1" />
+							inputWidget="studio.entityselecthandlerlist" column="0" />
 						<field name="orderField"
-							inputWidget="studio.entityfieldlist" column="1" />
+							inputWidget="studio.entityfieldlist" column="0" />
 						<field name="listFormat"
-							inputWidget="application.texttemplate" column="1" />
+							inputWidget="application.texttemplate" column="0" />
 						<field name="filterGenerator"
 							inputWidget="application.reffiltergeneratorsearch"
-							switchOnChange="true" column="1" />
+							switchOnChange="true" column="0" />
 						<field name="filterGeneratorRule"
-							inputWidget="studio.reffiltergeneratorrulelist" column="1" />
+							inputWidget="studio.reffiltergeneratorrulelist" column="0" />
 					</section>
 				</tab>
 				<tab name="filter" label="$m{studio.appref.form.filter}"
@@ -4235,7 +4124,7 @@
 			<tabs>
 				<tab name="basicDetails"
 					label="$m{studio.appref.form.basicdetails}" contentType="MINIFORM">
-					<section name="refFormDetails" columns="TYPE_2">
+					<section name="refFormDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -4247,20 +4136,18 @@
 							column="0" required="true" saveAs="true" />
 						<field name="type" inputWidget="application.enumlist"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
-							column="1" switchOnChange="true" required="true" />
+							column="0" switchOnChange="true" required="true" />
 						<field name="applet" inputWidget="studio.apiappletlist"
-							column="1" />
+							column="0" />
 						<field name="supportCreate"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="supportRead" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="supportUpdate"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="supportDelete"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -4308,7 +4195,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.chart.form.basicdetails}" contentType="MINIFORM"
 					editable="true">
-					<section name="chartDetails" columns="TYPE_2">
+					<section name="chartDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -4320,28 +4207,26 @@
 							column="0" required="true" saveAs="true" />
 						<field name="title" column="0" />
 						<field name="subTitle" column="0" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
-						<field name="type" column="1" required="true"
+						<field name="type" column="0" required="true"
 							switchOnChange="true" />
-						<field name="paletteType" column="1" required="true"
+						<field name="paletteType" column="0" required="true"
 							switchOnChange="true" />
 						<field name="color" inputWidget="studio.chartcolorlist"
-							column="1" required="true" />
-						<field name="provider" column="1" required="true"
+							column="0" required="true" />
+						<field name="provider" column="0" required="true"
 							switchOnChange="true" />
-						<field name="rule" column="1" switchOnChange="true" />
-						<field name="category" column="1" />
-						<field name="series" column="1" required="true" />
-						<field name="height" column="1" />
+						<field name="rule" column="0" switchOnChange="true" />
+						<field name="category" column="0" />
+						<field name="series" column="0" required="true" />
+						<field name="height" column="0" />
 					</section>
-					<section name="chartFlags" columns="TYPE_1_2">
-						<field name="stacked" column="1" />
-						<field name="smooth" column="2" />
-						<field name="showGrid" column="1" />
-						<field name="showDataLabels" column="2" />
-						<field name="formatDataLabels" column="1" />
-						<field name="formatYLabels" column="2" />
+					<section name="chartFlags" columns="TYPE_2">
+						<field name="stacked" column="0" />
+						<field name="smooth" column="1" />
+						<field name="showGrid" column="0" />
+						<field name="showDataLabels" column="1" />
+						<field name="formatDataLabels" column="0" />
+						<field name="formatYLabels" column="1" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -4457,7 +4342,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.chartdatasource.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="chartDataSourceDetails" columns="TYPE_2">
+					<section name="chartDataSourceDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -4467,16 +4352,14 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
-						<field name="type" column="1" required="true" />
+						<field name="type" column="0" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="1" switchOnChange="true" required="true" />
+							column="0" switchOnChange="true" required="true" />
 						<field name="categoryField"
-							inputWidget="studio.entitycategoryfieldlist" column="1"
+							inputWidget="studio.entitycategoryfieldlist" column="0"
 							switchOnChange="true" />
 						<field name="timeSeriesType"
-							inputWidget="application.enumlist" column="1" visible="false" />
+							inputWidget="application.enumlist" column="0" visible="false" />
 					</section>
 				</tab>
 				<tab name="series"
@@ -4565,7 +4448,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.dashboard.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="entityDetails" columns="TYPE_2">
+					<section name="entityDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -4575,16 +4458,11 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
-						<field name="sections" column="1" disabled="true" />
+						<field name="sections" column="0" disabled="true" />
 						<field name="allowSecondaryTenants"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
-				<tab name="design" label="$m{studio.dashboard.form.design}"
-					contentType="CHILD_LIST" applet="manageDashboardTile"
-					reference="tileList" editAction="/designChildItem" />
 				<tab name="options" label="$m{studio.dashboard.form.options}"
 					contentType="CHILD_LIST" applet="manageDashboardOption"
 					reference="optionsList" />
@@ -4633,17 +4511,17 @@
 				<tab name="basicDetails"
 					label="$m{studio.dashboardtile.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="entityDetails" columns="TYPE_2">
+					<section name="entityDetails" columns="TYPE_1">
 						<field name="dashboardId"
 							inputWidget="application.entitysearch" column="0"
 							label="$m{dashboard.dashboardtile.dashboard}" required="true" />
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="type" column="1" required="true" />
-						<field name="chart" column="1" required="true" />
-						<field name="section" column="1" required="true" />
-						<field name="index" column="1" required="true" />
+						<field name="type" column="0" required="true" />
+						<field name="chart" column="0" required="true" />
+						<field name="section" column="0" required="true" />
+						<field name="index" column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -4657,14 +4535,14 @@
 				<tab name="basicDetails"
 					label="$m{studio.dashboardoption.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="basicDetails" columns="TYPE_2">
+					<section name="basicDetails" columns="TYPE_1">
 						<field name="dashboardId"
 							inputWidget="application.entitysearch" column="0"
 							label="$m{dashboard.dashboardoption.dashboard}" required="true" />
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" column="0" required="true" />
-						<field name="label" column="1" required="true" />
+						<field name="label" column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="bases" label="$m{studio.dashboardoption.form.bases}"
@@ -4681,12 +4559,12 @@
 				<tab name="basicDetails"
 					label="$m{studio.dashboardoptioncatbase.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="basicDetails" columns="TYPE_2">
+					<section name="basicDetails" columns="TYPE_1">
 						<field name="dashboardOptionId"
 							inputWidget="application.entitysearch" column="0" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="1" switchOnChange="true" required="true" />
-						<field name="chartDataSource" column="1" required="true"
+							column="0" switchOnChange="true" required="true" />
+						<field name="chartDataSource" column="0" required="true"
 							switchOnChange="true" />
 					</section>
 				</tab>
@@ -4733,7 +4611,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.notificationtemplate.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="templateDetails" columns="TYPE_2">
+					<section name="templateDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -4743,28 +4621,16 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="1" />
+							column="0" />
 						<field name="notificationType"
-							inputWidget="application.enumlist" column="1" required="true"
+							inputWidget="application.enumlist" column="0" required="true"
 							switchOnChange="true" />
 						<field name="messageFormat"
-							inputWidget="application.enumlist" column="1" required="true"
+							inputWidget="application.enumlist" column="0" required="true"
 							disabled="true" />
 					</section>
-					<section name="messageDetails" columns="TYPE_1">
-						<field name="subject" inputWidget="application.text"
-							column="0" required="true" />
-						<field name="template"
-							inputWidget="application.textarealarge" column="0"
-							required="true" />
-					</section>
 				</tab>
-				<!--tab name="params" label="$m{studio.notificationtemplate.form.params}" 
-					contentType="CHILD_LIST" applet="manageNotifTemplateParam" reference="paramList" 
-					/ -->
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>
@@ -4826,20 +4692,6 @@
 					</setValues>
 				</formStatePolicy>
 			</formStatePolicies>
-			<formWidgetRulesPolicies>
-				<formWidgetRulesPolicy
-					name="templateWidgetRule"
-					description="$m{studio.notificationtemplate.form.formwidgetrulespolicy.template}">
-					<onCondition>
-						<restriction type="NOT_EQUALS"
-							field="notificationType" paramA="SMS" />
-					</onCondition>
-					<widgetRules>
-						<entry field="template"
-							widget="application.richtexteditorlarge" />
-					</widgetRules>
-				</formWidgetRulesPolicy>
-			</formWidgetRulesPolicies>
 		</form>
 		<form name="notifTemplateParamForm"
 			description="$m{studio.notificationtemplateparam.form}"
@@ -4848,11 +4700,11 @@
 				<tab name="basicDetails"
 					label="$m{studio.notificationtemplateparam.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="templateParamDetails" columns="TYPE_2">
+					<section name="templateParamDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="label" inputWidget="application.text"
-							column="1" required="true" />
+							column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -4883,7 +4735,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.notificationlargetext.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="largeTextDetails" columns="TYPE_2">
+					<section name="largeTextDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -4893,13 +4745,11 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="1" />
-						<field name="fontFamily" column="1" />
+							column="0" />
+						<field name="fontFamily" column="0" />
 						<field name="fontSizeInPixels"
-							inputWidget="application.integer" column="1" />
+							inputWidget="application.integer" column="0" />
 					</section>
 					<section name="bodyDetails" columns="TYPE_1">
 						<field name="body" inputWidget="application.textareaxxlarge"
@@ -4955,11 +4805,11 @@
 				<tab name="basicDetails"
 					label="$m{studio.notificationlargetextparam.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="templateParamDetails" columns="TYPE_2">
+					<section name="templateParamDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="label" inputWidget="application.text"
-							column="1" required="true" />
+							column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -4990,7 +4840,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.reportconfiguration.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="configDetails" columns="TYPE_2"
+					<section name="configDetails" columns="TYPE_1"
 						label="$m{studio.reportconfiguration.form.basicdetails}">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
@@ -5003,35 +4853,33 @@
 							column="0" required="true" saveAs="true" />
 						<field name="title" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="reportable"
-							inputWidget="studio.reportablebynamelist" column="1"
+							inputWidget="studio.reportablebynamelist" column="0"
 							required="true" switchOnChange="true" />
 						<field name="type" inputWidget="application.enumlist"
-							column="1" required="true" switchOnChange="true" />
+							column="0" required="true" switchOnChange="true" />
 						<field name="summaryDatasource"
-							inputWidget="studio.summarydatasourcelist" column="1"
+							inputWidget="studio.summarydatasourcelist" column="0"
 							visible="false" />
 						<field name="template" inputWidget="application.text"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="processor" inputWidget="application.text"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="letterGenerator"
-							inputWidget="studio.reportablelettergeneratorlist" column="1"
+							inputWidget="studio.reportablelettergeneratorlist" column="0"
 							required="true" visible="false" />
 						<field name="showGrandFooter"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="invertGroupColors"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="landscape" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="underlineRows"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="shadeOddRows"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
-					<section name="pageDetails" columns="TYPE_2"
+					<section name="pageDetails" columns="TYPE_1"
 						label="$m{studio.reportconfiguration.form.pagedimension}"
 						visible="false">
 						<field name="sizeType" inputWidget="application.enumlist"
@@ -5041,19 +4889,15 @@
 						<field name="height" inputWidget="application.integer"
 							column="0" required="true" visible="false" />
 						<field name="marginTop" inputWidget="application.integer"
-							column="1" required="true" visible="true" />
+							column="0" required="true" visible="true" />
 						<field name="marginLeft" inputWidget="application.integer"
-							column="1" required="true" visible="true" />
+							column="0" required="true" visible="true" />
 						<field name="marginRight" inputWidget="application.integer"
-							column="1" required="true" visible="true" />
+							column="0" required="true" visible="true" />
 						<field name="marginBottom" inputWidget="application.integer"
-							column="1" required="true" visible="true" />
+							column="0" required="true" visible="true" />
 					</section>
 				</tab>
-				<tab name="design"
-					label="$m{studio.reportconfiguration.form.design}"
-					contentType="CHILD_LIST" applet="manageReportColumn"
-					reference="columnList" editAction="/designChildItem" />
 				<tab name="placements"
 					label="$m{studio.reportconfiguration.form.placements}"
 					contentType="CHILD_LIST" applet="manageReportPlacement"
@@ -5184,7 +5028,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.reportcolumn.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="basicDetails" columns="TYPE_2">
+					<section name="basicDetails" columns="TYPE_1">
 						<field name="reportConfigurationId"
 							inputWidget="application.entitysearch" column="0" required="true"
 							label="$m{report.reportcolumn.reportconfiguration}" />
@@ -5197,21 +5041,21 @@
 						<field name="formatter" inputWidget="application.text"
 							column="0" />
 						<field name="columnOrder" inputWidget="application.enumlist"
-							column="1" />
+							column="0" />
 						<field name="horizAlignType"
-							inputWidget="application.enumlist" column="1" />
+							inputWidget="application.enumlist" column="0" />
 						<field name="vertAlignType"
-							inputWidget="application.enumlist" column="1" />
+							inputWidget="application.enumlist" column="0" />
 						<field name="width" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 						<field name="bold" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="group" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="groupOnNewPage"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="sum" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -5223,7 +5067,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.reportplacement.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="basicDetails" columns="TYPE_2"
+					<section name="basicDetails" columns="TYPE_1"
 						label="$m{studio.reportplacement.form.basicdetails}">
 						<field name="reportConfigurationId"
 							inputWidget="application.entitysearch" column="0" required="true"
@@ -5236,30 +5080,30 @@
 						<field name="text" inputWidget="application.textarea"
 							column="0" required="true" visible="false" />
 						<field name="horizAlignType"
-							inputWidget="application.enumlist" column="1" visible="false"
+							inputWidget="application.enumlist" column="0" visible="false"
 							required="true" />
 						<field name="vertAlignType"
-							inputWidget="application.enumlist" column="1" visible="false"
+							inputWidget="application.enumlist" column="0" visible="false"
 							required="true" />
 						<field name="formatter" inputWidget="application.text"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="bold" inputWidget="application.checkbox"
-							column="1" visible="false" />
+							column="0" visible="false" />
 					</section>
-					<section name="dimensionDetails" columns="TYPE_2"
+					<section name="dimensionDetails" columns="TYPE_1"
 						label="$m{studio.reportplacement.form.placementdimension}">
 						<field name="xOffsetType" inputWidget="application.enumlist"
 							column="0" required="true" />
 						<field name="yOffsetType" inputWidget="application.enumlist"
 							column="0" required="true" />
-						<field name="x" inputWidget="application.integer" column="1"
+						<field name="x" inputWidget="application.integer" column="0"
 							required="true" />
-						<field name="y" inputWidget="application.integer" column="1"
+						<field name="y" inputWidget="application.integer" column="0"
 							required="true" />
 						<field name="width" inputWidget="application.integer"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="height" inputWidget="application.integer"
-							column="1" required="true" />
+							column="0" required="true" />
 					</section>
 				</tab>
 			</tabs>
@@ -5297,7 +5141,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.reportparameter.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="basicDetails" columns="TYPE_2">
+					<section name="basicDetails" columns="TYPE_1">
 						<field name="reportConfigurationId"
 							inputWidget="application.entitysearch" column="0" required="true" />
 						<field name="name" inputWidget="application.componentname"
@@ -5307,14 +5151,14 @@
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="type"
-							inputWidget="application.simpledatatypelist" column="1"
+							inputWidget="application.simpledatatypelist" column="0"
 							required="true" switchOnChange="true" />
 						<field name="editor"
-							inputWidget="application.datatypeeditorlist" column="1" />
+							inputWidget="application.datatypeeditorlist" column="0" />
 						<field name="mandatory" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="defaultVal" inputWidget="application.text"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -5337,7 +5181,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.apptable.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="tableDetails" columns="TYPE_2">
+					<section name="tableDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -5349,51 +5193,46 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="1" required="true" switchOnChange="true" />
+							column="0" required="true" switchOnChange="true" />
 						<field name="loadingSearchInput"
-							inputWidget="studio.tablesearchinputlist" column="1" />
+							inputWidget="studio.tablesearchinputlist" column="0" />
 						<field name="loadingFilterGen"
-							inputWidget="studio.tableworkitemfiltergenlist" column="1" />
+							inputWidget="studio.tableworkitemfiltergenlist" column="0" />
 						<field name="detailsPanelName"
-							inputWidget="studio.detailspanellist" column="1" />
+							inputWidget="studio.detailspanellist" column="0" />
 						<field name="itemsPerPage" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 						<field name="summaryTitleColumns"
-							inputWidget="application.integer" column="1" />
+							inputWidget="application.integer" column="0" />
 					</section>
-					<section name="tableFlags" columns="TYPE_1_2">
+					<section name="tableFlags" columns="TYPE_2">
 						<field name="headerless" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="showLabelHeader"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="headerToUpperCase"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="headerCenterAlign"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="sortable" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="serialNo" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="multiSelect" inputWidget="application.checkbox"
-							column="2" />
+							column="1" />
 						<field name="nonConforming"
-							inputWidget="application.checkbox" column="2" />
+							inputWidget="application.checkbox" column="1" />
 						<field name="basicSearch" inputWidget="application.checkbox"
-							column="2" />
+							column="1" />
 						<field name="totalSummary"
-							inputWidget="application.checkbox" column="2" />
+							inputWidget="application.checkbox" column="1" />
 						<field name="limitSelectToColumns"
-							inputWidget="application.checkbox" column="2" />
+							inputWidget="application.checkbox" column="1" />
 						<field name="fixedRows" inputWidget="application.checkbox"
-							column="2" />
+							column="1" />
 					</section>
 				</tab>
-				<tab name="design" label="$m{studio.apptable.form.design}"
-					contentType="CHILD_LIST" applet="manageAppTableColumn"
-					reference="columnList" editAction="/designChildItem" />
 				<tab name="filters" label="$m{studio.apptable.form.filters}"
 					quickOrder="true" contentType="CHILD_LIST"
 					applet="manageAppTableFilter" reference="filterList" />
@@ -5459,7 +5298,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.apptablecolumn.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="tableColumnDetails" columns="TYPE_2">
+					<section name="tableColumnDetails" columns="TYPE_1">
 						<field name="appTableId"
 							inputWidget="application.entitysearch" column="0" required="true" />
 						<field name="field" inputWidget="application.name"
@@ -5467,9 +5306,9 @@
 						<field name="renderWidget" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="linkAct" inputWidget="application.text"
-							column="1" />
+							column="0" />
 						<field name="widthRatio" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -5481,7 +5320,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.apptableaction.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="tableColumnDetails" columns="TYPE_2">
+					<section name="tableColumnDetails" columns="TYPE_1">
 						<field name="appTableId"
 							inputWidget="application.entitysearch" column="0" required="true" />
 						<field name="name" inputWidget="application.componentname"
@@ -5491,10 +5330,10 @@
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="policy"
-							inputWidget="studio.tableentitylistactionpolicylist" column="1"
+							inputWidget="studio.tableentitylistactionpolicylist" column="0"
 							required="true" />
 						<field name="orderIndex" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -5506,7 +5345,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.apptableloading.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="tableColumnDetails" columns="TYPE_2">
+					<section name="tableColumnDetails" columns="TYPE_1">
 						<field name="appTableId"
 							inputWidget="application.entitysearch" column="0" required="true" />
 						<field name="name" inputWidget="application.componentname"
@@ -5516,10 +5355,10 @@
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="provider"
-							inputWidget="studio.tableloadingproviderlist" column="1"
+							inputWidget="studio.tableloadingproviderlist" column="0"
 							required="true" />
 						<field name="orderIndex" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -5531,18 +5370,18 @@
 				<tab name="basicDetails"
 					label="$m{studio.apptablefilter.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="filterDetails" columns="TYPE_2">
+					<section name="filterDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="rowColor"
-							inputWidget="studio.tablerowcolorlist" column="1" />
+							inputWidget="studio.tablerowcolorlist" column="0" />
 						<field name="legendLabel" inputWidget="application.text"
-							column="1" />
+							column="0" />
 						<field name="filterGenerator"
 							inputWidget="studio.tablefiltergeneratorlist"
-							switchOnChange="true" column="1" />
+							switchOnChange="true" column="0" />
 					</section>
 				</tab>
 				<tab name="condition"
@@ -5574,7 +5413,7 @@
 			<tabs>
 				<tab name="basicDetails"
 					label="$m{studio.appform.form.basicdetails}" contentType="MINIFORM">
-					<section name="formDetails" columns="TYPE_2">
+					<section name="formDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -5586,34 +5425,28 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="1" required="true" switchOnChange="true" />
+							column="0" required="true" switchOnChange="true" />
 						<field name="type" inputWidget="application.enumlist"
-							column="1" required="true" switchOnChange="true" />
+							column="0" required="true" switchOnChange="true" />
 						<field name="helpSheet" inputWidget="formhelpsheetlist"
-							column="1" />
+							column="0" />
 						<field name="titleFormat"
-							inputWidget="application.texttemplate" column="1" />
+							inputWidget="application.texttemplate" column="0" />
 						<field name="consolidatedValidation"
-							inputWidget="studio.consformvalidationpolicylist" column="1"
+							inputWidget="studio.consformvalidationpolicylist" column="0"
 							visible="false" />
 						<field name="consolidatedReview"
-							inputWidget="studio.consformreviewpolicylist" column="1"
+							inputWidget="studio.consformreviewpolicylist" column="0"
 							visible="false" />
 						<field name="consolidatedState"
-							inputWidget="studio.consformstatepolicylist" column="1"
+							inputWidget="studio.consformstatepolicylist" column="0"
 							visible="false" />
 						<field name="listingGenerator"
-							inputWidget="studio.listinggeneratorlist" column="1"
+							inputWidget="studio.listinggeneratorlist" column="0"
 							visible="false" />
 					</section>
 				</tab>
-				<tab name="design" label="$m{studio.appform.form.design}"
-					contentType="CHILD_LIST" applet="manageAppFormElement"
-					reference="elementList" editAction="/designChildItem"
-					visible="false" />
 				<tab name="filters" label="$m{studio.appform.form.filters}"
 					contentType="CHILD_LIST" applet="manageAppFormFilter"
 					reference="filterList" visible="false" />
@@ -5721,7 +5554,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformelement.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="formElementDetails" columns="TYPE_2">
+					<section name="formElementDetails" columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							disabled="true" column="0" required="true" />
 						<field name="type" inputWidget="application.enumlist"
@@ -5751,29 +5584,29 @@
 						<field name="color" inputWidget="application.enumlist"
 							column="0" />
 						<field name="sectionColumns"
-							inputWidget="application.integer" column="1" />
+							inputWidget="application.integer" column="0" />
 						<field name="fieldColumn" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 						<field name="minLen" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 						<field name="maxLen" inputWidget="application.integer"
-							column="1" />
+							column="0" />
 						<field name="switchOnChange"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="showAnnotation"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="required" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="ignoreParentCondition"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="showSearch" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="visible" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="editable" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="disabled" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -5785,14 +5618,14 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformfilter.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="filterDetails" columns="TYPE_2">
+					<section name="filterDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.name" column="0"
 							required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="filterGenerator"
 							inputWidget="studio.formfiltergeneratorlist"
-							switchOnChange="true" column="1" />
+							switchOnChange="true" column="0" />
 					</section>
 				</tab>
 				<tab name="condition"
@@ -5809,7 +5642,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformannotation.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="formAnnotationDetails" columns="TYPE_2">
+					<section name="formAnnotationDetails" columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							label="$m{application.appformelement.appform}" column="0"
 							required="true" disabled="true" />
@@ -5818,13 +5651,13 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="type" inputWidget="application.enumlist"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="visibility" inputWidget="application.enumlist"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="html" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="directPlacement"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 					<section name="messageDetails" columns="TYPE_1">
 						<field name="message" inputWidget="application.textarea"
@@ -5843,7 +5676,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformaction.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="formActionDetails" columns="TYPE_2">
+					<section name="formActionDetails" columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							label="$m{application.appformelement.appform}" column="0"
 							disabled="true" required="true" />
@@ -5854,22 +5687,22 @@
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="type" inputWidget="application.enumlist"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="highlightType"
-							inputWidget="application.enumlist" column="1" />
+							inputWidget="application.enumlist" column="0" />
 						<field name="policy"
-							inputWidget="studio.formactionpolicylist" column="1"
+							inputWidget="studio.formactionpolicylist" column="0"
 							switchOnChange="true" required="true" />
 						<field name="rule"
-							inputWidget="studio.formactionrulelist" column="1" />
+							inputWidget="studio.formactionrulelist" column="0" />
 						<field name="orderIndex" inputWidget="application.integer"
-							required="true" column="1" />
+							required="true" column="0" />
 						<field name="showOnCreate"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="showOnMaintain"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 						<field name="validateForm"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
 				<tab name="onCondition"
@@ -5884,7 +5717,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformrelatedlist.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="formRelatedListDetails" columns="TYPE_2">
+					<section name="formRelatedListDetails" columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							label="$m{application.appformelement.appform}" column="0"
 							disabled="true" required="true" />
@@ -5896,12 +5729,12 @@
 							column="0" required="true" />
 						<field name="applet"
 							inputWidget="studio.formrelatedappletlist" switchOnChange="true"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="filter"
-							inputWidget="studio.formappletfilterlist" column="1"
+							inputWidget="studio.formappletfilterlist" column="0"
 							required="true" />
 						<field name="editAction"
-							inputWidget="studio.rellisteditactionlist" column="1" />
+							inputWidget="studio.rellisteditactionlist" column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -5913,7 +5746,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformstatepolicy.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="fieldStatePolicyDetails" columns="TYPE_2">
+					<section name="fieldStatePolicyDetails" columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							disabled="true" column="0" required="true"
 							label="$m{application.appformstatepolicy.appform}" />
@@ -5922,11 +5755,11 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="type" inputWidget="application.enumlist"
-							switchOnChange="true" column="1" required="true" />
+							switchOnChange="true" column="0" required="true" />
 						<field name="valueGenerator"
-							inputWidget="studio.formentitysetvaluesgenlist" column="1" />
+							inputWidget="studio.formentitysetvaluesgenlist" column="0" />
 						<field name="trigger"
-							inputWidget="studio.formstatefieldlist" column="1" />
+							inputWidget="studio.formstatefieldlist" column="0" />
 					</section>
 				</tab>
 				<tab name="onCondition"
@@ -5948,14 +5781,14 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformwidgetrulespolicy.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="fieldStatePolicyDetails" columns="TYPE_2">
+					<section name="fieldStatePolicyDetails" columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							disabled="true" column="0" required="true"
 							label="$m{application.appformwidgetrulespolicy.appform}" />
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
-							column="1" required="true" />
+							column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="onCondition"
@@ -5974,7 +5807,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformsetstate.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="setStateDetails" columns="TYPE_2">
+					<section name="setStateDetails" columns="TYPE_1">
 						<field name="appFormStatePolicyId" disabled="true"
 							column="0" required="true"
 							label="$m{application.appformsetstate.appformstatepolicy}" />
@@ -5983,13 +5816,13 @@
 						<field name="target" inputWidget="studio.formelementlist"
 							column="0" required="true" />
 						<field name="required" inputWidget="application.enumlist"
-							column="1" required="true" disabled="true" />
+							column="0" required="true" disabled="true" />
 						<field name="visible" inputWidget="application.enumlist"
-							column="1" required="true" disabled="true" />
+							column="0" required="true" disabled="true" />
 						<field name="editable" inputWidget="application.enumlist"
-							column="1" required="true" disabled="true" />
+							column="0" required="true" disabled="true" />
 						<field name="disabled" inputWidget="application.enumlist"
-							column="1" required="true" disabled="true" />
+							column="0" required="true" disabled="true" />
 					</section>
 				</tab>
 			</tabs>
@@ -6026,7 +5859,7 @@
 					label="$m{studio.appformfieldvalidationpolicy.form.basicdetails}"
 					contentType="MINIFORM">
 					<section name="fieldValidationPolicyDetails"
-						columns="TYPE_2">
+						columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							label="$m{application.appformelement.appform}" column="0"
 							disabled="true" required="true" />
@@ -6035,12 +5868,12 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="fieldName" inputWidget="studio.formfieldlist"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="validation"
 							inputWidget="application.formvalidatorlist" switchOnChange="true"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="rule"
-							inputWidget="studio.formfieldvalidationrulelist" column="1" />
+							inputWidget="studio.formfieldvalidationrulelist" column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -6053,7 +5886,7 @@
 					label="$m{studio.appformvalidationpolicy.form.basicdetails}"
 					contentType="MINIFORM">
 					<section name="formValidationPolicyDetails"
-						columns="TYPE_2">
+						columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							disabled="true" column="0" required="true"
 							label="$m{application.appformvalidationpolicy.appform}" />
@@ -6062,9 +5895,9 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="target" inputWidget="studio.formstatefieldlist"
-							column="1" />
+							column="0" />
 						<field name="errorMatcher"
-							inputWidget="studio.entitymatcherlist" column="1" />
+							inputWidget="studio.entitymatcherlist" column="0" />
 					</section>
 					<section name="messageDetails" columns="TYPE_1">
 						<field name="message" inputWidget="application.textarea"
@@ -6083,7 +5916,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appformreviewpolicy.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="formReviewPolicyDetails" columns="TYPE_2">
+					<section name="formReviewPolicyDetails" columns="TYPE_1">
 						<field name="appFormId" inputWidget="studio.formlist"
 							disabled="true" column="0" required="true"
 							label="$m{application.appformreviewpolicy.appform}" />
@@ -6092,19 +5925,19 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="formEvents"
-							inputWidget="studio.formreviewtypelist" column="1" />
+							inputWidget="studio.formreviewtypelist" column="0" />
 						<field name="target" inputWidget="studio.formstatetablist"
 							column="1" />
 						<field name="errorMatcher"
-							inputWidget="studio.entitymatcherlist" column="1" />
+							inputWidget="studio.entitymatcherlist" column="0" />
 						<field name="skippable" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 					</section>
-					<section name="messageDetails" columns="TYPE_2">
+					<section name="messageDetails" columns="TYPE_1">
 						<field name="messageType" inputWidget="application.enumlist"
 							column="0" required="true" />
 						<field name="message" inputWidget="application.textarea"
-							column="1" required="true" />
+							column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="errorCondition"
@@ -6136,7 +5969,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.apphelpsheet.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="formDetails" columns="TYPE_2">
+					<section name="formDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -6148,12 +5981,10 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="1" required="true" switchOnChange="true" />
+							column="0" required="true" switchOnChange="true" />
 						<field name="helpOverview"
-							inputWidget="application.richtexteditormedium" column="1" />
+							inputWidget="application.richtexteditormedium" column="0" />
 					</section>
 				</tab>
 				<tab name="entries" label="$m{studio.apphelpsheet.form.entries}"
@@ -6170,12 +6001,12 @@
 				<tab name="basicDetails"
 					label="$m{studio.apphelpentry.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="helpEntryDetails" columns="TYPE_2">
+					<section name="helpEntryDetails" columns="TYPE_1">
 						<field name="appHelpSheetId"
 							inputWidget="application.entitysearch" disabled="true" column="0"
 							required="true" label="$m{application.apphelpentry.apphelpsheet}" />
 						<field name="fieldName"
-							inputWidget="studiohelpentryfieldlist" column="1" required="true" />
+							inputWidget="studiohelpentryfieldlist" column="0" required="true" />
 					</section>
 					<section name="helpEntryCont" columns="TYPE_1">
 						<field name="helpContent"
@@ -6211,7 +6042,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.appwidgettype.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="basicDetails" columns="TYPE_2">
+					<section name="basicDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -6221,18 +6052,16 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="dataType" inputWidget="application.enumlist"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="inputType" inputWidget="application.enumlist"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="stretch" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="listOption" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="enumOption" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 					</section>
 					<section name="editorDetails" columns="TYPE_1">
 						<field name="editor" inputWidget="application.textarea"
@@ -6321,7 +6150,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.workflow.form.basicdetails}"
 					contentType="MINIFORM" editable="true">
-					<section name="workflowDetails" columns="TYPE_2">
+					<section name="workflowDetails" columns="TYPE_1">
 						<field name="applicationId"
 							reference="studio.applicationDevelopableRef"
 							inputWidget="application.entitysearch" column="0"
@@ -6335,25 +6164,20 @@
 							column="0" required="true" />
 						<field name="casePrefix" inputWidget="application.wordwithupper"
 							column="0"/>
-						<field name="configType" inputWidget="application.enumlist"
-							column="1" disabled="true" required="true" />
 						<field name="entity"
-							inputWidget="studio.workentitybynamelist" column="1"
+							inputWidget="studio.workentitybynamelist" column="0"
 							required="true" saveAs="true" switchOnChange="true" />
 						<field name="loadingTable"
-							inputWidget="studio.workflowtablelist" column="1" />
+							inputWidget="studio.workflowtablelist" column="0" />
 						<field name="descFormat"
-							inputWidget="application.texttemplate" column="1" />
+							inputWidget="application.texttemplate" column="0" />
 						<field name="filterGenerator"
 							inputWidget="studio.workflowfiltergeneratorlist"
-							switchOnChange="true" column="1" />
+							switchOnChange="true" column="0" />
 						<field name="supportMultiItemAction"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
-				<tab name="design" label="$m{studio.workflow.form.design}"
-					contentType="CHILD_LIST" applet="manageWfStep" reference="stepList"
-					editAction="/designChildItem" />
 				<tab name="filters" label="$m{studio.workflow.form.filters}"
 					contentType="CHILD_LIST" applet="manageWorkflowFilter"
 					reference="filterList" />
@@ -6419,13 +6243,13 @@
 				<tab name="basicDetails"
 					label="$m{studio.workflowfilter.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="filterDetails" columns="TYPE_2">
+					<section name="filterDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="filterGenerator"
-							inputWidget="studio.workflowfiltergeneratorlist" column="1" />
+							inputWidget="studio.workflowfiltergeneratorlist" column="0" />
 					</section>
 				</tab>
 				<tab name="condition"
@@ -6443,15 +6267,15 @@
 				<tab name="basicDetails"
 					label="$m{studio.workflowsetvalues.form.basicdetails}"
 					contentType="MINIFORM">
-					<section name="setValuesDetails" columns="TYPE_2">
+					<section name="setValuesDetails" columns="TYPE_1">
 						<field name="name" inputWidget="application.componentname"
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="type" inputWidget="application.enumlist"
-							column="1" required="false" />
+							column="0" required="false" />
 						<field name="valueGenerator"
-							inputWidget="studio.wfentitysetvaluesgenlist" column="1" />
+							inputWidget="studio.wfentitysetvaluesgenlist" column="0" />
 					</section>
 				</tab>
 				<tab name="condition"
@@ -6471,7 +6295,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.workflow.step.form.basicdetails}"
 					contentType="MINIFORM" editable="false">
-					<section name="stepDetails" columns="TYPE_2">
+					<section name="stepDetails" columns="TYPE_1">
 						<field name="workflowId"
 							inputWidget="application.entitysearch" column="0"
 							label="$m{workflow.step.workflow}" disabled="true"
@@ -6485,29 +6309,29 @@
 						<field name="formName" inputWidget="studio.workflowformlist"
 							column="0" />
 						<field name="type" inputWidget="application.enumlist"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="valueGenerator"
-							inputWidget="studio.wfentitysetvaluesgenlist" column="1" />
+							inputWidget="studio.wfentitysetvaluesgenlist" column="0" />
 						<field name="recordActionType"
-							inputWidget="application.enumlist" column="1" required="true"
+							inputWidget="application.enumlist" column="0" required="true"
 							visible="false" />
-						<field name="policy" column="1" required="true"
+						<field name="policy" column="0" required="true"
 							visible="false" />
-						<field name="rule" column="1" visible="false" />
+						<field name="rule" column="0" visible="false" />
 						<field name="priority" inputWidget="application.enumlist"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="reminderMinutes"
-							inputWidget="application.integer" column="1" />
+							inputWidget="application.integer" column="0" />
 						<field name="criticalMinutes"
-							inputWidget="application.integer" column="1" />
+							inputWidget="application.integer" column="0" />
 						<field name="expiryMinutes"
-							inputWidget="application.integer" column="1" />
+							inputWidget="application.integer" column="0" />
 						<field name="audit" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="branchOnly" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="includeForwarder"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
 				<tab name="routings"
@@ -6584,7 +6408,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.workflow.steprouting.form.basicdetails}"
 					contentType="MINIFORM" editable="false">
-					<section name="stepRoutingDetails" columns="TYPE_2">
+					<section name="stepRoutingDetails" columns="TYPE_1">
 						<field name="wfStepId"
 							inputWidget="application.entitysearch" column="0"
 							label="$m{workflow.steprouting.step}" required="true" />
@@ -6593,9 +6417,9 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="conditionName"
-							inputWidget="studio.wfstepfilterlist" column="1" />
+							inputWidget="studio.wfstepfilterlist" column="0" />
 						<field name="nextStepName"
-							inputWidget="studio.wfsteproutetolist" column="1" />
+							inputWidget="studio.wfsteproutetolist" column="0" />
 					</section>
 				</tab>
 				<tab name="routeCondition"
@@ -6611,7 +6435,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.workflow.stepuseraction.form.basicdetails}"
 					contentType="MINIFORM" editable="false">
-					<section name="stepUserActionDetails" columns="TYPE_2">
+					<section name="stepUserActionDetails" columns="TYPE_1">
 						<field name="wfStepId"
 							inputWidget="application.entitysearch" column="0"
 							label="$m{workflow.stepuseraction.step}" required="true" />
@@ -6622,17 +6446,17 @@
 						<field name="label" inputWidget="application.text"
 							column="0" />
 						<field name="commentRequirement"
-							inputWidget="application.enumlist" column="1" required="true" />
+							inputWidget="application.enumlist" column="0" required="true" />
 						<field name="highlightType"
-							inputWidget="application.enumlist" column="1" />
+							inputWidget="application.enumlist" column="0" />
 						<field name="nextStepName"
-							inputWidget="studio.wfsteproutetolist" column="1" required="true" />
+							inputWidget="studio.wfsteproutetolist" column="0" required="true" />
 						<field name="orderIndex" inputWidget="application.integer"
-							column="1" required="true" />
+							column="0" required="true" />
 						<field name="formReview" inputWidget="application.checkbox"
-							column="1" />
+							column="0" />
 						<field name="validatePage"
-							inputWidget="application.checkbox" column="1" />
+							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
 			</tabs>
@@ -6644,7 +6468,7 @@
 				<tab name="basicDetails"
 					label="$m{studio.workflow.stepalert.form.basicdetails}"
 					contentType="MINIFORM" editable="false">
-					<section name="stepAlertDetails" columns="TYPE_2">
+					<section name="stepAlertDetails" columns="TYPE_1">
 						<field name="wfStepId"
 							inputWidget="application.entitysearch" column="0"
 							label="$m{workflow.stepalert.step}" required="true" />
@@ -6667,11 +6491,11 @@
 						<field name="type" inputWidget="application.enumlist"
 							column="1" required="true" />
 						<field name="notificationType"
-							inputWidget="application.enumlist" column="1" required="true" />
+							inputWidget="application.enumlist" column="0" required="true" />
 						<field name="fireOnPrevStepName"
-							inputWidget="studio.wfstepreceivefromlist" column="1" />
+							inputWidget="studio.wfstepreceivefromlist" column="0" />
 						<field name="fireOnConditionName"
-							inputWidget="studio.wfstepfilterlist" column="1" />
+							inputWidget="studio.wfstepfilterlist" column="0" />
 					</section>
 				</tab>
 				<tab name="fireOnCondition"

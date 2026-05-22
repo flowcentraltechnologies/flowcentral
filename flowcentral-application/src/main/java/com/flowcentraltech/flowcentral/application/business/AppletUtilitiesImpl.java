@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
@@ -120,10 +121,12 @@ import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPol
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.FormValidationContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ParamConfigListProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
@@ -131,7 +134,11 @@ import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityFieldAudit;
+import com.flowcentraltech.flowcentral.common.data.FieldError;
+import com.flowcentraltech.flowcentral.common.data.FormError;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.flowcentraltech.flowcentral.common.data.FormValidation;
 import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormattedEntityAudit;
 import com.flowcentraltech.flowcentral.common.data.FormattedFieldAudit;
@@ -180,6 +187,7 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.database.sql.SqlFieldTypeInfo;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.message.MessageResolver;
@@ -394,6 +402,21 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException {
+        return applicationModuleService.getStaticListEnumType(listName);
+    }
+
+    @Override
+    public Optional<String> generateFieldTypeSql(String entity, SqlFieldTypeInfo info) throws UnifyException {
+        return applicationModuleService.generateFieldTypeSql(entity, info);
+    }
+
+    @Override
+    public Optional<String> getTableRowColor(String tableName, ValueStore row) throws UnifyException {
+        return applicationModuleService.getTableRowColor(tableName, row);
     }
 
     @Override
@@ -2068,6 +2091,31 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return false;
     }
     
+    @Override
+    public FormValidation validateFormUsingComponentValidation(String formName, Object inst,
+            EvaluationMode evaluationMode) throws UnifyException {
+        List<FormError> forms = Collections.emptyList();
+        final FormContext ctx = new FormContext(this, getFormDef(formName), inst);
+        final FormValidationContext vCtx = new FormValidationContext(evaluationMode);
+        formContextEvaluator.evaluateFormContextComponentValidation(ctx, vCtx);
+        if (ctx.isWithValidationErrors()) {
+            forms = new ArrayList<FormError>();
+            for (FormMessage formMessage : ctx.getValidationErrors()) {
+                forms.add(new FormError(formMessage.getType(), formMessage.getMessage()));
+            }
+        }
+
+        List<FieldError> fields = Collections.emptyList();
+        if (ctx.isWithFieldErrors()) {
+            fields = new ArrayList<FieldError>();
+            for (Map.Entry<String, List<String>> entry : ctx.getFieldErrors().entrySet()) {
+                fields.add(new FieldError(entry.getKey(), entry.getValue()));
+            }
+        }
+
+        return new FormValidation(forms, fields);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException {

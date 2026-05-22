@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.web.widgets.ParamValueEntry;
 import com.flowcentraltech.flowcentral.application.web.widgets.ParamValuesWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -46,13 +44,12 @@ public class ParamValuesWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, paramValuesWidget);
         writer.write(">");
-        List<ValueStore> valueStoreList = paramValuesWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = paramValuesWidget.getItemCount();
+        if (len > 0) {
             DynamicField paramCtrl = paramValuesWidget.getParamCtrl();
-            int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                ParamValueEntry pvo = (ParamValueEntry) lineValueStore.getValueObject();
+                ValueStore lineValueStore = paramValuesWidget.getItemValueStoreAt(i);
+                ParamValueEntry pvo = paramValuesWidget.getItemAt();
                 writer.write("<div class=\"line\"><div class=\"lbl\">");
                 if (pvo.getParamConfig().isMandatory()) {
                     writer.write("<img class=\"req\" src=\"");
@@ -73,12 +70,11 @@ public class ParamValuesWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         ParamValuesWidget paramValuesWidget = (ParamValuesWidget) widget;
-        List<ValueStore> valueStoreList = paramValuesWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = paramValuesWidget.getItemCount();
+        if (len > 0) {
             DynamicField paramCtrl = paramValuesWidget.getParamCtrl();
-            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
+                ValueStore lineValueStore = paramValuesWidget.getItemValueStoreAt(i);
                 writeBehavior(writer, paramValuesWidget, lineValueStore, paramCtrl);
             }
         }

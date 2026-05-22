@@ -39,5 +39,6 @@ public final class StudioWidgetWriterUtils {
         WriterUtils.registerJSAlias("fuxstudio.rigReportColumnEditorPanel", "fuxstudio06");  
         WriterUtils.registerJSAlias("fuxstudio.rigReportEditor", "fuxstudio07");  
         WriterUtils.registerJSAlias("fuxstudio.rigDashboardEditor", "fuxstudio08");  
+        WriterUtils.registerJSAlias("fuxstudio.rigEntityEditor", "fuxstudio09");  
    }
 }

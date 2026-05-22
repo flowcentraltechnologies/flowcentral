@@ -35,12 +35,16 @@ public class PortalTable {
 
     private List<PortalTableColumn> columns;
 
-    public PortalTable(String name, String description, String label, String entity, List<PortalTableColumn> columns) {
+    private List<PortalTableLegend> legends;
+    
+    public PortalTable(String name, String description, String label, String entity, List<PortalTableColumn> columns,
+            List<PortalTableLegend> legends) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.entity = entity;
         this.columns = columns;
+        this.legends = legends;
     }
 
     public String getName() {
@@ -62,4 +66,9 @@ public class PortalTable {
     public List<PortalTableColumn> getColumns() {
         return columns;
     }
+
+    public List<PortalTableLegend> getLegends() {
+        return legends;
+    }
+
 }

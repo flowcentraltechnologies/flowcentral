@@ -31,8 +31,8 @@ public abstract class AbstractOSAsyncMessagingErrorProcessor extends AbstractFlo
     public final void handleError(String target, String processor, String correlationId, String errorCode,
             String errorMsg) throws UnifyException {
         logDebug(
-                "Handling asynchronous messaging error with code [{0}], error message [{1}], processor [{2}] and correlation ID [{3}] ...",
-                errorCode, errorMsg, processor, correlationId);
+                "Handling asynchronous messaging error with code [{0}], error message [{1}], processor [{2}] and target [{3}] ...",
+                errorCode, errorMsg, processor, target);
         doHandleError(target, processor, correlationId, errorCode, errorMsg);
     }
 

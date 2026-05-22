@@ -15,19 +15,22 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
-import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppComponentApplet;
+import com.flowcentraltech.flowcentral.studio.web.panels.applet.AbstractStudioAppComponentApplet;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Studio application component applet controller.
@@ -35,28 +38,26 @@ import com.tcdng.unify.web.constant.Secured;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component("/studioappcomponentapplet")
 @UplBinding("web/studio/upl/studioappcomponentappletpage.upl")
-public class StudioAppComponentAppletController
-        extends AbstractEntityFormAppletController<StudioAppComponentApplet, StudioAppComponentAppletPageBean> {
+public abstract class AbstractStudioAppComponentAppletController<T extends AbstractStudioAppComponentApplet, U extends AbstractStudioAppComponentAppletPageBean<T>>
+        extends AbstractEntityFormAppletController<T, U> {
 
     @Configurable
     private StudioModuleService studioModuleService;
 
-    public StudioAppComponentAppletController() {
-        super(StudioAppComponentAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    public AbstractStudioAppComponentAppletController(Class<U> beanClass) {
+        super(beanClass, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
 
-        StudioAppComponentAppletPageBean pageBean = getPageBean();
+        U pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            StudioAppComponentApplet applet = new StudioAppComponentApplet(getPage(), studioModuleService, au(),
-                    getPathVariables(),
+            T applet = createApplet(getPage(), studioModuleService, au(), getPathVariables(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
@@ -65,4 +66,7 @@ public class StudioAppComponentAppletController
         }
     }
 
+    protected abstract T createApplet(Page page, StudioModuleService studio, AppletUtilities au,
+            List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
+            EntityFormEventHandlers formEventHandlers) throws UnifyException;
 }

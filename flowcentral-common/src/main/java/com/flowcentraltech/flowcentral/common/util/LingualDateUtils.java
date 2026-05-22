@@ -43,6 +43,10 @@ public final class LingualDateUtils {
         cal1.setTime(now);
         cal2.setTime(now);
         switch (type) {
+            case LAST_HOUR:
+                cal1.add(Calendar.HOUR_OF_DAY, -1);
+                cal2.add(Calendar.HOUR_OF_DAY, -1);
+                break;
             case LAST_15_DAYS:
                 cal1.add(Calendar.DAY_OF_YEAR, -15);
                 break;
@@ -88,7 +92,11 @@ public final class LingualDateUtils {
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
                 cal2.set(Calendar.DAY_OF_YEAR, cal2.getActualMaximum(Calendar.DAY_OF_YEAR));
                 break;
-            case NEXT_15_DAYS:
+            case NEXT_HOUR:
+                cal1.add(Calendar.HOUR_OF_DAY, 1);
+                cal2.add(Calendar.HOUR_OF_DAY, 1);
+                break;
+           case NEXT_15_DAYS:
                 cal2.add(Calendar.DAY_OF_YEAR, 15);
                 break;
             case NEXT_30_DAYS:
@@ -133,6 +141,8 @@ public final class LingualDateUtils {
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
                 cal2.set(Calendar.DAY_OF_YEAR, cal2.getActualMaximum(Calendar.DAY_OF_YEAR));
                 break;
+            case THIS_HOUR:
+                break;
             case THIS_MONTH:
                 cal1.set(Calendar.DAY_OF_MONTH, 1);
                 cal2.set(Calendar.DAY_OF_MONTH, cal2.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -159,6 +169,11 @@ public final class LingualDateUtils {
                 break;
         }
 
+        if (type.maxResolution().isMinute()) {
+            return new DateRange(CalendarUtils.getZeroMinuteDate(cal1.getTime()),
+                    CalendarUtils.getLastMinuteDate(cal2.getTime()));
+        }
+        
         return new DateRange(CalendarUtils.getMidnightDate(cal1.getTime()),
                 CalendarUtils.getLastSecondDate(cal2.getTime()));
     }
@@ -172,6 +187,9 @@ public final class LingualDateUtils {
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(now);
         switch (type) {
+            case LAST_HOUR:
+                cal1.add(Calendar.HOUR_OF_DAY, -1);
+                break;
             case LAST_15_DAYS:
                 cal1.add(Calendar.DAY_OF_YEAR, -15);
                 break;
@@ -210,6 +228,9 @@ public final class LingualDateUtils {
             case LAST_YEAR:
                 cal1.add(Calendar.YEAR, -1);
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
+                break;
+            case NEXT_HOUR:
+                cal1.add(Calendar.HOUR_OF_DAY, 1);
                 break;
             case NEXT_15_DAYS:
                 cal1.add(Calendar.DAY_OF_YEAR, 15);
@@ -250,6 +271,8 @@ public final class LingualDateUtils {
                 cal1.add(Calendar.YEAR, 1);
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
                 break;
+            case THIS_HOUR:
+                break;
             case THIS_MONTH:
                 cal1.set(Calendar.DAY_OF_MONTH, 1);
                 break;
@@ -272,6 +295,10 @@ public final class LingualDateUtils {
                 break;
         }
 
+        if (type.maxResolution().isMinute()) {
+            return CalendarUtils.getZeroMinuteDate(cal1.getTime());
+        }
+        
         return CalendarUtils.getMidnightDate(cal1.getTime());
     }
 }

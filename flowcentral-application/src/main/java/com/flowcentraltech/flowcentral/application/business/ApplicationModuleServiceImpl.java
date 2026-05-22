@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -105,6 +106,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplet;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalAppletOption;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalDashboard;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
@@ -118,6 +120,7 @@ import com.flowcentraltech.flowcentral.application.data.portal.PortalReference;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalReport;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTableColumn;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalTableLegend;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowStep;
 import com.flowcentraltech.flowcentral.application.entities.*;
@@ -146,6 +149,7 @@ import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.business.policies.FormWizardTaskProcessor;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
@@ -154,6 +158,7 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
+import com.flowcentraltech.flowcentral.common.data.FormValidation;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
@@ -239,6 +244,7 @@ import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamCons
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.entities.Module;
+import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
@@ -279,6 +285,7 @@ import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlEntityLoader;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
+import com.tcdng.unify.core.database.sql.SqlFieldTypeInfo;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.list.ListManager;
 import com.tcdng.unify.core.message.MessageResolver;
@@ -1441,6 +1448,41 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return prdb.build();
                 }
             };
+    }
+
+    @Override
+    public Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException {
+        return listManager.getStaticListEnumType(listName);
+    }
+
+    @Override
+    public Optional<String> generateFieldTypeSql(String entity, SqlFieldTypeInfo info) throws UnifyException {
+        return ((SqlDataSourceDialect) db().getDataSource().getDialect()).generateFieldTypeSql(info); // TODO Detect
+                                                                                                      // datasource from
+                                                                                                      // entity
+                                                                                                      // definition
+    }
+
+    @Override
+    public Optional<String> getTableRowColor(String tableName, ValueStore row) throws UnifyException {
+        final TableDef tableDef = getTableDef(tableName);
+        if (tableDef.isRowColorFilters()) {
+            final Date now = getNow();
+            for (TableFilterDef tableFilterDef : tableDef.getRowColorFilterList()) {
+                if (tableFilterDef.getFilterDef().getObjectFilter(tableDef.getEntityDef(), row.getReader(), now)
+                        .matchReader(row.getReader())) {
+                    return Optional.of(tableFilterDef.getRowColor());
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public FormValidation validateFormUsingComponentValidation(String formName, Object inst,
+            EvaluationMode evaluationMode) throws UnifyException {
+        return appletUtilities.validateFormUsingComponentValidation(formName, inst, evaluationMode);
     }
 
     @Override
@@ -3821,14 +3863,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 ApplicationReplicationUtils.applyReplicationRules(ctx, appFormWidgetRulesPolicy.getWidgetRules());
             }
 
-            // Field Validation Policies
+            // Field FormValidation Policies
             for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : srcAppForm.getFieldValidationList()) {
                 appFormFieldValidationPolicy.setFieldName(ctx.fieldSwap(appFormFieldValidationPolicy.getFieldName()));
                 appFormFieldValidationPolicy
                         .setValidation(ctx.componentSwap(appFormFieldValidationPolicy.getValidation()));
             }
 
-            // Form Validation Policies
+            // Form FormValidation Policies
             for (AppFormValidationPolicy appFormValidationPolicy : srcAppForm.getFormValidationList()) {
                 appFormValidationPolicy.setErrorMatcher(ctx.componentSwap(appFormValidationPolicy.getErrorMatcher()));
                 ApplicationReplicationUtils.applyReplicationRules(ctx, appFormValidationPolicy.getErrorCondition());
@@ -4009,7 +4051,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final List<PortalEnumItem> items = new ArrayList<PortalEnumItem>();
             for (AppEnumerationItem appEnumerationItem : appEnumeration.getItemList()) {
                 items.add(new PortalEnumItem(appEnumerationItem.getCode(), appEnumerationItem.getLabel(),
-                        appEnumerationItem.getColor() != null ? appEnumerationItem.getColor().name(): null));
+                        appEnumerationItem.getColor() != null ? appEnumerationItem.getColor().name() : null));
             }
 
             final String enumName = ApplicationNameUtils.ensureLongNameReference(applicationName,
@@ -4096,8 +4138,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
                             : getWidgetTypeDef(
                                     InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String renderer = InputWidgetUtils.constructPortalRenderer(widgetTypeDef, resolvedEntityFieldDef,
-                            serviceId);
+                    final String renderer = InputWidgetUtils.constructPortalRenderer(widgetTypeDef,
+                            resolvedEntityFieldDef, serviceId);
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
                             resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
@@ -4106,8 +4148,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             tableColumnDef.getLinkAct(), renderer, tableColumnDef.getWidthRatio()));
                 }
 
-                tables.put(table, new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
-                        resolveApplicationMessage(tableDef.getLabel()), entity, DataUtils.unmodifiableList(columns)));
+                final List<PortalTableLegend> legends = new ArrayList<PortalTableLegend>();
+                for (TableFilterDef tableFilterDef : tableDef.getRowColorFilterList()) {
+                    legends.add(
+                            new PortalTableLegend(tableFilterDef.isWithLegendLabel() ? tableFilterDef.getLegendLabel()
+                                    : tableFilterDef.getListDescription(), tableFilterDef.getRowColor()));
+                }
+
+                tables.put(table,
+                        new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
+                                resolveApplicationMessage(tableDef.getLabel()), entity,
+                                DataUtils.unmodifiableList(columns), legends));
             }
 
             final List<String> formList = Arrays.asList(
@@ -4157,15 +4208,27 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
+                    final boolean remoteValidation = formDef.isWithFieldValidationPolicy()
+                            || formDef.isWithConsolidatedFormValidation() || formDef.isWithFormValidationPolicy();
                     forms.put(form, new PortalForm(formDef.getLongName(), formDef.getDescription(), entity,
-                            DataUtils.unmodifiableList(elements)));
+                            DataUtils.unmodifiableList(elements), remoteValidation));
+                }
+            }
+
+            List<PortalAppletOption> options = Collections.emptyList();
+            final List<AppAppletFilter> quickFilters = environment().findAll(new AppAppletFilterQuery()
+                    .appAppletId(appletDef.getId()).quickFilter(true).addSelect("name", "description"));
+            if (!DataUtils.isBlank(quickFilters)) {
+                options = new ArrayList<PortalAppletOption>();
+                for (AppAppletFilter filter : quickFilters) {
+                    options.add(new PortalAppletOption(filter.getName(), filter.getDescription()));
                 }
             }
 
             applets.put(applet,
                     new PortalApplet(appletDef.getType().name(), appletDef.getLongName(), appletDef.getDescription(),
                             resolveApplicationMessage(appletDef.getLabel()), entity, appletDef.getIcon(),
-                            formList.get(0), formList.get(1), table, appletDef.isPortalAccess()));
+                            formList.get(0), formList.get(1), table, appletDef.isPortalAccess(), options));
 
             for (String capplet : childApplets) {
                 extractPortalDependencies(capplet, applets, tables, forms, entities, references);

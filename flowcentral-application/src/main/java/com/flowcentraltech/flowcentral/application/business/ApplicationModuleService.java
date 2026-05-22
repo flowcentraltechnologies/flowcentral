@@ -88,13 +88,16 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.FormValidation;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.flowcentraltech.flowcentral.system.entities.Module;
+import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.database.WorkEntity;
@@ -107,6 +110,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
+import com.tcdng.unify.core.database.sql.SqlFieldTypeInfo;
 import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
@@ -116,6 +120,59 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * @since 4.1
  */
 public interface ApplicationModuleService extends FlowCentralService {
+
+    /**
+     * Gets a static list enumeration type.
+     * 
+     * @param listName
+     *                 the list name
+     * @return the list enumeration type
+     * @throws UnifyException
+     *                        if static list with name is unknown. if an error occurs
+     */
+    Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException;
+    
+    /**
+     * Generates a field type SQL
+     * 
+     * @param entity
+     *               the entity name
+     * @param info
+     *               the field type information
+     * @return the field type SQL
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> generateFieldTypeSql(String entity, SqlFieldTypeInfo info) throws UnifyException;
+
+    /**
+     * Gets table row color.
+     * 
+     * @param tableName
+     *                  the table name
+     * @param row
+     *                  the row value store
+     * @return the color in HEX
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> getTableRowColor(String tableName, ValueStore row) throws UnifyException;
+    
+    /**
+     * Validate form using component validation.
+     * 
+     * @param formName
+     *                       the form name
+     * @param inst
+     *                       the entity instance
+     * @param evaluationMode
+     *                       the evaluation mode
+     * @return form validation
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FormValidation validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
+            throws UnifyException;
 
     /**
      * Gets process variables.

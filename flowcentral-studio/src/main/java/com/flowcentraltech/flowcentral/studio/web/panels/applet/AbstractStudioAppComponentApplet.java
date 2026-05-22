@@ -30,17 +30,20 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyCons
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
- * Studio application component applet object.
+ * Abstract base class for studio application component applet object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppComponentApplet extends AbstractEntityFormApplet {
+public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFormApplet {
 
     private final StudioModuleService sms;
+
+    private final String pageCaption;
 
     private final String instTitle;
 
@@ -48,8 +51,8 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
 
     private final String applicationName;
 
-    public StudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
-            String applicationName, AppletWidgetReferences appletWidgetReferences,
+    public AbstractStudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au,
+            List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers, true);
         this.sms = sms;
@@ -60,6 +63,8 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
                 StudioAppletPropertyConstants.ENTITY_TYPE);
         this.instTitle = au.resolveSessionMessage(getCurrFormAppletDef().getDescription());
         this.typeTitle = au.resolveSessionMessage(type.caption());
+        this.pageCaption = au.resolveSessionMessage("$m{studio.application.component.pagecaption}",
+                !StringUtils.isBlank(instTitle) ? instTitle: "<New>");
         Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
         if (instId == null || instId.longValue() == 0L) {
             constructNewForm();
@@ -73,6 +78,10 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
     @Override
     public AppletDef getRootAppletDef() throws UnifyException {
         return sms != null ? sms.getAppletDef(getAppletName()) : null;
+    }
+
+    public String getPageCaption() {
+        return pageCaption;
     }
 
     public String getInstTitle() {

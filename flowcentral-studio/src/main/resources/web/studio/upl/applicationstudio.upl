@@ -16,6 +16,7 @@
 !ui-document layout:$d{!ui-desktoptype2 collapsibleSidebar:true} caption:$m{studio.application.document}
     headerPanel:$c{topBanner} menuPanel:$c{menuColPanel} contentPanel:$c{content}
     favicon:$s{web/images/favicon_studio.png}
+    resourcePrefix:flo
 	styleSheet:$t{css/flowcentral.css}
 	styleSheet:$t{css/flowcentral-slim.css}
 	styleSheet:$t{css/flowcentral-theme.css}
@@ -70,9 +71,10 @@
 
 // Content
 !ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed}
+	documentPath:$s{/applicationstudio}
 	paths:$s{/applicationstudio/dashboard/openPage}
-	stickyPaths:$s{/applicationstudio/dashboard/openPage}
-	tabbed:true documentPath:$s{/applicationstudio}
+//	stickyPaths:$s{/applicationstudio/dashboard/openPage}
+	tabbed:false
 	titleUppercase:false  
 
 // New application dialog

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
+import java.util.Map;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
@@ -29,13 +30,16 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstan
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.local.OSMessagingLocalController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
+import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractPlainJsonController;
 import com.tcdng.unify.web.http.HttpRequestHeaders;
+import com.tcdng.unify.web.util.HttpUtils;
 
 /**
  * OS Messaging Controller.
@@ -44,7 +48,7 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
  * @since 4.1
  */
 @Component(OSMessagingModuleNameConstants.OSMESSAGING_CONTROLLER)
-public class OSMessagingController extends AbstractPlainJsonController {
+public class OSMessagingController extends AbstractPlainJsonController implements OSMessagingLocalController {
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
@@ -59,6 +63,30 @@ public class OSMessagingController extends AbstractPlainJsonController {
         super.onInitialize();
         debugging = getContainerSetting(boolean.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
+    }
+
+    @Override
+    public PostResp<String> handleLocalMessaging(Map<String, String> headers, String requestJson)
+            throws UnifyException {
+        String target = headers.get(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
+        target = !StringUtils.isBlank(target) ? target
+                : headers.get(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
+        target = !StringUtils.isBlank(target) ? target
+                : getApplicationName();
+       logDebug("Performing local messaging to [{0}]...", target);
+        final long start = System.currentTimeMillis();
+        boolean success = true;
+        String jsonResponse = null;
+        try {
+            setHttpRequestHeaders(headers);
+            jsonResponse = doExecute(null, requestJson);
+        } catch (Exception e) {
+            jsonResponse = HttpUtils.getJsonErrorResponse(e);
+            success = false;
+        }
+
+        return new PostResp<String>(success ? jsonResponse : null, success ? null : jsonResponse, requestJson,
+                jsonResponse, 200, System.currentTimeMillis() - start);
     }
 
     @SuppressWarnings("unchecked")

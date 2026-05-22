@@ -15,6 +15,7 @@
 
 !ui-document layout:$d{!ui-desktoptype1} contentPanel:$c{content}
     favicon:$s{web/images/favicon_enduser.png} captionBinding:windowTitle
+    resourcePrefix:flo
 	styleSheet:$t{css/flowcentral.css}
 	styleSheet:$t{css/flowcentral-slim.css}
 	styleSheet:$t{css/flowcentral-theme.css}

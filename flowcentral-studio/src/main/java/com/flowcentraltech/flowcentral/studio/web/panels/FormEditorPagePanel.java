@@ -33,23 +33,24 @@ public class FormEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     public void switchState() throws UnifyException {
-        super.switchState();
+        FormEditorPage formEditorPage = getFormEditorPage();
+        if (formEditorPage != null) {
+            final boolean readOnly = isAppletContextReadOnly();
+            FormEditor formEditor = formEditorPage.getFormEditor();
+            formEditor.setReadOnly(readOnly);
+            if (!formEditor.isInitialized()) {
+                formEditor.init(getWidgetByShortName("formEditorBodyPanel").getLongName(),
+                        getWidgetByShortName("editTabPanel").getLongName(),
+                        getWidgetByShortName("editSectionPanel").getLongName(),
+                        getWidgetByShortName("editFieldPanel").getLongName());
+            }
 
-        final boolean readOnly = isAppletContextReadOnly();
-        FormEditor formEditor = getFormEditorPage().getFormEditor();
-        formEditor.setReadOnly(readOnly);
-        if (!formEditor.isInitialized()) {
-            formEditor.init(getWidgetByShortName("formEditorBodyPanel").getLongName(),
-                    getWidgetByShortName("editTabPanel").getLongName(),
-                    getWidgetByShortName("editSectionPanel").getLongName(),
-                    getWidgetByShortName("editFieldPanel").getLongName());
+            boolean isEditable = !readOnly;
+            setWidgetVisible("saveBtn", isEditable);
+            setWidgetEditable("editTabPanel", isEditable);
+            setWidgetEditable("editSectionPanel", isEditable);
+            setWidgetEditable("editFieldPanel", isEditable);
         }
-
-        boolean isEditable = !readOnly;
-        setWidgetVisible("saveBtn", isEditable);
-        setWidgetEditable("editTabPanel", isEditable);
-        setWidgetEditable("editSectionPanel", isEditable);
-        setWidgetEditable("editFieldPanel", isEditable);
     }
 
     @Action
@@ -57,6 +58,12 @@ public class FormEditorPagePanel extends AbstractStudioEditorPagePanel {
         FormEditorPage formEditorPage = getFormEditorPage();
         formEditorPage.commitDesign();
         hintUser("$m{studioappformapplet.formeditor.success.hint}", formEditorPage.getSubTitle());
+    }
+
+    @Override
+    protected boolean isAppletContextReadOnly() throws UnifyException {
+        // TODO
+        return false;
     }
 
     private FormEditorPage getFormEditorPage() throws UnifyException {

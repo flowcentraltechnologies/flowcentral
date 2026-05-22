@@ -51,5 +51,7 @@ public interface FlowCentralContainerPropertyConstants {
     String FLOWCENTRAL_APPLICATION_OS_VENDORDOMAIN = "flowcentral.application.os.vendordomain";
 
     String FLOWCENTRAL_APPLICATION_OS_DEBUGGING = "flowcentral.application.os.debugging";
+    
+    String FLOWCENTRAL_APPLICATION_OS_INTEGRATION_SERVICE_ID = "flowcentral.application.os.integrationserviceid";
 
 }

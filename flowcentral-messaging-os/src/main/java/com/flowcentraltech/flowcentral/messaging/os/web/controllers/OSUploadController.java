@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.messaging.os.web.controllers;
 
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
@@ -29,14 +30,18 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstan
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.local.OSUploadLocalController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
+import com.tcdng.unify.core.util.PostResp;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.AbstractHttpUploadController;
 import com.tcdng.unify.web.http.HttpRequestHeaders;
+import com.tcdng.unify.web.http.SimpleHttpRequestHeaders;
 import com.tcdng.unify.web.util.ContentDisposition;
+import com.tcdng.unify.web.util.HttpUtils;
 
 /**
  * OS Upload Controller.
@@ -45,7 +50,7 @@ import com.tcdng.unify.web.util.ContentDisposition;
  * @since 4.1
  */
 @Component(OSMessagingModuleNameConstants.OSMESSAGING_UPLOAD_CONTROLLER)
-public class OSUploadController extends AbstractHttpUploadController {
+public class OSUploadController extends AbstractHttpUploadController implements OSUploadLocalController {
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
@@ -60,6 +65,24 @@ public class OSUploadController extends AbstractHttpUploadController {
         super.onInitialize();
         debugging = getContainerSetting(boolean.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_DEBUGGING);
+    }
+
+    @Override
+    public PostResp<String> handleLocalUpload(Map<String, String> headers, ContentDisposition disposition,
+            InputStream in) throws UnifyException {
+        logDebug("Performing local upload using signature [{0}]...", headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
+        final long start = System.currentTimeMillis();
+        boolean success = true;
+        String jsonResponse = null;
+        try {
+            jsonResponse = handleUpload(new SimpleHttpRequestHeaders(headers), disposition, in);
+        } catch (Exception e) {
+            jsonResponse = HttpUtils.getJsonErrorResponse(e);
+            success = false;
+        }
+
+        return new PostResp<String>(success ? jsonResponse : null, success ? null : jsonResponse, "",
+                jsonResponse, 200, System.currentTimeMillis() - start);
     }
 
     @SuppressWarnings("unchecked")

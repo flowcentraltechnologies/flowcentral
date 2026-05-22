@@ -14,14 +14,3 @@
 // the License.
 
 !fc-studiodashboardappletpanel
-
-// Dashboard Editor Page
-!fc-dashboardeditorpagepanel:dashboardEditorPagePanel binding:dashboardEditorPage
-	moreActionButtons:$c{saveDesignCloseBtn closeDesignBtn}
-!ui-button:saveDesignCloseBtn caption:$m{button.saveclose}
-	eventHandler:$d{!ui-event event:onclick action:$c{saveDesignCloseAct}}
-!ui-button:closeDesignBtn caption:$m{button.close}
-	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
-
-// Actions
-!ui-postcommand:saveDesignCloseAct command:saveDesignAndClose components:$c{dashboardEditorPagePanel}

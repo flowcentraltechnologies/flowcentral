@@ -99,6 +99,14 @@ public class AppletContext extends AbstractContext {
                 ApplicationModuleSysParamConstants.ENABLE_PARENT_STATE_AUDITING);
     }
 
+    public AppletContext(AppletUtilities au) throws UnifyException {
+        this.applet = null;
+        this.page = null;
+        this.au = au;
+        this.auditingEnabled = false;
+        this.parentStateAuditingEnabled = false;
+    }
+
     public AbstractApplet applet() {
         return applet;
     }

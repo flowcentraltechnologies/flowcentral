@@ -35,28 +35,30 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioReportConfigurationApplet extends StudioAppComponentApplet {
+public class StudioReportConfigurationApplet extends AbstractStudioAppComponentApplet {
 
     private ReportEditorPage reportEditorPage;
 
-    public StudioReportConfigurationApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
-            String applicationName, AppletWidgetReferences appletWidgetReferences,
+    public StudioReportConfigurationApplet(Page page, StudioModuleService sms, AppletUtilities au,
+            List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        createDesign();
     }
 
     public ReportEditorPage getReportEditorPage() {
         return reportEditorPage;
     }
 
-    public void designChildItem(int childTabIndex) throws UnifyException {
+    public void createDesign() throws UnifyException {
         ReportConfiguration reportConfiguration = (ReportConfiguration) form.getFormBean();
-        Object id = reportConfiguration.getId();
-        String subTitle = reportConfiguration.getDescription();
-        setTabDefAndSaveCurrentForm(childTabIndex);
-        reportEditorPage = constructNewReportEditorPage(reportConfiguration.getReportable(), id, subTitle);
-        reportEditorPage.newEditor();
-        viewMode = ViewMode.CUSTOM_PAGE;
+        Long reportConfigurationId = reportConfiguration.getId();
+        if (reportConfigurationId != null) {
+            String subTitle = reportConfiguration.getDescription();
+            reportEditorPage = constructNewReportEditorPage(reportConfiguration.getReportable(), reportConfigurationId,
+                    subTitle);
+            reportEditorPage.newEditor();
+        }
     }
 
     private ReportEditorPage constructNewReportEditorPage(String entityName, Object id, String subTitle)

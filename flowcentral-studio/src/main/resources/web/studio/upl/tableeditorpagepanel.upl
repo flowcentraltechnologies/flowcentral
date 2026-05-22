@@ -14,12 +14,7 @@
 // the License.
 
 !fc-tableeditorpagepanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;} heights:$l{none 100% none}}
-	components:$c{headerBar tableEditorBodyPanel editColumnPanel}
-
-// Override
-!ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{saveBtn}
-	components:$f{moreActionButtons}
+	components:$c{tableEditorBodyPanel editColumnPanel}
 
 // Table editor panel
 !ui-panel:tableEditorBodyPanel style:$s{height:100%;}

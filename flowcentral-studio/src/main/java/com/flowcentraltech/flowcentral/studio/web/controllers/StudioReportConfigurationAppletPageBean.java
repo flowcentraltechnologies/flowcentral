@@ -15,8 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
-import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletPageBean;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioReportConfigurationApplet;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Studio report configuration component applet page bean.
@@ -25,14 +25,15 @@ import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioReportConf
  * @since 4.1
  */
 public class StudioReportConfigurationAppletPageBean
-        extends AbstractEntityFormAppletPageBean<StudioReportConfigurationApplet> {
+        extends AbstractStudioAppComponentAppletPageBean<StudioReportConfigurationApplet> {
 
-    public String getInstTitle() {
-        return getApplet().getInstTitle();
+    public StudioReportConfigurationApplet getApplet() {
+        return super.getApplet();
     }
 
-    public String getTypeTitle() {
-        return getApplet().getTypeTitle();
+    @Override
+    public void setApplet(StudioReportConfigurationApplet applet) throws UnifyException {
+        super.setApplet(applet);
     }
 
 }
