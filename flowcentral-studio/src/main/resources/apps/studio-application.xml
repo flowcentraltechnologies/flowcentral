@@ -14,6 +14,11 @@
 	</helpSheets>
 	<!-- Widget Types -->
 	<widgetTypes>
+		<widgetType name="entitybasetypelist"
+			description="$m{studio.widgettype.entitybasetypelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select blankOption:$s{} list:entitybasetypelist exclude:$l{STA SWK NME CGE CNE APE}"
+			renderer="!ui-label" />
 		<widgetType name="entitytemplatetext" listOption="true"
 			description="$m{studio.widgettype.templatetext}" dataType="STRING"
 			inputType="STRING"
@@ -3134,10 +3139,8 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="baseType" inputWidget="application.enumlist"
+						<field name="baseType" inputWidget="entitybasetypelist"
 							column="0" disabled="true" required="true" />
-						<field name="entityClass" inputWidget="application.text"
-							column="0" editable="false" required="true" saveAs="true" />
 						<field name="tableName" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
 						<field name="dateFormatter"
@@ -3349,14 +3352,8 @@
 							visible="false" switchOnChange="true" />
 						<field name="property" inputWidget="entitypropertylist"
 							column="0" visible="false" switchOnChange="true" />
-						<field name="type" inputWidget="application.enumlist"
-							column="0" required="true" disabled="true" />
 						<field name="columnName"
 							inputWidget="application.columnname" column="0" required="false" />
-						<field name="jsonName" inputWidget="application.text"
-							column="0" />
-						<field name="jsonFormatter"
-							inputWidget="studio.jsonformatterlist" column="0" />
 						<field name="inputLabel" inputWidget="application.text"
 							column="0" required="false" />
 						<field name="inputWidget"
@@ -3376,30 +3373,34 @@
 							column="0" visible="false" />
 						<field name="autoFormat" inputWidget="application.text"
 							column="0" visible="false" />
+						<field name="jsonName" inputWidget="application.text"
+							column="0" />
+						<field name="jsonFormatter"
+							inputWidget="studio.jsonformatterlist" column="0" />
 						<field name="defaultVal" inputWidget="application.text"
 							column="0" visible="false" />
 					</section>
 					<section name="optionDetails" columns="TYPE_2">
-						<field name="auditable" inputWidget="application.checkbox"
-							column="0" visible="false" />
-						<field name="reportable" inputWidget="application.checkbox"
-							column="0" visible="false" />
-						<field name="trim" inputWidget="application.checkbox"
-							column="0" visible="false" />
-						<field name="allowNegative"
-							inputWidget="application.checkbox" column="0" visible="false" />
-						<field name="readOnly" inputWidget="application.checkbox"
-							column="0" visible="false" />
-						<field name="nullable" inputWidget="application.checkbox"
+						<field name="basicSearch" inputWidget="application.checkbox"
 							column="0" visible="false" />
 						<field name="maintainLink"
-							inputWidget="application.checkbox" column="1" visible="false" />
+							inputWidget="application.checkbox" column="0" visible="false" />
 						<field name="descriptive" inputWidget="application.checkbox"
-							column="1" visible="false" />
-						<field name="basicSearch" inputWidget="application.checkbox"
-							column="1" visible="false" />
+							column="0" visible="false" />
 						<field name="branchScoping"
+							inputWidget="application.checkbox" column="0" visible="false" />
+						<field name="auditable" inputWidget="application.checkbox"
+							column="1" visible="false" />
+						<field name="reportable" inputWidget="application.checkbox"
+							column="1" visible="false" />
+						<field name="trim" inputWidget="application.checkbox"
+							column="1" visible="false" />
+						<field name="allowNegative"
 							inputWidget="application.checkbox" column="1" visible="false" />
+						<field name="readOnly" inputWidget="application.checkbox"
+							column="1" visible="false" />
+						<field name="nullable" inputWidget="application.checkbox"
+							column="1" visible="false" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"

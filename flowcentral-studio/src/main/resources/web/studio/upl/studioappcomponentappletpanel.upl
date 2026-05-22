@@ -32,7 +32,7 @@
 	eventHandler:$d{!ui-event event:onclick action:$c{prepareEntitySaveAsAct}}
 !ui-button:updateBtn caption:$m{button.save}
 	eventHandler:$d{!ui-event event:onclick action:$c{updateAct}}
-!ui-button:deleteBtn caption:$m{button.delete}
+!ui-button:deleteBtn caption:$m{button.delete} styleClass:$e{fc-redbutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{deleteAct}}
-!ui-button:cancelBtn caption:$m{button.close}
+!ui-button:cancelBtn caption:$m{button.close} styleClass:$e{fc-bluebutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}

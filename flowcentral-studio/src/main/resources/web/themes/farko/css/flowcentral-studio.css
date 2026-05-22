@@ -375,8 +375,8 @@
 .studiodetail .fc-filter .item,
 .studiodetail .fc-fieldsequence .item,
 .studiodetail .fc-propertysequence .item,
-.studiodetail .fc-setvalues .item {width:86px;margin-right:4px;}
-.studiodetail .fc-searchinputs .vitem {width:186px;margin-right:4px;}
+.studiodetail .fc-setvalues .item {width:98px;margin-right:4px;}
+.studiodetail .fc-searchinputs .vitem {width:198px;margin-right:4px;}
 .studiodetail .fc-tabsheet {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-fieldsequence .abutton {min-width:18px;}
 .studiodetail .fc-propertysequence .atab {width:initial;}
