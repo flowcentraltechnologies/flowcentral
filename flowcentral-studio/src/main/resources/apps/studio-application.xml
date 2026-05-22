@@ -3484,6 +3484,18 @@
 					</setStates>
 				</formStatePolicy>
 				<formStatePolicy type="ON_SWITCH"
+					name="pvFieldPolicy"
+					description="$m{studio.appentityfield.form.formstatepolicy.processvariablefield}">
+					<onCondition>
+						<restriction type="AMONGST" field="dataType"
+							paramA="ST" />
+					</onCondition>
+					<setStates>
+						<setState type="FIELD"
+							target="defaultVal" visible="TRUE" />
+					</setStates>
+				</formStatePolicy>
+				<formStatePolicy type="ON_SWITCH"
 					name="intFieldPolicy"
 					description="$m{studio.appentityfield.form.formstatepolicy.integerfield}">
 					<onCondition>

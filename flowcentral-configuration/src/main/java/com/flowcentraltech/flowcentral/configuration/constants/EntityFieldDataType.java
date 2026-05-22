@@ -433,6 +433,17 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             false,
             false),
+    PROCESS_VARIABLE(
+            "PV",
+            DataType.STRING,
+            8,
+            false,
+            false,
+            false,
+            true,
+            true,
+            false,
+            false),
     LIST_ONLY(
             "LO",
             null,
@@ -548,7 +559,8 @@ public enum EntityFieldDataType implements EnumConst {
     }
 
     public boolean isSupportLingual() {
-        return STRING.equals(this) || DATE.equals(this) || TIMESTAMP.equals(this) || TIMESTAMP_UTC.equals(this);
+        return STRING.equals(this) || PROCESS_VARIABLE.equals(this) || DATE.equals(this) || TIMESTAMP.equals(this)
+                || TIMESTAMP_UTC.equals(this);
     }
 
     public boolean isEnumDataType() {
@@ -570,6 +582,10 @@ public enum EntityFieldDataType implements EnumConst {
 
     public boolean isUnlinkable() {
         return REF_UNLINKABLE.equals(this);
+    }
+
+    public boolean isProcessVariable() {
+        return PROCESS_VARIABLE.equals(this);
     }
 
     public boolean isPrimitive() {
@@ -742,6 +758,7 @@ public enum EntityFieldDataType implements EnumConst {
             case REF:
             case REF_FILEUPLOAD:
             case REF_UNLINKABLE:
+            case PROCESS_VARIABLE:
             case SCRATCH:
             case SHORT:
             case SHORT_ARRAY:
