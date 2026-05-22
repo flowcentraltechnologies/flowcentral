@@ -35,4 +35,8 @@ public class StudioNotifTemplateAppletPageBean extends AbstractStudioAppComponen
         super.setApplet(applet);
     }
 
+    public String getTemplateEntity() throws UnifyException {
+        return getApplet().getTemplateEntity();
+    }
+
 }

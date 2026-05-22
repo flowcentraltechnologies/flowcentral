@@ -110,6 +110,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> branchScopingFieldDefList;
 
+    private List<ListData> templateOptionsList;
+
     private Map<String, EntityFieldDef> fieldDefMap;
 
     private Map<String, String> fieldLabelMap;
@@ -930,6 +932,36 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return listOnlyFieldDefList;
+    }
+
+    public List<ListData> getTemplateOptionsList() throws UnifyException {
+        if (templateOptionsList == null) {
+            synchronized (this) {
+                if (templateOptionsList == null) {
+                    templateOptionsList = new ArrayList<ListData>();
+                    for (EntityFieldDef entityFieldDef : getBaseFieldDefList()) {
+                        if (!entityFieldDef.isPrimaryKey()) {
+                            templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
+                                    "BSE:" + entityFieldDef.getFieldLabel()));
+                        }
+                    }
+
+                    for (EntityFieldDef entityFieldDef : getActFieldDefList()) {
+                        templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
+                                "FLD:" + entityFieldDef.getFieldLabel()));
+                    }
+
+                    for (EntityFieldDef entityFieldDef : getListOnlyFieldDefList()) {
+                        templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
+                                "LST:" + entityFieldDef.getFieldLabel()));
+                    }
+
+                    templateOptionsList = Collections.unmodifiableList(templateOptionsList);
+                }
+            }
+        }
+
+        return templateOptionsList;
     }
 
     public List<EntityFieldDef> getBranchScopingFieldDefList() {

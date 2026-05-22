@@ -45,10 +45,10 @@ public class NotificationTemplate extends BaseApplicationEntity {
     @Column(length = 128, nullable = true)
     private String entity;
 
-    @Column(length = 128)
+    @Column(length = 1024, nullable = true)
     private String subject;
 
-    @Column(type = ColumnType.CLOB)
+    @Column(type = ColumnType.CLOB, nullable = true)
     private String template;
 
     @ChildList

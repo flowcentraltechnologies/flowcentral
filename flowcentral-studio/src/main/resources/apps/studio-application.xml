@@ -14,6 +14,16 @@
 	</helpSheets>
 	<!-- Widget Types -->
 	<widgetTypes>
+		<widgetType name="entitytemplatetext" listOption="true"
+			description="$m{studio.widgettype.templatetext}" dataType="STRING"
+			inputType="STRING"
+			editor="!ui-text options:$s{entitytemplateoptionslist}"
+			renderer="!ui-label" />
+		<widgetType name="entitytemplaterichtexteditor" listOption="true"
+			description="$m{studio.widgettype.templaterichtexteditor}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-richtexteditor rows:16 options:$s{entitytemplateoptionslist}"
+			renderer="!ui-label" />
 		<widgetType name="environmentdelegatelist"
 			description="$m{studio.widgettype.environmentdelegatelist}"
 			dataType="STRING" inputType="STRING"

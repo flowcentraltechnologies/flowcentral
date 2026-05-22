@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
@@ -60,6 +61,11 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet 
         return templateForm;
     }
 
+    public String getTemplateEntity() throws UnifyException {
+        final NotificationTemplate tempate = form != null? (NotificationTemplate) form.getFormBean() : null;
+        return tempate != null ? tempate.getEntity(): null;
+    }
+    
     private static FormTabDef getFormTabDef(AppletUtilities au) throws UnifyException {
         if (formTabDef == null) {
             synchronized (StudioNotifTemplateApplet.class) {
@@ -67,14 +73,14 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet 
                     final EntityDef entityDef = au.getEntityDef("notification.notifTemplate");
                     final List<FormFieldDef> fieldDefs = new ArrayList<FormFieldDef>();
                     EntityFieldDef entityFieldDef = entityDef.getFieldDef("subject");
-                    WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef("application.text");
+                    WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef("studio.entitytemplatetext");
                     String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
                             entityFieldDef, null, null);
                     fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null,
                             null, entityFieldDef.getFieldLabel(), renderer, 0, false, false,
                             true, true, true, false));
                     entityFieldDef = entityDef.getFieldDef("template");
-                    widgetTypeDef = au.getWidgetTypeDef("application.richtexteditorlarge");
+                    widgetTypeDef = au.getWidgetTypeDef("studio.entitytemplaterichtexteditor");
                     renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
                             entityFieldDef, null, null);
                     fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null,

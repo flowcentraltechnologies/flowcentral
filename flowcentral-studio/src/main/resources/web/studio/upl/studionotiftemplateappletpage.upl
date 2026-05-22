@@ -17,7 +17,7 @@
 
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}
-	components:$c{templateForm}
+	components:$c{templateForm templateOptions}
 
 // Applet panel
 !fc-studionotiftemplateappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
@@ -26,5 +26,7 @@
 
 // Template form
 !fc-miniform:templateForm binding:applet.templateForm
+!ui-textoptions:templateOptions alias:$s{entitytemplateoptionslist}
+	list:$s{studioentitytemplateoptionslist} listParams:$l{templateEntity}
 
 // Actions
