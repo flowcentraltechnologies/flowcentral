@@ -402,7 +402,13 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
                             result = new Object[tupleResult.size()];
                             for (int i = 0; i < result.length; i++) {
-                                result[i] = tupleResult.get(i).get(0);
+                                Object val = tupleResult.get(i).get(0);
+                                EntityInfo valEntityInfo = val != null ? interconnect.findEntityInfoByClass(val.getClass()) : null;
+                                if (valEntityInfo != null) {
+                                    val = PropertyUtils.getProperty(val, "id");
+                                }
+                                
+                                result[i] = val;
                             }
                         }
                             break;

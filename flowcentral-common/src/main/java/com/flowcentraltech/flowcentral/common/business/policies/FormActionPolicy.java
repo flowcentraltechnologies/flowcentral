@@ -16,6 +16,9 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.List;
+
+import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -26,5 +29,23 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface FormActionPolicy extends EntityActionPolicy {
 
+    /**
+     * Gets confirmation message.
+     * 
+     * @return the confirmation message otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     String getConfirmation() throws UnifyException;
+
+    /**
+     * Gets action rules.
+     * 
+     * @param entityName
+     *                   the entity name
+     * @return the list of rules
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getRuleList(String entityName) throws UnifyException;
 }

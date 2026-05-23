@@ -26,8 +26,8 @@ import org.junit.Test;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.test.AbstractFlowCentralTest;
 import com.tcdng.unify.core.criterion.Restriction;
 
 /**

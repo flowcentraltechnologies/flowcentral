@@ -29,6 +29,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.AbstractBootService;
 import com.tcdng.unify.core.application.BootInstallationInfo;
+import com.tcdng.unify.core.application.PostBootSetup;
 import com.tcdng.unify.core.application.StartupShutdownHook;
 
 /**

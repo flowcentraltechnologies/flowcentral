@@ -86,6 +86,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> stringFieldDefList;
 
+    private List<EntityFieldDef> baseFieldDefList;
+
+    private List<EntityFieldDef> actFieldDefList;
+
     private List<EntityFieldDef> fkFieldDefList;
 
     private List<EntityFieldDef> columnFieldDefList;
@@ -105,6 +109,8 @@ public class EntityDef extends BaseApplicationEntityDef {
     private List<EntityFieldDef> mappedFieldDefList;
 
     private List<EntityFieldDef> branchScopingFieldDefList;
+
+    private List<ListData> templateOptionsList;
 
     private Map<String, EntityFieldDef> fieldDefMap;
 
@@ -127,6 +133,8 @@ public class EntityDef extends BaseApplicationEntityDef {
     private List<EntityAttachmentDef> attachmentList;
 
     private List<UniqueConstraintDef> uniqueConstraintList;
+
+    private Map<String, UniqueConstraintDef> uniqueConstraintMap;
 
     private List<IndexDef> indexList;
 
@@ -848,6 +856,45 @@ public class EntityDef extends BaseApplicationEntityDef {
         return fkFieldDefList;
     }
 
+    public List<EntityFieldDef> getBaseFieldDefList() {
+        if (baseFieldDefList == null) {
+            synchronized (this) {
+                if (baseFieldDefList == null) {
+                    baseFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isBase() && !entityFieldDef.isListOnly()) {
+                            baseFieldDefList.add(entityFieldDef);
+                        }
+                    }
+                    
+                    baseFieldDefList = DataUtils.unmodifiableList(baseFieldDefList);
+                }
+            }
+        }
+
+        return baseFieldDefList;
+    }
+
+    public List<EntityFieldDef> getActFieldDefList() {
+        if (actFieldDefList == null) {
+            synchronized (this) {
+                if (actFieldDefList == null) {
+                    actFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (!entityFieldDef.isBase() && !entityFieldDef.isChild() && !entityFieldDef.isChildList()
+                                && !entityFieldDef.isListOnly()) {
+                            actFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    actFieldDefList = DataUtils.unmodifiableList(actFieldDefList);
+                }
+            }
+        }
+
+        return actFieldDefList;
+    }
+
     public List<EntityFieldDef> getColumnFieldDefList() {
         if (columnFieldDefList == null) {
             synchronized (this) {
@@ -885,6 +932,36 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return listOnlyFieldDefList;
+    }
+
+    public List<ListData> getTemplateOptionsList() throws UnifyException {
+        if (templateOptionsList == null) {
+            synchronized (this) {
+                if (templateOptionsList == null) {
+                    templateOptionsList = new ArrayList<ListData>();
+                    for (EntityFieldDef entityFieldDef : getBaseFieldDefList()) {
+                        if (!entityFieldDef.isPrimaryKey()) {
+                            templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
+                                    "f: " + entityFieldDef.getFieldLabel()));
+                        }
+                    }
+
+                    for (EntityFieldDef entityFieldDef : getActFieldDefList()) {
+                        templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
+                                "f: " + entityFieldDef.getFieldLabel()));
+                    }
+
+                    for (EntityFieldDef entityFieldDef : getListOnlyFieldDefList()) {
+                        templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
+                                "f: " + entityFieldDef.getFieldLabel()));
+                    }
+
+                    templateOptionsList = Collections.unmodifiableList(templateOptionsList);
+                }
+            }
+        }
+
+        return templateOptionsList;
     }
 
     public List<EntityFieldDef> getBranchScopingFieldDefList() {
@@ -1000,11 +1077,20 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public UniqueConstraintDef getUniqueConstraint(String name) {
         if (uniqueConstraintList != null) {
-            for (UniqueConstraintDef uniqueConstraintDef : uniqueConstraintList) {
-                if (uniqueConstraintDef.getName().equals(name)) {
-                    return uniqueConstraintDef;
+            if (uniqueConstraintMap == null) {
+                synchronized (this) {
+                    if (uniqueConstraintMap == null) {
+                        uniqueConstraintMap = new HashMap<String, UniqueConstraintDef>();
+                        for (UniqueConstraintDef uniqueConstraintDef : uniqueConstraintList) {
+                            uniqueConstraintMap.put(uniqueConstraintDef.getName(), uniqueConstraintDef);
+                        }
+
+                        uniqueConstraintMap = DataUtils.unmodifiableMap(uniqueConstraintMap);
+                    }
                 }
             }
+
+            return uniqueConstraintMap.get(name);
         }
 
         return null;
@@ -1541,7 +1627,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addAttachmentDef(FileAttachmentType type, String name, String description) {
+        public Builder addAttachmentDef(FileAttachmentType type, String name, String description, String label) {
             if (attachmentDefMap == null) {
                 attachmentDefMap = new LinkedHashMap<String, EntityAttachmentDef>();
             }
@@ -1550,7 +1636,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Attachment with name [" + name + "] already exists in this definition.");
             }
 
-            attachmentDefMap.put(name, new EntityAttachmentDef(type, name, description));
+            attachmentDefMap.put(name, new EntityAttachmentDef(type, name, description, label));
             return this;
         }
 
@@ -1619,7 +1705,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 uploadList = new ArrayList<EntityUploadDef>();
             }
 
-            uploadList.add(new EntityUploadDef(name, description, fieldSequenceDef, constraintAction));
+            uploadList.add(new EntityUploadDef(longName, name, description, fieldSequenceDef, constraintAction));
             return this;
         }
 

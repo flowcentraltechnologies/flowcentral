@@ -45,4 +45,12 @@ public class WorkflowQuery extends BaseApplicationEntityQuery<Workflow> {
         return (WorkflowQuery) addEquals("runnable", true);
     }
 
+    public WorkflowQuery notPublished() {
+        return (WorkflowQuery) addEquals("published", false);
+    }
+
+    public WorkflowQuery notRunnable() {
+        return (WorkflowQuery) addEquals("runnable", false);
+    }
+
 }

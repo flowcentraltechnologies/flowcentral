@@ -31,15 +31,4 @@ public interface OSMessagingResponseConstants {
 
     String ERROR_MSG = "Error";
 
-    String PROCESSOR_UNKNOWN = "GP01";
-
-    String NO_TARGET_SPECIFIED = "GP02";
-
-    String NO_SOURCE_SPECIFIED = "GP03";
-
-    String NO_PROCESSOR_SPECIFIED = "GP04";
-
-    String PROCESSING_EXCEPTION = "GP05";
-    
-    String NO_TARGET_NOT_ADDRESSED = "GP06"; 
 }

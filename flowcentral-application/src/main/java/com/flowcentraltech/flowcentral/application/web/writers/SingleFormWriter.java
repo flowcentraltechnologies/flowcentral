@@ -57,7 +57,9 @@ public class SingleFormWriter extends AbstractControlWriter {
         super.doWriteBehavior(writer, widget, handlers);
         SingleFormWidget singleFormWidget = (SingleFormWidget) widget;
         SingleFormPanel<?> singleFormPanel = singleFormWidget.getSingleFormPanel();
-        writer.writeBehavior(singleFormPanel);
-        addPageAlias(singleFormWidget.getId(), singleFormPanel);
+        if (singleFormPanel != null) {
+            writer.writeBehavior(singleFormPanel);
+            addPageAlias(singleFormWidget.getId(), singleFormPanel);
+        }
     }
 }

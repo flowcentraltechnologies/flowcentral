@@ -78,5 +78,9 @@ public class UniqueConstraintDef {
     public boolean isCaseInsensitive() {
         return caseInsensitive;
     }
+    
+    public boolean isAllFieldsMatch(List<String> fieldList) {
+        return this.fieldList.size() == fieldList.size() && this.fieldList.containsAll(fieldList);
+    }
 
 }

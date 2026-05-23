@@ -919,14 +919,15 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final EntityDef _entityDef = form.getFormDef().getEntityDef();
         EntityActionResult entityActionResult = null;
         if (isWorkflowCopy()) {
-            final WorkEntity workEntity = (WorkEntity) inst;
-            final String workflowName = viewMode.isCreateForm() || workEntity.getOriginalCopyId() == null
-                    ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(_currFormAppletDef.getLongName())
-                    : (actionMode.isDelete()
-                            ? ApplicationNameUtils.getWorkflowCopyDeleteWorkflowName(_currFormAppletDef.getLongName())
+            final WorkEntity workEntity = (WorkEntity) inst; 
+            final String workflowName = actionMode.isDelete()
+                    ? ApplicationNameUtils.getWorkflowCopyDeleteWorkflowName(_currFormAppletDef.getLongName())
+                    : (workEntity.getOriginalCopyId() == null
+                            ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(_currFormAppletDef.getLongName())
                             : ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(_currFormAppletDef.getLongName()));
+
             final String policy = actionMode.isDelete() ? null
-                    : (viewMode.isCreateForm()
+                    : (workEntity.getOriginalCopyId() == null
                             ? _currFormAppletDef.getPropValue(String.class,
                                     AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY)
                             : _currFormAppletDef.getPropValue(String.class,
@@ -997,11 +998,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return entityActionResult;
     }
 
-    public EntityActionResult formActionOnInst(String actionPolicyName, String formActionName) throws UnifyException {
+    public EntityActionResult formActionOnInst(String actionPolicyName, String actionRule, String formActionName)
+            throws UnifyException {
         AbstractForm _form = getResolvedForm();
         final FormContext formContext = _form.getCtx();
         Entity _inst = (Entity) _form.getFormBean();
         EntityActionContext efCtx = new EntityActionContext(_form.getFormDef().getEntityDef(), _inst, actionPolicyName);
+        efCtx.setActionRule(actionRule);
         efCtx.setAll(formContext);
         if (isListingView()) {
             final String listingGenerator = listingForm.getFormListing().getListingGenerator();
@@ -1112,8 +1115,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return getResolvedForm().getBeanTitle();
     }
 
-    public String getAssignmentTitle() {
-        return assignmentPage != null ? assignmentTitle = assignmentPage.getMainTitle() : assignmentTitle;
+    public String getAssignmentTitle() throws UnifyException {
+        return assignmentPage != null ? assignmentTitle = au().resolveSessionMessage(assignmentPage.getMainTitle()) : assignmentTitle;
     }
 
     public String getAssignmentSubTitle() {
@@ -1193,7 +1196,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public boolean matchFormBeanToAppletPropertyCondition(String conditionPropName) throws UnifyException {
         return au().formBeanMatchAppletPropertyCondition(getFormAppletDef(), form, conditionPropName);
     }
+    
+    public boolean matchFormBeanToAppletPropertyConditionWhenPresent(String conditionPropName) throws UnifyException {
+        return au().formBeanMatchAppletPropertyConditionWhenPresent(getFormAppletDef(), form, conditionPropName);
+    }
 
+    
     public void ensureCurrentAppletStruct() throws UnifyException {
         AppletDef _currFormAppletDef = getFormAppletDef();
         if (_currFormAppletDef != null) {
@@ -1245,7 +1253,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         SectorIcon sectorIcon = getSectorIcon();
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityClassDef entityClassDef = getEntityClassDef(assignPageDef.getEntity());
-        breadCrumbs.setLastCrumbTitle(entityClassDef.getEntityDef().getDescription());
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage(entityClassDef.getEntityDef().getDescription()));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         final String pseudoDeleteField = _appletDef.getPropValue(boolean.class,
                 AppletPropertyConstants.ASSIGNMENT_PSEUDO_DELETE) ? _appletDef.getPseudoDeleteField() : null;
@@ -1341,7 +1349,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 : null;
         final String beanTitle = !StringUtils.isBlank(createNewCaption) ? createNewCaption
                 : au().resolveSessionMessage(formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
-                        entityClassDef.getEntityDef().getDescription());
+                        au().resolveSessionMessage(entityClassDef.getEntityDef().getDescription()));
         FormDef formDef = getPreferredForm(PreferredFormType.INPUT_ONLY, _currentFormAppletDef, (Entity) inst,
                 formMode.formProperty());
         return constructForm(formDef, (Entity) inst, formMode, beanTitle, childFkFieldName, isChild);
@@ -1387,7 +1395,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 : !StringUtils.isBlank(createNewCaption) ? createNewCaption
                         : au().resolveSessionMessage(
                                 formMode.isCreate() ? "$m{form.newentity}" : "$m{form.maintainentity}",
-                                formDef.getEntityDef().getDescription());
+                                        au().resolveSessionMessage(formDef.getEntityDef().getDescription()));
         return constructForm(formDef, inst, formMode, beanTitle, childFkFieldName, isChild);
     }
 
@@ -1801,6 +1809,18 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         EntityActionResult entityActionResult = null;
         Long entityInstId = (Long) inst.getId();
         if (viewMode.isCreateForm()) {
+            final AppletDef _currFormAppletDef = getFormAppletDef();
+            String channel = _currFormAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL);
+            if (StringUtils.isBlank(channel)) {
+                channel = _currFormAppletDef.getPropValue(String.class,
+                        AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
+            }
+            
+            if (!StringUtils.isBlank(channel)) {
+                au().workItemUtilities().checkSubmitToWorkflowChannel(channel, (WorkEntity) inst);
+            }
+
             entityActionResult = createInst();
             takeAuditSnapshot(rCtx.auditEventType());
             entityInstId = (Long) entityActionResult.getResult();

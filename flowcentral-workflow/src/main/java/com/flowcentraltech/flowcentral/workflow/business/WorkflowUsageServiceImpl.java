@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 
 /**
  * Default implementation of workflow usage service.
@@ -151,7 +152,7 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
 
     }
 }

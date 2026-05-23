@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.integration.activemq;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.ParamValues;
@@ -25,6 +24,7 @@ import com.flowcentraltech.flowcentral.integration.business.IntegrationModuleSer
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleNameConstants;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
 import com.flowcentraltech.flowcentral.integration.entities.EndpointConfig;
+import com.flowcentraltech.flowcentral.test.AbstractFlowCentralTest;
 import com.tcdng.unify.core.data.ParamConfig;
 
 /**

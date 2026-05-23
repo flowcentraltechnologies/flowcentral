@@ -50,6 +50,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.data.BadgeInfo;
 import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 
 /**
@@ -68,19 +69,19 @@ public abstract class AbstractTable<T, U> {
         SIMPLE,
         ENABLED_UPLOAD,
         DISABLED_UPLOAD;
-        
+
         public boolean isSimple() {
             return SIMPLE.equals(this);
         }
-        
+
         public boolean isEnabledUpload() {
             return ENABLED_UPLOAD.equals(this);
         }
-        
+
         public boolean isDisabledUpload() {
             return DISABLED_UPLOAD.equals(this);
         }
-        
+
         public boolean isUpload() {
             return ENABLED_UPLOAD.equals(this) || DISABLED_UPLOAD.equals(this);
         }
@@ -129,6 +130,8 @@ public abstract class AbstractTable<T, U> {
     private boolean basicSearchMode;
 
     private boolean viewOnly;
+
+    private boolean editable;
 
     private boolean disabled;
 
@@ -182,6 +185,7 @@ public abstract class AbstractTable<T, U> {
         this.highlightedRow = -1;
         this.detailsIndex = -1;
         this.sections = Collections.emptyList();
+        this.editable = true;
     }
 
     public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
@@ -398,11 +402,19 @@ public abstract class AbstractTable<T, U> {
     }
 
     public boolean isViewOnly() {
-        return viewOnly || disabled;
+        return viewOnly || disabled || !editable;
     }
 
     public void setViewOnly(boolean viewOnly) {
         this.viewOnly = viewOnly;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     public boolean isDisabled() {
@@ -489,7 +501,7 @@ public abstract class AbstractTable<T, U> {
             postTableSummaryLines = entryPolicy != null && dispItemList != null
                     ? entryPolicy.getPostTableSummaryLines(parentReader, new BeanValueListStore(dispItemList))
                     : null;
-         }
+        }
     }
 
     public boolean isTotalLabelColumn(String fieldName) {
@@ -644,7 +656,7 @@ public abstract class AbstractTable<T, U> {
         clearTableSummaryLines();
         getDispItems();
     }
-    
+
     public void clearSelected() throws UnifyException {
         setSourceObjectClearSelected(sourceObject);
     }
@@ -737,6 +749,27 @@ public abstract class AbstractTable<T, U> {
 
     protected void setSections(List<Section> sections) {
         this.sections = DataUtils.unmodifiableList(sections);
+    }
+
+    public static class ChoiceConfig {
+
+        private final BadgeInfo choiceBadgeInfo;
+
+        private final int columnIndex;
+
+        public ChoiceConfig(BadgeInfo choiceBadgeInfo, int columnIndex) {
+            this.choiceBadgeInfo = choiceBadgeInfo;
+            this.columnIndex = columnIndex;
+        }
+
+        public BadgeInfo getChoiceBadgeInfo() {
+            return choiceBadgeInfo;
+        }
+
+        public int getColumnIndex() {
+            return columnIndex;
+        }
+
     }
 
     public static class Section {

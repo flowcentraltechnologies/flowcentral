@@ -30,6 +30,8 @@ public class ApplicationDef implements VersionedEntityDef {
 
     private String description;
 
+    private String label;
+
     private Long id;
 
     private long version;
@@ -50,11 +52,12 @@ public class ApplicationDef implements VersionedEntityDef {
 
     private String sectorColor;
 
-    public ApplicationDef(String name, String description, Long id, long version, boolean developable,
+    public ApplicationDef(String name, String description, String label, Long id, long version, boolean developable,
             boolean menuAccess, String moduleName, String moduleDesc, String moduleLabel, String moduleShortCode,
             String sectorShortCode, String sectorColor) {
         this.name = name;
         this.description = description;
+        this.label = label;
         this.id = id;
         this.version = version;
         this.developable = developable;
@@ -73,6 +76,10 @@ public class ApplicationDef implements VersionedEntityDef {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     @Override

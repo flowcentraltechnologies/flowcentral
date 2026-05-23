@@ -47,8 +47,8 @@ public class StudioEntityFieldDataTypeListCommand extends AbstractApplicationLis
     private List<EntityFieldDataType> supportedTypeList = Collections
             .unmodifiableList(Arrays.asList(EntityFieldDataType.REF, EntityFieldDataType.REF_UNLINKABLE,
                     EntityFieldDataType.REF_FILEUPLOAD, EntityFieldDataType.ENUM_REF, EntityFieldDataType.ENUM,
-                    EntityFieldDataType.ENUM_DYN, EntityFieldDataType.LIST_ONLY, EntityFieldDataType.CHILD,
-                    EntityFieldDataType.CHILD_LIST, EntityFieldDataType.STRING, EntityFieldDataType.STRING_ARRAY,
+                    EntityFieldDataType.ENUM_DYN, EntityFieldDataType.PROCESS_VARIABLE, EntityFieldDataType.LIST_ONLY,
+                    EntityFieldDataType.CHILD, EntityFieldDataType.CHILD_LIST, EntityFieldDataType.STRING, EntityFieldDataType.STRING_ARRAY,
                     EntityFieldDataType.CHAR, EntityFieldDataType.BOOLEAN, EntityFieldDataType.BOOLEAN_ARRAY,
                     EntityFieldDataType.LONG, EntityFieldDataType.LONG_ARRAY, EntityFieldDataType.INTEGER,
                     EntityFieldDataType.INTEGER_ARRAY, EntityFieldDataType.SHORT, EntityFieldDataType.SHORT_ARRAY,

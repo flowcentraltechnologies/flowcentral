@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.EnumerationDef;
@@ -44,10 +45,16 @@ import com.tcdng.unify.core.list.AbstractDynamicListManager;
  * @since 4.1
  */
 @Component(ApplicationModuleNameConstants.APPLICATION_DYNAMICLIST_MANAGER)
-public class DynamicListManagerImpl extends AbstractDynamicListManager {
+public class DynamicListManagerImpl extends AbstractDynamicListManager implements DynamicEnumProvider {
 
     @Configurable
     private EnvironmentService environmentService;
+    
+    @Configurable
+    private DynamicListExternalAccessibilityProvider dynamicListProvider;
+    
+    @Configurable
+    private StaticListExternalAccessibilityProvider staticListProvider;
     
     private FactoryMap<String, EnumerationDef> enumDefFactoryMap;
     
@@ -57,12 +64,40 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager {
             {
                 @Override
                 protected boolean stale(String longName, EnumerationDef enumerationDef) throws Exception {
+                    if (staticListProvider != null) {
+                        Optional<Boolean> option =  staticListProvider.isStale(longName, enumerationDef);
+                        if (option.isPresent()) {
+                            return option.get();
+                        }
+                    }
+                    
+                    if (dynamicListProvider != null) {
+                        Optional<Boolean> option =  dynamicListProvider.isStale(longName, enumerationDef);
+                        if (option.isPresent()) {
+                            return option.get();
+                        }
+                    }
+                    
                     return environmentService.value(long.class, "versionNo",
                             new AppEnumerationQuery().id(enumerationDef.getId())) > enumerationDef.getVersion();
                 }
 
                 @Override
-                protected EnumerationDef create(String longName, Object... arg1) throws Exception {
+                protected EnumerationDef create(String longName, Object... params) throws Exception {
+                    if (staticListProvider != null) {
+                        Optional<EnumerationDef> optional = staticListProvider.getEnumerationDef(longName);
+                        if (optional.isPresent()) {
+                            return optional.get();
+                        }
+                    }
+                    
+                    if (dynamicListProvider != null) {
+                        Optional<EnumerationDef> optional = dynamicListProvider.getEnumerationDef(longName);
+                        if (optional.isPresent()) {
+                            return optional.get();
+                        }
+                    }
+                    
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
                     AppEnumeration appEnumeration = environmentService
                             .list(Query.of(AppEnumeration.class).addEquals("name", nameParts.getEntityName())
@@ -70,7 +105,7 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager {
                     
                     List<EnumerationItemDef> itemsList = new ArrayList<EnumerationItemDef>();
                     for (AppEnumerationItem item : appEnumeration.getItemList()) {
-                        itemsList.add(new EnumerationItemDef(item.getCode(), item.getLabel()));
+                        itemsList.add(new EnumerationItemDef(item.getCode(), item.getLabel(), item.getColor()));
                     }
 
                     return new EnumerationDef(nameParts, appEnumeration.getDescription(), appEnumeration.getId(),
@@ -79,6 +114,11 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager {
             };
     }
     
+    @Override
+    public EnumerationDef getEnumerationDef(String longName) throws UnifyException {
+        return enumDefFactoryMap.get(longName);
+    }
+
     @Override
     public List<? extends Listable> getList(Locale locale, String listName, Object... params) throws UnifyException {
       return enumDefFactoryMap.get(listName).getItemsList();

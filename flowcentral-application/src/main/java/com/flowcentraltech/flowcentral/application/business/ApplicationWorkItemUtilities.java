@@ -35,6 +35,18 @@ import com.tcdng.unify.core.UnifyException;
 public interface ApplicationWorkItemUtilities extends FlowCentralComponent {
 
     /**
+     * Checks if workflow channel is valid for submission.
+     * 
+     * @param workflowChannelName
+     *                            the workflow channel name
+     * @param inst
+     *                            the entity instance to submit to workflow
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void checkSubmitToWorkflowChannel(String workflowChannelName, WorkEntity inst) throws UnifyException;
+
+    /**
      * Submit entity instance to workflow channel.
      * 
      * @param entityDef

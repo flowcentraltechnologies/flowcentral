@@ -98,7 +98,8 @@ public class EntityAuditSnapshotViewWriter extends AbstractWidgetWriter {
                     final boolean delete = eventType.isDelete();
                     writer.write("<tr>");
                     writer.write("<td>")
-                            .writeWithHtmlEscape(entityDef.getFieldDef(fieldSnapshot.getFieldName()).getFieldLabel())
+                            .writeWithHtmlEscape(resolveSessionMessage(
+                                    entityDef.getFieldDef(fieldSnapshot.getFieldName()).getFieldLabel()))
                             .write("</td>");
                     writer.write("<td");
                     if (highlightChange && delete) {
@@ -142,7 +143,7 @@ public class EntityAuditSnapshotViewWriter extends AbstractWidgetWriter {
             writer.write("<span class=\"eaheadertxtc");
             writer.write(" ").write(textClass);
         } else {
-            writer.write("<span class=\"eaheadertxt");            
+            writer.write("<span class=\"eaheadertxt");
         }
 
         writer.write("\">");

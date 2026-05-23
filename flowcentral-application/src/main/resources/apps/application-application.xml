@@ -12,11 +12,26 @@
 			description="$m{application.widgettype.mandatorylabel}"
 			dataType="BOOLEAN" inputType="BOOLEAN" listOption="true"
 			editor="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}"
-			renderer="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}" />
+			renderer="!ui-booleanlabel onTrue:$m{label.mandatory} onFalse:$m{label.optional}" />			
+		<widgetType name="symbollist"
+			description="$m{application.widgettype.symbollist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-symbolselect blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="restapilist"
 			description="$m{application.widgettype.restapilist}"
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select blankOption:$s{} list:restapilist"
+			renderer="!ui-label" />
+		<widgetType name="simpledatatypelist"
+			description="$m{application.widgettype.simpledatatypelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select blankOption:$s{} list:datatypelist exclude:$l{BT CT}"
+			renderer="!ui-label" />
+		<widgetType name="restapisearch"
+			description="$m{application.widgettype.restapisearch}"
+			dataType="STRING" inputType="STRING"
+			editor="!fc-entitysearch ref:$s{application.appAPIRef} listKey:$s{longName}"
 			renderer="!ui-label" />
 		<widgetType name="datatypeeditorlist"
 			description="$m{application.widgettype.datatypeeditorlist}"
@@ -39,6 +54,81 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:emailproducerconsumerlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<!-- Free Form -->
+		<widgetType name="freeforminteger" listOption="true"
+			description="$m{application.widgettype.plaininteger}" dataType="INTEGER"
+			inputType="INTEGER"
+			editor="!ui-integer useGrouping:true acceptNegative:true"
+			renderer="!ui-label formatter:$d{!integerformat useGrouping:true} style:$s{text-align:right;}" />
+		<widgetType name="freeformpassword" listOption="true"
+			description="$m{application.widgettype.plainpassword}" dataType="STRING"
+			inputType="STRING" editor="!ui-password"
+			renderer="!ui-label" />
+		<widgetType name="freeformwildname" listOption="true"
+			description="$m{application.widgettype.plainwildname}" dataType="STRING"
+			inputType="STRING"
+			editor="!ui-name special:true"
+			renderer="!ui-label" />
+		<widgetType name="freeformdecimal" listOption="true"
+			description="$m{application.widgettype.plaindecimal}" dataType="DOUBLE"
+			inputType="DOUBLE"
+			editor="!ui-decimal useGrouping:true strictFormat:true acceptNegative:true"
+			renderer="!ui-label formatter:$d{!decimalformat useGrouping:true} style:$s{text-align:right;}" />
+		<widgetType name="freeformamount" listOption="true"
+			description="$m{application.widgettype.plainamount}" dataType="DECIMAL"
+			inputType="DECIMAL"
+			editor="!ui-decimal useGrouping:true strictFormat:true acceptNegative:true"
+			renderer="!ui-label formatter:$d{!decimalformat useGrouping:true} style:$s{text-align:right;}" />
+		<widgetType name="freeformamountwhole" listOption="true"
+			description="$m{application.widgettype.plainamountwhole}"
+			dataType="DECIMAL" inputType="DECIMAL"
+			editor="!ui-decimal strictFormat:true acceptNegative:true"
+			renderer="!ui-label formatter:$d{!decimalformat useGrouping:true} style:$s{text-align:right;}" />
+		<widgetType name="freeformamountaccounting" listOption="true"
+			description="$m{application.widgettype.plainamountaccounting}"
+			dataType="DECIMAL" inputType="DECIMAL"
+			editor="!ui-decimal-accounting useGrouping:true strictFormat:true acceptNegative:true"
+			renderer="!ui-label formatter:$d{!decimalaccountingformat useGrouping:true} style:$s{text-align:right;}" />
+		<widgetType name="freeformamountaccountingwhole" listOption="true"
+			description="$m{application.widgettype.plainamountaccountingwhole}"
+			dataType="DECIMAL" inputType="DECIMAL"
+			editor="!ui-decimal-accounting useGrouping:true strictFormat:true acceptNegative:true"
+			renderer="!ui-label formatter:$d{!decimalaccountingformat precision:%s useGrouping:true} style:$s{text-align:right;}" />
+		<widgetType name="freeformpath" listOption="true"
+			description="$m{application.widgettype.plainpath}" dataType="STRING"
+			inputType="STRING" editor="!ui-path"
+			renderer="!ui-label" />
+		<widgetType name="freeformname" listOption="true"
+			description="$m{application.widgettype.plainname}" dataType="STRING"
+			inputType="STRING"
+			editor="!ui-name"
+			renderer="!ui-label" />
+		<widgetType name="freeformword" listOption="true"
+			description="$m{application.widgettype.plainword}" dataType="STRING"
+			inputType="STRING"
+			editor="!ui-word"
+			renderer="!ui-label" />
+		<widgetType name="freeformalphanumeric" listOption="true"
+			description="$m{application.widgettype.plainalphanumeric}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-alphanumeric"
+			renderer="!ui-label" />
+		<widgetType name="freeformintegertext" listOption="true"
+			description="$m{application.widgettype.plainintegertext}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-integertext"
+			renderer="!ui-label" />
+		<widgetType name="freeformtext" listOption="true"
+			description="$m{application.widgettype.plaintext}" dataType="STRING"
+			inputType="STRING"
+			editor="!ui-text"
+			renderer="!ui-label" />
+		<widgetType name="freeformtextarea" listOption="true"
+			description="$m{application.widgettype.plaintextarea}" dataType="STRING"
+			inputType="STRING"
+			editor="!ui-textarea rows:4"
+			renderer="!ui-label" />
+		<!-- General -->
 		<widgetType name="integer" listOption="true"
 			description="$m{application.widgettype.integer}" dataType="INTEGER"
 			inputType="INTEGER"
@@ -491,7 +581,7 @@
 		<widgetType name="fileattachmenttypelist"
 			description="$m{application.widgettype.fileattachmenttypelist}"
 			dataType="STRING" inputType="STRING"
-			editor="!ui-select list:fileattachmenttypelist blankOption:$m{blank.none}"
+			editor="!ui-select list:fileattachmenttypelist blankOption:$m{blank.none} exclude:$l{PNG JPG GIF BMP}"
 			renderer="!ui-listlabel list:fileattachmenttypelist" />
 		<widgetType name="fileupload"
 			description="$m{application.widgettype.fileupload}"
@@ -830,6 +920,10 @@
 					type="STRING" />
 				<field name="entity" label="$m{application.appapplet.entity}"
 					type="STRING" />
+				<field name="icon"
+					label="$m{application.appapplet.icon}"
+					type="STRING" inputWidget="application.symbollist"
+					nullable="true" />
 				<field name="routeToApplet"
 					label="$m{application.appapplet.routetoapplet}"
 					type="STRING"
@@ -850,6 +944,11 @@
 					label="$m{application.appapplet.pseudodeletefield}"
 					type="STRING"
 					nullable="true" />
+				<field name="assignSearch"
+					label="$m{application.appapplet.assignsearch}" type="STRING"
+					nullable="true"/>
+				<field name="portalAccess"
+					label="$m{application.appapplet.portalaccess}" type="BOOLEAN" />
 				<field name="menuAccess"
 					label="$m{application.appapplet.menuaccess}" type="BOOLEAN" />
 				<field name="titleFormat"
@@ -857,6 +956,9 @@
 					nullable="true" />
 				<field name="supportOpenInNewWindow"
 					label="$m{application.appapplet.supportopeninnewwindow}"
+					type="BOOLEAN" />
+				<field name="supportRemoteAccess"
+					label="$m{application.appapplet.supportremoteaccess}"
 					type="BOOLEAN" />
 				<field name="allowSecondaryTenants"
 					label="$m{application.appapplet.allowsecondarytenants}"
@@ -1424,10 +1526,14 @@
 					label="$m{application.appentityattachment.type}"
 					type="ENUM_REF"
 					references="fileattachmenttypelist"
-					inputWidget="application.enumlist" />
+					inputWidget="application.fileattachmenttypelist" />
 				<field name="typeDesc"
 					label="$m{application.appentityattachment.typedesc}"
 					type="LIST_ONLY" key="type" property="description" />
+				<field name="label"
+					label="$m{application.appentityattachment.fieldlabel}"
+					type="STRING"
+					inputWidget="application.text" />
 			</fields>
 		</entity>
 		<entity name="appEntityExpression"
@@ -1931,6 +2037,9 @@
 					label="$m{application.apptablefilter.legendlabel}"
 					type="STRING"
 					nullable="true" />
+				<field name="executionIndex"
+					label="$m{application.apptablefilter.executionindex}"
+					type="INTEGER" />					
 				<field name="filterGenerator"
 					label="$m{application.apptablefilter.filtergenerator}"
 					type="STRING"
@@ -2245,6 +2354,8 @@
 					type="STRING" />
 				<field name="policy"
 					label="$m{application.appformaction.policy}" type="STRING" />
+				<field name="rule"
+					label="$m{application.appformaction.rule}" type="STRING" nullable="true"/>
 				<field name="orderIndex"
 					label="$m{application.appformaction.orderindex}"
 					type="INTEGER" />
@@ -2704,6 +2815,13 @@
 				<field name="displayIndex"
 					label="$m{application.appenumerationitem.displayindex}"
 					type="INTEGER" />
+				<field name="color" nullable="true"
+					label="$m{application.appenumerationitem.color}"
+					references="colorschemelist"
+					type="ENUM_REF" inputWidget="application.enumlist" />
+				<field name="colorDesc"
+					label="$m{application.appenumerationitem.colordesc}"
+					type="LIST_ONLY" key="color" property="description"/>
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="codeUc"

@@ -36,7 +36,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 4.1
  */
 @Component("studiooncreateappentity-policy")
-public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy {
+public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy { 
 
     @Configurable
     private EntitySchemaManager entitySchemaManager;

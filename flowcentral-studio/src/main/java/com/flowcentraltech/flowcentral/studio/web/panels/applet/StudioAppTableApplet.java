@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppTableApplet extends StudioAppComponentApplet {
+public class StudioAppTableApplet extends AbstractStudioAppComponentApplet {
 
     private TableEditorPage tableEditorPage;
 
@@ -43,20 +43,21 @@ public class StudioAppTableApplet extends StudioAppComponentApplet {
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
+        createDesign();
     }
 
     public TableEditorPage getTableEditorPage() {
         return tableEditorPage;
     }
 
-    public void designChildItem(int childTabIndex) throws UnifyException {
+    public void createDesign() throws UnifyException {
         AppTable appTable = (AppTable) form.getFormBean();
-        Object id = appTable.getId();
-        String subTitle = appTable.getDescription();
-        setTabDefAndSaveCurrentForm(childTabIndex);
-        tableEditorPage = constructNewTableEditorPage(appTable.getEntity(), id, subTitle);
-        tableEditorPage.newEditor();
-        viewMode = ViewMode.CUSTOM_PAGE;
+        Long tableId = appTable.getId();
+        if (tableId != null) {
+            String subTitle = appTable.getDescription();
+            tableEditorPage = constructNewTableEditorPage(appTable.getEntity(), tableId, subTitle);
+            tableEditorPage.newEditor();
+        }
     }
 
     private TableEditorPage constructNewTableEditorPage(String entityName, Object id, String subTitle)

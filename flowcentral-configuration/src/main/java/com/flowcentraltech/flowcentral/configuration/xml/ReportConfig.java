@@ -34,7 +34,7 @@ import com.tcdng.unify.core.constant.PageSizeType;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "report")
-public class ReportConfig extends BaseRootConfig {
+public class ReportConfig extends BaseRootAppConfig {
 
     @JsonSerialize(using = ReportConfigTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = ReportConfigTypeXmlAdapter.Deserializer.class)

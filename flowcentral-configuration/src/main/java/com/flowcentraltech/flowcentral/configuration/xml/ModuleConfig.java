@@ -28,7 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "module")
-public class ModuleConfig extends BaseRootConfig {
+public class ModuleConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String shortCode;

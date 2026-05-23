@@ -30,12 +30,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.PortalReportProvider;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReport;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalReportParam;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
@@ -85,6 +88,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.Bold;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.HAlignType;
@@ -103,6 +107,7 @@ import com.tcdng.unify.core.criterion.ZeroParamRestriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Input;
 import com.tcdng.unify.core.data.Inputs;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Query;
@@ -131,7 +136,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ReportModuleNameConstants.REPORT_MODULE_SERVICE)
 public class ReportModuleServiceImpl extends AbstractFlowCentralService
-        implements ReportModuleService, RolePrivilegeBackupAgent {
+        implements ReportModuleService, RolePrivilegeBackupAgent, PortalReportProvider {
 
     @Configurable
     private ThemeManager themeManager;
@@ -164,6 +169,29 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void unregisterCustomApplicationRolePrivileges(Long applicationId) throws UnifyException {
         environment().deleteAll(new ReportGroupMemberQuery().applicationId(applicationId).isCustom());
+    }
+
+    @Override
+    public List<PortalReport> getPortalReports(String applicationName) throws UnifyException {
+        final List<PortalReport> reports = new ArrayList<PortalReport>();
+        for (Long reportConfigId : environment().valueList(Long.class, "id",
+                new ReportConfigurationQuery().applicationName(applicationName))) {
+            final ReportConfiguration reportConfiguration = environment().find(new ReportConfigurationQuery()
+                    .id(reportConfigId).addSelect("name", "description", "title", "parameterList"));
+            final List<PortalReportParam> params = new ArrayList<PortalReportParam>();
+            for (ReportParameter reportParameter : reportConfiguration.getParameterList()) {
+                params.add(new PortalReportParam(reportParameter.getType().name(), reportParameter.getName(),
+                        reportParameter.getDescription(), reportParameter.getLabel(), reportParameter.getDefaultVal(),
+                        reportParameter.getEditor(), reportParameter.getMandatory()));
+            }
+
+            final String reportName = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                    reportConfiguration.getName());
+            reports.add(new PortalReport(reportName, reportConfiguration.getDescription(),
+                    reportConfiguration.getTitle(), params));
+        }
+
+        return reports;
     }
 
     @Override
@@ -372,7 +400,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                     if (entityDef.isNotDelegateListOnly(reportableField.getName())) {
                         final String formatter = resolveFormatter(entityClassDef, reportableField);
                         ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
-                                defaultColumn.getCaption(), reportableField.getType(), formatter,
+                                resolveSessionMessage(defaultColumn.getCaption()), reportableField.getType(), formatter,
                                 HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
                                 true);
                         reportOptions.addColumnOptions(remoteColumnOptions);
@@ -386,9 +414,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
             if (entityDef.isNotDelegateListOnly(reportableField.getName())) {
                 final String formatter = resolveFormatter(entityClassDef, reportableField);
                 ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
-                        reportableField.getDescription(), reportableField.getType(), formatter,
-                        HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
-                        isSelectAll);
+                        resolveSessionMessage(entityDef.getFieldDef(reportableField.getName()).getFieldLabel()),
+                        reportableField.getType(), formatter, HAlignType.fromName(reportableField.getHorizontalAlign()),
+                        reportableField.getWidth(), isSelectAll);
                 reportOptions.addColumnOptions(remoteColumnOptions);
             }
         }
@@ -406,6 +434,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return formatter;
+    }
+
+    @Override
+    public UploadedFile generateDynamicReport(ReportOptions reportOptions) throws UnifyException {
+        UploadedFile uploadedFile = UploadedFile.create(reportOptions.getFilename());
+        try {
+            generateDynamicReport(reportOptions, uploadedFile.getOut());
+        } finally {
+            uploadedFile.closeOut(); 
+        }
+        
+        return uploadedFile;
     }
 
     @Override
@@ -609,6 +649,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         Report report = rb.build();
         setCommonReportParameters(report);
         reportServer.generateReport(report, outputStream);
+    }
+
+    @Override
+    public UploadedFile generateReport(Report report) throws UnifyException {
+        UploadedFile uploadedFile = UploadedFile.create(report.getTitle());
+        try {
+            generateReport(report, uploadedFile.getOut());
+        } finally {
+            uploadedFile.closeOut(); 
+        }
+        
+        return uploadedFile;
     }
 
     @Override
@@ -927,7 +979,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
 
     }
 
@@ -997,7 +1049,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     FilterConditionType type = restrictionDef.getType();
-                    SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getFieldInfo(restrictionDef.getFieldName());
+                    SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getListFieldInfo(restrictionDef.getFieldName());                   
                     ColumnType columnType = sqlFieldInfo.getColumnType();
                     if (columnType.isDate() || columnType.isTimestamp()) {
                         ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(

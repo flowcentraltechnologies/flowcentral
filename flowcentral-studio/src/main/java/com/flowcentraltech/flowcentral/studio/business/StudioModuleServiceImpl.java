@@ -112,6 +112,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Parameter;
 import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.UploadedFile;
@@ -174,6 +175,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                         case HEADLESS_TABS:
                         case MANAGE_PROPERTYLIST:
                         case CREATE_ENTITY:
+                        case CREATE_ENTITY_SUBMISSION:
                         case CREATE_ENTITY_SINGLEFORM:
                         case FORM_WIZARD:
                         case LISTING:
@@ -209,9 +211,10 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             final String entity = appletUtilities.application().getFormDef(form).getEntityDef()
                                     .getLongName();
                             final String assignDescField = null;
+                            final String assignSearch = null;
                             final String pseudoDeleteField = null;
                             StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type.appletType(), entity,
-                                    label, type.icon(), assignDescField, pseudoDeleteField, 0, true, false, false,
+                                    label, type.icon(), assignDescField, assignSearch, pseudoDeleteField, 0, false, true, false, false, false,
                                     descriptiveButtons, appletName, description, np.getInstId(), 0L);
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM, form);
                             adb.addPropDef(StudioAppletPropertyConstants.ENTITY_FORM, form);
@@ -430,7 +433,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         logDebug(taskMonitor, "Uploading studio snapshot [{0}]...", snapshotUploadFile.getFilename());
         logDebug(taskMonitor, "Validating uploaded snapshot file...");
         if (snapshotConfig == null) {
-            snapshotConfig = ConfigurationUtils.getSnapshotConfig(snapshotUploadFile.getData());
+            snapshotConfig = ConfigurationUtils.getSnapshotConfig(snapshotUploadFile);
             if (snapshotConfig == null) {
                 throwOperationErrorException(new IllegalArgumentException("Invalid snapshot file."));
             }
@@ -453,6 +456,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         studioSnapshot.setSnapshot(snapshotUploadFile.getData());
         environment().create(studioSnapshot);
         logDebug(taskMonitor, "Snapshot file [{0}] upload successfully completed.", snapshotUploadFile.getFilename());
+        
+        snapshotUploadFile.invalidate();
         return 0;
     }
 
@@ -531,7 +536,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
         installStudioFeatures(moduleInstall);
     }
 

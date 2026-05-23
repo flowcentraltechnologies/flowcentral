@@ -55,6 +55,8 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
     
     private String loginSubtitle;
     
+    private String loginImage;
+    
     private Long loginTenantId;
     
     private List<UserRoleInfo> userRoleList;
@@ -145,6 +147,14 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
 
     public void setLoginSubtitle(String loginSubtitle) {
         this.loginSubtitle = loginSubtitle;
+    }
+
+    public String getLoginImage() {
+        return loginImage;
+    }
+
+    public void setLoginImage(String loginImage) {
+        this.loginImage = loginImage;
     }
 
     public Long getLoginTenantId() {

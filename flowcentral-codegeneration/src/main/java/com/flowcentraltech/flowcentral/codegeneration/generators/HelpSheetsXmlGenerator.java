@@ -74,10 +74,11 @@ public class HelpSheetsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.HELP, descKey, appHelpSheet.getDescription());
 
                 helpSheetConfig.setName(appHelpSheet.getName());
-                helpSheetConfig.setDescription("$m{" + descKey + "}");
+                helpSheetConfig.setDescription(ctx.isSnapshotMode() ? appHelpSheet.getDescription() :"$m{" + descKey + "}");
                 helpSheetConfig.setEntity(appHelpSheet.getEntity());
                 helpSheetConfig.setLabel(appHelpSheet.getLabel());
                 helpSheetConfig.setHelpOverview(appHelpSheet.getHelpOverview());
+                helpSheetConfig.setClassified(appHelpSheet.isClassified());
 
                 List<HelpEntryConfig> entryList = new ArrayList<HelpEntryConfig>();
                 for (AppHelpEntry entry: appHelpSheet.getEntryList()) {

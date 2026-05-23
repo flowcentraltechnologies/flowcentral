@@ -42,7 +42,6 @@ public class TabSheetWriter extends AbstractControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
-        logDebug("Writing tab sheet structure [{0}]...", widget.getLongName());
         TabSheetWidget tabSheetWidget = (TabSheetWidget) widget;
         writer.write("<div");
         writeTagAttributes(writer, tabSheetWidget);
@@ -59,7 +58,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                         writer.write("<div class=\"ttabx\">");
                         writer.write("<div class=\"ttabxc\">");
                         writer.write("<span>");
-                        writer.writeWithHtmlEscape(tabDef.getTabLabel());
+                        writer.writeWithHtmlEscape(resolveSessionMessage(tabDef.getTabLabel()));
                         writer.write("</span>");
                         writer.write("</div>");
 
@@ -80,8 +79,7 @@ public class TabSheetWriter extends AbstractControlWriter {
                 for (int i = 0; i < len; i++) {
                     if (tabSheet.getTabSheetItem(i).isVisible()) {
                         TabDef tabDef = tabDefList.get(i);
-                        logDebug("Writing tab structure [{0}] with label [{1}]...", tabDef.getTabName(),
-                                tabDef.getTabLabel());
+                        final String tabLabel = resolveSessionMessage(tabDef.getTabLabel());
                         MessageType messageType = tabSheet.getReviewMessageType(tabDef.getTabName());
                         writer.write("<li id=\"").write(tabPrefix).write(i).write("\" class=\"");
                         writer.write(WidgetWriterUtils.getTabClass(i, currentIndex));
@@ -90,13 +88,13 @@ public class TabSheetWriter extends AbstractControlWriter {
                             writer.write("<img src=\"");
                             writer.writeFileImageContextURL(messageType.image());
                             writer.write("\">");
-                            writer.write("<span class=\"msg\">").writeWithHtmlEscape(tabDef.getTabLabel())
+                            writer.write("<span class=\"msg\">").writeWithHtmlEscape(tabLabel)
                                     .write("</span>");
                         } else if (tabDef.isErrors()) {
-                            writer.write("<span class=\"err\">").writeWithHtmlEscape(tabDef.getTabLabel())
+                            writer.write("<span class=\"err\">").writeWithHtmlEscape(tabLabel)
                                     .write("</span>");
                         } else {
-                            writer.writeWithHtmlEscape(tabDef.getTabLabel());
+                            writer.writeWithHtmlEscape(tabLabel);
                         }
 
                         writer.write("</li>");
@@ -114,13 +112,11 @@ public class TabSheetWriter extends AbstractControlWriter {
 
         writer.write("</div>");
         writer.write("</div>");
-        logDebug("Tab sheet structure [{0}] successfully written.", widget.getLongName());
     }
 
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
             throws UnifyException {
-        logDebug("Writing tab sheet behavior [{0}]...", widget.getLongName());
         super.doWriteBehavior(writer, widget, handlers);
         TabSheetWidget tabSheetWidget = (TabSheetWidget) widget;
 
@@ -158,6 +154,5 @@ public class TabSheetWriter extends AbstractControlWriter {
             writer.writeParam("pCurrSel", tabSheet.getCurrentTabIndex());
             writer.endFunction();
         }
-        logDebug("Tab sheet behavior [{0}] successfully written.", widget.getLongName());
     }
 }

@@ -25,6 +25,7 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public abstract class BaseConfig {
 
+    @Override
     public final String toString() {
         return StringUtils.toXmlString(this);
     }

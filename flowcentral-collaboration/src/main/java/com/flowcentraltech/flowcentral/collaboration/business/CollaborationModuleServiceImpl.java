@@ -37,6 +37,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 
 /**
  * Implementation of collaboration module service.
@@ -180,7 +181,8 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(final ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
+            throws UnifyException {
 
     }
 

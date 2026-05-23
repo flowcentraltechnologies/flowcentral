@@ -219,6 +219,10 @@ public class WfStepDef {
         return stepAppletName;
     }
 
+    public boolean isWithStepAppletName() {
+        return !StringUtils.isBlank(stepAppletName);
+    }
+
     public String getNextStepName() {
         return nextStepName;
     }

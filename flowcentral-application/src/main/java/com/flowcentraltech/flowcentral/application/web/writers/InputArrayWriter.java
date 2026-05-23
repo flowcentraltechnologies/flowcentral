@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -42,11 +40,11 @@ public class InputArrayWriter extends AbstractControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
-        InputArrayWidget inputArrayWidget = (InputArrayWidget) widget;        
+        InputArrayWidget inputArrayWidget = (InputArrayWidget) widget;
         writer.write("<table");
         writeTagAttributes(writer, inputArrayWidget);
         writer.write(">");
-        
+
         final int columns = inputArrayWidget.getColumns() <= 0 ? 1 : inputArrayWidget.getColumns();
         final String caption = inputArrayWidget.getCaption();
         if (!StringUtils.isBlank(caption)) {
@@ -55,19 +53,18 @@ public class InputArrayWriter extends AbstractControlWriter {
             writer.writeWithHtmlEscape(caption);
             writer.write("</span></tr>");
         }
-        
-        List<ValueStore> valueStoreList = inputArrayWidget.getValueList();
-        if (valueStoreList != null) {
+
+        final int len = inputArrayWidget.getItemCount();
+        if (len > 0) {
             DynamicField editCtrl = inputArrayWidget.getEditCtrl();
             DynamicField viewCtrl = inputArrayWidget.getViewCtrl();
             Control selectCtrl = inputArrayWidget.getSelectCtrl();
-            final int len = valueStoreList.size();
             final String sectionStyle = "width:" + 100 / columns + "%;";
             for (int i = 0; i < len;) {
                 writer.write("<tr class=\"line\">");
                 int j = 0;
                 for (; j < columns && i < len; j++, i++) {
-                    ValueStore lineValueStore = valueStoreList.get(i);
+                    ValueStore lineValueStore = inputArrayWidget.getItemValueStoreAt(i);
                     boolean editable = lineValueStore.retrieve(boolean.class, "editable");
                     Control valueCtrl = editable ? editCtrl : viewCtrl;
                     writer.write("<td class=\"section\" style=\"");
@@ -95,14 +92,13 @@ public class InputArrayWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         InputArrayWidget inputArrayWidget = (InputArrayWidget) widget;
-        List<ValueStore> valueStoreList = inputArrayWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = inputArrayWidget.getItemCount();
+        if (len > 0) {
             DynamicField editCtrl = inputArrayWidget.getEditCtrl();
             DynamicField viewCtrl = inputArrayWidget.getViewCtrl();
             Control selectCtrl = inputArrayWidget.getSelectCtrl();
-            final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
+                ValueStore lineValueStore = inputArrayWidget.getItemValueStoreAt(i);
                 boolean editable = lineValueStore.retrieve(boolean.class, "editable");
                 Control valueCtrl = editable ? editCtrl : viewCtrl;
                 writeBehavior(writer, inputArrayWidget, lineValueStore, valueCtrl, selectCtrl);

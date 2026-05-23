@@ -27,6 +27,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordGenerator;
+import com.tcdng.unify.core.security.SecurityComponents;
 
 /**
  * User creation approved set values generator.
@@ -41,7 +42,7 @@ public class UserCreateApprovedSetValuesGenerator extends AbstractEntitySetValue
     @Configurable
     private SystemModuleService systemModuleService;
 
-    @Configurable("oneway-stringcryptograph")
+    @Configurable(SecurityComponents.ONEWAY_STRING_CRYPTOGRAPH)
     private OneWayStringCryptograph passwordCryptograph;
 
     @Override

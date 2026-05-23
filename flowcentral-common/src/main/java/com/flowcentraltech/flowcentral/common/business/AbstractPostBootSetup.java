@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.application.PostBootSetup;
 
 /**
  * Convenient abstract base class for post-boot setup components.

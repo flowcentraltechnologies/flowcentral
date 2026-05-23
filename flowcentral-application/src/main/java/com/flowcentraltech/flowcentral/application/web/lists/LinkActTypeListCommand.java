@@ -63,7 +63,9 @@ public class LinkActTypeListCommand extends AbstractFlowCentralListCommand<ZeroP
                             new ListData(LinkActConstants.COLUMN_ACTION,
                                     getApplicationMessage("application.column.action")),
                             new ListData(LinkActConstants.BUTTON_ACTION,
-                                    getApplicationMessage("application.button.action"))));
+                                    getApplicationMessage("application.button.action")),
+                            new ListData(LinkActConstants.TOGGLE_ACTION,
+                                    getApplicationMessage("application.toggle.action"))));
                 }
             }
         }

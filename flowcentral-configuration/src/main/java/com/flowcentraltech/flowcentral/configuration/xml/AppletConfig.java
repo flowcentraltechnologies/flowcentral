@@ -30,7 +30,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.AppletTypeXmlAd
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class AppletConfig extends BaseNameConfig {
+public class AppletConfig extends BaseClassifiedConfig {
 
     @JsonSerialize(using = AppletTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = AppletTypeXmlAdapter.Deserializer.class)
@@ -66,12 +66,21 @@ public class AppletConfig extends BaseNameConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private int displayIndex;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private String assignSearch;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean portalAccess;
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean menuAccess;
     
     @JacksonXmlProperty(isAttribute = true)
     private Boolean supportOpenInNewWindow;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean supportRemoteAccess;
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;
@@ -92,8 +101,10 @@ public class AppletConfig extends BaseNameConfig {
     private AppletAlertsConfig alerts;
     
     public AppletConfig() {
+        this.portalAccess = Boolean.FALSE;
         this.menuAccess = Boolean.FALSE;
         this.supportOpenInNewWindow = Boolean.FALSE;
+        this.supportRemoteAccess = Boolean.FALSE;
         this.allowSecondaryTenants = Boolean.FALSE;
     }
     
@@ -169,6 +180,22 @@ public class AppletConfig extends BaseNameConfig {
         this.pseudoDeleteField = pseudoDeleteField;
     }
 
+    public String getAssignSearch() {
+        return assignSearch;
+    }
+
+    public void setAssignSearch(String assignSearch) {
+        this.assignSearch = assignSearch;
+    }
+
+    public Boolean getPortalAccess() {
+        return portalAccess;
+    }
+
+    public void setPortalAccess(Boolean portalAccess) {
+        this.portalAccess = portalAccess;
+    }
+
     public Boolean getMenuAccess() {
         return menuAccess;
     }
@@ -191,6 +218,14 @@ public class AppletConfig extends BaseNameConfig {
 
     public void setSupportOpenInNewWindow(Boolean supportOpenInNewWindow) {
         this.supportOpenInNewWindow = supportOpenInNewWindow;
+    }
+
+    public Boolean getSupportRemoteAccess() {
+        return supportRemoteAccess;
+    }
+
+    public void setSupportRemoteAccess(Boolean supportRemoteAccess) {
+        this.supportRemoteAccess = supportRemoteAccess;
     }
 
     public Boolean getAllowSecondaryTenants() {

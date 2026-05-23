@@ -24,7 +24,7 @@
 	components:$c{sectorIcon titleBlock}
 !fc-sectoricon:sectorIcon binding:sectorIcon
 !ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
-!ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle
+!ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle 
 !ui-label:subTitle styleClass:$s{hdsubtitle} binding:entityTitle
 
 // Search entries panel

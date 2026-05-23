@@ -208,7 +208,7 @@ fux.menuShowPopup = function(uEv) {
 			cnt.push("<div class=\"base\" id=\"");
 			cnt.push(_baseId + i);
 			cnt.push("\">");
-            cnt.push("<span class=\"icon\">");
+            cnt.push("<span class=\"icon g_fsm\">");
             cnt.push(uMenuItems[i].icon);
             cnt.push("</span>");
 			cnt.push("<a>");
@@ -320,8 +320,8 @@ fux.rigChart = function(rgp) {
 	}
 	
 	var chart = new ApexCharts(_id(id), options);
-    chart.render();
-    fux.chartList.push(chart);
+	chart.render();
+	fux.chartList.push(chart);
 }
 
 fux.clearCharts = function() {

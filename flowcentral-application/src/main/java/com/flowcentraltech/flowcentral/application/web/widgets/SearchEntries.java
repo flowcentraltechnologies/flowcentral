@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.common.business.SearchInputRestrictionGenerator;
+import com.flowcentraltech.flowcentral.common.data.Entries;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
@@ -116,7 +116,9 @@ public class SearchEntries {
     public void clear() {
         if (entryList != null) {
             for (SearchEntry searchEntry : entryList) {
-                searchEntry.getParamInput().setValue(null);
+                if (!searchEntry.isFixed()) {
+                    searchEntry.getParamInput().setValue(null);
+                }
             }
         }
     }
@@ -266,12 +268,12 @@ public class SearchEntries {
                     final String label = au.resolveSessionMessage(searchInputDef.getLabel());
                     final SearchEntry searchEntry = searchInputDef.getFieldName().startsWith("s:")
                             ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
-                                    SearchConditionType.SESSION_ATTRIBUTE, preferredEvent)
+                                    SearchConditionType.SESSION_ATTRIBUTE, searchInputDef.getDefVal(), searchInputDef.isFixed(), preferredEvent)
                             : (searchInputDef.getFieldName().startsWith("f:")
                                     ? new SearchEntry(au, entityDef, label, searchInputDef.getFieldName().substring(2),
-                                            searchInputDef.getType(), preferredEvent)
+                                            searchInputDef.getType(), searchInputDef.getDefVal(), searchInputDef.isFixed(), preferredEvent)
                                     : new SearchEntry(au, entityDef, label,
-                                            searchInputDef.getFieldName().substring(2), preferredEvent));
+                                            searchInputDef.getFieldName().substring(2), searchInputDef.getDefVal(), searchInputDef.isFixed(), preferredEvent));
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef(searchInputDef.getWidget());
                     searchEntry.normalize(widgetTypeDef);
                     entryList.add(searchEntry);
@@ -289,7 +291,7 @@ public class SearchEntries {
                             ? SearchConditionType.ILIKE
                             : SearchConditionType.EQUALS;
                     SearchEntry searchEntry = new SearchEntry(au, entityDef, label, entityFieldDef.getFieldName(),
-                            conditionType, preferredEvent);
+                            conditionType, null, false, preferredEvent);
                     searchEntry.normalize();
                     entryList.add(searchEntry);
                 }
@@ -299,34 +301,5 @@ public class SearchEntries {
 
     private String getLabelSuggestion(String fieldName) {
         return labelSuggestion != null ? labelSuggestion.getSuggestedLabel(fieldName) : null;
-    }
-
-    public static class Entries {
-
-        private final Map<String, Object> inputs;
-
-        private final Restriction restriction;
-
-        private Entries(Map<String, Object> inputs, Restriction restriction) {
-            this.inputs = inputs;
-            this.restriction = restriction;
-        }
-
-        private Entries() {
-            this.inputs = Collections.emptyMap();
-            this.restriction = null;
-        }
-
-        public Map<String, Object> getInputs() {
-            return inputs;
-        }
-
-        public Restriction getRestriction() {
-            return restriction;
-        }
-
-        public boolean isWithRestriction() {
-            return restriction != null;
-        }
     }
 }

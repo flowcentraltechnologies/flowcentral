@@ -27,10 +27,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.common.constants.SequencePartType;
 import com.flowcentraltech.flowcentral.common.data.SequenceDef;
 import com.flowcentraltech.flowcentral.common.data.SequencePartDef;
+import com.flowcentraltech.flowcentral.test.AbstractFlowCentralTest;
 
 /**
  * Sequence code generator tests

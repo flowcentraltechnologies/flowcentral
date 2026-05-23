@@ -69,6 +69,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Parameter;
 import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
@@ -126,9 +127,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections.unmodifiableList(
-            Arrays.asList("charts-xml-generator", "dashboards-xml-generator", "notification-templates-xml-generator",
-                    "notification-largetexts-xml-generator", "reports-xml-generator", "workflows-xml-generator",
-                    "help-sheets-xml-generator", "application-xml-generator"));
+            Arrays.asList(
+                    "charts-xml-generator",
+                    "dashboards-xml-generator",
+                    "notification-templates-xml-generator",
+                    "notification-largetexts-xml-generator",
+                    "reports-xml-generator",
+                    "workflows-xml-generator",
+                    "help-sheets-xml-generator",
+                    "application-xml-generator"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME,
             description = "Generate Extension Module Files Task",
@@ -151,7 +158,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
                         moduleName, messageReplacements, false);
 
                 // Generate applications
@@ -206,7 +213,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
-            String zipFilename = String.format("%s_extension_%s%s", filenamePrefix, smf.format(now), ".zip");
+            String zipFilename = String.format("extension_%s_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
             codeGenerationItem.setFilename(zipFilename);
@@ -253,7 +260,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
                         moduleName, messageReplacements, true);
 
                 // Generate applications
@@ -280,13 +287,6 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     StaticModuleArtifactGenerator generator = (StaticModuleArtifactGenerator) getComponent(
                             "extension-module-xml-generator");
                     generator.generate(moduleCtx, moduleName, zos);
-
-                    // Generate messages
-                    addTaskMessage(taskMonitor, "Generating messages for module [{0}]...", moduleName);
-                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
-                            "extension-module-messages-generator");
-                    generator = (StaticModuleArtifactGenerator) getComponent("extension-module-messages-generator");
-                    generator.generate(moduleCtx, moduleName, zos);
                 }
             }
 
@@ -299,12 +299,10 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
-            final String fileName = String.format("%s_snapshot_%s", filenamePrefix, smf.format(now));
-            String zipFilename = String.format("%s_snapshot_%s%s", filenamePrefix, smf.format(now), ".zip");
-
+            final String name = String.format("snapshot_%s_%s", filenamePrefix, smf.format(now));
             IOUtils.close(zos);
-            return new Snapshot(getApplicationName(), getDeploymentVersion(), getAuxiliaryVersion(), fileName,
-                    zipFilename, baos.toByteArray());
+            return new Snapshot(getApplicationName(), getDeploymentVersion(), getAuxiliaryVersion(), name,
+                    name + ".zip", baos.toByteArray());
         } finally {
             IOUtils.close(zos);
         }
@@ -331,7 +329,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             moduleList.removeAll(EXCLUDED_UTILITIES_MODULES);
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for utilities module [{0}]", moduleName);
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
                         moduleName, Collections.emptyMap(), false);
 
                 // Generate applications
@@ -414,7 +412,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(final ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
+            throws UnifyException {
 
     }
 

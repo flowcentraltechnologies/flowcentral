@@ -15,9 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.business;
 
+import java.util.Optional;
+
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAccess;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -29,30 +30,23 @@ import com.tcdng.unify.core.UnifyException;
 public interface OSMessagingAccessManager extends  FlowCentralService {
 
     /**
-     * Checks if application has messaging access.
+     * Checks processor access by looking at supplied messaging header.
      * 
-     * @param authorization
-     *                      the authorization token
-     * @param source
-     *                      the source application
-     * @param target
-     *                      the target application
-     * @param processor
-     *                      the processor
-     * @return response on error otherwise null
+     * @param header
+     *                      the header
      * @throws UnifyException
-     *                        if an error occurs
+     *                        if check access failed. if an error occurs
      */
-    OSMessagingError checkAccess(String authorization, String source, String target, String processor)
-            throws UnifyException;
+    void checkAccess(OSMessagingHeader header) throws UnifyException;
 
     /**
-     * Logs messaging access.
+     * Resolves a delegate function to target service.
      * 
-     * @param access
-     *                    the access object
+     * @param delegate
+     *                 the delegate function
+     * @return the optional target
      * @throws UnifyException
      *                        if an error occurs
      */
-    void logAccess(OSMessagingAccess access) throws UnifyException;
+    Optional<String> resolveDelegateFunctionTarget(String delegate) throws UnifyException;
 }

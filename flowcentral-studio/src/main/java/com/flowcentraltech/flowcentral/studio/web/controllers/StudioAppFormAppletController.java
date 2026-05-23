@@ -15,20 +15,17 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
-import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppFormApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.constant.ReadOnly;
-import com.tcdng.unify.web.constant.ResetOnWrite;
-import com.tcdng.unify.web.constant.Secured;
+import com.tcdng.unify.web.ui.widget.Page;
 
 /**
  * Studio application form applet controller.
@@ -39,39 +36,18 @@ import com.tcdng.unify.web.constant.Secured;
 @Component("/studioappformapplet")
 @UplBinding("web/studio/upl/studioappformappletpage.upl")
 public class StudioAppFormAppletController
-        extends AbstractEntityFormAppletController<StudioAppFormApplet, StudioAppFormAppletPageBean> {
-
-    @Configurable
-    private StudioModuleService studioModuleService;
+        extends AbstractStudioAppComponentAppletController<StudioAppFormApplet, StudioAppFormAppletPageBean> {
 
     public StudioAppFormAppletController() {
-        super(StudioAppFormAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
-    }
-
-    @Action
-    public String designChildItem() throws UnifyException {
-        StudioAppFormAppletPageBean pageBean = getPageBean();
-        StudioAppFormApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        applet.designChildItem(childTabIndex);
-        return "refreshapplet";
+        super(StudioAppFormAppletPageBean.class);
     }
 
     @Override
-    protected void onOpenPage() throws UnifyException {
-        super.onOpenPage();
-
-        StudioAppFormAppletPageBean pageBean = getPageBean();
-        if (pageBean.getApplet() == null) {
-            AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
-            EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            StudioAppFormApplet applet = new StudioAppFormApplet(getPage(), studioModuleService, au(), getPathVariables(),
-                    (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
-                    appletWidgetReferences, formEventHandlers);
-            pageBean.setApplet(applet);
-        } else {
-            pageBean.getApplet().ensureClearOnNew();
-        }
+    protected StudioAppFormApplet createApplet(Page page, StudioModuleService studio, AppletUtilities au,
+            List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
+            EntityFormEventHandlers formEventHandlers) throws UnifyException {
+        return new StudioAppFormApplet(page, studio, au, pathVariables, applicationName, appletWidgetReferences,
+                formEventHandlers);
     }
 
 }

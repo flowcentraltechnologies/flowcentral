@@ -25,11 +25,11 @@ import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameCons
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardItemQuery;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Review wizard create action policy.
@@ -44,7 +44,7 @@ public class ReviewWizardCreateActionPolicy extends AbstractEntityActionPolicy {
     private AppletUtilities appletUtil;
 
     @Override
-    public boolean checkAppliesTo(Entity inst) throws UnifyException {
+    public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
         return true;
     }
 
@@ -71,7 +71,7 @@ public class ReviewWizardCreateActionPolicy extends AbstractEntityActionPolicy {
             wfWizardItem.setWizard(wfWizardDef.getLongName());
             wfWizardItem.setPrimaryEntityId((Long) entityInst.getId());
             wfWizardItem.setTitle(entityInst.getDescription());
-            wfWizardItem.setOwnerId(getUserToken().getUserLoginId());
+            wfWizardItem.setOwnerId(getUserLoginId());
             wfWizardItem.setPercentCompleted(percentCompleted);
             appletUtil.environment().create(wfWizardItem);
         } else {

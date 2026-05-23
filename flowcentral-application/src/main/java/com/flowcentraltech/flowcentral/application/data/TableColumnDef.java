@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.data.BadgeInfo;
 
 /**
  * Table column definition;
@@ -28,6 +29,8 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 4.1
  */
 public class TableColumnDef {
+
+    private BadgeInfo badgeInfo;
 
     private String label;
 
@@ -67,10 +70,13 @@ public class TableColumnDef {
 
     private boolean summary;
 
-    public TableColumnDef(String label, String fieldName, String headerStyle, String cellRenderer, String cellEditor,
-            String renderer, String editor, String linkAct, String symbol, OrderType order, int widthRatio, int width,
-            boolean switchOnChange, boolean hiddenOnNull, boolean hidden, boolean disabled, boolean editable, boolean sortable,
-            boolean summary) {
+    private boolean toggle;
+
+    public TableColumnDef(BadgeInfo badgeInfo, String label, String fieldName, String headerStyle, String cellRenderer,
+            String cellEditor, String renderer, String editor, String linkAct, String symbol, OrderType order,
+            int widthRatio, int width, boolean switchOnChange, boolean hiddenOnNull, boolean hidden, boolean disabled,
+            boolean editable, boolean sortable, boolean summary, boolean toggle) {
+        this.badgeInfo = badgeInfo;
         this.label = label;
         this.fieldName = fieldName;
         this.headerStyle = headerStyle;
@@ -90,11 +96,12 @@ public class TableColumnDef {
         this.editable = editable;
         this.sortable = sortable;
         this.summary = summary;
+        this.toggle = toggle;
     }
 
     private TableColumnDef(String label, String fieldName, String renderer, String editor, String linkAct,
-            String symbol, OrderType order, int widthRatio, boolean switchOnChange, boolean hiddenOnNull, boolean hidden, boolean disabled,
-            boolean editable, boolean sortable, boolean summary) {
+            String symbol, OrderType order, int widthRatio, boolean switchOnChange, boolean hiddenOnNull,
+            boolean hidden, boolean disabled, boolean editable, boolean sortable, boolean summary) {
         this.label = label;
         this.fieldName = fieldName;
         this.renderer = renderer;
@@ -110,6 +117,18 @@ public class TableColumnDef {
         this.editable = editable;
         this.sortable = sortable;
         this.summary = summary;
+    }
+
+    public BadgeInfo getBadgeInfo() {
+        return badgeInfo;
+    }
+
+    public boolean isWithBadgeInfo() {
+        return badgeInfo != null;
+    }
+    
+    public boolean isToggle() {
+        return toggle;
     }
 
     public String getLabel() {

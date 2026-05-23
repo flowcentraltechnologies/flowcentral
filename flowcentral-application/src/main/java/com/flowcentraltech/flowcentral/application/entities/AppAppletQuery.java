@@ -47,6 +47,10 @@ public class AppAppletQuery extends BaseApplicationEntityQuery<AppApplet> {
         return (AppAppletQuery) addAmongst("entity", entity);
     }
 
+    public AppAppletQuery portalAccess(boolean portalAccess) {
+        return (AppAppletQuery) addEquals("portalAccess", portalAccess);
+    }
+
     public AppAppletQuery menuAccess(boolean menuAccess) {
         return (AppAppletQuery) addEquals("menuAccess", menuAccess);
     }

@@ -33,17 +33,18 @@ public class ReportEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     public void switchState() throws UnifyException {
-        super.switchState();
+        final ReportEditorPage reportEditorPage = getReportEditorPage();
+        if (reportEditorPage != null) {
+            final boolean readOnly = isAppletContextReadOnly();
+            ReportEditor reportEditor = reportEditorPage.getReportEditor();
+            reportEditor.setReadOnly(readOnly);
+            if (reportEditor.getEditColumnId() == null) {
+                reportEditor.setEditColumnId(getWidgetByShortName("editColumnPanel").getId());
+            }
 
-        final boolean readOnly = isAppletContextReadOnly();
-        ReportEditor reportEditor = getReportEditorPage().getReportEditor();
-        reportEditor.setReadOnly(readOnly);
-        if (reportEditor.getEditColumnId() == null) {
-            reportEditor.setEditColumnId(getWidgetByShortName("editColumnPanel").getId());
+            setWidgetVisible("saveBtn", !readOnly);
+            setWidgetEditable("editColumnPanel", !readOnly);
         }
-
-        setWidgetVisible("saveBtn", !readOnly);
-        setWidgetEditable("editColumnPanel", !readOnly);
     }
 
     @Action
@@ -56,6 +57,11 @@ public class ReportEditorPagePanel extends AbstractStudioEditorPagePanel {
         ReportEditorPage reportEditorPage = getReportEditorPage();
         reportEditorPage.commitDesign();
         hintUser("$m{studioreportconfigurationapplet.reporteditor.success.hint}", reportEditorPage.getSubTitle());
+    }
+
+    @Override
+    protected boolean isAppletContextReadOnly() throws UnifyException {
+        return false;
     }
 
     private ReportEditorPage getReportEditorPage() throws UnifyException {

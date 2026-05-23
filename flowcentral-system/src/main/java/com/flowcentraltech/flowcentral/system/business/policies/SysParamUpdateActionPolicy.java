@@ -27,11 +27,11 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.SessionAttributeProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * System parameter update action policy.
@@ -50,7 +50,7 @@ public class SysParamUpdateActionPolicy extends AbstractAppletActionPolicy {
     private SessionAttributeProvider sessionAttributeProvider;
 
     @Override
-    public boolean checkAppliesTo(Entity inst) throws UnifyException {
+    public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
         return true;
     }
 

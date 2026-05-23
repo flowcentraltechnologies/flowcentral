@@ -17,10 +17,15 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldUploadDef.ListProp;
 import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.batch.ConstraintAction;
 
 /**
@@ -30,6 +35,8 @@ import com.tcdng.unify.core.batch.ConstraintAction;
  * @since 4.1
  */
 public class EntityUploadDef implements Listable {
+
+    private String entity;
 
     private String name;
 
@@ -41,10 +48,11 @@ public class EntityUploadDef implements Listable {
 
     private ConstraintAction constraintAction;
 
-    private String header;
+    private List<EntityFieldUploadDef> fieldUploadDefList;
 
-    public EntityUploadDef(String name, String description, FieldSequenceDef fieldSequenceDef,
+    public EntityUploadDef(String entity, String name, String description, FieldSequenceDef fieldSequenceDef,
             ConstraintAction constraintAction) {
+        this.entity = entity;
         this.name = name;
         this.description = description;
         this.fieldSequenceDef = fieldSequenceDef;
@@ -77,47 +85,95 @@ public class EntityUploadDef implements Listable {
         return constraintAction;
     }
 
-    public String getHeader(EntityDef entityDef) {
-        if (header == null) {
-            synchronized (this) {
-                if (header == null) {
-                    StringBuilder sb = new StringBuilder();
-                    boolean appendSym = false;
-                    for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
-                        if (appendSym) {
-                            sb.append(", ");
-                        } else {
-                            appendSym = true;
-                        }
+    public String getHeader(AppletUtilities au, EntityDef entityDef) throws UnifyException {
+        if (!entityDef.getLongName().equals(entity)) {
+            throw new IllegalArgumentException("Incompatible with supplied entity definition.");
+        }
 
-                        sb.append("[");
-                        sb.append(entityDef.getFieldDef(fieldSequenceEntryDef.getFieldName()).getFieldLabel());
-                        if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
-                            StandardFormatType type = StandardFormatType
-                                    .fromCode(fieldSequenceEntryDef.getStandardFormatCode());
-                            if (type != null) {
-                                sb.append("{").append(type.format()).append("}");
+        StringBuilder sb = new StringBuilder();
+        boolean appendSym = false;
+        for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
+            if (appendSym) {
+                sb.append(", ");
+            } else {
+                appendSym = true;
+            }
+
+            sb.append("[");
+            sb.append(au.resolveSessionMessage(
+                    entityDef.getFieldDef(fieldSequenceEntryDef.getFieldName()).getFieldLabel()));
+            if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
+                StandardFormatType type = StandardFormatType.fromCode(fieldSequenceEntryDef.getStandardFormatCode());
+                if (type != null) {
+                    sb.append("{").append(type.format()).append("}");
+                }
+            }
+            sb.append("]");
+        }
+
+        return sb.toString();
+    }
+
+    public List<EntityFieldUploadDef> getFieldUploadDefList(AppletUtilities au, EntityDef entityDef)
+            throws UnifyException {
+        if (!entityDef.getLongName().equals(entity)) {
+            throw new IllegalArgumentException("Incompatible with supplied entity definition.");
+        }
+
+        if (fieldUploadDefList == null) {
+            synchronized (this) {
+                if (fieldUploadDefList == null) {
+                    fieldUploadDefList = new ArrayList<EntityFieldUploadDef>();
+                    Map<String, List<ListProp>> listOnlyToKeyMap = new HashMap<String, List<ListProp>>();
+                    for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
+                        EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldSequenceEntryDef.getFieldName());
+                        if (entityFieldDef.isListOnly()) {
+                            List<ListProp> properties = listOnlyToKeyMap.get(entityFieldDef.getKey());
+                            if (properties == null) {
+                                properties = new ArrayList<ListProp>();
+                                listOnlyToKeyMap.put(entityFieldDef.getKey(), properties);
                             }
+
+                            properties.add(new ListProp(fieldSequenceEntryDef.getFieldName(), entityFieldDef.getProperty()));
+                        } else {
+                            fieldUploadDefList.add(new EntityFieldUploadDef(fieldSequenceEntryDef.getFieldName()));
                         }
-                        sb.append("]");
                     }
 
-                    header = sb.toString();
+                    for (Map.Entry<String, List<ListProp>> entry : listOnlyToKeyMap.entrySet()) {
+                        String keyFieldName = null;
+                        EntityFieldDef refEntityFieldDef = entityDef.getFieldDef(keyFieldName = entry.getKey());
+                        if (refEntityFieldDef.isEnumDataType()) {
+                            fieldUploadDefList
+                                    .add(new EntityFieldUploadDef(keyFieldName, refEntityFieldDef.getReferences()));
+                        } else {
+                            final RefDef refDef = au.getRefDef(refEntityFieldDef.getRefLongName());
+                            fieldUploadDefList.add(new EntityFieldUploadDef(keyFieldName, refDef.getEntity(),
+                                    entry.getValue()));
+                        }
+
+                    }
+
+                    fieldUploadDefList = Collections.unmodifiableList(fieldUploadDefList);
                 }
             }
         }
 
-        return header;
+        return fieldUploadDefList;
     }
 
     public List<String> getFieldNameList() {
         if (fieldNameList == null) {
-            fieldNameList = new ArrayList<String>();
-            for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
-                fieldNameList.add(fieldSequenceEntryDef.getFieldName());
-            }
+            synchronized (this) {
+                if (fieldNameList == null) {
+                    fieldNameList = new ArrayList<String>();
+                    for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
+                        fieldNameList.add(fieldSequenceEntryDef.getFieldName());
+                    }
 
-            fieldNameList = Collections.unmodifiableList(fieldNameList);
+                    fieldNameList = Collections.unmodifiableList(fieldNameList);
+                }
+            }
         }
 
         return fieldNameList;

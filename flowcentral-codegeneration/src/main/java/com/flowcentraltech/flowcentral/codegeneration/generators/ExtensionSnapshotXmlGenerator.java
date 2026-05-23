@@ -49,7 +49,7 @@ public class ExtensionSnapshotXmlGenerator extends AbstractStaticArtifactGenerat
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         snapshotConfig.setSnapshotTimestamp(sdf.format(new Date()));
         snapshotConfig.setSnapshotVersion("1.0.0");
-        snapshotConfig.setSnapshotTakenBy(getUserToken() != null ? getUserToken().getUserLoginId() : null);
+        snapshotConfig.setSnapshotTakenBy(getUserLoginId());
         SnapshotMeta meta = ctx.getSnapshotMeta();
         snapshotConfig.setSnapshotType(meta.getType());
         snapshotConfig.setSnapshotTitle(meta.getTitle());

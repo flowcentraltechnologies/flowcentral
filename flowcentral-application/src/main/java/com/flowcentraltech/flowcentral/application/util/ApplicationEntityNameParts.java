@@ -28,6 +28,8 @@ public class ApplicationEntityNameParts {
 
     private String longName;
 
+    private String normalLongName;
+
     private String applicationName;
 
     private String entityName;
@@ -36,12 +38,14 @@ public class ApplicationEntityNameParts {
 
     public ApplicationEntityNameParts(String longName, String applicationName, String entityName) {
         this.longName = longName;
+        this.normalLongName = longName;
         this.applicationName = applicationName;
         this.entityName = entityName;
     }
 
     public ApplicationEntityNameParts(String longName, String applicationName, String entityName, String minorName) {
         this.longName = longName;
+        this.normalLongName = ApplicationNameUtils.ensureLongNameReference(applicationName, entityName);
         this.applicationName = applicationName;
         this.entityName = entityName;
         this.minorName = minorName;
@@ -49,6 +53,10 @@ public class ApplicationEntityNameParts {
 
     public String getLongName() {
         return longName;
+    }
+
+    public String getNormalLongName() {
+        return normalLongName;
     }
 
     public String getApplicationName() {

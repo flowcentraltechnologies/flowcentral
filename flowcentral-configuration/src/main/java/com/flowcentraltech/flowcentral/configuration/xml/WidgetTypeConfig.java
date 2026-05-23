@@ -32,7 +32,7 @@ import com.tcdng.unify.core.util.xml.adapter.DataTypeXmlAdapter;
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class WidgetTypeConfig extends BaseNameConfig {
+public class WidgetTypeConfig extends BaseClassifiedConfig {
 
     @JsonSerialize(using = DataTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = DataTypeXmlAdapter.Deserializer.class)

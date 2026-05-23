@@ -70,8 +70,8 @@ public class PropertySearch extends AbstractPanelFormBinding {
         return beanListTable;
     }
 
-    public String getEntityTitle() {
-        return beanListTable.getTableDef().getLabel();
+    public String getEntityTitle() throws UnifyException {
+        return getAppletCtx().au().resolveSessionMessage(beanListTable.getTableDef().getLabel());
     }
 
     public String getEntitySubTitle() {

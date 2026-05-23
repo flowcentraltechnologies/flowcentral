@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
+import com.tcdng.unify.common.database.VersionEntity;
 import com.tcdng.unify.core.annotation.Policy;
 import com.tcdng.unify.core.annotation.Version;
 
@@ -25,15 +26,17 @@ import com.tcdng.unify.core.annotation.Version;
  * @since 4.1
  */
 @Policy("baseversion-entitypolicy")
-public abstract class BaseVersionEntity extends BaseEntity {
+public abstract class BaseVersionEntity extends BaseEntity implements VersionEntity {
 
     @Version
     private long versionNo;
 
+    @Override
     public final long getVersionNo() {
         return versionNo;
     }
 
+    @Override
     public final void setVersionNo(long versionNo) {
         this.versionNo = versionNo;
     }

@@ -58,8 +58,8 @@ public class ExtensionModuleXmlGenerator extends AbstractResourcesArtifactGenera
         ctx.addMessage(StaticMessageCategoryType.HEADER, descKey, module.getDescription());
         ctx.addMessage(StaticMessageCategoryType.HEADER, labelKey, module.getLabel());
         moduleConfig.setName(moduleName);
-        moduleConfig.setDescription("$m{" + descKey + "}");
-        moduleConfig.setLabel("$m{" + labelKey + "}");
+        moduleConfig.setDescription(ctx.isSnapshotMode() ? module.getDescription() :"$m{" + descKey + "}");
+        moduleConfig.setLabel(ctx.isSnapshotMode() ? module.getLabel() :"$m{" + labelKey + "}");
         moduleConfig.setPrincipal(false); // Extension
         moduleConfig.setShortCode(module.getShortCode());
         moduleConfig.setModuleAppsConfig(ctx.getModuleAppsConfig());

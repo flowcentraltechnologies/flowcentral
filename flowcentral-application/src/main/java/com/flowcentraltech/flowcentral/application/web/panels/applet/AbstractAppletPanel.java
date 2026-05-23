@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormM
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
@@ -236,21 +237,36 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 		entitySelect.setEnableFilter(false);
 		return entitySelect;
 	}
-	
-	protected void handleHints(EntityActionResult entityActionResult, FormContext ctx) throws UnifyException {
-		String errMsg = (String) getRequestAttribute(
-				AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
-		if (!StringUtils.isBlank(errMsg)) {
-			hintUser(MODE.ERROR, "$m{entityformapplet.formdelegation.error.hint}");
-		} else {
-			String successHint = entityActionResult.getSuccessHint();
-			if (!StringUtils.isBlank(successHint)) {
-				formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
-			} else {
-			    formHintFailure(entityActionResult.getFailureHint(), ctx != null ? ctx.getEntityName() : null);
-			}
-		}
-	}
+    
+    protected void handleHints(EntityActionResult entityActionResult, FormContext ctx) throws UnifyException {
+        String errMsg = (String) getRequestAttribute(
+                AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
+        if (!StringUtils.isBlank(errMsg)) {
+            hintUser(MODE.ERROR, "$m{entityformapplet.formdelegation.error.hint}");
+        } else {
+            String successHint = entityActionResult.getSuccessHint();
+            if (!StringUtils.isBlank(successHint)) {
+                formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
+            } else {
+                formHintFailure(entityActionResult.getFailureHint(), ctx != null ? ctx.getEntityName() : null);
+            }
+        }
+    }
+    
+    protected void handleHints(EntityListActionResult entityActionResult) throws UnifyException {
+        String errMsg = (String) getRequestAttribute(
+                AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
+        if (!StringUtils.isBlank(errMsg)) {
+            hintUser(MODE.ERROR, "$m{entityformapplet.formdelegation.error.hint}");
+        } else {
+            String successHint = entityActionResult.getSuccessHint();
+            if (!StringUtils.isBlank(successHint)) {
+                formHintSuccess(successHint, null);
+            } else {
+                formHintFailure(entityActionResult.getFailureHint(),null);
+            }
+        }
+    }
 
 	protected void setCloseResultMapping() throws UnifyException {
 		if (getApplet().appletCtx().isInDetachedWindow()) {

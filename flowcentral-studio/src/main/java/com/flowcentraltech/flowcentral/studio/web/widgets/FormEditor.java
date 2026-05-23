@@ -220,8 +220,8 @@ public class FormEditor {
         return editorBodyPanelName;
     }
 
-    public static Builder newBuilder(FormDef formDef) {
-        return new Builder(formDef);
+    public static Builder newBuilder(AppletUtilities au, FormDef formDef) {
+        return new Builder(au, formDef);
     }
 
     public static class Builder {
@@ -234,7 +234,10 @@ public class FormEditor {
 
         private FormSection currentSection;
 
-        public Builder(FormDef formDef) {
+        private AppletUtilities au;
+
+        public Builder(AppletUtilities au, FormDef formDef) {
+            this.au = au;
             this.formDef = formDef;
             this.tabs = new ArrayList<FormTab>();
         }
@@ -261,16 +264,17 @@ public class FormEditor {
         public Builder addField(String entity, EntityFieldDataType dataType, String name, String label,
                 String inputWidget, String reference, String previewForm, WidgetColor widgetColor, int column,
                 boolean switchOnChange, boolean saveAs, boolean required, boolean visible, boolean editable,
-                boolean disabled) {
+                boolean disabled) throws UnifyException {
             String color = widgetColor != null ? widgetColor.code() : null;
             currentSection.getFields()
-                    .add(new FormField(entity, dataType.code(), name, label,
-                            formDef.getEntityDef().getFieldDef(name).getFieldLabel(), inputWidget, reference,
-                            previewForm, color, column, switchOnChange, saveAs, required, visible, editable, disabled));
+                    .add(new FormField(entity, dataType.code(), name, au.resolveSessionMessage(label),
+                            au.resolveSessionMessage(formDef.getEntityDef().getFieldDef(name).getFieldLabel()),
+                            inputWidget, reference, previewForm, color, column, switchOnChange, saveAs, required,
+                            visible, editable, disabled));
             return this;
         }
 
-        public FormEditor build(AppletUtilities au) {
+        public FormEditor build() {
             return new FormEditor(au, formDef, new Design(tabs));
         }
     }

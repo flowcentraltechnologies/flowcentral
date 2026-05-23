@@ -23,7 +23,7 @@ import com.tcdng.unify.common.data.Listable;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class BaseNamedDef implements Listable {
+public abstract class BaseNamedDef implements Listable, VersionedEntityDef {
 
     private String name;
 
@@ -58,10 +58,12 @@ public abstract class BaseNamedDef implements Listable {
         return description;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public long getVersion() {
         return version;
     }

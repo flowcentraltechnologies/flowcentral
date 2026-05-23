@@ -67,6 +67,7 @@ import com.flowcentraltech.flowcentral.system.data.CredentialDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseEntryDef;
 import com.flowcentraltech.flowcentral.system.data.ScheduledTaskDef;
+import com.flowcentraltech.flowcentral.system.data.SysParamInfo;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
@@ -98,6 +99,7 @@ import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.Feature;
 import com.tcdng.unify.core.application.FeatureQuery;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
@@ -107,8 +109,10 @@ import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
+import com.tcdng.unify.core.security.SecurityComponents;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskManager;
@@ -367,6 +371,13 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public void updateSystemParameters(List<SysParamInfo> params) throws UnifyException {
+        for (SysParamInfo param : params) {
+            setSysParameterValue(param.getCode(), param.getVal());
+        }
+    }
+
+    @Override
     public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, List<StringToken> tokenList)
             throws UnifyException {
         return paramGeneratorManager.getParameterizedStringGenerator(paramReader, tokenList);
@@ -383,7 +394,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         if (param != null && param.startsWith("{{") && param.endsWith("}}")) {
             String key = param.substring(2, param.length() - 2);
             if ("u:loginId".equals(key)) {
-                return getUserToken().getUserLoginId();
+                return getUserLoginId();
             } else if (key.startsWith("s:")) {
                 return getSessionAttribute(key.substring(2));
             } else if (key.startsWith("p:")) {
@@ -413,7 +424,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
         pw.flush();
 
-        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph");
+        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent(SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH);
         String request = cryptograph.encrypt(writer.toString());
         String[] lines = StringUtils.splitIntoLengths(request, 40);
         writer = new StringWriter();
@@ -540,13 +551,13 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
             pw.flush();
 
-            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
+            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent(SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
                     new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
             String license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
 
             final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT, false).name(licenseName)
-                    .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
+                    .title(licenseName).fileName(licenseName).file(UploadedFile.create(licenseName, encLicense.getBytes())).build();
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
                     0L, _attachment);
             attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY,
@@ -565,7 +576,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         try {
             Feature deploymentID = environment().find(new FeatureQuery().code("deploymentID"));
             Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
-            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
+            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent(SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
                     new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
             BufferedReader reader = new BufferedReader(new StringReader(new String(licenseFile, "UTF-8")));
             String license = cryptograph.decrypt(IOUtils.readAll(reader));
@@ -593,7 +604,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             license = writer.toString();
             String encLicense = cryptograph.encrypt(license);
             final Attachment _attachment = Attachment.newBuilder(FileAttachmentType.TEXT, false).name(licenseName)
-                    .title(licenseName).fileName(licenseName).data(encLicense.getBytes()).build();
+                    .title(licenseName).fileName(licenseName).file(UploadedFile.create(licenseName, encLicense.getBytes())).build();
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.LICENSE_CATEGORY, "system.credential",
                     0L, _attachment);
             logDebug(taskMonitor, "...license file successfully loaded...");
@@ -627,81 +638,81 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 SystemModuleSysParamConstants.SYSTEM_SCHEDULER_MAX_TRIGGER);
 
         // Fetch tasks ready to run
-        logDebug("Fetching ready tasks...");
         List<Long> readyScheduledTaskIdList = db().valueList(Long.class, "id",
                 new ScheduledTaskQuery().readyToRunOn(now));
+        if (!DataUtils.isBlank(readyScheduledTaskIdList)) {
+            // Schedule tasks that are active only today
+            logDebug("[{0}] potential scheduled task(s) to run...", readyScheduledTaskIdList.size());
+            int triggered = 0;
+            for (Long scheduledTaskId : readyScheduledTaskIdList) {
+                ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
+                final String taskLock = scheduledTaskDef.getLock();
+                logDebug("Setting up scheduled task [{0}] using lock [{1}] ...", scheduledTaskDef.getDescription(),
+                        taskLock);
+                Map<String, Object> taskParameters = new HashMap<String, Object>();
+                taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
+                taskParameters.put(TaskParameterConstants.TENANT_ID, Entity.PRIMARY_TENANT_ID);
+                taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
+                taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
 
-        // Schedule tasks that are active only today
-        logDebug("[{0}] potential scheduled task(s) to run...", readyScheduledTaskIdList.size());
-        int triggered = 0;
-        for (Long scheduledTaskId : readyScheduledTaskIdList) {
-            ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
-            final String taskLock = scheduledTaskDef.getLock();
-            logDebug("Setting up scheduled task [{0}] using lock [{1}] ...", scheduledTaskDef.getDescription(),
-                    taskLock);
-            Map<String, Object> taskParameters = new HashMap<String, Object>();
-            taskParameters.put(TaskParameterConstants.USER_LOGIN_ID, scheduledTaskDef.getUserLoginId());
-            taskParameters.put(TaskParameterConstants.TENANT_ID, Entity.PRIMARY_TENANT_ID);
-            taskParameters.put(TaskParameterConstants.LOCK_TO_TRY, taskLock);
-            taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);
+                Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
+                        new ScheduledTaskQuery().id(scheduledTaskId));
+                final Date startOn = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getStartOffset());
+                Date expiryOn = CalendarUtils.getDateWithOffset(nextExecutionOn, expirationAllowanceMilliSec);
+                if (!now.before(startOn) && now.before(expiryOn)) {
+                    // Task execution has not expired. Start task
+                    // Load settings
+                    for (ParamValueDef pvd : scheduledTaskDef.getParamValuesDef().getParamValueList()) {
+                        taskParameters.put(pvd.getParamName(), pvd.getConvertedParamVal());
+                    }
 
-            Date nextExecutionOn = environment().value(Date.class, "nextExecutionOn",
-                    new ScheduledTaskQuery().id(scheduledTaskId));
-            final Date startOn = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getStartOffset());
-            Date expiryOn = CalendarUtils.getDateWithOffset(nextExecutionOn, expirationAllowanceMilliSec);
-            if (!now.before(startOn) && now.before(expiryOn)) {
-                // Task execution has not expired. Start task
-                // Load settings
-                for (ParamValueDef pvd : scheduledTaskDef.getParamValuesDef().getParamValueList()) {
-                    taskParameters.put(pvd.getParamName(), pvd.getConvertedParamVal());
+                    // Fire task
+                    taskManager.scheduleTaskToRunAfter(scheduledTaskDef.getTaskName(), taskParameters, true, 0);
+                    logDebug("Task [{0}] is setup to run...", scheduledTaskDef.getDescription());
+                    triggered++;
                 }
 
-                // Fire task
-                taskManager.scheduleTaskToRunAfter(scheduledTaskDef.getTaskName(), taskParameters, true, 0);
-                logDebug("Task [{0}] is setup to run...", scheduledTaskDef.getDescription());
-                triggered++;
-            }
-
-            // Calculate and set next execution
-            Date calcNextExecutionOn = null;
-            long repeatMillSecs = scheduledTaskDef.getRepeatMillSecs();
-            if (repeatMillSecs > 0) {
-                Date limit = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getEndOffset());
-                long factor = ((now.getTime() - nextExecutionOn.getTime()) / repeatMillSecs) + 1;
-                long actNextOffsetMillSecs = factor * repeatMillSecs;
-                calcNextExecutionOn = CalendarUtils.getDateWithOffset(nextExecutionOn, actNextOffsetMillSecs);
-                if (calcNextExecutionOn.before(startOn) || calcNextExecutionOn.after(limit)) {
-                    calcNextExecutionOn = null;
+                // Calculate and set next execution
+                Date calcNextExecutionOn = null;
+                long repeatMillSecs = scheduledTaskDef.getRepeatMillSecs();
+                if (repeatMillSecs > 0) {
+                    Date limit = CalendarUtils.getDateWithOffset(workingDt, scheduledTaskDef.getEndOffset());
+                    long factor = ((now.getTime() - nextExecutionOn.getTime()) / repeatMillSecs) + 1;
+                    long actNextOffsetMillSecs = factor * repeatMillSecs;
+                    calcNextExecutionOn = CalendarUtils.getDateWithOffset(nextExecutionOn, actNextOffsetMillSecs);
+                    if (calcNextExecutionOn.before(startOn) || calcNextExecutionOn.after(limit)) {
+                        calcNextExecutionOn = null;
+                    }
                 }
-            }
 
-            if (calcNextExecutionOn == null) {
-                if (now.before(startOn) && CalendarUtils.isWithinCalendar(scheduledTaskDef.getWeekdays(),
-                        scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), startOn)) {
-                    // Today start time
-                    calcNextExecutionOn = startOn;
-                } else {
-                    // Use next eligible date start time
-                    calcNextExecutionOn = CalendarUtils.getDateWithOffset(
-                            CalendarUtils.getNextEligibleDate(scheduledTaskDef.getWeekdays(),
-                                    scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), workingDt),
-                            scheduledTaskDef.getStartOffset());
+                if (calcNextExecutionOn == null) {
+                    if (now.before(startOn) && CalendarUtils.isWithinCalendar(scheduledTaskDef.getWeekdays(),
+                            scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), startOn)) {
+                        // Today start time
+                        calcNextExecutionOn = startOn;
+                    } else {
+                        // Use next eligible date start time
+                        calcNextExecutionOn = CalendarUtils.getDateWithOffset(
+                                CalendarUtils.getNextEligibleDate(scheduledTaskDef.getWeekdays(),
+                                        scheduledTaskDef.getDays(), scheduledTaskDef.getMonths(), workingDt),
+                                scheduledTaskDef.getStartOffset());
+                    }
                 }
-            }
 
-            environment().updateById(ScheduledTask.class, scheduledTaskId,
-                    new Update().add("nextExecutionOn", calcNextExecutionOn).add("lastExecutionOn", now));
-            logDebug("Task [{0}] is scheduled to run next on [{1,date,dd/MM/yy HH:mm:ss}]...",
-                    scheduledTaskDef.getDescription(), calcNextExecutionOn);
+                environment().updateById(ScheduledTask.class, scheduledTaskId,
+                        new Update().add("nextExecutionOn", calcNextExecutionOn).add("lastExecutionOn", now));
+                logDebug("Task [{0}] is scheduled to run next on [{1,date,dd/MM/yy HH:mm:ss}]...",
+                        scheduledTaskDef.getDescription(), calcNextExecutionOn);
 
-            if (triggered >= maxScheduledTaskTrigger) {
-                break;
+                if (triggered >= maxScheduledTaskTrigger) {
+                    break;
+                }
             }
         }
     }
 
     @Override
-    protected void doInstallModuleFeatures(final ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall) throws UnifyException {
         installModuleAndSystemParameters(moduleInstall);
     }
 
@@ -710,9 +721,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         Date now = getNow();
         Feature deploymentID = environment().find(new FeatureQuery().code("deploymentID"));
         Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
-        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
+        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent(SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
                 new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
-        String license = cryptograph.decrypt(new String(attachment.getData()));
+        String license = cryptograph.decrypt(new String(attachment.getFile().getDataAndInvalidate()));
 
         try (BufferedReader reader = new BufferedReader(new StringReader(license));) {
             String type = reader.readLine();

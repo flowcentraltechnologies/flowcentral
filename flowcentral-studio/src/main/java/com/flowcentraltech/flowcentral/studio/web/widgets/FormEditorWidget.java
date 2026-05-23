@@ -23,8 +23,6 @@ import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.annotation.UplAttribute;
-import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.stream.JsonObjectStreamer;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
@@ -37,7 +35,6 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @since 4.1
  */
 @Component("fc-formeditor")
-@UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "260px") })
 public class FormEditorWidget extends AbstractFlowCentralMultiControl {
 
     public static final String WORK_CONTENT = "content";
@@ -245,10 +242,6 @@ public class FormEditorWidget extends AbstractFlowCentralMultiControl {
 
     public Control getEditModeCtrl() {
         return editModeCtrl;
-    }
-
-    public String getChoiceWidth() throws UnifyException {
-        return getUplAttribute(String.class, "choiceWidth");
     }
 
     public FormEditor getFormEditor() throws UnifyException {

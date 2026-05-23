@@ -30,7 +30,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormTypeXmlAdap
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class AppFormConfig extends BaseNameConfig {
+public class AppFormConfig extends BaseClassifiedConfig {
 
     @JacksonXmlProperty
     private FormFiltersConfig filters;

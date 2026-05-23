@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.studio.web.widgets.TableEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.TableEditorWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -77,14 +78,16 @@ public class TableEditorWriter extends AbstractControlWriter {
         jsonWriter.beginArray("fields");
         int i = 0;
         for (EntityFieldDef entityFieldDef : tableEditor.getEntityDef().getSortedFieldDefList()) {
-            if (entityFieldDef.isTableViewable()) {
+            if (entityFieldDef.isTableViewable()
+                    && !ApplicationEntityUtils.RESERVED_EDITOR_FIELDS.contains(entityFieldDef.getFieldName())) {
+                final String flabel = resolveSessionMessage(entityFieldDef.getFieldLabel());
                 writer.write("<div class=\"fld\" id=\"").write(tableEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");
-                writer.writeWithHtmlEscape(entityFieldDef.getFieldLabel());
+                writer.writeWithHtmlEscape(flabel);
                 writer.write("</span></div>");
 
                 jsonWriter.beginObject();
-                jsonWriter.write("fldLabel", entityFieldDef.getFieldLabel());
+                jsonWriter.write("fldLabel", flabel);
                 jsonWriter.write("fldNm", entityFieldDef.getFieldName());
                 if (entityFieldDef.isWithInputWidget()) {
                     jsonWriter.write("fldWidget", entityFieldDef.getInputWidget());

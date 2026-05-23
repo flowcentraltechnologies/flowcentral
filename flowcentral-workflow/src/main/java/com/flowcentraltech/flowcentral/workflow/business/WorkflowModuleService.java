@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.business;
 
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationWorkItemUtilities;
@@ -40,6 +41,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils.DesignType;
 import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
  * Workflow business service.
@@ -50,6 +52,18 @@ import com.tcdng.unify.core.UnifyException;
 public interface WorkflowModuleService extends FlowCentralService, ApplicationWorkItemUtilities {
 
     /**
+     * Publishes all unpublished workflows of an application.
+     * 
+     * @param taskMonitor
+     *                        the task monitor
+     * @param applicationName
+     *                        the application name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void publishUnpublishedWorkflows(TaskMonitor taskMonitor, String applicationName) throws UnifyException;
+
+    /**
      * Publishes a workflow.
      * 
      * @param workflowName
@@ -58,6 +72,18 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     void publishWorkflow(String workflowName) throws UnifyException;
+
+    /**
+     * Publishes a workflow.
+     * 
+     * @param taskMonitor
+     *                    the task monitor
+     * @param workflowId
+     *                    the workflow ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void publishWorkflow(TaskMonitor taskMonitor, Long workflowId) throws UnifyException;
 
     /**
      * Submit work entity instance to workflow by name.
@@ -75,6 +101,27 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      */
     void submitToWorkflowByName(String workflowName, String entity, Long id) throws UnifyException;
 
+    /**
+     * Submit work entity instance to workflow by name.
+     * 
+     * @param workflowName
+     *                     the workflow name
+     * @param entity
+     *                     the entity long name
+     * @param id
+     *                     the entity ID
+     * @param requestedBy
+     *                     the requested by
+     * @param requestedOn
+     *                     the requested on
+     * @throws UnifyException
+     *                        if workflow channel is unknown. If instance type does
+     *                        not match workflow entity definition. If an error
+     *                        occurs
+     */
+    void submitToWorkflowByName(String workflowName, String entity, Long id, String requestedBy, Date requestedOn)
+            throws UnifyException;
+    
     /**
      * Submit entity instance to workflow by workflow name.
      * 
@@ -167,7 +214,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     Workflow findWorkflow(Long workflowId) throws UnifyException;
 
     /**
-     * Finds workflow ID list for application.
+     * Finds unpublished non-runnable custom workflow ID list for application.
      * 
      * @param applicationName
      *                        the application name
@@ -175,7 +222,18 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Long> findCustomWorkflowIdList(String applicationName) throws UnifyException;
+    List<Long> findUnpublishedNonRunnableCustomWorkflowIdList(String applicationName) throws UnifyException;
+
+    /**
+     * Finds runnable custom workflow ID list for application.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return list of application workflow IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> findRunnableCustomWorkflowIdList(String applicationName) throws UnifyException;
 
     /**
      * Finds workflow channel by ID.
@@ -323,6 +381,29 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     WorkEntityItem getWfItemWorkEntityFromWorkItemId(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException;
+
+    /**
+     * Applies user action on workflow item.
+     * 
+     * @param workRecId
+     *                     the workflow record ID
+     * @param workflowName
+     *                     the workflow name
+     * @param stepName
+     *                     the workflow step name
+     * @param userAction
+     *                     the user action to apply
+     * @param actionDate
+     *                     action date
+     * @param actionBy
+     *                     action by
+     * @return true if successfully applied otherwise false when workflow item is
+     *         not in step
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean applyUserAction(Long workRecId, String workflowName, String stepName, String userAction, Date actionDate,
+            String actionBy) throws UnifyException;
 
     /**
      * Applies user action on workflow item.

@@ -169,7 +169,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
             writer.write(">");
             writeReportHeader(reader, listingReportProperties, new HtmlListingGeneratorWriter(formListing, themeManager,
-                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
+                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, true)); // TODO Get highlight from options
             if (listingReportProperties.isBodyBorderless()) {
                 writer.write("<div>");
             } else {
@@ -177,13 +177,13 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             }
             
             generateHtmlListing(formListing, listingReportProperties.getName(), reader, listingReportProperties, writer,
-                    pausePrintColors, false);
+                    pausePrintColors, true); // TODO Make this configurable/ settings
             writeReportAddendum(reader, listingReportProperties,
                     new HtmlListingGeneratorWriter(formListing, themeManager, entityImageProvider,
-                            listingReportProperties.getName(), writer, pausePrintColors, false));
+                            listingReportProperties.getName(), writer, pausePrintColors, true)); // TODO Get highlight from options
             writer.write("</div>");
             writeReportFooter(reader, listingReportProperties, new HtmlListingGeneratorWriter(formListing, themeManager,
-                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
+                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, true)); // TODO Get highlight from options
             writer.write("</div>");
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
@@ -196,6 +196,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
                 formListing.nextIndex();
             }
         }
+        
+        rb.outputSettings(getFileOutputSettings(reader));
     }
 
     @Override
@@ -222,13 +224,14 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         }
 
         rb.customObject(workbook);
+        rb.outputSettings(getFileOutputSettings(reader));
         return rb.build();
     }
 
     @Override
     public final void generateListing(ValueStoreReader reader, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
-        generateHtmlListing(null, "", reader, listingProperties, writer, Collections.emptySet(), true);
+        generateHtmlListing(null, "", reader, listingProperties, writer, Collections.emptySet(), true); // TODO Get highlight from properties
     }
 
     protected abstract Set<ListingColorType> getPausePrintColors() throws UnifyException;

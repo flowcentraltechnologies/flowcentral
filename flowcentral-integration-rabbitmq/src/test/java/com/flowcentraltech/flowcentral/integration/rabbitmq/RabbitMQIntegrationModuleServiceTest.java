@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.integration.rabbitmq;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.ParamValues;
@@ -34,6 +33,7 @@ import com.flowcentraltech.flowcentral.integration.entities.EndpointPath;
 import com.flowcentraltech.flowcentral.integration.rabbitmq.constants.RabbitMQEndpointConstants;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
+import com.flowcentraltech.flowcentral.test.AbstractFlowCentralTest;
 import com.tcdng.unify.core.data.ParamConfig;
 
 /**

@@ -53,6 +53,11 @@ public class FileAttachmentImageWidget extends AbstractFlowCentralMultiControl {
     }
 
     @Override
+    public boolean isSupportStretch() throws UnifyException {
+        return false;
+    }
+
+    @Override
     protected void doOnPageConstruct() throws UnifyException {
         imageGenerator.init(FileAttachmentCategoryType.fromCode(getUplAttribute(String.class, "category")),
                 getUplAttribute(String.class, "entityName"), getUplAttribute(String.class, "attachmentName"));

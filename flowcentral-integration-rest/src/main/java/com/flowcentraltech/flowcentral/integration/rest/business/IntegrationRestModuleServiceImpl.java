@@ -28,6 +28,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Periodic;
 import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ControllerFinder;
@@ -52,7 +53,6 @@ public class IntegrationRestModuleServiceImpl extends AbstractFlowCentralService
     
     @Periodic(PeriodicType.FAST)
     public void checkRestEndpointChange(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Checking REST endpoint change...");
         if (init) {
             Set<String> restEndpointNames = endpointManager.getAndClearChangedRestEndpoint();
             if (!DataUtils.isBlank(restEndpointNames)) {
@@ -66,15 +66,17 @@ public class IntegrationRestModuleServiceImpl extends AbstractFlowCentralService
     
     @Broadcast
     public void updateAllRestEndpointCache() throws UnifyException {
-        logDebug("Updating REST endpoints...");
         Set<String> activeRestEndpointPaths = endpointManager.getActiveRestEndpointPaths();
-        controllerFinder.setControllerAliases(IntegrationRestModuleNameConstants.INTEGRATION_REST_CONTROLLER,
-                activeRestEndpointPaths);
-        logDebug("REST endpoints successfully updated.");
+        if (!DataUtils.isBlank(activeRestEndpointPaths)) {
+            logDebug("Updating REST endpoints...");
+            controllerFinder.setControllerAliases(IntegrationRestModuleNameConstants.INTEGRATION_REST_CONTROLLER,
+                    activeRestEndpointPaths);
+            logDebug("REST endpoints successfully updated.");
+        }
     }
  
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx,ModuleInstall moduleInstall) throws UnifyException {
 
     }
 

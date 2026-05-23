@@ -32,7 +32,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "workflow-wizard")
-public class WfWizardConfig extends BaseNameConfig {
+public class WfWizardConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String entity;

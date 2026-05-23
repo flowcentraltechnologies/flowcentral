@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "notifLargeText")
-public class NotifLargeTextConfig extends BaseNameConfig {
+public class NotifLargeTextConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String entity;

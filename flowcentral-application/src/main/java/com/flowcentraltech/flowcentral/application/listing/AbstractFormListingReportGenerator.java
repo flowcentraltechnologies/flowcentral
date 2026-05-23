@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.FileOutputSettings;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.ReportPageProperties;
 
@@ -41,6 +42,19 @@ public abstract class AbstractFormListingReportGenerator extends AbstractFlowCen
                 ReportPageProperties.newBuilder().resourceBaseUri(getSessionContext().getUriBase()).build(),
                 Arrays.asList(new ListingReportProperties(
                         listingOptions.isWithOptionsName() ? listingOptions.getOptionsName() : "default_prop")));
+    }
+
+    /**
+     * Override this method to set settings to be applied to output report.
+     * 
+     * @param reader
+     *               the value reader
+     * @return the output settings
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected FileOutputSettings getFileOutputSettings(ValueStoreReader reader) throws UnifyException {
+        return null;
     }
 
     protected abstract void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,

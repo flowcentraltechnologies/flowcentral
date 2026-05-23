@@ -32,10 +32,13 @@ public class EntityAttachmentDef implements Listable {
 
     private String description;
 
-    public EntityAttachmentDef(FileAttachmentType type, String name, String description) {
+    private String label;
+
+    public EntityAttachmentDef(FileAttachmentType type, String name, String description, String label) {
         this.type = type;
         this.name = name;
         this.description = description;
+        this.label = label;
     }
 
     @Override
@@ -58,6 +61,10 @@ public class EntityAttachmentDef implements Listable {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
 }

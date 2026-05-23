@@ -34,16 +34,15 @@ public abstract class AbstractHttpPostDelegateFormActionPolicy extends AbstractD
         super(operation, skipUpdate);
     }
 
-    public AbstractHttpPostDelegateFormActionPolicy(String operation, Collection<String> copyExclusions, boolean skipUpdate) {
+    public AbstractHttpPostDelegateFormActionPolicy(String operation, Collection<String> copyExclusions,
+            boolean skipUpdate) {
         super(operation, copyExclusions, skipUpdate);
     }
 
     @Override
-    protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
+    protected String sendToDelegateProcedureService(String jsonReq, String endpoint) throws UnifyException {
         return extractResult(IOUtils.postJsonToEndpoint(
-                getEndpoint() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq));
+                endpoint + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq));
     }
-
-    protected abstract String getEndpoint() throws UnifyException;
 
 }

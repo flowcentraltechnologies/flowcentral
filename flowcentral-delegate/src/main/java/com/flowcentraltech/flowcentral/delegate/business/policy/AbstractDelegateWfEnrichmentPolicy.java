@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractWfEnrichmentPolicy;
@@ -44,13 +45,16 @@ import com.tcdng.unify.core.util.DataUtils;
 public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnrichmentPolicy {
 
     @Configurable
+    private ApplicationModuleService applicationModuleService;
+
+    @Configurable
     private EnvironmentDelegateUtilities utilities;
 
     @Configurable
     private EnvironmentDelegateRegistrar registrar;
 
     private String operation;
-    
+
     public AbstractDelegateWfEnrichmentPolicy(String operation) {
         this.operation = operation;
     }
@@ -62,7 +66,7 @@ public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnric
         ProcedureRequest req = new ProcedureRequest(operation);
         req.setEntity(registrar.resolveLongName(inst.getClass()));
         req.setPayload(utilities.encodeDelegateEntity(inst));
-        JsonProcedureResponse resp =  sendToDelegateProcedureService(req);
+        JsonProcedureResponse resp = sendToDelegateProcedureService(req, getEndpoint(wfItemReader));
         Object[] payload = resp.getPayload();
         Entity respInst = null;
         if (payload != null && payload.length == 1) {
@@ -83,9 +87,10 @@ public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnric
         return Collections.emptyList();
     }
 
-    protected JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req) throws UnifyException {
+    protected JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req, String endpoint)
+            throws UnifyException {
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
-        String respJSON = sendToDelegateProcedureService(reqJSON);
+        String respJSON = sendToDelegateProcedureService(reqJSON, endpoint);
         JsonProcedureResponse resp = DataUtils.fromJsonString(JsonProcedureResponse.class, respJSON);
         if (resp.error()) {
             // TODO Translate to local exception and throw
@@ -93,7 +98,13 @@ public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnric
 
         return resp;
     }
+    
+    protected final ApplicationModuleService application() {
+        return applicationModuleService;
+    }
 
-    protected abstract String sendToDelegateProcedureService(String jsonReq) throws UnifyException;
+    protected abstract String getEndpoint(ValueStoreReader reader) throws UnifyException;
+
+    protected abstract String sendToDelegateProcedureService(String jsonReq, String endpoint) throws UnifyException;
 
 }

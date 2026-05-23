@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.common.data;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.Target;
 
 /**
- * Validation errors.
+ * FormValidation errors.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1

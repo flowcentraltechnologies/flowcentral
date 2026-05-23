@@ -28,6 +28,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.FileAttachmentInfo;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
@@ -56,7 +57,7 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
         FileAttachmentInfo fileAttachmentInfo = new FileAttachmentInfo(type);
         fileAttachmentInfo.setFilename(attachment.isWithFileName() ? attachment.getFileName()
                 : type.appendDefaultExtension(attachment.getName()));
-        fileAttachmentInfo.setAttachment(getData(type, attachment));
+        fileAttachmentInfo.setAttachment(getFile(type, attachment));
         return fileAttachmentInfo;
     }
 
@@ -90,5 +91,5 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
     protected abstract List<Attachment> getAttachments(ValueStoreReader reader, AttachmentsOptions options)
             throws UnifyException;
 
-    protected abstract byte[] getData(FileAttachmentType resolvedType, Attachment attachment) throws UnifyException;
+    protected abstract UploadedFile getFile(FileAttachmentType resolvedType, Attachment attachment) throws UnifyException;
 }

@@ -30,6 +30,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FileAttachmentInfo;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -49,7 +50,7 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
 
     @SuppressWarnings("unchecked")
     @Override
-    public Object save(Object id, String category, FileAttachmentType type, String filename, byte[] attachment)
+    public Object save(Object id, String category, FileAttachmentType type, String filename, UploadedFile file)
             throws UnifyException {
         final RefDef refDef = application().getRefDef(category);
         final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
@@ -58,7 +59,7 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
         final String blobDescFieldName = entityDef.getBlobDescFieldName();
         if (id == null) {
             Entity inst = entityClassDef.newInst();
-            DataUtils.setBeanProperty(inst, blobFieldName, attachment);
+            DataUtils.setBeanProperty(inst, blobFieldName, file.getDataAndInvalidate());
             if (!StringUtils.isBlank(blobDescFieldName)) {
                 DataUtils.setBeanProperty(inst, blobDescFieldName, filename);
             }
@@ -66,7 +67,7 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
             return environment().create(inst);
         }
 
-        Update update = new Update().add(blobFieldName, attachment);
+        Update update = new Update().add(blobFieldName, file.getDataAndInvalidate());
         if (!StringUtils.isBlank(blobDescFieldName)) {
             update.add(blobDescFieldName, filename);
         }
@@ -113,7 +114,7 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
 
         FileAttachmentInfo fileAttachmentInfo = new FileAttachmentInfo(type);
         fileAttachmentInfo.setFilename(filename);
-        fileAttachmentInfo.setAttachment(attachment);
+        fileAttachmentInfo.setAttachment(UploadedFile.create(filename, attachment));
         return fileAttachmentInfo;
     }
 

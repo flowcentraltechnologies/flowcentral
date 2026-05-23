@@ -72,7 +72,7 @@ public class EntitySelectPanel extends AbstractApplicationPanel {
     @Action
     public void select() throws UnifyException {
         IndexedTarget indexedTarget = getRequestTarget(IndexedTarget.class);
-        if (indexedTarget.isValidValueIndex()) {
+        if (indexedTarget != null && indexedTarget.isValidValueIndex()) {
             Popup popup = getCurrentPopup();
             if (popup != null) {
                 EntitySelect entitySelect = (EntitySelect) popup.getBackingBean();

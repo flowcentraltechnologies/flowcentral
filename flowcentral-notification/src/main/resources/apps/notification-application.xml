@@ -80,6 +80,12 @@
 				<property name="propertyList.update" value="true" />
 			</properties>
 		</applet>
+		<applet name="manageSendTestNotification"
+			description="$m{notification.sendtestnotification.manage}"
+			label="$m{notification.sendtestnotification.label}" icon="paper-plane"
+			type="PATH_PAGE" path="/notification/sendtestnotification/openPage"
+			menuAccess="true" allowSecondaryTenants="true">
+		</applet>
 	</applets>
 	<!-- References -->
 	<references>

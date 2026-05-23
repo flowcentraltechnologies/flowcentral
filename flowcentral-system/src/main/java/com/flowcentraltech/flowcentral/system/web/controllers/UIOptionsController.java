@@ -26,6 +26,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -101,7 +102,7 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
                 FileAttachmentCategoryType.FILERESOURCE_CATEGORY, SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
                 SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, resourceName);
         if (attachment != null) {
-            return attachment.getData();
+            return attachment.getFile().getDataAndInvalidate();
         }
 
         return null;
@@ -111,8 +112,8 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
         if (resource != null) {
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FILERESOURCE_CATEGORY,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
-                    SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID,
-                    Attachment.newBuilder(type, false).name(resourceName).title("").data(resource).build());
+                    SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, Attachment.newBuilder(type, false)
+                            .name(resourceName).title("").file(UploadedFile.create(resourceName, resource)).build());
         } else {
             fileAttachmentProvider.deleteFileAttachment(FileAttachmentCategoryType.FILERESOURCE_CATEGORY,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,

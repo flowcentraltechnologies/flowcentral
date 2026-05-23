@@ -124,7 +124,7 @@ public final class ApplicationReplicationUtils {
                 lineNumber++;
             }
         } catch (Exception e) {
-            throw new UnifyOperationException(e, "ApplicationReplicationUtils", e.getMessage());
+            throw new UnifyOperationException(e);
         }
 
         entityrb.replace(srcApplicationName, destApplicationName);

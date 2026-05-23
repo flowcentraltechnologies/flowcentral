@@ -17,9 +17,11 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.tcdng.unify.common.util.ProcessVariableUtils;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
 
@@ -31,6 +33,9 @@ import com.tcdng.unify.core.data.ValueStoreWriter;
  */
 public abstract class AbstractWfEnrichmentPolicy extends AbstractFlowCentralComponent implements WfEnrichmentPolicy {
 
+    @Configurable
+    private EnvironmentService environment;
+
     @Override
     protected void onInitialize() throws UnifyException {
 
@@ -39,6 +44,10 @@ public abstract class AbstractWfEnrichmentPolicy extends AbstractFlowCentralComp
     @Override
     protected void onTerminate() throws UnifyException {
 
+    }
+
+    protected final EnvironmentService environment() {
+        return environment;
     }
 
     /**

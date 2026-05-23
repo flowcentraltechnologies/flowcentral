@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
@@ -54,97 +55,127 @@ public class EntityListWidget extends AbstractEntityListWidget {
     public WriteWork getWriteWork() throws UnifyException {
         WriteWork work = super.getWriteWork();
         if (work.get(WORK_RESULTLIST) == null) {
+            final String listKey = getListkey();
             RefDef refDef = null;
             EntityClassDef entityClassDef = null;
             Restriction br = null;
-            if (isDirect()) {
-                entityClassDef = application().getEntityClassDef(getRef(0));
-            } else {
-                refDef = getRefDef(0);
-                entityClassDef = application().getEntityClassDef(refDef.getEntity());
-                br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                        getValueStore().getReader(), application().getNow()) : null;
-            }
 
-            Query<? extends Entity> query = null;
-            if (br != null) {
-                query = Query.ofDefaultingToAnd((Class<? extends Entity>) entityClassDef.getEntityClass(), br);
-            } else {
-                query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
-                query.ignoreEmptyCriteria(true);
-            }
-
-            addMoreResultRestriction(entityClassDef, query);
-            int limit = getUplAttribute(int.class, "limit");
-            if (limit > 0) {
-                query.setLimit(limit);
-            }
-
-            if (refDef.isWithOrderField()) {
-                query.addOrder(refDef.getOrderField());
-                if (query.isSelect()) {
-                    query.addSelect(refDef.getOrderField());
-                }
-            } else {
-                String searchField = getSearchField(entityClassDef, refDef);
-                if (searchField != null) {
-                    query.addOrder(searchField);
-                }
-            }
-
-            List<? extends Listable> listableList = environment().listAll(query);
-
-            final String listKey = getListkey();
-            final int len = listableList.size();
-            final boolean isListFormat = refDef != null && refDef.isWithListFormat();
-            ParameterizedStringGenerator generator = null;
-            if (isListFormat) {
-                generator = specialParamProvider().getStringGenerator(new BeanValueListStore(listableList).getReader(),
-                        getValueStore().getReader(), refDef.getListFormat());
-            }
-
-            boolean isListKey = !StringUtils.isBlank(listKey);
-            boolean isLongName = isListKey && "longName".equals(listKey);
-            Formatter<Object> formatter = getFormatter();
-            final String[] selIdArr = new String[len];
-            final String[] lblArr = new String[len];
-            final String[] keyArr = new String[len];
-            for (int i = 0; i < len; i++) {
-                Listable listable = listableList.get(i);
-                String key = null;
-                if (isListKey) {
-                    if (isLongName) {
-                        key = ApplicationNameUtils.getApplicationEntityLongName(
-                                DataUtils.convert(String.class,
-                                        ReflectUtils.getBeanProperty(listable, "applicationName")),
-                                DataUtils.convert(String.class, ReflectUtils.getBeanProperty(listable, "name")));
-                    } else {
-                        key = DataUtils.convert(String.class, ReflectUtils.getBeanProperty(listable, listKey));
-                    }
-
-                } else {
-                    key = listable.getListKey();
-                }
-
-                String nindex = getNamingIndexedId(i);
-                selIdArr[i] = nindex;
-                keyArr[i] = key;
-
-                if (isListFormat) {
-                    lblArr[i] = generator.setDataIndex(i).generate();
-                } else {
-                    if (formatter != null) {
-                        lblArr[i] = formatter.format(listable.getListDescription());
-                    } else {
+            final int limit = getUplAttribute(int.class, "limit");
+            List<? extends Listable> listableList = null;
+            if (isWithExternalAccessibility()) {
+                Optional<List<Listable>> optional = externalAccessibility().getRefListables(getRef(0), listKey, null,
+                        limit, false);
+                if (optional.isPresent()) {
+                    listableList = optional.get();
+                    final int len = listableList.size();
+                    final String[] selIdArr = new String[len];
+                    final String[] lblArr = new String[len];
+                    final String[] keyArr = new String[len];
+                    for (int i = 0; i < len; i++) {
+                        Listable listable = listableList.get(i);
+                        selIdArr[i] = getNamingIndexedId(i);
+                        keyArr[i] = listable.getListKey();
                         lblArr[i] = listable.getListDescription();
                     }
+                    
+                    work.set(WORK_RESULTLIST, listableList);
+                    work.set(WORK_SELECTIDS, selIdArr);
+                    work.set(WORK_KEYS, keyArr);
+                    work.set(WORK_LABELS, lblArr);
                 }
             }
 
-            work.set(WORK_RESULTLIST, listableList);
-            work.set(WORK_SELECTIDS, selIdArr);
-            work.set(WORK_KEYS, keyArr);
-            work.set(WORK_LABELS, lblArr);
+            if (listableList == null) {
+                if (isDirect()) {
+                    entityClassDef = application().getEntityClassDef(getRef(0));
+                } else {
+                    refDef = getRefDef(0);
+                    entityClassDef = application().getEntityClassDef(refDef.getEntity());
+                    br = refDef.isWithFilter()
+                            ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
+                                    getValueStore().getReader(), application().getNow())
+                            : null;
+                }
+
+                Query<? extends Entity> query = null;
+                if (br != null) {
+                    query = Query.ofDefaultingToAnd((Class<? extends Entity>) entityClassDef.getEntityClass(), br);
+                } else {
+                    query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+                    query.ignoreEmptyCriteria(true);
+                }
+
+                addMoreResultRestriction(entityClassDef, query);
+                if (limit > 0) {
+                    query.setLimit(limit);
+                }
+
+                if (refDef.isWithOrderField()) {
+                    query.addOrder(refDef.getOrderField());
+                    if (query.isSelect()) {
+                        query.addSelect(refDef.getOrderField());
+                    }
+                } else {
+                    String searchField = getSearchField(entityClassDef, refDef);
+                    if (searchField != null) {
+                        query.addOrder(searchField);
+                    }
+                }
+
+                listableList = environment().listAll(query);
+
+                final int len = listableList.size();
+                final boolean isListFormat = refDef != null && refDef.isWithListFormat();
+                ParameterizedStringGenerator generator = null;
+                if (isListFormat) {
+                    generator = specialParamProvider().getStringGenerator(
+                            new BeanValueListStore(listableList).getReader(), getValueStore().getReader(),
+                            refDef.getListFormat());
+                }
+
+                boolean isListKey = !StringUtils.isBlank(listKey);
+                boolean isLongName = isListKey && "longName".equals(listKey);
+                Formatter<Object> formatter = getFormatter();
+                final String[] selIdArr = new String[len];
+                final String[] lblArr = new String[len];
+                final String[] keyArr = new String[len];
+                for (int i = 0; i < len; i++) {
+                    Listable listable = listableList.get(i);
+                    String key = null;
+                    if (isListKey) {
+                        if (isLongName) {
+                            key = ApplicationNameUtils.getApplicationEntityLongName(
+                                    DataUtils.convert(String.class,
+                                            ReflectUtils.getBeanProperty(listable, "applicationName")),
+                                    DataUtils.convert(String.class, ReflectUtils.getBeanProperty(listable, "name")));
+                        } else {
+                            key = DataUtils.convert(String.class, ReflectUtils.getBeanProperty(listable, listKey));
+                        }
+
+                    } else {
+                        key = listable.getListKey();
+                    }
+
+                    String nindex = getNamingIndexedId(i);
+                    selIdArr[i] = nindex;
+                    keyArr[i] = key;
+
+                    if (isListFormat) {
+                        lblArr[i] = generator.setDataIndex(i).generate();
+                    } else {
+                        if (formatter != null) {
+                            lblArr[i] = formatter.format(listable.getListDescription());
+                        } else {
+                            lblArr[i] = listable.getListDescription();
+                        }
+                    }
+                }
+
+                work.set(WORK_RESULTLIST, listableList);
+                work.set(WORK_SELECTIDS, selIdArr);
+                work.set(WORK_KEYS, keyArr);
+                work.set(WORK_LABELS, lblArr);
+            }
         }
 
         return work;

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.tcdng.unify.web.ui.widget.data.BadgeInfo;
 
 /**
  * Enumeration definition.
@@ -31,21 +32,23 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 public class EnumerationDef extends BaseApplicationEntityDef {
 
     private String label;
-    
+
     private Map<String, EnumerationItemDef> items;
 
     private List<EnumerationItemDef> itemsList;
 
-    public EnumerationDef(ApplicationEntityNameParts nameParts, String description, Long id, long version,
-            String label, List<EnumerationItemDef> itemsList) {
+    private BadgeInfo badgeInfo;
+
+    public EnumerationDef(ApplicationEntityNameParts nameParts, String description, Long id, long version, String label,
+            List<EnumerationItemDef> itemsList) {
         super(nameParts, description, id, version);
         this.label = label;
         this.itemsList = Collections.unmodifiableList(itemsList);
         this.items = new LinkedHashMap<String, EnumerationItemDef>();
-        for (EnumerationItemDef item: itemsList) {
+        for (EnumerationItemDef item : itemsList) {
             this.items.put(item.getCode(), item);
         }
-        
+
         this.items = Collections.unmodifiableMap(this.items);
     }
 
@@ -65,9 +68,27 @@ public class EnumerationDef extends BaseApplicationEntityDef {
     public List<EnumerationItemDef> getItemsList() {
         return itemsList;
     }
-    
+
     public EnumerationItemDef getItem(String code) {
         return items.get(code);
+    }
+
+    public BadgeInfo getBadgeInfo() {
+        if (badgeInfo == null) {
+            synchronized (this) {
+                if (badgeInfo == null) {
+                    BadgeInfo.Builder bib = BadgeInfo.newBuilder();
+                    for (EnumerationItemDef enumerationItemDef : itemsList) {
+                        bib.addItem(enumerationItemDef.getCode(), enumerationItemDef.getLabel(),
+                                enumerationItemDef.getColor());
+                    }
+
+                    badgeInfo = bib.build();
+                }
+            }
+        }
+
+        return badgeInfo;
     }
 
 }

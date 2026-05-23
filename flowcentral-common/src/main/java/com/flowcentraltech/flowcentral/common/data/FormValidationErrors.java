@@ -193,6 +193,10 @@ public class FormValidationErrors implements ValidationErrors {
         return invalidFields.get(fieldName);
     }
 
+    public Map<String, List<String>> getFieldErrors() {
+        return invalidFields;
+    }
+    
     public boolean isWithSectionErrors() {
         return !DataUtils.isBlank(invalidSections);
     }

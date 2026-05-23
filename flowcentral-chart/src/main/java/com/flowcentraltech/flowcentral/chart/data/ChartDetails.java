@@ -149,6 +149,10 @@ public class ChartDetails {
         return series;
     }
 
+    public boolean isWithSeries() {
+        return !DataUtils.isBlank(series);
+    }
+    
     public Set<String> getSeriesInclusion() {
         return seriesInclusion;
     }

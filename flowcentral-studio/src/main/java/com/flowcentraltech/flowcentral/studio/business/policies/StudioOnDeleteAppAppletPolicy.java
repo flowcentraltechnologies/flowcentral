@@ -26,9 +26,9 @@ import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Studio on delete application applet policy.
@@ -62,7 +62,7 @@ public class StudioOnDeleteAppAppletPolicy extends AbstractStudioAppletActionPol
     }
 
     @Override
-    public boolean checkAppliesTo(Entity inst) throws UnifyException {
+    public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
         return true;
     }
 

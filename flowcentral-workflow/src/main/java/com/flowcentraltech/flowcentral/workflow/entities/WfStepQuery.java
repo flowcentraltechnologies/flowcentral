@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
@@ -33,12 +34,25 @@ import com.tcdng.unify.core.criterion.NotEquals;
  */
 public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
 
+    private static final List<WorkflowStepType> ACTIONABLES = Arrays.asList(
+            WorkflowStepType.USER_ACTION,
+            WorkflowStepType.START,
+            WorkflowStepType.ERROR);
+
     public WfStepQuery() {
         super(WfStep.class);
     }
 
     public WfStepQuery workflowId(Long workflowId) {
         return (WfStepQuery) addEquals("workflowId", workflowId);
+    }
+
+    public WfStepQuery startActionable() {
+        return (WfStepQuery) addIsNotNull("appletName").addEquals("type",  WorkflowStepType.START);
+    }
+
+    public WfStepQuery userActionable() {
+        return (WfStepQuery) addIsNotNull("appletName").addAmongst("type", ACTIONABLES);
     }
 
     public WfStepQuery routableTo() {
@@ -58,6 +72,14 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
 
     public WfStepQuery workflowRunnable(boolean workflowRunnable) {
         return (WfStepQuery) addEquals("workflowRunnable", workflowRunnable);
+    }
+
+    public WfStepQuery workflowDevelopable(boolean workflowDevelopable) {
+        return (WfStepQuery) addEquals("workflowDevelopable", workflowDevelopable);
+    }
+    
+    public WfStepQuery withCasePrefix() {
+        return (WfStepQuery) addIsNotNull("workflowCasePrefix");
     }
 
     public WfStepQuery withEjectionRestriction() {
@@ -91,7 +113,7 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     public WfStepQuery workflowLoadingTable(String workflowLoadingTable) {
         return (WfStepQuery) addEquals("workflowLoadingTable", workflowLoadingTable);
     }
-    
+
     public WfStepQuery isWithLoadingTable() {
         return (WfStepQuery) addIsNotNull("workflowLoadingTable");
     }

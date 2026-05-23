@@ -87,4 +87,13 @@ public final class ApplicationQueryUtils {
             }
         }
     }
+
+    public static void addWidgetTypeCriteria(Query<AppWidgetType> query, DataType dataType) {
+        if (dataType == null) {
+            query.addRestriction(new IsNull("dataType"));
+        } else {
+            query.addRestriction(new And().add(new Amongst("dataType", dataType.convertibleFromTypes()))
+                    .add(new Equals("listOption", true)));
+        }
+    }
 }

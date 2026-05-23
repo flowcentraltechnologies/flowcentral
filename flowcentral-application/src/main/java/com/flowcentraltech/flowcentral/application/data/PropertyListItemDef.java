@@ -40,8 +40,10 @@ public class PropertyListItemDef {
 
     private boolean encrypt;
 
+    private boolean disabled;
+
     public PropertyListItemDef(EntityFieldDef entityFieldDef, WidgetTypeDef widgetTypeDef, String description, String renderer,
-            String defaultVal, boolean required, boolean mask, boolean encrypt) {
+            String defaultVal, boolean required, boolean mask, boolean encrypt, boolean disabled) {
         this.entityFieldDef = entityFieldDef;
         this.widgetTypeDef = widgetTypeDef;
         this.description = description;
@@ -50,6 +52,7 @@ public class PropertyListItemDef {
         this.required = required;
         this.mask = mask;
         this.encrypt = encrypt;
+        this.disabled = disabled;
     }
 
     public EntityFieldDef getEntityFieldDef() {
@@ -90,5 +93,9 @@ public class PropertyListItemDef {
 
     public boolean isEncrypt() {
         return encrypt;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
     }
 }

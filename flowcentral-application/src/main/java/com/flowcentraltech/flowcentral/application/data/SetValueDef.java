@@ -50,8 +50,4 @@ public class SetValueDef {
         return param;
     }
 
-    @Override
-    public String toString() {
-        return "SetValueDef [type=" + type + ", fieldName=" + fieldName + ", param=" + param + "]";
-    }
 }

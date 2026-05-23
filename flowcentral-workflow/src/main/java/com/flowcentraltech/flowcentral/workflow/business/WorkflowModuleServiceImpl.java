@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
 import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.business.EmailListProducerConsumer;
+import com.flowcentraltech.flowcentral.application.business.PortalWorkflowProvider;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
@@ -52,6 +53,9 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
 import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowStep;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowUserAction;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
@@ -95,6 +99,7 @@ import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleS
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelErrorConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
@@ -107,6 +112,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfAlertDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfFilterDef;
+import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.flowcentraltech.flowcentral.workflow.data.WfRoutingDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfSetValuesDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
@@ -129,6 +135,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfStepRole;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRoleQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserActionQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueue;
 import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueueQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizard;
@@ -160,6 +167,7 @@ import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.constant.OrderType;
@@ -191,8 +199,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(WorkflowModuleNameConstants.WORKFLOW_MODULE_SERVICE)
-public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
-        implements WorkflowModuleService, ApplicationAppletDefProvider, RolePrivilegeBackupAgent {
+public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implements WorkflowModuleService,
+        ApplicationAppletDefProvider, RolePrivilegeBackupAgent, PortalWorkflowProvider {
 
     private static final List<WorkflowStepType> USER_INTERACTIVE_STEP_TYPES = Arrays
             .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR, WorkflowStepType.DELAY);
@@ -224,6 +232,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
+    @Configurable
+    private WorkItemExternalAccessibilityProvider workItemExternalAccessibilityProvider;
+
     private final FactoryMap<String, WfDef> wfDefFactoryMap;
 
     private final FactoryMap<String, WfWizardDef> wfWizardDefFactoryMap;
@@ -239,7 +250,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         this.wfDefFactoryMap = new StaleableFactoryMap<String, WfDef>()
             {
-
                 @Override
                 protected boolean stale(String longName, WfDef wfDef) throws Exception {
                     return isStale(new WorkflowQuery(), wfDef);
@@ -248,20 +258,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected WfDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    final String workflowName = WorkflowNameUtils.getWorkflowRunnableName(nameParts.getEntityName());
+                    final String workflowRunnableName = WorkflowNameUtils.getWorkflowRunnableName(nameParts.getEntityName());
                     Workflow workflow = environment().list(new WorkflowQuery().runnable()
-                            .applicationName(nameParts.getApplicationName()).name(workflowName));
+                            .applicationName(nameParts.getApplicationName()).nameIn(Arrays.asList(workflowRunnableName, nameParts.getEntityName())));
                     if (workflow == null) {
                         throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_FIND_RUNNABLE_APPLICATION_WORKFLOW,
                                 longName);
                     }
 
                     longName = ApplicationNameUtils.getApplicationEntityLongName(nameParts.getApplicationName(),
-                            workflowName);
+                            workflow.getName());
                     List<StringToken> descFormat = !StringUtils.isBlank(workflow.getDescFormat())
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
-                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(), descFormat,
+                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(),
+                            resolveApplicationMessage(workflow.getLabel()), workflow.getCasePrefix(), descFormat,
                             workflow.isSupportMultiItemAction(), longName, workflow.getDescription(), workflow.getId(),
                             workflow.getVersionNo());
 
@@ -300,10 +311,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String label = getApplicationMessage("workflow.applet.label", workflow.getLabel(),
                                     wfStep.getLabel());
                             final String assignDescField = null;
+                            final String assignSearch = null;
                             final String pseudoDeleteField = null;
                             StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(_reviewAppletType, null, label,
-                                    "tasks", assignDescField, pseudoDeleteField, 0, true, false, true,
-                                    descriptiveButtons, appletName, label);
+                                    "tasks", assignDescField, assignSearch, pseudoDeleteField, 0, false, true, false,
+                                    false, true, descriptiveButtons, appletName, label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
                                     : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
@@ -326,7 +338,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getWorkItemLoadingRestriction(), wfStep.getEjectionRestriction(),
                                 wfStep.getAttachmentProviderName(), wfStep.getNewCommentCaption(),
                                 wfStep.getAppletSetValuesName(), wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(),
-                                wfStep.getDescription(), wfStep.getLabel(),
+                                resolveApplicationMessage(wfStep.getDescription()),
+                                resolveApplicationMessage(wfStep.getLabel()),
                                 DataUtils.convert(int.class, wfStep.getReminderMinutes()),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()),
@@ -418,10 +431,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final boolean descriptiveButtons = appletUtil.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     final String assignDescField = null;
+                    final String assignSearch = null;
                     final String pseudoDeleteField = null;
                     StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS,
-                            null, label, "magic", assignDescField, pseudoDeleteField, 0, true, false, true,
-                            descriptiveButtons, appletName, label);
+                            null, label, "magic", assignDescField, assignSearch, pseudoDeleteField, 0, false, true,
+                            false, false, true, descriptiveButtons, appletName, label);
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfWizardItemReviewTable");
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE_NEW, "true");
                     adb.addPropDef(WfWizardAppletPropertyConstants.WORKFLOW_WIZARD, longName);
@@ -471,11 +485,56 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void clearDefinitionsCache() throws UnifyException {
-        logDebug("Clearing definitions cache...");
+        logInfo("Clearing definitions cache...");
         wfDefFactoryMap.clear();
         wfWizardDefFactoryMap.clear();
         wfChannelDefFactoryMap.clear();
-        logDebug("Definitions cache clearing successfully completed.");
+        logInfo("Definitions cache clearing successfully completed.");
+    }
+
+    @Override
+    public List<String> getPortalApplicationNames() throws UnifyException {
+        Set<String> applicationNames = environment().valueSet(String.class, "applicationName",
+                new WfStepQuery().workflowDevelopable(true).userActionable().workflowRunnable(true));
+        return new ArrayList<String>(applicationNames);
+    }
+
+    @Override
+    public List<PortalWorkflow> getPortalWorkflows(String applicationName) throws UnifyException {
+        Set<Long> workflowIds = environment().valueSet(Long.class, "workflowId",
+                new WfStepQuery().applicationName(applicationName).workflowRunnable(true).withCasePrefix()
+                        .startActionable().userActionable());
+        if (!DataUtils.isBlank(workflowIds)) {
+            final List<PortalWorkflow> workflows = new ArrayList<PortalWorkflow>();
+            for (Long workflowId : workflowIds) {
+                final List<PortalWorkflowStep> steps = new ArrayList<PortalWorkflowStep>();
+                for (WfStep step : environment().findAll(new WfStepQuery().workflowId(workflowId).userActionable())) {
+                    final List<PortalWorkflowUserAction> userActions = new ArrayList<PortalWorkflowUserAction>();
+                    for (WfStepUserAction userAction : environment()
+                            .findAll(new WfStepUserActionQuery().wfStepId(step.getId()))) {
+                        userActions.add(new PortalWorkflowUserAction(userAction.getName(),
+                                resolveApplicationMessage(userAction.getLabel()),
+                                userAction.getHighlightType() != null ? userAction.getHighlightType().toString()
+                                        : null));
+                    }
+
+                    steps.add(new PortalWorkflowStep(step.getName(), resolveApplicationMessage(step.getDescription()),
+                            resolveApplicationMessage(step.getLabel()), step.getAppletName(), step.getType().toString(),
+                            DataUtils.unmodifiableList(userActions)));
+                }
+
+                final Workflow workflow = environment().findLean(new WorkflowQuery().id(workflowId));
+                final String workflowName = ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        workflow.getName());
+                workflows.add(new PortalWorkflow(workflowName, resolveApplicationMessage(workflow.getDescription()),
+                        resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(), workflow.getCasePrefix(),
+                        workflow.getDescFormat(), DataUtils.unmodifiableList(steps)));
+            }
+
+            return workflows;
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
@@ -525,14 +584,42 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public void publishUnpublishedWorkflows(TaskMonitor taskMonitor, String applicationName) throws UnifyException {
+        // Publish unpublished custom workflows
+        List<Long> workflowIdList = findUnpublishedNonRunnableCustomWorkflowIdList(applicationName);
+        if (!DataUtils.isBlank(workflowIdList)) {
+            for (Long workflowId : workflowIdList) {
+                publishWorkflow(taskMonitor, workflowId);
+            }
+        }
+    }
+
+    @Override
     public void publishWorkflow(String workflowName) throws UnifyException {
+        publishWorkflow(null, workflowName);
+    }
+
+    @Override
+    public void publishWorkflow(TaskMonitor taskMonitor, Long workflowId) throws UnifyException {
+        final Workflow workflow = environment()
+                .list(new WorkflowQuery().id(workflowId).addSelect("applicationName", "name"));
+        publishWorkflow(taskMonitor,
+                ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(), workflow.getName()));
+    }
+
+    private void publishWorkflow(final TaskMonitor taskMonitor, final String workflowName) throws UnifyException {
+        logInfo(taskMonitor, "Publishing workflow [{0}]...", workflowName);
         ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
         final String runnableName = WorkflowNameUtils.getWorkflowRunnableName(anp.getEntityName());
         final Workflow workflow = environment()
                 .find(new WorkflowQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
+        if (workflow.isRunnable()) {
+            throwOperationErrorException(
+                    new IllegalArgumentException("Can not publish runnable workflow [" + workflowName + "]"));
+        }
+
         final Long workflowId = workflow.getId();
         final String runnableDesc = WorkflowNameUtils.getWorkflowRunnableDescription(workflow.getDescription());
-        // TODO Validate if workflow is runnable
         Workflow runWorkflow = environment()
                 .find(new WorkflowQuery().applicationName(anp.getApplicationName()).name(runnableName));
         if (runWorkflow == null) {
@@ -544,6 +631,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             environment().create(workflow);
         } else {
             runWorkflow.setDescription(runnableDesc);
+            runWorkflow.setCasePrefix(workflow.getCasePrefix());
             runWorkflow.setLoadingTable(workflow.getLoadingTable());
             runWorkflow.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
             runWorkflow.setEntity(workflow.getEntity());
@@ -558,6 +646,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
 
         environment().updateById(Workflow.class, workflowId, new Update().add("published", true));
+        logInfo(taskMonitor, "Workflow [{0}] successfully published.", workflowName);
     }
 
     @Override
@@ -567,6 +656,26 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         executeEntityPreActionPolicy(ctx);
         submitToWorkflowByName(workflowName, inst);
         return executeEntityPostActionPolicy(ctx);
+    }
+
+    @Override
+    public void checkSubmitToWorkflowChannel(String workflowChannelName, WorkEntity inst) throws UnifyException {
+        WfChannelDef wfChannelDef = getWfChannelDef(workflowChannelName);
+        if (WfChannelStatus.CLOSED.equals(wfChannelDef.getStatus())) {
+            throwOperationErrorException(new Exception("Workflow channel is closed."));
+        }
+
+        if (WfChannelStatus.SUSPENDED.equals(wfChannelDef.getStatus())) {
+            throwOperationErrorException(new Exception("Workflow channel is suspended."));
+        }
+
+        WfDef wfDef = getWfDef(wfChannelDef.getDestination());
+        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
+        if (!entityClassDef.isCompatible(inst)) {
+            Class<?> clazz = inst != null ? inst.getClass() : null;
+            throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_SUBMIT_INST_TO_INCOMPATIBLE_WORKFLOW, clazz,
+                    wfDef.getName(), wfDef.getApplicationName());
+        }
     }
 
     @Override
@@ -621,9 +730,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final EntityDef entityDef = appletUtil.getAppletEntityDef(appletName);
         final AppletWorkflowCopyInfo appletWorkflowCopyInfo = appletUtil.application()
                 .getAppletWorkflowCopyInfo(appletName);
-        final String workflowDesc = entityDef.getLabel() + designType.descSuffix();
-        final String workflowLabel = entityDef.getLabel() + designType.labelSuffix();
-        final String stepLabel = entityDef.getLabel() + designType.labelSuffix();
+        final String workflowDesc = entityDef.getLabel() + " " + resolveApplicationMessage(designType.descSuffix());
+        final String workflowLabel = entityDef.getLabel() + " " + resolveApplicationMessage(designType.labelSuffix());
+        final String stepLabel = entityDef.getLabel() + " " + resolveApplicationMessage(designType.labelSuffix());
         Workflow workflow = environment()
                 .findLean(new WorkflowQuery().applicationName(wnp.getApplicationName()).name(wnp.getEntityName()));
         if (workflow == null) {
@@ -635,6 +744,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setDescription(workflowDesc);
             workflow.setLabel(workflowLabel);
             workflow.setEntity(entityDef.getLongName());
+            workflow.setCasePrefix(designType.casePrefix());
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
             workflow.setSupportMultiItemAction(true);
             workflow.setPublished(false);
@@ -651,6 +761,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflow.setConfigType(ConfigType.STATIC);
                 workflow.setDescription(workflowDesc);
                 workflow.setLabel(workflowLabel);
+                workflow.setCasePrefix(designType.casePrefix());
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 workflow.setSupportMultiItemAction(true);
                 workflow.setPublished(false);
@@ -692,10 +803,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 .findLean(new AppTableQuery().applicationName(tnp.getApplicationName()).name(tnp.getEntityName()));
         final long tableVersionNo = appTable.getVersionNo();
         final ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(loadinAppletName);
-        final String loadingAppletDesc = resolveApplicationMessage("$m{workflow.myworkitems.loadingapplet.description}",
-                appTable.getDescription());
-        final String loadingAppletLabel = resolveApplicationMessage("$m{workflow.myworkitems.loadingapplet.label}",
-                appTable.getLabel());
+        final String loadingAppletDesc = resolveSessionMessage("$m{workflow.myworkitems.loadingapplet.description}",
+                resolveSessionMessage(appTable.getDescription()));
+        final String loadingAppletLabel = resolveSessionMessage("$m{workflow.myworkitems.loadingapplet.label}",
+                resolveSessionMessage(appTable.getLabel()));
+
         AppApplet loadingApplet = environment()
                 .findLean(new AppAppletQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
         if (loadingApplet == null) {
@@ -739,9 +851,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         submitToWorkflowByName(workflowName, inst);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void submitToWorkflowByName(String workflowName, String entity, Long id, String requestedBy,
+            Date requestedOn) throws UnifyException {
+        EntityClassDef entityClassDef = appletUtil.getEntityClassDef(entity);
+        WorkEntity inst = (WorkEntity) environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(),
+                id);
+        submitToWorkflow(getWfDef(workflowName), inst, requestedBy, requestedOn);
+    }
+
     @Override
     public void submitToWorkflowByName(String workflowName, WorkEntity inst) throws UnifyException {
-        submitToWorkflow(getWfDef(workflowName), inst);
+        submitToWorkflow(getWfDef(workflowName), inst, null, null);
     }
 
     @SuppressWarnings("unchecked")
@@ -816,9 +938,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Long> findCustomWorkflowIdList(String applicationName) throws UnifyException {
+    public List<Long> findUnpublishedNonRunnableCustomWorkflowIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id",
-                new WorkflowQuery().applicationName(applicationName).isCustom());
+                new WorkflowQuery().notPublished().notRunnable().applicationName(applicationName).isCustom());
+    }
+
+    @Override
+    public List<Long> findRunnableCustomWorkflowIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new WorkflowQuery().runnable().applicationName(applicationName).isCustom());
     }
 
     @Override
@@ -899,8 +1027,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             for (String loadingTableName : loadingTableNameList) {
                 final ApplicationEntityNameParts tnp = ApplicationNameUtils
                         .getApplicationEntityNameParts(loadingTableName);
-                final String label = environment().value(String.class, "label",
-                        new AppTableQuery().applicationName(tnp.getApplicationName()).name(tnp.getEntityName()));
+                final String label = resolveSessionMessage(environment().value(String.class, "label",
+                        new AppTableQuery().applicationName(tnp.getApplicationName()).name(tnp.getEntityName())));
                 workflowLoadingTableInfoList.add(new WorkflowLoadingTableInfo(loadingTableName, label));
             }
 
@@ -1079,40 +1207,65 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction,
+    public boolean applyUserAction(Long workRecId, String workflowName, String stepName, String userAction,
+            Date actionDate, String actionBy) throws UnifyException {
+        final Long wfItemId = environment().value(Long.class, "id",
+                new WfItemQuery().workRecId(workRecId).workflowName(workflowName).wfStepName(stepName));
+        return applyUserAction(null, wfItemId, stepName, userAction, actionDate, actionBy, null, null,
+                WfReviewMode.NORMAL, false);
+    }
+
+    @Override
+    public boolean applyUserAction(final WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction,
             WfReviewMode wfReviewMode) {
-        return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, wfReviewMode, false);
+        return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, wfReviewMode, true);
     }
 
     @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode,
             final boolean listing) {
-        logDebug("Applying user action [{0}] in step [{1}] and review mode [{2}]...", userAction, stepName,
+        return applyUserAction(wfEntityInst, wfItemId, stepName, userAction, null, null, comment, emails, wfReviewMode,
+                listing);
+    }
+
+    private boolean applyUserAction(WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
+            final String userAction, Date actionDate, String actionBy, final String comment, InputArrayEntries emails,
+            WfReviewMode wfReviewMode, final boolean listing) {
+        logInfo("Applying user action [{0}] in step [{1}] and review mode [{2}]...", userAction, stepName,
                 wfReviewMode);
         try {
             final WfItem wfItem = environment().list(WfItem.class, wfItemId);
             if (!wfItem.getWfStepName().equals(stepName)) {
-                logDebug(
-                        "Belaying user action [{0}] because step name disparity was detected between action step [{1}] and work item step [{2}].",
+                logInfo("Belaying user action [{0}] because step name disparity was detected between action step [{1}] and work item step [{2}].",
                         userAction, stepName, wfItem.getWfStepName());
                 return false;
             }
 
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-            final String userLoginId = getUserToken().getUserLoginId();
+            final String userLoginId = !StringUtils.isBlank(actionBy) ? actionBy : getUserLoginId();
             final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
             if (!currentWfStepDef.isUserAction(userAction) && !currentWfStepDef.isError()) {
-                logDebug("Belaying user action [{0}] because action step [{1}] doesn't support such action.",
-                        userAction, stepName);
+                logInfo("Belaying user action [{0}] because action step [{1}] doesn't support such action.", userAction,
+                        stepName);
                 return false;
+            }
+
+            if (wfEntityInst == null) {
+                wfEntityInst = (WorkEntity) environment().listLean(
+                        appletUtil.application().queryOf(wfDef.getEntity()).addEquals("id", wfItem.getWorkRecId()));
+                if (wfEntityInst == null) {
+                    logInfo("Belaying user action [{0}] because wo step [{1}] because entity with ID [{2}] could not be found.",
+                            userAction, stepName, wfItem.getWorkRecId());
+                    return false;
+                }
             }
 
             final WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
             // Update current event
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
-                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment)
-                            .add("wfAction", userActionDef.getLabel()));
+                    new Update().add("actor", userLoginId).add("actionDt", actionDate != null ? actionDate : getNow())
+                            .add("comment", comment).add("wfAction", userActionDef.getLabel()));
 
             // Prepare event for next step. If error step and next step is not specified
             // jump to the work item previous step
@@ -1133,13 +1286,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setHeldBy(userLoginId);
             environment().updateByIdVersion(wfItem);
 
-            final ValueStore wfEntityInstValueStore = new BeanValueStore(wfEntityInst);
             boolean update = !listing;
             if (userActionDef.isWithSetValues() || userActionDef.isWithAppletSetValues()) {
                 wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
                 final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
                 final Date now = getNow();
                 if (userActionDef.isWithSetValues()) {
+                    final ValueStore wfEntityInstValueStore = new BeanValueStore(wfEntityInst);
                     final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
                     if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
                             .getObjectFilter(entityDef, wfEntityInstValueStore.getReader(), now)
@@ -1163,12 +1316,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
 
             final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
-            if (wfReviewMode.lean()) {
-                if (emails != null) {
+            if (emails != null) {
+                if (wfReviewMode.lean()) {
                     environment().findChildren(wfEntityInst);
-                    updateEmails(wfDef, wfEntityInst, emails);
                 }
-            } else {
+
                 updateEmails(wfDef, wfEntityInst, emails);
             }
 
@@ -1309,44 +1461,47 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public void sendWorkItemAlerts(TaskMonitor taskMonitor) throws UnifyException {
         if (tryGrabLock(WFITEMALERT_QUEUE_LOCK)) {
             try {
-                logDebug("Sending work item alerts...");
                 final Date now = getNow();
                 final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_ALERT_BATCH_SIZE);
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().reminderDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] reminder work item alerts...", wfItemList.size());
-                for (WfItem wfItem : wfItemList) {
-                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.REMINDER_NOTIFICATION);
-                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                            sent ? new Update().add("reminderAlertSent", true)
-                                    : new Update().add("reminderAlertSent", false).add("reminderDt", null));
-                }
+                if (!DataUtils.isBlank(wfItemList)) {
+                    logInfo("Sending [{0}] reminder work item alerts...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.REMINDER_NOTIFICATION);
+                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                                sent ? new Update().add("reminderAlertSent", true)
+                                        : new Update().add("reminderAlertSent", false).add("reminderDt", null));
+                    }
 
-                commitTransactions();
+                    commitTransactions();
+                }
 
                 wfItemList = environment().listAll(new WfItemQuery().criticalDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] critical work item alerts...", wfItemList.size());
-                for (WfItem wfItem : wfItemList) {
-                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.CRITICAL_NOTIFICATION);
-                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                            new Update().add("criticalAlertSent", sent).add("criticalDt", null));
-                }
+                if (!DataUtils.isBlank(wfItemList)) {
+                    logInfo("Sending [{0}] critical work item alerts...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.CRITICAL_NOTIFICATION);
+                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                                new Update().add("criticalAlertSent", sent).add("criticalDt", null));
+                    }
 
-                commitTransactions();
+                    commitTransactions();
+                }
 
                 wfItemList = environment().listAll(new WfItemQuery().expirationDue(now).setLimit(batchSize));
-                logDebug("Sending [{0}] expiration work item alerts...", wfItemList.size());
-                for (WfItem wfItem : wfItemList) {
-                    boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.EXPIRATION_NOTIFICATION);
-                    environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                            new Update().add("expirationAlertSent", sent).add("expectedDt", null));
+                if (!DataUtils.isBlank(wfItemList)) {
+                    logInfo("Sending [{0}] expiration work item alerts...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.EXPIRATION_NOTIFICATION);
+                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
+                                new Update().add("expirationAlertSent", sent).add("expectedDt", null));
+                    }
+
+                    commitTransactions();
                 }
-
-                commitTransactions();
-
             } finally {
                 releaseLock(WFITEMALERT_QUEUE_LOCK);
-                logDebug("Work item alerts sending completed.");
             }
         }
     }
@@ -1396,34 +1551,34 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @SuppressWarnings("unchecked")
     @Periodic(PeriodicType.FASTER)
     public void ejectDelayedWorkItem(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Ejecting delayed work items...");
         if (tryGrabLock(WFITEM_EJECTION_LOCK)) {
             try {
-                logDebug("Fetching delayed work items ready for ejection...");
                 final Date now = getNow();
                 final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
                 List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).setLimit(batchSize));
-                logDebug("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
                 List<Long> ejected = new ArrayList<Long>();
-                for (WfItem wfItem : wfItemList) {
-                    final Long wfItemId = wfItem.getId();
-                    final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-                    final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
-                    final String nextStepName = currentWfStepDef.getNextStepName();
+                if (!DataUtils.isBlank(wfItemList)) {
+                    logInfo("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        final Long wfItemId = wfItem.getId();
+                        final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+                        final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+                        final String nextStepName = currentWfStepDef.getNextStepName();
 
-                    final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
-                    final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(),
-                            wfItem.getWfStepName(), null, null, null, null);
+                        final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
+                        final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(),
+                                wfItem.getWfStepName(), null, null, null, null);
 
-                    wfItem.setWfItemEventId(wfItemEventId);
-                    wfItem.setEjectionDt(null);
-                    environment().updateByIdVersion(wfItem);
+                        wfItem.setWfItemEventId(wfItemEventId);
+                        wfItem.setEjectionDt(null);
+                        environment().updateByIdVersion(wfItem);
 
-                    pushToWfTransitionQueue(wfDef, wfItemId, true);
-                    commitTransactions();
+                        pushToWfTransitionQueue(wfDef, wfItemId, true);
+                        commitTransactions();
 
-                    ejected.add(wfItemId);
+                        ejected.add(wfItemId);
+                    }
                 }
 
                 List<WfStep> stepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
@@ -1432,8 +1587,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 for (WfStep wfStep : stepList) {
                     final String workflowName = ApplicationNameUtils
                             .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
-                    logDebug("Checking step [{0}] in workflow [{1}] for retriction ejection...", wfStep.getName(),
-                            workflowName);
                     final WfDef wfDef = getWfDef(workflowName);
                     final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfStep.getName());
                     final String nextStepName = currentWfStepDef.getNextStepName();
@@ -1451,7 +1604,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         }
 
                         List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
-                        logDebug("Processing [{0}] work item(s) for conditional ejection...", workRecIds.size());
                         if (!DataUtils.isBlank(workRecIds)) {
                             List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
                                     Query.of((Class<? extends Entity>) entityDef.getEntityClass())
@@ -1459,8 +1611,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             if (!DataUtils.isBlank(actWorkRecIds)) {
                                 wfItemList = environment()
                                         .listAll(new WfItemQuery().addAmongst("workRecId", actWorkRecIds));
-                                logDebug("Ejecting [{0}] delayed work item(s) based on condition...",
-                                        wfItemList.size());
+                                logInfo("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
                                 for (WfItem wfItem : wfItemList) {
                                     final Long wfItemId = wfItem.getId();
                                     final Long wfItemEventId = createWfItemEvent(nextWfStepDef,
@@ -1479,24 +1630,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             } finally {
                 releaseLock(WFITEM_EJECTION_LOCK);
-                logDebug("Work item ejections completed.");
             }
         }
     }
 
     @Periodic(PeriodicType.FASTEST)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Processing transition queue items...");
         List<WfTransitionQueue> pendingList = null;
         if (tryGrabLock(WFTRANSITION_QUEUE_LOCK)) {
             try {
-                logDebug("Lock acquired for transition queue processing...");
                 final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WFTRANSITION_PROCESSING_BATCH_SIZE);
                 pendingList = environment()
                         .findAll(new WfTransitionQueueQuery().unprocessed().orderById().setLimit(batchSize));
-                logDebug("Fetched [{0}] transition queue items...", pendingList.size());
                 if (!DataUtils.isBlank(pendingList)) {
+                    logInfo("Fetched [{0}] transition queue items...", pendingList.size());
                     List<Long> pendingIdList = new ArrayList<Long>();
                     for (WfTransitionQueue wfTransitionQueue : pendingList) {
                         pendingIdList.add(wfTransitionQueue.getId());
@@ -1507,12 +1655,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             } finally {
                 releaseLock(WFTRANSITION_QUEUE_LOCK);
-                logDebug("Released transition queue processing lock.");
             }
         }
 
         if (!DataUtils.isBlank(pendingList)) {
-            logDebug("Performing workflow transition for [{0}] items...", pendingList.size());
+            logInfo("Performing workflow transition for [{0}] items...", pendingList.size());
             for (WfTransitionQueue wfTransitionQueue : pendingList) {
                 if (performWfTransition(wfTransitionQueue)) {
                     environment().deleteById(wfTransitionQueue);
@@ -1521,7 +1668,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     environment().updateByIdVersion(wfTransitionQueue);
                 }
             }
-            logDebug("Workflow transition completed.");
         }
     }
 
@@ -1530,39 +1676,34 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public void processAutoloadingItems(TaskMonitor taskMonitor) throws UnifyException {
         if (appletUtil.system().getSysParameterValue(boolean.class,
                 WorkflowModuleSysParamConstants.WF_ENABLE_AUTOLOADING)) {
-            logDebug("Processing workflow auto-loading...");
             if (tryGrabLock(WFAUTOLOADING_LOCK)) {
                 try {
-                    logDebug("Lock acquired for workflow auto loading...");
                     final Date now = getNow();
                     final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                             WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
                     List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
                             .supportsAutoload().addSelect("applicationName", "workflowName", "autoLoadConditionName"));
-                    logDebug("[{0}] steps detected with auto loading...", autoLoadStepList.size());
-                    for (WfStep wfStep : autoLoadStepList) {
-                        String workflowName = ApplicationNameUtils
-                                .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
-                        logDebug("Performing workflow auto loading for [{0}]...", workflowName);
-                        WfDef wfDef = getWfDef(workflowName);
-                        EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfDef.getEntity());
-                        Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName()).getFilterDef()
-                                .getRestriction(entityClassDef.getEntityDef(), null, now);
-                        List<? extends WorkEntity> entityList = environment().listAll(Query
-                                .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
-                                .addRestriction(restriction).addRestriction(new Or()
-                                        .add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
-                                .addOrder("id").setLimit(batchSize));
-                        logDebug("Loading [{0}] items for workflow [{1}]...", entityList.size(), workflowName);
-                        for (WorkEntity inst : entityList) {
-                            submitToWorkflowByName(workflowName, inst);
+                    if (!DataUtils.isBlank(autoLoadStepList)) {
+                        for (WfStep wfStep : autoLoadStepList) {
+                            String workflowName = ApplicationNameUtils.getApplicationEntityLongName(
+                                    wfStep.getApplicationName(), wfStep.getWorkflowName());
+                            WfDef wfDef = getWfDef(workflowName);
+                            EntityClassDef entityClassDef = appletUtil.application()
+                                    .getEntityClassDef(wfDef.getEntity());
+                            Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName())
+                                    .getFilterDef().getRestriction(entityClassDef.getEntityDef(), null, now);
+                            List<? extends WorkEntity> entityList = environment().listAll(Query
+                                    .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
+                                    .addRestriction(restriction).addRestriction(new Or()
+                                            .add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
+                                    .addOrder("id").setLimit(batchSize));
+                            for (WorkEntity inst : entityList) {
+                                submitToWorkflowByName(workflowName, inst);
+                            }
                         }
-
-                        logDebug("Workflow auto loading completed for [{0}].", workflowName);
                     }
                 } finally {
                     releaseLock(WFAUTOLOADING_LOCK);
-                    logDebug("Released workflow auto-loading lock.");
                 }
             }
         }
@@ -1600,7 +1741,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall)
+            throws UnifyException {
 
     }
 
@@ -1614,8 +1756,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity workInst) throws UnifyException {
-        logDebug("Submitting item to workflow [{0}]. Item payload [{1}]", wfDef.getLongName(),
+    private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity workInst, String submittedBy,
+            Date submittedOn) throws UnifyException {
+        logInfo("Submitting item to workflow [{0}]. Item payload [{1}]", wfDef.getLongName(),
                 workInst.getWorkflowItemDesc());
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         if (!entityClassDef.isCompatible(workInst)) {
@@ -1678,7 +1821,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
 
             final String userLoginId = userToken == null ? DefaultApplicationConstants.SYSTEM_LOGINID
-                    : getUserToken().getUserLoginId();
+                    : getUserLoginId();
             String itemDesc = workInst.getWorkflowItemDesc();
             if (wfDef.isWithDescFormat()) {
                 ParameterizedStringGenerator generator = appletUtil
@@ -1687,7 +1830,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
 
             if (StringUtils.isBlank(itemDesc)) {
-                itemDesc = entityClassDef.getLongName() + " - " + workRecId;
+                itemDesc = entityDef.getLabel() + " [" + workRecId + "]";
+            }
+
+            if (wfDef.isWithCasePrefix()) {
             }
 
             WfItemHist wfItemHist = new WfItemHist();
@@ -1698,7 +1844,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItemHist.setItemDesc(itemDesc);
             wfItemHist.setBranchCode(workInst.getWorkBranchCode());
             wfItemHist.setDepartmentCode(workInst.getWorkDepartmentCode());
-            wfItemHist.setInitiatedBy(userLoginId);
+            wfItemHist.setInitiatedBy(submittedBy != null ? submittedBy : userLoginId);
+            wfItemHist.setInitiatedOn(submittedOn != null ? submittedOn : now);
             Long wfItemHistId = (Long) environment().create(wfItemHist);
             Long wfItemEventId = createWfItemEvent(startStepDef, wfItemHistId);
 
@@ -1737,14 +1884,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final String prevStepName = wfItem.getPrevWfStepName();
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
+        final WorkflowStepType type = currWfStepDef.getType();
+
+        final boolean isPerformExternal = workItemExternalAccessibilityProvider != null && type.supportExternal()
+                && appletUtil.system().getSysParameterValue(boolean.class,
+                        WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT);
+        final WfItemAccessible accessible = isPerformExternal ? createWfItemAccessible(wfItem, wfEntityInst) : null;
 
         transitionItem.setVariables(getTransitionVariables(wfItem, entityDef));
 
         setSavePoint();
         wfItem.setHeldBy(null);
         try {
-            logDebug("Transitioning item [{0}] in step [{1}] of type [{2}]...", wfItem.getWfItemDesc(),
-                    currWfStepDef.getLabel(), currWfStepDef.getType());
+            logInfo("Transitioning workflow item [{0}] with ID [{1}] in step [{2}] of type [{3}]...",
+                    wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel(),
+                    currWfStepDef.getType());
             WfStepDef nextWfStep = currWfStepDef.isWithNextStepName()
                     ? wfDef.getWfStepDef(currWfStepDef.getNextStepName())
                     : null;
@@ -1757,9 +1911,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            final WorkflowStepType type = currWfStepDef.getType();
             switch (type) {
                 case START:
+                    if (isPerformExternal) {
+                        workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.START, accessible);
+                    }
+
                     break;
                 case SET_VALUES:
                     break;
@@ -1767,21 +1924,26 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 case ENRICHMENT:
                     if (currWfStepDef.isWithPolicy()) {
+                        logInfo("Executing workflow enrichment policy [{0}]...", currWfStepDef.getPolicy());
                         WfEnrichmentPolicy policy = (WfEnrichmentPolicy) getComponent(currWfStepDef.getPolicy());
                         policy.enrich(wfInstWriter, wfInstReader, currWfStepDef.getRule());
                         transitionItem.setUpdated();
                     }
+
                     break;
                 case PROCEDURE:
                     if (currWfStepDef.isWithPolicy()) {
+                        logInfo("Executing workflow procedure policy [{0}]...", currWfStepDef.getPolicy());
                         WfProcessPolicy policy = (WfProcessPolicy) getComponent(currWfStepDef.getPolicy());
                         policy.execute(wfInstReader, currWfStepDef.getRule());
                     }
+
                     break;
                 case RECORD_ACTION:
                     if (currWfStepDef.isWithRecordAction()) {
                         switch (currWfStepDef.getRecordActionType()) {
-                            case CREATE: {
+                            case CREATE:
+                            case CREATEAS: {
                                 WorkEntity newInst = entityClassDef.newInst(wfEntityInst);
                                 Long originWorkRecId = (Long) environment().create(newInst);
                                 fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
@@ -1806,10 +1968,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 if (originalCopyId != null) {
                                     WorkEntity originalInst = (WorkEntity) environment().findLean(
                                             (Class<? extends Entity>) entityClassDef.getEntityClass(), originalCopyId);
-
                                     new BeanValueStore(originalInst).copyWithExclusions(
                                             new BeanValueStore(wfEntityInst),
-                                            ApplicationEntityUtils.RESERVED_BASE_FIELDS);
+                                            ApplicationEntityUtils.RESERVED_WORKFLOW_BASE_FIELDS);
                                     environment().updateByIdVersionEditableChildren(originalInst);
                                     fileAttachmentProvider.sychFileAttachments(FileAttachmentCategoryType.FORM_CATEGORY,
                                             entityDef.getLongName(), originalCopyId, (Long) wfEntityInst.getId());
@@ -1820,6 +1981,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 break;
                         }
                     }
+
                     break;
                 case BINARY_ROUTING:
                     if (wfDef.getFilterDef(currWfStepDef.getBinaryConditionName()).getFilterDef()
@@ -1829,6 +1991,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
                     }
+
                     break;
                 case POLICY_ROUTING:
                     WfBinaryPolicy policy = (WfBinaryPolicy) getComponent(currWfStepDef.getPolicy());
@@ -1837,6 +2000,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
                     }
+
                     break;
                 case MULTI_ROUTING:
                     WfStepDef routeToWfStep = resolveMultiRouting(wfDef, currWfStepDef, wfInstReader);
@@ -1848,11 +2012,26 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfItem.setEjectionDt(ejectionDt);
                 case USER_ACTION:
                 case ERROR:
+                    // External accessibility
+                    if (isPerformExternal && currWfStepDef.isWithStepAppletName()) {
+                        if (type.isUserAction()) {
+                            if (workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.USER_ACTION, accessible)) {
+                                wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
+                            }
+                        } else {
+                            workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.ERROR, accessible);
+                        }
+                    }
+
                     // Workflow item has settled in current step. (Yes delay also settles here)
                     wfItem.setForwardTo(null);
                     environment().updateByIdVersion(wfItem);
                     break;
                 case END: {
+                    if (isPerformExternal) {
+                        workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.END, accessible);
+                    }
+
                     environment().delete(WfItem.class, wfItemId);
                     final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                     if (originalCopyId != null) {
@@ -1908,6 +2087,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 commitTransactions();
+
+                logInfo("Workflow item [{0}] with ID [{1}] successfully transitioned from step [{2}] to step [{3}].",
+                        wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel(),
+                        nextWfStep.getLabel());
+
                 transitionItem.setFlowTransition();
                 return doWfTransition(transitionItem);
             }
@@ -1915,7 +2099,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             logError(e);
             try {
                 rollbackToSavePoint();
-                logDebug("An error has occured. Routing item [{0}] to error step...", wfItem.getWfItemDesc());
+
                 String errorCode = null;
                 if (e instanceof UnifyException) {
                     errorCode = ((UnifyException) e).getErrorCode();
@@ -1940,14 +2124,25 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfEntityInst.getId()),
                         new Update().add("processingStatus", errWfStepDef.getProcessingStatus()));
 
+                logInfo("Transition of workflow item [{0}] with ID [{1}] in step [{2}] failed. Routed to error step.",
+                        wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel());
                 commitTransactions();
             } catch (Exception e1) {
                 logError(e1);
                 return false;
             }
+        } finally {
+
         }
 
         return true;
+    }
+
+    private WfItemAccessible createWfItemAccessible(WfItem wfItem, WorkEntity wfEntityInst) {
+        return new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getBranchCode(), wfItem.getDepartmentCode(),
+                wfItem.getWfItemDesc(), wfItem.getWorkflowName(), wfEntityInst.getPreferredWorkflowName(),
+                wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getInitiatedBy(), wfItem.getCreateDt(),
+                wfItem.getStepDt(), wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());
     }
 
     private Map<String, Object> getTransitionVariables(WfItem wfItem, EntityDef entityDef) throws UnifyException {
@@ -2005,7 +2200,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendPassThroughAlerts(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String prevStepName) throws UnifyException {
-        logDebug("Sending pass through alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
+        logInfo("Sending pass through alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
                 prevStepName);
         if (wfStepDef.isUserAction()) {
             final SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(),
@@ -2014,7 +2209,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     securedLinkInfo.getLinkUrl());
             transitionItem.getReader().setTempValue(NotificationAlertSender.WFITEM_HTMLLINK_VARIABLE,
                     securedLinkInfo.getHtmlLink());
-            logDebug("Setting work item link variables [{0}] and [{1}]...", securedLinkInfo.getLinkUrl(),
+            logInfo("Setting work item link variables [{0}] and [{1}]...", securedLinkInfo.getLinkUrl(),
                     securedLinkInfo.getHtmlLink());
         }
 
@@ -2027,7 +2222,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendUserActionAlertsByPreviousStep(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String prevStepName) throws UnifyException {
-        logDebug("Sending user actions alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
+        logInfo("Sending user actions alerts in step [{0}] depending on previous step [{1}]...", wfStepDef.getName(),
                 prevStepName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnPreviousStep(prevStepName)) {
@@ -2038,7 +2233,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void sendUserActionAlertsByAction(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String actionName) throws UnifyException {
-        logDebug("Sending user actions alerts in step [{0}] depending on action name [{1}]...", wfStepDef.getName(),
+        logInfo("Sending user actions alerts in step [{0}] depending on action name [{1}]...", wfStepDef.getName(),
                 actionName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnAction(actionName)) {

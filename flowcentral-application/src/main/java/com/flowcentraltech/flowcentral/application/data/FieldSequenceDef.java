@@ -19,7 +19,9 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.UnifyException;
@@ -36,6 +38,8 @@ import com.tcdng.unify.core.util.DataUtils;
 public class FieldSequenceDef {
 
     private List<FieldSequenceEntryDef> fieldSequenceList;
+
+    private Map<String, FieldSequenceEntryDef> fieldSequenceMap;
 
     private String name;
 
@@ -61,6 +65,23 @@ public class FieldSequenceDef {
         return fieldSequenceList;
     }
 
+    public FieldSequenceEntryDef getFieldSequenceEntryDef(String fieldName) {
+        if (fieldSequenceMap == null) {
+            synchronized(this) {
+                if (fieldSequenceMap == null) {
+                    fieldSequenceMap = new HashMap<String, FieldSequenceEntryDef>();
+                    for (FieldSequenceEntryDef fieldSequenceEntryDef: fieldSequenceList) {
+                        fieldSequenceMap.put(fieldSequenceEntryDef.getFieldName(), fieldSequenceEntryDef);
+                    }
+                    
+                    fieldSequenceMap = Collections.unmodifiableMap(fieldSequenceMap);
+                }
+            }
+        }
+        
+        return fieldSequenceMap.get(fieldName);
+    }
+    
     public List<String> getFieldNames() {
         if (fieldNames == null) {
             synchronized (this) {

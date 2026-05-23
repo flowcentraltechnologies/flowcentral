@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.notification.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +27,14 @@ import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.util.StringToken;
+import com.tcdng.unify.common.util.StringTokenUtils;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.UploadedFile;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -138,6 +145,16 @@ public class NotifMessage {
         return new Builder(template);
     }
 
+    public static Builder newBuilder(String subject, String body) {
+        if (body == null) {
+            throw new IllegalArgumentException("Messag body can not be null.");
+        }
+
+        return new Builder(
+                subject == null ? Collections.emptyList() : StringTokenUtils.breakdownParameterizedString(subject),
+                StringTokenUtils.breakdownParameterizedString(body));
+    }
+
     public static Builder newBuilder(List<StringToken> subjectTokenList, List<StringToken> templateTokenList) {
         return new Builder(subjectTokenList, templateTokenList);
     }
@@ -237,24 +254,36 @@ public class NotifMessage {
         }
 
         public Builder addParam(String name, Object val) {
-            params.put(name, val);
+            this.params.put(name, val);
             return this;
         }
 
         public Builder addParams(Map<String, Object> params) {
-            params.putAll(params);
+            this.params.putAll(params);
+            return this;
+        }
+
+        public Builder addParams(ValueStore valueStore) throws UnifyException {
+            this.params.putAll(valueStore.getValues());
+            return this;
+        }
+
+        public Builder addParams(Entity inst) throws UnifyException {
+            addParams(new BeanValueStore(inst));
             return this;
         }
 
         public Builder addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data,
-                boolean inline) {
-            attachments.add(
-                    Attachment.newBuilder(type, inline).name(name).title(title).fileName(fileName).data(data).build());
+                boolean inline) throws UnifyException {
+            attachments.add(Attachment.newBuilder(type, inline).name(name).title(title).fileName(fileName)
+                    .file(UploadedFile.create(name, data)).build());
             return this;
         }
 
-        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline) {
-            attachments.add(Attachment.newBuilder(type, inline).name(name).title(title).data(data).build());
+        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data, boolean inline)
+                throws UnifyException {
+            attachments.add(Attachment.newBuilder(type, inline).name(name).title(title)
+                    .file(UploadedFile.create(name, data)).build());
             return this;
         }
 

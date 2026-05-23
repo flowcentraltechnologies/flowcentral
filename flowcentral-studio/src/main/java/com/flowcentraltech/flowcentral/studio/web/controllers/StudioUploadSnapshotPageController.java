@@ -71,7 +71,7 @@ public class StudioUploadSnapshotPageController extends AbstractStudioPageContro
             return "refresh";
         }
         
-        SnapshotConfig snapshotConfig = ConfigurationUtils.getSnapshotConfig(snapshotFile.getData());
+        SnapshotConfig snapshotConfig = ConfigurationUtils.getSnapshotConfig(snapshotFile);
         if (snapshotConfig == null) {
             hintUser(MODE.ERROR, "$m{studio.uploadsnapshotpage.snapshotfileinvalid}");
             return "refresh";

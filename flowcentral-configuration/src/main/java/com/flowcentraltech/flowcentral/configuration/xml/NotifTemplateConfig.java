@@ -39,7 +39,7 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "notifTemplate")
-public class NotifTemplateConfig extends BaseRootConfig {
+public class NotifTemplateConfig extends BaseRootAppConfig {
 
     @JsonSerialize(using = NotificationTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = NotificationTypeXmlAdapter.Deserializer.class)

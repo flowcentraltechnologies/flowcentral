@@ -26,6 +26,9 @@ import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.data.Audit;
+import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.MessageType;
 
@@ -38,8 +41,12 @@ import com.tcdng.unify.web.ui.constant.MessageType;
 public class EntityActionContext extends AbstractContext {
 
     private Entity inst;
+    
+    private ValueStore instValueStore;
 
     private String actionPolicyName;
+
+    private String actionRule;
 
     private FormListingOptions listingOptions;
 
@@ -104,6 +111,18 @@ public class EntityActionContext extends AbstractContext {
         return inst;
     }
 
+    public ValueStoreReader getReader() {
+        if (instValueStore == null) {
+            synchronized(this) {
+                if (instValueStore == null) {
+                    instValueStore = new BeanValueStore(inst);
+                }                
+            }
+        }
+        
+        return instValueStore.getReader();
+    }
+    
     public Audit getAudit() {
         return audit;
     }
@@ -138,6 +157,18 @@ public class EntityActionContext extends AbstractContext {
 
     public boolean isWithActionPolicy() {
         return !StringUtils.isBlank(actionPolicyName);
+    }
+
+    public void setActionRule(String actionRule) {
+        this.actionRule = actionRule;
+    }
+
+    public String getActionRule() {
+        return actionRule;
+    }
+
+    public boolean isWithActionRule() {
+        return !StringUtils.isBlank(actionRule);
     }
 
     public SweepingCommitPolicy getSweepingCommitPolicy() {

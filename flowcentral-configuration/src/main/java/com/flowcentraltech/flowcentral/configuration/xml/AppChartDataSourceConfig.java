@@ -35,7 +35,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartTimeSeries
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "chartDataSource")
-public class AppChartDataSourceConfig extends BaseNameConfig {
+public class AppChartDataSourceConfig extends BaseClassifiedConfig {
     
     @JsonSerialize(using = ChartDataSourceTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = ChartDataSourceTypeXmlAdapter.Deserializer.class)

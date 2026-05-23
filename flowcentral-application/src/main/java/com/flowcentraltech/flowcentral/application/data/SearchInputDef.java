@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Search input definition.
@@ -33,11 +34,18 @@ public class SearchInputDef {
 
     private String label;
 
-    public SearchInputDef(SearchConditionType type, String fieldName, String widget, String label) {
+    private String defVal;
+
+    private boolean fixed;
+
+    public SearchInputDef(SearchConditionType type, String fieldName, String widget, String label, String defVal,
+            boolean fixed) {
         this.type = type;
         this.fieldName = fieldName;
         this.widget = widget;
         this.label = label;
+        this.defVal = defVal;
+        this.fixed = fixed;
     }
 
     public SearchConditionType getType() {
@@ -54,6 +62,19 @@ public class SearchInputDef {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getDefVal() {
+        return defVal;
+    }
+
+    public boolean isFixed() {
+        return fixed;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

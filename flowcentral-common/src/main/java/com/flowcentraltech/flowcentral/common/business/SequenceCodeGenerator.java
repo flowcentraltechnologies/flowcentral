@@ -59,6 +59,20 @@ public interface SequenceCodeGenerator extends FlowCentralComponent {
      *                          the sequence owner Id
      * @param sequenceDefintion
      *                          the sequence definition
+     * @return the next sequence code
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getNextSequenceCode(String ownerId, String sequenceDefintion) throws UnifyException;
+    
+    /**
+     * Gets the next sequence code for the supplied sequence definition and current
+     * date.
+     * 
+     * @param ownerId
+     *                          the sequence owner Id
+     * @param sequenceDefintion
+     *                          the sequence definition
      * @param valueStoreReader
      *                          the value store reader (optional)
      * @return the next sequence code

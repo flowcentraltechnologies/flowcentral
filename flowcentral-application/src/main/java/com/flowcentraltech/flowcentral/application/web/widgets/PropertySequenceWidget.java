@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
 
@@ -31,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @since 4.1
  */
 @Component("fc-propertysequence")
-public class PropertySequenceWidget extends AbstractValueListWidget<PropertySequenceEntry> {
+public class PropertySequenceWidget extends AbstractItemListWidget<PropertySequenceEntry> {
 
     private Control propertySelectCtrl;
 
@@ -68,13 +67,11 @@ public class PropertySequenceWidget extends AbstractValueListWidget<PropertySequ
     @Action
     public void moveUp() throws UnifyException {
         getPropertySequence().moveUpEntry(getRequestTarget(int.class));
-        invalidateValueList();
-    }
+     }
 
     @Action
     public void moveDown() throws UnifyException {
         getPropertySequence().moveDownEntry(getRequestTarget(int.class));
-        invalidateValueList();
     }
 
     @Action
@@ -114,11 +111,6 @@ public class PropertySequenceWidget extends AbstractValueListWidget<PropertySequ
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(PropertySequenceEntry propertySequenceEntry, int index) throws UnifyException {
-        return createValueStore(propertySequenceEntry, index);
     }
 
 }

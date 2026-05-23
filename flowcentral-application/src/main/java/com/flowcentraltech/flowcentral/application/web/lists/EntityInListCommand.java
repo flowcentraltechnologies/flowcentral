@@ -29,6 +29,7 @@ import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.data.AssignParams;
 
 /**
@@ -56,6 +57,11 @@ public class EntityInListCommand extends AbstractApplicationListCommand<AssignPa
             EntityClassDef _assignEntityClassDef = application().getEntityClassDef(_assignRefDef.getEntity());
             Query<?> query = Query.of((Class<? extends Entity>) _assignEntityClassDef.getEntityClass());
             query.addAmongst("id", params.getAssignedIdList(Long.class));
+            
+            if (parts.isWithSearchField() && !StringUtils.isBlank(params.getSearchText1())) {
+                query.addILike(parts.getSearchField(), params.getSearchText1());
+            }
+            
             if (parts.isWithDescField()) {
                 query.addSelect("id", parts.getDescField()).addOrder(parts.getDescField());
             }

@@ -43,6 +43,9 @@ public class EntityAttachmentConfig extends BaseConfig {
     @JacksonXmlProperty(isAttribute = true)
     private String description;
 
+    @JacksonXmlProperty(isAttribute = true)
+    private String label;
+
     public FileAttachmentType getType() {
         return type;
     }
@@ -65,6 +68,14 @@ public class EntityAttachmentConfig extends BaseConfig {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
 }

@@ -655,7 +655,7 @@
 				<column field="email" renderWidget="application.text"
 					widthRatio="1" />
 				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
+					widthRatio="1" order="DESC" />
 				<column field="updateDt" renderWidget="application.datetime"
 					widthRatio="1" />
 				<column field="statusDesc" renderWidget="application.text"
@@ -712,7 +712,7 @@
 					label="$m{security.user.workflowstatus}"
 					renderWidget="application.text" widthRatio="1" />
 				<column field="createDt" renderWidget="application.datetime"
-					widthRatio="1" />
+					widthRatio="1" order="DESC" />
 				<column field="updateDt" renderWidget="application.datetime"
 					widthRatio="1" />
 			</columns>

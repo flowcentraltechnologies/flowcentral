@@ -97,7 +97,7 @@ public class PropertyListDef extends BaseApplicationEntityDef {
 
         public Builder addItemDef(EntityFieldDef entityFieldDef, WidgetTypeDef widgetTypeDef, String setLabel,
                 String description, String renderer, String defaultVal, boolean required, boolean mask,
-                boolean encrypt) {
+                boolean encrypt, boolean disabled) {
             List<PropertyListItemDef> itemList = itemDefMap.get(setLabel);
             if (itemList == null) {
                 throw new RuntimeException("Property set with label [" + setLabel + "] is unknown in this definition.");
@@ -110,7 +110,7 @@ public class PropertyListDef extends BaseApplicationEntityDef {
 
             itemNames.add(entityFieldDef.getFieldName());
             itemList.add(new PropertyListItemDef(entityFieldDef, widgetTypeDef, description, renderer, defaultVal,
-                    required, mask, encrypt));
+                    required, mask, encrypt, disabled));
             return this;
         }
 
@@ -123,7 +123,7 @@ public class PropertyListDef extends BaseApplicationEntityDef {
                     formFieldDefList.add(new FormFieldDef(propertyListItemDef.getEntityFieldDef(),
                             propertyListItemDef.getWidgetTypeDef(), null, null, propertyListItemDef.getDescription(),
                             propertyListItemDef.getRenderer(), 0, false, false, propertyListItemDef.isRequired(), true,
-                            true, false));
+                            true, propertyListItemDef.isDisabled()));
                     itemList.add(propertyListItemDef);
                 }
 

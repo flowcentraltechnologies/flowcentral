@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.delegate.business.policy;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActionPolicy;
@@ -30,6 +31,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -39,6 +41,9 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 4.1
  */
 public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActionPolicy {
+
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
 
     @Configurable
     private EnvironmentDelegateUtilities utilities;
@@ -67,10 +72,12 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
     @Override
     protected final EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         Entity inst = ctx.getInst();
+        final BeanValueStore instBeanValueStore = new BeanValueStore(inst);
+
         ProcedureRequest req = new ProcedureRequest(operation);
         req.setEntity(registrar.resolveLongName(inst.getClass()));
         req.setPayload(utilities.encodeDelegateEntity(inst));
-        JsonProcedureResponse resp = sendToDelegateProcedureService(req);
+        JsonProcedureResponse resp = sendToDelegateProcedureService(req, getEndpoint(instBeanValueStore.getReader()));
         Object[] payload = resp.getPayload();
         Entity respInst = null;
         if (payload != null && payload.length == 1) {
@@ -84,7 +91,7 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         if (respInst != null) {
             new BeanValueStore(inst).copyWithExclusions(new BeanValueStore(respInst), copyExclusions);
         }
-        
+
         return null;
     }
 
@@ -94,10 +101,19 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         result.setSkipUpdate(skipUpdate);
         return result;
     }
+    
+    protected final ApplicationModuleService application() {
+        return applicationModuleService;
+    }
 
-    private JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req) throws UnifyException {
+    protected abstract String getEndpoint(ValueStoreReader reader) throws UnifyException;
+
+    protected abstract String sendToDelegateProcedureService(String jsonReq, String endpoint) throws UnifyException;
+
+    private JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req, String endpoint)
+            throws UnifyException {
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
-        String respJSON = sendToDelegateProcedureService(reqJSON);
+        String respJSON = sendToDelegateProcedureService(reqJSON, endpoint);
         JsonProcedureResponse resp = DataUtils.fromJsonString(JsonProcedureResponse.class, respJSON);
         if (resp.error()) {
             // TODO Translate to local exception and throw
@@ -105,7 +121,5 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
 
         return resp;
     }
-
-    protected abstract String sendToDelegateProcedureService(String jsonReq) throws UnifyException;
 
 }

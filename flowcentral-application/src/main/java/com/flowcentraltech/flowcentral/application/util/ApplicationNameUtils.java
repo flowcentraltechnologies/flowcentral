@@ -95,9 +95,19 @@ public final class ApplicationNameUtils {
                     try {
                         String[] po = StringUtils.charSplit(assignRule, ':');
                         if (po.length == 4) {
-                            return new EntityAssignRuleNameParts(po[0], po[1], po[2], po[3]);
+                            String searchField = null;
+                            String descField = null;
+                            final int index = po[3].indexOf('/');
+                            if (index >= 0) {
+                                searchField = po[3].substring(index);
+                                descField = po[3].substring(index + 1);
+                            } else {
+                                searchField = po[3];
+                            }
+                            
+                            return new EntityAssignRuleNameParts(po[0], po[1], po[2], searchField, descField);
                         } else {
-                            return new EntityAssignRuleNameParts(po[0], po[1], po[2], null);
+                            return new EntityAssignRuleNameParts(po[0], po[1], po[2], null, null);
                         }
                     } catch (Exception e) {
                         throw new RuntimeException("Name parts error: assignRule = " + assignRule, e);

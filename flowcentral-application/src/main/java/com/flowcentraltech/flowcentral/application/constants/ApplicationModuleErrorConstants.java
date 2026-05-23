@@ -74,4 +74,9 @@ public interface ApplicationModuleErrorConstants {
      */
     String NO_ORDER_FIELD_CONFIGURED_FOR_APPLET_QUICK_ORDER = "APPLICATION_000B";
 
+    /**
+     * Unable to import data {0}. List-only field {1} does not resolve to a unique property.
+     */
+    String UNABLE_LOAD_DATA_LISTONLY_NOT_RESOLVING_TO_UNIQUE = "APPLICATION_000C";
+
 }

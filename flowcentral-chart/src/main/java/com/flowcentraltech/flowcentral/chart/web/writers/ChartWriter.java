@@ -24,6 +24,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.constants.ChartRequestAttributeConstants;
@@ -40,6 +41,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -77,29 +79,31 @@ public class ChartWriter extends AbstractWidgetWriter {
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
         if (chartDef.getType().isCard()) {
-            writer.write("<div class=\"card\">");
+            if (chartDetails.isWithSeries()) {
+                writer.write("<div class=\"card\">");
 
-            writer.write("<span class=\"title\">");
-            if (chartDef.isWithTitle()) {
-                writer.writeWithHtmlEscape(chartDef.getTitle());
+                writer.write("<span class=\"title\">");
+                if (chartDef.isWithTitle()) {
+                    writer.writeWithHtmlEscape(chartDef.getTitle());
+                }
+                writer.write("</span>");
+
+                writer.write("<span class=\"subtitle\">");
+                if (chartDef.isWithSubtitle()) {
+                    writer.writeWithHtmlEscape(chartDef.getSubTitle());
+                }
+                writer.write("</span>");
+
+                writer.write("<span class=\"content\" style=\"color:");
+                writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
+                writer.write(";\">");
+                Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
+                String fmt = ChartUtils.getFormattedCardValue(num);
+                writer.writeWithHtmlEscape(fmt);
+                writer.write("</span>");
+
+                writer.write("</div>");
             }
-            writer.write("</span>");
-
-            writer.write("<span class=\"subtitle\">");
-            if (chartDef.isWithSubtitle()) {
-                writer.writeWithHtmlEscape(chartDef.getSubTitle());
-            }
-            writer.write("</span>");
-
-            writer.write("<span class=\"content\" style=\"color:");
-            writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
-            writer.write(";\">");
-            Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
-            String fmt = ChartUtils.getFormattedCardValue(num);
-            writer.writeWithHtmlEscape(fmt);
-            writer.write("</span>");
-
-            writer.write("</div>");
         } else if (chartDef.getType().isTable()) {
             if (chartDetails.isWithTableSeries()) {
                 FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
@@ -186,11 +190,13 @@ public class ChartWriter extends AbstractWidgetWriter {
         if (chartDef.getType().isFlowCentralType()) {
 
         } else {
-            writer.beginFunction("fux.rigChart");
-            writer.writeParam("pId", chartWidget.getId());
-            writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartDetails,
-                    chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
-            writer.endFunction();
+            if (chartDetails != null) {
+                writer.beginFunction("fux.rigChart");
+                writer.writeParam("pId", chartWidget.getId());
+                writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartDetails,
+                        chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
+                writer.endFunction();
+            }
         }
     }
 
@@ -218,29 +224,34 @@ public class ChartWriter extends AbstractWidgetWriter {
             this.cache = new HashMap<String, ChartDetails>();
         }
 
-        public ChartDetails getChartDetails(ChartConfiguration configuration, ChartDef chartDef)
-                throws UnifyException {
+        public ChartDetails getChartDetails(ChartConfiguration configuration, ChartDef chartDef) throws UnifyException {
             final String providerName = chartDef.getProvider();
             final String rule = chartDef.getRule();
             final String key = providerName + (!StringUtils.isBlank(rule) ? "." + rule : "");
             ChartDetails chartDetails = cache.get(key);
             if (chartDetails == null) {
+                TimeResolutionType maxResolution = TimeResolutionType.YEAR;
                 Restriction restriction = null;
                 ChartDetailsProvider provider = (ChartDetailsProvider) getComponent(providerName);
                 Set<String> seriesFieldInclusion = Collections.emptySet();
-                if (provider.isUsesChartDataSource()) {
+                if (provider.isUsesChartDataSource() && !StringUtils.isBlank(rule)) {
                     final ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(rule);
                     final EntityDef entityDef = chartDataSourceDef.getEntityDef();
-                    restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null,
-                            configuration.getCatBase(chartDataSourceDef.getLongName()), chartModuleService.getNow());
+                    final FilterDef catFilterDef = configuration.getCatBase(chartDataSourceDef.getLongName());
+                    if (catFilterDef != null) {
+                        maxResolution = catFilterDef.getMaxTimeResolution();
+                    }
                     
+                    restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null,
+                            catFilterDef, chartModuleService.getNow());
+
                     seriesFieldInclusion = new HashSet<String>();
                     for (String seriesName : chartDef.getSeriesInclusion()) {
                         seriesFieldInclusion.add(entityDef.getEntitySeriesDef(seriesName).getFieldName());
                     }
                 }
 
-                chartDetails = provider.provide(rule, restriction);
+                chartDetails = provider.provide(rule, restriction, maxResolution);
                 chartDetails.setSeriesFieldInclusion(seriesFieldInclusion);
                 cache.put(key, chartDetails);
             }

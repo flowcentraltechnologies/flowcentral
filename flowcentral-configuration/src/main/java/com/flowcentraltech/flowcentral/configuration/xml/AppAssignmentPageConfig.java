@@ -26,7 +26,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class AppAssignmentPageConfig extends BaseNameConfig {
+public class AppAssignmentPageConfig extends BaseClassifiedConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String entity;
@@ -66,6 +66,9 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String ruleDescField;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean search;
 
     public String getEntity() {
         return entity;
@@ -169,6 +172,14 @@ public class AppAssignmentPageConfig extends BaseNameConfig {
 
     public void setRuleDescField(String ruleDescField) {
         this.ruleDescField = ruleDescField;
+    }
+
+    public Boolean getSearch() {
+        return search;
+    }
+
+    public void setSearch(Boolean search) {
+        this.search = search;
     }
 
 }

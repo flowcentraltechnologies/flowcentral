@@ -24,9 +24,9 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Studio unlock resource action policy.
@@ -38,8 +38,8 @@ import com.tcdng.unify.core.annotation.Component;
 public class StudioUnlockResourceActionPolicy extends AbstractCollaborationFormActionPolicy {
 
     @Override
-    public boolean checkAppliesTo(Entity inst) throws UnifyException {
-        final BaseApplicationEntity _appInst = (BaseApplicationEntity) inst;
+    public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
+        final BaseApplicationEntity _appInst = (BaseApplicationEntity) reader.getValueObject();
         if (isCollaboration()) {
             final ConfigType configType = _appInst.getConfigType();
             if (!configType.isStatic()) {

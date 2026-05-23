@@ -13,8 +13,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-workfloweditorpagepanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;} heights:$l{none 100%}}
-	components:$c{headerBar workflowEditorBodyPanel}
+!fc-workfloweditorpagepanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
+	components:$c{workflowEditorBodyPanel}
 
 // Workflow editor panel
 !ui-panel:workflowEditorBodyPanel style:$s{height:100%;}

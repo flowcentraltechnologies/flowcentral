@@ -28,7 +28,7 @@
 
 // Header Section
 !ui-panel:headerSection styleClass:$e{fc-loginheader fc-loginheadertop} components:$c{topBannerImg}
-!ui-image:topBannerImg src:$s{web/images/applicationloginbanner.png}
+!ui-image:topBannerImg src:$s{web/images/applicationloginbanner.png} srcBinding:loginImage
 	styleClass:$e{fc-loginheaderimg}
 
 // Login caption

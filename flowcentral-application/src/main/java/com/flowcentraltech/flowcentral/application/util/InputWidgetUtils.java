@@ -144,6 +144,7 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.TIMESTAMP_UTC, "application.datetime");
         map.put(EntityFieldDataType.TIMESTAMP, "application.datetime");
         map.put(EntityFieldDataType.STRING, "application.text");
+        map.put(EntityFieldDataType.SCRATCH, "application.text");
         map.put(EntityFieldDataType.ENUM, "application.enumlist");
         map.put(EntityFieldDataType.ENUM_REF, "application.enumlist");
         map.put(EntityFieldDataType.ENUM_DYN, "application.enumlist");
@@ -159,6 +160,9 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DECIMAL_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.LIST_ONLY, "application.text");
+        map.put(EntityFieldDataType.CHILD, "application.textarea");
+        map.put(EntityFieldDataType.CHILD_LIST, "application.textarea");
         defaultFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
@@ -176,6 +180,7 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DECIMAL, "application.decimal");
         map.put(EntityFieldDataType.DATE, "application.date");
         map.put(EntityFieldDataType.STRING, "application.text");
+        map.put(EntityFieldDataType.SCRATCH, "application.text");
         map.put(EntityFieldDataType.TIMESTAMP_UTC, "application.datetime");
         map.put(EntityFieldDataType.TIMESTAMP, "application.datetime");
         map.put(EntityFieldDataType.ENUM, "application.text");
@@ -193,6 +198,9 @@ public final class InputWidgetUtils {
         map.put(EntityFieldDataType.DECIMAL_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.DATE_ARRAY, "application.textarea");
         map.put(EntityFieldDataType.STRING_ARRAY, "application.textarea");
+        map.put(EntityFieldDataType.LIST_ONLY, "application.text");
+        map.put(EntityFieldDataType.CHILD, "application.textarea");
+        map.put(EntityFieldDataType.CHILD_LIST, "application.textarea");
         defaultSyncFormInputWidgets = Collections.unmodifiableMap(map);
     }
 
@@ -321,7 +329,7 @@ public final class InputWidgetUtils {
     }
 
     public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) throws UnifyException {
-        String editor = InputWidgetUtils.resolveEditor(widgetTypeDef.getEditor(), widgetTypeDef, efa, null, null);
+        String editor = InputWidgetUtils.resolveEditor(widgetTypeDef.getEditor(), widgetTypeDef, efa, null, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
             esb.append(" style:$s{width:100%;}");
@@ -333,7 +341,7 @@ public final class InputWidgetUtils {
 
     public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa)
             throws UnifyException {
-        String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null);
+        String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(renderer);
             esb.append(" style:$s{width:100%;}");
@@ -345,8 +353,8 @@ public final class InputWidgetUtils {
 
     public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
             throws UnifyException {
-        String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, false);
-        if (widgetTypeDef.isStretch()) {
+        final String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, null, false);
+        if (widgetTypeDef != null && widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
             esb.append(" style:$s{width:100%;");
 
@@ -361,6 +369,11 @@ public final class InputWidgetUtils {
         return editor;
     }
 
+    public static String constructPortalEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef, String serviceId)
+            throws UnifyException {
+        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, serviceId, false);
+    }
+
     public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
             throws UnifyException {
         return InputWidgetUtils.constructEditorWithBinding(widgetTypeDef, entityFieldDef, null, null);
@@ -368,7 +381,7 @@ public final class InputWidgetUtils {
 
     public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,
             String reference, WidgetColor color) throws UnifyException {
-        String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, reference, false);
+        String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, reference, null, false);
         StringBuilder esb = new StringBuilder(editor);
         esb.append(" binding:").append(entityFieldDef.getFieldName());
         boolean isWithStyling = widgetTypeDef.isStretch() || color != null;
@@ -390,21 +403,29 @@ public final class InputWidgetUtils {
 
     public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
             throws UnifyException {
-        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, true);
+        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, null, true);
+    }
+
+    public static String constructPortalRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,  String serviceId)
+            throws UnifyException {
+        return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, serviceId, true);
     }
 
     private static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef, String reference,
-            boolean renderer) throws UnifyException {
-        final EntityFieldAttributes efa = entityFieldDef.isWithResolvedTypeFieldDef()
-                ? entityFieldDef.getResolvedTypeFieldDef()
-                : entityFieldDef;
-        String editor = renderer ? widgetTypeDef.getRenderer() : widgetTypeDef.getEditor();
-        editor = InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference);
-        return editor;
+            String serviceId, boolean renderer) throws UnifyException {
+        if (widgetTypeDef != null) {
+            final EntityFieldAttributes efa = entityFieldDef.isWithResolvedTypeFieldDef()
+                    ? entityFieldDef.getResolvedTypeFieldDef()
+                    : entityFieldDef;
+            final String editor = renderer ? widgetTypeDef.getRenderer() : widgetTypeDef.getEditor();
+            return InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference, serviceId);
+        }
+
+        return null;
     }
 
     private static String resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,
-            EntityFieldDef entityFieldDef, String reference) throws UnifyException {
+            EntityFieldDef entityFieldDef, String reference, String serviceId) throws UnifyException {
         switch (widgetTypeDef.getLongName()) {
             case "application.richtexteditor":
             case "application.richtexteditormedium":
@@ -512,18 +533,26 @@ public final class InputWidgetUtils {
             case "application.enumreadonlytext":
             case "application.enumlistlabel":
                 String _references = entityFieldDef != null ? entityFieldDef.getReferences() : efa.getReferences();
+                if (!StringUtils.isBlank(serviceId) && !StringUtils.isBlank(_references) && _references.indexOf('.') > 0) {
+                    _references = _references + "." + serviceId; //Service ID as minor name
+                }
+                
                 editor = String.format(editor, _references);
                 break;
             case "application.entitylist":
             case "application.entitysearch":
             case "application.entityselect":
-            case "application.caseentitysearch":
+            case "application.caseentitysearch": 
                 if (entityFieldDef != null) {
                     if (StringUtils.isBlank(reference)) {
                         reference = entityFieldDef.isEntityRef() ? entityFieldDef.getRefLongName()
                                 : entityFieldDef.getReferences();
                     }
 
+                    if (!StringUtils.isBlank(serviceId) && !StringUtils.isBlank(reference)) {
+                        reference = reference + "." + serviceId; //Service ID as minor name
+                    }
+                    
                     editor = String.format(editor, reference,
                             StringUtils.toNonNullString(entityFieldDef.getInputListKey(), ""));
                 }
@@ -1094,6 +1123,8 @@ public final class InputWidgetUtils {
                 searchInputConfig.setField(searchInputDef.getFieldName());
                 searchInputConfig.setLabel(searchInputDef.getLabel());
                 searchInputConfig.setWidget(searchInputDef.getWidget());
+                searchInputConfig.setDefVal(searchInputDef.getDefVal());
+                searchInputConfig.setFixed(searchInputDef.isFixed());
                 inputList.add(searchInputConfig);
             }
 
@@ -1114,11 +1145,10 @@ public final class InputWidgetUtils {
                         String label = p[0];
                         String field = p[1];
                         String widget = p[2];
-                        SearchConditionType type = null;
-                        if (p.length > 3) {
-                            type = SearchConditionType.fromCode(p[3]);
-                        }
-                        sidb.addSearchInputDef(type, field, widget, label);
+                        SearchConditionType type = p.length > 3 ? SearchConditionType.fromCode(p[3]) : null;
+                        String defVal = p.length > 4 ? p[4] : null;
+                        boolean disabled =  p.length > 5 ? Boolean.valueOf(p[5]) : false;
+                        sidb.addSearchInputDef(type, field, widget, label, defVal, disabled);
                     }
                 } catch (IOException e) {
                     throw new UnifyOperationException(e);
@@ -1446,6 +1476,13 @@ public final class InputWidgetUtils {
                         if (searchInputConfig.getType() != null) {
                             bw.write(searchInputConfig.getType().code());
                             bw.write(']');
+                            
+                            if (searchInputConfig.getDefVal() != null) {
+                                bw.write(searchInputConfig.getDefVal());
+                                bw.write(']');
+                                bw.write(String.valueOf(searchInputConfig.getFixed()));
+                                bw.write(']');
+                            }
                         }
                         bw.newLine();
                     }
@@ -1475,7 +1512,13 @@ public final class InputWidgetUtils {
                         bw.write(']');
                         if (searchInputDef.getType() != null) {
                             bw.write(searchInputDef.getType().code());
-                            bw.write(']');
+                            bw.write(']');                            
+                            if (searchInputDef.getDefVal() != null) {
+                                bw.write(searchInputDef.getDefVal());
+                                bw.write(']');
+                                bw.write(String.valueOf(searchInputDef.isFixed()));
+                                bw.write(']');
+                            }
                         }
                         bw.newLine();
                     }

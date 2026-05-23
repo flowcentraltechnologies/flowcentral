@@ -56,6 +56,9 @@ public class AppApplet extends BaseApplicationEntity {
 
     @Column(length = 64, nullable = true)
     private String assignField;
+    
+    @Column(length = 64, nullable = true)
+    private String assignSearch;
 
     @Column(length = 64, nullable = true)
     private String assignDescField;
@@ -65,6 +68,9 @@ public class AppApplet extends BaseApplicationEntity {
 
     @Column(length = 1024, nullable = true)
     private String titleFormat;
+    
+    @Column
+    private boolean portalAccess;
 
     @Column
     private boolean menuAccess;
@@ -72,6 +78,9 @@ public class AppApplet extends BaseApplicationEntity {
     @Column
     private boolean supportOpenInNewWindow;
 
+    @Column
+    private boolean supportRemoteAccess;
+    
     @Column
     private boolean allowSecondaryTenants;
 
@@ -187,6 +196,22 @@ public class AppApplet extends BaseApplicationEntity {
         this.titleFormat = titleFormat;
     }
 
+    public String getAssignSearch() {
+        return assignSearch;
+    }
+
+    public void setAssignSearch(String assignSearch) {
+        this.assignSearch = assignSearch;
+    }
+
+    public boolean isPortalAccess() {
+        return portalAccess;
+    }
+
+    public void setPortalAccess(boolean portalAccess) {
+        this.portalAccess = portalAccess;
+    }
+
     public boolean isMenuAccess() {
         return menuAccess;
     }
@@ -201,6 +226,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setSupportOpenInNewWindow(boolean supportOpenInNewWindow) {
         this.supportOpenInNewWindow = supportOpenInNewWindow;
+    }
+
+    public boolean isSupportRemoteAccess() {
+        return supportRemoteAccess;
+    }
+
+    public void setSupportRemoteAccess(boolean supportRemoteAccess) {
+        this.supportRemoteAccess = supportRemoteAccess;
     }
 
     public boolean isAllowSecondaryTenants() {

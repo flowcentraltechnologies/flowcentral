@@ -17,6 +17,7 @@
     headerPanel:$c{topBanner} contentPanel:$c{content}
     menuPanel:$c{menuPanel}
     favicon:$s{web/images/favicon_enduser.png}
+    resourcePrefix:flo
 	styleSheet:$t{css/flowcentral.css}
 	styleSheet:$t{css/flowcentral-slim.css}
 	styleSheet:$t{css/flowcentral-theme.css}
@@ -41,7 +42,7 @@
     binding:userPhotoGenerator
     eventHandler:$d{!ui-event event:onclick action:$c{userDetailsAct}}
     
-!ui-panel:topAlert styleClass:$e{fc-topalert} components:$c{alertBell} refreshEvery:20000
+!ui-panel:topAlert styleClass:$e{fc-topalert} components:$c{alertBell} refreshEvery:30000
 !ui-bell:alertBell styleClass:$e{fc-topbell} binding:alertCount hint:$m{application.notifications}
     eventHandler:$d{!ui-event event:onclick action:$c{userNotificationsAct}}
 
@@ -77,7 +78,7 @@
 
 // Content
 !ui-contentpanel:content styleClassBinding:$s{contentStyleClass}
-	pathsBinding:applicationPaths stickyPathsBinding:enableStickyPaths
+	pathsBinding:applicationPaths stickyPathsBinding:stickyPaths
 	tabbedBinding:enableMultipleTabs documentPath:$s{/application}
 	titleUppercase:false
 	

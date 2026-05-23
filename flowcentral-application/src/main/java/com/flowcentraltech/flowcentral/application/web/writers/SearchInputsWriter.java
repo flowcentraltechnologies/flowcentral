@@ -29,6 +29,7 @@ import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.control.DynamicField;
 import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
@@ -48,27 +49,30 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writeTagAttributes(writer, searchInputsWidget);
         writer.write(">");
 
-        List<ValueStore> valueStoreList = searchInputsWidget.getValueList();
-        if (valueStoreList != null) {
+        final int len = searchInputsWidget.getItemCount();
+        if (len > 0) {
             Control labelCtrl = searchInputsWidget.getLabelCtrl();
             Control fieldSelectCtrl = searchInputsWidget.getFieldSelectCtrl();
             Control widgetCtrl = searchInputsWidget.getWidgetCtrl();
             Control conditionTypeCtrl = searchInputsWidget.getConditionTypeCtrl();
+            DynamicField defValCtrl = searchInputsWidget.getDefValCtrl();
+            Control fixedCtrl = searchInputsWidget.getFixedCtrl();
             Control moveUpCtrl = searchInputsWidget.getMoveUpCtrl();
             Control moveDownCtrl = searchInputsWidget.getMoveDownCtrl();
             Control deleteCtrl = searchInputsWidget.getDeleteCtrl();
-            final int len = valueStoreList.size();
             final int last = len - 1;
 
             final String labelLabel = resolveSessionMessage("$m{searchinputs.label}");
             final String fieldLabel = resolveSessionMessage("$m{searchinputs.field}");
             final String widgetLabel = resolveSessionMessage("$m{searchinputs.widget}");
             final String conditionLabel = resolveSessionMessage("$m{searchinputs.condition}");
+            final String defValLabel = resolveSessionMessage("$m{searchinputs.default}");
+            final String fixedLabel = resolveSessionMessage("$m{searchinputs.fixed}");
             writer.write("<table class=\"editor\" style=\"display: block;width:100%;table-layout:fixed;\">");
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                SearchInputEntry sie = (SearchInputEntry) lineValueStore.getValueObject();
-                writer.write("<tr class=\"line\">");
+                ValueStore lineValueStore = searchInputsWidget.getItemValueStoreAt(i);
+                SearchInputEntry sie = searchInputsWidget.getItemAt();
+                writer.write("<tr class=\"line\"><td>");
                 writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
                 if (sie.isWithFieldName()) {
                     writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel);
@@ -76,10 +80,21 @@ public class SearchInputsWriter extends AbstractControlWriter {
                         writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel);
                         if (sie.isWithWidget() && sie.isFieldInput()) {
                             writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel);
+                            if (sie.isWithDefValInput()) {
+                                writeValuesItem(writer, lineValueStore, defValCtrl, defValLabel);
+                                writeValuesItem(writer, lineValueStore, fixedCtrl, fixedLabel);
+                            } else {
+                                writeBlankValuesItem(writer);
+                                writeBlankValuesItem(writer);
+                            }
                         } else {
+                            writeBlankValuesItem(writer);
+                            writeBlankValuesItem(writer);
                             writeBlankValuesItem(writer);
                         }
                     } else {
+                        writeBlankValuesItem(writer);
+                        writeBlankValuesItem(writer);
                         writeBlankValuesItem(writer);
                         writeBlankValuesItem(writer);
                     }
@@ -87,9 +102,11 @@ public class SearchInputsWriter extends AbstractControlWriter {
                     writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
+                    writeBlankValuesItem(writer);
+                    writeBlankValuesItem(writer);
                 }
 
-                writer.write("<td class=\"atab\">");
+                writer.write("</td><td class=\"atab\">");
                 moveUpCtrl.setDisabled(i == 0);
                 moveDownCtrl.setDisabled(i >= (len - 2));
                 writeActionItem(writer, lineValueStore, moveUpCtrl);
@@ -112,17 +129,19 @@ public class SearchInputsWriter extends AbstractControlWriter {
             throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         SearchInputsWidget searchInputsWidget = (SearchInputsWidget) widget;
-        List<ValueStore> valueStoreList = searchInputsWidget.getValueList();
         List<String> csb = new ArrayList<String>();
-        if (valueStoreList != null) {
+        final int len = searchInputsWidget.getItemCount();
+        if (len > 0) {
             Control labelCtrl = searchInputsWidget.getLabelCtrl();
             Control fieldSelectCtrl = searchInputsWidget.getFieldSelectCtrl();
             Control widgetCtrl = searchInputsWidget.getWidgetCtrl();
             Control conditionTypeCtrl = searchInputsWidget.getConditionTypeCtrl();
-            final int len = valueStoreList.size();
+            DynamicField defValCtrl = searchInputsWidget.getDefValCtrl();
+            Control fixedCtrl = searchInputsWidget.getFixedCtrl();
+
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                SearchInputEntry sie = (SearchInputEntry) lineValueStore.getValueObject();
+                ValueStore lineValueStore = searchInputsWidget.getItemValueStoreAt(i);
+                SearchInputEntry sie = searchInputsWidget.getItemAt();
                 writeBehavior(writer, searchInputsWidget, lineValueStore, fieldSelectCtrl);
                 csb.add(fieldSelectCtrl.getId());
                 if (sie.isWithFieldName()) {
@@ -134,7 +153,13 @@ public class SearchInputsWriter extends AbstractControlWriter {
                         if (sie.isWithWidget() && sie.isFieldInput()) {
                             writeBehavior(writer, searchInputsWidget, lineValueStore, conditionTypeCtrl);
                             csb.add(conditionTypeCtrl.getId());
-                        }
+                            if (sie.isWithDefValInput()) {
+                                writeBehavior(writer, searchInputsWidget, lineValueStore, defValCtrl);
+                                writeBehavior(writer, searchInputsWidget, lineValueStore, fixedCtrl);
+                                csb.add(defValCtrl.getId());
+                                csb.add(fixedCtrl.getId());
+                            }
+                       }
                     }
                 }
             }
@@ -153,7 +178,7 @@ public class SearchInputsWriter extends AbstractControlWriter {
 
     private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
             throws UnifyException {
-        writer.write("<td class=\"vitem\">");
+        writer.write("<div class=\"vitem\">");
         writer.write("<div style=\"display:table;width:100%;\">");
         writer.write("<div style=\"display:table-row;\">");
         writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
@@ -167,12 +192,12 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writer.write("</div>");
         writer.write("</div>");
         writer.write("</div>");
-        writer.write("</td>");
+        writer.write("</div>");
     }
 
     private void writeBlankValuesItem(ResponseWriter writer) throws UnifyException {
-        writer.write("<td class=\"vitem\">");
-        writer.write("</td>");
+        writer.write("<div class=\"vitem\">");
+        writer.write("</div>");
     }
 
     private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
@@ -182,12 +207,12 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writer.write("</span>");
     }
 
-    private void writeBehavior(ResponseWriter writer, SearchInputsWidget tokenSequenceWidget, ValueStore lineValueStore,
+    private void writeBehavior(ResponseWriter writer, SearchInputsWidget searchInputsWidget, ValueStore lineValueStore,
             Control ctrl) throws UnifyException {
         ctrl.setValueStore(lineValueStore);
         writer.writeBehavior(ctrl);
-        if (tokenSequenceWidget.isContainerEditable()) {
-            addPageAlias(tokenSequenceWidget.getId(), ctrl);
+        if (searchInputsWidget.isContainerEditable()) {
+            addPageAlias(searchInputsWidget.getId(), ctrl);
         }
     }
 }

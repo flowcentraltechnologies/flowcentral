@@ -26,16 +26,24 @@ import com.tcdng.unify.core.format.Formatter;
  */
 public class RecLoadInfo {
 
+    public static final RecLoadInfo NONUNIQUE_LISTONLY_PROPERTY = new RecLoadInfo();
+    
     private String fieldName;
 
     private Object val;
 
     private Formatter<?> formatter;
 
+    private boolean nonUniqueListOnlyProperty;
+    
     public RecLoadInfo(String fieldName, Object val, Formatter<?> formatter) {
         this.fieldName = fieldName;
         this.val = val;
         this.formatter = formatter;
+    }
+
+    private RecLoadInfo() {
+        this.nonUniqueListOnlyProperty = true;
     }
 
     public String getFieldName() {
@@ -48,5 +56,9 @@ public class RecLoadInfo {
 
     public Formatter<?> getFormatter() {
         return formatter;
+    }
+
+    public boolean isNonUniqueListOnlyProperty() {
+        return nonUniqueListOnlyProperty;
     }
 }

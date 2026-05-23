@@ -18,8 +18,10 @@ package com.flowcentraltech.flowcentral.messaging.os.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
+import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.LessOrEqual;
 import com.tcdng.unify.core.criterion.Or;
 
 /**
@@ -34,12 +36,25 @@ public class OSMessagingAsyncQuery extends BaseAuditEntityQuery<OSMessagingAsync
         super(OSMessagingAsync.class);
     }
 
+    public OSMessagingAsyncQuery correlationId(String correlationId) {
+        return (OSMessagingAsyncQuery) addEquals("correlationId", correlationId);
+    }
+
     public OSMessagingAsyncQuery endpoint(String endpoint) {
         return (OSMessagingAsyncQuery) addEquals("endpoint", endpoint);
     }
 
     public OSMessagingAsyncQuery isDue(Date now) {
         return (OSMessagingAsyncQuery) addLessThanEqual("nextAttemptOn", now);
+    }
+
+    public OSMessagingAsyncQuery isDead(Date now) {
+        return (OSMessagingAsyncQuery) addRestriction(
+                new And().add(new LessOrEqual("processBefore", now)).add(new Equals("processing", Boolean.TRUE)));
+    }
+
+    public OSMessagingAsyncQuery isResponseNull() {
+        return (OSMessagingAsyncQuery) addIsNull("responseCode");
     }
 
     public OSMessagingAsyncQuery isSent() {

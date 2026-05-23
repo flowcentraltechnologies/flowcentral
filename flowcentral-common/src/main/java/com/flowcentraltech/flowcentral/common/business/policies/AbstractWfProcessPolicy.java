@@ -17,8 +17,10 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
@@ -29,6 +31,9 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 public abstract class AbstractWfProcessPolicy extends AbstractFlowCentralComponent implements WfProcessPolicy {
 
+    @Configurable
+    private EnvironmentService environment;
+
     @Override
     protected void onInitialize() throws UnifyException {
 
@@ -37,6 +42,10 @@ public abstract class AbstractWfProcessPolicy extends AbstractFlowCentralCompone
     @Override
     protected void onTerminate() throws UnifyException {
 
+    }
+    
+    protected final EnvironmentService environment() {
+        return environment;
     }
 
     /**

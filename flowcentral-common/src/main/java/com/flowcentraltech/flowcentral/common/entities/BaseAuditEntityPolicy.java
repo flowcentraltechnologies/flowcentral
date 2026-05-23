@@ -38,13 +38,12 @@ public class BaseAuditEntityPolicy extends BaseVersionEntityPolicy {
         baseAuditEntity.setCreateDt(now);
         baseAuditEntity.setUpdateDt(now);
 
-        final String loginId = getUserLoginId();
         if (baseAuditEntity.getCreatedBy() == null) {
-            baseAuditEntity.setCreatedBy(loginId);
+            baseAuditEntity.setCreatedBy(getUserLoginId());
         }
         
         if (baseAuditEntity.getUpdatedBy() == null) {
-            baseAuditEntity.setUpdatedBy(loginId);
+            baseAuditEntity.setUpdatedBy(getUserLoginId());
         }
 
         return super.preCreate(baseAuditEntity, now);
@@ -60,7 +59,8 @@ public class BaseAuditEntityPolicy extends BaseVersionEntityPolicy {
         baseAuditEntity.setUpdatedBy(loginId);
     }
 
-    private String getUserLoginId() throws UnifyException {
+    @Override
+    protected String getUserLoginId() throws UnifyException {
         UserToken userToken = getUserToken();
         return userToken != null && userToken.isWithUserLoginId() ? userToken.getUserLoginId()
                 : DefaultApplicationConstants.SYSTEM_LOGINID;

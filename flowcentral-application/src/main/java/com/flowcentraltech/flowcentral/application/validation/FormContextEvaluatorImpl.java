@@ -86,7 +86,6 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
         widgetValidatorMap = Collections.unmodifiableMap(map);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void evaluateFormContext(final FormContext ctx, FormValidationContext vCtx) throws UnifyException {
         ctx.clearValidationErrors();
@@ -97,9 +96,6 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
             final FormDef formDef = ctx.getFormDef();
             final EntityDef entityDef = formDef.getEntityDef();
             final Object inst = ctx.getInst();
-            final AppletUtilities au = ctx.au();
-            final ValueStore instValueStore = ctx.getFormValueStore();
-            final ValueStoreReader instValueStoreReader = instValueStore.getReader();
             Map<String, Object> fieldsInScope = new HashMap<String, Object>();
             // Pull fields in scope and check required fields and lengths
             for (FormWidgetState formWidgetState : ctx.getFormWidgetStateList()) {
@@ -159,126 +155,150 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
             }
 
             if (fieldsInScope != null && !fieldsInScope.isEmpty()) {
-                // Check field validations
-                for (FieldValidationPolicyDef policyDef : formDef.getFieldValidationPolicies()) {
-                    String fieldName = policyDef.getFieldName();
-                    if (fieldsInScope.containsKey(fieldName) && !ctx.isWithFieldError(fieldName)) {
-                        Validator validator = (Validator) getComponent(policyDef.getValidator());
-                        Object val = fieldsInScope.get(fieldName);
-                        if (val != null && !validator.validate(policyDef.getRule(), val)) {
-                            ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(
-                                    policyDef.getRule(), entityDef.getFieldDef(fieldName).getFieldLabel()));
-                        }
-                    }
-                }
-
-                // Check unique constraints
-                final Object id = DataUtils.getBeanProperty(Object.class, inst, "id");
-                if (entityDef.isWithUniqueConstraints()) {
-                    boolean isUpdate = vCtx.isOfUpdate();
-                    if (isUpdate || vCtx.isOfCreate()) {
-                        final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
-                        final Long originalCopyId = entityClassDef.isWorkType()
-                                ? DataUtils.getBeanProperty(Long.class, inst, "originalCopyId")
-                                : null;
-                        for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
-                            List<String> fieldList = constDef.getFieldList();
-                            if (multiErrorMessages || !ctx.isWithFieldError(fieldList)) {
-                                Query query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
-                                if (isUpdate) {
-                                    query.addNotEquals("id", id);
-                                }
-
-                                if (originalCopyId != null) {
-                                    query.addNotEquals("id", originalCopyId);
-                                }
-
-                                for (String fieldName : fieldList) {
-                                    Object val = null;
-                                    if (!fieldsInScope.containsKey(fieldName)) {
-                                        val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
-                                        fieldsInScope.put(fieldName, val);
-                                    } else {
-                                        val = fieldsInScope.get(fieldName);
-                                    }
-
-                                    if (constDef.isCaseInsensitive() && val instanceof String) {
-                                        query.addIEquals(fieldName, (String) val);
-                                    } else {
-                                        query.addEquals(fieldName, val);
-                                    }
-                                }
-
-                                if (constDef.isWithConditionList()) {
-                                    for (UniqueConditionDef ucd : constDef.getConditionList()) {
-                                        query.addRestriction(ucd.getRestriction());
-                                    }
-                                }
-
-                                if (environmentService.countAll(query) > 0) {
-                                    StringBuilder sb = new StringBuilder();
-                                    boolean appendSym = false;
-                                    for (String fieldName : fieldList) {
-                                        if (appendSym) {
-                                            sb.append(", ");
-                                        } else {
-                                            appendSym = true;
-                                        }
-
-                                        sb.append(entityDef.getFieldDef(fieldName).getFieldLabel()).append(" = ")
-                                                .append(fieldsInScope.get(fieldName));
-                                    }
-
-                                    String msg = getApplicationMessage("application.validation.uniqueconstraint",
-                                            sb.toString());
-                                    for (String fieldName : fieldList) {
-                                        ctx.addValidationError(new FieldTarget(fieldName), msg);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (multiErrorMessages || !ctx.isWithFormErrors()) {
-                    // Check form validations
-                    if (formDef.isWithConsolidatedFormValidation()) {
-                        ConsolidatedFormValidationPolicy policy = au.getComponent(
-                                ConsolidatedFormValidationPolicy.class, formDef.getConsolidatedFormValidation());
-                        for (TargetFormMessage message : policy.validate(vCtx, instValueStore)) {
-                            addValidationMessage(ctx, message);
-                        }
-                    }
-
-                    if (formDef.isWithFormValidationPolicy()) {
-                        final Date now = au.getNow();
-                        for (FormValidationPolicyDef policyDef : formDef.getFormValidationPolicies()) {
-                            if (policyDef.isErrorMatcher()) {
-                                EntityMatcher matcher = au.getComponent(EntityMatcher.class,
-                                        policyDef.getErrorMatcher());
-                                if (matcher.match(entityDef, vCtx, instValueStore)) {
-                                    addValidationMessage(ctx, policyDef);
-                                    continue;
-                                }
-                            }
-
-                            if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
-                                    .getObjectFilter(entityDef, instValueStoreReader, now).matchObject(inst)) {
-                                addValidationMessage(ctx, policyDef);
-                            }
-                        }
-                    }
-                }
-
-                if ((multiErrorMessages || !ctx.isWithFormErrors()) && entityDef.delegated()
-                        && entityDef.isActionPolicy()) {
-                    List<String> errors = environmentService.validate((Entity) inst, vCtx.getEvaluationMode());
-                    ctx.addValidationErrorMessages(errors);
-                }
+                componentFormValidation(ctx, vCtx, multiErrorMessages);
             }
         }
     }
+
+    @Override
+    public void evaluateFormContextComponentValidation(final FormContext ctx, final FormValidationContext vCtx)
+            throws UnifyException {
+        final boolean multiErrorMessages = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.MULTI_ERROR_MESSAGES_ENABLED);
+        componentFormValidation(ctx, vCtx, multiErrorMessages);
+    }
     
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private void componentFormValidation(final FormContext ctx, final FormValidationContext vCtx,
+            final boolean multiErrorMessages) throws UnifyException {
+        final FormDef formDef = ctx.getFormDef();
+        final EntityDef entityDef = formDef.getEntityDef();
+        final Object inst = ctx.getInst();
+        final AppletUtilities au = ctx.au();
+        final ValueStore instValueStore = ctx.getFormValueStore();
+        final ValueStoreReader instValueStoreReader = instValueStore.getReader();
+        final Map<String, Object> fieldsInScope = new HashMap<String, Object>();
+
+        // Check field validations
+        for (FieldValidationPolicyDef policyDef : formDef.getFieldValidationPolicies()) {
+            String fieldName = policyDef.getFieldName();
+            if (fieldsInScope.containsKey(fieldName) && !ctx.isWithFieldError(fieldName)) {
+                Validator validator = (Validator) getComponent(policyDef.getValidator());
+                Object val = fieldsInScope.get(fieldName);
+                if (val != null && !validator.validate(policyDef.getRule(), val)) {
+                    ctx.addValidationError(new FieldTarget(fieldName), validator.getFailureMessage(policyDef.getRule(),
+                            entityDef.getFieldDef(fieldName).getFieldLabel()));
+                }
+            }
+        }
+
+        // Check unique constraints
+        final Object id = DataUtils.getBeanProperty(Object.class, inst, "id");
+        if (entityDef.isWithUniqueConstraints()) {
+            boolean isUpdate = vCtx.isOfUpdate();
+            if (isUpdate || vCtx.isOfCreate()) {
+                final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
+                final Long originalCopyId = entityClassDef.isWorkType()
+                        ? DataUtils.getBeanProperty(Long.class, inst, "originalCopyId")
+                        : null;
+                for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
+                    List<String> fieldList = constDef.getFieldList();
+                    if (multiErrorMessages || !ctx.isWithFieldError(fieldList)) {
+                        Query query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+                        if (isUpdate) {
+                            query.addNotEquals("id", id);
+                        }
+
+                        if (originalCopyId != null) {
+                            query.addNotEquals("id", originalCopyId);
+                        } else {
+                            if (entityClassDef.isWorkType()) {
+                                query.addIsNotNull("wfItemVersionType");
+                            }
+                        }
+
+                        for (String fieldName : fieldList) {
+                            Object val = null;
+                            if (!fieldsInScope.containsKey(fieldName)) {
+                                val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
+                                fieldsInScope.put(fieldName, val);
+                            } else {
+                                val = fieldsInScope.get(fieldName);
+                            }
+
+                            if (constDef.isCaseInsensitive() && val instanceof String) {
+                                query.addIEquals(fieldName, (String) val);
+                            } else {
+                                query.addEquals(fieldName, val);
+                            }
+                        }
+
+                        if (constDef.isWithConditionList()) {
+                            for (UniqueConditionDef ucd : constDef.getConditionList()) {
+                                query.addRestriction(ucd.getRestriction());
+                            }
+                        }
+
+                        if (environmentService.countAll(query) > 0) {
+                            StringBuilder sb = new StringBuilder();
+                            boolean appendSym = false;
+                            for (String fieldName : fieldList) {
+                                if (appendSym) {
+                                    sb.append(", ");
+                                } else {
+                                    appendSym = true;
+                                }
+
+                                sb.append(entityDef.getFieldDef(fieldName).getFieldLabel()).append(" = ")
+                                        .append(fieldsInScope.get(fieldName));
+                            }
+
+                            String msg = getApplicationMessage("application.validation.uniqueconstraint",
+                                    sb.toString());
+                            for (String fieldName : fieldList) {
+                                ctx.addValidationError(new FieldTarget(fieldName), msg);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (multiErrorMessages || !ctx.isWithFormErrors()) {
+            // Check form validations
+            if (formDef.isWithConsolidatedFormValidation()) {
+                ConsolidatedFormValidationPolicy policy = au.getComponent(ConsolidatedFormValidationPolicy.class,
+                        formDef.getConsolidatedFormValidation());
+                for (TargetFormMessage message : policy.validate(vCtx, instValueStore)) {
+                    addValidationMessage(ctx, message);
+                }
+            }
+
+            if (formDef.isWithFormValidationPolicy()) {
+                final Date now = au.getNow();
+                for (FormValidationPolicyDef policyDef : formDef.getFormValidationPolicies()) {
+                    if (policyDef.isErrorMatcher()) {
+                        EntityMatcher matcher = au.getComponent(EntityMatcher.class, policyDef.getErrorMatcher());
+                        if (matcher.match(entityDef, vCtx, instValueStore)) {
+                            addValidationMessage(ctx, policyDef);
+                            continue;
+                        }
+                    }
+
+                    if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
+                            .getObjectFilter(entityDef, instValueStoreReader, now).matchObject(inst)) {
+                        addValidationMessage(ctx, policyDef);
+                    }
+                }
+            }
+        }
+
+        if ((multiErrorMessages || !ctx.isWithFormErrors()) && entityDef.delegated() && entityDef.isActionPolicy()) {
+            List<String> errors = environmentService.validate((Entity) inst, vCtx.getEvaluationMode());
+            ctx.addValidationErrorMessages(errors);
+        }
+    }
+
     @Override
     public ReviewResult reviewFormContext(FormContext ctx, FormValidationContext vCtx, FormReviewContext rCtx)
             throws UnifyException {

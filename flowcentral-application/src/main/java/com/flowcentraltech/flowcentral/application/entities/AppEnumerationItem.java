@@ -20,6 +20,8 @@ import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
+import com.tcdng.unify.core.constant.ColorScheme;
 
 /**
  * Application enumeration item entity.
@@ -43,6 +45,12 @@ public class AppEnumerationItem extends BaseAuditEntity {
 
     @Column(nullable = true)
     private Integer displayIndex;
+    
+    @ForeignKey(nullable = true)
+    private ColorScheme color;
+    
+    @ListOnly(key = "color", property = "description")
+    private String colorDesc;
     
     @Override
     public String getDescription() {
@@ -79,6 +87,22 @@ public class AppEnumerationItem extends BaseAuditEntity {
 
     public void setDisplayIndex(Integer displayIndex) {
         this.displayIndex = displayIndex;
+    }
+
+    public ColorScheme getColor() {
+        return color;
+    }
+
+    public void setColor(ColorScheme color) {
+        this.color = color;
+    }
+
+    public String getColorDesc() {
+        return colorDesc;
+    }
+
+    public void setColorDesc(String colorDesc) {
+        this.colorDesc = colorDesc;
     }
 
 }

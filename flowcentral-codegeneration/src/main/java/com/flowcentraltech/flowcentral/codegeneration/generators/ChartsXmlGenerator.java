@@ -67,9 +67,9 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 appChartConfig.setType(chart.getType());
                 appChartConfig.setPaletteType(chart.getPaletteType());
                 appChartConfig.setName(chart.getName());
-                appChartConfig.setDescription("$m{" + descKey + "}");
-                appChartConfig.setTitle("$m{" + titleKey + "}");
-                appChartConfig.setSubTitle("$m{" + subTitleKey + "}");
+                appChartConfig.setDescription(ctx.isSnapshotMode() ? chart.getDescription() :"$m{" + descKey + "}");
+                appChartConfig.setTitle(ctx.isSnapshotMode() ? chart.getTitle() :"$m{" + titleKey + "}");
+                appChartConfig.setSubTitle(ctx.isSnapshotMode() ? chart.getSubTitle() :"$m{" + subTitleKey + "}");
                 appChartConfig.setWidth(chart.getWidth());
                 appChartConfig.setHeight(chart.getHeight());
                 appChartConfig.setProvider(chart.getProvider());
@@ -83,7 +83,7 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 appChartConfig.setFormatYLabels(chart.isFormatYLabels());
                 appChartConfig.setStacked(chart.isStacked());
                 appChartConfig.setSmooth(chart.isSmooth());
-
+                appChartConfig.setClassified(chart.isClassified());
                 chartConfigList.add(appChartConfig);
             }
 
@@ -109,8 +109,9 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 appChartDataSourceConfig.setTimeSeriesType(chartDataSource.getTimeSeriesType());
                 appChartDataSourceConfig.setCategoryField(chartDataSource.getCategoryField());
                 appChartDataSourceConfig.setName(chartDataSource.getName());
-                appChartDataSourceConfig.setDescription("$m{" + descKey + "}");
+                appChartDataSourceConfig.setDescription(ctx.isSnapshotMode() ? chartDataSource.getDescription() :"$m{" + descKey + "}");
                 appChartDataSourceConfig.setEntity(chartDataSource.getEntity());
+                appChartDataSourceConfig.setClassified(chartDataSource.isClassified());
                 appChartDataSourceConfig
                         .setCategoryBase(InputWidgetUtils.getFilterConfig(au(), chartDataSource.getCategoryBase()));
                 appChartDataSourceConfig

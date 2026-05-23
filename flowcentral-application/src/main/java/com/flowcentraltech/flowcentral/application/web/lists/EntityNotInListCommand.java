@@ -31,6 +31,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.data.AssignParams;
 
 /**
@@ -74,6 +75,10 @@ public class EntityNotInListCommand extends AbstractApplicationListCommand<Assig
                 query.addNotAmongst("id", params.getAssignedIdList(Long.class));
             }
 
+            if (parts.isWithSearchField() && !StringUtils.isBlank(params.getSearchText2())) {
+                query.addILike(parts.getSearchField(), params.getSearchText2());
+            }
+            
             if (parts.isWithDescField()) {
                 query.addSelect("id", parts.getDescField()).addOrder(parts.getDescField());
             }

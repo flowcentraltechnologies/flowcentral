@@ -21,26 +21,96 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  * @author FlowCentral Technologies Limited
  * @since 4.1 
  */
-public abstract class BaseOSMessagingReq {
+public abstract class BaseOSMessagingReq {   
+    
+    private final String processor;
+
+    private String correlationId;
+
+    private String userId;
+
+    private String function;
+
+    private String service;
 
     private String source;
 
+    private String sourceVersion;
+
+    private String originSource;
+
     private String target;
 
-    public String getSource() {
+    protected BaseOSMessagingReq(String processor) {
+        this.processor = processor;
+    }
+
+    public final String getProcessor() {
+        return processor;
+    }
+
+    public final String getCorrelationId() {
+        return correlationId;
+    }
+
+    public final void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
+    }
+
+    public final String getUserId() {
+        return userId;
+    }
+
+    public final void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public final String getFunction() {
+        return function;
+    }
+
+    public final void setFunction(String function) {
+        this.function = function;
+    }
+
+    public final String getService() {
+        return service;
+    }
+
+    public final void setService(String service) {
+        this.service = service;
+    }
+
+    public final String getSource() {
         return source;
     }
 
-    public void setSource(String source) {
+    public final void setSource(String source) {
         this.source = source;
     }
 
-    public String getTarget() {
+    public final String getOriginSource() {
+        return originSource;
+    }
+
+    public final void setOriginSource(String originSource) {
+        this.originSource = originSource;
+    }
+
+    public final String getSourceVersion() {
+        return sourceVersion;
+    }
+
+    public final void setSourceVersion(String sourceVersion) {
+        this.sourceVersion = sourceVersion;
+    }
+
+    public final String getTarget() {
         return target;
     }
 
-    public void setTarget(String target) {
+    public final void setTarget(String target) {
         this.target = target;
     }
-   
+      
 }

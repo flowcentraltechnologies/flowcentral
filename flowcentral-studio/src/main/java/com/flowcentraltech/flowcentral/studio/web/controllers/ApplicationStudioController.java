@@ -33,7 +33,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.core.util.QueryUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -198,8 +197,8 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         pageBean.setCurrentApplicationId(applicationId);
 
-        if (!QueryUtils.isValidLongCriteria(applicationId)
-                || Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
+        if (/*!QueryUtils.isValidLongCriteria(applicationId)
+                || */Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
             contentPanel.clearPages();
         }

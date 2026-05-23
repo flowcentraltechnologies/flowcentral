@@ -23,12 +23,13 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordGenerator;
+import com.tcdng.unify.core.security.SecurityComponents;
 
 /**
  * User new action policy.
@@ -40,16 +41,14 @@ import com.tcdng.unify.core.security.PasswordGenerator;
 @Component(name = "user-newactionpolicy", description = "$m{security.entityactionpolicy.newuser}")
 public class UserNewActionPolicy extends AbstractAppletActionPolicy {
 
-//    private static final String USER_PASSWORD = "USER_PASSWORD";
-
     @Configurable
     private SystemModuleService systemModuleService;
 
-    @Configurable("oneway-stringcryptograph")
+    @Configurable(SecurityComponents.ONEWAY_STRING_CRYPTOGRAPH)
     private OneWayStringCryptograph passwordCryptograph;
 
     @Override
-    public boolean checkAppliesTo(Entity inst) throws UnifyException {
+    public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
         return true;
     }
 
@@ -65,7 +64,6 @@ public class UserNewActionPolicy extends AbstractAppletActionPolicy {
 
             String password = passwordGenerator.generatePassword(user.getLoginId(), passwordLength);
             user.setPassword(passwordCryptograph.encrypt(password));
-//        ctx.setAttribute(USER_PASSWORD, password);
         }
 
         return null;

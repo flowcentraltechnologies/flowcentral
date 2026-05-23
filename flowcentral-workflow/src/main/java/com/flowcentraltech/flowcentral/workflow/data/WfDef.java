@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Workflow definition.
@@ -41,6 +42,10 @@ import com.tcdng.unify.core.util.DataUtils;
 public class WfDef extends BaseApplicationEntityDef {
 
     private final String entity;
+
+    private final String label;
+
+    private final String casePrefix;
 
     private Map<String, WfStepDef> steps;
 
@@ -62,12 +67,14 @@ public class WfDef extends BaseApplicationEntityDef {
 
     private boolean supportMultiItemAction;
 
-    private WfDef(String entity, WfStepDef startStepDef, WfStepDef errorStepDef, Map<String, WfStepDef> steps,
+    private WfDef(String entity, String label, String casePrefix, WfStepDef startStepDef, WfStepDef errorStepDef, Map<String, WfStepDef> steps,
             Map<String, WfFilterDef> filterDefMap, Map<String, WfSetValuesDef> setValuesDefMap,
             List<StringToken> descFormat, boolean supportMultiItemAction, ApplicationEntityNameParts nameParts,
             String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.entity = entity;
+        this.label = label;
+        this.casePrefix = casePrefix;
         this.startStepDef = startStepDef;
         this.errorStepDef = errorStepDef;
         this.steps = steps;
@@ -95,6 +102,18 @@ public class WfDef extends BaseApplicationEntityDef {
 
     public boolean isSupportMultiItemAction() {
         return supportMultiItemAction;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public String getCasePrefix() {
+        return casePrefix;
+    }
+
+    public boolean isWithCasePrefix() {
+        return !StringUtils.isBlank(casePrefix);
     }
 
     public WfSetValuesDef getSetValuesDef(String name) {
@@ -197,14 +216,18 @@ public class WfDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
-    public static Builder newBuilder(String entity, List<StringToken> descFormat, boolean supportMultiItemAction,
+    public static Builder newBuilder(String entity, String label, String casePrefix, List<StringToken> descFormat, boolean supportMultiItemAction,
             String longName, String description, Long id, long version) {
-        return new Builder(entity, descFormat, supportMultiItemAction, longName, description, id, version);
+        return new Builder(entity, label, casePrefix, descFormat, supportMultiItemAction, longName, description, id, version);
     }
 
     public static class Builder {
 
         private String entity;
+
+        private String label;
+
+        private String casePrefix;
 
         private Map<String, WfStepDef> steps;
 
@@ -228,9 +251,11 @@ public class WfDef extends BaseApplicationEntityDef {
 
         private long version;
 
-        public Builder(String entity, List<StringToken> descFormat, boolean supportMultiItemAction, String longName,
-                String description, Long id, long version) {
+        public Builder(String entity, String label, String casePrefix, List<StringToken> descFormat,
+                boolean supportMultiItemAction, String longName, String description, Long id, long version) {
             this.entity = entity;
+            this.label = label;
+            this.casePrefix = casePrefix;
             this.descFormat = descFormat;
             this.longName = longName;
             this.description = description;
@@ -304,8 +329,8 @@ public class WfDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Workflow has no error step.");
             }
 
-            return new WfDef(entity, startStepDef, errorStepDef, DataUtils.unmodifiableMap(steps), filterDefMap,
-                    setValuesDefMap, descFormat, supportMultiItemAction,
+            return new WfDef(entity, label, casePrefix, startStepDef, errorStepDef, DataUtils.unmodifiableMap(steps),
+                    filterDefMap, setValuesDefMap, descFormat, supportMultiItemAction,
                     ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         }
     }

@@ -30,6 +30,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Parameter;
 import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 
@@ -89,7 +90,7 @@ public class RepositoryModuleServiceImpl extends AbstractFlowCentralService impl
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
 
     }
 

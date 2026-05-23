@@ -32,7 +32,7 @@
 		<sysParameter code="SYS-0003" defaultVal="info@tcdng.com"
 			description="$m{system.sysparam.systememail}"
 			editor="!ui-text size:48" editable="true" />
-		<sysParameter code="SYS-0004" defaultVal="false"
+		<sysParameter code="SYS-0004" defaultVal="true"
 			description="$m{system.sysparam.scheduleranabled}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
 		<sysParameter code="SYS-0005" defaultVal="5"

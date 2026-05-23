@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.notification.constants.NotificationModule
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.EmailSettingsInfo;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextParamDef;
@@ -81,6 +82,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Periodic;
 import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
@@ -419,7 +421,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 notifAttachment.setName(attachment.getName());
                 notifAttachment.setTitle(attachment.getTitle());
                 notifAttachment.setType(attachment.getType());
-                notifAttachment.setData(attachment.getData());
+                notifAttachment.setData(attachment.getFile().getData());
                 notifAttachment.setProvider(attachment.getProvider());
                 notifAttachment.setSourceId(attachment.getSourceId());
                 attachmentList.add(notifAttachment);
@@ -432,11 +434,52 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         }
     }
 
+    @Override
+    public void updateEmailSettings(EmailSettingsInfo settings) throws UnifyException {
+        NotificationChannel channel = environment().find(new NotificationChannelQuery().notifType(NotifType.EMAIL));
+        List<NotificationChannelProp> channelPropList = new ArrayList<NotificationChannelProp>();
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.ADDRESS_PROPERTY,
+                settings.getSmtpHostAddress()));
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.PORT_PROPERTY,
+                String.valueOf(settings.getSmtpHostPort())));
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.SECURITYTYPE_PROPERTY,
+                settings.getSmtpSecurityType()));
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.USERNAME_PROPERTY,
+                settings.getSmtpUsername()));
+        channelPropList.add(new NotificationChannelProp(NotificationHostServerConstants.PASSWORD_PROPERTY,
+                twoWayStringCryptograph.encrypt(settings.getSmtpPassword())));
+        channelPropList.add(new NotificationChannelProp(NotificationChannelPropertyConstants.MAX_BATCH_SIZE,
+                settings.getMaxBatchSize() > 0 ? String.valueOf(settings.getMaxBatchSize()) : null));
+        channelPropList.add(new NotificationChannelProp(NotificationChannelPropertyConstants.MAX_TRIES,
+                settings.getMaxRetries() > 0 ? String.valueOf(settings.getMaxRetries()) : null));
+        channelPropList.add(new NotificationChannelProp(NotificationChannelPropertyConstants.RETRY_MINUTES,
+                settings.getRetriesInMinutes() > 0 ? String.valueOf(settings.getRetriesInMinutes()) : null));
+
+        if (channel == null) {
+            channel = new NotificationChannel();
+            channel.setNotificationType(NotifType.EMAIL);
+            channel.setName("emailNotifChannel");
+            channel.setDescription("Email Notification Channel");
+            channel.setSenderName(settings.getSenderName());
+            channel.setSenderContact(settings.getSenderEmail());
+            channel.setMessagesPerMinute(settings.getMessagesPerMinute() > 0 ? settings.getMessagesPerMinute() : null);
+            channel.setStatus(RecordStatus.ACTIVE);
+            channel.setChannelPropList(channelPropList);
+            environment().create(channel);
+        } else {
+            channel.setSenderName(settings.getSenderName());
+            channel.setSenderContact(settings.getSenderEmail());
+            channel.setMessagesPerMinute(settings.getMessagesPerMinute() > 0 ? settings.getMessagesPerMinute() : null);
+            channel.setStatus(RecordStatus.ACTIVE);
+            channel.setChannelPropList(channelPropList);
+            environment().updateByIdVersion(channel);
+        }
+    }
+
     @Periodic(PeriodicType.FAST)
     public void sendNotifications(TaskMonitor taskMonitor) throws UnifyException {
         if (au.system().getSysParameterValue(boolean.class, NotificationModuleSysParamConstants.NOTIFICATION_ENABLED)
                 && tryGrabLock(SEND_NOTIFICATION_LOCK)) {
-            logDebug("Lock required to send notifications successfully grabbed...");
             try {
                 final int maxBatchSize = au.system().getSysParameterValue(int.class,
                         NotificationModuleSysParamConstants.NOTIFICATION_MAX_BATCH_SIZE);
@@ -448,54 +491,42 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 final Date now = environment().getNow();
                 for (NotifType notifType : NOTIFICATION_TYPE_LIST) {
                     for (Long tenantId : au.system().getPrimaryMappedTenantIds()) {
-                        logDebug("Checking [{0}] notifications for tenant with id [{1}]...", notifType, tenantId);
                         if (environment().countAll(new NotificationChannelQuery().notifType(notifType)
                                 .status(RecordStatus.ACTIVE)) > 0) {
-                            logDebug("Sending [{0}] notifications for tenant with id [{1}]...", notifType, tenantId);
                             TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(tenantId);
                             final NotifChannelDef notifChannelDef = tenantChannelInfo
                                     .getNotificationChannelDef(notifType);
                             if (notifChannelDef.isThrottled()) {
-                                logDebug("Throttling detected for [{0}] and tenant with id [{1}]...",
-                                        notifChannelDef.getName(), tenantId);
                                 if (notifChannelDef.isThrottledAndIsNotDue(now)) {
-                                    logDebug("Throttling not due an skipped for [{0}] and tenant with id [{1}].",
-                                            notifChannelDef.getName(), tenantId);
                                     continue;
                                 }
-
-                                logDebug("Applying throttle at the rate of [{0}] messages per minute...",
-                                        notifChannelDef.getMessagesPerMinute());
                             }
 
                             try {
-                                final int localMaxBatchSize = notifChannelDef.isThrottled()
+                                int localMaxBatchSize = notifChannelDef.isThrottled()
                                         ? notifChannelDef.getMessagesPerMinute()
-                                        : (notifChannelDef.isProp(NotificationChannelPropertyConstants.MAX_BATCH_SIZE)
-                                                ? notifChannelDef.getPropValue(int.class,
-                                                        NotificationChannelPropertyConstants.MAX_BATCH_SIZE)
-                                                : maxBatchSize);
+                                        : notifChannelDef.getPropValue(int.class,
+                                                        NotificationChannelPropertyConstants.MAX_BATCH_SIZE);
+                                localMaxBatchSize = localMaxBatchSize == 0 ? maxBatchSize: localMaxBatchSize;
                                 final int localMaxAttempts = notifChannelDef
                                         .isProp(NotificationChannelPropertyConstants.MAX_TRIES)
                                                 ? notifChannelDef.getPropValue(int.class,
-                                                        NotificationChannelPropertyConstants.MAX_TRIES)
+                                                        NotificationChannelPropertyConstants.MAX_TRIES, maxBatchSize)
                                                 : maxAttempts;
                                 final int localRetryMinutes = notifChannelDef
                                         .isProp(NotificationChannelPropertyConstants.RETRY_MINUTES)
                                                 ? notifChannelDef.getPropValue(int.class,
                                                         NotificationChannelPropertyConstants.RETRY_MINUTES)
                                                 : retryMinutes;
+                                localMaxBatchSize = 5;
                                 if (localMaxBatchSize > 0) {
-                                    logDebug(
-                                            "Parameters for sending notifications extracted. MaxBatchSize = [{0}], MaxAttempts = [{1}], RetryMinutes = [{2}]",
-                                            localMaxBatchSize, localMaxAttempts, localRetryMinutes);
                                     List<Long> pendingNotificationIdList = environment().valueList(Long.class, "id",
                                             new NotificationOutboxQuery().type(notifType).due(now)
                                                     .status(NotificationOutboxStatus.NOT_SENT)
                                                     .setLimit(localMaxBatchSize));
-                                    logDebug("Sending [{0}] notifications via channel [{1}]...",
-                                            pendingNotificationIdList.size(), notifChannelDef.getDescription());
                                     if (!DataUtils.isBlank(pendingNotificationIdList)) {
+                                        logDebug("Sending [{0}] notifications via channel [{1}]...",
+                                                pendingNotificationIdList.size(), notifChannelDef.getDescription());
                                         NotificationMessagingChannel channel = getNotificationMessagingChannel(
                                                 notifType);
                                         ChannelMessage[] messages = getChannelMessages(tenantId,
@@ -548,13 +579,12 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 }
             } finally {
                 releaseLock(SEND_NOTIFICATION_LOCK);
-                logDebug("Lock required to send notifications successfully released...");
             }
         }
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
 
     }
 
@@ -700,8 +730,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                     @Override
                     protected boolean stale(NotifType type, NotifChannelDef notifChannelDef) throws Exception {
-                        return (environment().value(long.class, "versionNo", new NotificationChannelQuery()
-                                .id(notifChannelDef.getId())) > notifChannelDef.getVersion());
+                        return isStale(new NotificationChannelQuery(), notifChannelDef);
                     }
 
                     @Override
@@ -718,8 +747,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                     @Override
                     protected boolean stale(String name, NotifChannelDef notifChannelDef) throws Exception {
-                        return (environment().value(long.class, "versionNo", new NotificationChannelQuery()
-                                .id(notifChannelDef.getId())) > notifChannelDef.getVersion());
+                        return isStale(new NotificationChannelQuery(), notifChannelDef);
                     }
 
                     @Override

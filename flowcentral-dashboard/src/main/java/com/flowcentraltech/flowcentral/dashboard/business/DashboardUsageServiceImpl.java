@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTileQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 
 /**
  * Default implementation of dashboard usage service.
@@ -94,7 +95,7 @@ public class DashboardUsageServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx,ModuleInstall moduleInstall) throws UnifyException {
 
     }
 }

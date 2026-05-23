@@ -19,7 +19,9 @@ package com.flowcentraltech.flowcentral.studio.web.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Table editor object.
@@ -70,8 +72,8 @@ public class TableEditor {
         this.design = design;
     }
 
-    public static Builder newBuilder(EntityDef entityDef) {
-        return new Builder(entityDef);
+    public static Builder newBuilder(AppletUtilities au, EntityDef entityDef) {
+        return new Builder(au, entityDef);
     }
 
     public static class Builder {
@@ -80,18 +82,22 @@ public class TableEditor {
 
         private List<TableColumn> columnList;
 
-        public Builder(EntityDef entityDef) {
+        private final AppletUtilities au;
+
+        public Builder(AppletUtilities au, EntityDef entityDef) {
+            this.au = au;
             this.entityDef = entityDef;
             this.columnList = new ArrayList<TableColumn>();
         }
 
         public Builder addColumn(String fieldName, String renderWidget, String label, String linkAct, String symbol,
                 String order, int widthRatio, boolean switchOnChange, boolean hiddenOnNull, boolean hidden,
-                boolean disabled, boolean editable, boolean sortable, boolean summary) {
+                boolean disabled, boolean editable, boolean sortable, boolean summary) throws UnifyException {
             if (entityDef.isWithFieldDef(fieldName)) {
-                columnList.add(new TableColumn(entityDef.getFieldDef(fieldName).getFieldLabel(), fieldName,
-                        renderWidget, label, linkAct, symbol, order, widthRatio, switchOnChange, hiddenOnNull, hidden,
-                        disabled, editable, sortable, summary));
+                columnList.add(new TableColumn(
+                        au.resolveSessionMessage(entityDef.getFieldDef(fieldName).getFieldLabel()), fieldName,
+                        renderWidget, au.resolveSessionMessage(label), linkAct, symbol, order, widthRatio,
+                        switchOnChange, hiddenOnNull, hidden, disabled, editable, sortable, summary));
             }
 
             return this;

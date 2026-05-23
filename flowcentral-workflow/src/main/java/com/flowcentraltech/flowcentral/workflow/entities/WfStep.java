@@ -142,11 +142,17 @@ public class WfStep extends BaseConfigNamedEntity {
     @ListOnly(key = "priority", property = "description")
     private String priorityDesc;
 
+    @ListOnly(key = "workflowId", property = "developable")
+    private boolean workflowDevelopable;
+
     @ListOnly(key = "workflowId", property = "runnable")
     private boolean workflowRunnable;
 
     @ListOnly(key = "workflowId", property = "name")
     private String workflowName;
+
+    @ListOnly(key = "workflowId", property = "casePrefix")
+    private String workflowCasePrefix;
 
     @ListOnly(key = "workflowId", property = "description")
     private String workflowDesc;
@@ -462,6 +468,14 @@ public class WfStep extends BaseConfigNamedEntity {
         this.priorityDesc = priorityDesc;
     }
 
+    public boolean isWorkflowDevelopable() {
+        return workflowDevelopable;
+    }
+
+    public void setWorkflowDevelopable(boolean workflowDevelopable) {
+        this.workflowDevelopable = workflowDevelopable;
+    }
+
     public boolean isWorkflowRunnable() {
         return workflowRunnable;
     }
@@ -476,6 +490,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setWorkflowName(String workflowName) {
         this.workflowName = workflowName;
+    }
+
+    public String getWorkflowCasePrefix() {
+        return workflowCasePrefix;
+    }
+
+    public void setWorkflowCasePrefix(String workflowCasePrefix) {
+        this.workflowCasePrefix = workflowCasePrefix;
     }
 
     public String getWorkflowDesc() {

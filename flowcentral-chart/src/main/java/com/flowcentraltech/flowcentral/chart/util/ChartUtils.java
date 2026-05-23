@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryData
 import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.database.Aggregation;
 import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.GroupingAggregation.Grouping;
@@ -63,6 +64,54 @@ public final class ChartUtils {
 
     private ChartUtils() {
 
+    }
+    
+    private static final List<ChartTimeSeriesType> mergedTypeList =
+            Arrays.asList(
+                    ChartTimeSeriesType.YEAR_MERGED,
+                    ChartTimeSeriesType.MONTH_MERGED,
+                    ChartTimeSeriesType.WEEK_MERGED,
+                    ChartTimeSeriesType.DAY_OVER_YEAR_MERGED,
+                    ChartTimeSeriesType.DAY_OVER_MONTH_MERGED,
+                    ChartTimeSeriesType.DAY_OVER_WEEK_MERGED,
+                    ChartTimeSeriesType.HOUR_OVER_DAY_MERGED);
+    
+    private static final List<ChartTimeSeriesType> fillTypeList =
+            Arrays.asList(
+                    ChartTimeSeriesType.DAY_OVER_YEAR,
+                    ChartTimeSeriesType.DAY_OVER_MONTH,
+                    ChartTimeSeriesType.DAY_OVER_WEEK,
+                    ChartTimeSeriesType.HOUR_OVER_DAY);
+    
+    private static final List<ChartTimeSeriesType> defaultTypeList =
+            Arrays.asList(
+                    ChartTimeSeriesType.YEAR,
+                    ChartTimeSeriesType.MONTH,
+                    ChartTimeSeriesType.WEEK,
+                    ChartTimeSeriesType.DAY,
+                    ChartTimeSeriesType.HOUR);
+    
+    public static ChartTimeSeriesType getBestAlternative(ChartTimeSeriesType type, TimeResolutionType maxResolution) {
+        if (maxResolution != null) {
+            final List<ChartTimeSeriesType> list = type.merged() ? mergedTypeList
+                    : (type.fill() ? fillTypeList : defaultTypeList);
+            final int len = list.size();
+            int i = 0;
+            while (i < len) {
+                if (type.equals(list.get(i++))) {
+                    break;
+                }
+            }
+
+            while (i < len) {
+                ChartTimeSeriesType alternative = list.get(i++);
+                if (alternative.maxResolution().less(type.maxResolution())) {
+                    return alternative;
+                }
+            }
+        }
+
+        return type;
     }
 
     public static String getFormattedCardValue(Number num) {
@@ -227,46 +276,48 @@ public final class ChartUtils {
                 : (chartDetails.isWithCategoryInclusion() ? chartDetails.getCategoryInclusion()
                         : chartDef.getCategoryInclusion());
         List<AbstractSeries<?, ?>> actseries = new ArrayList<AbstractSeries<?, ?>>(series.values());
-        if (chartType.axisChart()) {
-            // Series
-            boolean integers = true;
-            jw.beginArray("series");
-            for (AbstractSeries<?, ?> _series : actseries) {
-                _series.setCategoryInclusion(categoryInclusion);
-                _series.writeAsObject(jw);
-                integers &= _series.getDataType().isInteger();
+        if (!DataUtils.isBlank(actseries)) {
+            if (chartType.axisChart()) {
+                // Series
+                boolean integers = true;
+                jw.beginArray("series");
+                for (AbstractSeries<?, ?> _series : actseries) {
+                    _series.setCategoryInclusion(categoryInclusion);
+                    _series.writeAsObject(jw);
+                    integers &= _series.getDataType().isInteger();
+                }
+                jw.endArray();
+
+                if (chartType.isColumn() || chartType.isLine() || chartType.isArea()) {
+                    // Y-axis
+                    jw.write("_yintegers", integers);
+                    jw.write("_yformatter", chartDef.isFormatYLabels());
+                    jw.beginObject("yaxis");
+                    jw.beginObject("labels");
+                    jw.endObject();
+                    jw.endObject();
+
+                    // X-axis
+                    jw.beginObject("xaxis");
+                    jw.write("type", categoryType.optionsType());
+                    jw.endObject();
+                }
+            } else {
+                AbstractSeries<?, ?> pseries = actseries.get(0);
+                pseries.setCategoryInclusion(categoryInclusion);
+
+                // Series
+                pseries.writeYValuesArray("series", jw);
+
+                // Labels
+                pseries.writeXValuesArray("labels", jw);
+
+                // Legend
+                jw.beginObject("legend");
+                jw.write("position", "left");
+                jw.write("offsetY", 60);
+                jw.endObject();
             }
-            jw.endArray();
-
-            if (chartType.isColumn() || chartType.isLine() || chartType.isArea()) {
-                // Y-axis
-                jw.write("_yintegers", integers);
-                jw.write("_yformatter", chartDef.isFormatYLabels());
-                jw.beginObject("yaxis");
-                jw.beginObject("labels");
-                jw.endObject();
-                jw.endObject();
-
-                // X-axis
-                jw.beginObject("xaxis");
-                jw.write("type", categoryType.optionsType());
-                jw.endObject();
-            }
-        } else {
-            AbstractSeries<?, ?> pseries = actseries.get(0);
-            pseries.setCategoryInclusion(categoryInclusion);
-
-            // Series
-            pseries.writeYValuesArray("series", jw);
-
-            // Labels
-            pseries.writeXValuesArray("labels", jw);
-
-            // Legend
-            jw.beginObject("legend");
-            jw.write("position", "left");
-            jw.write("offsetY", 60);
-            jw.endObject();
         }
 
         jw.endObject();

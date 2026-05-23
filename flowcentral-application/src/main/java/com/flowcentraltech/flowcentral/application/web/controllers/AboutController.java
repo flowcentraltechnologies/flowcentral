@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.web.data.About;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPopupPageController;
@@ -38,10 +40,12 @@ public class AboutController extends AbstractFlowCentralPopupPageController<Abou
 
     @Override
     protected About getPopupBean() throws UnifyException {
-        final String applicationCode =  getApplicationCode();
-        final String applicationName =  getApplicationName();
+        final String applicationCode = getApplicationCode();
+        final String applicationName = getApplicationName();
         final String applicationVersion = getDeploymentVersion();
-        return new About(applicationCode, applicationName, applicationVersion);
+        final String serverTimeZone = getApplicationTimeZone().getDisplayName();
+        final Date serverDateTime = environment().getNow();
+        return new About(applicationCode, applicationName, applicationVersion, serverDateTime, serverTimeZone);
     }
 
 }

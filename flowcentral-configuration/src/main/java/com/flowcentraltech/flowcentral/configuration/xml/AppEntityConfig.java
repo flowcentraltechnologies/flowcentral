@@ -30,7 +30,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.EntityBaseTypeX
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class AppEntityConfig extends BaseNameConfig {
+public class AppEntityConfig extends BaseClassifiedConfig {
 
     @JsonSerialize(using = EntityBaseTypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = EntityBaseTypeXmlAdapter.Deserializer.class)

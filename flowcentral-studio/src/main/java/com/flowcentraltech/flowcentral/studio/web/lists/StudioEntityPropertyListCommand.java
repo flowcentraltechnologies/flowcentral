@@ -65,7 +65,7 @@ public class StudioEntityPropertyListCommand extends AbstractApplicationListComm
                             .findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                                     .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
                                     .dataTypeNotIn(EntityFieldDataType.CHILD, EntityFieldDataType.CHILD_LIST,
-                                            EntityFieldDataType.REF_FILEUPLOAD, EntityFieldDataType.CATEGORY_COLUMN,
+                                            /*EntityFieldDataType.REF_FILEUPLOAD,*/ EntityFieldDataType.CATEGORY_COLUMN,
                                             EntityFieldDataType.FOSTER_PARENT_ID,
                                             EntityFieldDataType.FOSTER_PARENT_TYPE, EntityFieldDataType.SCRATCH)
                                     .addSelect("id", "name", "label").addOrder("name"));

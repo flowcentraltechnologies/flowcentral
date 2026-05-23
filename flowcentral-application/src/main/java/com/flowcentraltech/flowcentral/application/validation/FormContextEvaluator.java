@@ -44,6 +44,18 @@ public interface FormContextEvaluator extends FlowCentralComponent {
     void evaluateFormContext(FormContext ctx, FormValidationContext vCtx) throws UnifyException;
 
     /**
+     * Evaluates a form context using component validation only.
+     * 
+     * @param ctx
+     *             the form context
+     * @param vCtx
+     *             the validation context
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void evaluateFormContextComponentValidation(FormContext ctx, FormValidationContext vCtx) throws UnifyException;
+
+    /**
      * Evaluates a form context.
      * 
      * @param ctx

@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -84,16 +85,19 @@ import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
+import com.flowcentraltech.flowcentral.common.data.FormValidation;
 import com.flowcentraltech.flowcentral.common.data.FormattedAudit;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.database.WorkEntity;
@@ -103,6 +107,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
@@ -111,6 +116,7 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.database.sql.SqlFieldTypeInfo;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.system.SequenceNumberService;
@@ -127,6 +133,43 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 public interface AppletUtilities extends FlowCentralComponent {
 
+    /**
+     * Gets a static list enumeration type.
+     * 
+     * @param listName
+     *                 the list name
+     * @return the list enumeration type
+     * @throws UnifyException
+     *                        if static list with name is unknown. if an error occurs
+     */
+    Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException;
+    
+    /**
+     * Generates a field type SQL
+     * 
+     * @param entity
+     *               the entity name
+     * @param info
+     *               the field type information
+     * @return the field type SQL
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> generateFieldTypeSql(String entity, SqlFieldTypeInfo info) throws UnifyException;
+
+    /**
+     * Gets table row color.
+     * 
+     * @param tableName
+     *                  the table name
+     * @param row
+     *                  the row value store
+     * @return the color in HEX
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Optional<String> getTableRowColor(String tableName, ValueStore row) throws UnifyException;
+    
     /**
      * Gets formatted audit. Uses default formatter options.
      * 
@@ -586,6 +629,13 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @return the application service.
      */
     ApplicationModuleService application();
+
+    /**
+     * Gets dynamic enumeration provider.
+     * 
+     * @return the provider
+     */
+    DynamicEnumProvider enumProvider();
 
     /**
      * Gets the application privilege manager.
@@ -1788,6 +1838,38 @@ public interface AppletUtilities extends FlowCentralComponent {
             throws UnifyException;
 
     /**
+     * Matches a form bean with applet condition property when present
+     * 
+     * @param appletDef
+     *                          the applet definition
+     * @param form
+     *                          the form
+     * @param conditionPropName
+     *                          the condition applet property name
+     * @return true if matched but false on no condition or otherwise
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean formBeanMatchAppletPropertyConditionWhenPresent(AppletDef appletDef, AbstractForm form,
+            String conditionPropName) throws UnifyException;
+
+    /**
+     * Validate form using component validation.
+     * 
+     * @param formName
+     *                       the form name
+     * @param inst
+     *                       the entity instance
+     * @param evaluationMode
+     *                       the evaluation mode
+     * @return validation result
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FormValidation validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
+            throws UnifyException;
+
+    /**
      * Bumps entity version
      * 
      * @param db
@@ -2042,6 +2124,21 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
+
+    /**
+     * Updates an entity type.
+     * 
+     * @param entityClass
+     *                    the entity class
+     * @param id
+     *                    the entity ID
+     * @param update
+     *                    the update object
+     * @return number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int updateEntity(Class<? extends Entity> entityClass, Long id, Update update) throws UnifyException;
 
     /**
      * Performs on form construction.

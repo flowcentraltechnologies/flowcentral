@@ -54,10 +54,13 @@ public class AssignmentPageDef extends BaseApplicationEntityDef {
 
     private String ruleDescField;
 
+    private boolean search;
+
     public AssignmentPageDef(String longName, String description, Long id, long version, String label, String entity,
             String updatePolicy, String baseField, String assignField, String filterCaption1, String filterCaption2,
-            String filterList1, String filterList2, String assignCaption, String unassignCaption, String assignList,
-            String unassignList, String ruleDescField) throws UnifyException {
+            String filterList1, String filterList2, boolean search, String assignCaption,
+            String unassignCaption, String assignList, String unassignList, String ruleDescField)
+            throws UnifyException {
         super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         this.label = label;
         this.entity = entity;
@@ -73,6 +76,7 @@ public class AssignmentPageDef extends BaseApplicationEntityDef {
         this.assignList = assignList;
         this.unassignList = unassignList;
         this.ruleDescField = ruleDescField;
+        this.search = search;
     }
 
     public String getLabel() {
@@ -125,6 +129,10 @@ public class AssignmentPageDef extends BaseApplicationEntityDef {
 
     public boolean isWithFilterList2() {
         return filterList2 != null;
+    }
+
+    public boolean isSearch() {
+        return search;
     }
 
     public String getAssignCaption() {

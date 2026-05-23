@@ -135,6 +135,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public String getAssignSearch() {
+        return parentAppletDef.getAssignSearch();
+    }
+
+    @Override
     public String getPseudoDeleteField() {
         return parentAppletDef.getPseudoDeleteField();
     }
@@ -225,6 +230,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
+    public boolean isPortalAccess() {
+        return parentAppletDef.isPortalAccess();
+    }
+
+    @Override
     public boolean isMenuAccess() {
         return parentAppletDef.isMenuAccess();
     }
@@ -232,6 +242,11 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     @Override
     public boolean isSupportOpenInNewWindow() {
         return parentAppletDef.isSupportOpenInNewWindow();
+    }
+
+    @Override
+    public boolean isSupportRemoteAccess() {
+        return parentAppletDef.isSupportRemoteAccess();
     }
 
     @Override

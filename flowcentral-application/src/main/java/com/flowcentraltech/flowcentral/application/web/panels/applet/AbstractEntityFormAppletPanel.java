@@ -112,7 +112,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         applet.ensureFormStruct();
 
         final AppletDef formAppletDef = applet.getFormAppletDef();
-        logDebug("Switching form applet panel [{0}]...", formAppletDef != null ? formAppletDef.getLongName() : null);
         final AppletContext appCtx = applet.appletCtx();
         final boolean isCollaboration = applet.isCollaboration() && collaborationProvider() != null;
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
@@ -554,9 +553,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             default:
                 break;
         }
-
-        logDebug("Switching completed for form applet panel [{0}].",
-                formAppletDef != null ? formAppletDef.getLongName() : null);
     }
 
     @Action
@@ -692,7 +688,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         FormContext ctx = evaluateCurrentFormContext(
                 new FormValidationContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()), actionName));
         if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(), actionName);
+            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(),
+                    formActionDef.getRule(), actionName);
             handleEntityActionResult(entityActionResult);
         }
     }
@@ -703,6 +700,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         if (applet.isPromptEnterWorkflowDraft()) {
             showPromptWorkflowDraft(WorkflowDraftType.UPDATE, IndexedTarget.BLANK);
         } else {
+        	final boolean attachmentDisabled = applet.matchFormBeanToAppletPropertyConditionWhenPresent(
+                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENT_DISABLE_CONDITION);
+        	setRequestAttribute(AppletRequestAttributeConstants.ATTACHMENT_DISABLED, attachmentDisabled);
             setCommandResultMapping(ApplicationResultMappingConstants.SHOW_FILE_ATTACHMENTS);
         }
     }
@@ -904,7 +904,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void maintain() throws UnifyException {
         IndexedTarget target = getIndexedTarget();
-        if (target.isValidValueIndex()) {
+        if (target != null && target.isValidValueIndex()) {
             if (getEntityFormApplet().isPromptEnterWorkflowDraft()
                     && EntitySearchValueMarkerConstants.CHILD_LIST.equals(target.getTarget())) {
                 showPromptWorkflowDraft(WorkflowDraftType.MAINTAIN, target);
@@ -940,7 +940,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void listing() throws UnifyException {
         getRequestContextUtil().setContentScrollReset();
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
-        if (target.isValidValueIndex()) {
+        if (target != null && target.isValidValueIndex()) {
             switch (target.getTarget()) {
                 case EntitySearchValueMarkerConstants.CHILD_LIST:
                     return;
@@ -1067,7 +1067,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
-    private IndexedTarget getIndexedTarget() throws UnifyException {
+    @Override
+    protected IndexedTarget getIndexedTarget() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         return getRequestAttribute(boolean.class, IN_WORKFLOW_DRAFT_LOOP_FLAG)
                 ? DataUtils.convert(IndexedTarget.class, applet.removeWorkflowDraftInfo().getRequestTarget())

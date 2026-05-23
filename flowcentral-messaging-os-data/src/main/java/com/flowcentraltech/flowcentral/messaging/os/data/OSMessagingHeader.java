@@ -1,0 +1,66 @@
+/*
+ * Copyright (c) 2021-2025 FlowCentral Technologies Limited.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.flowcentraltech.flowcentral.messaging.os.data;
+
+/**
+ * OS messaging header.
+ * 
+ * @author FlowCentral Technologies Limited
+ * @since 4.1
+ */
+public class OSMessagingHeader {
+
+    public static final OSMessagingHeader BLANK = new OSMessagingHeader();
+    
+    private String source;
+
+    private String processor;
+    
+    private boolean processorPresent;
+    
+    private long versionNo;
+
+    public OSMessagingHeader(String source, String processor, boolean processorPresent, long versionNo) {
+        this.source = source;
+        this.processor = processor;
+        this.processorPresent = processorPresent;
+        this.versionNo = versionNo;
+    }
+
+    private OSMessagingHeader() {
+        
+    }
+    
+    public String getSource() {
+        return source;
+    }
+
+    public String getProcessor() {
+        return processor;
+    }
+
+    public long getVersionNo() {
+        return versionNo;
+    }
+
+    public boolean isSourcePresent() {
+        return source != null;
+    }
+
+    public boolean isProcessorPresent() {
+        return processorPresent;
+    }
+}

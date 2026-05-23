@@ -26,7 +26,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class AppDashboardConfig extends BaseNameConfig {
+public class AppDashboardConfig extends BaseClassifiedConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;

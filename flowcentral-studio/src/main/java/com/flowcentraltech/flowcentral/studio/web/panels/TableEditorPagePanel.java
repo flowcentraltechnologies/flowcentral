@@ -33,17 +33,18 @@ public class TableEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     public void switchState() throws UnifyException {
-        super.switchState();
+        final TableEditorPage tableEditorPage = getTableEditorPage();
+        if (tableEditorPage != null) {
+            final boolean readOnly = isAppletContextReadOnly();
+            TableEditor tableEditor = tableEditorPage.getTableEditor();
+            tableEditor.setReadOnly(readOnly);
+            if (tableEditor.getEditColumnId() == null) {
+                tableEditor.setEditColumnId(getWidgetByShortName("editColumnPanel").getId());
+            }
 
-        final boolean readOnly = isAppletContextReadOnly();
-        TableEditor tableEditor = getTableEditorPage().getTableEditor();
-        tableEditor.setReadOnly(readOnly);
-        if (tableEditor.getEditColumnId() == null) {
-            tableEditor.setEditColumnId(getWidgetByShortName("editColumnPanel").getId());
+            setWidgetVisible("saveBtn", !readOnly);
+            setWidgetEditable("editColumnPanel", !readOnly);
         }
-
-        setWidgetVisible("saveBtn", !readOnly);
-        setWidgetEditable("editColumnPanel", !readOnly);
     }
 
     @Action
@@ -56,6 +57,12 @@ public class TableEditorPagePanel extends AbstractStudioEditorPagePanel {
         TableEditorPage tableEditorPage = getTableEditorPage();
         tableEditorPage.commitDesign();
         hintUser("$m{studioapptableapplet.tableeditor.success.hint}", tableEditorPage.getSubTitle());
+    }
+
+    @Override
+    protected boolean isAppletContextReadOnly() throws UnifyException {
+        // TODO
+        return false;
     }
 
     private TableEditorPage getTableEditorPage() throws UnifyException {

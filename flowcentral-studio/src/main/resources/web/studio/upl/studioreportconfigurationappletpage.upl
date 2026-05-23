@@ -13,11 +13,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-page captionBinding:$s{instTitle} subCaptionBinding:$s{typeTitle} components:$c{appletPanel}
+!ui-page
+
+// Design panel
+!ui-panel:designPanel style:$s{width:100%;height:100%;}
+	components:$c{reportEditorPagePanel}
 
 // Applet panel
-!fc-studioreportconfigurationappletpanel:appletPanel style:$s{width:100%;height:100%;}
+!fc-studioreportconfigurationappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
 	binding:applet
+	additionalUpdateComponents:$c{reportEditorPagePanel}
 
+// Report Editor Page
+!fc-reporteditorpagepanel:reportEditorPagePanel binding:applet.reportEditorPage
 
 // Actions

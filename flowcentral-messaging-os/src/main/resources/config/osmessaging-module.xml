@@ -13,4 +13,10 @@
 			longDescription="$m{osmessaging.long.description}" autoInstall="true"
 			configFile="apps/osmessaging-application.xml" />
 	</applications>
+	<!-- System Parameters -->
+	<sysParameters>
+		<sysParameter code="OMG-0001" defaultVal="false"
+			description="$m{osmessaging.sysparam.loggingenabled}"
+			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
+	</sysParameters>
 </module>

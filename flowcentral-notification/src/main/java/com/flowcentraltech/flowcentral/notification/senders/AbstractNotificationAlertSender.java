@@ -35,6 +35,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.Formats;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.IOUtils;
 
@@ -103,14 +104,14 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
             FormListingOptions options) throws UnifyException {
         final byte[] report = appletUtilities.generateViewListingReportAsByteArray(reader, generator, options);
         return Attachment.newBuilder(FileAttachmentType.PDF, false).fileName(fileName).title(fileName).name(fileName)
-                .data(report).build();
+                .file(UploadedFile.create(fileName, report)).build();
     }
 
     protected Attachment createPdfAttachmentFromListing(String fileName, ValueStoreReader reader,
             List<GenerateListingReportOptions> options) throws UnifyException {
         final byte[] report = appletUtilities.generateViewListingReportAsByteArray(reader, options);
         return Attachment.newBuilder(FileAttachmentType.PDF, false).fileName(fileName).title(fileName).name(fileName)
-                .data(report).build();
+                .file(UploadedFile.create(fileName, report)).build();
     }
 
     protected Attachment createPdfAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
@@ -144,7 +145,7 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
             String letterGenerator) throws UnifyException {
         final byte[] report = appletUtilities.generateLetterListingReportAsByteArray(reader, letterGenerator);
         return Attachment.newBuilder(FileAttachmentType.PDF, false).fileName(fileName).title(fileName).name(fileName)
-                .data(report).build();
+                .file(UploadedFile.create(fileName, report)).build();
     }
 
     protected Attachment createExcelAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
@@ -178,7 +179,7 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
             throws UnifyException {
         final String fileName = IOUtils.getActualFileName(absoluteFileName);
         final byte[] file = IOUtils.readFileResourceInputStream(absoluteFileName);
-        return Attachment.newBuilder(type, false).fileName(fileName).title(fileName).name(fileName).data(file).build();
+        return Attachment.newBuilder(type, false).fileName(fileName).title(fileName).name(fileName).file(UploadedFile.create(fileName, file)).build();
     }
 
     private Attachment createAttachmentFromDetailListingReport(String fileName, ValueStoreReader reader,
@@ -187,7 +188,7 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
         final byte[] report = appletUtilities.generateDetailListingReportAsByteArray(reader, tableName, dataList,
                 detailsListingGenerator, properties, formats, spreadSheet);
         return Attachment.newBuilder(spreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF, false).fileName(fileName)
-                .title(fileName).name(fileName).data(report).build();
+                .title(fileName).name(fileName).file(UploadedFile.create(fileName, report)).build();
     }
 
     private Attachment createAttachmentFromDetailListingReport(String fileName, ValueStoreReader reader,
@@ -196,6 +197,6 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
         final byte[] report = appletUtilities.generateDetailListingReportAsByteArray(reader, detailsCaseList,
                 detailsListingGenerator, properties, columns, asSpreadSheet);
         return Attachment.newBuilder(asSpreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF, false)
-                .fileName(fileName).title(fileName).name(fileName).data(report).build();
+                .fileName(fileName).title(fileName).name(fileName).file(UploadedFile.create(fileName, report)).build();
     }
 }

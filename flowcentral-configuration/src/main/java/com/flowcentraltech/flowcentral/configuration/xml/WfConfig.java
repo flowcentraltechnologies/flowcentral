@@ -29,13 +29,16 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
 @JacksonXmlRootElement(localName = "workflow")
-public class WfConfig extends BaseRootConfig {
+public class WfConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(localName = "steps")
     private WfStepsConfig stepsConfig;
 
     @JacksonXmlProperty(isAttribute = true)
     private String entity;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private String casePrefix;
 
     @JacksonXmlProperty(isAttribute = true)
     private String loadingTable;
@@ -79,6 +82,14 @@ public class WfConfig extends BaseRootConfig {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getCasePrefix() {
+        return casePrefix;
+    }
+
+    public void setCasePrefix(String casePrefix) {
+        this.casePrefix = casePrefix;
     }
 
     public String getLoadingTable() {

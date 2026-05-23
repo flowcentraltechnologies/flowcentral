@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.Control;
 
@@ -31,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @since 4.1
  */
 @Component("fc-widgetrules")
-public class WidgetRulesWidget extends AbstractValueListWidget<WidgetRuleEntry> {
+public class WidgetRulesWidget extends AbstractItemListWidget<WidgetRuleEntry> {
 
     private Control fieldSelectCtrl;
 
@@ -86,11 +85,6 @@ public class WidgetRulesWidget extends AbstractValueListWidget<WidgetRuleEntry> 
         }
 
         return Collections.emptyList();
-    }
-
-    @Override
-    protected ValueStore newValue(WidgetRuleEntry widgetRuleEntry, int index) throws UnifyException {
-        return createValueStore(widgetRuleEntry, index);
     }
 
 }

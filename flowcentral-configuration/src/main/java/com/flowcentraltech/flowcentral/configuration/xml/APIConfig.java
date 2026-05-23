@@ -30,7 +30,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.APITypeXmlAdapt
  * @since 4.1
  */
 @JsonInclude(value = Include.NON_NULL, content = Include.NON_EMPTY)
-public class APIConfig extends BaseNameConfig {
+public class APIConfig extends BaseClassifiedConfig {
 
     @JsonSerialize(using = APITypeXmlAdapter.Serializer.class)
     @JsonDeserialize(using = APITypeXmlAdapter.Deserializer.class)

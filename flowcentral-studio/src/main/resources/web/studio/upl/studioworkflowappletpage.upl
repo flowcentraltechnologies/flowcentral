@@ -13,11 +13,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-page captionBinding:$s{instTitle} subCaptionBinding:$s{typeTitle} components:$c{appletPanel}
+!ui-page
 
+// Design panel
+!ui-panel:designPanel style:$s{width:100%;height:100%;}
+	components:$c{workflowEditorPagePanel}
+	
 // Applet panel
-!fc-studioworkflowappletpanel:appletPanel style:$s{width:100%;height:100%;}
-	binding:applet
+!fc-studioworkflowappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
+	binding:applet 
+	publishEventHandler:$d{!ui-event event:onclick action:$c{publishAct}}
+	additionalUpdateComponents:$c{workflowEditorPagePanel}
 
+// Workflow Editor Page
+!fc-workfloweditorpagepanel:workflowEditorPagePanel binding:applet.workflowEditorPage
 
 // Actions
+!ui-post:publishAct path:$n{/publish}

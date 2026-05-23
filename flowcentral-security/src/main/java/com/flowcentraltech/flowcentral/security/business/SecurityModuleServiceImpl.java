@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -53,10 +54,13 @@ import com.flowcentraltech.flowcentral.notification.business.NotificationModuleS
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
+import com.flowcentraltech.flowcentral.security.business.data.UserDetail;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleEntityConstants;
@@ -79,6 +83,7 @@ import com.flowcentraltech.flowcentral.security.entities.UserQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserRole;
 import com.flowcentraltech.flowcentral.security.entities.UserRoleQuery;
 import com.flowcentraltech.flowcentral.security.templatewrappers.UserPasswordResetTemplateWrapper;
+import com.flowcentraltech.flowcentral.security.templatewrappers.UserWelcomeTemplateWrapper;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
@@ -93,6 +98,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
@@ -100,6 +106,8 @@ import com.tcdng.unify.core.data.StringComposition;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordAutenticationService;
 import com.tcdng.unify.core.security.PasswordGenerator;
+import com.tcdng.unify.core.security.SecurityComponents;
+import com.tcdng.unify.core.security.UserProfile;
 import com.tcdng.unify.core.system.UserSessionManager;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.ColorUtils;
@@ -136,7 +144,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private NotificationModuleService notificationModuleService;
 
-    @Configurable("oneway-stringcryptograph")
+    @Configurable(SecurityComponents.ONEWAY_STRING_CRYPTOGRAPH)
     private OneWayStringCryptograph passwordCryptograph;
 
     @Override
@@ -199,6 +207,91 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 minimumSpecial, minimumUppercase, minimumLowercase);
     }
 
+    @Override
+	public Long createUser(UserDetail userDetail) throws UnifyException {
+			String loginId = generateLoginId(userDetail.getFullName());
+			User user = new User();
+			user.setFullName(userDetail.getFullName());
+			user.setLoginId(loginId);
+			user.setPassword(passwordCryptograph.encrypt(loginId.toLowerCase()));
+			user.setEmail(userDetail.getEmail());
+			user.setMobileNo(userDetail.getMobileNo());
+			user.setSupervisor(userDetail.getSupervisor());
+			user.setUserRoleList(getUserRoles(userDetail.getUserRoleCode()));
+			
+			user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
+			user.setStatus(RecordStatus.ACTIVE);
+			
+			// send User Welcome Notification
+			UserWelcomeTemplateWrapper wrapper = notificationModuleService
+					.wrapperOfNotifTemplate(UserWelcomeTemplateWrapper.class);
+			wrapper.setFullName(user.getFullName());
+			wrapper.setLoginId(loginId);
+			wrapper.setPlainPassword(loginId.toLowerCase());
+			wrapper.addTORecipient(user.getFullName(), user.getEmail());
+			notificationModuleService.sendNotification(wrapper.getMessage());
+			
+			return (Long) environment().create(user);
+	}
+    
+    private String generateLoginId(String fullName) throws UnifyException {
+		List<String> loginIds = environment().valueList(String.class,"loginId",
+				new UserQuery().ignoreEmptyCriteria(true));
+		String[] fullNameSplit = fullName.toUpperCase().split(" ");
+		StringBuilder loginIdBuilder = new StringBuilder(fullNameSplit[0]);
+		boolean haveCheckedOtherName = false;
+		while (loginIds.contains(loginIdBuilder.toString())) {
+			if (fullNameSplit.length == 1 || haveCheckedOtherName) {
+				char randomAlphabet = generateRandomAlphabet();
+				loginIdBuilder.append(randomAlphabet);
+			} else {
+				char firstLetter = fullNameSplit[1].charAt(0);
+				loginIdBuilder.append(firstLetter);
+				haveCheckedOtherName = true;
+			}
+		}
+		return loginIdBuilder.toString();
+	}
+    
+    private char generateRandomAlphabet() {
+		return (char) ('A' + new Random().nextInt(26));
+	}
+    
+    private List<UserRole> getUserRoles(List<String> roleCodes)throws UnifyException{
+    	List<UserRole> userRoles = new ArrayList<>();
+		for (String roleCode : roleCodes) {
+			roleCode = roleCode.toUpperCase();
+			Optional<Long> roleIdOpt = getRoleId(roleCode);
+			Long roleId;
+			if (roleIdOpt.isPresent()) {
+				roleId = roleIdOpt.get();
+			} else {
+				roleId = createRole(roleCode);
+			}
+			UserRole userRole = new UserRole();
+			userRole.setRoleId(roleId);
+			userRoles.add(userRole);
+		}
+		return userRoles;
+    }
+    
+    private Long createRole(String roleCode) throws UnifyException {
+		Role role = new Role();
+		role.setCode(roleCode);
+		role.setDescription(StringUtils.capitalizeFirstLetter(roleCode.toLowerCase()));
+		role.setDepartmentId(getDefaultDepartmentId()); 
+		return (Long) environment().create(role);
+	}
+
+	private Long getDefaultDepartmentId() throws UnifyException {
+		MappedDepartment departments = environment().findFirst(new MappedDepartmentQuery().ignoreEmptyCriteria(true));				
+		return departments.getId();
+	}
+
+	private Optional<Long> getRoleId(String roleCode) throws UnifyException {
+		return environment().valueOptional(Long.class,"id", new RoleQuery().code(roleCode));
+	}
+	
     @Override
     public SecuredLinkInfo getNewOpenLink(String title, String openUrl, Long entityId, int validityMinutes)
             throws UnifyException {
@@ -268,7 +361,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                         final boolean expired = now.after(securedLink.getExpiresOn());
                         Update update = new Update().add("lastAccessedOn", now);
                         if (isUserLoggedIn()) {
-                            update.add("lastAccessedBy", getUserToken().getUserLoginId());
+                            update.add("lastAccessedBy", getUserLoginId());
                         }
 
                         environment().updateById(SecuredLink.class, securedLink.getId(), update);
@@ -479,7 +572,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 SecurityModuleSysParamConstants.KEEP_USER_LOGIN_EVENTS);
         if (keepUserLoginEvents) {
             Long userId = environment().value(Long.class, "id",
-                    new UserQuery().loginId(getUserToken().getUserLoginId()));
+                    new UserQuery().loginId(getUserLoginId()));
             SessionContext ctx = getSessionContext();
             UserLoginEvent userLoginEvent = new UserLoginEvent();
             userLoginEvent.setEventType(LoginEventType.LOGOUT);
@@ -496,7 +589,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void changeUserPassword(String oldPassword, String newPassword) throws UnifyException {
         oldPassword = passwordCryptograph.encrypt(oldPassword);
-        User user = environment().find(new UserQuery().password(oldPassword).loginId(getUserToken().getUserLoginId()));
+        User user = environment().find(new UserQuery().password(oldPassword).loginId(getUserLoginId()));
         if (user == null) {
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_OLD_PASSWORD);
         }
@@ -579,9 +672,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throws UnifyException {
         PasswordAutenticationService passwordAuthService = (PasswordAutenticationService) getComponent(
                 PasswordAutenticationService.class);
-        List<String> roleCodes = passwordAuthService.getRoles(userLoginId);
-        if (!DataUtils.isBlank(roleCodes)) {
-            List<Role> roleList = organizationModuleService.findRoles(new RoleQuery().codeIn(roleCodes));
+        UserProfile userProfile = passwordAuthService.getUserProfile(userLoginId);
+        if (!DataUtils.isBlank(userProfile.getRoles())) {
+            List<Role> roleList = organizationModuleService.findRoles(new RoleQuery().codeIn(userProfile.getRoles()));
             if (!DataUtils.isBlank(roleList)) {
                 final List<UserRoleInfo> result = new ArrayList<UserRoleInfo>();
                 final List<Long> branchScopingIdList = organizationModuleService.getCurrentUserBranchIds(userLoginId,
@@ -672,7 +765,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(FileAttachmentCategoryType.FORM_CATEGORY,
                 SecurityModuleEntityConstants.USER_ENTITY_NAME, userId, SecurityModuleAttachmentConstants.PHOTO);
         if (attachment != null) {
-            return attachment.getData();
+            return attachment.getFile().getDataAndInvalidate();
         }
 
         return null;
@@ -688,7 +781,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
         installDefaults(moduleInstall);
     }
 

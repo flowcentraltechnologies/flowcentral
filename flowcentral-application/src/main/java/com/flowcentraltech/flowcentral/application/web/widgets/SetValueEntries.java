@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -43,8 +42,6 @@ public class SetValueEntries {
 
     private List<SetValueEntry> entryList;
 
-    private List<SetValueEntry> viewEntryList;
-
     public SetValueEntries(AppletUtilities au, EntityDef entityDef) {
         this(au, entityDef, Editable.TRUE);
     }
@@ -54,7 +51,6 @@ public class SetValueEntries {
         this.entityDef = entityDef;
         this.entryList = new ArrayList<SetValueEntry>();
         this.entryList.add(new SetValueEntry(au, entityDef, rootEditable.isTrue()));
-        this.viewEntryList = Collections.unmodifiableList(entryList);
     }
 
     public SetValueEntries(AppletUtilities au, EntityDef entityDef, SetValuesDef setValuesDef) throws UnifyException {
@@ -66,12 +62,12 @@ public class SetValueEntries {
         this.au = au;
         this.entityDef = entityDef;
         this.entryList = new ArrayList<SetValueEntry>();
-        this.viewEntryList = Collections.unmodifiableList(entryList);
         loadEntryList(setValuesDef, editable);
     }
 
     public void clear() throws UnifyException {
-        entryList.clear();
+        entryList = new ArrayList<SetValueEntry>();
+        entryList.add(new SetValueEntry(au, entityDef, true));
     }
 
     public void removeEntry(int index) throws UnifyException {
@@ -87,7 +83,7 @@ public class SetValueEntries {
     }
 
     public List<SetValueEntry> getEntryList() {
-        return viewEntryList;
+        return entryList;
     }
 
     public int size() {

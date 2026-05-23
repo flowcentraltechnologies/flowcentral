@@ -29,45 +29,99 @@ import com.tcdng.unify.core.annotation.Column;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Table(name = "FC_OSMESSAGINGASYNC",
-        indexes = { @Index({ "endpoint" }) })
+@Table(name = "FC_OSMESSAGINGASYNC", indexes = { @Index({ "target" }), @Index({ "correlationId" }) })
 public class OSMessagingAsync extends BaseAuditEntity {
 
-    @Column(name = "ENDPOINT_NM", length = 64)
-    private String endpoint;
+    @Column(name = "TARGET", length = 32)
+    private String target;
+
+    @Column(name = "CORRELATION_ID", length = 32, nullable = true)
+    private String correlationId;
+
+    @Column(name = "PROCESSOR", length = 64)
+    private String processor;
+
+    @Column(name = "DELEGATE_FUNC", length = 64, nullable = true)
+    private String function;
+
+    @Column(name = "DELEGATE_SERVICE", length = 64, nullable = true)
+    private String service;
+
+    @Column(name = "USER_LOGIN_ID", length = 64, nullable = true)
+    private String userLoginId;
 
     @Column(name = "ASYNC_MESSAGE", type = ColumnType.CLOB)
     private String message;
 
-    @Column(name = "NEXT_ATTEMPT_ON")
+    @Column(name = "NEXT_ATTEMPT_ON", type = ColumnType.TIMESTAMP)
     private Date nextAttemptOn;
 
-    @Column(name = "PROCESS_BEFORE", nullable = true)
+    @Column(name = "PROCESS_BEFORE", type = ColumnType.TIMESTAMP, nullable = true)
     private Date processBefore;
 
-    @Column(name = "SENT_ON", nullable = true)
+    @Column(name = "SENT_ON", type = ColumnType.TIMESTAMP, nullable = true)
     private Date sentOn;
 
     @Column(name = "RESP_CD", length = 10, nullable = true)
     private String responseCode;
 
-    @Column(name = "RESP_MSG", length=256, nullable = true)
+    @Column(name = "RESP_MSG", length = 1024, nullable = true)
     private String responseMsg;
 
     @Column(name = "PROCESSING_FG", nullable = true)
     private Boolean processing;
-    
+
     @Override
     public String getDescription() {
-        return this.endpoint;
+        return target + " " + processor + (correlationId != null ? " " + correlationId : "");
     }
 
-    public String getEndpoint() {
-        return endpoint;
+    public String getTarget() {
+        return target;
     }
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
+    }
+
+    public String getProcessor() {
+        return processor;
+    }
+
+    public void setProcessor(String processor) {
+        this.processor = processor;
+    }
+
+    public String getFunction() {
+        return function;
+    }
+
+    public void setFunction(String function) {
+        this.function = function;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    public String getUserLoginId() {
+        return userLoginId;
+    }
+
+    public void setUserLoginId(String userLoginId) {
+        this.userLoginId = userLoginId;
     }
 
     public String getMessage() {

@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.criterion.Restriction;
 
 /**
@@ -39,9 +40,15 @@ public class ChartSnapshotChartDetailsProvider extends AbstractChartDetailsProvi
 
     @Override
     public ChartDetails provide(String rule, Restriction restriction) throws UnifyException {
-        return chart().getChartSnapshotDef(rule).getChartDetails();
+        return provide(rule, restriction, null);
     }
 
+    @Override
+    public ChartDetails provide(String rule, Restriction restriction, TimeResolutionType maxResolution)
+            throws UnifyException {
+        return chart().getChartSnapshotDef(rule).getChartDetails();
+    }
+    
     @Override
     public List<? extends Listable> getRuleList(Locale locale) throws UnifyException {
         return chart().findChartSnapshots((ChartSnapshotQuery) new ChartSnapshotQuery()

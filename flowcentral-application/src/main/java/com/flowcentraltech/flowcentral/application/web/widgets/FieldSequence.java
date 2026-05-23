@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -39,8 +38,6 @@ public class FieldSequence {
 
     private List<FieldSequenceEntry> entryList;
 
-    private List<FieldSequenceEntry> viewEntryList;
-
     public FieldSequence(EntityDef entityDef, FieldSequenceDef fieldSequenceDef) throws UnifyException {
         this(entityDef, fieldSequenceDef, Editable.TRUE);
     }
@@ -49,7 +46,6 @@ public class FieldSequence {
             throws UnifyException {
         this.entityDef = entityDef;
         this.entryList = new ArrayList<FieldSequenceEntry>();
-        this.viewEntryList = Collections.unmodifiableList(entryList);
         loadEntryList(fieldSequenceDef, editable);
     }
 
@@ -61,7 +57,8 @@ public class FieldSequence {
     }
 
     public void clear() throws UnifyException {
-        entryList.clear();
+        entryList = new ArrayList<FieldSequenceEntry>();
+        entryList.add(new FieldSequenceEntry(entityDef, true));
     }
 
     public void moveUpEntry(int index) throws UnifyException {
@@ -91,7 +88,7 @@ public class FieldSequence {
     }
 
     public List<FieldSequenceEntry> getEntryList() {
-        return viewEntryList;
+        return entryList;
     }
 
     public int size() {

@@ -24,9 +24,9 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Studio on create component policy.
@@ -38,7 +38,7 @@ import com.tcdng.unify.core.annotation.Component;
 public class StudioOnCreateComponentPolicy extends AbstractStudioAppletActionPolicy {
 
     @Override
-    public boolean checkAppliesTo(Entity inst) throws UnifyException {
+    public boolean checkAppliesTo(ValueStoreReader reader) throws UnifyException {
         return true;
     }
 

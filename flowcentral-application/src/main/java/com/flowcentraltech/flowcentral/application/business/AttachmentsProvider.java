@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.data.AttachmentsOptions;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.FileAttachmentInfo;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
@@ -63,11 +64,11 @@ public interface AttachmentsProvider extends FlowCentralComponent {
      *                   the attachment source
      * @param filename
      *                   the file name
-     * @param fileData
-     *                   the file data
+     * @param file
+     *                   the file
      * @throws UnifyException
      *                        if an error occurs
      */
-    void saveAttachmentData(Attachment attachment, String filename, byte[] fileData) throws UnifyException;
+    void saveAttachmentData(Attachment attachment, String filename, UploadedFile file) throws UnifyException;
 
 }
