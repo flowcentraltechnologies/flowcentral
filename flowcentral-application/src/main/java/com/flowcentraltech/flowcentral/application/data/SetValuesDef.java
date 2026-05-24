@@ -27,7 +27,6 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntitySetValuesGenerator;
 import com.flowcentraltech.flowcentral.application.business.FieldSetValueGenerator;
-import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameParts;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.SessionParamType;
@@ -134,9 +133,9 @@ public class SetValuesDef {
                         }
                         break;
                     case PROCESS_VARIABLE:
-                        ProcessVariable variable = DataUtils.convert(ProcessVariable.class, setValueDef.getParam());
-                        if (variable != null) {
-                            val = variables.get(variable.variableKey());
+                        String variableKey = setValueDef.getParam();
+                        if (variableKey != null) {
+                            val = variables.get(variableKey);
                         }
                         break;
                     case GENERATOR:

@@ -154,6 +154,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.common.data.Listable;
@@ -282,6 +283,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private final Map<String, WidgetTypeDef> adhocWidgets;
 
     private MappedEntityProviderInfo mappedEntityProviderInfo;
+    
+    private List<ProcessVariablesProvider> processVariablesProviders;
 
     public AppletUtilitiesImpl() {
         this.singleFormBeanClassByPanelName = new FactoryMap<String, Class<? extends SingleFormBean>>()
@@ -402,6 +405,34 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException {
+        if (!DataUtils.isBlank(processVariablesProviders)) {
+            List<ProcessVariableDef> variables = new ArrayList<ProcessVariableDef>();
+            for (ProcessVariablesProvider provider : processVariablesProviders) {
+                variables.addAll(provider.getProcessVariables(entity));
+            }
+
+            return variables;
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Map<String, String> getInitialProcessVariables(String entity) throws UnifyException {
+        if (!DataUtils.isBlank(processVariablesProviders)) {
+            Map<String, String> variables = new HashMap<String, String>();
+            for (ProcessVariablesProvider provider : processVariablesProviders) {
+                variables.putAll(provider.getInitialProcessVariables(entity));
+            }
+
+            return variables;
+        }
+
+        return Collections.emptyMap();
     }
 
     @Override
@@ -2156,6 +2187,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void onInitialize() throws UnifyException {
+        // Process variable providers
+        processVariablesProviders = getComponents(ProcessVariablesProvider.class);
+        
+        // Mapped entity providers
         Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
         List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
         for (MappedEntityProvider _provider : _providers) {

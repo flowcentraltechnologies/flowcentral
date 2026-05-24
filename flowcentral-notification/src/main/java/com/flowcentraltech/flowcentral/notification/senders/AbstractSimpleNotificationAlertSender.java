@@ -18,12 +18,12 @@ package com.flowcentraltech.flowcentral.notification.senders;
 import java.util.Collections;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
+import com.flowcentraltech.flowcentral.system.constants.SystemProcessVariableConstants;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -68,7 +68,7 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
         if (!DataUtils.isBlank(recipientList)) {
             NotifMessage.Builder nb = NotifMessage.newBuilder(notifTemplateDef.getSubjectTokenList(),
                     notifTemplateDef.getTemplateTokenList());
-            nb.from(reader.read(String.class, ProcessVariable.APP_CORRESPONDER.variableKey()));
+            nb.from(reader.read(String.class, SystemProcessVariableConstants.APP_CORRESPONDER));
 
             // Set recipients
             for (Recipient recipient : recipientList) {

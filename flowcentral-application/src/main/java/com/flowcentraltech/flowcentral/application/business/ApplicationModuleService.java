@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import java.io.Reader;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -173,17 +172,6 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     FormValidation validateFormUsingComponentValidation(String formName, Object inst, EvaluationMode evaluationMode)
             throws UnifyException;
-
-    /**
-     * Gets process variables.
-     * 
-     * @param entity
-     *               optional entity long name
-     * @return the process variables
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    Map<String, Object> getProcessVariables(String entity) throws UnifyException;
     
     /**
      * Checks if entity component is present.

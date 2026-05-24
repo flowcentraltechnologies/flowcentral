@@ -51,7 +51,6 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefin
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormWizardExecuteTaskConstants;
-import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.application.data.APIDef;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -155,12 +154,10 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerProp
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.AttachmentDetails;
 import com.flowcentraltech.flowcentral.common.data.FormValidation;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
-import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
@@ -241,6 +238,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.system.constants.SystemProcessVariableConstants;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.entities.Module;
@@ -307,7 +306,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         implements ApplicationModuleService, SystemRestoreService, FileAttachmentProvider, SuggestionProvider,
-        PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar {
+        PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar, ProcessVariablesProvider {
 
     private static final String PRE_INSTALLATION_SETUP_LOCK = "app::preinstallationsetup";
 
@@ -334,6 +333,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
                     ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY)));
 
+    private List<ProcessVariableDef> sysProcessVariableDefs;
+    
     private static final int MAX_LIST_DEPTH = 8;
 
     private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 5000;
@@ -1451,6 +1452,57 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException {
+        if (sysProcessVariableDefs == null) {
+            synchronized (this) {
+                if (sysProcessVariableDefs == null) {
+                    sysProcessVariableDefs = new ArrayList<ProcessVariableDef>();
+                    sysProcessVariableDefs.add(new ProcessVariableDef(SystemProcessVariableConstants.APP_TITLE,
+                            resolveApplicationMessage("$m{application.system.processvariable.apptitle}")));
+                    sysProcessVariableDefs.add(new ProcessVariableDef(SystemProcessVariableConstants.APP_CORRESPONDER,
+                            resolveApplicationMessage("$m{application.system.processvariable.appcorresponder}")));
+                    sysProcessVariableDefs.add(new ProcessVariableDef(SystemProcessVariableConstants.APP_URL,
+                            resolveApplicationMessage("$m{application.system.processvariable.appurl}")));
+                    sysProcessVariableDefs.add(new ProcessVariableDef(SystemProcessVariableConstants.APP_HTML_LINK,
+                            resolveApplicationMessage("$m{application.system.processvariable.apphtmllink}")));
+                    sysProcessVariableDefs.add(new ProcessVariableDef(SystemProcessVariableConstants.ENTITY_NAME,
+                            resolveApplicationMessage("$m{application.system.processvariable.entityname}")));
+                    sysProcessVariableDefs.add(new ProcessVariableDef(SystemProcessVariableConstants.ENTITY_DESC,
+                            resolveApplicationMessage("$m{application.system.processvariable.entitydesc}")));
+                    sysProcessVariableDefs = Collections.unmodifiableList(sysProcessVariableDefs);
+                }
+            }
+        }
+
+        // TODO Add entity process variables
+        return sysProcessVariableDefs;
+    }
+
+    @Override
+    public Map<String, String> getInitialProcessVariables(String entity) throws UnifyException {
+        Map<String, String> variables = new HashMap<String, String>();
+        final String appTitle = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
+        final String appCorresponder = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
+        final String appUrl = appletUtilities.system().getSysParameterValue(String.class,
+                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
+
+        variables.put(SystemProcessVariableConstants.APP_TITLE, appTitle);
+        variables.put(SystemProcessVariableConstants.APP_CORRESPONDER, appCorresponder);
+        variables.put(SystemProcessVariableConstants.APP_URL, appUrl);
+        variables.put(SystemProcessVariableConstants.APP_HTML_LINK, null);
+        if (!StringUtils.isBlank(entity)) {
+            EntityDef entityDef = getEntityDef(entity);
+            variables.put(SystemProcessVariableConstants.ENTITY_NAME, entityDef.getName());
+            variables.put(SystemProcessVariableConstants.ENTITY_DESC, entityDef.getDescription());
+        }
+
+        // TODO Add entity initial process variables
+        return variables;
+    }
+
+    @Override
     public Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException {
         return listManager.getStaticListEnumType(listName);
     }
@@ -1483,31 +1535,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public FormValidation validateFormUsingComponentValidation(String formName, Object inst,
             EvaluationMode evaluationMode) throws UnifyException {
         return appletUtilities.validateFormUsingComponentValidation(formName, inst, evaluationMode);
-    }
-
-    @Override
-    public Map<String, Object> getProcessVariables(String entity) throws UnifyException {
-        Map<String, Object> variables = new HashMap<String, Object>();
-        final String appTitle = getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
-        final String appCorresponder = getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
-        final String appUrl = appletUtilities.system().getSysParameterValue(String.class,
-                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
-
-        SecuredLinkInfo securedLinkInfo = appletUtilities.system().getNewSecuredLink(SecuredLinkType.LOGIN, appTitle,
-                appUrl);
-        variables.put(ProcessVariable.APP_TITLE.variableKey(), appTitle);
-        variables.put(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
-        variables.put(ProcessVariable.APP_URL.variableKey(), appUrl);
-        variables.put(ProcessVariable.APP_HTML_LINK.variableKey(), securedLinkInfo.getHtmlLink());
-        if (!StringUtils.isBlank(entity)) {
-            EntityDef entityDef = getEntityDef(entity);
-            variables.put(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
-            variables.put(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
-        }
-
-        return variables;
     }
 
     @Override
