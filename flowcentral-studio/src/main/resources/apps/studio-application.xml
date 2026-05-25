@@ -3030,7 +3030,7 @@
 				</tab>
 				<tab name="condition"
 					label="$m{studio.appappletfilter.form.condition}"
-					reference="app_applet" contentType="FILTER_CONDITION" includeSysParam="true" includeProcessVariable="true"/>
+					reference="app_applet" contentType="FILTER_CONDITION" includeSysParam="true"/>
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>
@@ -4061,7 +4061,7 @@
 					</section>
 				</tab>
 				<tab name="filter" label="$m{studio.appref.form.filter}"
-					reference="app_ref" contentType="FILTER_CONDITION" />
+					reference="app_ref" contentType="FILTER_CONDITION" includeSysParam="true"/>
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>
@@ -4371,7 +4371,7 @@
 					visible="true" />
 				<tab name="categoryBase"
 					label="$m{studio.chartdatasource.form.categorybase}"
-					reference="chart_categorybase" contentType="FILTER_CONDITION" />
+					reference="chart_categorybase" contentType="FILTER_CONDITION" includeSysParam="true" />
 				<tab name="fieldSequence"
 					label="$m{studio.chartdatasource.form.grouping}"
 					reference="chart_grouping" contentType="FIELD_SEQUENCE" />
@@ -4571,7 +4571,7 @@
 				<tab name="categoryBase"
 					label="$m{studio.dashboardoptioncatbase.form.categorybase}"
 					reference="dashboardoption_categorybase"
-					contentType="FILTER_CONDITION" />
+					contentType="FILTER_CONDITION" includeSysParam="true" />
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>
@@ -5666,7 +5666,7 @@
 				</tab>
 				<tab name="onCondition"
 					label="$m{studio.appformannotation.form.oncondition}"
-					reference="app_formannotation" contentType="FILTER_CONDITION" />
+					reference="app_formannotation" contentType="FILTER_CONDITION" includeSysParam="true" />
 			</tabs>
 		</form>
 		<form name="appFormActionForm"
@@ -5707,7 +5707,7 @@
 				</tab>
 				<tab name="onCondition"
 					label="$m{studio.appformaction.form.oncondition}"
-					reference="app_formaction" contentType="FILTER_CONDITION" />
+					reference="app_formaction" contentType="FILTER_CONDITION" includeSysParam="true" />
 			</tabs>
 		</form>
 		<form name="appFormRelatedListForm"
@@ -5764,7 +5764,7 @@
 				</tab>
 				<tab name="onCondition"
 					label="$m{studio.appformstatepolicy.form.oncondition}"
-					reference="app_formstatepolicy" contentType="FILTER_CONDITION" />
+					reference="app_formstatepolicy" contentType="FILTER_CONDITION" includeSysParam="true"/>
 				<tab name="setStates"
 					label="$m{studio.appformstatepolicy.form.setstates}"
 					contentType="CHILD_LIST" applet="manageAppFormSetState"
@@ -5906,7 +5906,7 @@
 				</tab>
 				<tab name="errorCondition"
 					label="$m{studio.appformvalidationpolicy.form.errorcondition}"
-					reference="app_formvalidationpolicy" contentType="FILTER_CONDITION" />
+					reference="app_formvalidationpolicy" contentType="FILTER_CONDITION" includeSysParam="true"/>
 			</tabs>
 		</form>
 		<form name="appFormReviewPolicyForm"
@@ -5942,7 +5942,7 @@
 				</tab>
 				<tab name="errorCondition"
 					label="$m{studio.appformreviewpolicy.form.errorcondition}"
-					reference="app_formreviewpolicy" contentType="FILTER_CONDITION" />
+					reference="app_formreviewpolicy" contentType="FILTER_CONDITION" includeSysParam="true"/>
 			</tabs>
 		</form>
 		<form name="appHelpSheetForm"
@@ -6255,7 +6255,7 @@
 				<tab name="condition"
 					label="$m{studio.workflowfilter.form.condition}"
 					reference="workflow" contentType="FILTER_CONDITION"
-					includeSysParam="true" />
+					includeSysParam="true"  includeProcessVariable="true"/>
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>
@@ -6281,7 +6281,7 @@
 				<tab name="condition"
 					label="$m{studio.workflowsetvalues.form.condition}"
 					reference="workflow" contentType="FILTER_CONDITION"
-					includeSysParam="true" />
+					includeSysParam="true" includeProcessVariable="true" />
 				<tab name="setValues"
 					label="$m{studio.workflowsetvalues.form.setvalues}"
 					reference="workflow" contentType="SET_VALUES" />
