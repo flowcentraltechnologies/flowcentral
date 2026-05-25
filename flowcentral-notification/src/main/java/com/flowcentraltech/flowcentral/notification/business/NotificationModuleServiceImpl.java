@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.ProcessVariablesProvider;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
@@ -43,6 +44,7 @@ import com.flowcentraltech.flowcentral.notification.constants.NotificationModule
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
+import com.flowcentraltech.flowcentral.notification.constants.NotificationTransitionVariableConstants;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
 import com.flowcentraltech.flowcentral.notification.data.EmailSettingsInfo;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
@@ -74,6 +76,7 @@ import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextIn
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
@@ -105,7 +108,7 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(NotificationModuleNameConstants.NOTIFICATION_MODULE_SERVICE)
-public class NotificationModuleServiceImpl extends AbstractFlowCentralService implements NotificationModuleService {
+public class NotificationModuleServiceImpl extends AbstractFlowCentralService implements NotificationModuleService, ProcessVariablesProvider {
 
     private static final String SEND_NOTIFICATION_LOCK = "notif::sendnotification-lock";
 
@@ -129,6 +132,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     private final FactoryMap<String, NotifLargeTextDef> largeTexts;
 
     private final FactoryMap<Long, TenantChannelInfo> tenantChannelInfos;
+
+    private List<ProcessVariableDef> notifProcessVariableDefs;
 
     public NotificationModuleServiceImpl() {
         this.messagingChannels = new HashMap<NotifType, NotificationMessagingChannel>();
@@ -218,6 +223,35 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_0 = { NotifLargeTextDef.class };
 
     private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_1 = { NotifLargeTextDef.class, Map.class };
+
+    @Override
+    public List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException {
+        if (notifProcessVariableDefs == null) {
+            synchronized (this) {
+                if (notifProcessVariableDefs == null) {
+                    notifProcessVariableDefs = new ArrayList<ProcessVariableDef>();
+                    // Transition variables
+                    notifProcessVariableDefs.add(new ProcessVariableDef(NotificationTransitionVariableConstants.TEMPLATE_VARIABLE,
+                            resolveApplicationMessage("$m{notification.system.processvariable.templatevariable}"), true));
+                    notifProcessVariableDefs.add(new ProcessVariableDef(NotificationTransitionVariableConstants.WFITEM_LINK_VARIABLE,
+                            resolveApplicationMessage("$m{notification.system.processvariable.wfitemlink}"), true));
+                    notifProcessVariableDefs.add(new ProcessVariableDef(NotificationTransitionVariableConstants.WFITEM_HTMLLINK_VARIABLE,
+                            resolveApplicationMessage("$m{notification.system.processvariable.wfitemhtmllink}"), true));
+                    notifProcessVariableDefs.add(new ProcessVariableDef(NotificationTransitionVariableConstants.PLAIN_PASSWORD,
+                            resolveApplicationMessage("$m{notification.system.processvariable.plainpassword}"), true));
+                    notifProcessVariableDefs = Collections.unmodifiableList(notifProcessVariableDefs);
+                }
+            }
+        }
+
+        // TODO Add entity process variables
+        return notifProcessVariableDefs;
+    }
+
+    @Override
+    public Map<String, String> getInitialProcessVariables(String entity) throws UnifyException {
+        return Collections.emptyMap();
+    }
 
     @Override
     public void clearDefinitionsCache() throws UnifyException {

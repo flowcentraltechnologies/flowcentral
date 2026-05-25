@@ -50,9 +50,13 @@ public class EntityFilterFieldDefListCommand extends AbstractFlowCentralListComm
             list.addAll(params.getEntityDef().getFilterFieldListables(params.getLabelSuggestionDef()));
         }
 
-       if (params.isIncludeSysParam()) {
-           list.addAll(au.system().getFilterSystemParameters());
-       }
+        if (params.isIncludeProcessVariable()) {
+            list.addAll(au.getProcessVariables(params.getEntityDef().getLongName()));
+        }
+
+        if (params.isIncludeSysParam()) {
+            list.addAll(au.system().getFilterSystemParameters());
+        }
 
         return list;
     }

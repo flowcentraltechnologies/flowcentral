@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.system.data;
 
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.data.Listable;
 
 /**
@@ -27,11 +28,24 @@ public class ProcessVariableDef implements Listable {
 
     private String name;
     
+    private String label;
+    
     private String caption;
 
-    public ProcessVariableDef(String name, String caption) {
+    private boolean transitional;
+    
+    public ProcessVariableDef(String name, String label, boolean transitional) {
         this.name = name;
-        this.caption = caption;
+        this.label = label;
+        this.caption = SystemUtils.encodeProcessVariableLabel(label);
+        this.transitional = transitional;
+    }
+    
+    public ProcessVariableDef(String name, String label) {
+        this.name = name;
+        this.label = label;
+        this.caption = SystemUtils.encodeProcessVariableLabel(label);
+        this.transitional = false;
     }
 
     @Override
@@ -48,8 +62,16 @@ public class ProcessVariableDef implements Listable {
         return name;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     public String getCaption() {
         return caption;
+    }
+
+    public boolean isTransitional() {
+        return transitional;
     }
         
 }

@@ -1457,6 +1457,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             synchronized (this) {
                 if (sysProcessVariableDefs == null) {
                     sysProcessVariableDefs = new ArrayList<ProcessVariableDef>();
+                    // Persisted process variables
                     sysProcessVariableDefs.add(new ProcessVariableDef(SystemProcessVariableConstants.APP_TITLE,
                             resolveApplicationMessage("$m{application.system.processvariable.apptitle}")));
                     sysProcessVariableDefs.add(new ProcessVariableDef(SystemProcessVariableConstants.APP_CORRESPONDER,
