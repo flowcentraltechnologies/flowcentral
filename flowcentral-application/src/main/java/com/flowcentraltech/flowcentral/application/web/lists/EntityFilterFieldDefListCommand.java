@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -51,7 +52,11 @@ public class EntityFilterFieldDefListCommand extends AbstractFlowCentralListComm
         }
 
         if (params.isIncludeProcessVariable()) {
-            list.addAll(au.getProcessVariables(params.getEntityDef().getLongName()));
+            for (ProcessVariableDef def : au.getProcessVariables(params.getEntityDef().getLongName())) {
+                if (def.isSupportFilter()) {
+                    list.add(def);
+                }
+            }
         }
 
         if (params.isIncludeSysParam()) {

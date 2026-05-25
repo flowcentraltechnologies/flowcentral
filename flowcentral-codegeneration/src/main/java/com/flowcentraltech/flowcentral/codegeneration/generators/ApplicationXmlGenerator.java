@@ -1018,6 +1018,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                         formTabConfig.setEditAllowAddition(appFormElement.getEditAllowAddition());
                         formTabConfig.setIgnoreParentCondition(appFormElement.isIgnoreParentCondition());
                         formTabConfig.setIncludeSysParam(appFormElement.isIncludeSysParam());
+                        formTabConfig.setIncludeProcessVariable(appFormElement.isIncludeProcessVariable());
                         formTabConfig.setShowSearch(appFormElement.isShowSearch());
                         formTabConfig.setQuickEdit(appFormElement.isQuickEdit());
                         formTabConfig.setQuickOrder(appFormElement.isQuickOrder());

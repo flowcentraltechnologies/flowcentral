@@ -72,6 +72,8 @@ public class FormTabDef {
 
     private boolean includeSysParam;
 
+    private boolean includeProcessVariable;
+
     private boolean showSearch;
 
     private boolean quickEdit;
@@ -89,8 +91,9 @@ public class FormTabDef {
     public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label, String icon,
             String applet, String reference, String mappedFieldName, String mappedForm, String editAction,
             String editViewOnly, String editAllowAddition, String editFixedRows,
-            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean includeSysParam, boolean showSearch,
-            boolean quickEdit, boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
+            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean includeSysParam,
+            boolean includeProcessVariable, boolean showSearch, boolean quickEdit, boolean quickOrder, boolean visible,
+            boolean editable, boolean disabled) {
         this.contentType = contentType;
         this.filterGroupDef = filterGroupDef;
         this.name = name;
@@ -107,6 +110,7 @@ public class FormTabDef {
         this.formSectionDefList = formSectionDefList;
         this.ignoreParentCondition = ignoreParentCondition;
         this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
         this.showSearch = showSearch;
         this.quickEdit = quickEdit;
         this.quickOrder = quickOrder;
@@ -133,6 +137,7 @@ public class FormTabDef {
         this.editFixedRows = srcFormTabDef.editFixedRows;
         this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
         this.includeSysParam = srcFormTabDef.includeSysParam;
+        this.includeProcessVariable = srcFormTabDef.includeProcessVariable;
         this.showSearch = srcFormTabDef.showSearch;
         this.quickEdit = srcFormTabDef.quickEdit;
         this.quickOrder = srcFormTabDef.quickOrder;
@@ -159,6 +164,7 @@ public class FormTabDef {
         this.editFixedRows = null;
         this.ignoreParentCondition = false;
         this.includeSysParam = false;
+        this.includeProcessVariable = false;
         this.showSearch = false;
         this.quickEdit = false;
         this.quickOrder = false;
@@ -168,7 +174,8 @@ public class FormTabDef {
         this.listOnlyCheck = 0;
     }
 
-    private FormTabDef(FormTabDef srcFormTabDef, String name, String label, String icon, List<FormSectionDef> formSectionDefList) {
+    private FormTabDef(FormTabDef srcFormTabDef, String name, String label, String icon,
+            List<FormSectionDef> formSectionDefList) {
         this.formSectionDefList = formSectionDefList;
         this.contentType = srcFormTabDef.contentType;
         this.filterGroupDef = srcFormTabDef.filterGroupDef;
@@ -185,6 +192,7 @@ public class FormTabDef {
         this.editFixedRows = srcFormTabDef.editFixedRows;
         this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
         this.includeSysParam = srcFormTabDef.includeSysParam;
+        this.includeProcessVariable = srcFormTabDef.includeProcessVariable;
         this.showSearch = srcFormTabDef.showSearch;
         this.quickEdit = srcFormTabDef.quickEdit;
         this.quickOrder = srcFormTabDef.quickOrder;
@@ -336,6 +344,10 @@ public class FormTabDef {
 
     public boolean isIncludeSysParam() {
         return includeSysParam;
+    }
+
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
     }
 
     public boolean isShowSearch() {

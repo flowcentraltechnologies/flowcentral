@@ -1157,6 +1157,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
                                     appFormElement.getEditAllowAddition(), appFormElement.getEditFixedRows(),
                                     appFormElement.isIgnoreParentCondition(), appFormElement.isIncludeSysParam(),
+                                    appFormElement.isIncludeProcessVariable(),
                                     appFormElement.isShowSearch(), appFormElement.isQuickEdit(),
                                     appFormElement.isQuickOrder(), appFormElement.isVisible(),
                                     appFormElement.isEditable(), appFormElement.isDisabled());
@@ -7212,6 +7213,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFormElement.setEditAllowAddition(formTabConfig.getEditAllowAddition());
             appFormElement.setIgnoreParentCondition(formTabConfig.getIgnoreParentCondition());
             appFormElement.setIncludeSysParam(formTabConfig.getIncludeSysParam());
+            appFormElement.setIncludeProcessVariable(formTabConfig.getIncludeProcessVariable());
             appFormElement.setShowSearch(formTabConfig.getShowSearch());
             appFormElement.setQuickEdit(formTabConfig.getQuickEdit());
             appFormElement.setQuickOrder(formTabConfig.getQuickOrder());

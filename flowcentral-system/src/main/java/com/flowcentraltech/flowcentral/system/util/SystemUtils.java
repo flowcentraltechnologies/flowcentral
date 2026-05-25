@@ -51,7 +51,11 @@ public final class SystemUtils {
     }
 
     public static String encodeSysParamLabel(String name) {
-        return SYS_PREFIX_UPPERCASE + name;
+        return SYS_PREFIX_UPPERCASE + " " + name;
+    }
+    
+    public static boolean isProcessVariable(String encoded) {
+        return encoded.startsWith(PRC_PREFIX);
     }
     
     public static boolean isSysParam(String encoded) {

@@ -3030,7 +3030,7 @@
 				</tab>
 				<tab name="condition"
 					label="$m{studio.appappletfilter.form.condition}"
-					reference="app_applet" contentType="FILTER_CONDITION" />
+					reference="app_applet" contentType="FILTER_CONDITION" includeSysParam="true" includeProcessVariable="true"/>
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>

@@ -652,25 +652,28 @@ public class FormDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFormTab(TabContentType contentType, String name, String tabLabel,
-                boolean isIgnoreParentCondition, boolean isIncludeSysParam, boolean showSearch, boolean quickEdit, boolean quickOrder,
-                boolean visible, boolean editable, boolean disabled) {
+                boolean isIgnoreParentCondition, boolean isIncludeSysParam, boolean isIncludeProcessVariable,
+                boolean showSearch, boolean quickEdit, boolean quickOrder, boolean visible, boolean editable,
+                boolean disabled) {
             return addFormTab(contentType, null, name, tabLabel, null, null, null, null, null, null, null, null,
-                    isIgnoreParentCondition, isIncludeSysParam, showSearch, quickEdit, quickOrder, visible, editable, disabled);
+                    isIgnoreParentCondition, isIncludeSysParam, isIncludeProcessVariable, showSearch, quickEdit,
+                    quickOrder, visible, editable, disabled);
         }
 
         public Builder addFormTab(TabContentType contentType, FilterGroupDef filterGroupDef, String name,
                 String tabLabel, String tabApplet, String tabReference, String mappedFieldName, String tabMappedForm,
                 String editAction, String editViewOnly, String editAllowAddition, String editFixedRows,
-                boolean isIgnoreParentCondition, boolean isIncludeSysParam, boolean showSearch, boolean quickEdit,
-                boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
+                boolean isIgnoreParentCondition, boolean isIncludeSysParam, boolean isIncludeProcessVariable,
+                boolean showSearch, boolean quickEdit, boolean quickOrder, boolean visible, boolean editable,
+                boolean disabled) {
             if (tabLabels.contains(name)) {
                 throw new RuntimeException("Tab with name [" + name + "] already exists on this form.");
             }
 
             formTabDefList.add(new TempFormTabDef(contentType, filterGroupDef, name, tabLabel, tabApplet, tabReference,
                     mappedFieldName, tabMappedForm, editAction, editViewOnly, editAllowAddition, editFixedRows,
-                    isIgnoreParentCondition, isIncludeSysParam, showSearch, quickEdit, quickOrder, visible, editable,
-                    disabled));
+                    isIgnoreParentCondition, isIncludeSysParam, isIncludeProcessVariable, showSearch, quickEdit,
+                    quickOrder, visible, editable, disabled));
             tabLabels.add(tabLabel);
             return this;
         }
@@ -894,7 +897,8 @@ public class FormDef extends BaseApplicationEntityDef {
                         tempFormTabDef.getTabMappedForm(), tempFormTabDef.getEditAction(),
                         tempFormTabDef.getEditViewOnly(), tempFormTabDef.getEditAllowAddition(),
                         tempFormTabDef.getEditFixedRows(), DataUtils.unmodifiableList(formSectionDefList),
-                        tempFormTabDef.isIgnoreParentCondition(), tempFormTabDef.isIncludeSysParam(), tempFormTabDef.isShowSearch(),
+                        tempFormTabDef.isIgnoreParentCondition(), tempFormTabDef.isIncludeSysParam(),
+                        tempFormTabDef.isIncludeProcessVariable(), tempFormTabDef.isShowSearch(),
                         tempFormTabDef.isQuickEdit(), tempFormTabDef.isQuickOrder(), tempFormTabDef.isVisible(),
                         tempFormTabDef.isEditable(), tempFormTabDef.isDisabled()));
             }
@@ -952,6 +956,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
             private boolean includeSysParam;
 
+            private boolean includeProcessVariable;
+
             private boolean showSearch;
 
             private boolean quickEdit;
@@ -969,8 +975,9 @@ public class FormDef extends BaseApplicationEntityDef {
             public TempFormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name,
                     String tabLabel, String tabApplet, String tabReference, String mappedFieldName,
                     String tabMappedForm, String editAction, String editViewOnly, String editAllowAddition,
-                    String editFixedRows, boolean ignoreParentCondition, boolean includeSysParam, boolean showSearch, boolean quickEdit,
-                    boolean quickOrder, boolean visible, boolean editable, boolean disabled) {
+                    String editFixedRows, boolean ignoreParentCondition, boolean includeSysParam,
+                    boolean includeProcessVariable, boolean showSearch, boolean quickEdit, boolean quickOrder,
+                    boolean visible, boolean editable, boolean disabled) {
                 this.contentType = contentType;
                 this.filterGroupDef = filterGroupDef;
                 this.name = name;
@@ -985,6 +992,7 @@ public class FormDef extends BaseApplicationEntityDef {
                 this.editFixedRows = editFixedRows;
                 this.ignoreParentCondition = ignoreParentCondition;
                 this.includeSysParam = includeSysParam;
+                this.includeProcessVariable = includeProcessVariable;
                 this.showSearch = showSearch;
                 this.quickEdit = quickEdit;
                 this.quickOrder = quickOrder;
@@ -1058,6 +1066,10 @@ public class FormDef extends BaseApplicationEntityDef {
 
             public boolean isIncludeSysParam() {
                 return includeSysParam;
+            }
+
+            public boolean isIncludeProcessVariable() {
+                return includeProcessVariable;
             }
 
             public boolean isShowSearch() {

@@ -1279,7 +1279,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntityFilter _entityFilter = constructEntityFilter(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), formDef.getEntityDef(), EntityFilter.ENABLE_ALL,
-                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam());
+                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam(), formTabDef.isIncludeProcessVariable());
                         _entityFilter.setListType(categoryType.listType());
                         _entityFilter.setParamList(categoryType.paramList());
                         _entityFilter.setCategory(categoryType.category());
@@ -1970,9 +1970,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition,
-            boolean includeSysParam) throws UnifyException {
+            boolean includeSysParam, boolean includeProcessVariable) throws UnifyException {
         return new EntityFilter(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFilterMode,
-                isIgnoreParentCondition, includeSysParam);
+                isIgnoreParentCondition, includeSysParam, includeProcessVariable);
     }
 
     @Override

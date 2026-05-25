@@ -678,7 +678,8 @@ public class EntityDef extends BaseApplicationEntityDef {
         if (labelSuggestionDef != null) {
             List<ListData> list = new ArrayList<ListData>();
             for (EntityFieldDef entityFieldDef : fieldDefList) {
-                if (entityFieldDef.isWithInputWidget() && entityFieldDef.isSupportFilter()) {
+                if (entityFieldDef.isWithInputWidget() && entityFieldDef.isSupportFilter()
+                        && ApplicationEntityUtils.isValidFilterField(entityFieldDef.getFieldName())) {
                     String suggestedLabel = labelSuggestionDef.getSuggestedLabel(entityFieldDef.getFieldName());
                     ListData item = StringUtils.isBlank(suggestedLabel)
                             ? new ListData(entityFieldDef.getListKey(), entityFieldDef.getListDescription())
@@ -696,7 +697,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                 if (filterFieldDefList == null) {
                     List<EntityFieldDef> list = new ArrayList<EntityFieldDef>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
-                        if (entityFieldDef.isWithInputWidget() && entityFieldDef.isSupportFilter()) {
+                        if (entityFieldDef.isWithInputWidget() && entityFieldDef.isSupportFilter()
+                                && ApplicationEntityUtils.isValidFilterField(entityFieldDef.getFieldName())) {
                             list.add(entityFieldDef);
                         }
                     }
@@ -866,7 +868,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                             baseFieldDefList.add(entityFieldDef);
                         }
                     }
-                    
+
                     baseFieldDefList = DataUtils.unmodifiableList(baseFieldDefList);
                 }
             }

@@ -232,13 +232,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                     notifProcessVariableDefs = new ArrayList<ProcessVariableDef>();
                     // Transition variables
                     notifProcessVariableDefs.add(new ProcessVariableDef(NotificationTransitionVariableConstants.TEMPLATE_VARIABLE,
-                            resolveApplicationMessage("$m{notification.system.processvariable.templatevariable}"), true));
+                            resolveApplicationMessage("$m{notification.system.processvariable.templatevariable}"), false, true));
                     notifProcessVariableDefs.add(new ProcessVariableDef(NotificationTransitionVariableConstants.WFITEM_LINK_VARIABLE,
-                            resolveApplicationMessage("$m{notification.system.processvariable.wfitemlink}"), true));
+                            resolveApplicationMessage("$m{notification.system.processvariable.wfitemlink}"), false, true));
                     notifProcessVariableDefs.add(new ProcessVariableDef(NotificationTransitionVariableConstants.WFITEM_HTMLLINK_VARIABLE,
-                            resolveApplicationMessage("$m{notification.system.processvariable.wfitemhtmllink}"), true));
+                            resolveApplicationMessage("$m{notification.system.processvariable.wfitemhtmllink}"), false, true));
                     notifProcessVariableDefs.add(new ProcessVariableDef(NotificationTransitionVariableConstants.PLAIN_PASSWORD,
-                            resolveApplicationMessage("$m{notification.system.processvariable.plainpassword}"), true));
+                            resolveApplicationMessage("$m{notification.system.processvariable.plainpassword}"), false, true));
                     notifProcessVariableDefs = Collections.unmodifiableList(notifProcessVariableDefs);
                 }
             }

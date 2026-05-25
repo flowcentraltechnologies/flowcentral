@@ -78,6 +78,9 @@ public class FormTabConfig extends BaseConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean includeSysParam;
+
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean includeProcessVariable;
     
     @JacksonXmlProperty(isAttribute = true)
     private Boolean showSearch;
@@ -104,6 +107,7 @@ public class FormTabConfig extends BaseConfig {
     public FormTabConfig() {
         this.ignoreParentCondition = Boolean.FALSE;
         this.includeSysParam = Boolean.FALSE;
+        this.includeProcessVariable = Boolean.FALSE;
         this.showSearch = Boolean.FALSE;
         this.quickEdit = Boolean.FALSE;
         this.quickOrder = Boolean.FALSE;
@@ -222,6 +226,14 @@ public class FormTabConfig extends BaseConfig {
 
     public void setIncludeSysParam(Boolean includeSysParam) {
         this.includeSysParam = includeSysParam;
+    }
+
+    public Boolean getIncludeProcessVariable() {
+        return includeProcessVariable;
+    }
+
+    public void setIncludeProcessVariable(Boolean includeProcessVariable) {
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public Boolean getShowSearch() {

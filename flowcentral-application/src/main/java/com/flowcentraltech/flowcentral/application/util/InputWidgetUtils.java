@@ -207,6 +207,10 @@ public final class InputWidgetUtils {
 
     private static final Map<SysParamType, EntityFieldDef> entityFieldDefBySysParamType;
 
+    private static final EntityFieldDef processVariableFieldDef = new EntityFieldDef("application.text",
+            "application.text", "application.text", EntityFieldDataType.STRING, EntityFieldType.CUSTOM, 0, 0, 0, 0,
+            false);
+
     static {
         final EntityFieldDef stringEntityFieldDef = new EntityFieldDef("application.text", "application.text",
                 "application.text", EntityFieldDataType.STRING, EntityFieldType.CUSTOM, 0, 0, 0, 0, false);
@@ -271,6 +275,10 @@ public final class InputWidgetUtils {
         }
 
         return "application.text";
+    }
+
+    public static EntityFieldDef getProcessVariableEntityFieldDef() {
+        return processVariableFieldDef;
     }
 
     public static String getDefaultEntityFieldWidget(EntityFieldDataType type) {
@@ -342,7 +350,8 @@ public final class InputWidgetUtils {
 
     public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa)
             throws UnifyException {
-        String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null, null);
+        String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null,
+                null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(renderer);
             esb.append(" style:$s{width:100%;}");
@@ -370,8 +379,8 @@ public final class InputWidgetUtils {
         return editor;
     }
 
-    public static String constructPortalEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef, String serviceId)
-            throws UnifyException {
+    public static String constructPortalEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,
+            String serviceId) throws UnifyException {
         return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, serviceId, false);
     }
 
@@ -407,8 +416,8 @@ public final class InputWidgetUtils {
         return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, null, true);
     }
 
-    public static String constructPortalRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,  String serviceId)
-            throws UnifyException {
+    public static String constructPortalRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,
+            String serviceId) throws UnifyException {
         return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, serviceId, true);
     }
 
@@ -534,16 +543,17 @@ public final class InputWidgetUtils {
             case "application.enumreadonlytext":
             case "application.enumlistlabel":
                 String _references = entityFieldDef != null ? entityFieldDef.getReferences() : efa.getReferences();
-                if (!StringUtils.isBlank(serviceId) && !StringUtils.isBlank(_references) && _references.indexOf('.') > 0) {
-                    _references = _references + "." + serviceId; //Service ID as minor name
+                if (!StringUtils.isBlank(serviceId) && !StringUtils.isBlank(_references)
+                        && _references.indexOf('.') > 0) {
+                    _references = _references + "." + serviceId; // Service ID as minor name
                 }
-                
+
                 editor = String.format(editor, _references);
                 break;
             case "application.entitylist":
             case "application.entitysearch":
             case "application.entityselect":
-            case "application.caseentitysearch": 
+            case "application.caseentitysearch":
                 if (entityFieldDef != null) {
                     if (StringUtils.isBlank(reference)) {
                         reference = entityFieldDef.isEntityRef() ? entityFieldDef.getRefLongName()
@@ -551,9 +561,9 @@ public final class InputWidgetUtils {
                     }
 
                     if (!StringUtils.isBlank(serviceId) && !StringUtils.isBlank(reference)) {
-                        reference = reference + "." + serviceId; //Service ID as minor name
+                        reference = reference + "." + serviceId; // Service ID as minor name
                     }
-                    
+
                     editor = String.format(editor, reference,
                             StringUtils.toNonNullString(entityFieldDef.getInputListKey(), ""));
                 }
@@ -1148,7 +1158,7 @@ public final class InputWidgetUtils {
                         String widget = p[2];
                         SearchConditionType type = p.length > 3 ? SearchConditionType.fromCode(p[3]) : null;
                         String defVal = p.length > 4 ? p[4] : null;
-                        boolean disabled =  p.length > 5 ? Boolean.valueOf(p[5]) : false;
+                        boolean disabled = p.length > 5 ? Boolean.valueOf(p[5]) : false;
                         sidb.addSearchInputDef(type, field, widget, label, defVal, disabled);
                     }
                 } catch (IOException e) {
@@ -1477,7 +1487,7 @@ public final class InputWidgetUtils {
                         if (searchInputConfig.getType() != null) {
                             bw.write(searchInputConfig.getType().code());
                             bw.write(']');
-                            
+
                             if (searchInputConfig.getDefVal() != null) {
                                 bw.write(searchInputConfig.getDefVal());
                                 bw.write(']');
@@ -1513,7 +1523,7 @@ public final class InputWidgetUtils {
                         bw.write(']');
                         if (searchInputDef.getType() != null) {
                             bw.write(searchInputDef.getType().code());
-                            bw.write(']');                            
+                            bw.write(']');
                             if (searchInputDef.getDefVal() != null) {
                                 bw.write(searchInputDef.getDefVal());
                                 bw.write(']');
@@ -1870,8 +1880,8 @@ public final class InputWidgetUtils {
             FilterRestrictionDef fo, SpecialParamProvider specialParamProvider, Date now,
             Map<String, Object> parameters) throws UnifyException {
         FilterConditionType type = fo.getType();
-        Object paramA = specialParamProvider.resolveSpecialParameter(fo.getParamA());
-        Object paramB = specialParamProvider.resolveSpecialParameter(fo.getParamB());
+        Object paramA = resolveParam(au, specialParamProvider, reader, fo.getParamA());
+        Object paramB = resolveParam(au, specialParamProvider, reader, fo.getParamB());
         if (type.isSessionParameterVal()) {
             if (paramA != null) {
                 SessionParamType sessionParamtype = SessionParamType.fromCode((String) paramA);
@@ -1891,7 +1901,8 @@ public final class InputWidgetUtils {
 
         if (!type.isFieldVal() && !type.isParameterVal()) {
             EntityFieldDef _entityFieldDef = isSysParam ? getEntityFieldDef(sysParamType)
-                    : entityDef.getFieldDef(fieldName);
+                    : (SystemUtils.isProcessVariable(fieldName) ? getProcessVariableEntityFieldDef()
+                            : entityDef.getFieldDef(fieldName));
             if (_entityFieldDef.isWithResolvedTypeFieldDef()) {
                 _entityFieldDef = _entityFieldDef.getResolvedTypeFieldDef();
             }
@@ -1924,5 +1935,22 @@ public final class InputWidgetUtils {
         }
 
         return new ResolvedCondition(fieldName, type, paramA, paramB);
+    }
+
+    private static Object resolveParam(AppletUtilities au, SpecialParamProvider specialParamProvider,
+            ValueStoreReader reader, String inparam) throws UnifyException {
+        Object param = specialParamProvider.resolveSpecialParameter(inparam);
+        if (param instanceof String) {
+            final String sparam = (String) param;
+            if (SystemUtils.isSysParam(sparam)) {
+                return au.system().getSysParameterValue(String.class, SystemUtils.getSysParamCode(sparam));
+            }
+
+            if (SystemUtils.isProcessVariable(sparam)) {
+                return reader.getTempValue(sparam);
+            }
+        }
+
+        return param;
     }
 }

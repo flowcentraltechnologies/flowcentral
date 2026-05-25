@@ -1615,13 +1615,15 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                                ignore parent condition flag
      * @param includeSysParam
      *                                include system parameter filters
+     * @param includeProcessVariable
+     *                                include process variable
      * @return the entity filter
      * @throws UnifyException
      *                        if an error occurs
      */
     EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam)
-            throws UnifyException;
+            EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam,
+            boolean includeProcessVariable) throws UnifyException;
 
     /**
      * Constructs entity search input.

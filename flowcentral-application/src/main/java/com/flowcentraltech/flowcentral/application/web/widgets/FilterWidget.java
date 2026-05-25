@@ -35,9 +35,7 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  */
 @Component("fc-filter")
 @UplAttributes({ @UplAttribute(name = "includeSysParam", type = boolean.class),
-        @UplAttribute(name = "includeSysParamBinding", type = String.class),
-        @UplAttribute(name = "includeProcessVariable", type = boolean.class),
-        @UplAttribute(name = "includeProcessVariableBinding", type = String.class) })
+        @UplAttribute(name = "includeSysParamBinding", type = String.class) })
 public class FilterWidget extends AbstractItemListWidget<FilterCondition> {
 
     private Control fieldSelectCtrl;
@@ -119,10 +117,6 @@ public class FilterWidget extends AbstractItemListWidget<FilterCondition> {
         return getUplAttribute(boolean.class, "includeSysParam", "includeSysParamBinding");
     }
 
-    public boolean isIncludeProcessVariable() throws UnifyException {
-        return getUplAttribute(boolean.class, "includeProcessVariable", "includeProcessVariableBinding");
-    }
-
     public Control getFieldSelectCtrl() throws UnifyException {
         if (fieldSelectCtrl == null) {
             fieldSelectCtrl = (Control) addInternalChildWidget(
@@ -175,13 +169,7 @@ public class FilterWidget extends AbstractItemListWidget<FilterCondition> {
     }
 
     public Filter getFilter() throws UnifyException {
-        final Filter filter = getValue(Filter.class);
-        if (filter != null) {
-            filter.setIncludeProcessVariable(isIncludeProcessVariable());
-            filter.setIncludeSysParam(isIncludeSysParam());
-        }
-
-        return filter;
+        return getValue(Filter.class);
     }
 
     @Override
@@ -201,9 +189,9 @@ public class FilterWidget extends AbstractItemListWidget<FilterCondition> {
                 switch (filter.getListType()) {
                     case IMMEDIATE_FIELD:
                         fieldParamCtrlA = (Control) addInternalChildWidget(
-                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef} binding:paramFieldA");
+                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef includeSysParam includeProcessVariable} binding:paramFieldA");
                         fieldParamCtrlB = (Control) addInternalChildWidget(
-                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef} binding:paramFieldB");
+                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef includeSysParam includeProcessVariable} binding:paramFieldB");
                         break;
                     case IMMEDIATE_PARAM:
                         fieldParamCtrlA = (Control) addInternalChildWidget(

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.lists;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.tcdng.unify.core.list.AbstractListParam;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity definition and label suggestion list parameters.
@@ -62,6 +63,11 @@ public class EntityLabelSuggestionDefListParams extends AbstractListParam {
     @Override
     public boolean isPresent() {
         return entityDef != null;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

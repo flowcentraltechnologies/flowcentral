@@ -74,6 +74,11 @@ public final class ApplicationEntityUtils {
                     "workBranchCode", "workDepartmentCode", "processingStatus", "processingStatusDesc", "configType",
                     "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
 
+    private static final Set<String> RESERVED_NON_FILTER_FIELDS = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "originWorkRecId", "originalCopyId",
+                    "wfItemVersionType", "inWorkflow", "processingStatus", "processingStatusDesc", "configType",
+                    "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
+
     public static final Set<String> RESERVED_EDITOR_FIELDS = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo",
                     "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow",
@@ -132,6 +137,10 @@ public final class ApplicationEntityUtils {
 
     }
 
+    public static boolean isValidFilterField(String fieldName) {
+        return !RESERVED_NON_FILTER_FIELDS.contains(fieldName);
+    }
+    
     public static Collection<String> getReservedFieldNames() {
         return RESERVED_BASE_FIELDS;
     }

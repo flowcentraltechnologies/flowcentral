@@ -32,20 +32,20 @@ public class ProcessVariableDef implements Listable {
     
     private String caption;
 
+    private boolean supportFilter;
+
     private boolean transitional;
     
-    public ProcessVariableDef(String name, String label, boolean transitional) {
-        this.name = name;
-        this.label = label;
-        this.caption = SystemUtils.encodeProcessVariableLabel(label);
-        this.transitional = transitional;
+    public ProcessVariableDef(String name, String label) {
+        this(name, label, false, false);
     }
     
-    public ProcessVariableDef(String name, String label) {
+    public ProcessVariableDef(String name, String label, boolean supportFilter, boolean transitional) {
         this.name = name;
         this.label = label;
         this.caption = SystemUtils.encodeProcessVariableLabel(label);
-        this.transitional = false;
+        this.supportFilter = supportFilter;
+        this.transitional = transitional;
     }
 
     @Override
@@ -68,6 +68,10 @@ public class ProcessVariableDef implements Listable {
 
     public String getCaption() {
         return caption;
+    }
+
+    public boolean isSupportFilter() {
+        return supportFilter;
     }
 
     public boolean isTransitional() {
