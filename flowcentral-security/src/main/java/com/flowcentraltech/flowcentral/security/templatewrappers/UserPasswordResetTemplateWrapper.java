@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.security.templatewrappers;
 
+import com.flowcentraltech.flowcentral.notification.constants.NotificationTransitionVariableConstants;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
-import com.tcdng.unify.common.util.ProcessVariableUtils;
 
 /**
  * User password reset notification template wrapper.
@@ -30,7 +30,6 @@ public class UserPasswordResetTemplateWrapper extends BaseNotifTemplateWrapper {
     public static final String __TEMPLATE_NAME = "security.userPasswordReset";
     private static final String FULL_NAME = "fullName";
     private static final String LOGIN_ID = "loginId";
-    private static final String PLAIN_PASSWORD = ProcessVariableUtils.getVariable("plainPassword");
 
     public UserPasswordResetTemplateWrapper(NotifTemplateDef notifTemplateDef) {
         super(notifTemplateDef);
@@ -45,6 +44,6 @@ public class UserPasswordResetTemplateWrapper extends BaseNotifTemplateWrapper {
     }
 
     public void setPlainPassword(String val) {
-        nmb.addParam(PLAIN_PASSWORD, val);
+        nmb.addParam(NotificationTransitionVariableConstants.PLAIN_PASSWORD, val);
     }
 }

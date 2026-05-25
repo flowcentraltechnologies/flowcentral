@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.flowcentraltech.flowcentral.notification.constants.NotificationTransitionVariableConstants;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.system.constants.SystemProcessVariableConstants;
@@ -52,7 +53,7 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
     @Override
     public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList, int sendDelayInMinutes)
             throws UnifyException {
-        final String template = reader.read(String.class, NotificationAlertSender.TEMPLATE_VARIABLE);
+        final String template = reader.read(String.class, NotificationTransitionVariableConstants.TEMPLATE_VARIABLE);
         if (StringUtils.isBlank(template)) {
             throwOperationErrorException(new IllegalArgumentException("Could not retreive template variable."));
         }

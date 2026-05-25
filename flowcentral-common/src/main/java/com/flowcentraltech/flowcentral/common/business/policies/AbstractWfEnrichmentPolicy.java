@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
-import com.tcdng.unify.common.util.ProcessVariableUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -67,7 +66,7 @@ public abstract class AbstractWfEnrichmentPolicy extends AbstractFlowCentralComp
     }
     
     protected void setProcessVariable(ValueStoreWriter wfItemWriter, String name, Object val) throws UnifyException {
-        wfItemWriter.setTempValue(ProcessVariableUtils.getVariable(name), val);
+        wfItemWriter.setTempValue(name, val);
     }
     
     protected void setProperty(ValueStoreWriter wfItemWriter, String property, Object val) throws UnifyException {

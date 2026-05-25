@@ -91,6 +91,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRuleEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UnifyOperationException;
 import com.tcdng.unify.core.constant.OrderType;
@@ -1881,11 +1882,11 @@ public final class InputWidgetUtils {
         }
 
         final String fieldName = fo.getFieldName();
-        final boolean isSysParam = SysParamType.isSysParam(fieldName);
+        final boolean isSysParam = SystemUtils.isSysParam(fieldName);
         final SysParamType sysParamType = isSysParam ? SysParamType.fromEncoded(fieldName) : null;
         if (isSysParam && reader != null) {
             reader.setTempValue(fieldName,
-                    au.system().getSysParameterValue(sysParamType.dataType(), SysParamType.getSysParamCode(fieldName)));
+                    au.system().getSysParameterValue(sysParamType.dataType(), SystemUtils.getSysParamCode(fieldName)));
         }
 
         if (!type.isFieldVal() && !type.isParameterVal()) {

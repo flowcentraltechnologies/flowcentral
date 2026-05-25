@@ -84,6 +84,7 @@ import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameterQuery;
 import com.flowcentraltech.flowcentral.system.util.LicenseUtils;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.util.StringToken;
@@ -362,8 +363,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             result = new ArrayList<ListData>();
             for (SystemParameter systemParameter : params) {
                 final SysParamType type = systemParameter.getType();
-                result.add(new ListData(type.encodeFilterCode(systemParameter.getCode()),
-                        type.encodeFilterName(systemParameter.getFilterName())));
+                result.add(new ListData(SystemUtils.encodeSysParamCode(type, systemParameter.getCode()),
+                        SystemUtils.encodeSysParamLabel(systemParameter.getFilterName())));
             }
         }
 

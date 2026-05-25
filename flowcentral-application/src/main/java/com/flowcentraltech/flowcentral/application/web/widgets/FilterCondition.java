@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.FilterConditionListType;
 import com.tcdng.unify.core.criterion.FilterConditionType;
@@ -182,7 +183,7 @@ public class FilterCondition {
             paramInputA = null;
             paramInputB = null;
         } else {
-            SysParamType sysParamType = SysParamType.isSysParam(fieldName) ? SysParamType.fromEncoded(fieldName) : null;
+            SysParamType sysParamType = SystemUtils.isSysParam(fieldName) ? SysParamType.fromEncoded(fieldName) : null;
             EntityFieldDef entityFieldDef = sysParamType != null ? InputWidgetUtils.getEntityFieldDef(sysParamType)
                     : entityDef.getFieldDef(fieldName);
 

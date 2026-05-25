@@ -93,6 +93,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
+import com.flowcentraltech.flowcentral.notification.constants.NotificationTransitionVariableConstants;
 import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
@@ -1524,8 +1525,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 final ValueStoreReader reader = new BeanValueStore(inst).getReader();
                 final String heldBy = wfItem.getHeldBy();
                 SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(), wfItem);
-                reader.setTempValue(NotificationAlertSender.WFITEM_LINK_VARIABLE, securedLinkInfo.getLinkUrl());
-                reader.setTempValue(NotificationAlertSender.WFITEM_HTMLLINK_VARIABLE, securedLinkInfo.getHtmlLink());
+                reader.setTempValue(NotificationTransitionVariableConstants.WFITEM_LINK_VARIABLE, securedLinkInfo.getLinkUrl());
+                reader.setTempValue(NotificationTransitionVariableConstants.WFITEM_HTMLLINK_VARIABLE, securedLinkInfo.getHtmlLink());
 
                 final Long tenantId = getTenantIdFromTransitionItem(entityClassDef, reader);
                 for (WfAlertDef wfAlertDef : alertList) {
@@ -2246,9 +2247,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         if (wfStepDef.isUserAction()) {
             final SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(),
                     transitionItem.getWfItem());
-            transitionItem.getReader().setTempValue(NotificationAlertSender.WFITEM_LINK_VARIABLE,
+            transitionItem.getReader().setTempValue(NotificationTransitionVariableConstants.WFITEM_LINK_VARIABLE,
                     securedLinkInfo.getLinkUrl());
-            transitionItem.getReader().setTempValue(NotificationAlertSender.WFITEM_HTMLLINK_VARIABLE,
+            transitionItem.getReader().setTempValue(NotificationTransitionVariableConstants.WFITEM_HTMLLINK_VARIABLE,
                     securedLinkInfo.getHtmlLink());
             logInfo("Setting work item link variables [{0}] and [{1}]...", securedLinkInfo.getLinkUrl(),
                     securedLinkInfo.getHtmlLink());
@@ -2333,7 +2334,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 }
             }
 
-            reader.setTempValue(NotificationAlertSender.TEMPLATE_VARIABLE, wfAlertDef.getTemplate());
+            reader.setTempValue(NotificationTransitionVariableConstants.TEMPLATE_VARIABLE, wfAlertDef.getTemplate());
             sender.composeAndSend(reader, recipientList, wfAlertDef.getSendDelayInMinutes());
         }
     }

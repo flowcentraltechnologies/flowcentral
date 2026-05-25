@@ -13,27 +13,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.system.constants;
+package com.flowcentraltech.flowcentral.notification.constants;
 
 import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 
 /**
- * System process variable constants.
+ * Notification transition variable constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface SystemProcessVariableConstants {
-    
-    String ENTITY_NAME = SystemUtils.encodeProcessVariableCode("entityName");
-    
-    String ENTITY_DESC = SystemUtils.encodeProcessVariableCode("entityDesc");
-    
-    String APP_TITLE = SystemUtils.encodeProcessVariableCode("appTitle");
-    
-    String APP_CORRESPONDER =  SystemUtils.encodeProcessVariableCode("appCorresponder");
-    
-    String APP_URL = SystemUtils.encodeProcessVariableCode("appUrl");
-    
-    String APP_HTML_LINK = SystemUtils.encodeProcessVariableCode("appHtmlLink");
+public interface NotificationTransitionVariableConstants {
+
+    String TEMPLATE_VARIABLE = SystemUtils.encodeProcessVariableCode("template");
+
+    String WFITEM_LINK_VARIABLE = SystemUtils.encodeProcessVariableCode("wfItemLink");
+
+    String WFITEM_HTMLLINK_VARIABLE = SystemUtils.encodeProcessVariableCode("wfItemHtmlLink");
+
+    String PLAIN_PASSWORD = SystemUtils.encodeProcessVariableCode("plainPassword");
 }

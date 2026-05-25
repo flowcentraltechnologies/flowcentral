@@ -62,6 +62,10 @@ public class Filter {
 
     private final FilterConditionListType listType;
 
+    private boolean includeSysParam;
+
+    private boolean includeProcessVariable;
+    
     private Long ownerInstId;
 
     private String paramList;
@@ -194,6 +198,22 @@ public class Filter {
 
     public LabelSuggestionDef getLabelSuggestionDef() {
         return labelSuggestionDef;
+    }
+
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public void setIncludeSysParam(boolean includeSysParam) {
+        this.includeSysParam = includeSysParam;
+    }
+
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
+    }
+
+    public void setIncludeProcessVariable(boolean includeProcessVariable) {
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public Long getOwnerInstId() {

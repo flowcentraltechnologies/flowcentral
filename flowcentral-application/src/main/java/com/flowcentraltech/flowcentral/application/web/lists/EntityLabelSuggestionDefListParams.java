@@ -31,9 +31,16 @@ public class EntityLabelSuggestionDefListParams extends AbstractListParam {
 
     private LabelSuggestionDef labelSuggestionDef;
 
-    public EntityLabelSuggestionDefListParams(EntityDef entityDef, LabelSuggestionDef labelSuggestionDef) {
+    private boolean includeSysParam;
+
+    private boolean includeProcessVariable;
+ 
+    public EntityLabelSuggestionDefListParams(EntityDef entityDef, LabelSuggestionDef labelSuggestionDef,
+            boolean includeSysParam, boolean includeProcessVariable) {
         this.entityDef = entityDef;
         this.labelSuggestionDef = labelSuggestionDef;
+        this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public EntityDef getEntityDef() {
@@ -44,15 +51,17 @@ public class EntityLabelSuggestionDefListParams extends AbstractListParam {
         return labelSuggestionDef;
     }
 
-    @Override
-    public boolean isPresent() {
-        return entityDef != null;
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
     }
 
     @Override
-    public String toString() {
-        return "EntityLabelSuggestionDefListParams [entityDef=" + entityDef + ", labelSuggestionDef="
-                + labelSuggestionDef + "]";
+    public boolean isPresent() {
+        return entityDef != null;
     }
 
 }

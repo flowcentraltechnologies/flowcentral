@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.constants;
 
-import com.tcdng.unify.common.util.ProcessVariableUtils;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 
 /**
  * Workflow transition variable constants.
@@ -25,11 +25,11 @@ import com.tcdng.unify.common.util.ProcessVariableUtils;
  */
 public interface WorkflowTransitionVariableConstants {
     
-    String FORWARDED_BY = ProcessVariableUtils.getVariable("wfForwardedBy");
+    String FORWARDED_BY = SystemUtils.encodeProcessVariableCode("forwardedBy");
     
-    String FORWARDED_BY_NAME = ProcessVariableUtils.getVariable("wfForwardedByName");
+    String FORWARDED_BY_NAME = SystemUtils.encodeProcessVariableCode("forwardedByName");
     
-    String FORWARD_TO = ProcessVariableUtils.getVariable("wfForwardTo");
+    String FORWARD_TO = SystemUtils.encodeProcessVariableCode("forwardTo");
     
-    String HELD_BY = ProcessVariableUtils.getVariable("swfHeldBy");
+    String HELD_BY = SystemUtils.encodeProcessVariableCode("heldBy");
 }
