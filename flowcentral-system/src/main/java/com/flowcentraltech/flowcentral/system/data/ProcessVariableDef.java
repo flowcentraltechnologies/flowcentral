@@ -28,6 +28,8 @@ public class ProcessVariableDef implements Listable {
 
     private String name;
 
+    private String parameter;
+
     private String label;
 
     private String caption;
@@ -46,6 +48,7 @@ public class ProcessVariableDef implements Listable {
             boolean transitional) {
         this.name = name;
         this.label = label;
+        this.parameter = "{{" + name + "}}";
         this.caption = SystemUtils.encodeProcessVariableLabel(label);
         this.supportFilter = supportFilter;
         this.supportValues = supportValues;
@@ -64,6 +67,10 @@ public class ProcessVariableDef implements Listable {
 
     public String getName() {
         return name;
+    }
+
+    public String getParameter() {
+        return parameter;
     }
 
     public String getLabel() {
