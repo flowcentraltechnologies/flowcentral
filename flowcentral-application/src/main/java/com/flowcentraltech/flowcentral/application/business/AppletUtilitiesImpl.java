@@ -2364,7 +2364,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     AppletPropertyConstants.WORKFLOWCOPY_CREATE_COPY_SETVALUES);
             if (!StringUtils.isBlank(wfCopyCreateSetValuesName)) {
                 AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopyCreateSetValuesName);
-                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst, Collections.emptyMap(),
+                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst,
                         null);
             }
         }
@@ -2433,8 +2433,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 AppletPropertyConstants.WORKFLOWCOPY_UPDATE_COPY_SETVALUES);
         if (!StringUtils.isBlank(wfCopyUpdateSetValuesName)) {
             AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopyUpdateSetValuesName);
-            appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(), wfCopyValueStore,
-                    Collections.emptyMap(), null);
+            appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(), wfCopyValueStore, null);
         }
 
         WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
@@ -2486,7 +2485,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     AppletPropertyConstants.MAINTAIN_FORM_DELETE_PSEUDO_SETVALUES);
             if (!StringUtils.isBlank(pseudoDeleteSetValuesName)) {
                 AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(pseudoDeleteSetValuesName);
-                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst, Collections.emptyMap(),
+                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst,
                         null);
             }
 
@@ -2566,7 +2565,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, valueStore.getReader(), now)
                     : null;
             if (objectFilter == null || objectFilter.matchReader(valueStore.getReader())) {
-                formStatePolicyDef.getSetValuesDef().apply(this, entityDef, now, valueStore, Collections.emptyMap(),
+                formStatePolicyDef.getSetValuesDef().apply(this, entityDef, now, valueStore,
                         null);
             }
         }
@@ -2801,7 +2800,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final Date now = getNow();
 
         // Execute delayed set values
-        final Map<String, Object> variables = Collections.emptyMap();
         for (FormStatePolicyDef formStatePolicyDef : _formDef.getOnDelayedSetValuesFormStatePolicyDefList()) {
             ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
                     ? formStatePolicyDef.getOnCondition().getObjectFilter(_formDef.getEntityDef(),
@@ -2809,8 +2807,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     : null;
             if (objectFilter == null || objectFilter.matchReader(_formValueStoreReader)) {
                 if (formStatePolicyDef.isSetValues()) {
-                    formStatePolicyDef.getSetValuesDef().apply(this, _formDef.getEntityDef(), now, _formValueStore,
-                            variables, null);
+                    formStatePolicyDef.getSetValuesDef().apply(this, _formDef.getEntityDef(), now, _formValueStore, null);
                 }
             }
         }

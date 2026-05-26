@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.flowcentraltech.flowcentral.common.input.StringInput;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -132,7 +133,9 @@ public class SetValueEntry {
                 paramField = null;
                 paramInput = null;
             } else {
-                EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                EntityFieldDef entityFieldDef = SystemUtils.isProcessVariable(fieldName)
+                        ? InputWidgetUtils.getProcessVariableEntityFieldDef()
+                        : entityDef.getFieldDef(fieldName);
                 paramInput = evalInput(entityFieldDef, paramInput);
                 paramField = null;
             }
@@ -150,8 +153,8 @@ public class SetValueEntry {
                     return new StringInput("!ui-select blankOption:$s{} list:sessionparamtypelist",
                             "!ui-listlabel list:sessionparamtypelist");
                 case PROCESS_VARIABLE:
-                    return new StringInput("!ui-select blankOption:$s{} list:processvariablelist",
-                            "!ui-listlabel list:processvariablelist");
+                    return new StringInput("!ui-select blankOption:$s{} list:setvalueprocessvariablelist listParams:$s{entityDef}",
+                            "!ui-listlabel list:setvalueprocessvariablelist listParams:$s{entityDef}"); 
                 case GENERATOR:
                     return new StringInput(
                             "!ui-select blankOption:$s{} list:fieldsetvaluegenlist listParams:$s{entityDef}",
@@ -173,8 +176,8 @@ public class SetValueEntry {
                     return new StringInput("!ui-select blankOption:$s{} list:sessionparamtypelist",
                             "!ui-listlabel list:sessionparamtypelist");
                 case PROCESS_VARIABLE:
-                    return new StringInput("!ui-select blankOption:$s{} list:processvariablelist",
-                            "!ui-listlabel list:processvariablelist");
+                    return new StringInput("!ui-select blankOption:$s{} list:setvalueprocessvariablelist listParams:$s{entityDef}",
+                            "!ui-listlabel list:setvalueprocessvariablelist listParams:$s{entityDef}");
                 case GENERATOR:
                     return new StringInput(
                             "!ui-select blankOption:$s{} list:fieldsetvaluegenlist listParams:$s{entityDef}",

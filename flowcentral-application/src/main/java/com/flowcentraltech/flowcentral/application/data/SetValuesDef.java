@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -29,12 +28,14 @@ import com.flowcentraltech.flowcentral.application.business.EntitySetValuesGener
 import com.flowcentraltech.flowcentral.application.business.FieldSetValueGenerator;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameParts;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.constants.SessionParamType;
 import com.flowcentraltech.flowcentral.common.util.LingualDateUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualStringType;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
@@ -107,13 +108,13 @@ public class SetValuesDef {
         return setValueList == null || setValueList.isEmpty();
     }
 
-    public void apply(AppletUtilities au, EntityDef entityDef, Date now, Entity inst, Map<String, Object> variables,
+    public void apply(AppletUtilities au, EntityDef entityDef, Date now, Entity inst,
             String trigger) throws UnifyException {
-        apply(au, entityDef, now, new BeanValueStore(inst), variables, trigger);
+        apply(au, entityDef, now, new BeanValueStore(inst), trigger);
     }
 
     public void apply(AppletUtilities au, EntityDef entityDef, Date now, ValueStore valueStore,
-            Map<String, Object> variables, String trigger) throws UnifyException {
+            String trigger) throws UnifyException {
         if (!StringUtils.isBlank(valueGenerator)) {
             EntitySetValuesGenerator entityValueGenerator = au.getComponent(EntitySetValuesGenerator.class,
                     valueGenerator);
@@ -121,7 +122,9 @@ public class SetValuesDef {
         }
 
         for (SetValueDef setValueDef : setValueList) {
-            final EntityFieldDef entityFieldDef = entityDef.getFieldDef(setValueDef.getFieldName());
+            final EntityFieldDef entityFieldDef = SystemUtils.isProcessVariable(setValueDef.getFieldName())
+                    ? InputWidgetUtils.getProcessVariableEntityFieldDef()
+                    : entityDef.getFieldDef(setValueDef.getFieldName());
             if (entityFieldDef.isSupportSetValue()) {
                 final EntityFieldDataType fieldType = entityFieldDef.getDataType();
                 Object val = null;
@@ -135,7 +138,7 @@ public class SetValuesDef {
                     case PROCESS_VARIABLE:
                         String variableKey = setValueDef.getParam();
                         if (variableKey != null) {
-                            val = variables.get(variableKey);
+                            val =  valueStore.getTempValue(variableKey);
                         }
                         break;
                     case GENERATOR:

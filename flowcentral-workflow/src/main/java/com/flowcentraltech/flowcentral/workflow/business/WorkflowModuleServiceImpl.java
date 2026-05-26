@@ -1335,7 +1335,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             .matchReader(wfEntityInstValueStore.getReader())) {
                         if (wfSetValuesDef.isWithSetValues()) {
                             wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
-                                    Collections.emptyMap(), null);
+                                    null);
                         }
                     }
                 }
@@ -1345,7 +1345,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     final AppletSetValuesDef appletSetValuesDef = appletDef
                             .getSetValues(userActionDef.getAppletSetValuesName());
                     appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, wfEntityInst,
-                            Collections.emptyMap(), null);
+                            null);
                 }
 
                 update = true;
@@ -1836,7 +1836,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             .matchReader(instValueStore.getReader())) {
                         if (wfSetValuesDef.isWithSetValues()) {
                             wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, workInst,
-                                    Collections.emptyMap(), null);
+                                    null);
                         }
                     }
                 }
@@ -2234,14 +2234,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         if (wfStepDef.isWithAppletSetValues()) {
             final AppletDef appletDef = appletUtil.getAppletDef(wfStepDef.getStepAppletName());
             final AppletSetValuesDef appletSetValuesDef = appletDef.getSetValues(wfStepDef.getAppletSetValuesName());
-            appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, valueStore, Collections.emptyMap(),
+            appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, valueStore,
                     null);
             updated = true;
         }
 
         WfStepSetValuesDef wfSetValuesDef = wfStepDef.getWfSetValuesDef();
         if (wfSetValuesDef != null && wfSetValuesDef.isSetValues()) {
-            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, valueStore, valueStore.getTempValues(),
+            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, valueStore,
                     null);
             updated = true;
         }

@@ -305,7 +305,6 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
                     }
                 }
 
-                final Map<String, Object> variables = Collections.emptyMap();
                 for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
                     if (formStatePolicyDef.isTriggered(trigger)) {
                         ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
@@ -315,7 +314,7 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
                         if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
                             if (formStatePolicyDef.isSetValues()) {
                                 formStatePolicyDef.getSetValuesDef().apply(appletUtilities, formDef.getEntityDef(), now,
-                                        formValueStore, variables, trigger);
+                                        formValueStore, trigger);
                                 setValuesExecuted = true;
                             }
                         }
