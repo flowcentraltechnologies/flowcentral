@@ -43,7 +43,7 @@ public final class SystemUtils {
     }
 
     public static String encodeProcessVariableLabel(String name) {
-        return PRC_PREFIX_UPPERCASE + name;
+        return PRC_PREFIX_UPPERCASE + " " + name;
     }
 
     public static String encodeSysParamCode(SysParamType type, String code) {
