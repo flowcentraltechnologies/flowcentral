@@ -45,16 +45,23 @@ public class SetValueEntry {
 
     private AbstractInput<?> paramInput;
 
+    private boolean includeSysParam;
+
+    private boolean includeProcessVariable;
+
     private boolean fieldChange;
 
     private boolean typeChange;
 
     private boolean editable;
 
-    public SetValueEntry(AppletUtilities au, EntityDef entityDef, boolean editable) {
+    public SetValueEntry(AppletUtilities au, EntityDef entityDef, boolean editable, boolean includeSysParam,
+            boolean includeProcessVariable) {
         this.au = au;
         this.entityDef = entityDef;
         this.editable = editable;
+        this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public String getFieldName() {
@@ -105,6 +112,14 @@ public class SetValueEntry {
 
     public boolean isEditable() {
         return editable;
+    }
+
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
     }
 
     public void normalize() throws UnifyException {

@@ -283,7 +283,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private final Map<String, WidgetTypeDef> adhocWidgets;
 
     private MappedEntityProviderInfo mappedEntityProviderInfo;
-    
+
     private List<ProcessVariablesProvider> processVariablesProviders;
 
     public AppletUtilitiesImpl() {
@@ -1279,7 +1279,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntityFilter _entityFilter = constructEntityFilter(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), formDef.getEntityDef(), EntityFilter.ENABLE_ALL,
-                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam(), formTabDef.isIncludeProcessVariable());
+                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam(),
+                                formTabDef.isIncludeProcessVariable());
                         _entityFilter.setListType(categoryType.listType());
                         _entityFilter.setParamList(categoryType.paramList());
                         _entityFilter.setCategory(categoryType.category());
@@ -1365,7 +1366,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntitySetValues _entitySetValues = constructEntitySetValues(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), formDef.getEntityDef(), EntitySetValues.ENABLE_ALL,
-                                formTabDef.isIgnoreParentCondition());
+                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam(),
+                                formTabDef.isIncludeProcessVariable());
                         _entitySetValues.setCategory(categoryType.category());
                         _entitySetValues.setOwnerInstId((Long) inst.getId());
                         _entitySetValues.load(_entityDef);
@@ -2007,10 +2009,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public EntitySetValues constructEntitySetValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, EntityDef ownerEntityDef, int entitySetValuesMode, boolean isIgnoreParentCondition)
-            throws UnifyException {
+            String tabName, EntityDef ownerEntityDef, int entitySetValuesMode, boolean isIgnoreParentCondition,
+            boolean includeSysParam, boolean includeProcessVariable) throws UnifyException {
         return new EntitySetValues(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entitySetValuesMode,
-                isIgnoreParentCondition);
+                isIgnoreParentCondition, includeSysParam, includeProcessVariable);
     }
 
     @Override
@@ -2107,7 +2109,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         return true;
     }
-    
+
     @Override
     public boolean formBeanMatchAppletPropertyConditionWhenPresent(AppletDef appletDef, AbstractForm form,
             String conditionPropName) throws UnifyException {
@@ -2121,7 +2123,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         return false;
     }
-    
+
     @Override
     public FormValidation validateFormUsingComponentValidation(String formName, Object inst,
             EvaluationMode evaluationMode) throws UnifyException {
@@ -2189,7 +2191,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     protected void onInitialize() throws UnifyException {
         // Process variable providers
         processVariablesProviders = getComponents(ProcessVariablesProvider.class);
-        
+
         // Mapped entity providers
         Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
         List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
@@ -2425,7 +2427,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         // Create workflow copy
         EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
         ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
-        wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_WORKFLOW_BASE_FIELDS);
+        wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst),
+                ApplicationEntityUtils.RESERVED_WORKFLOW_BASE_FIELDS);
         final String wfCopyUpdateSetValuesName = formAppletDef.getPropValue(String.class,
                 AppletPropertyConstants.WORKFLOWCOPY_UPDATE_COPY_SETVALUES);
         if (!StringUtils.isBlank(wfCopyUpdateSetValuesName)) {
@@ -2890,8 +2893,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             if (type != null) {
                 final String resourceName = ApplicationNameUtils
                         .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
-                enterReadOnlyMode = !collaborationProvider.isLockedBy(type, resourceName,
-                        getUserLoginId());
+                enterReadOnlyMode = !collaborationProvider.isLockedBy(type, resourceName, getUserLoginId());
             }
         }
 

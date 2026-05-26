@@ -44,7 +44,7 @@ public class SetValuesWidget extends AbstractItemListWidget<SetValueEntry> {
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entitysetvaluefielddeflist listParams:$l{entityDef} binding:fieldName");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entitysetvaluefielddeflist listParams:$l{entityDef includeProcessVariable} binding:fieldName");
         typeSelectCtrl = (Control) addInternalChildWidget(
                 "!ui-select style:$s{width:100%;} blankOption:$s{} list:entitysetvalueoptionlist listParams:$l{entityDef fieldName} binding:type");
         paramCtrl = (DynamicField) addInternalChildWidget(

@@ -42,32 +42,44 @@ public class SetValueEntries {
 
     private List<SetValueEntry> entryList;
 
-    public SetValueEntries(AppletUtilities au, EntityDef entityDef) {
-        this(au, entityDef, Editable.TRUE);
+    private boolean includeSysParam;
+
+    private boolean includeProcessVariable;
+
+    public SetValueEntries(AppletUtilities au, EntityDef entityDef, boolean includeSysParam,
+            boolean includeProcessVariable) {
+        this(au, entityDef, Editable.TRUE, includeSysParam, includeProcessVariable);
     }
 
-    public SetValueEntries(AppletUtilities au, EntityDef entityDef, Editable rootEditable) {
+    public SetValueEntries(AppletUtilities au, EntityDef entityDef, Editable rootEditable, boolean includeSysParam,
+            boolean includeProcessVariable) {
+        this.au = au;
+        this.entityDef = entityDef;
+        this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
+        this.entryList = new ArrayList<SetValueEntry>();
+        this.entryList
+                .add(new SetValueEntry(au, entityDef, rootEditable.isTrue(), includeSysParam, includeProcessVariable));
+    }
+
+    public SetValueEntries(AppletUtilities au, EntityDef entityDef, SetValuesDef setValuesDef, boolean includeSysParam,
+            boolean includeProcessVariable) throws UnifyException {
+        this(au, entityDef, setValuesDef, Editable.TRUE, includeSysParam, includeProcessVariable);
+    }
+
+    public SetValueEntries(AppletUtilities au, EntityDef entityDef, SetValuesDef setValuesDef, Editable editable,
+            boolean includeSysParam, boolean includeProcessVariable) throws UnifyException {
         this.au = au;
         this.entityDef = entityDef;
         this.entryList = new ArrayList<SetValueEntry>();
-        this.entryList.add(new SetValueEntry(au, entityDef, rootEditable.isTrue()));
-    }
-
-    public SetValueEntries(AppletUtilities au, EntityDef entityDef, SetValuesDef setValuesDef) throws UnifyException {
-        this(au, entityDef, setValuesDef, Editable.TRUE);
-    }
-
-    public SetValueEntries(AppletUtilities au, EntityDef entityDef, SetValuesDef setValuesDef, Editable editable)
-            throws UnifyException {
-        this.au = au;
-        this.entityDef = entityDef;
-        this.entryList = new ArrayList<SetValueEntry>();
+        this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
         loadEntryList(setValuesDef, editable);
     }
 
     public void clear() throws UnifyException {
         entryList = new ArrayList<SetValueEntry>();
-        entryList.add(new SetValueEntry(au, entityDef, true));
+        entryList.add(new SetValueEntry(au, entityDef, true, includeSysParam, includeProcessVariable));
     }
 
     public void removeEntry(int index) throws UnifyException {
@@ -107,7 +119,7 @@ public class SetValueEntries {
 
         SetValueEntry last = entryList.get(entryList.size() - 1);
         if (last.isWithFieldName()) {
-            entryList.add(new SetValueEntry(au, entityDef, true));
+            entryList.add(new SetValueEntry(au, entityDef, true, includeSysParam, includeProcessVariable));
         }
     }
 
@@ -131,13 +143,14 @@ public class SetValueEntries {
     private void loadEntryList(SetValuesDef setValuesDef, Editable editable) throws UnifyException {
         if (setValuesDef != null) {
             for (SetValueDef setValueDef : setValuesDef.getSetValueList()) {
-                SetValueEntry svo = new SetValueEntry(au, entityDef, editable.isTrue());
+                SetValueEntry svo = new SetValueEntry(au, entityDef, editable.isTrue(), includeSysParam,
+                        includeProcessVariable);
                 setFieldAndInputParams(svo, setValueDef);
                 entryList.add(svo);
             }
         }
 
-        entryList.add(new SetValueEntry(au, entityDef, editable.isTrue()));
+        entryList.add(new SetValueEntry(au, entityDef, editable.isTrue(), includeSysParam, includeProcessVariable));
     }
 
     private void setFieldAndInputParams(SetValueEntry svo, SetValueDef setValueDef) throws UnifyException {

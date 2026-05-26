@@ -369,8 +369,8 @@ public class WorkflowEditor {
                 SetValueEntries entries = (step.getSetValues() != null && step.getSetValues().getSetValues() != null)
                         ? new SetValueEntries(au, entityDef,
                                 InputWidgetUtils.getSetValuesDef(null, step.getSetValues().getSetValues()),
-                                Editable.TRUE)
-                        : new SetValueEntries(au, entityDef);
+                                Editable.TRUE, false, false)
+                        : new SetValueEntries(au, entityDef, false, false);
                 setValuesInfo.setEntries(entries);
                 return stepSetValuesPanelName;
             case STEP:

@@ -1731,12 +1731,17 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                                the entity set values mode
      * @param isIgnoreParentCondition
      *                                ignore parent condition flag
+     * @param includeSysParam
+     *                                include system parameter filters
+     * @param includeProcessVariable
+     *                                include process variable
      * @return the entity set values
      * @throws UnifyException
      *                        if an error occurs
      */
     EntitySetValues constructEntitySetValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int entitySetValuesMode, boolean isIgnoreParentCondition) throws UnifyException;
+            EntityDef ownerEntityDef, int entitySetValuesMode, boolean isIgnoreParentCondition,
+            boolean includeSysParam, boolean includeProcessVariable) throws UnifyException;
 
     /**
      * Constructs entity parameter values.

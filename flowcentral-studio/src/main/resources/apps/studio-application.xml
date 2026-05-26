@@ -3067,7 +3067,7 @@
 				</tab>
 				<tab name="setValues"
 					label="$m{studio.appappletsetvalues.form.setvalues}"
-					reference="app_applet" contentType="SET_VALUES" />
+					reference="app_applet" contentType="SET_VALUES" includeSysParam="true"/>
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>
@@ -5771,7 +5771,7 @@
 					reference="setStateList" />
 				<tab name="setValues"
 					label="$m{studio.appformstatepolicy.form.setvalues}"
-					reference="app_formstatepolicy" contentType="SET_VALUES" />
+					reference="app_formstatepolicy" contentType="SET_VALUES" includeSysParam="true" />
 			</tabs>
 		</form>
 		<form name="appFormWidgetRulesPolicyForm"
@@ -6255,7 +6255,7 @@
 				<tab name="condition"
 					label="$m{studio.workflowfilter.form.condition}"
 					reference="workflow" contentType="FILTER_CONDITION"
-					includeSysParam="true"  includeProcessVariable="true"/>
+					includeSysParam="true" includeProcessVariable="true"/>
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>
@@ -6284,7 +6284,8 @@
 					includeSysParam="true" includeProcessVariable="true" />
 				<tab name="setValues"
 					label="$m{studio.workflowsetvalues.form.setvalues}"
-					reference="workflow" contentType="SET_VALUES" />
+					reference="workflow" contentType="SET_VALUES"
+						includeSysParam="true" includeProcessVariable="true" />
 				<tab name="changeLog" label="$m{application.form.audit}"
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>

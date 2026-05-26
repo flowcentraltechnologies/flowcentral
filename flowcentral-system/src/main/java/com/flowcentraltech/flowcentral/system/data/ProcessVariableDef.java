@@ -27,24 +27,28 @@ import com.tcdng.unify.common.data.Listable;
 public class ProcessVariableDef implements Listable {
 
     private String name;
-    
+
     private String label;
-    
+
     private String caption;
 
     private boolean supportFilter;
 
+    private boolean supportValues;
+
     private boolean transitional;
-    
+
     public ProcessVariableDef(String name, String label) {
-        this(name, label, false, false);
+        this(name, label, false, false, false);
     }
-    
-    public ProcessVariableDef(String name, String label, boolean supportFilter, boolean transitional) {
+
+    public ProcessVariableDef(String name, String label, boolean supportFilter, boolean supportValues,
+            boolean transitional) {
         this.name = name;
         this.label = label;
         this.caption = SystemUtils.encodeProcessVariableLabel(label);
         this.supportFilter = supportFilter;
+        this.supportValues = supportValues;
         this.transitional = transitional;
     }
 
@@ -70,6 +74,10 @@ public class ProcessVariableDef implements Listable {
         return caption;
     }
 
+    public boolean isSupportValues() {
+        return supportValues;
+    }
+
     public boolean isSupportFilter() {
         return supportFilter;
     }
@@ -77,5 +85,5 @@ public class ProcessVariableDef implements Listable {
     public boolean isTransitional() {
         return transitional;
     }
-        
+
 }

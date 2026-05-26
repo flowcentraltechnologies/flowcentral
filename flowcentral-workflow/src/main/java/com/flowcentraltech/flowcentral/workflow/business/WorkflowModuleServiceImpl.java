@@ -507,13 +507,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     wrProcessVariableDefs = new ArrayList<ProcessVariableDef>();
                     // Transition variables
                     wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARDED_BY,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardedby}"), true, true));
+                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardedby}"), true, false, true));
                     wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARDED_BY_NAME,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardedbyname}"), true, true));
+                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardedbyname}"), true, false, true));
                     wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARD_TO,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardto}"), true, true));
+                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardto}"), true, false, true));
                     wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.HELD_BY,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.heldby}"), true, true));
+                            resolveApplicationMessage("$m{workflow.system.processvariable.heldby}"), true, false, true));
                     wrProcessVariableDefs = Collections.unmodifiableList(wrProcessVariableDefs);
                 }
             }
