@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.flowcentraltech.flowcentral.chart.apexcharts.business.constants.ApexChartsNameConstants;
+import com.flowcentraltech.flowcentral.chart.apexcharts.constants.ApexChartsNameConstants;
 import com.flowcentraltech.flowcentral.chart.business.AbstractChartOptionsProvider;
 import com.flowcentraltech.flowcentral.chart.data.AbstractSeries;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;

@@ -10,7 +10,7 @@
 
 	<artifactId>flowcentral-chart-apexcharts</artifactId>
 	<name>flowcentral-chart-apexcharts</name>
-	<description>Flowcentral Chart Module (Apex Charts)</description>
+	<description>Flowcentral Chart Module (ApexCharts)</description>
 	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
