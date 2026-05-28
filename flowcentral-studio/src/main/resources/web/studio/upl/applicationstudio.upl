@@ -21,7 +21,7 @@
 	styleSheet:$t{css/flowcentral-slim.css}
 	styleSheet:$t{css/flowcentral-theme.css}
 	script:$s{web/js/flowcentral-web.js}
-	script:$s{web/js/apexcharts.min.js}
+	script:$s{web/js/chartslib.js}
 	script:$s{web/js/fabric.min.js}
 	script:$s{web/js/flowcentral-studio-web.js}
 	styleSheet:$t{css/flowcentral-studio.css}

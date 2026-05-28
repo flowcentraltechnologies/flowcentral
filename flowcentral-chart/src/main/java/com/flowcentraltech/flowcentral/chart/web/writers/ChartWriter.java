@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.chart.business.ChartOptionsProvider;
 import com.flowcentraltech.flowcentral.chart.constants.ChartRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
@@ -65,6 +66,9 @@ public class ChartWriter extends AbstractWidgetWriter {
     @Configurable
     private ChartModuleService chartModuleService;
 
+    @Configurable
+    private ChartOptionsProvider chartOptionsProvider;
+    
     @Configurable
     private AppletUtilities appletUtilities;
 
@@ -187,16 +191,13 @@ public class ChartWriter extends AbstractWidgetWriter {
 
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        if (chartDef.getType().isFlowCentralType()) {
-
-        } else {
-            if (chartDetails != null) {
-                writer.beginFunction("fux.rigChart");
-                writer.writeParam("pId", chartWidget.getId());
-                writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartDetails,
-                        chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
-                writer.endFunction();
-            }
+        if (!chartDef.getType().isFlowCentralType() && chartDetails != null) {
+            writer.beginFunction("fux.rigChart");
+            writer.writeParam("pId", chartWidget.getId());
+            writer.writeParam("pType", chartOptionsProvider.getOptionsType());
+            writer.writeParam("pOptions", chartOptionsProvider.getChartOptions(chartDef, chartDetails,
+                    chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
+            writer.endFunction();
         }
     }
 
