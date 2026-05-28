@@ -327,7 +327,7 @@ fux.rigChart = function(rgp) {
 		fux.chartList.push({type:type, chart:chart});
 	} else if (type === "echarts") {
 		var chart = echarts.init(_id(id));
-		chart.render();
+		chart.setOption(options);
 		fux.chartList.push({type:type, chart:chart});
 	}
 }
