@@ -63,6 +63,7 @@
     <module>flowcentral-fontawesome</module>
     <module>flowcentral-test</module>
     <module>flowcentral-chart-apexcharts</module>
+    <module>flowcentral-chart-echarts</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
