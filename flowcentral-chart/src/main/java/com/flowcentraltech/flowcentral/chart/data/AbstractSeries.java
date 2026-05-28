@@ -160,7 +160,7 @@ public abstract class AbstractSeries<T, U extends Number> {
         return categoryLabels.containsKey(xobj) ? categoryLabels.get(xobj) : String.valueOf(xobj);
     }
 
-    private List<AbstractSeriesData> getDataList() {
+    public List<AbstractSeriesData> getDataList() {
         if (dataList == null) {
             synchronized (this) {
                 if (dataList == null) {
@@ -185,7 +185,7 @@ public abstract class AbstractSeries<T, U extends Number> {
 
     protected abstract AbstractSeriesData createData(T x, U y);
 
-    protected abstract class AbstractSeriesData {
+    public abstract class AbstractSeriesData {
 
         private final T x;
 
@@ -209,7 +209,7 @@ public abstract class AbstractSeries<T, U extends Number> {
             return "AbstractSeriesData [x=" + x + ", y=" + y + "]";
         }
 
-        protected String resolveX(Object xobj) {
+        public String resolveX(Object xobj) {
             return AbstractSeries.this.resolveX(xobj);
         }
 

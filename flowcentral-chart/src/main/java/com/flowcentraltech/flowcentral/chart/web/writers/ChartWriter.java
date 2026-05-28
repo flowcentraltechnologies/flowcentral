@@ -79,7 +79,7 @@ public class ChartWriter extends AbstractWidgetWriter {
         final String chartLongName = chartWidget.getValue(String.class);
         ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
         ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef);
-        writer.write("<div");
+        writer.write("<div style=\"height:320px;\"");
         writeTagAttributes(writer, chartWidget);
         writer.write(">");
         if (chartDef.getType().isCard()) {
