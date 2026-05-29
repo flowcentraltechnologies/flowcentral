@@ -14,34 +14,31 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.studio.constants;
+package com.flowcentraltech.flowcentral.configuration.constants;
 
-import com.flowcentraltech.flowcentral.configuration.constants.ChartColorType;
-import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
- * Studio chart color list.
+ * Chart color list.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@StaticList(name = "studiochartcolorlist", description="Studio Chart Color List")
-public enum StudioChartColorType implements EnumConst {
+public enum ChartColorType implements EnumConst {
 
-    RED(ChartColorType.RED.code()),
-    ORANGE(ChartColorType.ORANGE.code()),
-    YELLOW(ChartColorType.YELLOW.code()),
-    GREEN(ChartColorType.GREEN.code()),
-    CYAN(ChartColorType.CYAN.code()),
-    BLUE(ChartColorType.BLUE.code()),
-    VIOLET(ChartColorType.VIOLET.code()),
-    GRAY(ChartColorType.GRAY.code());
+    RED("#72170e"),
+    ORANGE("#e65c00"),
+    YELLOW("#f1c927"),
+    GREEN("#1d6355"),
+    CYAN("#199a95"),
+    BLUE("#13496c"),
+    VIOLET("#4a2759"),
+    GRAY("#22262b");
 
     private final String code;
     
-    private StudioChartColorType(String code) {
+    private ChartColorType(String code) {
         this.code = code;
     }
 
@@ -55,11 +52,11 @@ public enum StudioChartColorType implements EnumConst {
         return RED.code;
     }
 
-    public static StudioChartColorType fromCode(String code) {
-        return EnumUtils.fromCode(StudioChartColorType.class, code);
+    public static ChartColorType fromCode(String code) {
+        return EnumUtils.fromCode(ChartColorType.class, code);
     }
 
-    public static StudioChartColorType fromName(String name) {
-        return EnumUtils.fromName(StudioChartColorType.class, name);
+    public static ChartColorType fromName(String name) {
+        return EnumUtils.fromName(ChartColorType.class, name);
     }
 }

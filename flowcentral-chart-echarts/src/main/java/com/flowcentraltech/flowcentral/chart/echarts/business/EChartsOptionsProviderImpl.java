@@ -16,7 +16,9 @@
 package com.flowcentraltech.flowcentral.chart.echarts.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +29,8 @@ import com.flowcentraltech.flowcentral.chart.data.AbstractSeries.AbstractSeriesD
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.echarts.constants.EChartsNameConstants;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartColorType;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartPaletteType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -42,6 +46,54 @@ import com.tcdng.unify.core.util.json.JsonWriter;
  */
 @Component(EChartsNameConstants.ECHARTS_OPTIONS_PROVIDER)
 public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
+
+    private static final Map<ChartPaletteType, List<String>> PALLETE_MAP;
+
+    private static final Map<ChartColorType, List<String>> MONOCHROME_MAP;
+
+    static {
+        Map<ChartPaletteType, List<String>> map = new HashMap<ChartPaletteType, List<String>>();
+        map.put(ChartPaletteType.PALETTE1,
+                Arrays.asList("#5470C6", "#91CC75", "#FAC858", "#EE6666", "#73C0DE", "#3BA272", "#FC8452", "#9A60B4"));
+        map.put(ChartPaletteType.PALETTE2,
+                Arrays.asList("#1f4e5b", "#2e7d7a", "#dfcdb4", "#e09f3e", "#9e2a2b", "#540b0e", "#6f5060", "#8cb369"));
+        map.put(ChartPaletteType.PALETTE3,
+                Arrays.asList("#FF6B6B", "#4ECDC4", "#FFE66D", "#1A535C", "#FF9F1C", "#2EC4B6", "#E71D36", "#011627"));
+        map.put(ChartPaletteType.PALETTE4,
+                Arrays.asList("#A5DEE5", "#FFDAC1", "#E2F0CB", "#C7CEEA", "#FFB7B2", "#B5EAD7", "#F6EAC2", "#D7BDE2"));
+        map.put(ChartPaletteType.PALETTE5,
+                Arrays.asList("#003F5C", "#2F4B7C", "#665191", "#A05195", "#D45087", "#F95D6A", "#FF7C43", "#FFA600"));
+        map.put(ChartPaletteType.PALETTE6,
+                Arrays.asList("#2E7D32", "#66BB6A", "#1E88E5", "#FB8C00", "#8E24AA", "#D81B60", "#00897B", "#FDD835"));
+        map.put(ChartPaletteType.PALETTE7,
+                Arrays.asList("#FF6F61", "#FF9472", "#FFB88C", "#FFD3A5", "#FF8A80", "#FF5252", "#FF7043", "#FFAB91"));
+        map.put(ChartPaletteType.PALETTE8,
+                Arrays.asList("#FF00FF", "#00FFFF", "#39FF14", "#FF073A", "#FFD300", "#7C00FF", "#00FF9F", "#FF6EC7"));
+        map.put(ChartPaletteType.PALETTE9,
+                Arrays.asList("#8D6E63", "#3F51B5", "#FF7043", "#26A69A", "#AB47BC", "#5C6BC0", "#EF5350", "#9CCC65"));
+        map.put(ChartPaletteType.PALETTE10,
+                Arrays.asList("#ff0054", "#ff5400", "#ffbd00", "#70e000", "#38b000", "#00b4d8", "#0077b6", "#9d4edd"));
+        PALLETE_MAP = Collections.unmodifiableMap(map);
+        
+        Map<ChartColorType, List<String>> map2 = new HashMap<ChartColorType, List<String>>();
+        map2.put(ChartColorType.RED,
+                Arrays.asList("#72170e", "#83332b", "#944f48", "#a56b65", "#b68783", "#c7a3a0", "#d8c0bd", "#e9dcda"));
+        map2.put(ChartColorType.ORANGE,
+                Arrays.asList("#e65c00", "#e96f1e", "#ec833d", "#ef975c", "#f2ab7b", "#f5be9a", "#f8d2b9", "#fbe6d8"));
+        map2.put(ChartColorType.YELLOW,
+                Arrays.asList("#f1c927", "#f2cf41", "#f4d65b", "#f6dc75", "#f7e38f", "#f9e9aa", "#fbf0c4", "#fcf6de"));
+        map2.put(ChartColorType.GREEN,
+                Arrays.asList("#1d6355", "#387569", "#53887e", "#6f9b92", "#8aaea7", "#a6c1bc", "#c1d4d0", "#dde7e5"));
+        map2.put(ChartColorType.CYAN,
+                Arrays.asList("#199a95", "#34a6a1", "#50b2ae", "#6cbebb", "#88cbc8", "#a4d7d5", "#c0e3e2", "#dcefef"));
+        map2.put(ChartColorType.BLUE,
+                Arrays.asList("#13496c", "#2f5f7d", "#4c758f", "#688ba1", "#85a1b3", "#a2b7c5", "#becdd7", "#dbe3e8"));
+        map2.put(ChartColorType.VIOLET,
+                Arrays.asList("#4a2759", "#5f416d", "#755b81", "#8b7595", "#a18fa9", "#b7aabd", "#cdc4d1", "#e3dee6"));
+        map2.put(ChartColorType.GRAY,
+                Arrays.asList("#22262b", "#3c4044", "#575a5e", "#727578", "#8d8f91", "#a8a9ab", "#c3c4c5", "#dddedf"));
+        MONOCHROME_MAP = Collections.unmodifiableMap(map2);
+    }
 
     @Override
     public String getOptionsType() throws UnifyException {
@@ -61,6 +113,22 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 ? chartDetails.getGroupingSeries(chartDef)
                 : (chartDetails.getSeries(chartDetails.isWithSeriesInclusion() ? chartDetails.getSeriesInclusion()
                         : chartDef.getSeriesInclusion()));
+
+        // Colors
+        if (chartDef.getPaletteType() != null) {
+            jw.beginArray("color");
+            if (chartDef.getPaletteType().monochrome()) {
+                ChartColorType type = chartDef.isWithColor() ? ChartColorType.fromCode(chartDef.getColor()): ChartColorType.GRAY;
+                for (String col : MONOCHROME_MAP.get(type)) {
+                    jw.writeObject(col);
+                }
+            } else {
+                for (String col : PALLETE_MAP.get(chartDef.getPaletteType())) {
+                    jw.writeObject(col);
+                }
+            }
+            jw.endArray();
+        }
 
         // Title & Sub-title
         String title = !StringUtils.isBlank(chartDetails.getTitle()) ? chartDetails.getTitle() : chartDef.getTitle();
@@ -98,9 +166,9 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
         }
 
         jw.beginObject("tooltip");
-        jw.write("trigger", chartType.axisChart() ? "axis":"item");
+        jw.write("trigger", chartType.axisChart() ? "axis" : "item");
         jw.endObject();
-     
+
         final Set<String> categoryInclusion = isDynamicCategories ? Collections.emptySet()
                 : (chartDetails.isWithCategoryInclusion() ? chartDetails.getCategoryInclusion()
                         : chartDef.getCategoryInclusion());
@@ -115,12 +183,12 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 }
                 jw.endArray();
                 jw.endObject();
-                
+
                 // Grid
                 jw.beginObject("grid");
                 jw.write("top", 80);
                 jw.endObject();
-                
+
                 // Category
                 jw.beginArray(chartType.isHorizontal() ? "yAxis" : "xAxis");
                 for (AbstractSeries<?, ?> _series : actseries) {
@@ -130,7 +198,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     if (!chartType.isHorizontal()) {
                         jw.write("position", "bottom");
                     }
-                    
+
                     if (chartType.isArea()) {
                         jw.write("boundaryGap", false);
                     }
@@ -156,7 +224,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 for (AbstractSeries<?, ?> _series : actseries) {
                     jw.beginObject();
                     jw.write("name", _series.getName());
-                    jw.write("type", chartType.isArea() ? "line": chartType.optionsType());
+                    jw.write("type", chartType.isArea() ? "line" : chartType.optionsType());
                     jw.write("smooth", chartDef.isSmooth());
                     jw.write("stack", "total");
                     jw.write("showSymbol", false);
@@ -172,7 +240,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                         jw.beginObject("areaStyle");
                         jw.endObject();
                     }
-                    
+
                     jw.endObject();
                 }
 
@@ -191,7 +259,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                     // Series
                     jw.beginArray("series");
-                    
+
                     jw.beginObject();
                     jw.write("name", pseries.getName());
                     jw.write("type", ChartType.PIE.optionsType());
@@ -225,7 +293,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.writeObject("80%");
                     jw.endArray();
                     jw.endObject();
-                    
+
                     // Angle
                     jw.beginObject("angleAxis");
                     jw.write("type", "category");
@@ -237,10 +305,10 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                     jw.endArray();
                     jw.endObject();
-                    
+
                     // Series
                     jw.beginArray("series");
-                    
+
                     jw.beginObject();
                     jw.write("name", pseries.getName());
                     jw.write("type", ChartType.BAR.optionsType());
@@ -264,7 +332,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     }
                     jw.endArray();
                     jw.endObject();
-                    
+
                     // Radar
                     jw.beginObject("radar");
                     jw.beginArray("indicator");
@@ -276,10 +344,10 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                     jw.endArray();
                     jw.endObject();
-                    
+
                     // Series
                     jw.beginArray("series");
-                    
+
                     jw.beginObject();
                     jw.write("type", ChartType.RADAR.optionsType());
 

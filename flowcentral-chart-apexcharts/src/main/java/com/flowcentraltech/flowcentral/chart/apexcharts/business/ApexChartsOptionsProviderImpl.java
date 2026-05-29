@@ -160,6 +160,7 @@ public class ApexChartsOptionsProviderImpl extends AbstractChartOptionsProvider 
         } else {
             jw.write("palette", chartDef.getPaletteType().optionsType());
         }
+
         jw.endObject();
 
         // Options
