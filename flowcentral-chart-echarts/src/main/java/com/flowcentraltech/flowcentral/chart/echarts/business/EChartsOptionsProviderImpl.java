@@ -98,7 +98,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
         }
 
         jw.beginObject("tooltip");
-        jw.write("trigger", "axis");
+        jw.write("trigger", chartType.axisChart() ? "axis":"item");
         jw.endObject();
      
         final Set<String> categoryInclusion = isDynamicCategories ? Collections.emptySet()
@@ -116,12 +116,21 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 jw.endArray();
                 jw.endObject();
                 
+                // Grid
+                jw.beginObject("grid");
+                jw.write("top", 80);
+                jw.endObject();
+                
                 // Category
                 jw.beginArray(chartType.isHorizontal() ? "yAxis" : "xAxis");
                 for (AbstractSeries<?, ?> _series : actseries) {
                     _series.setCategoryInclusion(categoryInclusion);
                     jw.beginObject();
                     jw.write("type", "category");
+                    if (!chartType.isHorizontal()) {
+                        jw.write("position", "bottom");
+                    }
+                    
                     if (chartType.isArea()) {
                         jw.write("boundaryGap", false);
                     }
@@ -172,11 +181,12 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 AbstractSeries<?, ?> pseries = actseries.get(0);
                 pseries.setCategoryInclusion(categoryInclusion);
 
-
                 if (chartType.isCircularChart()) {
                     // Legend
                     jw.beginObject("legend");
-                    
+                    jw.write("orient", "vertical");
+                    jw.write("top", "middle");
+                    jw.write("left", 10);
                     jw.endObject();
 
                     // Series
@@ -186,13 +196,14 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.write("name", pseries.getName());
                     jw.write("type", ChartType.PIE.optionsType());
                     if (chartType.isPieChart()) {
-                        jw.write("radius", "60%");
+                        jw.write("radius", "55%");
                     } else {
                         jw.beginArray("radius");
                         jw.writeObject("40%");
                         jw.writeObject("70%");
                         jw.endArray();
                     }
+                    jw.write("top", 40);
 
                     jw.beginArray("data");
                     for (AbstractSeriesData _data : pseries.getDataList()) {
