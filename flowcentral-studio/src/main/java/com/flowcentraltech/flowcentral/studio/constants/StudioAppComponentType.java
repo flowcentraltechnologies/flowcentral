@@ -244,7 +244,7 @@ public enum StudioAppComponentType implements EnumConst {
             "$m{studio.application.component.type.chartdatasources}",
             "studio.menu.label.chartdatasource",
             "chart-bar",
-            "/studioappcomponentapplet",
+            "/studiochartdatasourceapplet",
             "studiooncreatecomponent-policy",
             null,
             null,
