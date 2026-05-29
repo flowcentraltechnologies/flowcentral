@@ -297,7 +297,6 @@ fux.rigChart = function(rgp) {
 	const id = rgp.pId;
 	const type = rgp.pType;
 	const options = rgp.pOptions
-
 	if (type === "apexcharts") {
 		if (options._yformatter) {
 			options.yaxis.labels.formatter = function(val, opts) {
@@ -344,6 +343,17 @@ fux.clearCharts = function() {
 		}
 
 		fux.chartList = [];
+	}
+}
+
+fux.rewireCharts = function() {
+	if (fux.chartList.length > 0) {
+		for (var i = 0; i < fux.chartList.length; i++) {
+			const item = fux.chartList[i];
+			if (item.type === "echarts") {
+				item.chart.resize();
+			}
+		}
 	}
 }
 
@@ -1269,6 +1279,8 @@ fux.init = function() {
 	ux.registerExtension("fux", fux);
 	ux.registerPageReset("clearFuxChart", fux.clearCharts);
 	ux.setHintTimeout(FC_USER_HINT_TIMEOUT);
+	ux.addHdl(window, "resize", fux.rewireCharts, {});
+		
 	// Perform
 	ux.setfn(fux.rigMenu,"fux01");  
 	ux.setfn(fux.rigMenuSearch,"fux02");  
