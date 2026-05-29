@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.chart.data.AbstractSeries.AbstractSeriesD
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.echarts.constants.EChartsNameConstants;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartColorType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartPaletteType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
@@ -113,6 +114,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 ? chartDetails.getGroupingSeries(chartDef)
                 : (chartDetails.getSeries(chartDetails.isWithSeriesInclusion() ? chartDetails.getSeriesInclusion()
                         : chartDef.getSeriesInclusion()));
+        final ChartCategoryDataType categoryType = chartDetails.getCategoryType();
 
         // Colors
         if (chartDef.getPaletteType() != null) {
@@ -194,7 +196,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 for (AbstractSeries<?, ?> _series : actseries) {
                     _series.setCategoryInclusion(categoryInclusion);
                     jw.beginObject();
-                    jw.write("type", "category");
+                    jw.write("type",categoryType.isDate() ? "time": "category");
                     if (!chartType.isHorizontal()) {
                         jw.write("position", "bottom");
                     }
