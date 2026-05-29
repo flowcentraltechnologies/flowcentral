@@ -95,6 +95,7 @@ public class ApexChartsOptionsProviderImpl extends AbstractChartOptionsProvider 
                 jw.write("fontSize", chartDetails.getSubTitleFontSize() + "px");
             }
             jw.endObject();
+            
             jw.endObject();
         }
 
