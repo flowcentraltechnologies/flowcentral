@@ -82,6 +82,11 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
     }
 
     @Override
+    public ChartDetails provide(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
+        return getChartData(chartDataSourceDef, null, null);
+    }
+
+    @Override
     public List<? extends Listable> getRuleList(Locale locale) throws UnifyException {
         List<ChartDataSource> sourceList = chart().findChartDataSources(
                 (ChartDataSourceQuery) new ChartDataSourceQuery().addSelect("applicationName", "name", "description")

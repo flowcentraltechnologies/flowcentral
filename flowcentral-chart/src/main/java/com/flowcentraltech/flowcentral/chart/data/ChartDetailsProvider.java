@@ -69,6 +69,17 @@ public interface ChartDetailsProvider extends RuleListComponent {
     ChartDetails provide(String rule, Restriction restriction, TimeResolutionType maxResolution) throws UnifyException;
 
     /**
+     * Provides data.
+     * 
+     * @param chartDataSourceDef
+     *                           the chart data source
+     * @return the chart data
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ChartDetails provide(ChartDataSourceDef chartDataSourceDef) throws UnifyException;
+    
+    /**
      * Indicates if provider utilizes a chart data source
      * 
      * @return true otherwise false

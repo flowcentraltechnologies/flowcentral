@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.AbstractChartDetailsProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
 import com.tcdng.unify.common.data.Listable;
@@ -48,7 +49,12 @@ public class ChartSnapshotChartDetailsProvider extends AbstractChartDetailsProvi
             throws UnifyException {
         return chart().getChartSnapshotDef(rule).getChartDetails();
     }
-    
+
+    @Override
+    public ChartDetails provide(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
+        return null;
+    }
+   
     @Override
     public List<? extends Listable> getRuleList(Locale locale) throws UnifyException {
         return chart().findChartSnapshots((ChartSnapshotQuery) new ChartSnapshotQuery()

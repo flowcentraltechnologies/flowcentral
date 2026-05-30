@@ -63,7 +63,7 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
             chartDatasourceView = constructNewChartDatasourceView(
                     ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
                     chartDataSourceId, subTitle);
-            chartDatasourceView.newEditor();
+            chartDatasourceView.reloadContent();
         }
     }
 

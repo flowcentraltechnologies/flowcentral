@@ -17,14 +17,15 @@
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
-import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
+import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
-import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
-import com.flowcentraltech.flowcentral.studio.web.widgets.TableEditor;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Query;
 
 /**
  * Chart datasource view.
@@ -37,6 +38,8 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
     private final ChartDataSourceDef chartDataSourceDef;
 
     private final Object baseId;
+
+    private EntityTable dataSetTable;
 
     public ChartDatasourceView(AppletUtilities au, ChartDataSourceDef chartDataSourceDef, Object baseId, BreadCrumbs breadCrumbs) {
         super(au, breadCrumbs);
@@ -52,21 +55,31 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
         return baseId;
     }
 
-    public void newEditor() throws UnifyException {
-        TableEditor.Builder teb = TableEditor.newBuilder(au(), null);
-        for (AppTableColumn appTableColumn : au().environment()
-                .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
-            teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
-                    appTableColumn.getLinkAct(), appTableColumn.getSymbol(), appTableColumn.getOrder(),
-                    appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(), appTableColumn.isHiddenOnNull(),
-                    appTableColumn.isHidden(), appTableColumn.isDisabled(), appTableColumn.isEditable(),
-                    appTableColumn.isSortable(), appTableColumn.isSummary());
-        }
+    public EntityTable getDataSetTable() {
+        return dataSetTable;
+    }
 
-        TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.apptable.form.design}"), "!fc-tableeditor",
-                RendererType.SIMPLE_WIDGET);
-        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.apptable.form.preview}"),
-                "fc-tablepreviewpanel", RendererType.STANDALONE_PANEL);
+    public void reloadContent() throws UnifyException {
+        final EntityDef entityDef = chartDataSourceDef.getEntityDef();
+        TableDef.Builder tdb = TableDef.newBuilder(entityDef, "Preview", false, false, "studio.dataSetTable",
+                "Priview Table", 0L, 0L);
+        tdb.sortHistory(4);
+        tdb.itemsPerPage(-1);
+        
+        ChartDetailsProvider detailsProvider = au().getComponent(ChartDetailsProvider.class, ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER);
+        ChartDetails chartDetails = detailsProvider.provide(chartDataSourceDef);
+//        if (design != null && design.getColumns() != null) {
+//            for (TableColumn tableColumn : design.getColumns()) {
+//                String renderer = InputWidgetUtils.constructRenderer(au.getWidgetTypeDef(tableColumn.getWidget()),
+//                        entityDef.getFieldDef(tableColumn.getFldNm()));
+//                OrderType order = OrderType.fromCode(tableColumn.getOrder());
+//                tdb.addColumnDef(tableColumn.getLabel(), tableColumn.getFldNm(), renderer, tableColumn.getLink(),
+//                        order, tableColumn.getWidth(), tableColumn.isSwitchOnChange(), tableColumn.isHiddenOnNull(),
+//                        tableColumn.isHidden(), tableColumn.isDisabled(), tableColumn.isEditable(),
+//                        tableColumn.isSort(), tableColumn.isSummary());
+//            }
+//        }
+
+        dataSetTable = new EntityTable(au(), tdb.build(au().enumProvider()), null);
     }
 }
