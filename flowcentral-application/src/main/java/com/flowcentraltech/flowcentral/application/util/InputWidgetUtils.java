@@ -1605,7 +1605,7 @@ public final class InputWidgetUtils {
 
     public static Restriction getRestriction(AppletUtilities au, EntityDef entityDef, ValueStoreReader reader,
             FilterDef filterDef, Date now, Map<String, Object> parameters) throws UnifyException {
-        if (filterDef != null) {
+        if (filterDef != null && !filterDef.isBlank()) {
             List<FilterRestrictionDef> conditionList = filterDef.getFilterRestrictionDefList();
             if (!conditionList.isEmpty()) {
                 FilterRestrictionDef fo = conditionList.get(0);

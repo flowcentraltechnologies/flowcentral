@@ -204,11 +204,6 @@ public abstract class AbstractSeries<T, U extends Number> {
             return y;
         }
 
-        @Override
-        public String toString() {
-            return "AbstractSeriesData [x=" + x + ", y=" + y + "]";
-        }
-
         public String resolveX(Object xobj) {
             return AbstractSeries.this.resolveX(xobj);
         }

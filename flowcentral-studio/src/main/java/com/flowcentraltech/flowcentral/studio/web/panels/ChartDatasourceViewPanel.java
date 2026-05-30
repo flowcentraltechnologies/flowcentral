@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.panels;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Chart datasource view panel.
@@ -32,9 +33,17 @@ public class ChartDatasourceViewPanel extends AbstractStudioEditorPagePanel {
     @Override
     public void switchState() throws UnifyException {
         final ChartDatasourceView chartDatasourceView = getChartDatasourceView();
+        System.out.println("@prime: ccccccccccccccccccccccccccccccccccccccccc");
+        System.out.println("@prime: chartDatasourceView = " + chartDatasourceView);
+        System.out.println("@prime: ccccccccccccccccccccccccccccccccccccccccc");
         if (chartDatasourceView != null) {
             // TODO
         }
+    }
+
+    @Action
+    public void saveDesign() throws UnifyException {
+
     }
 
     @Override

@@ -73,9 +73,13 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
     @Override
     public ChartDetails provide(String rule, Restriction restriction, TimeResolutionType maxResolution)
             throws UnifyException {
-        if (!StringUtils.isBlank(rule)) {
-            ChartDataSourceDef chartDataSourceDef = chart().getChartDataSourceDef(rule);
-            return getChartData(chartDataSourceDef, restriction, maxResolution);
+        try {
+            if (!StringUtils.isBlank(rule)) {
+                ChartDataSourceDef chartDataSourceDef = chart().getChartDataSourceDef(rule);
+                return getChartData(chartDataSourceDef, restriction, maxResolution);
+            }
+        } catch (Exception e) {
+            logError(e);
         }
 
         return ChartDetails.newBuilder(ChartCategoryDataType.STRING).build();
@@ -83,7 +87,13 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
 
     @Override
     public ChartDetails provide(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
-        return getChartData(chartDataSourceDef, null, null);
+        try {
+            return getChartData(chartDataSourceDef, null, null);
+        } catch (Exception e) {
+            logError(e);
+        }
+
+        return ChartDetails.newBuilder(ChartCategoryDataType.STRING).build();
     }
 
     @Override
@@ -113,9 +123,11 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
         final Date now = au().getNow();
         final PropertySequenceDef series = chartDataSourceDef.getSeries();
         final List<AggregateFunction> aggregateFunction = new ArrayList<AggregateFunction>();
-        for (PropertySequenceEntryDef sequenceDef : series.getSequenceList()) {
-            EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
-            aggregateFunction.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
+        if (chartDataSourceDef.isWithSeries()) {
+            for (PropertySequenceEntryDef sequenceDef : series.getSequenceList()) {
+                EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
+                aggregateFunction.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
+            }
         }
 
         final FilterDef catBaseFilterDef = chartDataSourceDef.getCategoryBase();
@@ -124,8 +136,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     : catBaseFilterDef.getMaxTimeResolution();
         }
 
-        Restriction baseRestriction = InputWidgetUtils.getRestriction(au(), entityDef, null, catBaseFilterDef, now);
-        
+        Restriction baseRestriction = null;// InputWidgetUtils.getRestriction(au(), entityDef, null, catBaseFilterDef, now);
+
         if (chartDataSourceDef.isWithCategories()) {
             final PropertySequenceDef categories = chartDataSourceDef.getCategories();
             if (!categories.isBlank()) {
@@ -136,15 +148,14 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     final String catlabel = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
                             ? propertySequenceEntryDef.getLabel()
                             : entityCategoryDef.getLabel();
-                    
-                    final FilterDef enFilterDef =  entityCategoryDef.getFilterDef();
+
+                    final FilterDef enFilterDef = entityCategoryDef.getFilterDef();
                     if (enFilterDef != null) {
                         maxResolution = maxResolution != null ? maxResolution.min(enFilterDef.getMaxTimeResolution())
                                 : enFilterDef.getMaxTimeResolution();
                     }
 
-                   Restriction restriction = InputWidgetUtils.getRestriction(au(), entityDef, null,
-                           enFilterDef, now);
+                    Restriction restriction = InputWidgetUtils.getRestriction(au(), entityDef, null, enFilterDef, now);
                     if (restriction != null) {
                         if (baseRestriction != null) {
                             restriction = new And().add(baseRestriction).add(restriction);

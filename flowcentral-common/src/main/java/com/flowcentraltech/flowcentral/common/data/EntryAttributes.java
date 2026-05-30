@@ -28,6 +28,15 @@ public class EntryAttributes implements EntityFieldAttributes {
 
     public static final EntryAttributes BLANK = new EntryAttributes();
 
+    public static final EntryAttributes DECIMAL = new EntryAttributes(null, null, 0, 0, 20, 2,
+            false, false, true);
+
+    public static final EntryAttributes INTEGER = new EntryAttributes(null, null, 0, 0, 20, 0,
+            false, false, true);
+
+    public static final EntryAttributes STRING = new EntryAttributes(null, null, 0, 0, 0, 0,
+            false, false, true);
+
     private String suggestionType;
 
     private String references;

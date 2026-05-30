@@ -75,7 +75,7 @@ public class TablePreview {
                 }
             }
 
-            entityTable = new EntityTable(au, tdb.build(au.enumProvider()), null);
+            entityTable = new EntityTable(au, tdb.build(au), null);
             Restriction searchRestriction = null;
             entityTable.setSourceObjectClearSelected(searchRestriction);
             oldDesign = design;

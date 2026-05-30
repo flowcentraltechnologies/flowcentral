@@ -16,16 +16,30 @@
 
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
-import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
+import com.flowcentraltech.flowcentral.chart.data.AbstractSeries;
+import com.flowcentraltech.flowcentral.chart.data.AbstractSeries.AbstractSeriesData;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.MapValueStore;
+import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Chart datasource view.
@@ -39,9 +53,10 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
 
     private final Object baseId;
 
-    private EntityTable dataSetTable;
+    private BeanListTable dataSetTable;
 
-    public ChartDatasourceView(AppletUtilities au, ChartDataSourceDef chartDataSourceDef, Object baseId, BreadCrumbs breadCrumbs) {
+    public ChartDatasourceView(AppletUtilities au, ChartDataSourceDef chartDataSourceDef, Object baseId,
+            BreadCrumbs breadCrumbs) {
         super(au, breadCrumbs);
         this.chartDataSourceDef = chartDataSourceDef;
         this.baseId = baseId;
@@ -55,31 +70,58 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
         return baseId;
     }
 
-    public EntityTable getDataSetTable() {
+    public BeanListTable getDataSetTable() {
         return dataSetTable;
     }
 
+    @SuppressWarnings("rawtypes")
     public void reloadContent() throws UnifyException {
-        final EntityDef entityDef = chartDataSourceDef.getEntityDef();
-        TableDef.Builder tdb = TableDef.newBuilder(entityDef, "Preview", false, false, "studio.dataSetTable",
+        final ChartDetailsProvider detailsProvider = au().getComponent(ChartDetailsProvider.class,
+                ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER);
+        final ChartDetails chartDetails = detailsProvider.provide(chartDataSourceDef);
+        final Map<String, AbstractSeries<?, ?>> series = chartDetails.getSeries();
+        final EntityDef.Builder edb = EntityDef
+        .newBuilder(ConfigType.CUSTOM, "com.flowcentraltech.flowcentral.preview.Az",
+                "Preview", null, null, null, null, null, false, false, false, false, false,
+                "application.preview", "Preview", 1L, 1L);
+        edb.addFieldDef("application.text", "application.text", EntityFieldDataType.STRING,
+                EntityFieldType.STATIC, "series", "Series");
+        final Set<String> used = new HashSet<String>();
+        for (AbstractSeries<?, ?> _series: series.values()) {
+            for (AbstractSeriesData data : _series.getDataList()) {
+                final String cat = data.resolveX(data.getX());
+                if (!used.contains(cat)) {
+                    if (_series.getDataType().isInteger()) {
+                        edb.addFieldDef("application.integer", "application.integer", EntityFieldDataType.INTEGER,
+                                EntityFieldType.CUSTOM, cat, cat);
+                        } else {
+                            edb.addFieldDef("application.decimal", "application.decimal", EntityFieldDataType.DECIMAL,
+                                    EntityFieldType.CUSTOM, cat, cat);
+                        }
+                    used.add(cat);
+                }
+            }
+        }
+        
+        final EntityDef entityDef = edb.build(au());
+        final TableDef.Builder tdb = TableDef.newBuilder(entityDef, "Preview", false, false, "studio.dataSetTable",
                 "Priview Table", 0L, 0L);
         tdb.sortHistory(4);
         tdb.itemsPerPage(-1);
-        
-        ChartDetailsProvider detailsProvider = au().getComponent(ChartDetailsProvider.class, ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER);
-        ChartDetails chartDetails = detailsProvider.provide(chartDataSourceDef);
-//        if (design != null && design.getColumns() != null) {
-//            for (TableColumn tableColumn : design.getColumns()) {
-//                String renderer = InputWidgetUtils.constructRenderer(au.getWidgetTypeDef(tableColumn.getWidget()),
-//                        entityDef.getFieldDef(tableColumn.getFldNm()));
-//                OrderType order = OrderType.fromCode(tableColumn.getOrder());
-//                tdb.addColumnDef(tableColumn.getLabel(), tableColumn.getFldNm(), renderer, tableColumn.getLink(),
-//                        order, tableColumn.getWidth(), tableColumn.isSwitchOnChange(), tableColumn.isHiddenOnNull(),
-//                        tableColumn.isHidden(), tableColumn.isDisabled(), tableColumn.isEditable(),
-//                        tableColumn.isSort(), tableColumn.isSummary());
-//            }
-//        }
 
-        dataSetTable = new EntityTable(au(), tdb.build(au().enumProvider()), null);
+        final List<ValueStore> list = new ArrayList<ValueStore>();
+        used.add("series");
+        for (Map.Entry<String, AbstractSeries<?, ?>> entry : chartDetails.getSeries().entrySet()) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("series", entry.getKey());
+            for (AbstractSeriesData data : entry.getValue().getDataList()) {
+                map.put(data.resolveX(data.getX()), data.getY());
+            }
+
+            list.add(new MapValueStore(map));
+        }
+
+        dataSetTable = new BeanListTable(au(), tdb.build(au()));
+        dataSetTable.setSourceObjectClearSelected(list);
     }
 }
