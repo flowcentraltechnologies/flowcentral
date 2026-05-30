@@ -1727,7 +1727,7 @@ public class EntityDef extends BaseApplicationEntityDef {
         public EntityDef build(AppletUtilities au) throws UnifyException {
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             List<EntityFieldDef> fieldDefList = new ArrayList<EntityFieldDef>(fieldDefMap.values());
-            DataUtils.sortDescending(fieldDefList, EntityFieldDef.class, "sortIndex");
+//            DataUtils.sortDescending(fieldDefList, EntityFieldDef.class, "sortIndex");
             return new EntityDef(au, baseType, type, DataUtils.unmodifiableMap(fieldDefMap),
                     DataUtils.unmodifiableList(fieldDefList), DataUtils.unmodifiableValuesList(attachmentDefMap),
                     DataUtils.unmodifiableMap(expressionDefMap), DataUtils.unmodifiableList(uniqueConstraintList),

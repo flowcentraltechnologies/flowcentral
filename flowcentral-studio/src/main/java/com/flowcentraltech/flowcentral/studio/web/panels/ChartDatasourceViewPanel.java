@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -32,13 +33,12 @@ public class ChartDatasourceViewPanel extends AbstractStudioEditorPagePanel {
 
     @Override
     public void switchState() throws UnifyException {
-        final ChartDatasourceView chartDatasourceView = getChartDatasourceView();
-        System.out.println("@prime: ccccccccccccccccccccccccccccccccccccccccc");
-        System.out.println("@prime: chartDatasourceView = " + chartDatasourceView);
-        System.out.println("@prime: ccccccccccccccccccccccccccccccccccccccccc");
-        if (chartDatasourceView != null) {
-            // TODO
-        }
+        super.switchState();
+        final ChartDatasourceView view = getChartDatasourceView();
+        final ChartDetails chartDetails = view != null ? view.getChartDetails() : null;
+
+        setVisible("dataSetBodyPanel", chartDetails != null && chartDetails.isWithSeries());
+        setVisible("gDataSetBodyPanel", chartDetails != null && chartDetails.isWithTableSeries());
     }
 
     @Action
@@ -51,7 +51,7 @@ public class ChartDatasourceViewPanel extends AbstractStudioEditorPagePanel {
         return false;
     }
 
-    private ChartDatasourceView getChartDatasourceView() throws UnifyException {
+    protected ChartDatasourceView getChartDatasourceView() throws UnifyException {
         return getValue(ChartDatasourceView.class);
     }
 }

@@ -136,7 +136,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     : catBaseFilterDef.getMaxTimeResolution();
         }
 
-        Restriction baseRestriction = null;// InputWidgetUtils.getRestriction(au(), entityDef, null, catBaseFilterDef, now);
+        Restriction baseRestriction = InputWidgetUtils.getRestriction(au(), entityDef, null, catBaseFilterDef, now);
 
         if (chartDataSourceDef.isWithCategories()) {
             final PropertySequenceDef categories = chartDataSourceDef.getCategories();

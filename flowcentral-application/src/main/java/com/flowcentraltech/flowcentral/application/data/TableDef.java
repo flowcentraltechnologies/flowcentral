@@ -715,7 +715,7 @@ public class TableDef extends BaseApplicationEntityDef {
         }
 
         public TableDef build(final AppletUtilities au) throws UnifyException {
-            if (DataUtils.isBlank(visibleColumnDefList)) {
+           if (DataUtils.isBlank(visibleColumnDefList)) {
                 for (EntityFieldDef entityFieldDef : entityDef.getColumnFieldDefList()) {
                     final String renderer = InputWidgetUtils
                             .constructRenderer(au.getWidgetTypeDef(entityFieldDef.getInputWidget()), entityFieldDef);
