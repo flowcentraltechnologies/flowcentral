@@ -15,8 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Studio chart data source applet panel.
@@ -27,5 +29,16 @@ import com.tcdng.unify.core.annotation.UplBinding;
 @Component("fc-studiochartdatasourceappletpanel")
 @UplBinding("web/studio/upl/studiochartdatasourceappletpanel.upl")
 public class StudioChartDatasourceAppletPanel extends AbstractStudioAppComponentAppletPanel {
+
+    @Action
+    @Override
+    public void update() throws UnifyException {
+        super.update();
+
+        final StudioChartDatasourceApplet applet = getValue(StudioChartDatasourceApplet.class);
+        if (applet.isRootForm()) {
+            applet.getChartDatasourceView().reloadContent();
+        }
+    }
 
 }

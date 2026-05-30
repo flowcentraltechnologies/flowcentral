@@ -33,12 +33,19 @@ public class ChartDatasourceViewPanel extends AbstractStudioEditorPagePanel {
 
     @Override
     public void switchState() throws UnifyException {
-        super.switchState();
         final ChartDatasourceView view = getChartDatasourceView();
         final ChartDetails chartDetails = view != null ? view.getChartDetails() : null;
 
         setVisible("dataSetBodyPanel", chartDetails != null && chartDetails.isWithSeries());
         setVisible("gDataSetBodyPanel", chartDetails != null && chartDetails.isWithTableSeries());
+    }
+
+    @Action
+    public void refreshDesign() throws UnifyException {
+        final ChartDatasourceView view = getChartDatasourceView();
+        if (view != null) {
+            view.reloadContent();
+        }
     }
 
     @Action

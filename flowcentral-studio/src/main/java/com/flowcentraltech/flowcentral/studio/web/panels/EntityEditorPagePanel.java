@@ -43,7 +43,13 @@ public class EntityEditorPagePanel extends AbstractStudioEditorPagePanel {
             setWidgetVisible("saveBtn", isEditable);
         }
     }
-
+    
+    @Action
+    public void refreshDesign() throws UnifyException {
+        EntityEditorPage entityEditorPage = getEntityEditorPage();
+        entityEditorPage.newEditor();
+    }
+    
     @Action
     public void saveDesign() throws UnifyException {
         EntityEditorPage entityEditorPage = getEntityEditorPage();

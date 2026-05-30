@@ -24,7 +24,6 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
-import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ChartDatasourceView;
@@ -70,10 +69,9 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
     private ChartDatasourceView constructNewChartDatasourceView(String chartDatasourceName, Object id, String subTitle)
             throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
-        ChartDataSourceDef chartDataSourceDef = cms.getChartDataSourceDef(chartDatasourceName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{chartdatasourceeditor.chartdatasourcedesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new ChartDatasourceView(au(), chartDataSourceDef, id, breadCrumbs);
+        return new ChartDatasourceView(au(), cms, chartDatasourceName, id, breadCrumbs);
     }
 
 }

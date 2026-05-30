@@ -30,24 +30,20 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class EntityEditorPage extends AbstractStudioEditorPage {
 
-    private final EntityDef entityDef;
+    private final String entityName;
 
     private final Object baseId;
 
     private EntityEditor entityEditor;
 
-    public EntityEditorPage(AppletUtilities au, EntityDef entityDef, Object baseId, BreadCrumbs breadCrumbs) {
+    public EntityEditorPage(AppletUtilities au, String entityName, Object baseId, BreadCrumbs breadCrumbs) {
         super(au, breadCrumbs);
-        this.entityDef = entityDef;
+        this.entityName = entityName;
         this.baseId = baseId;
     }
 
     public EntityEditor getEntityEditor() {
         return entityEditor;
-    }
-
-    public EntityDef getEntityDef() {
-        return entityDef;
     }
 
     public Object getBaseId() {
@@ -59,6 +55,7 @@ public class EntityEditorPage extends AbstractStudioEditorPage {
     }
 
     public void newEditor() throws UnifyException {
+        final EntityDef entityDef = au().getEntityDef(entityName);
         EntityEditor.Builder eeb = EntityEditor.newBuilder(au(), entityDef);
         entityEditor = eeb.build();
     }

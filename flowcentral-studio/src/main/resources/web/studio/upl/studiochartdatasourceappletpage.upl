@@ -22,6 +22,7 @@
 // Applet panel
 !fc-studiochartdatasourceappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
 	binding:applet
+	refreshOnUpdate:$c{chartDatasourceViewPanel}
 
 // Chart datasource view
 !fc-chartdatasourceviewpanel:chartDatasourceViewPanel binding:applet.chartDatasourceView

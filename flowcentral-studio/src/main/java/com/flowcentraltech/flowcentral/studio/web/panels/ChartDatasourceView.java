@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.AbstractSeries;
 import com.flowcentraltech.flowcentral.chart.data.AbstractSeries.AbstractSeriesData;
@@ -49,8 +50,10 @@ import com.tcdng.unify.core.data.ValueStore;
  * @since 4.1
  */
 public class ChartDatasourceView extends AbstractStudioEditorPage {
-
-    private final ChartDataSourceDef chartDataSourceDef;
+    
+    final ChartModuleService cms;
+    
+    final String chartDatasourceName;
 
     private final Object baseId;
 
@@ -60,15 +63,12 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
 
     private ChartDetails chartDetails;
 
-    public ChartDatasourceView(AppletUtilities au, ChartDataSourceDef chartDataSourceDef, Object baseId,
+    public ChartDatasourceView(AppletUtilities au, ChartModuleService cms, String chartDatasourceName, Object baseId,
             BreadCrumbs breadCrumbs) {
         super(au, breadCrumbs);
-        this.chartDataSourceDef = chartDataSourceDef;
+        this.cms = cms;
+        this.chartDatasourceName = chartDatasourceName;
         this.baseId = baseId;
-    }
-
-    public ChartDataSourceDef getChartDataSourceDef() {
-        return chartDataSourceDef;
     }
 
     public Object getBaseId() {
@@ -89,6 +89,7 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
 
     @SuppressWarnings("rawtypes")
     public void reloadContent() throws UnifyException {
+        final ChartDataSourceDef chartDataSourceDef = cms.getChartDataSourceDef(chartDatasourceName);
         final ChartDetailsProvider detailsProvider = au().getComponent(ChartDetailsProvider.class,
                 ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER);
         chartDetails = detailsProvider.provide(chartDataSourceDef);
