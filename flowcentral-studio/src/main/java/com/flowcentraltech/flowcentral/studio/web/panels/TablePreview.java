@@ -42,6 +42,8 @@ public class TablePreview {
 
     private final TableEditor tableEditor;
 
+    private final String tableName;
+    
     private EntityTable entityTable;
 
     private Design oldDesign;
@@ -49,6 +51,13 @@ public class TablePreview {
     public TablePreview(AppletUtilities au, TableEditor tableEditor) {
         this.au = au;
         this.tableEditor = tableEditor;
+        this.tableName  = null;
+    }
+
+    public TablePreview(AppletUtilities au, String tableName) {
+        this.au = au;
+        this.tableEditor = null;
+        this.tableName = tableName;
     }
 
     public EntityTable getEntityTable() {
@@ -56,6 +65,14 @@ public class TablePreview {
     }
 
     public void reload() throws UnifyException {
+        if (tableEditor == null) {
+            TableDef tableDef = au.getTableDef(tableName);
+            entityTable = new EntityTable(au, tableDef, null);
+            Restriction searchRestriction = null;
+            entityTable.setSourceObjectClearSelected(searchRestriction);
+            return;
+        }
+        
         Design design = tableEditor.getDesign();
         if (oldDesign != design) {
             final EntityDef entityDef = tableEditor.getEntityDef();

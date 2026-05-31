@@ -59,6 +59,8 @@ public class FormPreview {
 
     private final FormEditor formEditor;
 
+    private final String formName;
+
     private HeaderWithTabsForm form;
 
     private Design oldDesign;
@@ -66,6 +68,13 @@ public class FormPreview {
     public FormPreview(AppletUtilities au, FormEditor formEditor) {
         this.au = au;
         this.formEditor = formEditor;
+        this.formName = null;
+    }
+
+    public FormPreview(AppletUtilities au, String formName) {
+        this.au = au;
+        this.formEditor = null;
+        this.formName = formName;
     }
 
     public HeaderWithTabsForm getForm() {
@@ -73,6 +82,15 @@ public class FormPreview {
     }
 
     public void reload() throws UnifyException {
+        if (formEditor == null) {
+            final FormDef formDef = au.getFormDef(formName);
+            final Object inst = ReflectUtils
+                    .newInstance(au.getEntityClassDef(formDef.getEntityDef().getListKey()).getEntityClass());
+            form = au.constructHeaderWithTabsForm(null, "Preview Subtitle", "Preview Title", formDef, (Entity) inst,
+                    FormMode.MAINTAIN, null, null);
+            return;
+        }
+        
         Design design = formEditor.getDesign();
         if (oldDesign != design) {
             final FormDef originFormDef = formEditor.getFormDef();
