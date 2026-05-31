@@ -13,39 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.studio.web.panels;
+package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
-import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 
 /**
- * Chart view panel.
+ * Studio application applet applet panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component("fc-chartviewpanel")
-@UplBinding("web/studio/upl/chartviewpanel.upl")
-public class ChartViewPanel extends AbstractStudioEditorPagePanel {
+@Component("fc-studioappappletappletpanel")
+@UplBinding("web/studio/upl/studioappappletappletpanel.upl")
+public class StudioAppAppletAppletPanel extends AbstractStudioAppComponentAppletPanel {
 
-    @Action
-    public void refreshDesign() throws UnifyException {
-
-    }
-
-    @Action
-    public void saveDesign() throws UnifyException {
-
-    }
-
-    @Override
-    protected boolean isAppletContextReadOnly() throws UnifyException {
-        return false;
-    }
-
-    protected ChartView getChartView() throws UnifyException {
-        return getValue(ChartView.class);
-    }
 }

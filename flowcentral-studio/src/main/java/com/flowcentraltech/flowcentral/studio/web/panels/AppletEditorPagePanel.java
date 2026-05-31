@@ -21,31 +21,36 @@ import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 
 /**
- * Chart view panel.
+ * Applet editor page panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component("fc-chartviewpanel")
-@UplBinding("web/studio/upl/chartviewpanel.upl")
-public class ChartViewPanel extends AbstractStudioEditorPagePanel {
+@Component("fc-appleteditorpagepanel")
+@UplBinding("web/studio/upl/appleteditorpagepanel.upl")
+public class AppletEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Action
-    public void refreshDesign() throws UnifyException {
-
+    public void preview() throws UnifyException {
+        // TODO ?
+        getAppletEditorPage().getTablePreview().reload();
+        getAppletEditorPage().getFormPreview().reload();
     }
 
     @Action
     public void saveDesign() throws UnifyException {
-
+        AppletEditorPage appletEditorPage = getAppletEditorPage();
+        appletEditorPage.commitDesign();
+        hintUser("$m{studioappappletapplet.appleteditor.success.hint}", appletEditorPage.getSubTitle());
     }
 
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
+        // TODO
         return false;
     }
 
-    protected ChartView getChartView() throws UnifyException {
-        return getValue(ChartView.class);
+    private AppletEditorPage getAppletEditorPage() throws UnifyException {
+        return getValue(AppletEditorPage.class);
     }
 }

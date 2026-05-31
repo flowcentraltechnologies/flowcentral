@@ -1,0 +1,26 @@
+// UPL template for table editor page panel
+// Copyright (c) 2021-2026 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-appleteditorpagepanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
+	components:$c{appletEditorBodyPanel}
+
+// Applet editor panel
+!ui-panel:appletEditorBodyPanel style:$s{height:100%;}
+	layout:$d{!ui-vertical style:$s{width:100%;height:100%} heights:$l{100%}} components:$c{tabSheet}
+!fc-tabsheet:tabSheet styleClass:$e{tabletabsheet} binding:tabSheet
+	
+// Actions
+!ui-postcommand:saveDesignAct command:saveDesign components:$c{appletEditorBodyPanel}
+

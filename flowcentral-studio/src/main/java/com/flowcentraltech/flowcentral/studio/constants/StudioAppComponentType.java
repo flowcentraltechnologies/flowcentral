@@ -171,7 +171,7 @@ public enum StudioAppComponentType implements EnumConst {
             "$m{studio.application.component.type.applets}",
             "studio.menu.label.applet",
             "window-restore",
-            "/studioappcomponentapplet",
+            "/studioappappletapplet",
             "studiooncreateappapplet-policy",
             null,
             "studioondeleteappapplet-policy",
