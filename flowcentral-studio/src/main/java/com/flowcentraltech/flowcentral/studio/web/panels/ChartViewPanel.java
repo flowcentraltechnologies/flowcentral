@@ -30,6 +30,11 @@ import com.tcdng.unify.web.annotation.Action;
 @UplBinding("web/studio/upl/chartviewpanel.upl")
 public class ChartViewPanel extends AbstractStudioEditorPagePanel {
 
+    @Override
+    public void switchState() throws UnifyException {
+
+    }
+
     @Action
     public void refreshDesign() throws UnifyException {
 

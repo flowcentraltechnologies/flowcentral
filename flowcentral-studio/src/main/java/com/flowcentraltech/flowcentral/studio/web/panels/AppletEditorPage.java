@@ -105,5 +105,7 @@ public class AppletEditorPage extends AbstractStudioEditorPage implements TabShe
                 Arrays.asList(new TabSheetItem("tablePreview", appletName, tablePreview, TABLE_PREVIEW_INDEX, true),
                         new TabSheetItem("formPreview", appletName, formPreview, FORM_PREVIEW_INDEX, true)));
         tabSheet.setEventHandler(this);
+
+        tablePreview.reload();
     }
 }

@@ -30,11 +30,9 @@ import com.tcdng.unify.web.annotation.Action;
 @UplBinding("web/studio/upl/appleteditorpagepanel.upl")
 public class AppletEditorPagePanel extends AbstractStudioEditorPagePanel {
 
-    @Action
-    public void preview() throws UnifyException {
-        // TODO ?
-        getAppletEditorPage().getTablePreview().reload();
-        getAppletEditorPage().getFormPreview().reload();
+    @Override
+    public void switchState() throws UnifyException {
+
     }
 
     @Action
