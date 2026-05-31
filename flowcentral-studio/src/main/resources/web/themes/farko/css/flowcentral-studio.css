@@ -124,6 +124,13 @@
 .fc-tablepreviewpanel {}
 .fc-tablepreviewpanel .hdbar {background-color: #e3e7ea;}
 
+/** Applet editor page panel */
+.fc-appleteditorpagepanel {height:100%;}
+.fc-appleteditorpagepanel .hdbar {background-color: #e3e7ea;}
+.fc-appleteditorpagepanel .hdtitle {display: block;font-weight:bold;}
+.fc-appleteditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
+
+
 /** Table editor page panel */
 .fc-tableeditorpagepanel {height:100%;}
 .fc-tableeditorpagepanel .hdbar {background-color: #e3e7ea;}
