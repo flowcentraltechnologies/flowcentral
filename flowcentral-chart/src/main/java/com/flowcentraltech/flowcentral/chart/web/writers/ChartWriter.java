@@ -77,10 +77,14 @@ public class ChartWriter extends AbstractWidgetWriter {
         ChartWidget chartWidget = (ChartWidget) widget;
         final ChartConfiguration configuration = chartWidget.getChartConfiguration();
         final String chartLongName = chartWidget.getValue(String.class);
-        ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef);
-        writer.write("<div style=\"height:320px;\"");
+        final ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
+        final ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef);
+        writer.write("<div ");
         writeTagAttributes(writer, chartWidget);
+        if (chartDef.getHeight() > 0 && !chartDef.getType().isTable()) {
+            writer.write(" style=\"height:").write(chartDef.getHeight()).write("px;\"");
+        }
+
         writer.write(">");
         if (chartDef.getType().isCard()) {
             if (chartDetails.isWithSeries()) {

@@ -230,7 +230,7 @@ public enum StudioAppComponentType implements EnumConst {
             "$m{studio.application.component.type.charts}",
             "studio.menu.label.chart",
             "chart-area",
-            "/studioappcomponentapplet",
+            "/studioappchartapplet",
             "studiooncreatecomponent-policy",
             null,
             null,

@@ -22,9 +22,9 @@
 	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
 
 // Chart panel
-!ui-panel:chartPanel
-	layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{dataSetTbl}
-!fc-beanlisttable:dataSetTbl binding:dataSetTable
+!ui-panel:chartPanel binding:configuration
+	layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{chartPreview}
+!fc-chart:chartPreview binding:chart
 
 // Action
 !ui-postcommand:saveDesignAct command:saveDesign components:$c{chartPanel}

@@ -105,14 +105,15 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
             final Set<String> used = new HashSet<String>();
             for (AbstractSeries<?, ?> _series : series.values()) {
                 for (AbstractSeriesData data : _series.getDataList()) {
-                    final String cat = data.resolveX(data.getX());
+                    final String cat = String.valueOf(data.getX());
+                    final String catLabel = data.resolveX(data.getX());
                     if (!used.contains(cat)) {
                         if (_series.getDataType().isInteger()) {
                             edb.addFieldDef("application.integer", "application.integer", EntityFieldDataType.INTEGER,
-                                    EntityFieldType.CUSTOM, cat, cat);
+                                    EntityFieldType.CUSTOM, cat, catLabel);
                         } else {
                             edb.addFieldDef("application.decimal", "application.decimal", EntityFieldDataType.DECIMAL,
-                                    EntityFieldType.CUSTOM, cat, cat);
+                                    EntityFieldType.CUSTOM, cat, catLabel);
                         }
                         used.add(cat);
                     }
@@ -130,7 +131,7 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
                 Map<String, Object> map = new HashMap<String, Object>();
                 map.put("series", entry.getKey());
                 for (AbstractSeriesData data : entry.getValue().getDataList()) {
-                    map.put(data.resolveX(data.getX()), data.getY());
+                    map.put(String.valueOf(data.getX()), data.getY());
                 }
 
                 list.add(new MapValueStore(map));

@@ -24,11 +24,13 @@ import com.flowcentraltech.flowcentral.chart.data.AbstractChartDetailsProvider;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.constant.TimeResolutionType;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Chart snapshot chart details provider.
@@ -47,18 +49,19 @@ public class ChartSnapshotChartDetailsProvider extends AbstractChartDetailsProvi
     @Override
     public ChartDetails provide(String rule, Restriction restriction, TimeResolutionType maxResolution)
             throws UnifyException {
-        return chart().getChartSnapshotDef(rule).getChartDetails();
+        return !StringUtils.isBlank(rule) ? chart().getChartSnapshotDef(rule).getChartDetails()
+                : ChartDetails.newBuilder(ChartCategoryDataType.STRING).build();
     }
 
     @Override
     public ChartDetails provide(ChartDataSourceDef chartDataSourceDef) throws UnifyException {
-        return null;
+        return ChartDetails.newBuilder(ChartCategoryDataType.STRING).build();
     }
-   
+
     @Override
     public List<? extends Listable> getRuleList(Locale locale) throws UnifyException {
-        return chart().findChartSnapshots((ChartSnapshotQuery) new ChartSnapshotQuery()
-                .addSelect("name", "description").ignoreEmptyCriteria(true));
+        return chart().findChartSnapshots((ChartSnapshotQuery) new ChartSnapshotQuery().addSelect("name", "description")
+                .ignoreEmptyCriteria(true));
     }
 
     @Override

@@ -145,10 +145,6 @@ public class ChartDetails {
                 || seriesFieldInclusion.contains(fieldName);
     }
     
-    public Map<String, AbstractSeries<?, ?>> getSeries() {
-        return series;
-    }
-
     public boolean isWithSeries() {
         return !DataUtils.isBlank(series);
     }
@@ -167,6 +163,10 @@ public class ChartDetails {
 
     public boolean isWithCategoryInclusion() {
         return !DataUtils.isBlank(categoryInclusion);
+    }
+
+    public Map<String, AbstractSeries<?, ?>> getSeries() {
+        return series;
     }
 
     public Map<String, AbstractSeries<?, ?>> getSeries(Set<String> inclusion) {
