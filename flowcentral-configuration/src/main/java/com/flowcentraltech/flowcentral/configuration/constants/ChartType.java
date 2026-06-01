@@ -92,8 +92,12 @@ public enum ChartType implements EnumConst {
         return !PIE.equals(this) && !DONUT.equals(this) && !POLAR_AREA.equals(this);
     }
 
+    public boolean triggerAxisChart() {
+        return !PIE.equals(this) && !DONUT.equals(this) && !POLAR_AREA.equals(this) && !RADAR.equals(this);
+    }
+
     public boolean isCircularChart() {
-        return PIE.equals(this) || DONUT.equals(this) || POLAR_AREA.equals(this);
+        return PIE.equals(this) || DONUT.equals(this);
     }
 
     public boolean isPolarChart() {

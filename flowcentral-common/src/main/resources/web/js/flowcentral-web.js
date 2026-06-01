@@ -297,6 +297,7 @@ fux.rigChart = function(rgp) {
 	const id = rgp.pId;
 	const type = rgp.pType;
 	const options = rgp.pOptions
+//	console.log("@prime: options = " + JSON.stringify(options));
 	if (type === "apexcharts") {
 		if (options._yformatter) {
 			options.yaxis.labels.formatter = function(val, opts) {

@@ -168,7 +168,9 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
         }
 
         jw.beginObject("tooltip");
-        jw.write("trigger", chartType.axisChart() ? "axis" : "item");
+        if (chartType.triggerAxisChart()) {
+            jw.write("trigger", "axis");
+        }
         jw.endObject();
 
         final Set<String> categoryInclusion = isDynamicCategories ? Collections.emptySet()
@@ -176,7 +178,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                         : chartDef.getCategoryInclusion());
         List<AbstractSeries<?, ?>> actseries = new ArrayList<AbstractSeries<?, ?>>(series.values());
         if (!DataUtils.isBlank(actseries)) {
-            if (chartType.axisChart()) {
+            if (chartType.triggerAxisChart()) {
                 // Legend
                 jw.beginObject("legend");
                 jw.beginArray("data");
@@ -296,6 +298,10 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.endArray();
                     jw.endObject();
 
+                    // Radius
+                    jw.beginObject("radiusAxis");
+                    jw.endObject();
+                    
                     // Angle
                     jw.beginObject("angleAxis");
                     jw.write("type", "category");
@@ -310,7 +316,6 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                     // Series
                     jw.beginArray("series");
-
                     jw.beginObject();
                     jw.write("name", pseries.getName());
                     jw.write("type", ChartType.BAR.optionsType());
@@ -323,7 +328,6 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.endArray();
 
                     jw.endObject();
-
                     jw.endArray();
                 } else if (chartType.isRadarChart()) {
                     // Legend
