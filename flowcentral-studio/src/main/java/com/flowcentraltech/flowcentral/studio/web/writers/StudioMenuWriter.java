@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
 import com.flowcentraltech.flowcentral.common.business.CodeGenerationProvider;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
@@ -90,9 +91,15 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     StudioAppComponentType.ENUMERATION, StudioAppComponentType.WIDGET, StudioAppComponentType.API,
                     StudioAppComponentType.APPLET, StudioAppComponentType.TABLE, StudioAppComponentType.FORM,
                     StudioAppComponentType.HELP_SHEET, StudioAppComponentType.REPORT_CONFIGURATION,
-                    StudioAppComponentType.NOTIFICATION_TEMPLATE, 
-                    StudioAppComponentType.CHART_DATASOURCE,
+                    StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.CHART_DATASOURCE,
                     StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD, StudioAppComponentType.WORKFLOW));
+
+    private static final List<StudioAppComponentType> restrictedMenuCategoryList = Collections
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY, StudioAppComponentType.ENUMERATION,
+                    StudioAppComponentType.APPLET, StudioAppComponentType.TABLE, StudioAppComponentType.FORM,
+                    StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.NOTIFICATION_TEMPLATE,
+                    StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART,
+                    StudioAppComponentType.DASHBOARD, StudioAppComponentType.WORKFLOW));
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -120,7 +127,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         }
 
         final boolean isCollaborationEnabled = appletUtilities.collaborationProvider() != null;
-        final List<StudioAppComponentType> selMenuCategoryList = application ? menuCategoryList
+        final boolean restrictedStudio = getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+        final List<StudioAppComponentType> selMenuCategoryList = application
+                ? (restrictedStudio ? restrictedMenuCategoryList : menuCategoryList)
                 : (isCollaborationEnabled ? collabUtilMenuCategoryList : utilMenuCategoryList);
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
         if (currCategory == null) {
@@ -243,7 +253,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
                         || isEntityTools || appletDef.isMenuAccess()) {
                     writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
-                    writer.write("<span>").writeWithHtmlEscape(resolveSessionMessage(appletDef.getLabel())).write("</span>");
+                    writer.write("<span>").writeWithHtmlEscape(resolveSessionMessage(appletDef.getLabel()))
+                            .write("</span>");
                     writer.write("</li>");
                     mjw.beginObject();
                     mjw.write("id", "item_" + appletDef.getViewId());
