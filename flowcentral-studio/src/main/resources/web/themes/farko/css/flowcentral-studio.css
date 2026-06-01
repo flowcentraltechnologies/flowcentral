@@ -17,7 +17,7 @@
 	--color-slate:#f7f9fa;
 	--color-slate-border:solid 1px #c0c0c0;
 	--color-pencil:#484848;
-	--studiodetail-fontsize:7.5pt;
+	--studiodetail-fontsize:6.5pt;
  }
 
 /* flowCentral studio CSS */
@@ -382,11 +382,12 @@
 .studiodetail .fc-miniform .mfclabel {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-miniform .mflabel {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-miniform .mflabel span{font-size:var(--studiodetail-fontsize);}
+.studiodetail .fc-filter .tab {width: 20px !important;}
 .studiodetail .fc-filter .item,
 .studiodetail .fc-fieldsequence .item,
 .studiodetail .fc-propertysequence .item,
-.studiodetail .fc-setvalues .item {width:98px;margin-right:4px;}
-.studiodetail .fc-searchinputs .vitem {width:198px;margin-right:4px;}
+.studiodetail .fc-setvalues .item {width:84px;margin-right:2px;}
+.studiodetail .fc-searchinputs .vitem {width:184px;margin-right:2px;}
 .studiodetail .fc-tabsheet {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-fieldsequence .abutton {min-width:18px;}
 .studiodetail .fc-propertysequence .atab {width:initial;}

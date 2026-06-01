@@ -14,6 +14,11 @@
 	</helpSheets>
 	<!-- Widget Types -->
 	<widgetTypes>
+		<widgetType name="reportconfigtypelist"
+			description="$m{studio.widgettype.reportconfigtypelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select blankOption:$s{} list:reportconfigtypelist exclude:$l{CSM PLC LTR}"
+			renderer="!ui-label" />
 		<widgetType name="entitybasetypelist"
 			description="$m{studio.widgettype.entitybasetypelist}"
 			dataType="STRING" inputType="STRING"
@@ -4856,7 +4861,7 @@
 						<field name="reportable"
 							inputWidget="studio.reportablebynamelist" column="0"
 							required="true" switchOnChange="true" />
-						<field name="type" inputWidget="application.enumlist"
+						<field name="type" inputWidget="reportconfigtypelist"
 							column="0" required="true" switchOnChange="true" />
 						<field name="summaryDatasource"
 							inputWidget="studio.summarydatasourcelist" column="0"
