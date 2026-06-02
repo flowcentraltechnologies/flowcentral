@@ -67,6 +67,10 @@ public class BreadCrumbs {
         return lastBreadCrumb;
     }
 
+    public int getDepth() {
+        return histCrumbList != null ? histCrumbList.size() : 0;
+    }
+    
     public static Builder newBuilder() {
         return new Builder();
     }

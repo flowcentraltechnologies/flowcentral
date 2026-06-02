@@ -38,7 +38,7 @@ public abstract class AbstractStudioAppComponentAppletPanel extends AbstractEnti
             setVisible("cancelBtn", false);
         }
         
-        setVisible("formPanel.headerLeftPanel", false);
+        //setVisible("formPanel.headerLeftPanel", false);
         setVisible("formPanel.headerCenterPanel", false);
     }
 

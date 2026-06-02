@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.application.web.writers;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormBreadCrumbsWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -44,54 +43,16 @@ public class FormBreadCrumbsWriter extends AbstractControlWriter {
         writer.write(">");
         BreadCrumbs frmBreadCrumbs = frmBreadCrumbsWidget.getBreadCrumbs();
         if (frmBreadCrumbs != null) {
-            writer.write("<ul class=\"base\">");
-            // History
-            for (BreadCrumb breadCrumb : frmBreadCrumbs.getHistCrumbList()) {
-                writeCrumb(writer, breadCrumb, true);
+            final int size = frmBreadCrumbs.getDepth();
+            writer.write("<span class=\"base\">");
+            for (int i = 0; i < size; i++) {
+                writeFontIcon(writer, "chevron-left");
             }
-
-            // Current
-            writeCrumb(writer, frmBreadCrumbs.getLastBreadCrumb(), false);
-            writer.write("</ul>");
+            
+            writer.write("</span>");
         }
+        
         writer.write("</div>");
     }
 
-    private void writeCrumb(ResponseWriter writer, BreadCrumb breadCrumb, boolean history) {
-        writer.write("<li class=\"");
-        if (!history) {
-            writer.write("last");
-        }
-        writer.write("\">");
-        if (breadCrumb.getStepIndex() > 0) {
-            writer.write("<span class=\"hdstep\">").write(breadCrumb.getStepIndex()).write("</span>");
-        }
-
-        writer.write("<div style=\"display: inline-block;\">");
-        writer.write("<span class=\"hdtitle");
-        if (history) {
-            writer.write(" hist");
-        }
-        writer.write("\"");
-        
-        final String title = breadCrumb.isWithTitle() ? breadCrumb.getTitle() : "";
-        writer.write(" title=\"").writeWithHtmlEscape(title).write("\"");
-        writer.write(">").writeWithHtmlEscape(title).write("</span>");
-
-        writer.write("<span class=\"hdsubtitle");
-        if (history) {
-            writer.write(" hist");
-        }
-        writer.write("\"");
-        
-        final String subtitle = breadCrumb.isWithSubTitle() ? breadCrumb.getSubTitle() : "";
-        writer.write(" title=\"").writeWithHtmlEscape(subtitle).write("\"");
-        writer.write(">").writeWithHtmlEscape(subtitle).write("</span>");
-
-        writer.write("</div>");
-        if (history) {
-            writer.write("<i class=\"chev\"></i>");
-        }
-        writer.write("</li>");
-    }
 }

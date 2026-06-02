@@ -64,7 +64,7 @@ public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFor
         this.instTitle = au.resolveSessionMessage(getCurrFormAppletDef().getDescription());
         this.typeTitle = au.resolveSessionMessage(type.caption());
         this.pageCaption = au.resolveSessionMessage("$m{studio.application.component.pagecaption}",
-                !StringUtils.isBlank(instTitle) ? instTitle: "<New>");
+                this.typeTitle.toUpperCase(), !StringUtils.isBlank( this.instTitle) ?  this.instTitle: "<New>");
         Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
         if (instId == null || instId.longValue() == 0L) {
             constructNewForm();

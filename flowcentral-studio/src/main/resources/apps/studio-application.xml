@@ -1886,8 +1886,6 @@
 					widthRatio="1" />
 				<column field="colorDesc" renderWidget="application.text"
 					label="$m{application.appenumerationitem.color}" widthRatio="1" />
-				<column field="displayIndex" renderWidget="application.text"
-					widthRatio="1" order="ASC" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appEntityFieldTable"
@@ -1901,8 +1899,6 @@
 					widthRatio="1" />
 				<column field="dataTypeDesc" renderWidget="application.text"
 					label="$m{application.appentityfield.datatype}" widthRatio="1" />
-				<column field="columnName" renderWidget="application.text"
-					widthRatio="1" />
 			</columns>
 		</table>
 		<table itemsPerPage="-1" name="appEntityFieldQuickEditTable"
@@ -1942,8 +1938,6 @@
 			<columns>
 				<column field="name" renderWidget="application.name"
 					widthRatio="1" linkAct="maintainAct" />
-				<column field="label" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="fieldName" renderWidget="application.text"
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
@@ -2066,10 +2060,6 @@
 					widthRatio="1" />
 				<column field="quickFilter" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="ownershipTypeDesc"
-					renderWidget="application.text"
-					label="$m{application.appappletfilter.ownershiptype}"
-					widthRatio="1" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appAppletSetValuesTable"
@@ -2102,8 +2092,6 @@
 				<column field="field" renderWidget="application.name"
 					widthRatio="1" />
 				<column field="renderWidget" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="linkAct" renderWidget="application.text"
 					widthRatio="1" />
 				<column field="widthRatio" renderWidget="application.integer"
 					widthRatio="1" />
@@ -2146,8 +2134,6 @@
 					widthRatio="1" />
 				<column field="rowColor" renderWidget="application.colorspan"
 					label="$m{application.apptablefilter.rowcolor}" widthRatio="1" />
-				<column field="legendLabel" renderWidget="application.text"
-					label="$m{application.apptablefilter.legendlabel}" widthRatio="1" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appFormElementTable"
@@ -2186,10 +2172,6 @@
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{application.appformannotation.type}" widthRatio="1" />
-				<column field="html" renderWidget="application.checkbox"
-					widthRatio="1" />
-				<column field="directPlacement"
-					renderWidget="application.checkbox" widthRatio="1" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appFormFilterTable"
@@ -2240,8 +2222,6 @@
 					widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="executionIndex"
-					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appFormWidgetRulesPolicyTable"
@@ -2287,12 +2267,6 @@
 					widthRatio="1" />
 				<column field="fieldName" renderWidget="application.name"
 					widthRatio="1" />
-				<column field="validation" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="rule" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="executionIndex"
-					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appFormValidationPolicyTable"
@@ -2306,8 +2280,6 @@
 					widthRatio="1" />
 				<column field="message" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="executionIndex"
-					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appFormReviewPolicyTable"
@@ -2321,8 +2293,6 @@
 					widthRatio="1" />
 				<column field="messageTypeDesc"
 					renderWidget="application.text" widthRatio="1" />
-				<column field="executionIndex"
-					renderWidget="application.text" widthRatio="1" order="ASC" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appHelpEntryTable"
@@ -2365,8 +2335,6 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="workflowDesc" renderWidget="application.text"
-					label="$m{workflow.step.workflow}" widthRatio="1" />
 				<column field="typeDesc" renderWidget="application.text"
 					label="$m{workflow.step.type}" widthRatio="1" />
 			</columns>
@@ -2481,9 +2449,6 @@
 					widthRatio="1" />
 				<column field="type" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="columnOrderDesc"
-					renderWidget="application.text" widthRatio="1"
-					label="$m{report.reportcolumn.columnorder}" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="reportPlacementTable"
@@ -3930,7 +3895,7 @@
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="color" inputWidget="application.enumlist"
-							column="1" />
+							column="0" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -6236,497 +6201,34 @@
 	</forms>
 	<!-- Property Lists -->
 	<propertyLists>
-		<propertyList name="cenAppAppletPropList"
-			description="$m{studio.appappletprop.createentity.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.createentity.searchproperties}">
-				<property name="page.alternateCaption"
-					description="$m{studio.appappletprop.createentity.pagealtcaption}"
-					inputWidget="application.text" />
-				<property name="page.alternateSubCaption"
-					description="$m{studio.appappletprop.createentity.pagealtsubcaption}"
-					inputWidget="application.text" />
-				<property name="assignmentPage"
-					description="$m{studio.appappletprop.createentity.assignmentpage}"
-					inputWidget="studio.propertyappletassignpagelist" />
-				<property name="page.multiple"
-					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.createentity.formproperties}">
-				<property name="createForm.new.caption"
-					description="$m{studio.appappletprop.createentity.createform.newcaption}"
-					inputWidget="application.text" />
-				<property name="createForm"
-					description="$m{studio.appappletprop.createentity.createform}"
-					inputWidget="studio.propertyappletformlist" required="false" />
-				<property name="createForm.new.policy"
-					description="$m{studio.appappletprop.createentity.createform.newpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm"
-					description="$m{studio.appappletprop.createentity.maintainform}"
-					inputWidget="studio.propertyappletformlist" />
-				<property name="maintainForm.update.policy"
-					description="$m{studio.appappletprop.createentity.maintain.updatepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.saveas.policy"
-					description="$m{studio.appappletprop.createentity.maintain.saveaspolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.onCreate.state.policy"
-					description="$m{studio.appappletprop.createentity.createform.formstatepolicy}"
-					inputWidget="studio.propertyappletcreateformstatepolicylist" />
-				<property name="maintainForm.update.condition"
-					description="$m{studio.appappletprop.createentity.maintain.updatecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.delete.policy"
-					description="$m{studio.appappletprop.createentity.maintain.deletepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.delete.condition"
-					description="$m{studio.appappletprop.createentity.maintain.deletecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="createForm.save"
-					description="$m{studio.appappletprop.createentity.createform.save}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.save.next"
-					description="$m{studio.appappletprop.createentity.createform.savenext}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.saveas"
-					description="$m{studio.appappletprop.createentity.maintainform.saveas}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.update"
-					description="$m{studio.appappletprop.createentity.maintainform.update}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.delete"
-					description="$m{studio.appappletprop.createentity.maintainform.delete}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.capture"
-					description="$m{studio.appappletprop.createentity.maintainform.capture}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachment.disable.condition"
-					description="$m{studio.appappletprop.createentity.maintain.attachmentdisablecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.capture.attachmentprovider"
-					description="$m{studio.appappletprop.createentity.maintainform.capture.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />
-				<property name="maintainForm.attachments"
-					description="$m{studio.appappletprop.createentity.maintainform.attachments}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachments.adhoc"
-					description="$m{studio.appappletprop.createentity.maintainform.attachments.adhoc}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.createentity.workflowproperties}">
-				<property name="createForm.submit.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submitnext.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitnextcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submit.buttonhighlight"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
-					inputWidget="application.checkbox" />
-				<property name="entityForm.submit.close"
-					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.policy"
-					description="$m{studio.appappletprop.createentity.createform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.createentity.createform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="createForm.submit.condition"
-					description="$m{studio.appappletprop.manageentity.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
-				<property name="createForm.submit"
-					description="$m{studio.appappletprop.createentity.createform.submit}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submitnext"
-					description="$m{studio.appappletprop.createentity.createform.submitnext}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.validate"
-					description="$m{studio.appappletprop.createentity.createform.submitvalidate}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submit.policy"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="maintainForm.submit.condition"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
-				<property name="maintainForm.submit"
-					description="$m{studio.appappletprop.manageentity.maintainform.submit}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submitnext"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitnext}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submit.validate"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitvalidate}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="cebAppAppletPropList"
-			description="$m{studio.appappletprop.createentitysubmission.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.createentity.searchproperties}">
-				<property name="page.alternateCaption"
-					description="$m{studio.appappletprop.createentity.pagealtcaption}"
-					inputWidget="application.text" />
-				<property name="page.alternateSubCaption"
-					description="$m{studio.appappletprop.createentity.pagealtsubcaption}"
-					inputWidget="application.text" />
-				<property name="page.multiple"
-					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.createentity.formproperties}">
-				<property name="createForm.new.caption"
-					description="$m{studio.appappletprop.createentity.createform.newcaption}"
-					inputWidget="application.text" />
-				<property name="createForm"
-					description="$m{studio.appappletprop.createentity.createform}"
-					inputWidget="studio.propertyappletformlist" required="false" />
-				<property name="createForm.new.policy"
-					description="$m{studio.appappletprop.createentity.createform.newpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.onCreate.state.policy"
-					description="$m{studio.appappletprop.createentity.createform.formstatepolicy}"
-					inputWidget="studio.propertyappletcreateformstatepolicylist" />
-				<property name="createForm.save"
-					description="$m{studio.appappletprop.manageentity.createform.save}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.save.next"
-					description="$m{studio.appappletprop.manageentity.createform.savenext}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.save.close"
-					description="$m{studio.appappletprop.manageentity.createform.saveclose}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm"
-					description="$m{studio.appappletprop.manageentity.maintainform}"
-					inputWidget="studio.propertyappletformlist" />
-				<property name="maintainForm.update.policy"
-					description="$m{studio.appappletprop.manageentity.maintain.updatepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.update.condition"
-					description="$m{studio.appappletprop.manageentity.maintain.updatecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.delete.policy"
-					description="$m{studio.appappletprop.manageentity.maintain.deletepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.delete.condition"
-					description="$m{studio.appappletprop.manageentity.maintain.deletecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.update"
-					description="$m{studio.appappletprop.manageentity.maintainform.update}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.delete"
-					description="$m{studio.appappletprop.manageentity.maintainform.delete}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.delete.pseudo"
-					description="$m{studio.appappletprop.manageentity.maintainform.delete.pseudo}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.capture"
-					description="$m{studio.appappletprop.createentity.maintainform.capture}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachment.disable.condition"
-					description="$m{studio.appappletprop.createentity.maintain.attachmentdisablecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.capture.attachmentprovider"
-					description="$m{studio.appappletprop.createentity.maintainform.capture.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />
-				<property name="maintainForm.attachments"
-					description="$m{studio.appappletprop.createentity.maintainform.attachments}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachments.adhoc"
-					description="$m{studio.appappletprop.createentity.maintainform.attachments.adhoc}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.createentity.workflowproperties}">
-				<property name="createForm.submit.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submitnext.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitnextcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submit.buttonhighlight"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
-					inputWidget="application.checkbox" disabled="true" />
-				<property name="entityForm.submit.close"
-					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
-					inputWidget="application.checkbox" disabled="true" />
-				<property name="createForm.submit.policy"
-					description="$m{studio.appappletprop.createentity.createform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.createentity.createform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="createForm.submit"
-					description="$m{studio.appappletprop.createentity.createform.submit}"
-					inputWidget="application.checkbox" disabled="true" />
-				<property name="createForm.submitnext"
-					description="$m{studio.appappletprop.createentity.createform.submitnext}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.validate"
-					description="$m{studio.appappletprop.createentity.createform.submitvalidate}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="cnsAppAppletPropList"
-			description="$m{studio.appappletprop.createentitysingleform.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.createentitysingleform.searchproperties}">
-				<property name="page.alternateCaption"
-					description="$m{studio.appappletprop.createentitysingleform.pagealtcaption}"
-					inputWidget="application.text" />
-				<property name="page.alternateSubCaption"
-					description="$m{studio.appappletprop.createentitysingleform.pagealtsubcaption}"
-					inputWidget="application.text" />
-				<property name="assignmentPage"
-					description="$m{studio.appappletprop.createentitysingleform.assignmentpage}"
-					inputWidget="studio.propertyappletassignpagelist" />
-				<property name="page.multiple"
-					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.createentitysingleform.formproperties}">
-				<property name="singleForm.panel"
-					description="$m{studio.appappletprop.createentitysingleform.panel}"
-					inputWidget="studio.propertysingleformpanellist" />
-				<property name="createForm.new.caption"
-					description="$m{studio.appappletprop.createentitysingleform.createform.newcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.new.policy"
-					description="$m{studio.appappletprop.createentitysingleform.createform.newpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.update.policy"
-					description="$m{studio.appappletprop.createentitysingleform.maintain.updatepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.update.condition"
-					description="$m{studio.appappletprop.createentitysingleform.maintain.updatecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.delete.policy"
-					description="$m{studio.appappletprop.createentitysingleform.maintain.deletepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.delete.condition"
-					description="$m{studio.appappletprop.createentitysingleform.maintain.deletecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="createForm.save"
-					description="$m{studio.appappletprop.createentitysingleform.createform.save}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.save.next"
-					description="$m{studio.appappletprop.createentitysingleform.createform.savenext}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.saveas"
-					description="$m{studio.appappletprop.createentitysingleform.maintainform.saveas}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.update"
-					description="$m{studio.appappletprop.createentitysingleform.maintainform.update}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.delete"
-					description="$m{studio.appappletprop.createentitysingleform.maintainform.delete}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.capture"
-					description="$m{studio.appappletprop.createentitysingleform.maintainform.capture}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachment.disable.condition"
-					description="$m{studio.appappletprop.createentity.maintain.attachmentdisablecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.capture.attachmentprovider"
-					description="$m{studio.appappletprop.createentitysingleform.maintainform.capture.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.createentitysingleform.workflowproperties}">
-				<property name="createForm.submit.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submitnext.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitnextcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submit.buttonhighlight"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
-					inputWidget="application.checkbox" />
-				<property name="entityForm.submit.close"
-					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.policy"
-					description="$m{studio.appappletprop.createentitysingleform.createform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.createentitysingleform.createform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="createForm.submit.condition"
-					description="$m{studio.appappletprop.manageentity.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
-				<property name="createForm.submit"
-					description="$m{studio.appappletprop.createentitysingleform.createform.submit}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submitnext"
-					description="$m{studio.appappletprop.createentitysingleform.createform.submitnext}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.validate"
-					description="$m{studio.appappletprop.createentitysingleform.createform.submitvalidate}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="fwzAppAppletPropList"
-			description="$m{studio.appappletprop.formwizard.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.formwizard.formproperties}">
-				<property name="createForm.new.caption"
-					description="$m{studio.appappletprop.formwizard.createform.newcaption}"
-					inputWidget="application.text" />
-				<property name="createForm"
-					description="$m{studio.appappletprop.formwizard.createform}"
-					inputWidget="studio.propertyappletformlist" required="false" />
-				<property name="createForm.new.policy"
-					description="$m{studio.appappletprop.formwizard.createform.newpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.navigation.policy"
-					description="$m{studio.appappletprop.formwizard.createform.navigationpolicy}"
-					inputWidget="studio.propertynavigationactionpolicylist" />
-				<property name="wizardForm.completion"
-					description="$m{studio.appappletprop.formwizard.wizardform.completion}"
-					inputWidget="studio.formwizardcompletiontypelist" />
-				<property name="wizardForm.task.processor"
-					description="$m{studio.appappletprop.formwizard.wizardform.taskprocessor}"
-					inputWidget="studio.propertywizardtaskprocessorlist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.formwizard.workflowproperties}">
-				<property name="createForm.submit.caption"
-					description="$m{studio.appappletprop.formwizard.createform.submitcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.formwizard.createform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="createForm.submit.validate"
-					description="$m{studio.appappletprop.formwizard.createform.submitvalidate}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="mllAppAppletPropList"
-			description="$m{studio.appappletprop.manageloading.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.manageloading.loadingproperties}">
-				<property name="page.alternateCaption"
-					description="$m{studio.appappletprop.manageloading.pagealtcaption}"
-					inputWidget="application.text" />
-				<property name="page.alternateSubCaption"
-					description="$m{studio.appappletprop.manageloading.pagealtsubcaption}"
-					inputWidget="application.text" />
-				<property name="baseRestriction"
-					description="$m{studio.appappletprop.manageloading.baserestriction}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="loadingTable"
-					description="$m{studio.appappletprop.manageloading.loadingtable}"
-					inputWidget="studio.propertyapplettablelist" required="true" />
-				<property name="loadingTable.actionFooter"
-					description="$m{studio.appappletprop.manageloading.loadingtable.actionfooter}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.searchInput"
-					description="$m{studio.appappletprop.manageloading.loadingtable.searchinput}"
-					inputWidget="studio.propertyappletsearchinputlist" />
-				<property name="searchTable.searchColumns"
-					description="$m{studio.appappletprop.manageloading.loadingtable.searchcolumns}"
-					inputWidget="studio.propertyappletsingledigit" />
-			</propertySet>
-		</propertyList>
 		<propertyList name="melAppAppletPropList"
 			description="$m{studio.appappletprop.manageentity.propertylist}">
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.searchproperties}">
-				<property name="page.alternateCaption"
-					description="$m{studio.appappletprop.manageentity.pagealtcaption}"
-					inputWidget="application.text" />
-				<property name="page.alternateSubCaption"
-					description="$m{studio.appappletprop.manageentity.pagealtsubcaption}"
-					inputWidget="application.text" />
-				<property name="page.maintainCaption"
-					description="$m{studio.appappletprop.manageentity.pagemaintaincaption}"
-					inputWidget="application.text" />
-				<property name="page.listingCaption"
-					description="$m{studio.appappletprop.manageentity.pagelistingcaption}"
-					inputWidget="application.text" />
-				<property name="searchTable.new.caption"
-					description="$m{studio.appappletprop.manageentity.searchtable.newcaption}"
-					inputWidget="application.text" />
-				<property name="searchTable.new.multiselect.ref"
-					description="$m{studio.appappletprop.manageentity.searchtable.newmultiselectref}"
-					inputWidget="studio.entityreflist" />
-				<property name="searchTable.new.treemultiselect.gen"
-					description="$m{studio.appappletprop.manageentity.searchtable.newtreemultiselectgen}"
-					inputWidget="studio.propertyapplettreetablegenlist" />
 				<property name="searchTable"
 					description="$m{studio.appappletprop.manageentity.searchtable}"
 					inputWidget="studio.propertyapplettablelist" required="true" />
 				<property name="searchTable.searchOnCriteriaOnly"
 					description="$m{studio.appappletprop.manageentity.searchtable.searchoncriteriaonly}"
 					inputWidget="application.checkbox" />
-				<property name="searchTable.selectByConstraint"
-					description="$m{studio.appappletprop.manageentity.searchtable.selectbyconstraint}"
-					inputWidget="studio.propertyappletuniqueconstraintlist" />
 				<property name="baseRestriction"
 					description="$m{studio.appappletprop.manageentity.baserestriction}"
 					inputWidget="studio.propertyappletfilterlist" />
-				<property name="searchTable.new"
-					description="$m{studio.appappletprop.manageentity.searchtable.new}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.edit"
-					description="$m{studio.appappletprop.manageentity.searchtable.edit}"
-					inputWidget="application.checkbox" />
 				<property name="searchTable.quickFilter"
 					description="$m{studio.appappletprop.manageentity.searchtable.quickfilter}"
 					inputWidget="application.checkbox" />
 				<property name="searchTable.quickFilter.default"
 					description="$m{studio.appappletprop.manageentity.searchtable.quickfilterdef}"
 					inputWidget="studio.propertyappletquickfilterlist" />
-				<property name="searchTable.actionFooter"
-					description="$m{studio.appappletprop.manageentity.searchtable.actionfooter}"
-					inputWidget="application.checkbox" />
 				<property name="searchTable.report"
 					description="$m{studio.appappletprop.manageentity.searchtable.report}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.basicSearchOnly"
-					description="$m{studio.appappletprop.manageentity.searchtable.basicsearchonly}"
 					inputWidget="application.checkbox" />
 				<property name="searchTable.searchInput"
 					description="$m{studio.appappletprop.manageentity.searchtable.searchinput}"
 					inputWidget="studio.propertyappletsearchinputlist" />
-				<property name="searchTable.searchColumns"
-					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
-					inputWidget="studio.propertyappletsingledigit" />
-				<property name="searchTable.viewItemInSeparateTab"
-					description="$m{studio.appappletprop.manageentity.searchtable.viewiteminseparatetab}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.showExpandedDetails"
-					description="$m{studio.appappletprop.manageentity.searchtable.showexpandeddetails}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.diffIgnore"
-					description="$m{studio.appappletprop.manageentity.searchtable.ignorediff}"
-					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">
-				<!--property name="longForm.support" description="$m{studio.appappletprop.manageentity.longform.support}" 
-					inputWidget="application.checkbox" / -->
-				<property name="createForm.new.caption"
-					description="$m{studio.appappletprop.createentity.createform.newcaption}"
-					inputWidget="application.text" />
-				<property name="listingForm"
-					description="$m{studio.appappletprop.manageentity.listingform}"
-					inputWidget="studio.propertyappletlistformlist" required="false" />
 				<property name="createForm"
 					description="$m{studio.appappletprop.manageentity.createform}"
 					inputWidget="studio.propertyappletformlist" required="false" />
@@ -6739,695 +6241,6 @@
 				<property name="maintainForm.update.policy"
 					description="$m{studio.appappletprop.manageentity.maintain.updatepolicy}"
 					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.saveas.policy"
-					description="$m{studio.appappletprop.manageentity.maintain.saveaspolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.onCreate.state.policy"
-					description="$m{studio.appappletprop.createentity.createform.formstatepolicy}"
-					inputWidget="studio.propertyappletcreateformstatepolicylist" />
-				<property name="maintainForm.update.condition"
-					description="$m{studio.appappletprop.manageentity.maintain.updatecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.delete.policy"
-					description="$m{studio.appappletprop.manageentity.maintain.deletepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.delete.condition"
-					description="$m{studio.appappletprop.manageentity.maintain.deletecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.delete.pseudo.setvalues"
-					description="$m{studio.appappletprop.manageentity.maintain.deletepseudosetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="createForm.save"
-					description="$m{studio.appappletprop.manageentity.createform.save}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.save.next"
-					description="$m{studio.appappletprop.manageentity.createform.savenext}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.save.close"
-					description="$m{studio.appappletprop.manageentity.createform.saveclose}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.saveas"
-					description="$m{studio.appappletprop.manageentity.maintainform.saveas}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.update"
-					description="$m{studio.appappletprop.manageentity.maintainform.update}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.delete"
-					description="$m{studio.appappletprop.manageentity.maintainform.delete}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.delete.pseudo"
-					description="$m{studio.appappletprop.manageentity.maintainform.delete.pseudo}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.capture"
-					description="$m{studio.appappletprop.manageentity.maintainform.capture}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachment.disable.condition"
-					description="$m{studio.appappletprop.createentity.maintain.attachmentdisablecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.capture.attachmentprovider"
-					description="$m{studio.appappletprop.manageentity.maintainform.capture.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />
-				<property name="maintainForm.attachments"
-					description="$m{studio.appappletprop.manageentity.maintainform.attachments}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachments.adhoc"
-					description="$m{studio.appappletprop.manageentity.maintainform.attachments.adhoc}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.redirections}">
-				<property name="listingRedirect.policy"
-					description="$m{studio.appappletprop.manageentity.listingredirectpolicy}"
-					inputWidget="studio.propertyappletlistingredirectpolicylist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.entrytablesettings}">
-				<property name="entryTable"
-					description="$m{studio.appappletprop.manageentity.entrytable}"
-					inputWidget="studio.propertyapplettablelist" />
-				<property name="entryTable.policy"
-					description="$m{studio.appappletprop.manageentity.entrytablepolicy}"
-					inputWidget="studio.propertyappletbeantablepolicylist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.quickeditsettings}">
-				<property name="quickEdit.form"
-					description="$m{studio.appappletprop.manageentity.quickeditform}"
-					inputWidget="studio.propertyappletformlist" />
-				<property name="quickEdit.table"
-					description="$m{studio.appappletprop.manageentity.quickedittable}"
-					inputWidget="studio.propertyapplettablelist" />
-				<property name="quickEdit.policy"
-					description="$m{studio.appappletprop.manageentity.quickeditpolicy}"
-					inputWidget="studio.propertyappletbeantablepolicylist" />
-				<property name="quickEdit.width"
-					description="$m{studio.appappletprop.manageentity.quickeditwidth}"
-					inputWidget="studio.propertyappletintegerdimension" />
-				<property name="quickEdit.height"
-					description="$m{studio.appappletprop.manageentity.quickeditheight}"
-					inputWidget="studio.propertyappletintegerdimension" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.quickordersettings}">
-				<property name="quickOrder.field"
-					description="$m{studio.appappletprop.manageentity.quickorderfield}"
-					inputWidget="studio.propertyappletintegerfieldlist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowcopyproperties}">
-				<property name="workflowCopy"
-					description="$m{studio.appappletprop.manageentity.workflowcopy}"
-					inputWidget="application.checkbox" />
-				<property name="workflowCopy.attachmentprovider"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.create}">
-				<property name="workflowCopy.create.copy.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.copysetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.approval.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.approval.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.approval.levels"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvallevels}"
-					inputWidget="studio.propertyappletlevelslist" />
-				<property name="workflowCopy.create.rejection.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.rejection.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.resubmit.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.resubmitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.resubmit.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.resubmitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.discard.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.discardalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.discard.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.discardsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.abort.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.abort.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.update}">
-				<property name="workflowCopy.update.copy.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.copysetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.approval.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.approval.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.approval.levels"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvallevels}"
-					inputWidget="studio.propertyappletlevelslist" />
-				<property name="workflowCopy.update.rejection.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.rejection.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.resubmit.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.resubmitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.resubmit.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.resubmitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.discard.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.discardalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.discard.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.discardsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.abort.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.abort.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.delete}">
-				<property name="workflowCopy.delete.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.delete.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.delete.approval.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.delete.approval.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.delete.approval.levels"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvallevels}"
-					inputWidget="studio.propertyappletlevelslist" />
-				<property name="workflowCopy.delete.rejection.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.delete.rejection.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.delete.abort.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.delete.abort.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowproperties}">
-				<property name="createForm.submit.caption"
-					description="$m{studio.appappletprop.manageentity.createform.submitcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submitnext.caption"
-					description="$m{studio.appappletprop.manageentity.createform.submitnextcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submit.buttonhighlight"
-					description="$m{studio.appappletprop.manageentity.createform.submitbuttonhighlight}"
-					inputWidget="application.checkbox" />
-				<property name="entityForm.submit.close"
-					description="$m{studio.appappletprop.manageentity.entityform.submitclose}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.policy"
-					description="$m{studio.appappletprop.manageentity.createform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.manageentity.createform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="createForm.submit.condition"
-					description="$m{studio.appappletprop.manageentity.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
-				<property name="createForm.submit"
-					description="$m{studio.appappletprop.manageentity.createform.submit}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submitnext"
-					description="$m{studio.appappletprop.manageentity.createform.submitnext}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.validate"
-					description="$m{studio.appappletprop.manageentity.createform.submitvalidate}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submit.policy"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="maintainForm.submit.condition"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
-				<property name="maintainForm.submit"
-					description="$m{studio.appappletprop.manageentity.maintainform.submit}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submitnext"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitnext}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submit.validate"
-					description="$m{studio.appappletprop.manageentity.maintainform.submitvalidate}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="mlsAppAppletPropList"
-			description="$m{studio.appappletprop.manageentitysingleform.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.manageentitysingleform.searchproperties}">
-				<property name="page.alternateCaption"
-					description="$m{studio.appappletprop.manageentitysingleform.pagealtcaption}"
-					inputWidget="application.text" />
-				<property name="page.alternateSubCaption"
-					description="$m{studio.appappletprop.manageentitysingleform.pagealtsubcaption}"
-					inputWidget="application.text" />
-				<property name="searchTable.new.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.searchtable.newcaption}"
-					inputWidget="application.text" />
-				<property name="searchTable.new.multiselect.ref"
-					description="$m{studio.appappletprop.manageentity.searchtable.newmultiselectref}"
-					inputWidget="studio.entityreflist" />
-				<property name="searchTable.new.treemultiselect.gen"
-					description="$m{studio.appappletprop.manageentity.searchtable.newtreemultiselectgen}"
-					inputWidget="studio.propertyapplettreetablegenlist" />
-				<property name="searchTable"
-					description="$m{studio.appappletprop.manageentitysingleform.searchtable}"
-					inputWidget="studio.propertyapplettablelist" required="true" />
-				<property name="baseRestriction"
-					description="$m{studio.appappletprop.manageentitysingleform.baserestriction}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="searchTable.new"
-					description="$m{studio.appappletprop.manageentitysingleform.searchtable.new}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.quickFilter"
-					description="$m{studio.appappletprop.manageentitysingleform.searchtable.quickfilter}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.quickFilter.default"
-					description="$m{studio.appappletprop.manageentitysingleform.searchtable.quickfilterdef}"
-					inputWidget="studio.propertyappletquickfilterlist" />
-				<property name="searchTable.actionFooter"
-					description="$m{studio.appappletprop.manageentitysingleform.searchtable.actionfooter}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.report"
-					description="$m{studio.appappletprop.manageentitysingleform.searchtable.report}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.basicSearchOnly"
-					description="$m{studio.appappletprop.manageentity.searchtable.basicsearchonly}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.searchColumns"
-					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
-					inputWidget="studio.propertyappletsingledigit" />
-				<property name="searchTable.viewItemInSeparateTab"
-					description="$m{studio.appappletprop.manageentity.searchtable.viewiteminseparatetab}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.diffIgnore"
-					description="$m{studio.appappletprop.manageentity.searchtable.ignorediff}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentitysingleform.formproperties}">
-				<property name="singleForm.panel"
-					description="$m{studio.appappletprop.manageentitysingleform.panel}"
-					inputWidget="studio.propertysingleformpanellist" />
-				<property name="createForm.new.caption"
-					description="$m{studio.appappletprop.createentity.createform.newcaption}"
-					inputWidget="application.text" />
-				<property name="listingForm"
-					description="$m{studio.appappletprop.manageentitysingleform.listingform}"
-					inputWidget="studio.propertyappletlistformlist" required="false" />
-				<property name="createForm.new.policy"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.newpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.update.policy"
-					description="$m{studio.appappletprop.manageentitysingleform.maintain.updatepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.update.condition"
-					description="$m{studio.appappletprop.manageentitysingleform.maintain.updatecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.delete.policy"
-					description="$m{studio.appappletprop.manageentitysingleform.maintain.deletepolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.delete.condition"
-					description="$m{studio.appappletprop.manageentitysingleform.maintain.deletecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="createForm.save"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.save}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.save.next"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.savenext}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.save.close"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.saveclose}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.update"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.update}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.delete"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.delete}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.capture"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.capture}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachment.disable.condition"
-					description="$m{studio.appappletprop.createentity.maintain.attachmentdisablecondition}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.capture.attachmentprovider"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.capture.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowcopyproperties}">
-				<property name="workflowCopy"
-					description="$m{studio.appappletprop.manageentity.workflowcopy}"
-					inputWidget="application.checkbox" />
-				<property name="workflowCopy.attachmentprovider"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.create}">
-				<property name="workflowCopy.create.copy.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.copysetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.submitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.approval.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.approval.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvalsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.approval.levels"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.approvallevels}"
-					inputWidget="studio.propertyappletlevelslist" />
-				<property name="workflowCopy.create.rejection.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.rejection.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.rejectionsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.resubmit.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.resubmitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.resubmit.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.resubmitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.discard.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.discardalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.discard.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.discardsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.create.abort.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.create.abort.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.create.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.update}">
-				<property name="workflowCopy.update.copy.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.copysetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.submitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.approval.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.approval.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvalsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.approval.levels"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.approvallevels}"
-					inputWidget="studio.propertyappletlevelslist" />
-				<property name="workflowCopy.update.rejection.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.rejection.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.rejectionsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.resubmit.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.resubmitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.resubmit.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.resubmitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.discard.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.discardalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.discard.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.discardsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.update.abort.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.update.abort.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.update.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowcopyproperties.delete}">
-				<property name="workflowCopy.delete.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.delete.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.submitsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.delete.approval.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.delete.approval.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvalsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.delete.approval.levels"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.approvallevels}"
-					inputWidget="studio.propertyappletlevelslist" />
-				<property name="workflowCopy.delete.rejection.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.delete.rejection.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.rejectionsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-				<property name="workflowCopy.delete.abort.alert"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.abortalert}"
-					inputWidget="studio.propertyappletalertlist" />
-				<property name="workflowCopy.delete.abort.setvalues"
-					description="$m{studio.appappletprop.manageentity.workflowcopy.delete.abortsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentitysingleform.workflowproperties}">
-				<property name="createForm.submit.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submitnext.caption"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitnextcaption}"
-					inputWidget="application.text" />
-				<property name="createForm.submit.buttonhighlight"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitbuttonhighlight}"
-					inputWidget="application.checkbox" />
-				<property name="entityForm.submit.close"
-					description="$m{studio.appappletprop.manageentitysingleform.entityform.submitclose}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.policy"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="createForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="createForm.submit.condition"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
-				<property name="createForm.submit"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submit}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submitnext"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitnext}"
-					inputWidget="application.checkbox" />
-				<property name="createForm.submit.validate"
-					description="$m{studio.appappletprop.manageentitysingleform.createform.submitvalidate}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submit.policy"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.submitpolicy}"
-					inputWidget="studio.propertyentityactionpolicylist" />
-				<property name="maintainForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-				<property name="maintainForm.submit.condition"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.submitcondition}"
-					inputWidget="studio.propertyappletfilterlist" required="false" />
-				<property name="maintainForm.submit"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.submit}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submitnext"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.submitnext}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.submit.validate"
-					description="$m{studio.appappletprop.manageentitysingleform.maintainform.submitvalidate}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="meaAppAppletPropList"
-			description="$m{studio.appappletprop.manageentityassign.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.searchproperties}">
-				<property name="searchTable"
-					description="$m{studio.appappletprop.manageentity.searchtable}"
-					inputWidget="studio.propertyapplettablelist" required="true" />
-				<property name="searchTable.edit"
-					description="$m{studio.appappletprop.manageentity.searchtable.edit}"
-					inputWidget="application.checkbox" />
-				<property name="assignmentPage"
-					description="$m{studio.appappletprop.manageentity.assignmentpage}"
-					inputWidget="studio.propertyappletassignpagelist" />
-				<property name="assignmentEntryTable"
-					description="$m{studio.appappletprop.manageentity.assignmententrytable}"
-					inputWidget="studio.propertyapplettablelist" />
-				<property name="assignmentEntryTable.policy"
-					description="$m{studio.appappletprop.manageentity.assignmententrytablepolicy}"
-					inputWidget="studio.propertyappletbeantablepolicylist" />
-				<property name="assignmentFixed"
-					description="$m{studio.appappletprop.manageentity.assignmentfixed}"
-					inputWidget="application.checkbox" />
-				<property name="assignment.pseudo.delete"
-					description="$m{studio.appappletprop.manageentity.assignmentpseudodelete}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="mebAppAppletPropList"
-			description="$m{studio.appappletprop.manageentitysubmit.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.searchproperties}">
-				<property name="searchTable"
-					description="$m{studio.appappletprop.manageentity.searchtable}"
-					inputWidget="studio.propertyapplettablelist" required="true" />
-				<property name="searchTable.searchOnCriteriaOnly"
-					description="$m{studio.appappletprop.manageentity.searchtable.searchoncriteriaonly}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.selectByConstraint"
-					description="$m{studio.appappletprop.manageentity.searchtable.selectbyconstraint}"
-					inputWidget="studio.propertyappletuniqueconstraintlist" />
-				<property name="baseRestriction"
-					description="$m{studio.appappletprop.manageentity.baserestriction}"
-					inputWidget="studio.propertyappletfilterlist" />
-				<property name="searchTable.quickFilter"
-					description="$m{studio.appappletprop.manageentity.searchtable.quickfilter}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.quickFilter.default"
-					description="$m{studio.appappletprop.manageentity.searchtable.quickfilterdef}"
-					inputWidget="studio.propertyappletquickfilterlist" />
-				<property name="searchTable.actionFooter"
-					description="$m{studio.appappletprop.manageentity.searchtable.actionfooter}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.report"
-					description="$m{studio.appappletprop.manageentity.searchtable.report}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.basicSearchOnly"
-					description="$m{studio.appappletprop.manageentity.searchtable.basicsearchonly}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.searchInput"
-					description="$m{studio.appappletprop.manageentity.searchtable.searchinput}"
-					inputWidget="studio.propertyappletsearchinputlist" />
-				<property name="searchTable.searchColumns"
-					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
-					inputWidget="studio.propertyappletsingledigit" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.formproperties}">
-				<property name="listingForm"
-					description="$m{studio.appappletprop.manageentity.listingform}"
-					inputWidget="studio.propertyappletlistformlist" required="false" />
-				<property name="maintainForm"
-					description="$m{studio.appappletprop.manageentity.maintainform}"
-					inputWidget="studio.propertyappletformlist" />
-				<property name="maintainForm.capture"
-					description="$m{studio.appappletprop.manageentity.maintainform.capture}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.capture.attachmentprovider"
-					description="$m{studio.appappletprop.manageentity.maintainform.capture.attachmentprovider}"
-					inputWidget="studio.propertyappletattachmentproviderlist" />
-				<property name="maintainForm.attachments"
-					description="$m{studio.appappletprop.manageentity.maintainform.attachments}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.attachments.adhoc"
-					description="$m{studio.appappletprop.manageentity.maintainform.attachments.adhoc}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-			<propertySet
-				label="$m{studio.appappletprop.manageentity.workflowproperties}">
-				<property name="createForm.submit.caption"
-					description="$m{studio.appappletprop.manageentitysubmit.createform.submitcaption}"
-					inputWidget="application.text" />
-				<property name="maintainForm.submit.workflow.channel"
-					description="$m{studio.appappletprop.manageentitysubmit.maintainform.submitworkflow}"
-					inputWidget="studio.propertyappletworkflowchannellist"
-					required="false" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="mplAppAppletPropList"
-			description="$m{studio.appappletprop.managepropertylist.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.managepropertylist.ruleproperties}">
-				<property name="propertyList.rule"
-					description="$m{studio.appappletprop.managepropertylist.property.rule}"
-					inputWidget="application.name" required="true" />
-				<property name="propertyList.update"
-					description="$m{studio.appappletprop.managepropertylist.property.update}"
-					inputWidget="application.checkbox" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="hdlAppAppletPropList"
-			description="$m{studio.appappletprop.headlesstabs.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.headlesstabs.properties}">
-				<property name="headlesstabs.applets"
-					description="$m{studio.appappletprop.headlesstabs.property.applets}"
-					inputWidget="application.textarea" required="true" />
-			</propertySet>
-		</propertyList>
-		<propertyList name="texAppAppletPropList"
-			description="$m{studio.appappletprop.taskexecution.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.taskexecution.properties}">
-				<property name="taskexecution.taskName"
-					description="$m{studio.appappletprop.taskexecution.property.task}"
-					inputWidget="studio.tasklist" required="true" />
 			</propertySet>
 		</propertyList>
 		<propertyList name="impAppAppletPropList"
@@ -7442,27 +6255,6 @@
 					inputWidget="studio.propertyroutetoappletlist" required="false" />
 			</propertySet>
 		</propertyList>
-		<propertyList name="ppgAppAppletPropList"
-			description="$m{studio.appappletprop.pathpage.propertylist}">
-			<propertySet
-				label="$m{studio.appappletprop.pathpage.properties}">
-				<property name="page.multiple"
-					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable"
-					description="$m{studio.appappletprop.manageentity.searchtable}"
-					inputWidget="studio.propertyapplettablelist" required="true" />
-				<property name="searchTable.searchOnCriteriaOnly"
-					description="$m{studio.appappletprop.manageentity.searchtable.searchoncriteriaonly}"
-					inputWidget="application.checkbox" />
-				<property name="searchTable.searchInput"
-					description="$m{studio.appappletprop.manageloading.loadingtable.searchinput}"
-					inputWidget="studio.propertyappletsearchinputlist" />
-				<property name="searchTable.searchColumns"
-					description="$m{studio.appappletprop.manageloading.loadingtable.searchcolumns}"
-					inputWidget="studio.propertyappletsingledigit" />
-			</propertySet>
-		</propertyList>
 	</propertyLists>
 
 	<!-- Property Rules -->
@@ -7472,20 +6264,8 @@
 			entity="application.appApplet" choiceField="type"
 			listField="propList" propNameField="name" propValField="value"
 			ignoreCase="true">
-			<choice name="fwz" val="fwzAppAppletPropList" />
-			<choice name="cen" val="cenAppAppletPropList" />
-			<choice name="ceb" val="cebAppAppletPropList" />
-			<choice name="cns" val="cnsAppAppletPropList" />
-			<choice name="mll" val="mllAppAppletPropList" />
 			<choice name="mel" val="melAppAppletPropList" />
-			<choice name="mls" val="mlsAppAppletPropList" />
-			<choice name="mea" val="meaAppAppletPropList" />
-			<choice name="meb" val="mebAppAppletPropList" />
-			<choice name="mpl" val="mplAppAppletPropList" />
-			<choice name="hdl" val="hdlAppAppletPropList" />
-			<choice name="tex" val="texAppAppletPropList" />
 			<choice name="dim" val="impAppAppletPropList" />
-			<choice name="ppg" val="ppgAppAppletPropList" />
 		</propertyRule>
 	</propertyRules>
 </application>

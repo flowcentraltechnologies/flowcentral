@@ -21,7 +21,7 @@
 	components:$c{headerLeftPanel headerRightPanel}
 	
 !ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{sectorIcon titleBlock newBtn editBtn viewBtn quickFilterBlock}
+	components:$c{sectorIcon newBtn editBtn viewBtn quickFilterBlock}
 !fc-sectoricon:sectorIcon binding:sectorIcon
 !ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
 !ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle
@@ -40,7 +40,7 @@
     eventHandler:$d{!ui-event event:onchange action:$c{quickFilterAct}}
 
 !ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle}
-	components:$c{reportBtn quickEditBtn quickOrderBtn refreshBtn fastBackBtn backBtn displayStart paginationLabel forwardBtn fastForwardBtn}
+	components:$c{reportBtn quickEditBtn quickOrderBtn fastBackBtn backBtn displayStart paginationLabel forwardBtn fastForwardBtn}
 !ui-button:reportBtn styleClass:$e{fc-greenbutton} caption:$m{button.report}
 	eventHandler:$f{reportEventHandler}
 !ui-button:quickEditBtn styleClass:$e{fc-orangebutton} caption:$m{button.quickedit}

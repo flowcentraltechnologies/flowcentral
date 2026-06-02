@@ -1275,23 +1275,25 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : appForm.getWidgetRulesList()) {
                         WidgetRulesDef widgetRulesDef = InputWidgetUtils
                                 .getWidgetRulesDef(appFormWidgetRulesPolicy.getWidgetRules());
-                        Map<String, String> ruleEditors = new HashMap<String, String>();
-                        for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
-                            if (widgetRuleEntryDef.isPresent()) {
-                                final String fieldName = widgetRuleEntryDef.getFieldName();
-                                FieldRenderInfo fieldRenderInfo = fieldRenderInfos.get(fieldName);
-                                WidgetTypeDef widgetTypeDef = getWidgetTypeDef(widgetRuleEntryDef.getWidget());
-                                EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                                String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
-                                        entityFieldDef, fieldRenderInfo.getReference(), fieldRenderInfo.getColor());
-                                ruleEditors.put(fieldName, renderer);
+                        if (widgetRulesDef != null) {
+                            Map<String, String> ruleEditors = new HashMap<String, String>();
+                            for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
+                                if (widgetRuleEntryDef.isPresent()) {
+                                    final String fieldName = widgetRuleEntryDef.getFieldName();
+                                    FieldRenderInfo fieldRenderInfo = fieldRenderInfos.get(fieldName);
+                                    WidgetTypeDef widgetTypeDef = getWidgetTypeDef(widgetRuleEntryDef.getWidget());
+                                    EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                                    String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
+                                            entityFieldDef, fieldRenderInfo.getReference(), fieldRenderInfo.getColor());
+                                    ruleEditors.put(fieldName, renderer);
+                                }
                             }
-                        }
 
-                        fdb.addFormWidgetRulesPolicy(appFormWidgetRulesPolicy.getName(),
-                                appFormWidgetRulesPolicy.getDescription(), InputWidgetUtils
-                                        .getFilterDef(appletUtilities, null, appFormWidgetRulesPolicy.getOnCondition()),
-                                widgetRulesDef, ruleEditors);
+                            fdb.addFormWidgetRulesPolicy(appFormWidgetRulesPolicy.getName(),
+                                    appFormWidgetRulesPolicy.getDescription(), InputWidgetUtils
+                                            .getFilterDef(appletUtilities, null, appFormWidgetRulesPolicy.getOnCondition()),
+                                    widgetRulesDef, ruleEditors);
+                        }
                     }
 
                     DataUtils.sortAscending(appForm.getFieldValidationList(), AppFormFieldValidationPolicy.class,

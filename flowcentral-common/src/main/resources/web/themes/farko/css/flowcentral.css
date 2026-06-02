@@ -513,23 +513,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 
 /* Form bread crumbs */
-.fc-formbreadcrumbs {}
-.fc-formbreadcrumbs .base {list-style: none; display: table; margin: 0px; padding: 0px;}
-.fc-formbreadcrumbs .base li {display: table-cell;vertical-align: middle;}
-.fc-formbreadcrumbs .hist {color:#666E79 !important;}
-.fc-formbreadcrumbs .last {}
-.fc-formbreadcrumbs .hdstep {display: inline-block; padding: 2px;margin-right: 6px; vertical-align: top; background-color: #a2a2a2; color: #fff;
-	font-size: 8pt; font-weight: bold;}
-.fc-formbreadcrumbs .last .hdstep {background-color: #000;}
-.fc-formbreadcrumbs .hdtitle {display: block;font-weight:bold;padding-bottom: 1px;
-	max-width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
-.fc-formbreadcrumbs .hdsubtitle {display: block;font-size:8pt;font-weight:bold;color:#666E79;
-	max-width: 200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
-.fc-formbreadcrumbs .chev {display:inline-block;width:11px;height: 20px;position:relative;margin: 0px 6px;}
-.fc-formbreadcrumbs .chev:before,
-.fc-formbreadcrumbs .chev:after {display:block;content:"";width:0;height:0em;border-style:solid;position:absolute;}
-.fc-formbreadcrumbs .chev:before {right:0; border-width:10px 0 10px 10px; border-color:transparent transparent transparent #a2a2a2;}
-.fc-formbreadcrumbs .chev:after {left:0; border-width:10px 0 10px 10px; border-color:transparent transparent transparent #e3e7ea;}
+.fc-formbreadcrumbs .base {font-size:8pt;color:#404040;}
 
 /* Form errors */
 .fc-formmessages {}

@@ -17,12 +17,17 @@
 	--color-slate:#f7f9fa;
 	--color-slate-border:solid 1px #c0c0c0;
 	--color-pencil:#484848;
-	--studiodetail-fontsize:6.5pt;
+	--studiodetail-fontsize:7pt;
  }
 
 /* flowCentral studio CSS */
+body, td, th, button, input, select, textarea {
+  font-size: 8pt;
+}
+
 .ui-select .sslist .norm:hover {background-color: #d5e7fb;color: #000;}
 .ui-select .sslist .sel {background-color: #3c4e63;color: #FFF;}
+
 
 /* CRUD dialog */
 .fc-cruddialog {}
@@ -47,7 +52,7 @@
 .fc-applicationlabel {color: #a0a0a0; font-size:16px;}
 
 /* Studio Menu */
-.fc-studiomenu {height: 100%; max-height: calc(100vh - 40px) !important; background-color: #24303f; color:#ffffff;font-size: 11px;}
+.fc-studiomenu {height: 100%; max-height: calc(100vh - 40px) !important; background-color: #24303f; color:#ffffff;}
 .fc-studiomenu .mheader {height: 24px;background-color: #3e4a59;}
 .fc-studiomenu .mheader span {display: block;padding:6px 12px; font-weight:bold;color:#d9d9d9;font-size: 10px;}
 .fc-studiomenu .mbody {height: calc(100vh - 62px) !important;max-height: calc(100vh - 62px) !important;overflow-y:scroll;}
@@ -72,11 +77,11 @@
 .fc-studiomenu .search {display: inline-block;padding-left: 4px;font-size: 8pt;height: 22px;width: calc(100% - 48px);}
 
 /** Editor */
-.fc-designtitle {font-size:18px;color:var(--color-pencil);font-weight:bold;text-align:center;}
+.fc-designtitle {color:#ffffff;font-weight:bold;background-color: #617C9C;padding: 4px 6px; box-sizing: border-box;}
 
 /** Entity Editor */
 .fc-entityeditor {width:100%;height:100%;}
-.fc-entityeditor .design {display:block;width:100%;max-width:100%;height:100%;max-height: calc(100vh - 86px); overflow:scroll;}
+.fc-entityeditor .design {display:block;width:100%;max-width:100%;height:calc(100vh - 82px);max-height: calc(100vh - 82px); overflow:scroll;}
 .fc-entityeditor .designbase {display:block;padding:4px;width: 100%;height:100%;box-sizing: border-box;}
 .fc-entityeditor .canvas {}
 
@@ -391,3 +396,5 @@
 .studiodetail .fc-tabsheet {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-fieldsequence .abutton {min-width:18px;}
 .studiodetail .fc-propertysequence .atab {width:initial;}
+.studiodetail .ui-select .sslist .norm {font-size:var(--studiodetail-fontsize);}
+.studiodetail .fc-entitylist .tread {background-color:#ffffff;}
