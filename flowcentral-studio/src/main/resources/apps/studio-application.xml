@@ -4383,8 +4383,6 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
 						<field name="sections" column="0" disabled="true" />
-						<field name="allowSecondaryTenants"
-							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
 				<tab name="options" label="$m{studio.dashboard.form.options}"
