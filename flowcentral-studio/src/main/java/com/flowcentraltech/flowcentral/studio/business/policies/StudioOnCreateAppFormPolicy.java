@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
+import com.flowcentraltech.flowcentral.configuration.constants.FormType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -44,6 +45,7 @@ public class StudioOnCreateAppFormPolicy extends StudioOnCreateComponentPolicy {
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         final AppForm appForm = (AppForm) ctx.getInst();
+        appForm.setType(FormType.INPUT);
         if (DataUtils.isBlank(appForm.getElementList())) {
             List<AppFormElement> elementList = new ArrayList<AppFormElement>();
             // Add basic tab with empty section

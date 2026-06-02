@@ -1973,11 +1973,9 @@
 				<column field="name" renderWidget="application.name"
 					widthRatio="2" linkAct="maintainAct" />
 				<column field="description" renderWidget="application.text"
-					widthRatio="3" />
-				<column field="label" renderWidget="application.text"
 					widthRatio="2" />
 				<column field="typeDesc" renderWidget="application.text"
-					widthRatio="1" />
+					widthRatio="2" />
 			</columns>
 		</table>
 		<table itemsPerPage="10" name="appEntityExpressionTable"
@@ -2784,18 +2782,6 @@
 							required="true" visible="false" />
 						<field name="path" inputWidget="application.text" column="0"
 							visible="false" />
-						<field name="displayIndex" inputWidget="application.integer"
-							column="0" />
-						<field name="portalAccess"
-							inputWidget="application.checkbox" column="0" visible="false" />
-						<field name="menuAccess" inputWidget="application.checkbox"
-							column="0" />
-						<field name="supportOpenInNewWindow"
-							inputWidget="application.checkbox" column="0" />
-						<field name="supportRemoteAccess"
-							inputWidget="application.checkbox" column="0" visible="false" />
-						<field name="allowSecondaryTenants"
-							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
 				<tab name="properties"
@@ -2947,17 +2933,6 @@
 						<setState type="FIELD" target="path" visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="remoteAccessPolicy"
-					description="$m{studio.appapplet.form.formstatepolicy.remoteaccesspolicy}">
-					<onCondition>
-						<restriction type="AMONGST" field="type" paramA="MEL" />
-					</onCondition>
-					<setStates>
-						<setState type="FIELD" target="supportRemoteAccess"
-							visible="TRUE" />
-					</setStates>
-				</formStatePolicy>
 			</formStatePolicies>
 			<formValidationPolicies>
 				<formValidationPolicy
@@ -3016,14 +2991,8 @@
 							column="0" required="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="ownershipType"
-							inputWidget="application.enumlist" column="0" required="true" />
-						<field name="owner" inputWidget="application.text"
-							column="0" disabled="true" />
 						<field name="preferredForm"
 							inputWidget="studio.appletformlist" column="0" />
-						<field name="preferredChildListApplet" switchOnChange="true"
-							inputWidget="studio.appletchildlistappletlist" column="0" />
 						<field name="childListActionType"
 							inputWidget="application.enumlist" column="0" visible="false" />
 						<field name="filterGenerator"
@@ -3154,22 +3123,8 @@
 						<field name="dateTimeFormatter"
 							inputWidget="studio.datetimeformatterlist" column="0"
 							required="false" />
-						<field name="emailProducerConsumer"
-							inputWidget="application.emailproducerconsumerlist" column="0" />
 						<field name="delegate" inputWidget="environmentdelegatelist"
 							column="0" switchOnChange="true" />
-						<field name="dataSourceName" inputWidget="application.text"
-							column="0" required="true" visible="false" />
-					</section>
-					<section name="optionDetails" columns="TYPE_2">
-						<field name="auditable" inputWidget="application.checkbox"
-							column="0" />
-						<field name="reportable" inputWidget="application.checkbox"
-							column="0" />
-						<field name="supportsChangeEvents"
-							inputWidget="application.checkbox" column="1" />
-						<field name="actionPolicy"
-							inputWidget="application.checkbox" column="1" disabled="true" />
 					</section>
 				</tab>
 				<tab name="fields" label="$m{studio.appentity.form.fields}"
@@ -3359,13 +3314,9 @@
 							column="0" visible="false" switchOnChange="true" />
 						<field name="columnName"
 							inputWidget="application.columnname" column="0" required="false" />
-						<field name="inputLabel" inputWidget="application.text"
-							column="0" required="false" />
 						<field name="inputWidget"
 							inputWidget="entityfieldwidgetlist" column="0"
 							switchOnChange="true" />
-						<field name="suggestionType"
-							inputWidget="suggestiontypelist" column="0" visible="false" />
 						<field name="inputListKey" inputWidget="application.text"
 							column="0" visible="false" />
 						<field name="minLen" inputWidget="application.integer"
@@ -3392,18 +3343,14 @@
 							inputWidget="application.checkbox" column="0" visible="false" />
 						<field name="descriptive" inputWidget="application.checkbox"
 							column="0" visible="false" />
-						<field name="branchScoping"
-							inputWidget="application.checkbox" column="0" visible="false" />
+						<field name="trim" inputWidget="application.checkbox"
+							column="0" visible="false" />
 						<field name="auditable" inputWidget="application.checkbox"
 							column="1" visible="false" />
 						<field name="reportable" inputWidget="application.checkbox"
 							column="1" visible="false" />
-						<field name="trim" inputWidget="application.checkbox"
-							column="1" visible="false" />
 						<field name="allowNegative"
 							inputWidget="application.checkbox" column="1" visible="false" />
-						<field name="readOnly" inputWidget="application.checkbox"
-							column="1" visible="false" />
 						<field name="nullable" inputWidget="application.checkbox"
 							column="1" visible="false" />
 					</section>
@@ -3514,18 +3461,6 @@
 					</setStates>
 				</formStatePolicy>
 				<formStatePolicy type="ON_SWITCH"
-					name="branchScopingPolicy"
-					description="$m{studio.appentityfield.form.formstatepolicy.branchscoping}">
-					<onCondition>
-						<restriction type="AMONGST" field="dataType"
-							paramA="RF|LN|LO" />
-					</onCondition>
-					<setStates>
-						<setState type="FIELD" target="branchScoping"
-							visible="TRUE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
 					name="decFieldPolicy"
 					description="$m{studio.appentityfield.form.formstatepolicy.decimalfield}">
 					<onCondition>
@@ -3595,18 +3530,6 @@
 					<setStates>
 						<setState type="FIELD"
 							target="key,property,reportable,maintainLink,descriptive,basicSearch"
-							visible="TRUE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="suggestionTypePolicy"
-					description="$m{studio.appentityfield.form.formstatepolicy.suggestiontype">
-					<onCondition>
-						<restriction type="EQUALS" field="inputWidget"
-							paramA="application.suggestiontextsearch" />
-					</onCondition>
-					<setStates>
-						<setState type="FIELD" target="suggestionType"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
@@ -4228,10 +4151,6 @@
 					<section name="chartFlags" columns="TYPE_2">
 						<field name="stacked" column="0" />
 						<field name="smooth" column="1" />
-						<field name="showGrid" column="0" />
-						<field name="showDataLabels" column="1" />
-						<field name="formatDataLabels" column="0" />
-						<field name="formatYLabels" column="1" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -4863,20 +4782,6 @@
 							required="true" switchOnChange="true" />
 						<field name="type" inputWidget="reportconfigtypelist"
 							column="0" required="true" switchOnChange="true" />
-						<field name="summaryDatasource"
-							inputWidget="studio.summarydatasourcelist" column="0"
-							visible="false" />
-						<field name="template" inputWidget="application.text"
-							column="0" visible="false" />
-						<field name="processor" inputWidget="application.text"
-							column="0" visible="false" />
-						<field name="letterGenerator"
-							inputWidget="studio.reportablelettergeneratorlist" column="0"
-							required="true" visible="false" />
-						<field name="showGrandFooter"
-							inputWidget="application.checkbox" column="0" />
-						<field name="invertGroupColors"
-							inputWidget="application.checkbox" column="0" />
 						<field name="landscape" inputWidget="application.checkbox"
 							column="0" />
 						<field name="underlineRows"
@@ -4884,29 +4789,7 @@
 						<field name="shadeOddRows"
 							inputWidget="application.checkbox" column="0" />
 					</section>
-					<section name="pageDetails" columns="TYPE_1"
-						label="$m{studio.reportconfiguration.form.pagedimension}"
-						visible="false">
-						<field name="sizeType" inputWidget="application.enumlist"
-							column="0" required="true" switchOnChange="true" />
-						<field name="width" inputWidget="application.integer"
-							column="0" required="true" visible="false" />
-						<field name="height" inputWidget="application.integer"
-							column="0" required="true" visible="false" />
-						<field name="marginTop" inputWidget="application.integer"
-							column="0" required="true" visible="true" />
-						<field name="marginLeft" inputWidget="application.integer"
-							column="0" required="true" visible="true" />
-						<field name="marginRight" inputWidget="application.integer"
-							column="0" required="true" visible="true" />
-						<field name="marginBottom" inputWidget="application.integer"
-							column="0" required="true" visible="true" />
-					</section>
 				</tab>
-				<tab name="placements"
-					label="$m{studio.reportconfiguration.form.placements}"
-					contentType="CHILD_LIST" applet="manageReportPlacement"
-					reference="placementList" />
 				<tab name="parameters"
 					label="$m{studio.reportconfiguration.form.parameters}"
 					contentType="CHILD_LIST" applet="manageReportParameter"
@@ -4948,80 +4831,6 @@
 					<setStates>
 						<setState type="FIELD"
 							target="name,description,reportable" disabled="TRUE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="onTabularPolicy"
-					description="$m{studio.reportconfiguration.form.formstatepolicy.tabular}">
-					<onCondition>
-						<restriction type="EQUALS" field="type" paramA="TBL" />
-					</onCondition>
-					<setStates>
-						<setState type="FIELD" target="sizeType,width,height"
-							visible="FALSE" />
-						<!--setState type="FIELD" target="template" visible="TRUE" / -->
-						<setState type="TAB" target="placements" visible="FALSE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="onSummaryPolicy"
-					description="$m{studio.reportconfiguration.form.formstatepolicy.summary}">
-					<onCondition>
-						<restriction type="EQUALS" field="type" paramA="CSM" />
-					</onCondition>
-					<setStates>
-						<setState type="FIELD" target="summaryDatasource"
-							visible="TRUE" />
-						<setState type="TAB" target="design" visible="FALSE" />
-						<setState type="TAB" target="placements" visible="FALSE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="onPlacementPolicy"
-					description="$m{studio.reportconfiguration.form.formstatepolicy.placement}">
-					<onCondition>
-						<restriction type="EQUALS" field="type" paramA="PLC" />
-					</onCondition>
-					<setStates>
-						<setState type="FIELD"
-							target="processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows"
-							visible="FALSE" />
-						<setState type="SECTION" target="pageDetails"
-							visible="TRUE" />
-						<setState type="TAB" target="columns" visible="FALSE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="onLetterPolicy"
-					description="$m{studio.reportconfiguration.form.formstatepolicy.letter}">
-					<onCondition>
-						<restriction type="EQUALS" field="type" paramA="LTR" />
-					</onCondition>
-					<setStates>
-						<setState type="FIELD"
-							target="processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows,landscape"
-							visible="FALSE" />
-						<setState type="FIELD" target="letterGenerator"
-							visible="TRUE" />
-						<setState type="TAB" target="placements" visible="FALSE" />
-						<setState type="TAB" target="columns" visible="FALSE" />
-						<setState type="SECTION" target="pageDetails"
-							visible="FALSE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="onDimensionPolicy"
-					description="$m{studio.reportconfiguration.form.formstatepolicy.dimension}">
-					<onCondition>
-						<restriction type="AND">
-							<restriction type="EQUALS" field="type" paramA="PLC" />
-							<restriction type="EQUALS" field="sizeType"
-								paramA="custom" />
-						</restriction>
-					</onCondition>
-					<setStates>
-						<setState type="FIELD" target="width,height"
-							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
 			</formStatePolicies>
@@ -5200,42 +5009,8 @@
 							column="0" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" required="true" switchOnChange="true" />
-						<field name="loadingSearchInput"
-							inputWidget="studio.tablesearchinputlist" column="0" />
-						<field name="loadingFilterGen"
-							inputWidget="studio.tableworkitemfiltergenlist" column="0" />
-						<field name="detailsPanelName"
-							inputWidget="studio.detailspanellist" column="0" />
 						<field name="itemsPerPage" inputWidget="application.integer"
 							column="0" />
-						<field name="summaryTitleColumns"
-							inputWidget="application.integer" column="0" />
-					</section>
-					<section name="tableFlags" columns="TYPE_2">
-						<field name="headerless" inputWidget="application.checkbox"
-							column="0" />
-						<field name="showLabelHeader"
-							inputWidget="application.checkbox" column="0" />
-						<field name="headerToUpperCase"
-							inputWidget="application.checkbox" column="0" />
-						<field name="headerCenterAlign"
-							inputWidget="application.checkbox" column="0" />
-						<field name="sortable" inputWidget="application.checkbox"
-							column="0" />
-						<field name="serialNo" inputWidget="application.checkbox"
-							column="0" />
-						<field name="multiSelect" inputWidget="application.checkbox"
-							column="1" />
-						<field name="nonConforming"
-							inputWidget="application.checkbox" column="1" />
-						<field name="basicSearch" inputWidget="application.checkbox"
-							column="1" />
-						<field name="totalSummary"
-							inputWidget="application.checkbox" column="1" />
-						<field name="limitSelectToColumns"
-							inputWidget="application.checkbox" column="1" />
-						<field name="fixedRows" inputWidget="application.checkbox"
-							column="1" />
 					</section>
 				</tab>
 				<tab name="filters" label="$m{studio.apptable.form.filters}"
@@ -5251,17 +5026,6 @@
 					contentType="MINIFORM_CHANGELOG" />
 			</tabs>
 			<formStatePolicies>
-				<formStatePolicy type="ON_SWITCH"
-					name="onCreatePolicy"
-					description="$m{studio.appentity.form.formstatepolicy.oncreate}">
-					<onCondition>
-						<restriction type="IS_NULL" field="id" />
-					</onCondition>
-					<setValues>
-						<setValue type="IMMEDIATE" field="serialNo" value="true" />
-						<setValue type="IMMEDIATE" field="sortable" value="true" />
-					</setValues>
-				</formStatePolicy>
 				<formStatePolicy type="ON_SWITCH"
 					name="onStaticPolicy"
 					description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -5432,24 +5196,8 @@
 							column="0" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" required="true" switchOnChange="true" />
-						<field name="type" inputWidget="application.enumlist"
-							column="0" required="true" switchOnChange="true" />
-						<field name="helpSheet" inputWidget="formhelpsheetlist"
-							column="0" />
 						<field name="titleFormat"
 							inputWidget="application.texttemplate" column="0" />
-						<field name="consolidatedValidation"
-							inputWidget="studio.consformvalidationpolicylist" column="0"
-							visible="false" />
-						<field name="consolidatedReview"
-							inputWidget="studio.consformreviewpolicylist" column="0"
-							visible="false" />
-						<field name="consolidatedState"
-							inputWidget="studio.consformstatepolicylist" column="0"
-							visible="false" />
-						<field name="listingGenerator"
-							inputWidget="studio.listinggeneratorlist" column="0"
-							visible="false" />
 					</section>
 				</tab>
 				<tab name="filters" label="$m{studio.appform.form.filters}"
@@ -5530,24 +5278,9 @@
 						<restriction type="EQUALS" field="type" paramA="INP" />
 					</onCondition>
 					<setStates>
-						<setState type="FIELD"
-							target="consolidatedValidation,consolidatedReview,consolidatedState"
-							visible="TRUE" />
 						<setState type="TAB"
-							target="design,filters,annotations,actions,relatedLists,widgetRulesPolicies,fieldValidationPolicies,fieldStatePolicies,formValidationPolicies,formReviewPolicies"
+							target="filters,annotations,actions,relatedLists,widgetRulesPolicies,fieldValidationPolicies,fieldStatePolicies,formValidationPolicies,formReviewPolicies"
 							visible="TRUE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="listingFormPolicy"
-					description="$m{studio.common.form.formstatepolicy.listingform}">
-					<onCondition>
-						<restriction type="EQUALS" field="type" paramA="LST" />
-					</onCondition>
-					<setStates>
-						<setState type="FIELD" target="listingGenerator"
-							visible="TRUE" />
-						<setState type="TAB" target="actions" visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
 			</formStatePolicies>
@@ -5659,12 +5392,6 @@
 							column="0" required="true" />
 						<field name="visibility" inputWidget="application.enumlist"
 							column="0" required="true" />
-						<field name="html" inputWidget="application.checkbox"
-							column="0" />
-						<field name="directPlacement"
-							inputWidget="application.checkbox" column="0" />
-					</section>
-					<section name="messageDetails" columns="TYPE_1">
 						<field name="message" inputWidget="application.textarea"
 							required="true" column="0" />
 					</section>
@@ -5690,8 +5417,6 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="label" inputWidget="application.text"
-							column="0" required="true" />
-						<field name="type" inputWidget="application.enumlist"
 							column="0" required="true" />
 						<field name="highlightType"
 							inputWidget="application.enumlist" column="0" />
@@ -5932,7 +5657,7 @@
 						<field name="formEvents"
 							inputWidget="studio.formreviewtypelist" column="0" />
 						<field name="target" inputWidget="studio.formstatetablist"
-							column="1" />
+							column="0" />
 						<field name="errorMatcher"
 							inputWidget="studio.entitymatcherlist" column="0" />
 						<field name="skippable" inputWidget="application.checkbox"

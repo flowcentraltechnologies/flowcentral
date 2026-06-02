@@ -365,7 +365,7 @@
 .fc-appleteditorpagepanel {margin:0px 24px;}
 
 .studiodetail {display:block;width:100%;height:100%;overflow-y:auto;max-height: calc(100vh - 44px);
-	box-sizing: border-box;padding:2px;border-left:var(--color-slate-border);background-color:var(--color-slate);}
+	box-sizing: border-box;border-left:var(--color-slate-border);background-color:var(--color-slate);}
 .studiodetail input[type="text"],
 .studiodetail input[type="password"] {height: 24px;width:100%;}
 .studiodetail td,

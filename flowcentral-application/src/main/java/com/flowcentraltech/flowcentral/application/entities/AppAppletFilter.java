@@ -75,10 +75,11 @@ public class AppAppletFilter extends BaseConfigNamedEntity {
         this.setName(name);
         this.setDescription(description);
         this.filter = new AppFilter(definition);
+        this.ownershipType = OwnershipType.GLOBAL;
     }
 
     public AppAppletFilter() {
-        
+        this.ownershipType = OwnershipType.GLOBAL;
     }
     
     public Long getAppAppletId() {

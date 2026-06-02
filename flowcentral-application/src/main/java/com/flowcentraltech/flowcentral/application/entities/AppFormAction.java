@@ -80,6 +80,10 @@ public class AppFormAction extends BaseConfigNamedEntity {
     @ListOnly(key = "highlightType", property = "description")
     private String highlightTypeDesc;
 
+    public AppFormAction() {
+        this.type = UIActionType.BUTTON;
+    }
+    
     public Long getAppFormId() {
         return appFormId;
     }

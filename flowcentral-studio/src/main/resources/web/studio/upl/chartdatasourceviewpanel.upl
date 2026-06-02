@@ -14,12 +14,7 @@
 // the License.
 
 !fc-chartdatasourceviewpanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
-	components:$c{topActionPanel dataSetBodyPanel gDataSetBodyPanel}
-
-// Top Action
-!ui-panel:topActionPanel style:$s{width:100%;text-align:right;} components:$c{refreshBtn}
-!ui-button:refreshBtn caption:$m{button.refresh}
-	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
+	components:$c{dataSetBodyPanel gDataSetBodyPanel}
 
 // Data set panel
 !ui-panel:dataSetBodyPanel
@@ -33,4 +28,3 @@
 
 // Action
 !ui-postcommand:saveDesignAct command:saveDesign components:$c{dataSetBodyPanel}
-!ui-postcommand:refreshAct command:refreshDesign

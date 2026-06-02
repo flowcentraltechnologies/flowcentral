@@ -38,7 +38,7 @@
 	eventHandler:$d{!ui-event event:onclick action:$c{savePropertiesAct}}
 
 // Properties form panel
-!ui-panel:propertiesBodyPanel style:$s{width:60%; margin: 8px auto;} 
+!ui-panel:propertiesBodyPanel style:$s{margin: 8px auto;} 
 	components:$c{headlessTabsFormPanel}
 !fc-headlesstabsformpanel:headlessTabsFormPanel binding:headlessForm
 	

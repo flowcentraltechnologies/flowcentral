@@ -14,12 +14,7 @@
 // the License.
 
 !fc-entityeditorpagepanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
-	components:$c{topActionPanel entityEditorBodyPanel}
-
-// Top Action
-!ui-panel:topActionPanel style:$s{width:100%;text-align:right;} components:$c{refreshBtn}
-!ui-button:refreshBtn caption:$m{button.refresh}
-	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
+	components:$c{entityEditorBodyPanel}
 
 // Entity editor panel
 !ui-panel:entityEditorBodyPanel style:$s{height:100%;}
@@ -28,4 +23,3 @@
 
 // Actions
 !ui-postcommand:saveDesignAct command:saveDesign components:$c{entityEditorBodyPanel}
-!ui-postcommand:refreshAct command:refreshDesign

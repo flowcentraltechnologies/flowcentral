@@ -14,12 +14,7 @@
 // the License.
 
 !fc-chartviewpanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
-	components:$c{topActionPanel chartPanel}
-
-// Top Action
-!ui-panel:topActionPanel style:$s{width:100%;text-align:right;} components:$c{refreshBtn}
-!ui-button:refreshBtn caption:$m{button.refresh}
-	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
+	components:$c{chartPanel}
 
 // Chart panel
 !ui-panel:chartPanel binding:configuration
@@ -28,4 +23,3 @@
 
 // Action
 !ui-postcommand:saveDesignAct command:saveDesign components:$c{chartPanel}
-!ui-postcommand:refreshAct command:refreshDesign
