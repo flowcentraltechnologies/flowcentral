@@ -389,7 +389,6 @@ body, td, th, button, input, select, textarea {
 .studiodetail .fc-miniform .mflabel span{font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-filter .tab {width: 20px !important;}
 .studiodetail .fc-filter .item,
-.studiodetail .fc-fieldsequence .item,
 .studiodetail .fc-propertysequence .item,
 .studiodetail .fc-setvalues .item {width:84px;margin-right:2px;}
 .studiodetail .fc-searchinputs .vitem {width:184px;margin-right:2px;}

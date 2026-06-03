@@ -55,8 +55,10 @@ public class FieldSequenceWriter extends AbstractControlWriter {
             Control moveUpCtrl = fieldSequenceWidget.getMoveUpCtrl();
             Control moveDownCtrl = fieldSequenceWidget.getMoveDownCtrl();
             Control deleteCtrl = fieldSequenceWidget.getDeleteCtrl();
-
+            
             final String usesLabel = resolveSessionMessage("$m{fieldsequence.usesformatter}");
+            writer.write("<div style=\"display:table;table-layout:fixed;\">");
+            
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = fieldSequenceWidget.getItemValueStoreAt(i);
                 FieldSequenceEntry fso = fieldSequenceWidget.getItemAt();
@@ -72,9 +74,17 @@ public class FieldSequenceWriter extends AbstractControlWriter {
                     writeActionItem(writer, lineValueStore, moveDownCtrl);
                     writeActionItem(writer, lineValueStore, deleteCtrl);
                     writer.write("</div>");
+                } else {
+                    writer.write("<div class=\"itab\">");
+                    writer.write("</div>");
+                    writer.write("<div class=\"atab\">");
+                    writer.write("</div>");
                 }
+                
                 writer.write("</div>");
             }
+
+            writer.write("</div>");
 
         }
         writer.write("</div>");
@@ -115,6 +125,7 @@ public class FieldSequenceWriter extends AbstractControlWriter {
 
     private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
             throws UnifyException {
+        writer.write("<div class=\"itab\">");
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
@@ -122,6 +133,7 @@ public class FieldSequenceWriter extends AbstractControlWriter {
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");
+        writer.write("</div>");
     }
 
     private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {

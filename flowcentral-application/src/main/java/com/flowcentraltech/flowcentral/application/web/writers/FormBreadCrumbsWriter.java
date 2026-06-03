@@ -43,10 +43,11 @@ public class FormBreadCrumbsWriter extends AbstractControlWriter {
         writer.write(">");
         BreadCrumbs frmBreadCrumbs = frmBreadCrumbsWidget.getBreadCrumbs();
         if (frmBreadCrumbs != null) {
-            final int size = frmBreadCrumbs.getDepth();
             writer.write("<span class=\"base\">");
-            for (int i = 0; i < size; i++) {
-                writeFontIcon(writer, "chevron-left");
+            if (frmBreadCrumbs.getDepth() == 0) {
+                writeFontIcon(writer, "stop");
+            } else {
+                writeFontIcon(writer, "arrow-left");
             }
             
             writer.write("</span>");

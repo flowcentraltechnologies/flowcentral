@@ -585,13 +585,15 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-paramvalues .item {display:inline-block; width: 200px; margin-right:6px;}
 
 /* Field sequence */
-.fc-fieldsequence {padding:4px;}
-.fc-fieldsequence .line {padding-bottom: 2px;}
+.fc-fieldsequence {padding:6px;}
+.fc-fieldsequence .line {display:table-row;}
 .fc-fieldsequence .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
-.fc-fieldsequence .label {display:inline-block; margin-right:6px;color:#808080;font-style: italic;font-size: 7pt;}
-.fc-fieldsequence .item {display:inline-block; margin-right:6px;width:200px;}
-.fc-fieldsequence .atab {display:inline-block;vertical-align: middle;height:24px;width:140px;}
+.fc-fieldsequence .itab {display:table-cell;width:calc(50% - 35px);padding-bottom:6px;}
+.fc-fieldsequence .label {display:block; color:#808080;font-style: italic;font-size: 7pt;}
+.fc-fieldsequence .item {display:block;padding:0px 2px;width:100%;box-sizing:border-box;}
+.fc-fieldsequence .atab {display:table-cell;vertical-align: middle;width:70px;padding-left:4px;
+  padding-top:4px;box-sizing: border-box;}
 .fc-fieldsequence .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #fff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; cursor: pointer;}
 .fc-fieldsequence .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
