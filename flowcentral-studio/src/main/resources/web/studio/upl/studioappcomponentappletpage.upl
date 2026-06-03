@@ -14,7 +14,7 @@
 // the License.
 
 !ui-page captionBinding:$s{instTitle} subCaptionBinding:$s{typeTitle}
-	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{none 396px}}
+	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{none 324px}}
 	components:$c{designBasePanel}
 	components:$c{appletPanel}
 
