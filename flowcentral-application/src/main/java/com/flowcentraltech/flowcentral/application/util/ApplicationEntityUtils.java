@@ -313,7 +313,7 @@ public final class ApplicationEntityUtils {
         AppFormElement appFormElement = new AppFormElement();
         appFormElement.setType(FormElementType.SECTION);
         appFormElement.setElementName("changeLog");
-        appFormElement.setSectionColumns(FormColumnsType.TYPE_2);
+        appFormElement.setSectionColumns(FormColumnsType.TYPE_1);
         appFormElement.setVisible(true);
         appFormElement.setDisabled(true);
         appFormElement.setConfigType(ConfigType.STATIC);
@@ -342,7 +342,7 @@ public final class ApplicationEntityUtils {
         appFormElement.setType(FormElementType.FIELD);
         appFormElement.setElementName("createDt");
         appFormElement.setInputWidget("application.datetimetext");
-        appFormElement.setFieldColumn(1);
+        appFormElement.setFieldColumn(0);
         appFormElement.setVisible(true);
         appFormElement.setConfigType(ConfigType.STATIC);
         elementList.add(appFormElement);
@@ -351,7 +351,7 @@ public final class ApplicationEntityUtils {
         appFormElement.setType(FormElementType.FIELD);
         appFormElement.setElementName("updateDt");
         appFormElement.setInputWidget("application.datetimetext");
-        appFormElement.setFieldColumn(1);
+        appFormElement.setFieldColumn(0);
         appFormElement.setVisible(true);
         appFormElement.setConfigType(ConfigType.STATIC);
         elementList.add(appFormElement);
