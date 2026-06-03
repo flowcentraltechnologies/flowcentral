@@ -331,8 +331,8 @@ public final class ApplicationEntityUtils {
 
         appFormElement = new AppFormElement();
         appFormElement.setType(FormElementType.FIELD);
-        appFormElement.setElementName("updatedBy");
-        appFormElement.setInputWidget("application.name");
+        appFormElement.setElementName("createDt");
+        appFormElement.setInputWidget("application.datetimetext");
         appFormElement.setFieldColumn(0);
         appFormElement.setVisible(true);
         appFormElement.setConfigType(ConfigType.STATIC);
@@ -340,8 +340,8 @@ public final class ApplicationEntityUtils {
 
         appFormElement = new AppFormElement();
         appFormElement.setType(FormElementType.FIELD);
-        appFormElement.setElementName("createDt");
-        appFormElement.setInputWidget("application.datetimetext");
+        appFormElement.setElementName("updatedBy");
+        appFormElement.setInputWidget("application.name");
         appFormElement.setFieldColumn(0);
         appFormElement.setVisible(true);
         appFormElement.setConfigType(ConfigType.STATIC);
