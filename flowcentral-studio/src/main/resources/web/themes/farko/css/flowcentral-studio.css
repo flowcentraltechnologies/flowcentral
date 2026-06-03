@@ -391,9 +391,7 @@ body, td, th, button, input, select, textarea {
 .studiodetail .fc-filter .item,
 .studiodetail .fc-propertysequence .item,
 .studiodetail .fc-setvalues .item {width:84px;margin-right:2px;}
-.studiodetail .fc-searchinputs .vitem {width:184px;margin-right:2px;}
 .studiodetail .fc-tabsheet {font-size:var(--studiodetail-fontsize);}
-.studiodetail .fc-fieldsequence .abutton {min-width:18px;}
 .studiodetail .fc-propertysequence .atab {width:initial;}
 .studiodetail .ui-select .sslist .norm {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-entitylist .tread {background-color:#ffffff;}

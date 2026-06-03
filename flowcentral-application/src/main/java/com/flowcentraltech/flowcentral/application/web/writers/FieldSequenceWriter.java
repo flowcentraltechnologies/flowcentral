@@ -57,36 +57,39 @@ public class FieldSequenceWriter extends AbstractControlWriter {
             Control deleteCtrl = fieldSequenceWidget.getDeleteCtrl();
             
             final String usesLabel = resolveSessionMessage("$m{fieldsequence.usesformatter}");
-            writer.write("<div style=\"display:table;table-layout:fixed;\">");
+            writer.write("<div style=\"display:table;table-layout:fixed;width:100%;\">");
             
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = fieldSequenceWidget.getItemValueStoreAt(i);
                 FieldSequenceEntry fso = fieldSequenceWidget.getItemAt();
                 writer.write("<div class=\"line\">");
+                
                 final String columnLabel = resolveSessionMessage("$m{fieldsequence.column}", i + 1);
+                writer.write("<div class=\"itab\">");
                 writeValuesItem(writer, lineValueStore, fieldSelectCtrl, columnLabel);
+                writer.write("</div>");
+                writer.write("<div class=\"itab\">");
                 if (!StringUtils.isBlank(fso.getFieldName())) {
                     writeValuesItem(writer, lineValueStore, paramCtrl, usesLabel);
-                    writer.write("<div class=\"atab\">");
+                }
+                writer.write("</div>");
+                
+                writer.write("<div class=\"atab\">");
+                if (!StringUtils.isBlank(fso.getFieldName())) {
                     moveUpCtrl.setDisabled(i == 0);
                     moveDownCtrl.setDisabled(i >= (len - 2));
                     writeActionItem(writer, lineValueStore, moveUpCtrl);
                     writeActionItem(writer, lineValueStore, moveDownCtrl);
                     writeActionItem(writer, lineValueStore, deleteCtrl);
-                    writer.write("</div>");
-                } else {
-                    writer.write("<div class=\"itab\">");
-                    writer.write("</div>");
-                    writer.write("<div class=\"atab\">");
-                    writer.write("</div>");
                 }
+                writer.write("</div>");
                 
                 writer.write("</div>");
             }
 
             writer.write("</div>");
-
         }
+        
         writer.write("</div>");
     }
 
@@ -125,7 +128,6 @@ public class FieldSequenceWriter extends AbstractControlWriter {
 
     private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
             throws UnifyException {
-        writer.write("<div class=\"itab\">");
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
@@ -133,7 +135,6 @@ public class FieldSequenceWriter extends AbstractControlWriter {
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");
-        writer.write("</div>");
     }
 
     private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
