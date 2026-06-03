@@ -17,17 +17,20 @@
 	--color-slate:#f7f9fa;
 	--color-slate-border:solid 1px #c0c0c0;
 	--color-pencil:#484848;
-	--studiodetail-fontsize:7pt;
+	--studiodetail-fontsize:6.5pt;
  }
 
 /* flowCentral studio CSS */
 body, td, th, button, input, select, textarea {
-  font-size: 8pt;
+  font-size: 7.5pt;
 }
 
 .ui-select .sslist .norm:hover {background-color: #d5e7fb;color: #000;}
 .ui-select .sslist .sel {background-color: #3c4e63;color: #FFF;}
 
+.fc-table .table td {padding: 4px 6px;}
+
+.fc-miniform .mfpre {width: 78px;}
 
 /* CRUD dialog */
 .fc-cruddialog {}
