@@ -55,25 +55,36 @@ public class SetValuesWriter extends AbstractControlWriter {
             Control typeSelectCtrl = setValuesWidget.getTypeSelectCtrl();
             DynamicField paramCtrl = setValuesWidget.getParamCtrl();
             Control deleteCtrl = setValuesWidget.getDeleteCtrl();
+            final String fieldLabel = resolveSessionMessage("$m{searchinputs.field}");
+            writer.write("<div style=\"display:table;table-layout:fixed;width:100%;\">");
+
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = setValuesWidget.getItemValueStoreAt(i);
                 SetValueEntry svo = setValuesWidget.getItemAt();
                 writer.write("<div class=\"line\">");
-                writeValuesItem(writer, lineValueStore, fieldSelectCtrl);
-                if (!StringUtils.isBlank(svo.getFieldName())) {
-                    writeValuesItem(writer, lineValueStore, typeSelectCtrl);
-                    if (svo.getType() != null && !svo.getType().isNoParam()) {
-                        if (svo.getParamInput() != null) {
-                            writeValuesItem(writer, lineValueStore, paramCtrl);
-                        }
-                    }
 
-                    writer.write("<div class=\"atab\">");
-                    writeActionItem(writer, lineValueStore, deleteCtrl);
-                    writer.write("</div>");
+                final boolean isWithFieldName = !StringUtils.isBlank(svo.getFieldName());
+                writer.write("<div class=\"itab\">");
+                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
+                if (isWithFieldName) {
+                    writeValuesItem(writer, lineValueStore, typeSelectCtrl, null);
+                }
+                if (isWithFieldName && svo.getType() != null && !svo.getType().isNoParam()
+                        && svo.getParamInput() != null) {
+                    writeValuesItem(writer, lineValueStore, paramCtrl, null);
                 }
                 writer.write("</div>");
+
+                writer.write("<div class=\"atab\">");
+                if (isWithFieldName) {
+                    writeActionItem(writer, lineValueStore, deleteCtrl);
+                }
+                writer.write("</div>");
+
+                writer.write("</div>");
             }
+
+            writer.write("</div>");
 
         }
         writer.write("</div>");
@@ -117,7 +128,14 @@ public class SetValuesWriter extends AbstractControlWriter {
         writer.endFunction();
     }
 
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
+    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
+            throws UnifyException {
+        if (label != null) {
+            writer.write("<span class=\"label\">");
+            writer.write(label);
+            writer.write("</span>");
+        }
+
         writer.write("<span class=\"item\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);

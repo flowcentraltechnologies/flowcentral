@@ -65,17 +65,16 @@ public class FieldSequenceWriter extends AbstractControlWriter {
                 writer.write("<div class=\"line\">");
                 
                 final String columnLabel = resolveSessionMessage("$m{fieldsequence.column}", i + 1);
+                final boolean isWithFieldName = !StringUtils.isBlank(fso.getFieldName());
                 writer.write("<div class=\"itab\">");
                 writeValuesItem(writer, lineValueStore, fieldSelectCtrl, columnLabel);
-                writer.write("</div>");
-                writer.write("<div class=\"itab\">");
-                if (!StringUtils.isBlank(fso.getFieldName())) {
+                if (isWithFieldName) {
                     writeValuesItem(writer, lineValueStore, paramCtrl, usesLabel);
                 }
                 writer.write("</div>");
                 
                 writer.write("<div class=\"atab\">");
-                if (!StringUtils.isBlank(fso.getFieldName())) {
+                if (isWithFieldName) {
                     moveUpCtrl.setDisabled(i == 0);
                     moveDownCtrl.setDisabled(i >= (len - 2));
                     writeActionItem(writer, lineValueStore, moveUpCtrl);

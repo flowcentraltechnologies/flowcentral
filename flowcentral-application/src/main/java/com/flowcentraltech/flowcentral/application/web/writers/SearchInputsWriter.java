@@ -84,8 +84,6 @@ public class SearchInputsWriter extends AbstractControlWriter {
                         writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel);
                     }
                 }
-                writer.write("</div>");
-                writer.write("<div class=\"itab\">");
                 if (isWithFieldName && isWithLabel && isWithWidget) {
                     writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel);
                     if (sie.isWithDefValInput()) {
@@ -104,48 +102,6 @@ public class SearchInputsWriter extends AbstractControlWriter {
                     writeActionItem(writer, lineValueStore, deleteCtrl);
                 }
                 writer.write("</div>");
-
-//                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
-//                if (sie.isWithFieldName()) {
-//                    writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel);
-//                    if (sie.isWithLabel()) {
-//                        writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel);
-//                        if (sie.isWithWidget() && sie.isFieldInput()) {
-//                            writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel);
-//                            if (sie.isWithDefValInput()) {
-//                                writeValuesItem(writer, lineValueStore, defValCtrl, defValLabel);
-//                                writeValuesItem(writer, lineValueStore, fixedCtrl, fixedLabel);
-//                            } else {
-//                                writeBlankValuesItem(writer);
-//                                writeBlankValuesItem(writer);
-//                            }
-//                        } else {
-//                            writeBlankValuesItem(writer);
-//                            writeBlankValuesItem(writer);
-//                            writeBlankValuesItem(writer);
-//                        }
-//                    } else {
-//                        writeBlankValuesItem(writer);
-//                        writeBlankValuesItem(writer);
-//                        writeBlankValuesItem(writer);
-//                        writeBlankValuesItem(writer);
-//                    }
-//                } else {
-//                    writeBlankValuesItem(writer);
-//                    writeBlankValuesItem(writer);
-//                    writeBlankValuesItem(writer);
-//                    writeBlankValuesItem(writer);
-//                    writeBlankValuesItem(writer);
-//                }
-//
-//                writer.write("</td><td class=\"atab\">");
-//                moveUpCtrl.setDisabled(i == 0);
-//                moveDownCtrl.setDisabled(i >= (len - 2));
-//                writeActionItem(writer, lineValueStore, moveUpCtrl);
-//                writeActionItem(writer, lineValueStore, moveDownCtrl);
-//                if (i < last) {
-//                    writeActionItem(writer, lineValueStore, deleteCtrl);
-//                }
 
                 writer.write("</div>");
             }

@@ -388,10 +388,7 @@ body, td, th, button, input, select, textarea {
 .studiodetail .fc-miniform .mflabel {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-miniform .mflabel span{font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-filter .tab {width: 20px !important;}
-.studiodetail .fc-filter .item,
-.studiodetail .fc-propertysequence .item,
-.studiodetail .fc-setvalues .item {width:84px;margin-right:2px;}
+.studiodetail .fc-filter .item {width:84px;margin-right:2px;}
 .studiodetail .fc-tabsheet {font-size:var(--studiodetail-fontsize);}
-.studiodetail .fc-propertysequence .atab {width:initial;}
 .studiodetail .ui-select .sslist .norm {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-entitylist .tread {background-color:#ffffff;}

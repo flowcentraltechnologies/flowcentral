@@ -61,26 +61,36 @@ public class PropertySequenceWriter extends AbstractControlWriter {
             Control moveUpCtrl = propertySequenceWidget.getMoveUpCtrl();
             Control moveDownCtrl = propertySequenceWidget.getMoveDownCtrl();
             Control deleteCtrl = propertySequenceWidget.getDeleteCtrl();
+            writer.write("<div style=\"display:table;table-layout:fixed;width:100%;\">");
 
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = propertySequenceWidget.getItemValueStoreAt(i);
                 PropertySequenceEntry pso = (PropertySequenceEntry) propertySequenceWidget.getItemAt();
                 writer.write("<div class=\"line\">");
+                final boolean isWithProperty = !StringUtils.isBlank(pso.getProperty());
+                writer.write("<div class=\"itab\">");
                 writeValuesItem(writer, lineValueStore, propertySelectCtrl, lineTypeLabel);
-                if (!StringUtils.isBlank(pso.getProperty())) {
+                if (isWithProperty) {
                     writeValuesItem(writer, lineValueStore, labelCtrl, lineLabel);
-                    writer.write("<div class=\"atab\">");
-                    moveUpCtrl.setDisabled(i == 0);
-                    moveDownCtrl.setDisabled(i >= (len - 2));
-                    writeActionItem(writer, lineValueStore, moveUpCtrl);
-                    writeActionItem(writer, lineValueStore, moveDownCtrl);
-                    writeActionItem(writer, lineValueStore, deleteCtrl);
-                    writer.write("</div>");
                 }
+                writer.write("</div>");
+                
+                writer.write("<div class=\"atab\">");
+                if (isWithProperty) {
+                  moveUpCtrl.setDisabled(i == 0);
+                  moveDownCtrl.setDisabled(i >= (len - 2));
+                  writeActionItem(writer, lineValueStore, moveUpCtrl);
+                  writeActionItem(writer, lineValueStore, moveDownCtrl);
+                  writeActionItem(writer, lineValueStore, deleteCtrl);
+                }
+                writer.write("</div>");
+                
                 writer.write("</div>");
             }
 
+            writer.write("</div>");
         }
+        
         writer.write("</div>");
     }
 
