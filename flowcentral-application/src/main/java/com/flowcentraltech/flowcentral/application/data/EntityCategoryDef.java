@@ -32,15 +32,15 @@ public class EntityCategoryDef implements Listable {
 
     private String label;
 
-    private String fieldName;
+    private String dateTimefieldName;
 
     private FilterDef filterDef;
 
-    public EntityCategoryDef(String name, String description, String label, String fieldName, FilterDef filterDef) {
+    public EntityCategoryDef(String name, String description, String label, String dateTimefieldName, FilterDef filterDef) {
         this.name = name;
         this.description = description;
         this.label = label;
-        this.fieldName = fieldName;
+        this.dateTimefieldName = dateTimefieldName;
         this.filterDef = filterDef;
     }
 
@@ -66,12 +66,12 @@ public class EntityCategoryDef implements Listable {
         return label;
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public String getDateTimeFieldName() {
+        return dateTimefieldName;
     }
 
-    public boolean isWithFieldName() {
-        return !StringUtils.isBlank(fieldName);
+    public boolean isTimeSeriesCategory() {
+        return !StringUtils.isBlank(dateTimefieldName);
     }
     
     public FilterDef getFilterDef() {

@@ -130,6 +130,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityCategoryDef> categoryDefList;
 
+    private List<EntityCategoryDef> timeSeriesCategoryDefList;
+
     private List<EntityAttachmentDef> attachmentList;
 
     private List<UniqueConstraintDef> uniqueConstraintList;
@@ -659,7 +661,13 @@ public class EntityDef extends BaseApplicationEntityDef {
         if (categoryDefList == null) {
             synchronized (this) {
                 if (categoryDefList == null) {
-                    categoryDefList = new ArrayList<EntityCategoryDef>(categoryDefs.values());
+                    categoryDefList = new ArrayList<EntityCategoryDef>();
+                    for (EntityCategoryDef entityCategoryDef: categoryDefs.values()) {
+                        if(!entityCategoryDef.isTimeSeriesCategory()) {
+                            categoryDefList.add(entityCategoryDef);
+                        }
+                    }
+                    
                     DataUtils.sortAscending(categoryDefList, EntityCategoryDef.class, "description");
                     categoryDefList = DataUtils.unmodifiableList(categoryDefList);
                 }
@@ -667,6 +675,26 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return categoryDefList;
+    }
+
+    public List<EntityCategoryDef> getTimeSeriesCategoryDefList() throws UnifyException {
+        if (timeSeriesCategoryDefList == null) {
+            synchronized (this) {
+                if (timeSeriesCategoryDefList == null) {
+                    timeSeriesCategoryDefList = new ArrayList<EntityCategoryDef>();
+                    for (EntityCategoryDef entityCategoryDef: categoryDefs.values()) {
+                        if(entityCategoryDef.isTimeSeriesCategory()) {
+                            timeSeriesCategoryDefList.add(entityCategoryDef);
+                        }
+                    }
+                    
+                    DataUtils.sortAscending(timeSeriesCategoryDefList, EntityCategoryDef.class, "description");
+                    timeSeriesCategoryDefList = DataUtils.unmodifiableList(timeSeriesCategoryDefList);
+                }
+            }
+        }
+
+        return timeSeriesCategoryDefList;
     }
 
     public List<? extends Listable> getFilterFieldListables(LabelSuggestionDef labelSuggestionDef)

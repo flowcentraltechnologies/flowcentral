@@ -20,10 +20,8 @@
 
 // Design panel
 !ui-panel:designBasePanel style:$s{width:100%;height:100%;padding-right:4px;box-sizing:border-box;}
-	layout:$d{!ui-vertical style:$s{width:100%;height:100%;} heights:$l{24px none}}
-	components:$c{designTitleLabel}
+	layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
 	components:$c{designPanel}
-!ui-label:designTitleLabel styleClass:$e{fc-designtitle} captionBinding:compTitle
 !ui-panel:designPanel style:$s{width:100%;height:100%;}
 	
 // Applet panel

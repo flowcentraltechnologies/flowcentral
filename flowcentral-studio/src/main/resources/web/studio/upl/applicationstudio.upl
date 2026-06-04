@@ -73,8 +73,8 @@
 !ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed}
 	documentPath:$s{/applicationstudio}
 	paths:$s{/applicationstudio/dashboard/openPage}
-//	stickyPaths:$s{/applicationstudio/dashboard/openPage}
-	tabbed:false
+	stickyPaths:$s{/applicationstudio/dashboard/openPage}
+	tabbed:true
 	titleUppercase:false  
 
 // New application dialog

@@ -58,7 +58,7 @@ body, td, th, button, input, select, textarea {
 .fc-studiomenu {height: 100%; max-height: calc(100vh - 40px) !important; background-color: #24303f; color:#ffffff;}
 .fc-studiomenu .mheader {height: 24px;background-color: #3e4a59;}
 .fc-studiomenu .mheader span {display: block;padding:6px 12px; font-weight:bold;color:#d9d9d9;font-size: 10px;}
-.fc-studiomenu .mbody {height: calc(100vh - 62px) !important;max-height: calc(100vh - 62px) !important;overflow-y:scroll;}
+.fc-studiomenu .mbody {overflow-y:auto;}
 .fc-studiomenu .menucatbar {background-color: #14202f;width: 68px;}
 .fc-studiomenu .menucat {width: 80px; padding: 6px 2px 6px 8px; box-sizing: border-box; cursor:pointer;}
 .fc-studiomenu .menucat:hover {background-color: #3e4a59;}
@@ -72,7 +72,7 @@ body, td, th, button, input, select, textarea {
 .fc-studiomenu .menu li {padding:8px; cursor:pointer;}
 .fc-studiomenu .menu li:hover {background-color: #3e4a59;}
 .fc-studiomenu .menu span {}
-.fc-studiomenu .mtop {margin-top:30px;}
+.fc-studiomenu .mtop {height:30px;}
 .fc-studiomenu .mfil {display:inline-block;color:#ffffff;font-size: 10px;padding: 4px;}
 .fc-studiomenu .mban {display:inline-block;color:#a34523;font-size: 12px !important;cursor:pointer;padding: 4px;}
 .fc-studiomenu .msearch {background-color:#24303f;padding:4px;position: fixed;min-width: 232px;}

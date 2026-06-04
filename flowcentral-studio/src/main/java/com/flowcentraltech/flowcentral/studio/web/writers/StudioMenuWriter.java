@@ -116,7 +116,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         writer.write("<span>");
         writer.writeWithHtmlEscape(application ? getSessionMessage("studio.menu.application.components")
                 : getSessionMessage("studio.menu.application.utilities"));
-        writer.write("</span></div><div class=\"mbody\">");
+        writer.write("</span></div><div style=\"height:100%;overflow-y:auto;\">");
         if (searchable) {
             // Search
             writer.write("<div class=\"msearch\">");
@@ -145,12 +145,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
         studioMenuWidget.setCurrentSel(currCategory);
 
-        writer.write("<div");
+        writer.write("<div style=\"display:table;width:100%;height:100%;\">");
         if (searchable) {
-            writer.write(" class=\"mtop\"");
+            writer.write("<div style=\"display:table-row;\"><div class=\"mtop\" style=\"display:table-cell;\"></div></div>");
         }
-
-        writer.write(" style=\"display:table;width:100%;height:100%;\"><div style=\"display:table-row;\">");
+        
+        writer.write("<div style=\"display:table-row;\">");
         // Category
         writer.write("<div class=\"menucatbar\" style=\"display:table-cell;vertical-align:top;\">");
         JsonWriter cjw = new JsonWriter();
