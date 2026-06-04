@@ -29,8 +29,8 @@ body, td, th, button, input, select, textarea {
 .ui-select .sslist .sel {background-color: #3c4e63;color: #FFF;}
 
 .fc-table .table td {padding: 4px 6px;}
-
 .fc-miniform .mfpre {width: 78px;}
+.fc-formbreadcrumbs .base {color: var(--color-formsec);}
 
 /* CRUD dialog */
 .fc-cruddialog {}
@@ -80,7 +80,7 @@ body, td, th, button, input, select, textarea {
 .fc-studiomenu .search {display: inline-block;padding-left: 4px;font-size: 8pt;height: 22px;width: calc(100% - 48px);}
 
 /** Editor */
-.fc-designtitle {color:#ffffff;font-weight:bold;background-color: #617C9C;padding: 4px 6px; box-sizing: border-box;}
+.fc-designtitle {color:#ffffff;font-weight:bold;background-color:var(--color-formsec);padding: 4px 6px; box-sizing: border-box;}
 
 /** Entity Editor */
 .fc-entityeditor {width:100%;height:100%;}
@@ -390,8 +390,6 @@ body, td, th, button, input, select, textarea {
 .studiodetail .fc-miniform .mfclabel {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-miniform .mflabel {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-miniform .mflabel span{font-size:var(--studiodetail-fontsize);}
-.studiodetail .fc-filter .tab {width: 20px !important;}
-.studiodetail .fc-filter .item {width:84px;margin-right:2px;}
 .studiodetail .fc-tabsheet {font-size:var(--studiodetail-fontsize);}
 .studiodetail .ui-select .sslist .norm {font-size:var(--studiodetail-fontsize);}
 .studiodetail .fc-entitylist .tread {background-color:#ffffff;}

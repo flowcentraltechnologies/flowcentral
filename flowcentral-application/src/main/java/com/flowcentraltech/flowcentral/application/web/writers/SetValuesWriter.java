@@ -65,13 +65,13 @@ public class SetValuesWriter extends AbstractControlWriter {
 
                 final boolean isWithFieldName = !StringUtils.isBlank(svo.getFieldName());
                 writer.write("<div class=\"itab\">");
-                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
+                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel, true);
                 if (isWithFieldName) {
-                    writeValuesItem(writer, lineValueStore, typeSelectCtrl, null);
+                    writeValuesItem(writer, lineValueStore, typeSelectCtrl, null, false);
                 }
                 if (isWithFieldName && svo.getType() != null && !svo.getType().isNoParam()
                         && svo.getParamInput() != null) {
-                    writeValuesItem(writer, lineValueStore, paramCtrl, null);
+                    writeValuesItem(writer, lineValueStore, paramCtrl, null, false);
                 }
                 writer.write("</div>");
 
@@ -128,7 +128,7 @@ public class SetValuesWriter extends AbstractControlWriter {
         writer.endFunction();
     }
 
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
+    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label, boolean bar)
             throws UnifyException {
         if (label != null) {
             writer.write("<span class=\"label\">");
@@ -136,7 +136,7 @@ public class SetValuesWriter extends AbstractControlWriter {
             writer.write("</span>");
         }
 
-        writer.write("<span class=\"item\">");
+        writer.write(bar ? "<span class=\"item bar\">" : "<span class=\"item\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");

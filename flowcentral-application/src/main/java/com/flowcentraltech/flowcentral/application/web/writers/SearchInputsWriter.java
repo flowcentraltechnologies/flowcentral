@@ -77,18 +77,18 @@ public class SearchInputsWriter extends AbstractControlWriter {
                 final boolean isWithWidget = sie.isWithWidget();
                 writer.write("<div class=\"line\">");
                 writer.write("<div class=\"itab\">");
-                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
+                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel, true);
                 if (isWithFieldName) {
-                    writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel);
+                    writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel, false);
                     if (isWithLabel) {
-                        writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel);
+                        writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel, false);
                     }
                 }
                 if (isWithFieldName && isWithLabel && isWithWidget) {
-                    writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel);
+                    writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel, false);
                     if (sie.isWithDefValInput()) {
-                        writeValuesItem(writer, lineValueStore, defValCtrl, defValLabel);
-                        writeValuesItem(writer, lineValueStore, fixedCtrl, fixedLabel);
+                        writeValuesItem(writer, lineValueStore, defValCtrl, defValLabel, false);
+                        writeValuesItem(writer, lineValueStore, fixedCtrl, fixedLabel, false);
                     }
                 }
                 writer.write("</div>");
@@ -164,12 +164,12 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writer.endFunction();
     }
 
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
+    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label, boolean bar)
             throws UnifyException {
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
-        writer.write("<span class=\"item\">");
+        writer.write(bar ? "<span class=\"item bar\">" : "<span class=\"item\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");

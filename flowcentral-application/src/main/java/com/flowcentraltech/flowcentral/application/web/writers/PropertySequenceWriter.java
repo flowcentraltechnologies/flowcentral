@@ -69,9 +69,9 @@ public class PropertySequenceWriter extends AbstractControlWriter {
                 writer.write("<div class=\"line\">");
                 final boolean isWithProperty = !StringUtils.isBlank(pso.getProperty());
                 writer.write("<div class=\"itab\">");
-                writeValuesItem(writer, lineValueStore, propertySelectCtrl, lineTypeLabel);
+                writeValuesItem(writer, lineValueStore, propertySelectCtrl, lineTypeLabel, true);
                 if (isWithProperty) {
-                    writeValuesItem(writer, lineValueStore, labelCtrl, lineLabel);
+                    writeValuesItem(writer, lineValueStore, labelCtrl, lineLabel, false);
                 }
                 writer.write("</div>");
                 
@@ -127,12 +127,12 @@ public class PropertySequenceWriter extends AbstractControlWriter {
         writer.endFunction();
     }
 
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
+    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label, boolean bar)
             throws UnifyException {
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
-        writer.write("<span class=\"item\">");
+        writer.write(bar ? "<span class=\"item bar\">" : "<span class=\"item\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");

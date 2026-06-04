@@ -67,13 +67,13 @@ public class FilterWriter extends AbstractControlWriter {
                 FilterCondition fo = filterWidget.getItemAt();
 
                 writer.write("<div class=\"line\">");
-                // Write depth tabs
-                int depth = fo.getDepth();
-                for (int j = 0; j < depth; j++) {
-                    writer.write("<span class=\"tab\">&nbsp;</span>");
-                }
-
                 if (fo.getType() != null && fo.getType().isCompound()) {
+                    // Write depth tabs
+                    int depth = fo.getDepth();
+                    for (int j = 0; j < depth; j++) {
+                        writer.write("<span class=\"tab\">&nbsp;</span>");
+                    }
+
                     writer.write("<span class=\"tab\">");
                     writer.write(getSessionMessage(fo.getType().symbolKey()));
                     writer.write("</span>");
@@ -88,8 +88,22 @@ public class FilterWriter extends AbstractControlWriter {
                     }
                     writer.write("</div>");
                 } else {
+                    writer.write("<div class=\"cond\">");
+                    writer.write("<div class=\"cline\">");
+                    final boolean isWithFieldName = !StringUtils.isBlank(fo.getFieldName());
+                    final int depth = fo.getDepth();
+                    writer.write("<div style=\"display:table-cell;width:");
+                    writer.write(32 * depth);
+                    writer.write("px;\">");
+                    // Write depth tabs
+                    for (int j = 0; j < depth; j++) {
+                        writer.write("<span class=\"tab\">&nbsp;</span>");
+                    }
+                    writer.write("</div>");
+
+                    writer.write("<div class=\"ctab\">");
                     writeFilterItem(writer, lineValueStore, fieldSelectCtrl);
-                    if (!StringUtils.isBlank(fo.getFieldName())) {
+                    if (isWithFieldName) {
                         writeFilterItem(writer, lineValueStore, conditionTypeCtrl);
                         if (fo.getType() != null) {
                             if (fo.getType().isFieldVal() || fo.getType().isParameterVal()) {
@@ -106,8 +120,13 @@ public class FilterWriter extends AbstractControlWriter {
                         }
                     }
 
+                    writer.write("</div>");
+
                     writer.write("<div class=\"atab2\">");
                     writeActionItem(writer, lineValueStore, deleteCtrl);
+                    writer.write("</div>");
+
+                    writer.write("</div>");
                     writer.write("</div>");
                 }
 
@@ -172,7 +191,7 @@ public class FilterWriter extends AbstractControlWriter {
     }
 
     private void writeFilterItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
-        writer.write("<span class=\"item\">");
+        writer.write("<span class=\"citem\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");

@@ -67,9 +67,9 @@ public class FieldSequenceWriter extends AbstractControlWriter {
                 final String columnLabel = resolveSessionMessage("$m{fieldsequence.column}", i + 1);
                 final boolean isWithFieldName = !StringUtils.isBlank(fso.getFieldName());
                 writer.write("<div class=\"itab\">");
-                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, columnLabel);
+                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, columnLabel, true);
                 if (isWithFieldName) {
-                    writeValuesItem(writer, lineValueStore, paramCtrl, usesLabel);
+                    writeValuesItem(writer, lineValueStore, paramCtrl, usesLabel, false);
                 }
                 writer.write("</div>");
                 
@@ -125,12 +125,12 @@ public class FieldSequenceWriter extends AbstractControlWriter {
         writer.endFunction();
     }
 
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
+    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label, boolean bar)
             throws UnifyException {
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
-        writer.write("<span class=\"item\">");
+        writer.write(bar ? "<span class=\"item bar\">" : "<span class=\"item\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");

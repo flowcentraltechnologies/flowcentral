@@ -420,16 +420,20 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Filter */
 .fc-filter {padding:4px;}
 .fc-filter .line {padding-bottom: 2px;}
-.fc-filter .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
+.fc-filter .tab {display:inline-block; width:28px !important; text-align:right;padding-right:2px; border-right:4px solid var(--color-formsec);
 	font-weight:bold; vertical-align: middle;}
-.fc-filter .item {display:inline-block; margin-right:6px;width:232px;}
 .fc-filter .atab1 {display:inline-block;vertical-align: middle;height:24px;width:140px;}
 .fc-filter .atab1:hover {}
-.fc-filter .atab2 {display:inline-block;vertical-align: middle;height:24px;width:40px;}
-.fc-filter .atab2:hover {}
-.fc-filter .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #fff !important;color:#4c4c4c;
+.fc-filter .abutton {padding:0px 4px; min-height:22px; min-width:18px; margin-left:2px; font-size:10px; background-color: #fff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; cursor: pointer;}
 .fc-filter .abutton:hover:enabled {color: #4c4c4c;background-color:#6080f0;}
+
+.fc-filter .cond {display:table;table-layout:fixed;width:calc(100% - 64px);}
+.fc-filter .cline {display:table-row;}
+.fc-filter .citem {display:block;padding:0px 2px;width:100%;box-sizing:border-box;margin-left:2px;margin-bottom:2px;}
+.fc-filter .ctab  {display:table-cell;vertical-align:top;width:calc(100% - 24px);padding-bottom:8px;}
+.fc-filter .atab2 {display:table-cell;vertical-align: top;height:24px;width:24px;}
+.fc-filter .atab2:hover {}
 
 /* Filter generator search */
 .fc-filtergeneratorsearch {}
@@ -599,7 +603,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-fieldsequence .itab,
 .fc-propertysequence .itab,
 .fc-setvalues .itab,
-.fc-searchinputs .itab {display:table-cell;vertical-align:top;width:calc(100% - 70px);padding-bottom:14px;}
+.fc-searchinputs .itab {display:table-cell;vertical-align:top;width:calc(100% - 70px);padding-bottom:8px;}
 .fc-fieldsequence .label,
 .fc-propertysequence .label,
 .fc-setvalues .label,
@@ -607,11 +611,15 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-fieldsequence .item,
 .fc-propertysequence .item,
 .fc-setvalues .item,
-.fc-searchinputs .item {display:block;padding:0px 2px;width:100%;box-sizing:border-box;margin-bottom:2px;}
+.fc-searchinputs .item {display:block;padding:0px 2px;width:100%;box-sizing:border-box;margin-bottom:2px;border-left:4px solid transparent;}
+.fc-fieldsequence .bar,
+.fc-propertysequence .bar,
+.fc-setvalues .bar,
+.fc-searchinputs .bar {border-left:4px solid var(--color-formsec);}
 .fc-fieldsequence .atab,
 .fc-propertysequence .atab,
 .fc-setvalues .atab,
-.fc-searchinputs .atab {display:table-cell;vertical-align:top;width:70px;padding-left:4px; box-sizing: border-box;}
+.fc-searchinputs .atab {display:table-cell;vertical-align:top;width:70px;padding-left:4px;padding-top:13px;box-sizing: border-box;}
 .fc-fieldsequence .abutton,
 .fc-propertysequence .abutton,
 .fc-setvalues .abutton,
