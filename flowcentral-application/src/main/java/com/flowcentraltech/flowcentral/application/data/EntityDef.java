@@ -1655,7 +1655,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addCategoryDef(String name, String description, String label, FilterDef filterDef) {
+        public Builder addCategoryDef(String name, String description, String label, String fieldName, FilterDef filterDef) {
             if (categoryDefMap == null) {
                 categoryDefMap = new LinkedHashMap<String, EntityCategoryDef>();
             }
@@ -1664,7 +1664,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Category with name [" + name + "] already exists in this definition.");
             }
 
-            categoryDefMap.put(name, new EntityCategoryDef(name, description, label, filterDef));
+            categoryDefMap.put(name, new EntityCategoryDef(name, description, label, fieldName, filterDef));
             return this;
         }
 

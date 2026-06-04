@@ -233,11 +233,6 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentitybooleanfieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="entitycategoryfieldlist"
-			description="$m{studio.widgettype.entitycategoryfieldlist}"
-			dataType="STRING" inputType="STRING"
-			editor="!ui-select list:studioentitycategoryfieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
-			renderer="!ui-label" />
 		<widgetType name="entitysearchfieldlist"
 			description="$m{studio.widgettype.entitysearchfieldlist}"
 			dataType="STRING" inputType="STRING"
@@ -267,6 +262,11 @@
 			description="$m{studio.widgettype.searchentriesrestrictionresolverlist}"
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:searchentriesrestrictionresolverlist listParams:$l{appEntityId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="categoryentityfieldlist"
+			description="$m{studio.widgettype.categoryentityfieldlist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:studiocategoryentityfieldlist listKey:$s{name} listParams:$l{appEntityId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="seriesentityfieldlist"
 			description="$m{studio.widgettype.seriesentityfieldlist}"
@@ -3564,6 +3564,8 @@
 							column="0" required="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
+						<field name="fieldName" inputWidget="categoryentityfieldlist"
+							column="0" />
 					</section>
 				</tab>
 				<tab name="condition"
@@ -4224,11 +4226,6 @@
 						<field name="type" column="0" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
 							column="0" switchOnChange="true" required="true" />
-						<field name="categoryField"
-							inputWidget="studio.entitycategoryfieldlist" column="0"
-							switchOnChange="true" />
-						<field name="timeSeriesType"
-							inputWidget="application.enumlist" column="0" visible="false" />
 					</section>
 				</tab>
 				<tab name="series"
@@ -4278,18 +4275,6 @@
 					<setStates>
 						<setState type="FIELD" target="name,description,entity"
 							disabled="TRUE" />
-					</setStates>
-				</formStatePolicy>
-				<formStatePolicy type="ON_SWITCH"
-					name="categoriesFormPolicy"
-					description="$m{studio.chartdatasource.form.formstatepolicy.categories}">
-					<onCondition>
-						<restriction type="IS_NOT_NULL" field="categoryField" />
-					</onCondition>
-					<setStates>
-						<!--setState type="TAB" target="categories" visible="false" / -->
-						<setState type="FIELD" target="timeSeriesType"
-							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
 			</formStatePolicies>

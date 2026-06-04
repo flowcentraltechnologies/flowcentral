@@ -614,6 +614,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                                 ctx.isSnapshotMode() ? appEntityCategory.getDescription() : "$m{" + descKey + "}");
                         entityCategoryConfig
                                 .setLabel(ctx.isSnapshotMode() ? appEntityCategory.getLabel() : "$m{" + labelKey + "}");
+                        entityCategoryConfig.setFieldName(appEntityCategory.getFieldName());
                         FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(),
                                 appEntityCategory.getFilter());
                         entityCategoryConfig
