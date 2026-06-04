@@ -36,7 +36,11 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 public class ChartWidget extends AbstractFlowCentralControl {
 
     public ChartConfiguration getChartConfiguration() throws UnifyException {
-        return (ChartConfiguration) getValueStore().getValueObject();
+        if (getValueStore() != null) {
+            return (ChartConfiguration) getValueStore().getValueObject();
+        }
+        
+        return null;
     }
 
     public boolean isSparkLine() throws UnifyException {

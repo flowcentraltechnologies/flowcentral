@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.tcdng.unify.common.data.Listable;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity category definition.
@@ -32,15 +31,12 @@ public class EntityCategoryDef implements Listable {
 
     private String label;
 
-    private String dateTimefieldName;
-
     private FilterDef filterDef;
 
-    public EntityCategoryDef(String name, String description, String label, String dateTimefieldName, FilterDef filterDef) {
+    public EntityCategoryDef(String name, String description, String label, FilterDef filterDef) {
         this.name = name;
         this.description = description;
         this.label = label;
-        this.dateTimefieldName = dateTimefieldName;
         this.filterDef = filterDef;
     }
 
@@ -64,14 +60,6 @@ public class EntityCategoryDef implements Listable {
 
     public String getLabel() {
         return label;
-    }
-
-    public String getDateTimeFieldName() {
-        return dateTimefieldName;
-    }
-
-    public boolean isTimeSeriesCategory() {
-        return !StringUtils.isBlank(dateTimefieldName);
     }
     
     public FilterDef getFilterDef() {

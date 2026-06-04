@@ -846,7 +846,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 appEntityCategory.getName(), appEntityCategory.getDescription(), null,
                                 appEntityCategory.getFilter());
                         edb.addCategoryDef(appEntityCategory.getName(), appEntityCategory.getDescription(),
-                                appEntityCategory.getLabel(), appEntityCategory.getFieldName(), filterDef);
+                                appEntityCategory.getLabel(), filterDef);
                     }
 
                     for (AppEntityExpression appEntityExpression : appEntity.getExpressionList()) {
@@ -6726,7 +6726,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityCategory.setName(entityCategoryConfig.getName());
                     appEntityCategory.setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
                     appEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
-                    appEntityCategory.setFieldName(entityCategoryConfig.getFieldName());
                     appEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
                     appEntityCategory.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC);
                     categoryList.add(appEntityCategory);
@@ -6734,7 +6733,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppEntityCategory
                             .setDescription(resolveApplicationMessage(entityCategoryConfig.getDescription()));
                     oldAppEntityCategory.setLabel(resolveApplicationMessage(entityCategoryConfig.getLabel()));
-                    oldAppEntityCategory.setFieldName(entityCategoryConfig.getFieldName());
                     oldAppEntityCategory.setFilter(InputWidgetUtils.newAppFilter(entityCategoryConfig));
                     oldAppEntityCategory.setConfigType(ConfigType.STATIC);
                     categoryList.add(oldAppEntityCategory);

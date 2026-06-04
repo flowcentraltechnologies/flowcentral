@@ -112,21 +112,16 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
     private ChartDetails getChartData(ChartDataSourceDef chartDataSourceDef, Restriction erestriction,
             TimeResolutionType maxResolution) throws UnifyException {
         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
-        final EntityFieldDef preferredCategoryEntityFieldDef = chartDataSourceDef.getCategoryEntityFieldDef();
-        final ChartCategoryDataType chartCategoryType = preferredCategoryEntityFieldDef != null
-                && preferredCategoryEntityFieldDef.isTime() && !chartDataSourceDef.isMerged()
-                        ? ChartCategoryDataType.DATE
-                        : ChartCategoryDataType.STRING;
+        final ChartCategoryDataType chartCategoryType = null;// TODO
         ChartDetails.Builder cdb = ChartDetails.newBuilder(chartCategoryType);
-        cdb.dynamicCategories(chartDataSourceDef.isWithGroupingFields());
 
         final Date now = au().getNow();
         final PropertySequenceDef series = chartDataSourceDef.getSeries();
-        final List<AggregateFunction> aggregateFunction = new ArrayList<AggregateFunction>();
+        final List<AggregateFunction> aggregateFunctions = new ArrayList<AggregateFunction>();
         if (chartDataSourceDef.isWithSeries()) {
             for (PropertySequenceEntryDef sequenceDef : series.getSequenceList()) {
                 EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
-                aggregateFunction.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
+                aggregateFunctions.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName()));
             }
         }
 
@@ -306,9 +301,8 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
                     entityFieldDef = entityFieldDef.getResolvedTypeFieldDef();
                 }
 
-                headers.add(new ChartTableColumn(
-                        /* entityFieldDef.isListOnly() ? EntityFieldDataType.STRING : */entityFieldDef.getDataType(),
-                        entitySeriesDef.getFieldName(), entitySeriesDef.getLabel(), false));
+                headers.add(new ChartTableColumn(entityFieldDef.getDataType(),
+                        entitySeriesDef.getName(), entitySeriesDef.getLabel(), false));
             }
 
             cdb.createTableSeries(DataUtils.toArray(ChartTableColumn.class, headers));

@@ -68,7 +68,7 @@ public class ChartWriter extends AbstractWidgetWriter {
 
     @Configurable
     private ChartOptionsProvider chartOptionsProvider;
-    
+
     @Configurable
     private AppletUtilities appletUtilities;
 
@@ -77,111 +77,114 @@ public class ChartWriter extends AbstractWidgetWriter {
         ChartWidget chartWidget = (ChartWidget) widget;
         final ChartConfiguration configuration = chartWidget.getChartConfiguration();
         final String chartLongName = chartWidget.getValue(String.class);
-        final ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        final ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef);
-        writer.write("<div ");
-        writeTagAttributes(writer, chartWidget);
-        if (chartDef.getHeight() > 0 && !chartDef.getType().isTable()) {
-            writer.write(" style=\"height:").write(chartDef.getHeight()).write("px;\"");
-        }
-
-        writer.write(">");
-        if (chartDef.getType().isCard()) {
-            if (chartDetails.isWithSeries()) {
-                writer.write("<div class=\"card\">");
-
-                writer.write("<span class=\"title\">");
-                if (chartDef.isWithTitle()) {
-                    writer.writeWithHtmlEscape(chartDef.getTitle());
-                }
-                writer.write("</span>");
-
-                writer.write("<span class=\"subtitle\">");
-                if (chartDef.isWithSubtitle()) {
-                    writer.writeWithHtmlEscape(chartDef.getSubTitle());
-                }
-                writer.write("</span>");
-
-                writer.write("<span class=\"content\" style=\"color:");
-                writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
-                writer.write(";\">");
-                Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
-                String fmt = ChartUtils.getFormattedCardValue(num);
-                writer.writeWithHtmlEscape(fmt);
-                writer.write("</span>");
-
-                writer.write("</div>");
+        if (!StringUtils.isBlank(chartLongName)) {
+            final ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
+            final ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef);
+            writer.write("<div ");
+            writeTagAttributes(writer, chartWidget);
+            if (chartDef.getHeight() > 0 && !chartDef.getType().isTable()) {
+                writer.write(" style=\"height:").write(chartDef.getHeight()).write("px;\"");
             }
-        } else if (chartDef.getType().isTable()) {
-            if (chartDetails.isWithTableSeries()) {
-                FormatterOptions.Instance options = FormatterOptions.DEFAULT.createInstance(getUnifyComponentContext());
-                writer.write("<div class=\"tbl\"");
-                if (chartDef.getHeight() > 0) {
-                    writer.write(" style=\"height:").write(chartDef.getHeight()).write("px;\"");
-                }
 
-                writer.write(">");
-                writer.write("<span class=\"title\">");
-                if (chartDef.isWithTitle()) {
-                    writer.writeWithHtmlEscape(chartDef.getTitle());
-                }
-                writer.write("</span>");
+            writer.write(">");
+            if (chartDef.getType().isCard()) {
+                if (chartDetails.isWithSeries()) {
+                    writer.write("<div class=\"card\">");
 
-                writer.write("<span class=\"subtitle\">");
-                if (chartDef.isWithSubtitle()) {
-                    writer.writeWithHtmlEscape(chartDef.getSubTitle());
-                }
-                writer.write("</span>");
+                    writer.write("<span class=\"title\">");
+                    if (chartDef.isWithTitle()) {
+                        writer.writeWithHtmlEscape(chartDef.getTitle());
+                    }
+                    writer.write("</span>");
 
-                // Header
-                final int cols = chartDetails.getTableHeaders().length;
-                final ChartTableColumn[] headers = chartDetails.getTableHeaders();
-                writer.write("<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
-                writer.write("<table class=\"cont\" style=\"width:100%;\"><thead>");
-                writer.write("<tr style=\"background-color:");
-                writer.write(chartDef.getColor());
-                writer.write(";position: sticky;top: 0px;\">");
-                for (ChartTableColumn header : headers) {
-                    if (header.isSeries() && !chartDetails.isSeriesFieldInclusion(header.getFieldName())) {
-                        continue;
+                    writer.write("<span class=\"subtitle\">");
+                    if (chartDef.isWithSubtitle()) {
+                        writer.writeWithHtmlEscape(chartDef.getSubTitle());
+                    }
+                    writer.write("</span>");
+
+                    writer.write("<span class=\"content\" style=\"color:");
+                    writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
+                    writer.write(";\">");
+                    Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
+                    String fmt = ChartUtils.getFormattedCardValue(num);
+                    writer.writeWithHtmlEscape(fmt);
+                    writer.write("</span>");
+
+                    writer.write("</div>");
+                }
+            } else if (chartDef.getType().isTable()) {
+                if (chartDetails.isWithTableSeries()) {
+                    FormatterOptions.Instance options = FormatterOptions.DEFAULT
+                            .createInstance(getUnifyComponentContext());
+                    writer.write("<div class=\"tbl\"");
+                    if (chartDef.getHeight() > 0) {
+                        writer.write(" style=\"height:").write(chartDef.getHeight()).write("px;\"");
                     }
 
-                    writer.write("<th>");
-                    writer.writeWithHtmlEscape(header.getLabel());
-                    writer.write("</th>");
-                }
-                writer.write("</tr></thead>");
+                    writer.write(">");
+                    writer.write("<span class=\"title\">");
+                    if (chartDef.isWithTitle()) {
+                        writer.writeWithHtmlEscape(chartDef.getTitle());
+                    }
+                    writer.write("</span>");
 
-                writer.write("<tbody>");
-                for (Object[] row : chartDetails.getTableSeries()) {
-                    writer.write("<tr>");
-                    for (int i = 0; i < cols; i++) {
-                        ChartTableColumn header = headers[i];
+                    writer.write("<span class=\"subtitle\">");
+                    if (chartDef.isWithSubtitle()) {
+                        writer.writeWithHtmlEscape(chartDef.getSubTitle());
+                    }
+                    writer.write("</span>");
+
+                    // Header
+                    final int cols = chartDetails.getTableHeaders().length;
+                    final ChartTableColumn[] headers = chartDetails.getTableHeaders();
+                    writer.write("<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
+                    writer.write("<table class=\"cont\" style=\"width:100%;\"><thead>");
+                    writer.write("<tr style=\"background-color:");
+                    writer.write(chartDef.getColor());
+                    writer.write(";position: sticky;top: 0px;\">");
+                    for (ChartTableColumn header : headers) {
                         if (header.isSeries() && !chartDetails.isSeriesFieldInclusion(header.getFieldName())) {
                             continue;
                         }
 
-                        String[] sval = options.format(header.getType(), row[i]);
-                        writer.write("<td><span class=\"");
-                        writer.write(header.getType().alignType().styleClass());
-                        writer.write("\">");
-                        writer.writeWithHtmlEscape(sval[0]);
-                        writer.write("</span></td>");
+                        writer.write("<th>");
+                        writer.writeWithHtmlEscape(header.getLabel());
+                        writer.write("</th>");
                     }
-                    writer.write("</tr>");
+                    writer.write("</tr></thead>");
+
+                    writer.write("<tbody>");
+                    for (Object[] row : chartDetails.getTableSeries()) {
+                        writer.write("<tr>");
+                        for (int i = 0; i < cols; i++) {
+                            ChartTableColumn header = headers[i];
+                            if (header.isSeries() && !chartDetails.isSeriesFieldInclusion(header.getFieldName())) {
+                                continue;
+                            }
+
+                            String[] sval = options.format(header.getType(), row[i]);
+                            writer.write("<td><span class=\"");
+                            writer.write(header.getType().alignType().styleClass());
+                            writer.write("\">");
+                            writer.writeWithHtmlEscape(sval[0]);
+                            writer.write("</span></td>");
+                        }
+                        writer.write("</tr>");
+                    }
+                    writer.write("</tbody>");
+                    writer.write("</table>");
+                    writer.write("</div>");
+
+                    writer.write("</div>");
                 }
-                writer.write("</tbody>");
-                writer.write("</table>");
-                writer.write("</div>");
-
-                writer.write("</div>");
             }
+
+            writer.write("</div>");
+
+            WriteWork work = chartWidget.getWriteWork();
+            work.set(CHART_DETAILS, chartDetails);
         }
-
-        writer.write("</div>");
-
-        WriteWork work = chartWidget.getWriteWork();
-        work.set(CHART_DETAILS, chartDetails);
     }
 
     @Override
@@ -194,14 +197,16 @@ public class ChartWriter extends AbstractWidgetWriter {
         ChartDetails chartDetails = work.get(ChartDetails.class, CHART_DETAILS);
 
         final String chartLongName = chartWidget.getValue(String.class);
-        ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-        if (!chartDef.getType().isFlowCentralType() && chartDetails != null) {
-            writer.beginFunction("fux.rigChart");
-            writer.writeParam("pId", chartWidget.getId());
-            writer.writeParam("pType", chartOptionsProvider.getOptionsType());
-            writer.writeParam("pOptions", chartOptionsProvider.getChartOptions(chartDef, chartDetails,
-                    chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
-            writer.endFunction();
+        if (!StringUtils.isBlank(chartLongName)) {
+            ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
+            if (!chartDef.getType().isFlowCentralType() && chartDetails != null) {
+                writer.beginFunction("fux.rigChart");
+                writer.writeParam("pId", chartWidget.getId());
+                writer.writeParam("pType", chartOptionsProvider.getOptionsType());
+                writer.writeParam("pOptions", chartOptionsProvider.getChartOptions(chartDef, chartDetails,
+                        chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
+                writer.endFunction();
+            }
         }
     }
 
@@ -246,9 +251,9 @@ public class ChartWriter extends AbstractWidgetWriter {
                     if (catFilterDef != null) {
                         maxResolution = catFilterDef.getMaxTimeResolution();
                     }
-                    
-                    restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null,
-                            catFilterDef, chartModuleService.getNow());
+
+                    restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null, catFilterDef,
+                            chartModuleService.getNow());
 
                     seriesFieldInclusion = new HashSet<String>();
                     for (String seriesName : chartDef.getSeriesInclusion()) {

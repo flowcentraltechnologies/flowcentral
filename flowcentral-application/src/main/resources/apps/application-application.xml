@@ -1488,10 +1488,6 @@
 					label="$m{application.appentitycategory.label}"
 					type="STRING"
 					inputWidget="application.text" />
-				<field name="fieldName"
-					label="$m{application.appentitycategory.fieldname}"
-					type="STRING"
-					inputWidget="application.name" nullable="true" />
 				<field name="filter"
 					label="$m{application.appentitycategory.filter}"
 					type="CHILD"

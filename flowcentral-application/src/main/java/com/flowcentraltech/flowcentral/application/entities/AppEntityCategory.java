@@ -45,9 +45,6 @@ public class AppEntityCategory extends BaseConfigEntity {
     @Column(name = "CATEGORY_LABEL", length = 64)
     private String label;
 
-    @Column(name = "FIELD_NM", length = 64, nullable = true)
-    private String fieldName;
-
     @ListOnly(key = "appEntityId", property = "name")
     private String appEntityName;
 
@@ -92,14 +89,6 @@ public class AppEntityCategory extends BaseConfigEntity {
 
     public void setAppEntityName(String appEntityName) {
         this.appEntityName = appEntityName;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
     }
 
     public String getApplicationName() {

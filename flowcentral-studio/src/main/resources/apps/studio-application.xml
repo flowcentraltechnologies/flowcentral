@@ -3564,8 +3564,6 @@
 							column="0" required="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="fieldName" inputWidget="categoryentityfieldlist"
-							column="0" />
 					</section>
 				</tab>
 				<tab name="condition"

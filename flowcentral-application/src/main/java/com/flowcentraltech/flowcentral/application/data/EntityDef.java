@@ -130,8 +130,6 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityCategoryDef> categoryDefList;
 
-    private List<EntityCategoryDef> timeSeriesCategoryDefList;
-
     private List<EntityAttachmentDef> attachmentList;
 
     private List<UniqueConstraintDef> uniqueConstraintList;
@@ -663,9 +661,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 if (categoryDefList == null) {
                     categoryDefList = new ArrayList<EntityCategoryDef>();
                     for (EntityCategoryDef entityCategoryDef: categoryDefs.values()) {
-                        if(!entityCategoryDef.isTimeSeriesCategory()) {
-                            categoryDefList.add(entityCategoryDef);
-                        }
+                        categoryDefList.add(entityCategoryDef);
                     }
                     
                     DataUtils.sortAscending(categoryDefList, EntityCategoryDef.class, "description");
@@ -675,26 +671,6 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return categoryDefList;
-    }
-
-    public List<EntityCategoryDef> getTimeSeriesCategoryDefList() throws UnifyException {
-        if (timeSeriesCategoryDefList == null) {
-            synchronized (this) {
-                if (timeSeriesCategoryDefList == null) {
-                    timeSeriesCategoryDefList = new ArrayList<EntityCategoryDef>();
-                    for (EntityCategoryDef entityCategoryDef: categoryDefs.values()) {
-                        if(entityCategoryDef.isTimeSeriesCategory()) {
-                            timeSeriesCategoryDefList.add(entityCategoryDef);
-                        }
-                    }
-                    
-                    DataUtils.sortAscending(timeSeriesCategoryDefList, EntityCategoryDef.class, "description");
-                    timeSeriesCategoryDefList = DataUtils.unmodifiableList(timeSeriesCategoryDefList);
-                }
-            }
-        }
-
-        return timeSeriesCategoryDefList;
     }
 
     public List<? extends Listable> getFilterFieldListables(LabelSuggestionDef labelSuggestionDef)
@@ -1683,7 +1659,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addCategoryDef(String name, String description, String label, String fieldName, FilterDef filterDef) {
+        public Builder addCategoryDef(String name, String description, String label, FilterDef filterDef) {
             if (categoryDefMap == null) {
                 categoryDefMap = new LinkedHashMap<String, EntityCategoryDef>();
             }
@@ -1692,7 +1668,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Category with name [" + name + "] already exists in this definition.");
             }
 
-            categoryDefMap.put(name, new EntityCategoryDef(name, description, label, fieldName, filterDef));
+            categoryDefMap.put(name, new EntityCategoryDef(name, description, label, filterDef));
             return this;
         }
 
