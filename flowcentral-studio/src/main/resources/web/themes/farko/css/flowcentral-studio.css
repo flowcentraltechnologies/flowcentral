@@ -17,12 +17,12 @@
 	--color-slate:#f7f9fa;
 	--color-slate-border:solid 1px #c0c0c0;
 	--color-pencil:#484848;
-	--studiodetail-fontsize:0.62rem;
+	--studiodetail-fontsize:0.65rem;
  }
 
 /* flowCentral studio CSS */
 body, td, th, button, input, select, textarea {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
 }
 
 .ui-select .sslist .norm:hover {background-color: #d5e7fb;color: #000;}
