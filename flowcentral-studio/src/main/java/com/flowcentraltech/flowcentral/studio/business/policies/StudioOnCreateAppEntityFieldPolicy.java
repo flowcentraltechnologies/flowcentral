@@ -41,6 +41,8 @@ public class StudioOnCreateAppEntityFieldPolicy extends AbstractStudioAppEntityF
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         final AppEntityField appEntityField = (AppEntityField) ctx.getInst();
+        appEntityField.setReportable(appEntityField.getDataType().isReportable());
+        appEntityField.setAuditable(true);
         if (appEntityField.isReportable() && appEntityField.getDataType().isTableViewable()) {
             Long reportableDefinitionId = getReportableDefinitionId(appEntityField);
             if (QueryUtils.isValidLongCriteria(reportableDefinitionId)) {

@@ -55,9 +55,11 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet {
         AppApplet appApplet = (AppApplet) form.getFormBean();
         Long appletId = appApplet.getId();
         if (appletId != null) {
-            String subTitle = appApplet.getDescription();
-            appletEditorPage = constructNewAppletEditorPage(appApplet.getEntity(), appletId, subTitle);
-            appletEditorPage.newEditor();
+            if (appApplet.getType().isEntityList()) {
+                String subTitle = appApplet.getDescription();
+                appletEditorPage = constructNewAppletEditorPage(appApplet.getEntity(), appletId, subTitle);
+                appletEditorPage.newEditor();
+            }
         }
     }
 

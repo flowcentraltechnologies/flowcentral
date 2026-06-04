@@ -3292,26 +3292,14 @@
 							column="0" visible="false" />
 						<field name="autoFormat" inputWidget="application.text"
 							column="0" visible="false" />
-						<field name="jsonName" inputWidget="application.text"
-							column="0" />
-						<field name="jsonFormatter"
-							inputWidget="studio.jsonformatterlist" column="0" />
-						<field name="defaultVal" inputWidget="application.text"
-							column="0" visible="false" />
 					</section>
 					<section name="optionDetails" columns="TYPE_2">
 						<field name="basicSearch" inputWidget="application.checkbox"
 							column="0" visible="false" />
 						<field name="maintainLink"
 							inputWidget="application.checkbox" column="0" visible="false" />
-						<field name="descriptive" inputWidget="application.checkbox"
-							column="0" visible="false" />
 						<field name="trim" inputWidget="application.checkbox"
 							column="0" visible="false" />
-						<field name="auditable" inputWidget="application.checkbox"
-							column="1" visible="false" />
-						<field name="reportable" inputWidget="application.checkbox"
-							column="1" visible="false" />
 						<field name="allowNegative"
 							inputWidget="application.checkbox" column="1" visible="false" />
 						<field name="nullable" inputWidget="application.checkbox"
@@ -3356,7 +3344,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="references,defaultVal,nullable,basicSearch"
+							target="references,nullable,basicSearch"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
@@ -3369,7 +3357,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="references,defaultVal,nullable,auditable,reportable,basicSearch"
+							target="references,nullable,auditable,reportable,basicSearch"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
@@ -3394,7 +3382,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="minLen,maxLen,trim,autoFormat,defaultVal,nullable,auditable,reportable,maintainLink,descriptive,basicSearch"
+							target="minLen,maxLen,trim,autoFormat,nullable,maintainLink,basicSearch"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
@@ -3419,7 +3407,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="precision,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
+							target="precision,allowNegative,nullable,basicSearch"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
@@ -3432,7 +3420,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="precision,scale,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
+							target="precision,scale,allowNegative,nullable,basicSearch"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
@@ -3445,7 +3433,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="defaultVal,nullable,auditable,reportable,basicSearch"
+							target="nullable,basicSearch"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
@@ -3458,7 +3446,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="nullable,auditable,reportable,basicSearch" visible="TRUE" />
+							target="nullable,basicSearch" visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
 				<formStatePolicy type="ON_SWITCH"
@@ -3492,7 +3480,7 @@
 					</onCondition>
 					<setStates>
 						<setState type="FIELD"
-							target="key,property,reportable,maintainLink,descriptive,basicSearch"
+							target="key,property,maintainLink,basicSearch"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
