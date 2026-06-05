@@ -147,8 +147,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     ChartDataSource chartDataSource = new ChartDataSource();
                     chartDataSource.setApplicationId(applicationId);
                     chartDataSource.setType(appChartDataSourceConfig.getType());
-                    chartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
-                    chartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
                     chartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                     chartDataSource.setName(appChartDataSourceConfig.getName());
                     chartDataSource.setDescription(description);
@@ -166,8 +164,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     environment().create(chartDataSource);
                 } else {
                     oldChartDataSource.setType(appChartDataSourceConfig.getType());
-                    oldChartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
-                    oldChartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
                     oldChartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                     oldChartDataSource.setDescription(description);
                     oldChartDataSource.setLimit(appChartDataSourceConfig.getLimit());
@@ -242,8 +238,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 ChartDataSource chartDataSource = new ChartDataSource();
                 chartDataSource.setApplicationId(applicationId);
                 chartDataSource.setType(appChartDataSourceConfig.getType());
-                chartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
-                chartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
                 chartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                 chartDataSource.setName(appChartDataSourceConfig.getName());
                 chartDataSource.setDescription(description);

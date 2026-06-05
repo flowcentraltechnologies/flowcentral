@@ -127,8 +127,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             .getFieldSequenceDef(chartDataSource.getFieldSequence());
 
                     ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(chartDataSource.getType(),
-                            chartDataSource.getTimeSeriesType(), longName, chartDataSource.getDescription(),
-                            chartDataSource.getCategoryField(),
+                            longName, chartDataSource.getDescription(),
                             appletUtilities.getEntityDef(chartDataSource.getEntity()),
                             InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),

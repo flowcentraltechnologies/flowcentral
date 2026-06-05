@@ -133,14 +133,8 @@
 				<field name="type" label="$m{chart.chartdatasource.type}"
 					type="ENUM_REF" references="chartdatasourcetypelist"
 					inputWidget="application.enumlist" />
-				<field name="timeSeriesType"
-					label="$m{chart.chartdatasource.timeseriestype}" type="ENUM_REF"
-					references="charttimeseriestypelist"
-					inputWidget="application.enumlist" />
 				<field name="entity" label="$m{chart.chartdatasource.entity}"
 					type="STRING" />
-				<field name="categoryField"
-					label="$m{chart.chartdatasource.categoryfield}" type="STRING" />
 				<field name="limit"
 					label="$m{chart.chartdatasource.limit}" type="INTEGER" />
 				<field name="categoryBase"
@@ -159,9 +153,6 @@
 				<field name="typeDesc"
 					label="$m{chart.chartdatasource.typedesc}" type="LIST_ONLY"
 					key="type" property="description" />
-				<field name="timeSeriesTypeDesc"
-					label="$m{chart.chartdatasource.timeseriestypedesc}"
-					type="LIST_ONLY" key="timeSeriesType" property="description" />
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="nameUc"

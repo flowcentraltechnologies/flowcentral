@@ -15,7 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.chart.entities;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
+import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.GreaterOrEqual;
+import com.tcdng.unify.core.criterion.IsNotNull;
+import com.tcdng.unify.core.criterion.Less;
 
 /**
  * Chart data source query.
@@ -31,6 +37,16 @@ public class ChartDataSourceQuery extends BaseApplicationEntityQuery<ChartDataSo
 
     public ChartDataSourceQuery entity(String entity) {
         return (ChartDataSourceQuery) addEquals("entity", entity);
+    }
+
+    public ChartDataSourceQuery isExpired(Date now) {
+        return (ChartDataSourceQuery) addRestriction(
+                new And().add(new IsNotNull("activeSnapshotExpiresOn")).add(new Less("activeSnapshotExpiresOn", now)));
+    }
+
+    public ChartDataSourceQuery isNotExpired(Date now) {
+        return (ChartDataSourceQuery) addRestriction(new And().add(new IsNotNull("activeSnapshotExpiresOn"))
+                .add(new GreaterOrEqual("activeSnapshotExpiresOn", now)));
     }
 
 }
