@@ -16,15 +16,12 @@
 
 package com.flowcentraltech.flowcentral.chart.entities;
 
-import java.util.Date;
-
 import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.common.constants.CacheRefreshRate;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
-import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
@@ -48,18 +45,6 @@ public class ChartDataSource extends BaseApplicationEntity {
 
     @Column(nullable = true)
     private CacheRefreshRate cacheRefreshRate;
-    
-    @Column(type = ColumnType.TIMESTAMP, nullable = true)
-    private Date activeSnapshotExpiresOn;
-
-    @Column(nullable = true)
-    private Long activeDatasourceSnapshotId;
-
-    @Column(nullable = true)
-    private Long datasourceSnapshotId1;
-
-    @Column(nullable = true)
-    private Long datasourceSnapshotId2;
     
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
@@ -98,38 +83,6 @@ public class ChartDataSource extends BaseApplicationEntity {
 
     public void setCacheRefreshRate(CacheRefreshRate cacheRefreshRate) {
         this.cacheRefreshRate = cacheRefreshRate;
-    }
-
-    public Date getActiveSnapshotExpiresOn() {
-        return activeSnapshotExpiresOn;
-    }
-
-    public void setActiveSnapshotExpiresOn(Date activeSnapshotExpiresOn) {
-        this.activeSnapshotExpiresOn = activeSnapshotExpiresOn;
-    }
-
-    public Long getActiveDatasourceSnapshotId() {
-        return activeDatasourceSnapshotId;
-    }
-
-    public void setActiveDatasourceSnapshotId(Long activeDatasourceSnapshotId) {
-        this.activeDatasourceSnapshotId = activeDatasourceSnapshotId;
-    }
-
-    public Long getDatasourceSnapshotId1() {
-        return datasourceSnapshotId1;
-    }
-
-    public void setDatasourceSnapshotId1(Long datasourceSnapshotId1) {
-        this.datasourceSnapshotId1 = datasourceSnapshotId1;
-    }
-
-    public Long getDatasourceSnapshotId2() {
-        return datasourceSnapshotId2;
-    }
-
-    public void setDatasourceSnapshotId2(Long datasourceSnapshotId2) {
-        this.datasourceSnapshotId2 = datasourceSnapshotId2;
     }
 
     public String getTypeDesc() {

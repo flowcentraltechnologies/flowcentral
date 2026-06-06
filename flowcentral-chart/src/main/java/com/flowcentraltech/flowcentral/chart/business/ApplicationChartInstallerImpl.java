@@ -150,7 +150,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                     chartDataSource.setName(appChartDataSourceConfig.getName());
                     chartDataSource.setDescription(description);
-                    chartDataSource.setLimit(appChartDataSourceConfig.getLimit());
                     chartDataSource
                             .setCategoryBase(InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
                     chartDataSource
@@ -166,7 +165,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     oldChartDataSource.setType(appChartDataSourceConfig.getType());
                     oldChartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                     oldChartDataSource.setDescription(description);
-                    oldChartDataSource.setLimit(appChartDataSourceConfig.getLimit());
                     oldChartDataSource
                             .setCategoryBase(InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
                     oldChartDataSource
@@ -241,7 +239,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 chartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                 chartDataSource.setName(appChartDataSourceConfig.getName());
                 chartDataSource.setDescription(description);
-                chartDataSource.setLimit(appChartDataSourceConfig.getLimit());
                 chartDataSource
                         .setCategoryBase(InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
                 chartDataSource

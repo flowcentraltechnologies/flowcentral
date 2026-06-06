@@ -43,6 +43,9 @@ public class ChartDatasourceSnapshot extends BaseAuditEntity {
     @Column(type = ColumnType.TIMESTAMP)
     private Date snapshotExpiresOn;
 
+    @Column(name = "ACTIVE_FG")
+    private boolean active;
+    
     @Override
     public String getDescription() {
         return null;
@@ -70,6 +73,14 @@ public class ChartDatasourceSnapshot extends BaseAuditEntity {
 
     public void setSnapshotExpiresOn(Date snapshotExpiresOn) {
         this.snapshotExpiresOn = snapshotExpiresOn;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

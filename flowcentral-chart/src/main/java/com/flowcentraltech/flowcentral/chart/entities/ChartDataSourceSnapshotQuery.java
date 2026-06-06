@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.chart.entities;
 
 import java.util.Date;
 
-import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
 
 /**
  * Chart data source snapshot query.
@@ -25,22 +25,30 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class ChartDataSourceSnapshotQuery extends BaseApplicationEntityQuery<ChartDataSource> {
+public class ChartDataSourceSnapshotQuery extends BaseEntityQuery<ChartDatasourceSnapshot> {
 
     public ChartDataSourceSnapshotQuery() {
-        super(ChartDataSource.class);
+        super(ChartDatasourceSnapshot.class);
     }
     
     public ChartDataSourceSnapshotQuery chartDataSourceId(Long chartDataSourceId) {
         return (ChartDataSourceSnapshotQuery) addEquals("chartDataSourceId", chartDataSourceId);
     }
-
+    
     public ChartDataSourceSnapshotQuery isExpired(Date now) {
         return (ChartDataSourceSnapshotQuery) addLessThan("snapshotExpiresOn", now);
     }
 
     public ChartDataSourceSnapshotQuery isNotExpired(Date now) {
         return (ChartDataSourceSnapshotQuery) addGreaterThanEqual("snapshotExpiresOn", now);
+    }
+    
+    public ChartDataSourceSnapshotQuery isActive() {
+        return (ChartDataSourceSnapshotQuery) addEquals("active", true);
+    }
+    
+    public ChartDataSourceSnapshotQuery isNotActive() {
+        return (ChartDataSourceSnapshotQuery) addEquals("active", false);
     }
 
 }
