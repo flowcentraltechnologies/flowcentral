@@ -107,7 +107,7 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
                     writer.write(";\">");
                     Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
-                    String fmt = ChartUtils.getFormattedCardValue(num);
+                    String fmt = null;//TODO ChartUtils.getFormattedCardValue(num);
                     writer.writeWithHtmlEscape(fmt);
                     writer.write("</span>");
 

@@ -15,30 +15,30 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
-import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
+import com.tcdng.unify.core.constant.TimeSeriesType;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstDeserializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstSerializer;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
- * Chart time series type XML adapter.
+ * Time series type XML adapter.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class ChartTimeSeriesTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
+public class TimeSeriesTypeXmlAdapter extends AbstractEnumConstXmlAdapter {
     
-    public static class Serializer extends AbstractEnumConstSerializer<ChartTimeSeriesType> {
+    public static class Serializer extends AbstractEnumConstSerializer<TimeSeriesType> {
         public Serializer() {
             
         }
 
     }
     
-    public static class Deserializer extends AbstractEnumConstDeserializer<ChartTimeSeriesType> {
+    public static class Deserializer extends AbstractEnumConstDeserializer<TimeSeriesType> {
 
         public Deserializer() {
-            super(ChartTimeSeriesType.class);
+            super(TimeSeriesType.class);
         }
 
     }

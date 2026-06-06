@@ -40,7 +40,7 @@ public class ChartDatasourceSnapshotSeries extends BaseEntity {
     @Column(length = 64)
     private String categoryName;
 
-    @Column(length = 96)
+    @Column(length = 96, nullable = true)
     private String categoryLabel;
 
     @ListOnly(key = "cdsSnapshotId", property = "chartDataSourceId")
@@ -48,6 +48,9 @@ public class ChartDatasourceSnapshotSeries extends BaseEntity {
     
     @ListOnly(key = "cdsSnapshotId", property = "categoryDataType")
     private ChartCategoryDataType categoryDataType;
+    
+    @ListOnly(key = "cdsSnapshotId", property = "viewOption")
+    private String snapshotViewOption;
     
     @ListOnly(key = "cdsSnapshotId", property = "snapshotExpiresOn")
     private Date snapshotExpiresOn;
@@ -98,6 +101,14 @@ public class ChartDatasourceSnapshotSeries extends BaseEntity {
 
     public void setCategoryDataType(ChartCategoryDataType categoryDataType) {
         this.categoryDataType = categoryDataType;
+    }
+
+    public String getSnapshotViewOption() {
+        return snapshotViewOption;
+    }
+
+    public void setSnapshotViewOption(String snapshotViewOption) {
+        this.snapshotViewOption = snapshotViewOption;
     }
 
     public Date getSnapshotExpiresOn() {

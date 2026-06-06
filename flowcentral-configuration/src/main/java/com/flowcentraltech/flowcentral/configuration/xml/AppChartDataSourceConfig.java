@@ -23,9 +23,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartDataSourceTypeXmlAdapter;
-import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartTimeSeriesTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.TimeSeriesTypeXmlAdapter;
+import com.tcdng.unify.core.constant.TimeSeriesType;
 
 /**
  * Chart data source configuration.
@@ -42,10 +42,10 @@ public class AppChartDataSourceConfig extends BaseClassifiedConfig {
     @JacksonXmlProperty(isAttribute = true)
     private ChartDataSourceType type;
 
-    @JsonSerialize(using = ChartTimeSeriesTypeXmlAdapter.Serializer.class)
-    @JsonDeserialize(using = ChartTimeSeriesTypeXmlAdapter.Deserializer.class)
+    @JsonSerialize(using = TimeSeriesTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = TimeSeriesTypeXmlAdapter.Deserializer.class)
     @JacksonXmlProperty(isAttribute = true, localName = "timeseries")
-    private ChartTimeSeriesType timeSeriesType;
+    private TimeSeriesType timeSeriesType;
     
     @JacksonXmlProperty
     private String entity;
@@ -116,11 +116,11 @@ public class AppChartDataSourceConfig extends BaseClassifiedConfig {
         this.categories = categories;
     }
 
-    public ChartTimeSeriesType getTimeSeriesType() {
+    public TimeSeriesType getTimeSeriesType() {
         return timeSeriesType;
     }
 
-    public void setTimeSeriesType(ChartTimeSeriesType timeSeriesType) {
+    public void setTimeSeriesType(TimeSeriesType timeSeriesType) {
         this.timeSeriesType = timeSeriesType;
     }
 
