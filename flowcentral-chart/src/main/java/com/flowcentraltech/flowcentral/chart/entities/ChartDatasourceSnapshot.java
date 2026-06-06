@@ -36,6 +36,9 @@ public class ChartDatasourceSnapshot extends BaseAuditEntity {
 
     @ForeignKey(ChartDataSource.class)
     private Long chartDataSourceId;
+
+    @Column(length = 64, nullable = true)
+    private String preferredOption;
     
     @ForeignKey
     private ChartCategoryDataType categoryDataType;
@@ -57,6 +60,14 @@ public class ChartDatasourceSnapshot extends BaseAuditEntity {
 
     public void setChartDataSourceId(Long chartDataSourceId) {
         this.chartDataSourceId = chartDataSourceId;
+    }
+
+    public String getPreferredOption() {
+        return preferredOption;
+    }
+
+    public void setPreferredOption(String preferredOption) {
+        this.preferredOption = preferredOption;
     }
 
     public ChartCategoryDataType getCategoryDataType() {

@@ -35,13 +35,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
 public class ChartDatasourceSnapshotSeries extends BaseEntity {
 
     @ForeignKey(ChartDatasourceSnapshot.class)
-    private Long chartDatasourceSnapshotId;
-
-    @Column(length = 64)
-    private String seriesName;
-
-    @Column(length = 96)
-    private String seriesLabel;
+    private Long cdsSnapshotId;
 
     @Column(length = 64)
     private String categoryName;
@@ -49,48 +43,29 @@ public class ChartDatasourceSnapshotSeries extends BaseEntity {
     @Column(length = 96)
     private String categoryLabel;
 
-    @Column(length = 64, nullable =  true)
-    private String groupingName;
-
-    @ListOnly(key = "chartDatasourceSnapshotId", property = "chartDataSourceId")
+    @ListOnly(key = "cdsSnapshotId", property = "chartDataSourceId")
     private Long chartDataSourceId;
     
-    @ListOnly(key = "chartDatasourceSnapshotId", property = "categoryDataType")
+    @ListOnly(key = "cdsSnapshotId", property = "categoryDataType")
     private ChartCategoryDataType categoryDataType;
     
-    @ListOnly(key = "chartDatasourceSnapshotId", property = "snapshotExpiresOn")
+    @ListOnly(key = "cdsSnapshotId", property = "snapshotExpiresOn")
     private Date snapshotExpiresOn;
 
-    @ListOnly(key = "chartDatasourceSnapshotId", property = "active")
+    @ListOnly(key = "cdsSnapshotId", property = "active")
     private boolean snapshotActive;
     
     @Override
     public String getDescription() {
-        return categoryLabel + " - " + seriesLabel;
+        return categoryName;
     }
 
-    public Long getChartDatasourceSnapshotId() {
-        return chartDatasourceSnapshotId;
+    public Long getCdsSnapshotId() {
+        return cdsSnapshotId;
     }
 
-    public void setChartDatasourceSnapshotId(Long chartDatasourceSnapshotId) {
-        this.chartDatasourceSnapshotId = chartDatasourceSnapshotId;
-    }
-
-    public String getSeriesName() {
-        return seriesName;
-    }
-
-    public void setSeriesName(String seriesName) {
-        this.seriesName = seriesName;
-    }
-
-    public String getSeriesLabel() {
-        return seriesLabel;
-    }
-
-    public void setSeriesLabel(String seriesLabel) {
-        this.seriesLabel = seriesLabel;
+    public void setCdsSnapshotId(Long cdsSnapshotId) {
+        this.cdsSnapshotId = cdsSnapshotId;
     }
 
     public String getCategoryName() {
@@ -125,14 +100,6 @@ public class ChartDatasourceSnapshotSeries extends BaseEntity {
         this.categoryDataType = categoryDataType;
     }
 
-    public String getGroupingName() {
-        return groupingName;
-    }
-
-    public void setGroupingName(String groupingName) {
-        this.groupingName = groupingName;
-    }
-
     public Date getSnapshotExpiresOn() {
         return snapshotExpiresOn;
     }
@@ -148,5 +115,6 @@ public class ChartDatasourceSnapshotSeries extends BaseEntity {
     public void setSnapshotActive(boolean snapshotActive) {
         this.snapshotActive = snapshotActive;
     }
+
 
 }

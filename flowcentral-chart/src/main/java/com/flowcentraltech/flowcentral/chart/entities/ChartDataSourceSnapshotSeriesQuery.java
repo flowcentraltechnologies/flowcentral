@@ -29,8 +29,8 @@ public class ChartDataSourceSnapshotSeriesQuery extends BaseEntityQuery<ChartDat
         super(ChartDatasourceSnapshotSeries.class);
     }
 
-    public ChartDataSourceSnapshotSeriesQuery chartDataSourceId(Long chartDataSourceId) {
-        return (ChartDataSourceSnapshotSeriesQuery) addEquals("chartDataSourceId", chartDataSourceId);
+    public ChartDataSourceSnapshotSeriesQuery cdsSnapshotId(Long cdsSnapshotId) {
+        return (ChartDataSourceSnapshotSeriesQuery) addEquals("cdsSnapshotId", cdsSnapshotId);
     }
 
     public ChartDataSourceSnapshotSeriesQuery isSnapshotActive() {

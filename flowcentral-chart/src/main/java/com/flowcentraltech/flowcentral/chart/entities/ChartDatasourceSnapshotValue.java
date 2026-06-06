@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -34,52 +35,85 @@ import com.tcdng.unify.core.annotation.ForeignKey;
 public class ChartDatasourceSnapshotValue extends BaseEntity {
 
     @ForeignKey(ChartDatasourceSnapshotSeries.class)
-    private Long chartDatasourceSnapshotSeriesId;
+    private Long cdsSnapshotSeriesId;
 
-    @Column(precision = 20, scale = 2)
-    private BigDecimal seriesValue;
+    @Column(length = 64)
+    private String fieldName;
 
-    @Column(nullable = true)
-    private Long numberCategory;
+    @Column(length = 64, nullable = true)
+    private String fieldLabel;
 
-    @Column(nullable = true)
-    private Date dateCategory;
+    @Column(precision = 20, scale = 2, nullable = true)
+    private BigDecimal numberValue;
+
+    @Column(length = 128, nullable = true)
+    private String textValue;
+
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
+    private Date dateValue;
+
+    @Column
+    private boolean grouping;
     
     @Override
     public String getDescription() {
-        return null;
+        return fieldName;
     }
 
-    public Long getChartDatasourceSnapshotSeriesId() {
-        return chartDatasourceSnapshotSeriesId;
+    public Long getCdsSnapshotSeriesId() {
+        return cdsSnapshotSeriesId;
     }
 
-    public void setChartDatasourceSnapshotSeriesId(Long chartDatasourceSnapshotSeriesId) {
-        this.chartDatasourceSnapshotSeriesId = chartDatasourceSnapshotSeriesId;
+    public void setCdsSnapshotSeriesId(Long cdsSnapshotSeriesId) {
+        this.cdsSnapshotSeriesId = cdsSnapshotSeriesId;
     }
 
-    public BigDecimal getSeriesValue() {
-        return seriesValue;
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public void setSeriesValue(BigDecimal seriesValue) {
-        this.seriesValue = seriesValue;
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
-    public Long getNumberCategory() {
-        return numberCategory;
+    public String getFieldLabel() {
+        return fieldLabel;
     }
 
-    public void setNumberCategory(Long numberCategory) {
-        this.numberCategory = numberCategory;
+    public void setFieldLabel(String fieldLabel) {
+        this.fieldLabel = fieldLabel;
     }
 
-    public Date getDateCategory() {
-        return dateCategory;
+    public BigDecimal getNumberValue() {
+        return numberValue;
     }
 
-    public void setDateCategory(Date dateCategory) {
-        this.dateCategory = dateCategory;
+    public void setNumberValue(BigDecimal numberValue) {
+        this.numberValue = numberValue;
+    }
+
+    public String getTextValue() {
+        return textValue;
+    }
+
+    public void setTextValue(String textValue) {
+        this.textValue = textValue;
+    }
+
+    public Date getDateValue() {
+        return dateValue;
+    }
+
+    public void setDateValue(Date dateValue) {
+        this.dateValue = dateValue;
+    }
+
+    public boolean isGrouping() {
+        return grouping;
+    }
+
+    public void setGrouping(boolean grouping) {
+        this.grouping = grouping;
     }
 
 }
