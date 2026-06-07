@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.codegeneration.web.controllers;
 import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Snapshot settings page bean.
+ * CDSnapshot settings page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1

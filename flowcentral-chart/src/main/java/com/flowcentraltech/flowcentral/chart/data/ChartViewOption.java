@@ -25,6 +25,8 @@ import com.tcdng.unify.core.criterion.Restriction;
  */
 public class ChartViewOption {
 
+    public static final ChartViewOption DEFAULT = new ChartViewOption("default");
+
     private String name;
 
     private Restriction restriction;
@@ -34,7 +36,7 @@ public class ChartViewOption {
         this.restriction = restriction;
     }
 
-    public ChartViewOption(String name) {
+    private ChartViewOption(String name) {
         this.name = name;
     }
 

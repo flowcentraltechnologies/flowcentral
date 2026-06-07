@@ -15,28 +15,35 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
- * Snapshot series object.
+ * Chart datasource snapshot value object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class SnapshotSeries {
+public class CDSnapshotVal {
     
-    private String cat;
+    private String nm;
 
     private String lbl;
 
-    private List<SnapshotVal> values;
+    private BigDecimal num;
 
-    public String getCat() {
-        return cat;
+    private String txt;
+
+    private Date date;
+
+    private boolean grouping;
+
+    public String getNm() {
+        return nm;
     }
 
-    public void setCat(String cat) {
-        this.cat = cat;
+    public void setNm(String nm) {
+        this.nm = nm;
     }
 
     public String getLbl() {
@@ -47,12 +54,35 @@ public class SnapshotSeries {
         this.lbl = lbl;
     }
 
-    public List<SnapshotVal> getValues() {
-        return values;
+    public BigDecimal getNum() {
+        return num;
     }
 
-    public void setValues(List<SnapshotVal> values) {
-        this.values = values;
+    public void setNum(BigDecimal num) {
+        this.num = num;
     }
 
+    public String getTxt() {
+        return txt;
+    }
+
+    public void setTxt(String txt) {
+        this.txt = txt;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public boolean isGrouping() {
+        return grouping;
+    }
+
+    public void setGrouping(boolean grouping) {
+        this.grouping = grouping;
+    }
 }

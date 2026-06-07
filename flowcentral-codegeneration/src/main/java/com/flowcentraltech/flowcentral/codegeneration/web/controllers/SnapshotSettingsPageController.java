@@ -30,7 +30,7 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 
 /**
- * Snapshot settings page controller.
+ * CDSnapshot settings page controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1

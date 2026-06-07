@@ -15,23 +15,54 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
- * Snapshot.
+ * Chart datasource snapshot.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class Snapshot {
+public class CDSnapshot {
 
-    private List<SnapshotSeries> series;
+    private String chartDatasourceName;
+    
+    private String view;
+    
+    private Date takenOn;
+    
+    private List<CDSnapshotSeries> series;
 
-    public List<SnapshotSeries> getSeries() {
+    public String getChartDatasourceName() {
+        return chartDatasourceName;
+    }
+
+    public void setChartDatasourceName(String chartDatasourceName) {
+        this.chartDatasourceName = chartDatasourceName;
+    }
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
+    }
+
+    public Date getTakenOn() {
+        return takenOn;
+    }
+
+    public void setTakenOn(Date takenOn) {
+        this.takenOn = takenOn;
+    }
+
+    public List<CDSnapshotSeries> getSeries() {
         return series;
     }
 
-    public void setSeries(List<SnapshotSeries> series) {
+    public void setSeries(List<CDSnapshotSeries> series) {
         this.series = series;
     }
 

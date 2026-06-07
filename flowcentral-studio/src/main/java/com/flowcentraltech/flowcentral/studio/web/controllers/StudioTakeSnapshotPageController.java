@@ -96,7 +96,7 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
         }
         
         pageBean.setMessage(null);
-        return launchTaskWithMonitorBox(taskSetup, "Take Studio Snapshot",
+        return launchTaskWithMonitorBox(taskSetup, "Take Studio CDSnapshot",
                 isToRepository ? "/studio/takesnapshot/pushToRemote"
                 : "/studio/snapshots/openPage", null);
     }
@@ -116,7 +116,7 @@ public class StudioTakeSnapshotPageController extends AbstractStudioPageControll
                 resultDetails.getFileName(), resultDetails.getSnapshot());
         pageBean.setResultDetails(null);
         pageBean.setMessage(null);
-        return executeRepositoryTransfer(transferToRemote, "Push Snapshot File to Remote", "/studio/snapshots/openPage",
+        return executeRepositoryTransfer(transferToRemote, "Push CDSnapshot File to Remote", "/studio/snapshots/openPage",
                 null);
     }
 

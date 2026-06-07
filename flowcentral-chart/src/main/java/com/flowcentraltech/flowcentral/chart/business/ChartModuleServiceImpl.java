@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
+import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -54,9 +55,11 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
+import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
+import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -185,22 +188,39 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
-    public void ensureWarmChartDatasource(String chartDatasourceName, ChartViewOption chartViewOption)
+    public CDSnapshot getChartDatasourceSnapshot(String chartDatasourceName, ChartViewOption chartViewOption)
             throws UnifyException {
         final ChartDataSourceDef chartDataSourceDef = getChartDataSourceDef(chartDatasourceName);
-        final String snapshotName = chartDatasourceName + "." + chartViewOption.getName();
-        final String lockName = DATASOURCE_LOCK_BASE + snapshotName;
-        grabLock(lockName);
-        try {
-            final Date now = getNow();
-            final ChartDatasourceSnapshot snapshot = environment().listLean(
-                    new ChartDataSourceSnapshotQuery().chartDataSourceId(chartDataSourceDef.getId()).isActive());
-            if (snapshot == null || now.after(snapshot.getSnapshotExpiresOn())) {
+        final Date now = getNow();
+        ChartDatasourceSnapshot chartDatasourceSnapshot = environment()
+                .find(new ChartDataSourceSnapshotQuery().chartDataSourceId(chartDataSourceDef.getId()));
+        if (chartDatasourceSnapshot == null || now.after(chartDatasourceSnapshot.getSnapshotExpiresOn())) {
+            final String lockName = DATASOURCE_LOCK_BASE + chartDatasourceName + "." + chartViewOption.getName();
+            grabLock(lockName);
+            try {
+                chartDatasourceSnapshot = environment()
+                        .find(new ChartDataSourceSnapshotQuery().chartDataSourceId(chartDataSourceDef.getId()));
+                if (chartDatasourceSnapshot == null || now.after(chartDatasourceSnapshot.getSnapshotExpiresOn())) {
+                    final CDSnapshot cdSnapshot = new CDSnapshot();
+                    if (chartDatasourceSnapshot != null) {
+                        environment().delete(chartDatasourceSnapshot);
+                    }
 
+                    chartDatasourceSnapshot = new ChartDatasourceSnapshot();
+                    chartDatasourceSnapshot.setChartDataSourceId(chartDataSourceDef.getId());
+                    chartDatasourceSnapshot.setViewOption(chartViewOption.getName());
+                    chartDatasourceSnapshot.setSnapshot(DataUtils.asJsonString(cdSnapshot));
+                    chartDatasourceSnapshot.setSnapshotExpiresOn(CalendarUtils.getDateWithFrequencyOffset(getNow(),
+                            FrequencyUnit.SECOND, chartDataSourceDef.getCacheRefreshRate().seconds()));
+                    environment().create(chartDatasourceSnapshot);
+                    return cdSnapshot;
+                }
+            } finally {
+                releaseLock(lockName);
             }
-        } finally {
-            releaseLock(lockName);
         }
+
+        return DataUtils.fromJsonString(CDSnapshot.class, chartDatasourceSnapshot.getSnapshot());
     }
 
     @Override
@@ -347,7 +367,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     protected void doInstallModuleFeatures(InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
         if (environment().countAll(new ChartSnapshotQuery().name("sampleSalesChartSnapshot")) == 0) {
             ChartSnapshot chartSnapshot = new ChartSnapshot(ChartCategoryDataType.STRING, "sampleSalesChartSnapshot",
-                    "Sample Sales Chart Snapshot",
+                    "Sample Sales Chart CDSnapshot",
                     "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]");
             chartSnapshot.setSeriesList(Arrays
                     .asList(new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Sales", "[60,40,30,50,70,55,62]")));
@@ -356,7 +376,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
         if (environment().countAll(new ChartSnapshotQuery().name("sampleCostsChartSnapshot")) == 0) {
             ChartSnapshot chartSnapshot = new ChartSnapshot(ChartCategoryDataType.STRING, "sampleCostsChartSnapshot",
-                    "Sample Costs Chart Snapshot",
+                    "Sample Costs Chart CDSnapshot",
                     "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]");
             chartSnapshot.setSeriesList(Arrays
                     .asList(new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Costs", "[25,40,35,38,40,58,50]")));
@@ -365,7 +385,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
         if (environment().countAll(new ChartSnapshotQuery().name("sampleSalesAndCostsChartSnapshot")) == 0) {
             ChartSnapshot chartSnapshot = new ChartSnapshot(ChartCategoryDataType.STRING,
-                    "sampleSalesAndCostsChartSnapshot", "Sample Sales and Costs Chart Snapshot",
+                    "sampleSalesAndCostsChartSnapshot", "Sample Sales and Costs Chart CDSnapshot",
                     "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]");
             chartSnapshot.setSeriesList(Arrays.asList(
                     new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Sales",

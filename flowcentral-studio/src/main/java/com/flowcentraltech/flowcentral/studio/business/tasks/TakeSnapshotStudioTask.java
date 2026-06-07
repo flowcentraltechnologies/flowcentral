@@ -31,9 +31,9 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Component(name = "takesnapshot-studiotask", description = "Take Snapshot Studio Task")
+@Component(name = "takesnapshot-studiotask", description = "Take CDSnapshot Studio Task")
 @Schedulable(parameters = {
-        @Parameter(name = "snapshotName", description = "Snapshot Name", editor = "!ui-text", type = String.class,
+        @Parameter(name = "snapshotName", description = "CDSnapshot Name", editor = "!ui-text", type = String.class,
                 mandatory = true),
         @Parameter(name = "message", description = "Message", editor = "!ui-textarea", type = String.class) })
 public class TakeSnapshotStudioTask extends AbstractStudioSchedulableTask {

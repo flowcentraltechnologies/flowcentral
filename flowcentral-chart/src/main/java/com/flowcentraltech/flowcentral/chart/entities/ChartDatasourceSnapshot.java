@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.chart.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
@@ -36,11 +35,8 @@ public class ChartDatasourceSnapshot extends BaseAuditEntity {
 
     @ForeignKey(ChartDataSource.class)
     private Long chartDataSourceId;
-    
-    @ForeignKey
-    private ChartCategoryDataType categoryDataType;
  
-    @Column(length = 96)
+    @Column(length = 64)
     private String viewOption;
     
     @Column(type = ColumnType.TIMESTAMP)
@@ -68,14 +64,6 @@ public class ChartDatasourceSnapshot extends BaseAuditEntity {
 
     public void setViewOption(String viewOption) {
         this.viewOption = viewOption;
-    }
-
-    public ChartCategoryDataType getCategoryDataType() {
-        return categoryDataType;
-    }
-
-    public void setCategoryDataType(ChartCategoryDataType categoryDataType) {
-        this.categoryDataType = categoryDataType;
     }
 
     public Date getSnapshotExpiresOn() {
