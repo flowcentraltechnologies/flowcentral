@@ -13,24 +13,41 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.chart.entities;
+package com.flowcentraltech.flowcentral.chart.data;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
+import com.tcdng.unify.core.criterion.Restriction;
 
 /**
- * Chart data source snapshot value query.
+ * Chart view option object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class ChartDataSourceSnapshotValueQuery extends BaseEntityQuery<ChartDatasourceSnapshotValue> {
+public class ChartViewOption {
 
-    public ChartDataSourceSnapshotValueQuery() {
-        super(ChartDatasourceSnapshotValue.class);
+    private String name;
+
+    private Restriction restriction;
+
+    public ChartViewOption(String name, Restriction restriction) {
+        this.name = name;
+        this.restriction = restriction;
     }
 
-    public ChartDataSourceSnapshotValueQuery cdsSnapshotSeriesId(Long cdsSnapshotSeriesId) {
-        return (ChartDataSourceSnapshotValueQuery) addEquals("cdsSnapshotSeriesId", cdsSnapshotSeriesId);
+    public ChartViewOption(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Restriction getRestriction() {
+        return restriction;
+    }
+
+    public boolean isWithRestriction() {
+        return restriction != null;
     }
 
 }

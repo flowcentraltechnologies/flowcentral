@@ -36,18 +36,18 @@ public class ChartDatasourceSnapshot extends BaseAuditEntity {
 
     @ForeignKey(ChartDataSource.class)
     private Long chartDataSourceId;
-
-    @Column(length = 64, nullable = true)
-    private String viewOption;
     
     @ForeignKey
     private ChartCategoryDataType categoryDataType;
+ 
+    @Column(length = 96)
+    private String viewOption;
     
     @Column(type = ColumnType.TIMESTAMP)
     private Date snapshotExpiresOn;
-
-    @Column(name = "ACTIVE_FG")
-    private boolean active;
+    
+    @Column(type = ColumnType.CLOB)
+    private String snapshot;
     
     @Override
     public String getDescription() {
@@ -86,12 +86,12 @@ public class ChartDatasourceSnapshot extends BaseAuditEntity {
         this.snapshotExpiresOn = snapshotExpiresOn;
     }
 
-    public boolean isActive() {
-        return active;
+    public String getSnapshot() {
+        return snapshot;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setSnapshot(String snapshot) {
+        this.snapshot = snapshot;
     }
 
 }

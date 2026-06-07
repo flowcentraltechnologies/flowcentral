@@ -16,15 +16,12 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
+import com.flowcentraltech.flowcentral.configuration.constants.CacheRefreshRate;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
 
 /**
@@ -49,19 +46,17 @@ public class ChartDataSourceDef implements VersionedEntityDef {
 
     private final PropertySequenceDef categories;
 
-    private final Integer limit;
-
     private final Long id;
 
     private final long version;
 
     private FieldSequenceDef groupingFieldSequenceDef;
 
-    private List<String> groupingFieldNames;
-    
+    private CacheRefreshRate cacheRefreshRate;
+
     public ChartDataSourceDef(ChartDataSourceType type, String longName, String description, EntityDef entityDef,
             FilterDef categoryBase, PropertySequenceDef series, PropertySequenceDef categories,
-            FieldSequenceDef groupingFieldSequenceDef, Integer limit, Long id, long version) {
+            FieldSequenceDef groupingFieldSequenceDef, CacheRefreshRate cacheRefreshRate, Long id, long version) {
         this.type = type;
         this.longName = longName;
         this.description = description;
@@ -70,7 +65,7 @@ public class ChartDataSourceDef implements VersionedEntityDef {
         this.series = series;
         this.categories = categories;
         this.groupingFieldSequenceDef = groupingFieldSequenceDef;
-        this.limit = limit;
+        this.cacheRefreshRate = cacheRefreshRate;
         this.id = id;
         this.version = version;
     }
@@ -103,8 +98,12 @@ public class ChartDataSourceDef implements VersionedEntityDef {
         return categories;
     }
 
-    public Integer getLimit() {
-        return limit;
+    public FieldSequenceDef getGroupingFieldSequenceDef() {
+        return groupingFieldSequenceDef;
+    }
+
+    public CacheRefreshRate getCacheRefreshRate() {
+        return cacheRefreshRate;
     }
 
     @Override
@@ -123,23 +122,6 @@ public class ChartDataSourceDef implements VersionedEntityDef {
 
     public boolean isWithCategories() {
         return categories != null;
-    }
-
-    public List<String> getGroupingFieldNames() {
-        if (groupingFieldNames == null) {
-            synchronized(this) {
-                if (groupingFieldNames == null) {
-                    groupingFieldNames = new ArrayList<String>();
-                    if (isWithGroupingFields()) {
-                        groupingFieldNames.addAll(groupingFieldSequenceDef.getFieldNames());
-                    }
-                    
-                    groupingFieldNames = Collections.unmodifiableList(groupingFieldNames);
-                }
-            }
-        }
-        
-        return groupingFieldNames;
     }
 
     public boolean isWithGroupingFields() {

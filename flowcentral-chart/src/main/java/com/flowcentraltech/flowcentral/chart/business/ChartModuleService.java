@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
+import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
@@ -38,6 +39,18 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface ChartModuleService extends FlowCentralService {
 
+    /**
+     * Ensures datasource is warm based on datasource cache refresh rate.
+     * 
+     * @param chartDatasourceName
+     *                            the chart datasource name
+     * @param chartViewOption
+     *                            the chart view option
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void ensureWarmChartDatasource(String chartDatasourceName, ChartViewOption chartViewOption) throws UnifyException;
+    
     /**
      * Clears chart cache.
      * 

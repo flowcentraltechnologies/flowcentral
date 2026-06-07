@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.chart.business;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,9 +34,12 @@ import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
+import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceSnapshotQuery;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDatasourceSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
@@ -65,6 +69,8 @@ import com.tcdng.unify.core.util.DataUtils;
 @Component(ChartModuleNameConstants.CHART_MODULE_SERVICE)
 public class ChartModuleServiceImpl extends AbstractFlowCentralService implements ChartModuleService {
 
+    private static final String DATASOURCE_LOCK_BASE = "CHARTDATASOURCE::";
+    
     @Configurable
     private AppletUtilities appletUtilities;
 
@@ -132,7 +138,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getCategories()),
-                            groupingFieldSequenceDef, 0, chartDataSource.getId(),
+                            groupingFieldSequenceDef, chartDataSource.getCacheRefreshRate(), chartDataSource.getId(),
                             chartDataSource.getVersionNo());
                     return chartDataSourceDef;
                 }
@@ -176,6 +182,25 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
             };
 
+    }
+
+    @Override
+    public void ensureWarmChartDatasource(String chartDatasourceName, ChartViewOption chartViewOption)
+            throws UnifyException {
+        final ChartDataSourceDef chartDataSourceDef = getChartDataSourceDef(chartDatasourceName);
+        final String snapshotName = chartDatasourceName + "." + chartViewOption.getName();
+        final String lockName = DATASOURCE_LOCK_BASE + snapshotName;
+        grabLock(lockName);
+        try {
+            final Date now = getNow();
+            final ChartDatasourceSnapshot snapshot = environment().listLean(
+                    new ChartDataSourceSnapshotQuery().chartDataSourceId(chartDataSourceDef.getId()).isActive());
+            if (snapshot == null || now.after(snapshot.getSnapshotExpiresOn())) {
+
+            }
+        } finally {
+            releaseLock(lockName);
+        }
     }
 
     @Override

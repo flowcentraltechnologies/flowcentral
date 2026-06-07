@@ -42,13 +42,5 @@ public class ChartDataSourceSnapshotQuery extends BaseEntityQuery<ChartDatasourc
     public ChartDataSourceSnapshotQuery isNotExpired(Date now) {
         return (ChartDataSourceSnapshotQuery) addGreaterThanEqual("snapshotExpiresOn", now);
     }
-    
-    public ChartDataSourceSnapshotQuery isActive() {
-        return (ChartDataSourceSnapshotQuery) addEquals("active", true);
-    }
-    
-    public ChartDataSourceSnapshotQuery isNotActive() {
-        return (ChartDataSourceSnapshotQuery) addEquals("active", false);
-    }
 
 }
