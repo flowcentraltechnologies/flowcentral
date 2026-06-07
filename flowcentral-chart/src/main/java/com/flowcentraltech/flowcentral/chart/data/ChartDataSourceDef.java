@@ -117,11 +117,11 @@ public class ChartDataSourceDef implements VersionedEntityDef {
     }
 
     public boolean isWithSeries() {
-        return series != null;
+        return series != null && !series.isBlank();
     }
 
     public boolean isWithCategories() {
-        return categories != null;
+        return categories != null && !categories.isBlank();
     }
 
     public boolean isWithGroupingFields() {

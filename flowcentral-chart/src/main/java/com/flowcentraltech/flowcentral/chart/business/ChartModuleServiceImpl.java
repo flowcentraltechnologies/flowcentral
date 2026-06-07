@@ -24,13 +24,21 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityCategoryDef;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.EntitySeriesDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
+import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.PropertySequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
+import com.flowcentraltech.flowcentral.chart.data.CDSnapshotSeries;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -56,11 +64,17 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
+import com.tcdng.unify.core.constant.TimeSeriesType;
+import com.tcdng.unify.core.criterion.AggregateFunction;
+import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.GroupingFunction;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Default chart business service implementation.
@@ -73,7 +87,7 @@ import com.tcdng.unify.core.util.DataUtils;
 public class ChartModuleServiceImpl extends AbstractFlowCentralService implements ChartModuleService {
 
     private static final String DATASOURCE_LOCK_BASE = "CHARTDATASOURCE::";
-    
+
     @Configurable
     private AppletUtilities appletUtilities;
 
@@ -135,9 +149,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     FieldSequenceDef groupingFieldSequenceDef = InputWidgetUtils
                             .getFieldSequenceDef(chartDataSource.getFieldSequence());
 
-                    ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(chartDataSource.getType(),
-                            longName, chartDataSource.getDescription(),
-                            appletUtilities.getEntityDef(chartDataSource.getEntity()),
+                    ChartDataSourceDef chartDataSourceDef = new ChartDataSourceDef(chartDataSource.getType(), longName,
+                            chartDataSource.getDescription(), appletUtilities.getEntityDef(chartDataSource.getEntity()),
                             InputWidgetUtils.getFilterDef(appletUtilities, null, chartDataSource.getCategoryBase()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getSeries()),
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getCategories()),
@@ -202,15 +215,82 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         .find(new ChartDataSourceSnapshotQuery().chartDataSourceId(chartDataSourceDef.getId()));
                 if (chartDatasourceSnapshot == null || now.after(chartDatasourceSnapshot.getSnapshotExpiresOn())) {
                     final CDSnapshot cdSnapshot = new CDSnapshot();
+                    cdSnapshot.setChartDatasourceName(chartDatasourceName);
+                    cdSnapshot.setView(chartViewOption.getName());
+
                     if (chartDatasourceSnapshot != null) {
                         environment().delete(chartDatasourceSnapshot);
                     }
 
+                    if (chartDataSourceDef.isWithSeries()) {
+                        final EntityDef entityDef = chartDataSourceDef.getEntityDef();
+                        final List<AggregateFunction> aggregateFunctions = new ArrayList<AggregateFunction>();
+                        for (PropertySequenceEntryDef sequenceDef : chartDataSourceDef.getSeries().getSequenceList()) {
+                            EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
+                            aggregateFunctions.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName(),
+                                    entitySeriesDef.getLabel()));
+                        }
+
+                        final FilterDef catBaseFilterDef = chartDataSourceDef.getCategoryBase();
+                        Restriction baseRestriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null,
+                                catBaseFilterDef, now);
+
+                        if (chartViewOption.isWithRestriction()) {
+                            baseRestriction = baseRestriction == null ? chartViewOption.getRestriction()
+                                    : new And().add(baseRestriction).add(chartViewOption.getRestriction());
+                        }
+
+                        List<GroupingFunction> groupingFunctions = Collections.emptyList();
+                        if (chartDataSourceDef.isWithGroupingFields()) {
+                            groupingFunctions = new ArrayList<GroupingFunction>();
+                            for (FieldSequenceEntryDef fieldSequenceDef : chartDataSourceDef
+                                    .getGroupingFieldSequenceDef().getFieldSequenceList()) {
+                                final String fieldName = fieldSequenceDef.getFieldName();
+                                final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                                final GroupingFunction _groupingFunction = entityFieldDef.isDateTime()
+                                        ? new GroupingFunction(fieldName, entityFieldDef.getFieldLabel(),
+                                                fieldSequenceDef.isWithParam()
+                                                        ? TimeSeriesType.fromCode(fieldSequenceDef.getParam())
+                                                        : TimeSeriesType.DAY)
+                                        : new GroupingFunction(fieldName, entityFieldDef.getFieldLabel());
+                                groupingFunctions.add(_groupingFunction);
+                            }
+                        }
+
+                        List<CDSnapshotSeries> series = new ArrayList<CDSnapshotSeries>();
+                        if (chartDataSourceDef.isWithCategories()) {
+                            for (PropertySequenceEntryDef propertySequenceEntryDef : chartDataSourceDef.getCategories().getSequenceList()) {
+                                final EntityCategoryDef entityCategoryDef = entityDef
+                                        .getEntityCategorysDef(propertySequenceEntryDef.getProperty());
+                                final String cat = entityCategoryDef.getName();
+                                final String catlabel = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
+                                        ? propertySequenceEntryDef.getLabel()
+                                        : entityCategoryDef.getLabel();
+
+                                final FilterDef enFilterDef = entityCategoryDef.getFilterDef();
+                                Restriction restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null, enFilterDef, now);
+                                if (baseRestriction != null) {
+                                    restriction = restriction == null? baseRestriction: new And().add(baseRestriction).add(restriction);
+                                }
+
+                                series.add(getChartDatasourceSnapshotSeries(aggregateFunctions, restriction,
+                                        groupingFunctions, cat, catlabel));
+                            }
+                        } else {
+                            series.add(getChartDatasourceSnapshotSeries(aggregateFunctions, baseRestriction,
+                                    groupingFunctions, null, null));
+                        }
+
+                        cdSnapshot.setSeries(series);
+                    }
+
+                    final Date takenOn = getNow();
+                    cdSnapshot.setTakenOn(takenOn);
                     chartDatasourceSnapshot = new ChartDatasourceSnapshot();
                     chartDatasourceSnapshot.setChartDataSourceId(chartDataSourceDef.getId());
                     chartDatasourceSnapshot.setViewOption(chartViewOption.getName());
                     chartDatasourceSnapshot.setSnapshot(DataUtils.asJsonString(cdSnapshot));
-                    chartDatasourceSnapshot.setSnapshotExpiresOn(CalendarUtils.getDateWithFrequencyOffset(getNow(),
+                    chartDatasourceSnapshot.setSnapshotExpiresOn(CalendarUtils.getDateWithFrequencyOffset(takenOn,
                             FrequencyUnit.SECOND, chartDataSourceDef.getCacheRefreshRate().seconds()));
                     environment().create(chartDatasourceSnapshot);
                     return cdSnapshot;
@@ -221,6 +301,12 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         }
 
         return DataUtils.fromJsonString(CDSnapshot.class, chartDatasourceSnapshot.getSnapshot());
+    }
+
+    private CDSnapshotSeries getChartDatasourceSnapshotSeries(List<AggregateFunction> aggregateFunctions,
+            Restriction restriction, List<GroupingFunction> groupingFunctions, String catName, String catLabel)
+            throws UnifyException {
+        return null; // TODO
     }
 
     @Override

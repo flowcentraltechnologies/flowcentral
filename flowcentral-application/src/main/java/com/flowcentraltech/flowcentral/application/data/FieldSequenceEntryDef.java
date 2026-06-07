@@ -26,22 +26,22 @@ public class FieldSequenceEntryDef {
 
     private String fieldName;
 
-    private String standardFormatCode;
+    private String param;
 
-    public FieldSequenceEntryDef(String fieldName, String standardFormatCode) {
+    public FieldSequenceEntryDef(String fieldName, String param) {
         this.fieldName = fieldName;
-        this.standardFormatCode = standardFormatCode;
+        this.param = param;
     }
 
     public String getFieldName() {
         return fieldName;
     }
 
-    public String getStandardFormatCode() {
-        return standardFormatCode;
+    public String getParam() {
+        return param;
     }
 
-    public boolean isWithStandardFormatCode() {
-        return standardFormatCode != null;
+    public boolean isWithParam() {
+        return param != null;
     }
 }
