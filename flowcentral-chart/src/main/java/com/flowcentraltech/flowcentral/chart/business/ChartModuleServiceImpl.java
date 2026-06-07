@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotSeries;
+import com.flowcentraltech.flowcentral.chart.data.CDSnapshotVal;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -69,9 +70,12 @@ import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.GroupingFunction;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
+import com.tcdng.unify.core.database.GroupingAggregation;
+import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -156,6 +160,11 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             InputWidgetUtils.getPropertySequenceDef(chartDataSource.getCategories()),
                             groupingFieldSequenceDef, chartDataSource.getCacheRefreshRate(), chartDataSource.getId(),
                             chartDataSource.getVersionNo());
+
+                    // Expire snapshot
+                    environment().updateAll(
+                            new ChartDataSourceSnapshotQuery().chartDataSourceId(chartDataSourceDef.getId()),
+                            new Update().add("snapshotExpiresOn", getNow()));
                     return chartDataSourceDef;
                 }
 
@@ -259,7 +268,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
                         List<CDSnapshotSeries> series = new ArrayList<CDSnapshotSeries>();
                         if (chartDataSourceDef.isWithCategories()) {
-                            for (PropertySequenceEntryDef propertySequenceEntryDef : chartDataSourceDef.getCategories().getSequenceList()) {
+                            for (PropertySequenceEntryDef propertySequenceEntryDef : chartDataSourceDef.getCategories()
+                                    .getSequenceList()) {
                                 final EntityCategoryDef entityCategoryDef = entityDef
                                         .getEntityCategorysDef(propertySequenceEntryDef.getProperty());
                                 final String cat = entityCategoryDef.getName();
@@ -268,16 +278,18 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                                         : entityCategoryDef.getLabel();
 
                                 final FilterDef enFilterDef = entityCategoryDef.getFilterDef();
-                                Restriction restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null, enFilterDef, now);
+                                Restriction restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef,
+                                        null, enFilterDef, now);
                                 if (baseRestriction != null) {
-                                    restriction = restriction == null? baseRestriction: new And().add(baseRestriction).add(restriction);
+                                    restriction = restriction == null ? baseRestriction
+                                            : new And().add(baseRestriction).add(restriction);
                                 }
 
-                                series.add(getChartDatasourceSnapshotSeries(aggregateFunctions, restriction,
+                                series.add(getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions, restriction,
                                         groupingFunctions, cat, catlabel));
                             }
                         } else {
-                            series.add(getChartDatasourceSnapshotSeries(aggregateFunctions, baseRestriction,
+                            series.add(getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions, baseRestriction,
                                     groupingFunctions, null, null));
                         }
 
@@ -303,10 +315,28 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         return DataUtils.fromJsonString(CDSnapshot.class, chartDatasourceSnapshot.getSnapshot());
     }
 
-    private CDSnapshotSeries getChartDatasourceSnapshotSeries(List<AggregateFunction> aggregateFunctions,
-            Restriction restriction, List<GroupingFunction> groupingFunctions, String catName, String catLabel)
-            throws UnifyException {
-        return null; // TODO
+    private CDSnapshotSeries getChartDatasourceSnapshotSeries(EntityDef entityDef,
+            List<AggregateFunction> aggregateFunctions, Restriction restriction,
+            List<GroupingFunction> groupingFunctions, String catName, String catLabel) throws UnifyException {
+        final CDSnapshotSeries cdSnapshotSeries = new CDSnapshotSeries();
+        cdSnapshotSeries.setCat(catName);
+        cdSnapshotSeries.setLbl(catLabel);
+
+        final Query<?> query = appletUtilities.application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true);
+        if (restriction != null) {
+            query.addRestriction(restriction);
+        }
+
+        final List<CDSnapshotVal> vals = new ArrayList<CDSnapshotVal>();
+        final List<GroupingAggregation> aggregations = environment().aggregate(aggregateFunctions, query, groupingFunctions);
+        for (GroupingAggregation aggregation: aggregations) {
+            CDSnapshotVal val = new CDSnapshotVal();
+            
+            vals.add(val);
+        }
+
+        cdSnapshotSeries.setVal(vals);
+        return cdSnapshotSeries;
     }
 
     @Override
