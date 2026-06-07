@@ -4440,9 +4440,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         refEntityClassDef.getEntityDef(), listProp.getProperty());
                                 final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef
                                         .getFieldSequenceDef().getFieldSequenceEntryDef(listProp.getFieldName());
-                                formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
+                                formatter = fieldSequenceEntryDef.isWithParam()
                                         ? appletUtilities.formatHelper()
-                                                .newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
+                                                .newFormatter(fieldSequenceEntryDef.getParam())
                                         : null;
                                 Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
                                         csvRecord.get(listProp.getFieldName()), formatter);
@@ -4454,9 +4454,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     } else {
                         final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef.getFieldSequenceDef()
                                 .getFieldSequenceEntryDef(fieldName);
-                        formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
+                        formatter = fieldSequenceEntryDef.isWithParam()
                                 ? appletUtilities.formatHelper()
-                                        .newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
+                                        .newFormatter(fieldSequenceEntryDef.getParam())
                                 : null;
                         val = csvRecord.get(fieldName);
                     }

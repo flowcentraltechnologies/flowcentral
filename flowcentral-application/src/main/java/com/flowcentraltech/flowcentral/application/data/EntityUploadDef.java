@@ -102,8 +102,8 @@ public class EntityUploadDef implements Listable {
             sb.append("[");
             sb.append(au.resolveSessionMessage(
                     entityDef.getFieldDef(fieldSequenceEntryDef.getFieldName()).getFieldLabel()));
-            if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
-                StandardFormatType type = StandardFormatType.fromCode(fieldSequenceEntryDef.getStandardFormatCode());
+            if (fieldSequenceEntryDef.isWithParam()) {
+                StandardFormatType type = StandardFormatType.fromCode(fieldSequenceEntryDef.getParam());
                 if (type != null) {
                     sb.append("{").append(type.format()).append("}");
                 }

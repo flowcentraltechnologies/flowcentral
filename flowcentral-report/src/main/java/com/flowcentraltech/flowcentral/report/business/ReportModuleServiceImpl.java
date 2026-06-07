@@ -48,6 +48,7 @@ import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
 import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
+import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
@@ -942,8 +943,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         // Chart summary
         if (reportOptions.isChartSummary()) {
             ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource(),
-                    reportOptions.getRestriction());
-            ChartTableColumn[] tableColumn = chartDetails.getTableHeaders();
+                    ChartViewOption.DEFAULT/*reportOptions.getRestriction()*/);
+            ChartTableColumn[] tableColumn = null;//TODO chartDetails.getTableHeaders();
             for (ChartTableColumn _tableColumn : tableColumn) {
                 final DataType dataType = _tableColumn.getType().dataType();
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
@@ -963,7 +964,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
             }
 
             List<Map<String, ?>> content = new ArrayList<Map<String, ?>>();
-            for (Object[] row : chartDetails.getTableSeries()) {
+            for (Object[] row : new ArrayList<Object[]>()) { // TODO
                 Map<String, Object> mrow = new HashMap<String, Object>();
                 for (int i = 0; i < row.length; i++) {
                     Object val = DataUtils.convert(tableColumn[i].getType().dataType().javaClass(), row[i]);

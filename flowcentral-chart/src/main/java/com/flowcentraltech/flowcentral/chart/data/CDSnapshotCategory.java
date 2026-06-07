@@ -27,6 +27,8 @@ public class CDSnapshotCategory {
 
     private String lbl;
 
+    private int groupingStart;
+    
     private CDSnapshotSeries[] series;
 
     public String getCat() {
@@ -43,6 +45,14 @@ public class CDSnapshotCategory {
 
     public void setLbl(String lbl) {
         this.lbl = lbl;
+    }
+
+    public int getGroupingStart() {
+        return groupingStart;
+    }
+
+    public void setGroupingStart(int groupingStart) {
+        this.groupingStart = groupingStart;
     }
 
     public CDSnapshotSeries[] getSeries() {

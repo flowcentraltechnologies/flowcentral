@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.chart.web.writers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,7 +80,7 @@ public class ChartWriter extends AbstractWidgetWriter {
         final String chartLongName = chartWidget.getValue(String.class);
         if (!StringUtils.isBlank(chartLongName)) {
             final ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-            final ChartDetails chartDetails = getChartDetailsCache().getChartDetails(configuration, chartDef);
+            final ChartDetails chartDetails = getChartDetails(configuration, chartDef);
             writer.write("<div ");
             writeTagAttributes(writer, chartWidget);
             if (chartDef.getHeight() > 0 && !chartDef.getType().isTable()) {
@@ -88,7 +89,7 @@ public class ChartWriter extends AbstractWidgetWriter {
 
             writer.write(">");
             if (chartDef.getType().isCard()) {
-                if (chartDetails.isWithSeries()) {
+                if (true) {
                     writer.write("<div class=\"card\">");
 
                     writer.write("<span class=\"title\">");
@@ -106,7 +107,7 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.write("<span class=\"content\" style=\"color:");
                     writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
                     writer.write(";\">");
-                    Number num = chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
+                    Number num = null;//TODO chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
                     String fmt = null;//TODO ChartUtils.getFormattedCardValue(num);
                     writer.writeWithHtmlEscape(fmt);
                     writer.write("</span>");
@@ -114,7 +115,7 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.write("</div>");
                 }
             } else if (chartDef.getType().isTable()) {
-                if (chartDetails.isWithTableSeries()) {
+                if (true) {
                     FormatterOptions.Instance options = FormatterOptions.DEFAULT
                             .createInstance(getUnifyComponentContext());
                     writer.write("<div class=\"tbl\"");
@@ -136,15 +137,15 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.write("</span>");
 
                     // Header
-                    final int cols = chartDetails.getTableHeaders().length;
-                    final ChartTableColumn[] headers = chartDetails.getTableHeaders();
+                    final int cols = 0;//TODO chartDetails.getTableHeaders().length;
+                    final ChartTableColumn[] headers = null;//chartDetails.getTableHeaders();
                     writer.write("<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
                     writer.write("<table class=\"cont\" style=\"width:100%;\"><thead>");
                     writer.write("<tr style=\"background-color:");
                     writer.write(chartDef.getColor());
                     writer.write(";position: sticky;top: 0px;\">");
                     for (ChartTableColumn header : headers) {
-                        if (header.isSeries() && !chartDetails.isSeriesFieldInclusion(header.getFieldName())) {
+                        if (header.isSeries()/* && !chartDetails.isSeriesFieldInclusion(header.getFieldName())*/) {
                             continue;
                         }
 
@@ -155,11 +156,11 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.write("</tr></thead>");
 
                     writer.write("<tbody>");
-                    for (Object[] row : chartDetails.getTableSeries()) {
+                    for (Object[] row : new ArrayList<Object[]>()) { // TODO
                         writer.write("<tr>");
                         for (int i = 0; i < cols; i++) {
                             ChartTableColumn header = headers[i];
-                            if (header.isSeries() && !chartDetails.isSeriesFieldInclusion(header.getFieldName())) {
+                            if (header.isSeries()/* && !chartDetails.isSeriesFieldInclusion(header.getFieldName())*/) {
                                 continue;
                             }
 
@@ -210,63 +211,9 @@ public class ChartWriter extends AbstractWidgetWriter {
         }
     }
 
-    private ChartDetailsCache getChartDetailsCache() throws UnifyException {
-        ChartDetailsCache cache = getRequestAttribute(ChartDetailsCache.class,
-                ChartRequestAttributeConstants.CHART_DETAILS_CACHE);
-        if (cache == null) {
-            cache = new ChartDetailsCache();
-            setRequestAttribute(ChartRequestAttributeConstants.CHART_DETAILS_CACHE, cache);
-        }
-
-        return cache;
+    private ChartDetails getChartDetails(ChartConfiguration configuration, ChartDef chartDef) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
-    /**
-     * For reuse of chart details when charts to be rendered in the same request
-     * context share the same provider details. No synchronization needed since it's
-     * request context (same thread).
-     */
-    private class ChartDetailsCache {
-
-        private Map<String, ChartDetails> cache;
-
-        private ChartDetailsCache() {
-            this.cache = new HashMap<String, ChartDetails>();
-        }
-
-        public ChartDetails getChartDetails(ChartConfiguration configuration, ChartDef chartDef) throws UnifyException {
-            final String providerName = chartDef.getProvider();
-            final String rule = chartDef.getRule();
-            final String key = providerName + (!StringUtils.isBlank(rule) ? "." + rule : "");
-            ChartDetails chartDetails = cache.get(key);
-            if (chartDetails == null) {
-                TimeResolutionType maxResolution = TimeResolutionType.YEAR;
-                Restriction restriction = null;
-                ChartDetailsProvider provider = (ChartDetailsProvider) getComponent(providerName);
-                Set<String> seriesFieldInclusion = Collections.emptySet();
-                if (provider.isUsesChartDataSource() && !StringUtils.isBlank(rule)) {
-                    final ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(rule);
-                    final EntityDef entityDef = chartDataSourceDef.getEntityDef();
-                    final FilterDef catFilterDef = configuration.getCatBase(chartDataSourceDef.getLongName());
-                    if (catFilterDef != null) {
-                        maxResolution = catFilterDef.getMaxTimeResolution();
-                    }
-
-                    restriction = InputWidgetUtils.getRestriction(appletUtilities, entityDef, null, catFilterDef,
-                            chartModuleService.getNow());
-
-                    seriesFieldInclusion = new HashSet<String>();
-                    for (String seriesName : chartDef.getSeriesInclusion()) {
-                        seriesFieldInclusion.add(entityDef.getEntitySeriesDef(seriesName).getFieldName());
-                    }
-                }
-
-                chartDetails = provider.provide(rule, restriction, maxResolution);
-                chartDetails.setSeriesFieldInclusion(seriesFieldInclusion);
-                cache.put(key, chartDetails);
-            }
-
-            return chartDetails;
-        }
-    }
 }

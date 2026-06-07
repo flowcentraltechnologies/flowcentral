@@ -781,7 +781,7 @@ public final class InputWidgetUtils {
             List<FieldSequenceEntryConfig> entryList = new ArrayList<FieldSequenceEntryConfig>();
             for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
                 entryList.add(new FieldSequenceEntryConfig(fieldSequenceEntryDef.getFieldName(),
-                        fieldSequenceEntryDef.getStandardFormatCode()));
+                        fieldSequenceEntryDef.getParam()));
             }
 
             return new FieldSequenceConfig(entryList);
@@ -797,8 +797,8 @@ public final class InputWidgetUtils {
                 for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
                     bw.write(fieldSequenceEntryDef.getFieldName());
                     bw.write(']');
-                    if (fieldSequenceEntryDef.isWithStandardFormatCode()) {
-                        bw.write(fieldSequenceEntryDef.getStandardFormatCode());
+                    if (fieldSequenceEntryDef.isWithParam()) {
+                        bw.write(fieldSequenceEntryDef.getParam());
                         bw.write(']');
                     }
 

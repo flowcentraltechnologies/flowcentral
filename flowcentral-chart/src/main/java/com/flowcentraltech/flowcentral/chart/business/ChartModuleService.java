@@ -17,17 +17,14 @@ package com.flowcentraltech.flowcentral.chart.business;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
-import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
-import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
-import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshot;
-import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
@@ -127,17 +124,6 @@ public interface ChartModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<Long> findCustomChartDataSourceIdList(String applicationName) throws UnifyException;
-    
-    /**
-     * Finds snapshots by criteria.
-     * 
-     * @param query
-     *              the query object
-     * @return list of chart snapshots
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<ChartSnapshot> findChartSnapshots(ChartSnapshotQuery query) throws UnifyException;
 
     /**
      * Finds chart definitions by application.
@@ -171,40 +157,6 @@ public interface ChartModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     ChartDataSourceDef getChartDataSourceDef(String chartDataSourceName) throws UnifyException; 
-    
-    /**
-     * Gets a chart snapshot definition.
-     * 
-     * @param snapshotName
-     *                     the snapshot name
-     * @return the chart snapshot
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    ChartSnapshotDef getChartSnapshotDef(String snapshotName) throws UnifyException;
-
-    /**
-     * Checks if chart snapshot exists.
-     * 
-     * @param snapshotName
-     *                     the snapshot name
-     * @return true if snapshot with name exists otherwise false
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean isChartSnapshotExist(String snapshotName) throws UnifyException;
-
-    /**
-     * Saves a chart snapshot. Updates existing record or creates a new one if
-     * necessary.
-     * 
-     * @param chartSnapshot
-     *                      the snapshot to save
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void saveChartSnapshot(ChartSnapshot chartSnapshot) throws UnifyException;
-
     /**
      * Fetch entity chart data sources.
      * 

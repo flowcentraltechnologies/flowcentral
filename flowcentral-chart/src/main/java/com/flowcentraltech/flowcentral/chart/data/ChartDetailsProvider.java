@@ -18,8 +18,6 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import com.flowcentraltech.flowcentral.common.business.RuleListComponent;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.constant.TimeResolutionType;
-import com.tcdng.unify.core.criterion.Restriction;
 
 /**
  * Chart details provider.
@@ -44,29 +42,14 @@ public interface ChartDetailsProvider extends RuleListComponent {
      * Provides data.
      * 
      * @param rule
-     *                    optional rule
-     * @param restriction
-     *                    optional restriction
+     *                        optional rule
+     * @param chartViewOption
+     *                        the chart view option
      * @return the chart data
      * @throws UnifyException
      *                        if an error occurs
      */
-    ChartDetails provide(String rule, Restriction restriction) throws UnifyException;
-
-    /**
-     * Provides data.
-     * 
-     * @param rule
-     *                    optional rule
-     * @param restriction
-     *                    optional restriction
-     * @param maxResolution
-     *                    optional maximum resolution
-     * @return the chart data
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    ChartDetails provide(String rule, Restriction restriction, TimeResolutionType maxResolution) throws UnifyException;
+    ChartDetails provide(String rule, ChartViewOption chartViewOption) throws UnifyException;
 
     /**
      * Provides data.
@@ -78,7 +61,7 @@ public interface ChartDetailsProvider extends RuleListComponent {
      *                        if an error occurs
      */
     ChartDetails provide(ChartDataSourceDef chartDataSourceDef) throws UnifyException;
-    
+
     /**
      * Indicates if provider utilizes a chart data source
      * 

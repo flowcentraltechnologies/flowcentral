@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.chart.business;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -42,8 +41,6 @@ import com.flowcentraltech.flowcentral.chart.data.CDSnapshotCategory;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotSeries;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
-import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
-import com.flowcentraltech.flowcentral.chart.data.ChartSnapshotDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
@@ -51,12 +48,7 @@ import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceSnapshotQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDatasourceSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
-import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshot;
-import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotQuery;
-import com.flowcentraltech.flowcentral.chart.entities.ChartSnapshotSeries;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
@@ -100,8 +92,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     private FactoryMap<String, ChartDef> chartDefFactoryMap;
 
     private FactoryMap<String, ChartDataSourceDef> chartDataSourceDefFactoryMap;
-
-    private FactoryMap<String, ChartSnapshotDef> chartSnapshotDefFactoryMap;
 
     public ChartModuleServiceImpl() {
         this.chartDefFactoryMap = new StaleableFactoryMap<String, ChartDef>()
@@ -168,43 +158,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             new ChartDataSourceSnapshotQuery().chartDataSourceId(chartDataSourceDef.getId()),
                             new Update().add("snapshotExpiresOn", getNow()));
                     return chartDataSourceDef;
-                }
-
-            };
-
-        this.chartSnapshotDefFactoryMap = new StaleableFactoryMap<String, ChartSnapshotDef>()
-            {
-
-                @Override
-                protected boolean stale(String chartSnapshotName, ChartSnapshotDef chartSnapshotDef) throws Exception {
-                    return isStale(new ChartSnapshotQuery(), chartSnapshotDef);
-                }
-
-                @Override
-                protected ChartSnapshotDef create(String chartSnapshotName, Object... arg1) throws Exception {
-                    ChartSnapshot chartSnapshot = environment().list(new ChartSnapshotQuery().name(chartSnapshotName));
-                    if (chartSnapshot == null) {
-                        throw new UnifyException(ChartModuleErrorConstants.CANNOT_FIND_CHART_SNAPSHOT,
-                                chartSnapshotName);
-                    }
-
-                    ChartDetails.Builder cdb = ChartDetails.newBuilder(chartSnapshot.getCategoryDataType());
-                    String[] _categories = DataUtils.arrayFromJsonString(String[].class, chartSnapshot.getCategories());
-                    for (ChartSnapshotSeries series : chartSnapshot.getSeriesList()) {
-                        cdb.createSeries(series.getSeriesDataType(), series.getName());
-                        Number[] _nseries = series.getSeriesDataType().isInteger()
-                                ? DataUtils.arrayFromJsonString(Integer[].class, series.getSeries())
-                                : DataUtils.arrayFromJsonString(Double[].class, series.getSeries());
-                        if (_nseries != null) {
-                            for (int i = 0; i < _nseries.length; i++) {
-                                cdb.addSeriesData(series.getName(), _categories[i], _nseries[i]);
-                            }
-                        }
-                    }
-
-                    ChartDetails chartDetails = cdb.build();
-                    return new ChartSnapshotDef(chartSnapshot.getName(), chartSnapshot.getDescription(), chartDetails,
-                            chartSnapshot.getId(), chartSnapshot.getVersionNo());
                 }
 
             };
@@ -334,6 +287,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
             query.addRestriction(restriction);
         }
 
+        int groupingStart = 0;
         final List<GroupingAggregation> aggregations = environment().aggregate(aggregateFunctions, query, groupingFunctions);
         final int seriesLen = aggregateFunctions.size() + groupingFunctions.size();
         final int dataLen = aggregations.size();
@@ -361,6 +315,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
             for (Grouping grouping: groupingAggregation.getGroupings()) {
                 CDSnapshotSeries _series = series[j];
                 if(_series == null) {
+                    groupingStart = j;
                     _series = series[j] = new CDSnapshotSeries();
                     _series.setNm(grouping.getFieldName());
                     _series.setLbl(grouping.getFieldLabel());
@@ -377,6 +332,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
             }
         }
 
+        cdSnapshotCategory.setGroupingStart(groupingStart);
         cdSnapshotCategory.setSeries(series);
         return cdSnapshotCategory;
     }
@@ -386,7 +342,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         logDebug("Clearing definitions cache...");
         chartDefFactoryMap.clear();
         chartDataSourceDefFactoryMap.clear();
-        chartSnapshotDefFactoryMap.clear();
         logDebug("Definitions cache clearing successfully completed.");
     }
 
@@ -427,11 +382,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
-    public List<ChartSnapshot> findChartSnapshots(ChartSnapshotQuery query) throws UnifyException {
-        return environment().listAll(query);
-    }
-
-    @Override
     public List<ChartDef> findChartDefs(String applicationName) throws UnifyException {
         List<String> chartNames = environment().valueList(String.class, "name",
                 new ChartQuery().applicationName(applicationName));
@@ -456,11 +406,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public ChartDataSourceDef getChartDataSourceDef(String chartDataSourceName) throws UnifyException {
         return chartDataSourceDefFactoryMap.get(chartDataSourceName);
-    }
-
-    @Override
-    public ChartSnapshotDef getChartSnapshotDef(String snapshotName) throws UnifyException {
-        return chartSnapshotDefFactoryMap.get(snapshotName);
     }
 
     @Override
@@ -508,50 +453,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
-    public boolean isChartSnapshotExist(String snapshotName) throws UnifyException {
-        return environment().countAll(new ChartSnapshotQuery().name(snapshotName)) > 0;
-    }
-
-    @Override
-    public void saveChartSnapshot(ChartSnapshot chartSnapshot) throws UnifyException {
-        if (environment().countAll(new ChartSnapshotQuery().name(chartSnapshot.getName())) == 0) {
-            environment().create(chartSnapshot);
-        } else {
-            environment().updateByIdVersion(chartSnapshot);
-        }
-    }
-
-    @Override
     protected void doInstallModuleFeatures(InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
-        if (environment().countAll(new ChartSnapshotQuery().name("sampleSalesChartSnapshot")) == 0) {
-            ChartSnapshot chartSnapshot = new ChartSnapshot(ChartCategoryDataType.STRING, "sampleSalesChartSnapshot",
-                    "Sample Sales Chart CDSnapshot",
-                    "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]");
-            chartSnapshot.setSeriesList(Arrays
-                    .asList(new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Sales", "[60,40,30,50,70,55,62]")));
-            environment().create(chartSnapshot);
-        }
-
-        if (environment().countAll(new ChartSnapshotQuery().name("sampleCostsChartSnapshot")) == 0) {
-            ChartSnapshot chartSnapshot = new ChartSnapshot(ChartCategoryDataType.STRING, "sampleCostsChartSnapshot",
-                    "Sample Costs Chart CDSnapshot",
-                    "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]");
-            chartSnapshot.setSeriesList(Arrays
-                    .asList(new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Costs", "[25,40,35,38,40,58,50]")));
-            environment().create(chartSnapshot);
-        }
-
-        if (environment().countAll(new ChartSnapshotQuery().name("sampleSalesAndCostsChartSnapshot")) == 0) {
-            ChartSnapshot chartSnapshot = new ChartSnapshot(ChartCategoryDataType.STRING,
-                    "sampleSalesAndCostsChartSnapshot", "Sample Sales and Costs Chart CDSnapshot",
-                    "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]");
-            chartSnapshot.setSeriesList(Arrays.asList(
-                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Sales",
-                            "[6000,4050,3820,5000,7200,5580,6240]"),
-                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Costs",
-                            "[2500,400,3500,3840,4000,5830,5000]")));
-            environment().create(chartSnapshot);
-        }
 
     }
 
