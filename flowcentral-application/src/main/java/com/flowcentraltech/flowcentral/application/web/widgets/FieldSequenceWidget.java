@@ -30,11 +30,13 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @since 4.1
  */
 @Component("fc-fieldsequence")
-public class FieldSequenceWidget extends AbstractItemListWidget<FieldSequenceEntry> {
+public class FieldSequenceWidget extends AbstractItemListWidget<FieldSequenceEntry> {//
 
     private Control fieldSelectCtrl;
 
     private Control paramCtrl;
+
+    private Control timeSeriesCtrl;
 
     private Control moveUpCtrl;
 
@@ -48,6 +50,8 @@ public class FieldSequenceWidget extends AbstractItemListWidget<FieldSequenceEnt
                 "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
         paramCtrl = (Control) addInternalChildWidget(
                 "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddefformatterlist listParams:$l{entityDef fieldName} binding:param");
+        timeSeriesCtrl = (Control) addInternalChildWidget(
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:timeseriestypelist binding:param");
         moveUpCtrl = (Control) addInternalChildWidget(
                 "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(
@@ -87,6 +91,10 @@ public class FieldSequenceWidget extends AbstractItemListWidget<FieldSequenceEnt
         return paramCtrl;
     }
 
+    public Control getTimeSeriesCtrl() {
+        return timeSeriesCtrl;
+    }
+
     public Control getMoveUpCtrl() {
         return moveUpCtrl;
     }
@@ -101,6 +109,11 @@ public class FieldSequenceWidget extends AbstractItemListWidget<FieldSequenceEnt
 
     public FieldSequence getFieldSequence() throws UnifyException {
         return getValue(FieldSequence.class);
+    }
+
+    public boolean isUseTimeSeries() throws UnifyException {
+        FieldSequence fieldSequence = getFieldSequence();
+        return fieldSequence != null && fieldSequence.isUseTimeSeries();
     }
 
     @Override

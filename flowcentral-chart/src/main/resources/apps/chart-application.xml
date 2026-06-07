@@ -135,8 +135,9 @@
 					inputWidget="application.enumlist" />
 				<field name="entity" label="$m{chart.chartdatasource.entity}"
 					type="STRING" />
-				<field name="limit"
-					label="$m{chart.chartdatasource.limit}" type="INTEGER" />
+				<field name="cacheRefreshRate" label="$m{chart.chartdatasource.cacherefreshrate}"
+					type="ENUM" references="cacherefreshratelist"
+					inputWidget="application.enumlist" />
 				<field name="categoryBase"
 					label="$m{chart.chartdatasource.categorybase}" type="CHILD"
 					category="chart-datasource" references="application.appFilterRef" />

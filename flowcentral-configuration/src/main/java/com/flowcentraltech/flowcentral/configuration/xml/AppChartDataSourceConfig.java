@@ -22,10 +22,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.flowcentraltech.flowcentral.configuration.constants.CacheRefreshRate;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.CacheRefreshRateXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChartDataSourceTypeXmlAdapter;
-import com.flowcentraltech.flowcentral.configuration.xml.adapter.TimeSeriesTypeXmlAdapter;
-import com.tcdng.unify.core.constant.TimeSeriesType;
 
 /**
  * Chart data source configuration.
@@ -42,19 +42,13 @@ public class AppChartDataSourceConfig extends BaseClassifiedConfig {
     @JacksonXmlProperty(isAttribute = true)
     private ChartDataSourceType type;
 
-    @JsonSerialize(using = TimeSeriesTypeXmlAdapter.Serializer.class)
-    @JsonDeserialize(using = TimeSeriesTypeXmlAdapter.Deserializer.class)
-    @JacksonXmlProperty(isAttribute = true, localName = "timeseries")
-    private TimeSeriesType timeSeriesType;
+    @JsonSerialize(using = CacheRefreshRateXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CacheRefreshRateXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "cache-refresh")
+    private CacheRefreshRate cacheRefreshRate;
     
     @JacksonXmlProperty
     private String entity;
-    
-    @JacksonXmlProperty(isAttribute = true, localName = "preferred-category-field")
-    private String categoryField;
-    
-    @JacksonXmlProperty(isAttribute = true)
-    private Integer limit;
 
     @JacksonXmlProperty(localName = "category-base")
     private FilterConfig categoryBase;
@@ -84,14 +78,6 @@ public class AppChartDataSourceConfig extends BaseClassifiedConfig {
         this.type = type;
     }
 
-    public Integer getLimit() {
-        return limit;
-    }
-
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
-
     public FilterConfig getCategoryBase() {
         return categoryBase;
     }
@@ -116,20 +102,12 @@ public class AppChartDataSourceConfig extends BaseClassifiedConfig {
         this.categories = categories;
     }
 
-    public TimeSeriesType getTimeSeriesType() {
-        return timeSeriesType;
+    public CacheRefreshRate getCacheRefreshRate() {
+        return cacheRefreshRate;
     }
 
-    public void setTimeSeriesType(TimeSeriesType timeSeriesType) {
-        this.timeSeriesType = timeSeriesType;
-    }
-
-    public String getCategoryField() {
-        return categoryField;
-    }
-
-    public void setCategoryField(String categoryField) {
-        this.categoryField = categoryField;
+    public void setCacheRefreshRate(CacheRefreshRate cacheRefreshRate) {
+        this.cacheRefreshRate = cacheRefreshRate;
     }
 
     public FieldSequenceConfig getFieldSequence() {

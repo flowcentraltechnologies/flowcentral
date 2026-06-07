@@ -20,7 +20,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertySequence;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
-import com.flowcentraltech.flowcentral.common.constants.CacheRefreshRate;
+import com.flowcentraltech.flowcentral.configuration.constants.CacheRefreshRate;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Child;
@@ -43,7 +43,7 @@ public class ChartDataSource extends BaseApplicationEntity {
     @Column(length = 64)
     private String entity;
 
-    @Column(nullable = true)
+    @Column
     private CacheRefreshRate cacheRefreshRate;
     
     @ListOnly(key = "type", property = "description")
@@ -61,6 +61,10 @@ public class ChartDataSource extends BaseApplicationEntity {
     @Child(category = "entity-grouping")
     private AppFieldSequence fieldSequence;
 
+    public ChartDataSource() {
+        this.type = ChartDataSourceType.ENTITY;
+    }
+    
     public ChartDataSourceType getType() {
         return type;
     }

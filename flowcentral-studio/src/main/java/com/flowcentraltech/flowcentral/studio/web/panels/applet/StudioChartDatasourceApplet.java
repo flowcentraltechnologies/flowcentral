@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
@@ -48,6 +49,10 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         this.cms = cms;
         createDesign();
+
+        final EntityFieldSequence entityFieldSequence = (EntityFieldSequence) form.getTabSheet().getTabSheetItem(3)
+                .getValObject();
+        entityFieldSequence.setUseTimeSeries(true);
     }
 
     public ChartDatasourceView getChartDatasourceView() {

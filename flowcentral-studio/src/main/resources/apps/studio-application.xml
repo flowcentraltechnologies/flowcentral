@@ -4221,9 +4221,9 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="type" column="0" required="true" />
 						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="0" switchOnChange="true" required="true" />
+							column="0" required="true" />
+						<field name="cacheRefreshRate" column="0" required="true" />
 					</section>
 				</tab>
 				<tab name="series"

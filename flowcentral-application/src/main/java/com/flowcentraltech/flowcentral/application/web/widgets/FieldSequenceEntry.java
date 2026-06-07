@@ -64,6 +64,10 @@ public class FieldSequenceEntry {
         return entityDef != null ? entityDef.getFieldDef(fieldName) : null;
     }
 
+    public boolean isDateTimeField() {
+        return entityDef != null && entityDef.getFieldDef(fieldName).isDateTime();
+    }
+
     public boolean isWithFieldName() {
         return fieldName != null;
     }

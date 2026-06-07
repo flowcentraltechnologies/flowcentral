@@ -1910,7 +1910,7 @@ public final class InputWidgetUtils {
             if (type.isLingual() && _entityFieldDef.isString()) {
                 return InputWidgetUtils.resolveLingualStringCondition(fieldName, _entityFieldDef, now, type, paramA,
                         paramB);
-            } else if (_entityFieldDef.isTime()) {
+            } else if (_entityFieldDef.isDateTime()) {
                 return InputWidgetUtils.resolveDateCondition(fieldName, _entityFieldDef, now, type, paramA, paramB);
             } else {
                 EntityFieldDataType fieldDataType = _entityFieldDef.getDataType();

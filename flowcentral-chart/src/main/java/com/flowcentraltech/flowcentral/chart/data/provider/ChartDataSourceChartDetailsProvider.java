@@ -205,7 +205,7 @@ public class ChartDataSourceChartDetailsProvider extends AbstractChartDetailsPro
             final int glen = groupingFieldNames.size();
             for (String fieldName : groupingFieldNames) {
                 final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                final GroupingFunction _groupingFunction = entityFieldDef.isTime()
+                final GroupingFunction _groupingFunction = entityFieldDef.isDateTime()
                         ? new GroupingFunction(fieldName, timeSeriesType)
                         : new GroupingFunction(fieldName);
                 groupingFunction.add(_groupingFunction);

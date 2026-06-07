@@ -105,7 +105,7 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.CHART, descKey, chartDataSource.getDescription());
 
                 appChartDataSourceConfig.setType(chartDataSource.getType());
-                appChartDataSourceConfig.setCategoryField(null);
+                appChartDataSourceConfig.setCacheRefreshRate(chartDataSource.getCacheRefreshRate());
                 appChartDataSourceConfig.setName(chartDataSource.getName());
                 appChartDataSourceConfig.setDescription(ctx.isSnapshotMode() ? chartDataSource.getDescription() :"$m{" + descKey + "}");
                 appChartDataSourceConfig.setEntity(chartDataSource.getEntity());

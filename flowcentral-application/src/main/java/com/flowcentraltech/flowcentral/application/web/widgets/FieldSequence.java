@@ -38,6 +38,8 @@ public class FieldSequence {
 
     private List<FieldSequenceEntry> entryList;
 
+    private boolean useTimeSeries;
+    
     public FieldSequence(EntityDef entityDef, FieldSequenceDef fieldSequenceDef) throws UnifyException {
         this(entityDef, fieldSequenceDef, Editable.TRUE);
     }
@@ -93,6 +95,14 @@ public class FieldSequence {
 
     public int size() {
         return entryList.size();
+    }
+
+    public boolean isUseTimeSeries() {
+        return useTimeSeries;
+    }
+
+    public void setUseTimeSeries(boolean useTimeSeries) {
+        this.useTimeSeries = useTimeSeries;
     }
 
     public void normalize() throws UnifyException {
