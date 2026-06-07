@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
-import java.util.List;
-
 /**
  * Chart datasource snapshot series object.
  * 
@@ -25,18 +23,20 @@ import java.util.List;
  */
 public class CDSnapshotSeries {
     
-    private String cat;
+    private String nm;
 
     private String lbl;
 
-    private List<CDSnapshotVal> vals;
+    private int grouping; // 0 - No grouping, 1 - Text and 2 - Datetime
+    
+    private String[] vals;
 
-    public String getCat() {
-        return cat;
+    public String getNm() {
+        return nm;
     }
 
-    public void setCat(String cat) {
-        this.cat = cat;
+    public void setNm(String nm) {
+        this.nm = nm;
     }
 
     public String getLbl() {
@@ -47,11 +47,19 @@ public class CDSnapshotSeries {
         this.lbl = lbl;
     }
 
-    public List<CDSnapshotVal> getVals() {
+    public int getGrouping() {
+        return grouping;
+    }
+
+    public void setGrouping(int grouping) {
+        this.grouping = grouping;
+    }
+
+    public String[] getVals() {
         return vals;
     }
 
-    public void setVal(List<CDSnapshotVal> vals) {
+    public void setVals(String[] vals) {
         this.vals = vals;
     }
 

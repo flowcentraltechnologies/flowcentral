@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Chart datasource snapshot.
@@ -32,7 +31,7 @@ public class CDSnapshot {
     
     private Date takenOn;
     
-    private List<CDSnapshotSeries> series;
+    private CDSnapshotCategory[] categories;
 
     public String getChartDatasourceName() {
         return chartDatasourceName;
@@ -58,12 +57,12 @@ public class CDSnapshot {
         this.takenOn = takenOn;
     }
 
-    public List<CDSnapshotSeries> getSeries() {
-        return series;
+    public CDSnapshotCategory[] getCategories() {
+        return categories;
     }
 
-    public void setSeries(List<CDSnapshotSeries> series) {
-        this.series = series;
+    public void setCategories(CDSnapshotCategory[] categories) {
+        this.categories = categories;
     }
 
 }

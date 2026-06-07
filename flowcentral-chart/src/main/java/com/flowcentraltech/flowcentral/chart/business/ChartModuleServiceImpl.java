@@ -38,8 +38,8 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleErrorConstants;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
+import com.flowcentraltech.flowcentral.chart.data.CDSnapshotCategory;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotSeries;
-import com.flowcentraltech.flowcentral.chart.data.CDSnapshotVal;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -74,6 +74,8 @@ import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
+import com.tcdng.unify.core.database.Aggregation;
+import com.tcdng.unify.core.database.Grouping;
 import com.tcdng.unify.core.database.GroupingAggregation;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.CalendarUtils;
@@ -266,8 +268,11 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             }
                         }
 
-                        List<CDSnapshotSeries> series = new ArrayList<CDSnapshotSeries>();
+                        CDSnapshotCategory[] categories = null;
                         if (chartDataSourceDef.isWithCategories()) {
+                            categories = new CDSnapshotCategory[chartDataSourceDef.getCategories()
+                                                                .getSequenceList().size()];
+                            int i = 0;
                             for (PropertySequenceEntryDef propertySequenceEntryDef : chartDataSourceDef.getCategories()
                                     .getSequenceList()) {
                                 final EntityCategoryDef entityCategoryDef = entityDef
@@ -285,15 +290,17 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                                             : new And().add(baseRestriction).add(restriction);
                                 }
 
-                                series.add(getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions, restriction,
-                                        groupingFunctions, cat, catlabel));
+                                categories[i] = getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions, restriction,
+                                        groupingFunctions, cat, catlabel);
+                                i++;
                             }
                         } else {
-                            series.add(getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions, baseRestriction,
-                                    groupingFunctions, null, null));
+                            categories = new CDSnapshotCategory[1];
+                            categories[0] = getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions, baseRestriction,
+                                    groupingFunctions, null, null);
                         }
 
-                        cdSnapshot.setSeries(series);
+                        cdSnapshot.setCategories(categories);
                     }
 
                     final Date takenOn = getNow();
@@ -315,28 +322,63 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         return DataUtils.fromJsonString(CDSnapshot.class, chartDatasourceSnapshot.getSnapshot());
     }
 
-    private CDSnapshotSeries getChartDatasourceSnapshotSeries(EntityDef entityDef,
+    private CDSnapshotCategory getChartDatasourceSnapshotSeries(EntityDef entityDef,
             List<AggregateFunction> aggregateFunctions, Restriction restriction,
             List<GroupingFunction> groupingFunctions, String catName, String catLabel) throws UnifyException {
-        final CDSnapshotSeries cdSnapshotSeries = new CDSnapshotSeries();
-        cdSnapshotSeries.setCat(catName);
-        cdSnapshotSeries.setLbl(catLabel);
+        final CDSnapshotCategory cdSnapshotCategory = new CDSnapshotCategory();
+        cdSnapshotCategory.setCat(catName);
+        cdSnapshotCategory.setLbl(catLabel);
 
         final Query<?> query = appletUtilities.application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true);
         if (restriction != null) {
             query.addRestriction(restriction);
         }
 
-        final List<CDSnapshotVal> vals = new ArrayList<CDSnapshotVal>();
         final List<GroupingAggregation> aggregations = environment().aggregate(aggregateFunctions, query, groupingFunctions);
-        for (GroupingAggregation aggregation: aggregations) {
-            CDSnapshotVal val = new CDSnapshotVal();
+        final int seriesLen = aggregateFunctions.size() + groupingFunctions.size();
+        final int dataLen = aggregations.size();
+        final CDSnapshotSeries[] series = new CDSnapshotSeries[seriesLen];
+        for (int i = 0; i < dataLen; i++) {
+            final GroupingAggregation groupingAggregation = aggregations.get(i);
+            int j = 0;
+            for (Aggregation aggregation: groupingAggregation.getAggregation()) {
+                CDSnapshotSeries _series = series[j];
+                if(_series == null) {
+                    _series = series[j] = new CDSnapshotSeries();
+                    _series.setNm(aggregation.getFieldName());
+                    _series.setLbl(aggregation.getFieldLabel());
+                    _series.setGrouping(0);
+                    _series.setVals(new String[dataLen]);
+                }
+                
+                if (aggregation.isWithValue()) {
+                _series.getVals()[i] = String.valueOf(aggregation.getValue());
+                }
+                
+                j++;
+            }
             
-            vals.add(val);
+            for (Grouping grouping: groupingAggregation.getGroupings()) {
+                CDSnapshotSeries _series = series[j];
+                if(_series == null) {
+                    _series = series[j] = new CDSnapshotSeries();
+                    _series.setNm(grouping.getFieldName());
+                    _series.setLbl(grouping.getFieldLabel());
+                    _series.setGrouping(grouping.isString() ? 1 : 2);
+                    _series.setVals(new String[dataLen]);
+                }
+                
+                if (grouping.isWithGrouping()) {
+                    _series.getVals()[i] = grouping.isDate() ? String.valueOf(grouping.getAsDate().getTime())
+                            : grouping.getAsString();
+                }
+                
+                j++;
+            }
         }
 
-        cdSnapshotSeries.setVal(vals);
-        return cdSnapshotSeries;
+        cdSnapshotCategory.setSeries(series);
+        return cdSnapshotCategory;
     }
 
     @Override
