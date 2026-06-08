@@ -72,6 +72,10 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
         return snapshotTable;
     }
 
+    public boolean isWithSnapshot() {
+        return snapshotTable != null;
+    }
+    
     public void reloadContent() throws UnifyException {
         final CDSnapshot cdSnapshot = cms.getChartDatasourceSnapshot(chartDatasourceName, ChartViewOption.DEFAULT);
         final CDSnapshotCategory[] categories = cdSnapshot.getCategories();

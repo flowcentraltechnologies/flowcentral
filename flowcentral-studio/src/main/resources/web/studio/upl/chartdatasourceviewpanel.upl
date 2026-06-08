@@ -14,17 +14,12 @@
 // the License.
 
 !fc-chartdatasourceviewpanel layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
-	components:$c{dataSetBodyPanel gDataSetBodyPanel}
+	components:$c{snapshotBodyPanel}
 
 // Data set panel
-!ui-panel:dataSetBodyPanel
-	layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{dataSetTbl}
-!fc-beanlisttable:dataSetTbl binding:dataSetTable
-
-// Group Data set panel
-!ui-panel:gDataSetBodyPanel
-	layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{gDataSetTbl}
-!fc-beanlisttable:gDataSetTbl binding:groupDataSetTable
+!ui-panel:snapshotBodyPanel
+	layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{snapshotTbl}
+!fc-beanlisttable:snapshotTbl binding:snapshotTable
 
 // Action
-!ui-postcommand:saveDesignAct command:saveDesign components:$c{dataSetBodyPanel}
+!ui-postcommand:saveDesignAct command:saveDesign components:$c{snapshotBodyPanel}
