@@ -191,8 +191,10 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         final List<AggregateFunction> aggregateFunctions = new ArrayList<AggregateFunction>();
                         for (PropertySequenceEntryDef sequenceDef : chartDataSourceDef.getSeries().getSequenceList()) {
                             EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
-                            aggregateFunctions.add(entitySeriesDef.getType().function(entitySeriesDef.getFieldName(),
-                                    entitySeriesDef.getLabel()));
+                            aggregateFunctions.add(entitySeriesDef.getType().function(entitySeriesDef.getName(),
+                                    entitySeriesDef.getFieldName(),
+                                    entitySeriesDef.getLabel() != null ? entitySeriesDef.getLabel()
+                                            : entitySeriesDef.getName()));
                         }
 
                         final FilterDef catBaseFilterDef = chartDataSourceDef.getCategoryBase();
@@ -207,12 +209,13 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         List<GroupingFunction> groupingFunctions = Collections.emptyList();
                         if (chartDataSourceDef.isWithGroupingFields()) {
                             groupingFunctions = new ArrayList<GroupingFunction>();
+                            int g = 0;
                             for (FieldSequenceEntryDef fieldSequenceDef : chartDataSourceDef
                                     .getGroupingFieldSequenceDef().getFieldSequenceList()) {
                                 final String fieldName = fieldSequenceDef.getFieldName();
                                 final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
                                 final GroupingFunction _groupingFunction = entityFieldDef.isDateTime()
-                                        ? new GroupingFunction(fieldName, entityFieldDef.getFieldLabel(),
+                                        ? new GroupingFunction("group" + g, fieldName, entityFieldDef.getFieldLabel(),
                                                 fieldSequenceDef.isWithParam()
                                                         ? TimeSeriesType.fromCode(fieldSequenceDef.getParam())
                                                         : TimeSeriesType.DAY)
@@ -223,8 +226,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
                         CDSnapshotCategory[] categories = null;
                         if (chartDataSourceDef.isWithCategories()) {
-                            categories = new CDSnapshotCategory[chartDataSourceDef.getCategories()
-                                                                .getSequenceList().size()];
+                            categories = new CDSnapshotCategory[chartDataSourceDef.getCategories().getSequenceList()
+                                    .size()];
                             int i = 0;
                             for (PropertySequenceEntryDef propertySequenceEntryDef : chartDataSourceDef.getCategories()
                                     .getSequenceList()) {
@@ -243,14 +246,14 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                                             : new And().add(baseRestriction).add(restriction);
                                 }
 
-                                categories[i] = getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions, restriction,
-                                        groupingFunctions, cat, catlabel);
+                                categories[i] = getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions,
+                                        restriction, groupingFunctions, cat, catlabel);
                                 i++;
                             }
                         } else {
                             categories = new CDSnapshotCategory[1];
-                            categories[0] = getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions, baseRestriction,
-                                    groupingFunctions, null, null);
+                            categories[0] = getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions,
+                                    baseRestriction, groupingFunctions, null, null);
                         }
 
                         cdSnapshot.setCategories(categories);
@@ -288,46 +291,47 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         }
 
         int groupingStart = 0;
-        final List<GroupingAggregation> aggregations = environment().aggregate(aggregateFunctions, query, groupingFunctions);
+        final List<GroupingAggregation> aggregations = environment().aggregate(aggregateFunctions, query,
+                groupingFunctions);
         final int seriesLen = aggregateFunctions.size() + groupingFunctions.size();
         final int dataLen = aggregations.size();
         final CDSnapshotSeries[] series = new CDSnapshotSeries[seriesLen];
         for (int i = 0; i < dataLen; i++) {
             final GroupingAggregation groupingAggregation = aggregations.get(i);
             int j = 0;
-            for (Aggregation aggregation: groupingAggregation.getAggregation()) {
+            for (Aggregation aggregation : groupingAggregation.getAggregation()) {
                 CDSnapshotSeries _series = series[j];
-                if(_series == null) {
+                if (_series == null) {
                     _series = series[j] = new CDSnapshotSeries();
-                    _series.setNm(aggregation.getFieldName());
+                    _series.setNm(aggregation.getName());
                     _series.setLbl(aggregation.getFieldLabel());
                     _series.setGrouping(0);
                     _series.setVals(new String[dataLen]);
                 }
-                
+
                 if (aggregation.isWithValue()) {
-                _series.getVals()[i] = String.valueOf(aggregation.getValue());
+                    _series.getVals()[i] = String.valueOf(aggregation.getValue());
                 }
-                
+
                 j++;
             }
-            
-            for (Grouping grouping: groupingAggregation.getGroupings()) {
+
+            for (Grouping grouping : groupingAggregation.getGroupings()) {
                 CDSnapshotSeries _series = series[j];
-                if(_series == null) {
+                if (_series == null) {
                     groupingStart = j;
                     _series = series[j] = new CDSnapshotSeries();
-                    _series.setNm(grouping.getFieldName());
+                    _series.setNm(grouping.getName());
                     _series.setLbl(grouping.getFieldLabel());
                     _series.setGrouping(grouping.isString() ? 1 : 2);
                     _series.setVals(new String[dataLen]);
                 }
-                
+
                 if (grouping.isWithGrouping()) {
                     _series.getVals()[i] = grouping.isDate() ? String.valueOf(grouping.getAsDate().getTime())
                             : grouping.getAsString();
                 }
-                
+
                 j++;
             }
         }

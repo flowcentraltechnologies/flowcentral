@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.MapValueStore;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Chart datasource view.
@@ -80,73 +81,75 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
         final CDSnapshot cdSnapshot = cms.getChartDatasourceSnapshot(chartDatasourceName, ChartViewOption.DEFAULT);
         final CDSnapshotCategory[] categories = cdSnapshot.getCategories();
         snapshotTable = null;
-        if (categories != null && categories.length > 0) {
-            // Structure
-            final EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.CUSTOM,
-                    "com.flowcentraltech.flowcentral.preview.Az", "Preview", null, null, null, null, null, false, false,
-                    false, false, false, "application.preview", "Preview", 1L, 1L);
-            edb.addFieldDef("application.text", "application.text", EntityFieldDataType.STRING, EntityFieldType.STATIC,
-                    "category", "Category");
-            final CDSnapshotCategory category = categories[0];
-            if (category.getSeries() != null && category.getSeries().length > 0) {
-                for (CDSnapshotSeries series : category.getSeries()) {
-                    final int grouping = series.getGrouping();
-                    if (grouping == 0) {
-                        edb.addFieldDef("application.decimal", "application.decimal", EntityFieldDataType.DECIMAL,
-                                EntityFieldType.CUSTOM, series.getNm(),
-                                series.getLbl() != null ? series.getLbl() : series.getNm());
-                    } else if (grouping == 1) {
-                        edb.addFieldDef("application.text", "application.text", EntityFieldDataType.STRING,
-                                EntityFieldType.CUSTOM, series.getNm(),
-                                series.getLbl() != null ? series.getLbl() : series.getNm());
-                    } else {
-                        edb.addFieldDef("application.datetime", "application.datetime", EntityFieldDataType.TIMESTAMP,
-                                EntityFieldType.CUSTOM, series.getNm(),
-                                series.getLbl() != null ? series.getLbl() : series.getNm());
-                    }
-                }
-            }
-
-            final EntityDef entityDef = edb.build(au());
-            final TableDef.Builder tdb = TableDef.newBuilder(entityDef, "Preview", false, false, "studio.snapshotTable",
-                    "Priview Table", 0L, 0L);
-            tdb.itemsPerPage(-1);
-
-            // Data
-            final List<ValueStore> list = new ArrayList<ValueStore>();
-            for (CDSnapshotCategory _category : categories) {
-                if (category.getSeries() != null && category.getSeries().length > 0) {
-                    final int len = category.getSeries()[0].getVals() != null ? category.getSeries()[0].getVals().length
-                            : 0;
-                    for (int i = 0; i < len; i++) {
-                        final Map<String, Object> map = new HashMap<String, Object>();
-                        map.put(_category.getCat(),
-                                _category.getLbl() != null ? _category.getLbl() : _category.getCat());
-
-                        for (CDSnapshotSeries series : category.getSeries()) {
-                            final int grouping = series.getGrouping();
-                            final String val = series.getVals()[i];
-                            Object _val = null;
-                            if (val != null) {
-                                if (grouping == 0) {
-                                    _val = new BigDecimal(val);
-                                } else if (grouping == 1) {
-                                    _val = val;
-                                } else {
-                                    _val = new Date(Long.parseLong(val));
-                                }
-                            }
-
-                            map.put(series.getNm(), _val);
-                        }
-
-                        list.add(new MapValueStore(map));
-                    }
-                }
-            }
-
-            snapshotTable = new BeanListTable(au(), tdb.build(au()));
-            snapshotTable.setSourceObjectClearSelected(list);
-        }
+        System.out.println("@prime: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        System.out.println("@prime: cdSnapshot = " + DataUtils.asJsonString(cdSnapshot));
+//        if (categories != null && categories.length > 0) {
+//            // Structure
+//            final EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.CUSTOM,
+//                    "com.flowcentraltech.flowcentral.preview.Az", "Preview", null, null, null, null, null, false, false,
+//                    false, false, false, "application.preview", "Preview", 1L, 1L);
+//            edb.addFieldDef("application.text", "application.text", EntityFieldDataType.STRING, EntityFieldType.STATIC,
+//                    "category", "Category");
+//            final CDSnapshotCategory category = categories[0];
+//            if (category.getSeries() != null && category.getSeries().length > 0) {
+//                for (CDSnapshotSeries series : category.getSeries()) {
+//                    final int grouping = series.getGrouping();
+//                    if (grouping == 0) {
+//                        edb.addFieldDef("application.decimal", "application.decimal", EntityFieldDataType.DECIMAL,
+//                                EntityFieldType.CUSTOM, series.getNm(),
+//                                series.getLbl() != null ? series.getLbl() : series.getNm());
+//                    } else if (grouping == 1) {
+//                        edb.addFieldDef("application.text", "application.text", EntityFieldDataType.STRING,
+//                                EntityFieldType.CUSTOM, series.getNm(),
+//                                series.getLbl() != null ? series.getLbl() : series.getNm());
+//                    } else {
+//                        edb.addFieldDef("application.datetime", "application.datetime", EntityFieldDataType.TIMESTAMP,
+//                                EntityFieldType.CUSTOM, series.getNm(),
+//                                series.getLbl() != null ? series.getLbl() : series.getNm());
+//                    }
+//                }
+//            }
+//
+//            final EntityDef entityDef = edb.build(au());
+//            final TableDef.Builder tdb = TableDef.newBuilder(entityDef, "Preview", false, false, "studio.snapshotTable",
+//                    "Priview Table", 0L, 0L);
+//            tdb.itemsPerPage(-1);
+//
+//            // Data
+//            final List<ValueStore> list = new ArrayList<ValueStore>();
+//            for (CDSnapshotCategory _category : categories) {
+//                if (category.getSeries() != null && category.getSeries().length > 0) {
+//                    final int len = category.getSeries()[0].getVals() != null ? category.getSeries()[0].getVals().length
+//                            : 0;
+//                    for (int i = 0; i < len; i++) {
+//                        final Map<String, Object> map = new HashMap<String, Object>();
+//                        map.put(_category.getCat(),
+//                                _category.getLbl() != null ? _category.getLbl() : _category.getCat());
+//
+//                        for (CDSnapshotSeries series : category.getSeries()) {
+//                            final int grouping = series.getGrouping();
+//                            final String val = series.getVals()[i];
+//                            Object _val = null;
+//                            if (val != null) {
+//                                if (grouping == 0) {
+//                                    _val = new BigDecimal(val);
+//                                } else if (grouping == 1) {
+//                                    _val = val;
+//                                } else {
+//                                    _val = new Date(Long.parseLong(val));
+//                                }
+//                            }
+//
+//                            map.put(series.getNm(), _val);
+//                        }
+//
+//                        list.add(new MapValueStore(map));
+//                    }
+//                }
+//            }
+//
+//            snapshotTable = new BeanListTable(au(), tdb.build(au()));
+//            snapshotTable.setSourceObjectClearSelected(list);
+//        }
     }
 }
