@@ -253,7 +253,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         } else {
                             categories = new CDSnapshotCategory[1];
                             categories[0] = getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions,
-                                    baseRestriction, groupingFunctions, null, null);
+                                    baseRestriction, groupingFunctions, "main", "Main");
                         }
 
                         cdSnapshot.setCategories(categories);
