@@ -70,18 +70,6 @@ public class Chart extends BaseApplicationEntity {
     private boolean stacked;
 
     @Column
-    private boolean showGrid;
-
-    @Column
-    private boolean showDataLabels;
-
-    @Column
-    private boolean formatDataLabels;
-
-    @Column
-    private boolean formatYLabels;
-
-    @Column
     private boolean smooth;
 
     @ListOnly(key = "type", property = "description")
@@ -184,38 +172,6 @@ public class Chart extends BaseApplicationEntity {
 
     public void setStacked(boolean stacked) {
         this.stacked = stacked;
-    }
-
-    public boolean isShowGrid() {
-        return showGrid;
-    }
-
-    public void setShowGrid(boolean showGrid) {
-        this.showGrid = showGrid;
-    }
-
-    public boolean isShowDataLabels() {
-        return showDataLabels;
-    }
-
-    public void setShowDataLabels(boolean showDataLabels) {
-        this.showDataLabels = showDataLabels;
-    }
-
-    public boolean isFormatDataLabels() {
-        return formatDataLabels;
-    }
-
-    public void setFormatDataLabels(boolean formatDataLabels) {
-        this.formatDataLabels = formatDataLabels;
-    }
-
-    public boolean isFormatYLabels() {
-        return formatYLabels;
-    }
-
-    public void setFormatYLabels(boolean formatYLabels) {
-        this.formatYLabels = formatYLabels;
     }
 
     public boolean isSmooth() {

@@ -41,6 +41,7 @@ import com.flowcentraltech.flowcentral.chart.data.CDSnapshotCategory;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotSeries;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
@@ -117,9 +118,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
                             .series(chart.getSeries()).color(chart.getColor())
                             .width(DataUtils.convert(int.class, chart.getWidth()))
-                            .height(DataUtils.convert(int.class, chart.getHeight())).showGrid(chart.isShowGrid())
-                            .showDataLabels(chart.isShowDataLabels()).formatDataLabels(chart.isFormatDataLabels())
-                            .formatYLabels(chart.isFormatYLabels()).stacked(chart.isStacked()).smooth(chart.isSmooth());
+                            .height(DataUtils.convert(int.class, chart.getHeight()))
+                            .stacked(chart.isStacked()).smooth(chart.isSmooth());
                     return cdb.build();
                 }
 
@@ -162,6 +162,12 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
             };
 
+    }
+
+    @Override
+    public ChartDetails getChartDetails(String chartName, ChartViewOption chartViewOption) throws UnifyException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
@@ -253,7 +259,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         } else {
                             categories = new CDSnapshotCategory[1];
                             categories[0] = getChartDatasourceSnapshotSeries(entityDef, aggregateFunctions,
-                                    baseRestriction, groupingFunctions, "main", "Main");
+                                    baseRestriction, groupingFunctions, "default", "Default");
                         }
 
                         cdSnapshot.setCategories(categories);

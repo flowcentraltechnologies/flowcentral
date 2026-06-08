@@ -4175,14 +4175,24 @@
 					name="multiCategorySeries"
 					description="$m{studio.chart.form.multicategoryseries.policy}">
 					<onCondition>
-						<restriction type="NOT_EQUALS" field="type"
-							paramA="CRD" />
+						<restriction type="NOT_AMONGST" field="type"
+							paramA="CRD|PIE|DNT" />
+					</onCondition>
+					<widgetRules>
+						<entry field="series"
+							widget="chart.chartdatasourceruleseriesmlist" />
+					</widgetRules>
+				</formWidgetRulesPolicy>
+				<formWidgetRulesPolicy
+					name="multiCategorySeriesCat"
+					description="$m{studio.chart.form.multicategoryseries.policycat}">
+					<onCondition>
+						<restriction type="NOT_AMONGST" field="type"
+							paramA="CRD|TBL|PIE|DNT" />
 					</onCondition>
 					<widgetRules>
 						<entry field="category"
 							widget="chart.chartdatasourcerulecategorymlist" />
-						<entry field="series"
-							widget="chart.chartdatasourceruleseriesmlist" />
 					</widgetRules>
 				</formWidgetRulesPolicy>
 			</formWidgetRulesPolicies>

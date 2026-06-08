@@ -96,17 +96,6 @@
 					type="BOOLEAN" inputWidget="application.checkbox" />
 				<field name="smooth" label="$m{chart.chart.smooth}"
 					type="BOOLEAN" inputWidget="application.checkbox" />
-				<field name="showGrid" label="$m{chart.chart.showgrid}"
-					type="BOOLEAN" inputWidget="application.checkbox" />
-				<field name="showDataLabels"
-					label="$m{chart.chart.showdatalabels}" type="BOOLEAN"
-					inputWidget="application.checkbox" />
-				<field name="formatDataLabels"
-					label="$m{chart.chart.formatdatalabels}" type="BOOLEAN"
-					inputWidget="application.checkbox" />
-				<field name="formatYLabels"
-					label="$m{chart.chart.formatylabels}" type="BOOLEAN"
-					inputWidget="application.checkbox" />
 				<field name="typeDesc" label="$m{chart.chart.typedesc}"
 					type="LIST_ONLY" key="type" property="description" />
 				<field name="paletteTypeDesc"

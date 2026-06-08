@@ -16,10 +16,6 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
-import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
-import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.StringUtils;
-
 /**
  * Chart details.
  * 
@@ -28,92 +24,35 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class ChartDetails {
 
-    private String title;
+    private ChartDef chartDef;
 
-    private String subTitle;
+    private ChartSeries[] series;
 
-    private int titleOffsetX;
+    private ChartCategory[] categories;
 
-    private int subTitleOffsetX;
-
-    private ChartDetails(String title, String subTitle, int titleOffsetX, int subTitleOffsetX) {
-        this.title = title;
-        this.subTitle = subTitle;
-        this.titleOffsetX = titleOffsetX;
-        this.subTitleOffsetX = subTitleOffsetX;
+    public ChartDetails(ChartDef chartDef, ChartSeries[] series, ChartCategory[] categories) {
+        this.chartDef = chartDef;
+        this.series = series;
+        this.categories = categories;
     }
 
-    public String getTitle() {
-        return title;
+    public ChartDef getChartDef() {
+        return chartDef;
     }
 
-    public String getSubTitle() {
-        return subTitle;
+    public ChartSeries[] getSeries() {
+        return series;
     }
 
-    public boolean isWithTitle() {
-        return !StringUtils.isBlank(title);
+    public ChartCategory[] getCategories() {
+        return categories;
     }
 
-    public boolean isWithSubtitle() {
-        return !StringUtils.isBlank(subTitle);
+    public boolean isWithSeries () {
+        return series != null && series.length > 0;
     }
 
-    public int getTitleOffsetX() {
-        return titleOffsetX;
-    }
-
-    public int getSubTitleOffsetX() {
-        return subTitleOffsetX;
-    }
-
-    public static Builder newBuilder(ChartCategoryDataType categoryType) {
-        return new Builder(categoryType);
-    }
-
-    public static class Builder {
-
-        private String title;
-
-        private String subTitle;
-
-        private int titleOffsetX;
-
-        private int subTitleOffsetX;
-
-        private ChartCategoryDataType categoryType;
-
-        public Builder(ChartCategoryDataType categoryType) {
-            this.categoryType = categoryType;
-        }
-
-        public Builder title(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public Builder titleOffsetX(int titleOffsetX) {
-            this.titleOffsetX = titleOffsetX;
-            return this;
-        }
-
-        public Builder subTitle(String subTitle) {
-            this.subTitle = subTitle;
-            return this;
-        }
-
-        public Builder subTitleOffsetX(int subTitleOffsetX) {
-            this.subTitleOffsetX = subTitleOffsetX;
-            return this;
-        }
-
-        public ChartCategoryDataType getCategoryType() {
-            return categoryType;
-        }
-
-        public ChartDetails build() throws UnifyException {
-            return new ChartDetails(title, subTitle, titleOffsetX, subTitleOffsetX);
-        }
-
+    public boolean isWithCategories () {
+        return categories != null && categories.length > 0;
     }
 }

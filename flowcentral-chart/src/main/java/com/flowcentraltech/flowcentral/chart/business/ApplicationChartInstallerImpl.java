@@ -91,10 +91,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chart.setCategory(appChartConfig.getCategory());
                     chart.setColor(appChartConfig.getColor());
                     chart.setSeries(appChartConfig.getSeries());
-                    chart.setShowGrid(appChartConfig.isShowGrid());
-                    chart.setShowDataLabels(appChartConfig.isShowDataLabels());
-                    chart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
-                    chart.setFormatYLabels(appChartConfig.isFormatYLabels());
                     chart.setStacked(appChartConfig.isStacked());
                     chart.setSmooth(appChartConfig.isSmooth());
                     chart.setClassified(appChartConfig.getClassified());
@@ -114,10 +110,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     oldChart.setCategory(appChartConfig.getCategory());
                     oldChart.setColor(appChartConfig.getColor());
                     oldChart.setSeries(appChartConfig.getSeries());
-                    oldChart.setShowGrid(appChartConfig.isShowGrid());
-                    oldChart.setShowDataLabels(appChartConfig.isShowDataLabels());
-                    oldChart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
-                    oldChart.setFormatYLabels(appChartConfig.isFormatYLabels());
                     oldChart.setStacked(appChartConfig.isStacked());
                     oldChart.setSmooth(appChartConfig.isSmooth());
                     oldChart.setClassified(appChartConfig.getClassified());
@@ -215,10 +207,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 chart.setCategory(appChartConfig.getCategory());
                 chart.setColor(appChartConfig.getColor());
                 chart.setSeries(appChartConfig.getSeries());
-                chart.setShowGrid(appChartConfig.isShowGrid());
-                chart.setShowDataLabels(appChartConfig.isShowDataLabels());
-                chart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
-                chart.setFormatYLabels(appChartConfig.isFormatYLabels());
                 chart.setStacked(appChartConfig.isStacked());
                 chart.setSmooth(appChartConfig.isSmooth());
                 chart.setClassified(appChartConfig.getClassified());

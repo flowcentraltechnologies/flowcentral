@@ -17,9 +17,7 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -41,9 +39,9 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     private ChartPaletteType paletteType;
 
-    private Set<String> categoryInclusion;
+    private List<String> categories;
 
-    private Set<String> seriesInclusion;
+    private List<String> series;
 
     private String title;
 
@@ -53,10 +51,6 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     private String rule;
 
-    private String category;
-
-    private String series;
-
     private String color;
 
     private int width;
@@ -65,20 +59,11 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     private boolean stacked;
 
-    private boolean showGrid;
-
     private boolean smooth;
-
-    private boolean showDataLabels;
-
-    private boolean formatDataLabels;
-
-    private boolean formatYLabels;
 
     private ChartDef(ChartType type, ChartPaletteType paletteType, String title, String subTitle, String provider,
             String rule, String category, String series, String color, int width, int height, boolean stacked,
-            boolean showGrid, boolean showDataLabels, boolean formatDataLabels, boolean formatYLabels, boolean smooth,
-            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+            boolean smooth, ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.paletteType = paletteType;
@@ -86,21 +71,13 @@ public class ChartDef extends BaseApplicationEntityDef {
         this.subTitle = subTitle;
         this.provider = provider;
         this.rule = rule;
-        this.category = category;
-        this.series = series;
         this.color = color;
         this.width = width;
         this.height = height;
         this.stacked = stacked;
-        this.showGrid = showGrid;
-        this.showDataLabels = showDataLabels;
-        this.formatDataLabels = formatDataLabels;
-        this.formatYLabels = formatYLabels;
         this.smooth = smooth;
-        this.categoryInclusion = Collections
-                .unmodifiableSet(new HashSet<String>(Arrays.asList(StringUtils.commaSplit(category))));
-        this.seriesInclusion = Collections
-                .unmodifiableSet(new HashSet<String>(Arrays.asList(StringUtils.commaSplit(series))));
+        this.categories = Arrays.asList(StringUtils.commaSplit(category));
+        this.series = Arrays.asList(StringUtils.commaSplit(series));
     }
 
     public ChartType getType() {
@@ -135,32 +112,12 @@ public class ChartDef extends BaseApplicationEntityDef {
         return rule;
     }
 
-    public String getCategory() {
-        return category;
+    public List<String> getCategories() {
+        return categories;
     }
 
-    public String getSeries() {
+    public List<String> getSeries() {
         return series;
-    }
-
-    public Set<String> getCategoryInclusion() {
-        return categoryInclusion;
-    }
-
-    public Set<String> getSeriesInclusion() {
-        return seriesInclusion;
-    }
-
-    public boolean isSeriesInclusion(String name) {
-        return seriesInclusion.contains(name);
-    }
-    
-    public boolean isWithCategoryInclusion() {
-        return !categoryInclusion.isEmpty();
-    }
-
-    public boolean isWithSeriesInclusion() {
-        return !seriesInclusion.isEmpty();
     }
 
     public String getColor() {
@@ -181,22 +138,6 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     public boolean isStacked() {
         return stacked;
-    }
-
-    public boolean isShowGrid() {
-        return showGrid;
-    }
-
-    public boolean isShowDataLabels() {
-        return showDataLabels;
-    }
-
-    public boolean isFormatDataLabels() {
-        return formatDataLabels;
-    }
-
-    public boolean isFormatYLabels() {
-        return formatYLabels;
     }
 
     public boolean isSmooth() {
@@ -234,15 +175,7 @@ public class ChartDef extends BaseApplicationEntityDef {
 
         private boolean stacked;
 
-        private boolean showGrid;
-
         private boolean smooth;
-
-        private boolean showDataLabels;
-
-        private boolean formatDataLabels;
-
-        private boolean formatYLabels;
 
         private String longName;
 
@@ -304,26 +237,6 @@ public class ChartDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder showGrid(boolean showGrid) {
-            this.showGrid = showGrid;
-            return this;
-        }
-
-        public Builder showDataLabels(boolean showDataLabels) {
-            this.showDataLabels = showDataLabels;
-            return this;
-        }
-
-        public Builder formatDataLabels(boolean formatDataLabels) {
-            this.formatDataLabels = formatDataLabels;
-            return this;
-        }
-
-        public Builder formatYLabels(boolean formatYLabels) {
-            this.formatYLabels = formatYLabels;
-            return this;
-        }
-
         public Builder smooth(boolean smooth) {
             this.smooth = smooth;
             return this;
@@ -331,7 +244,7 @@ public class ChartDef extends BaseApplicationEntityDef {
 
         public ChartDef build() throws UnifyException {
             return new ChartDef(type, paletteType, title, subTitle, provider, rule, category, series, color, width,
-                    height, stacked, showGrid, showDataLabels, formatDataLabels, formatYLabels, smooth,
+                    height, stacked, smooth,
                     ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         }
     }

@@ -78,18 +78,6 @@ public class AppChartConfig extends BaseClassifiedConfig {
     private boolean stacked;
 
     @JacksonXmlProperty(isAttribute = true)
-    private boolean showGrid;
-
-    @JacksonXmlProperty(isAttribute = true)
-    private boolean showDataLabels;
-
-    @JacksonXmlProperty(isAttribute = true)
-    private boolean formatDataLabels;
-
-    @JacksonXmlProperty(isAttribute = true)
-    private boolean formatYLabels;
-
-    @JacksonXmlProperty(isAttribute = true)
     private boolean smooth;
 
     public AppChartConfig() {
@@ -192,44 +180,12 @@ public class AppChartConfig extends BaseClassifiedConfig {
         this.stacked = stacked;
     }
 
-    public boolean isShowGrid() {
-        return showGrid;
-    }
-
-    public void setShowGrid(boolean showGrid) {
-        this.showGrid = showGrid;
-    }
-
-    public boolean isShowDataLabels() {
-        return showDataLabels;
-    }
-
-    public void setShowDataLabels(boolean showDataLabels) {
-        this.showDataLabels = showDataLabels;
-    }
-
     public boolean isSmooth() {
         return smooth;
     }
 
     public void setSmooth(boolean smooth) {
         this.smooth = smooth;
-    }
-
-    public boolean isFormatDataLabels() {
-        return formatDataLabels;
-    }
-
-    public void setFormatDataLabels(boolean formatDataLabels) {
-        this.formatDataLabels = formatDataLabels;
-    }
-
-    public boolean isFormatYLabels() {
-        return formatYLabels;
-    }
-
-    public void setFormatYLabels(boolean formatYLabels) {
-        this.formatYLabels = formatYLabels;
     }
 
 }

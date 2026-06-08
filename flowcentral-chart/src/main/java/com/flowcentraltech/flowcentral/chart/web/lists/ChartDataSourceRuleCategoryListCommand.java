@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.chart.web.lists;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +27,7 @@ import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.StringParam;
 
@@ -38,6 +40,7 @@ import com.tcdng.unify.core.list.StringParam;
 @Component("chartdatasourcerulecategorylist")
 public class ChartDataSourceRuleCategoryListCommand extends AbstractListCommand<StringParam> {
 
+    private static final List<ListData> DEFAULT_CATEGORY = Arrays.asList(new ListData("default", "Default"));
     @Configurable
     private ChartModuleService chartModuleService;
 
@@ -50,7 +53,7 @@ public class ChartDataSourceRuleCategoryListCommand extends AbstractListCommand<
         if (param.isPresent()) {
             ChartDataSourceDef chartDataSourceDef = chartModuleService.getChartDataSourceDef(param.getValue());
             return chartDataSourceDef.isWithCategories() ? chartDataSourceDef.getCategories().getSequenceList()
-                    : Collections.emptyList();
+                    : DEFAULT_CATEGORY;
         }
 
         return Collections.emptyList();
