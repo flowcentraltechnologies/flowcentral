@@ -87,7 +87,7 @@ public class EntityFieldSequence extends AbstractPanelFormBinding {
         }
     }
 
-    public void setUseTimeSeries(boolean useTimeSeries) {
+    public void setUseTimeSeries(boolean useTimeSeries) throws UnifyException {
         this.useTimeSeries = useTimeSeries;
         if (fieldSequence != null) {
             fieldSequence.setUseTimeSeries(useTimeSeries);

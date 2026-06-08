@@ -47,7 +47,7 @@ public class FieldSequenceWidget extends AbstractItemListWidget<FieldSequenceEnt
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select style:$s{width:100%;} blankOption:$s{} list:groupingentityfielddeflist listParams:$l{entityDef} binding:fieldName");
+                "!ui-select style:$s{width:100%;} blankOption:$s{} list:groupingentityfielddeflist listParams:$l{entityDef mode} binding:fieldName");
         paramCtrl = (Control) addInternalChildWidget(
                 "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddefformatterlist listParams:$l{entityDef fieldName} binding:param");
         timeSeriesCtrl = (Control) addInternalChildWidget(

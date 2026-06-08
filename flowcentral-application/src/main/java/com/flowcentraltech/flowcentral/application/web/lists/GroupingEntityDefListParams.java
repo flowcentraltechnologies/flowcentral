@@ -28,9 +28,9 @@ public class GroupingEntityDefListParams extends AbstractListParam {
 
     private EntityDef entityDef;
 
-    private int mode;
+    private Integer mode;
     
-    public GroupingEntityDefListParams(EntityDef entityDef, int mode) {
+    public GroupingEntityDefListParams(EntityDef entityDef, Integer mode) {
         this.entityDef = entityDef;
         this.mode = mode;
     }
@@ -40,7 +40,7 @@ public class GroupingEntityDefListParams extends AbstractListParam {
     }
 
     public int getMode() {
-        return mode;
+        return mode != null ? mode : 0;
     }
 
     @Override

@@ -102,8 +102,9 @@ public class FieldSequence {
         return useTimeSeries;
     }
 
-    public void setUseTimeSeries(boolean useTimeSeries) {
+    public void setUseTimeSeries(boolean useTimeSeries) throws UnifyException {
         this.useTimeSeries = useTimeSeries;
+        normalize();
     }
 
     public void normalize() throws UnifyException {
