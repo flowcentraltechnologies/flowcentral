@@ -76,6 +76,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> sortedFieldDefList;
 
+    private List<EntityFieldDef> sortedNoDatetimeFieldDefList;
+
     private List<EntityFieldDef> filterFieldDefList;
 
     private List<EntityFieldDef> filterStringFieldDefList;
@@ -421,6 +423,25 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         return sortedFieldDefList;
+    }
+
+    public List<EntityFieldDef> getSortedNoDatetimeFieldDefList() throws UnifyException {
+        if (sortedNoDatetimeFieldDefList == null) {
+            synchronized (this) {
+                if (sortedNoDatetimeFieldDefList == null) {
+                    sortedNoDatetimeFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : getSortedFieldDefList()) {
+                        if (!entityFieldDef.isDateTime()) {
+                            sortedNoDatetimeFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    sortedNoDatetimeFieldDefList = DataUtils.unmodifiableList(sortedNoDatetimeFieldDefList);
+                }
+            }
+        }
+
+        return sortedNoDatetimeFieldDefList;
     }
 
     public List<EntityFieldDef> getAuditableFieldDefList() throws UnifyException {

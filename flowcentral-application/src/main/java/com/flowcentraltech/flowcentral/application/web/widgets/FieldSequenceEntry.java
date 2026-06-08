@@ -33,6 +33,8 @@ public class FieldSequenceEntry {
 
     private String param;
 
+    private int mode; // 0 - Normal, 1 - No Datetime and 2 - Blank;
+    
     private boolean editable;
 
     public FieldSequenceEntry(EntityDef entityDef, boolean editable) {
@@ -54,6 +56,14 @@ public class FieldSequenceEntry {
 
     public void setParam(String param) {
         this.param = param;
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 
     public EntityDef getEntityDef() {
