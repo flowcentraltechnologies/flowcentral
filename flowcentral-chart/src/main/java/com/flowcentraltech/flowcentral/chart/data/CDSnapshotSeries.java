@@ -23,6 +23,10 @@ package com.flowcentraltech.flowcentral.chart.data;
  */
 public class CDSnapshotSeries {
     
+    private String ty;
+    
+    private String fld;
+    
     private String nm;
 
     private String lbl;
@@ -33,6 +37,22 @@ public class CDSnapshotSeries {
 
     private boolean time;
     
+    public String getTy() {
+        return ty;
+    }
+
+    public void setTy(String ty) {
+        this.ty = ty;
+    }
+
+    public String getFld() {
+        return fld;
+    }
+
+    public void setFld(String fld) {
+        this.fld = fld;
+    }
+
     public String getNm() {
         return nm;
     }

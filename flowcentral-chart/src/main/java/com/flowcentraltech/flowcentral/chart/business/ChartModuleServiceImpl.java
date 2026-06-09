@@ -119,8 +119,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
                             .series(chart.getSeries()).color(chart.getColor())
                             .width(DataUtils.convert(int.class, chart.getWidth()))
-                            .height(DataUtils.convert(int.class, chart.getHeight()))
-                            .stacked(chart.isStacked()).smooth(chart.isSmooth());
+                            .height(DataUtils.convert(int.class, chart.getHeight())).stacked(chart.isStacked())
+                            .smooth(chart.isSmooth());
                     return cdb.build();
                 }
 
@@ -166,7 +166,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
-    public ChartDetails getChartDetails(String chartName, ChartConfiguration chartConfiguration) throws UnifyException {
+    public ChartDetails getChartDetails(ChartConfiguration chartConfiguration) throws UnifyException {
         // TODO Auto-generated method stub
         return null;
     }
@@ -310,8 +310,10 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                 CDSnapshotSeries _series = series[j];
                 if (_series == null) {
                     _series = series[j] = new CDSnapshotSeries();
+                    _series.setTy(entityDef.getFieldDef(aggregation.getFieldName()).getDataType().code());
                     _series.setNm(aggregation.getName());
                     _series.setLbl(aggregation.getFieldLabel());
+                    _series.setFld(aggregation.getFieldName());
                     _series.setGrouping(0);
                     _series.setTime(false);
                     _series.setVals(new String[dataLen]);
@@ -329,8 +331,10 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                 if (_series == null) {
                     groupingStart = j;
                     _series = series[j] = new CDSnapshotSeries();
+                    _series.setTy(entityDef.getFieldDef(grouping.getFieldName()).getDataType().code());
                     _series.setNm(grouping.getName());
                     _series.setLbl(grouping.getFieldLabel());
+                    _series.setFld(grouping.getFieldName());
                     _series.setGrouping(grouping.isString() ? 1 : 2);
                     _series.setTime(grouping.isDate());
                     _series.setVals(new String[dataLen]);
