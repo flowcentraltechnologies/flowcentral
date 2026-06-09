@@ -46,14 +46,34 @@ public class ChartDetails {
         return chartDef;
     }
 
-    public ChartSeries[] getSeries() {
-        return series;
+    public ChartSeries getSeries(int index) {
+        return series[index];
     }
 
-    public ChartCategory[] getCategories() {
-        return categories;
+    public int getSeriesCount() {
+        return series != null ? series.length : 0;
     }
 
+    public int getDataDepth() {
+        return series != null ? series[0].getDataDepth() : 0;
+    }
+    
+    public Object getSeriesVal(int seriesIndex, int dataIndex) {
+        return series[seriesIndex].getVal(dataIndex);
+    }
+
+    public ChartCategory getCategory(int index) {
+        return categories[index];
+    }
+
+    public int getCategoryCount() {
+        return categories != null ? categories.length : 0;
+    }
+    
+    public Object getCategoryVal(int index) {
+        return categories[index].getVal();
+    }
+    
     public boolean isPresent() {
         return chartDef != null;
     }

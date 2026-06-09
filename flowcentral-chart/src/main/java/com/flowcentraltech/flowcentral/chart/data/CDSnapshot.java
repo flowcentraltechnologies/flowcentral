@@ -31,6 +31,8 @@ public class CDSnapshot {
     
     private Date takenOn;
     
+    private Date expiresOn;
+    
     private CDSnapshotCategory[] categories;
 
     public String getChartDatasourceName() {
@@ -55,6 +57,14 @@ public class CDSnapshot {
 
     public void setTakenOn(Date takenOn) {
         this.takenOn = takenOn;
+    }
+
+    public Date getExpiresOn() {
+        return expiresOn;
+    }
+
+    public void setExpiresOn(Date expiresOn) {
+        this.expiresOn = expiresOn;
     }
 
     public CDSnapshotCategory[] getCategories() {

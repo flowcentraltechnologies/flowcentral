@@ -91,7 +91,7 @@ public class ChartWriter extends AbstractWidgetWriter {
                         writer.write("<span class=\"content\" style=\"color:");
                         writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
                         writer.write(";\">");
-                        Number num = (Number) chartDetails.getSeries()[0].getVals()[0];
+                        Number num = (Number) chartDetails.getSeriesVal(0, 0);
                         String fmt = ChartUtils.getFormattedCardValue(num);
                         writer.writeWithHtmlEscape(fmt);
                         writer.write("</span>");
@@ -121,17 +121,16 @@ public class ChartWriter extends AbstractWidgetWriter {
                         writer.write("</span>");
 
                         // Header
-                        final ChartSeries[] series = chartDetails.getSeries();
-                        final int cols = series.length;
-                        final int rows = series[0].getVals().length;
+                        final int cols = chartDetails.getSeriesCount();
+                        final int rows = chartDetails.getDataDepth();
                         writer.write("<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
                         writer.write("<table class=\"cont\" style=\"width:100%;\"><thead>");
                         writer.write("<tr style=\"background-color:");
                         writer.write(chartDef.getColor());
                         writer.write(";position: sticky;top: 0px;\">");
-                        for (ChartSeries _series : series) {
+                        for (int c = 0; c < cols; c++) {
                             writer.write("<th>");
-                            writer.writeWithHtmlEscape(_series.getLabel());
+                            writer.writeWithHtmlEscape(chartDetails.getSeries(c).getLabel());
                             writer.write("</th>");
                         }
                         writer.write("</tr></thead>");
@@ -140,9 +139,8 @@ public class ChartWriter extends AbstractWidgetWriter {
                         for (int r = 0; r < rows; r++) {
                             writer.write("<tr>");
                             for (int c = 0; c < cols; c++) {
-                                ChartSeries _series = series[c];
-
-                                String[] sval = options.format(_series.getType(), _series.getVals()[r]);
+                                ChartSeries _series = chartDetails.getSeries(c);
+                                String[] sval = options.format(_series.getType(), _series.getVal(r));
                                 writer.write("<td><span class=\"");
                                 writer.write(_series.getType().alignType().styleClass());
                                 writer.write("\">");

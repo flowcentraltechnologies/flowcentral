@@ -75,42 +75,41 @@
 			title="$m{dashboard.samplechart1.title}"
 			subTitle="$m{dashboard.samplechart1.subtitle}"
 			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot"
-			showGrid="false" smooth="true" showDataLabels="true" />
+			smooth="true" />
 		<chart name="sampleChart2"
 			description="$m{dashboard.samplechart2.description}" type="BAR"
 			palette="PALETTE3" title="$m{dashboard.samplechart2.title}"
 			subTitle="$m{dashboard.samplechart2.subtitle}"
 			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
-			showGrid="false" smooth="true" showDataLabels="true" />
+			smooth="true" />
 
 		<chart name="sampleChart3"
 			description="$m{dashboard.samplechart3.description}" type="AREA"
 			title="$m{dashboard.samplechart3.title}"
 			subTitle="$m{dashboard.samplechart3.subtitle}"
 			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot"
-			showGrid="false" smooth="false" />
+			smooth="false" />
 		<chart name="sampleChart4"
 			description="$m{dashboard.samplechart4.description}" type="AREA"
 			palette="PALETTE7" title="$m{dashboard.samplechart4.title}"
 			subTitle="$m{dashboard.samplechart4.subtitle}"
 			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
-			showGrid="false" smooth="false" />
+			smooth="false" />
 
 		<chart name="sampleChart5"
 			description="$m{dashboard.samplechart5.description}" type="COLUMN"
 			title="$m{dashboard.samplechart5.title}"
 			subTitle="$m{dashboard.samplechart5.subtitle}"
 			provider="chartsnapshot-provider"
-			rule="sampleSalesAndCostsChartSnapshot" showGrid="true"
+			rule="sampleSalesAndCostsChartSnapshot"
 			smooth="true"
-			stacked="true" showDataLabels="true" formatDataLabels="true"
-			formatYLabels="true" />
+			stacked="true" />
 		<chart name="sampleChart6"
 			description="$m{dashboard.samplechart6.description}" type="DONUT"
 			title="$m{dashboard.samplechart6.title}"
 			subTitle="$m{dashboard.samplechart6.subtitle}" height="300"
 			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
-			showGrid="true" smooth="true" stacked="false" showDataLabels="true" />
+			smooth="true" stacked="false" />
 	</charts>
 	<!-- References -->
 	<references>

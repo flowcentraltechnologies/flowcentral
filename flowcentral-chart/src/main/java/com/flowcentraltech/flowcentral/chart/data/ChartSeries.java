@@ -70,8 +70,12 @@ public class ChartSeries {
         return grouping;
     }
 
-    public Object[] getVals() {
-        return vals;
+    public int getDataDepth() {
+        return vals.length;
+    }
+    
+    public Object getVal(int index) {
+        return vals[index];
     }
 
     public boolean isTime() {

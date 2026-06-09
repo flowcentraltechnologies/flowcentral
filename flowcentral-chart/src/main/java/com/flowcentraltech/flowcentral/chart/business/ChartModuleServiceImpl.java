@@ -39,10 +39,13 @@ import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotCategory;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotSeries;
+import com.flowcentraltech.flowcentral.chart.data.ChartCategory;
 import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
+import com.flowcentraltech.flowcentral.chart.data.ChartDetailsContext;
+import com.flowcentraltech.flowcentral.chart.data.ChartSeries;
 import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
@@ -50,7 +53,9 @@ import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceSnapshotQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDatasourceSnapshot;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
+import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
@@ -91,9 +96,11 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Configurable
     private AppletUtilities appletUtilities;
 
-    private FactoryMap<String, ChartDef> chartDefFactoryMap;
+    private final FactoryMap<String, ChartDef> chartDefFactoryMap;
 
-    private FactoryMap<String, ChartDataSourceDef> chartDataSourceDefFactoryMap;
+    private final FactoryMap<String, ChartDataSourceDef> chartDataSourceDefFactoryMap;
+
+    private final FactoryMap<String, ChartDetailsContext> chartDetailsContextFactoryMap;
 
     public ChartModuleServiceImpl() {
         this.chartDefFactoryMap = new StaleableFactoryMap<String, ChartDef>()
@@ -163,12 +170,49 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
             };
 
+
+            this.chartDetailsContextFactoryMap = new StaleableFactoryMap<String, ChartDetailsContext>()
+                {
+
+                    @Override
+                    protected boolean stale(String longName, ChartDetailsContext ctx) throws Exception {
+                        return getNow().after(ctx.getSnapshotExpiresOn());
+                    }
+
+                    @Override
+                    protected ChartDetailsContext create(String longName, Object... args) throws Exception {
+                        final ChartConfiguration chartConfiguration = (ChartConfiguration) args[0];
+                        final ChartDef chartDef = getChartDef(chartConfiguration.getChart());
+                        final ChartDataSourceDef chartDataSourceDef = getChartDataSourceDef(chartDef.getRule());
+                        final EntityDef entityDef = chartDataSourceDef.getEntityDef();
+                        final CDSnapshot cdSnapshot = getChartDatasourceSnapshot(chartDataSourceDef.getLongName(),
+                                new ChartViewOption(chartConfiguration.getViewOptionName(),
+                                        InputWidgetUtils.getRestriction(appletUtilities, entityDef, null,
+                                                chartConfiguration.getViewOptionCatBase(chartDataSourceDef.getLongName()), getNow())));
+                        return new ChartDetailsContext(cdSnapshot, chartDataSourceDef.getId());
+                    }
+
+                };
     }
 
     @Override
     public ChartDetails getChartDetails(ChartConfiguration chartConfiguration) throws UnifyException {
-        // TODO Auto-generated method stub
-        return null;
+        final ChartDef chartDef = getChartDef(chartConfiguration.getChart());
+        final String viewOption = !StringUtils.isBlank(chartConfiguration.getViewOptionName()) ? chartConfiguration.getViewOptionName() : "default";
+        final ChartDetailsContext ctx = chartDetailsContextFactoryMap.get(chartDef.getRule() + "." + viewOption, chartConfiguration);
+        
+        final ChartType chartType = chartDef.getType();
+        final List<String> cseries = chartDef.getSeries();
+        final List<String> ccategories = chartDef.getCategories();
+        ChartSeries[] series = null;
+        ChartCategory[] categories = null;
+        if (chartType.isCard()) {
+            CDSnapshotCategory cdcat = cdSnapshot.getCategories()[0];
+            categories = new ChartCategory[]{ChartUtils.getChartCategory(cdcat)};
+            
+        }
+
+        return new ChartDetails(chartDef, series, categories);
     }
 
     @Override
@@ -267,13 +311,16 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     }
 
                     final Date takenOn = getNow();
+                    final Date expiresOn = CalendarUtils.getDateWithFrequencyOffset(takenOn,
+                            FrequencyUnit.SECOND, chartDataSourceDef.getCacheRefreshRate().seconds());
                     cdSnapshot.setTakenOn(takenOn);
+                    cdSnapshot.setExpiresOn(expiresOn);
+                    
                     chartDatasourceSnapshot = new ChartDatasourceSnapshot();
                     chartDatasourceSnapshot.setChartDataSourceId(chartDataSourceDef.getId());
                     chartDatasourceSnapshot.setViewOption(chartViewOption.getName());
                     chartDatasourceSnapshot.setSnapshot(DataUtils.asJsonString(cdSnapshot));
-                    chartDatasourceSnapshot.setSnapshotExpiresOn(CalendarUtils.getDateWithFrequencyOffset(takenOn,
-                            FrequencyUnit.SECOND, chartDataSourceDef.getCacheRefreshRate().seconds()));
+                    chartDatasourceSnapshot.setSnapshotExpiresOn(expiresOn);
                     environment().create(chartDatasourceSnapshot);
                     return cdSnapshot;
                 }
