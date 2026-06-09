@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+
 /**
  * Chart series object.
  * 
@@ -22,20 +24,34 @@ package com.flowcentraltech.flowcentral.chart.data;
  * @since 4.1
  */
 public class ChartSeries {
-    
+
+    private EntityFieldDataType type;
+
     private String name;
 
     private String label;
 
-    private int grouping; // 0 - No grouping, 1 - Text and 2 - Datetime
-    
+    private String field;
+
     private Object[] vals;
 
-    public ChartSeries(String name, String label, int grouping, Object[] vals) {
+    private int grouping; // 0 - No grouping, 1 - Text and 2 - Datetime
+
+    private boolean time;
+
+    public ChartSeries(EntityFieldDataType type, String name, String label, String field, int grouping, Object[] vals,
+            boolean time) {
+        this.type = type;
         this.name = name;
         this.label = label;
+        this.field = field;
         this.grouping = grouping;
         this.vals = vals;
+        this.time = time;
+    }
+
+    public EntityFieldDataType getType() {
+        return type;
     }
 
     public String getName() {
@@ -46,12 +62,20 @@ public class ChartSeries {
         return label;
     }
 
+    public String getField() {
+        return field;
+    }
+
     public int getGrouping() {
         return grouping;
     }
 
     public Object[] getVals() {
         return vals;
+    }
+
+    public boolean isTime() {
+        return time;
     }
 
 }

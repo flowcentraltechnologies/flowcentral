@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.chart.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
+import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -38,7 +39,16 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface ChartModuleService extends FlowCentralService {
 
-    ChartDetails getChartDetails(String chartName, ChartViewOption chartViewOption) throws UnifyException;
+    /**
+     * Get chart details.
+     * 
+     * @param configuration
+     *                      the chart configuration
+     * @return the chart details
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ChartDetails getChartDetails(ChartConfiguration configuration) throws UnifyException;
     
     /**
      * Gets a chart datasource snapshot.

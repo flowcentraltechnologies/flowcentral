@@ -27,9 +27,12 @@ public class ChartCategory {
 
     private String label;
 
-    public ChartCategory(String name, String label) {
+    private Object val;
+
+    public ChartCategory(String name, String label, Object val) {
         this.name = name;
         this.label = label;
+        this.val = val;
     }
 
     public String getName() {
@@ -38,6 +41,10 @@ public class ChartCategory {
 
     public String getLabel() {
         return label;
+    }
+
+    public Object getVal() {
+        return val;
     }
 
 }

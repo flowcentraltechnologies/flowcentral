@@ -15,19 +15,18 @@
  */
 package com.flowcentraltech.flowcentral.chart.echarts.business;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.flowcentraltech.flowcentral.chart.business.AbstractChartOptionsProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartCategory;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
+import com.flowcentraltech.flowcentral.chart.data.ChartSeries;
 import com.flowcentraltech.flowcentral.chart.echarts.constants.EChartsNameConstants;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartColorType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartPaletteType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartType;
@@ -99,20 +98,15 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
         return "echarts";
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public JsonWriter getChartOptions(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine,
-            int preferredHeight) throws UnifyException {
+    public JsonWriter getChartOptions(ChartDetails chartDetails) throws UnifyException {
         JsonWriter jw = new JsonWriter();
         jw.beginObject(); // Main body start
 
+        final ChartDef chartDef = chartDetails.getChartDef();
         final ChartType chartType = chartDef.getType();
-        final boolean isDynamicCategories = chartDetails.isDynamicCategories();
-        final Map<String, AbstractSeries<?, ?>> series = isDynamicCategories && chartType.axisChart()
-                ? chartDetails.getGroupingSeries(chartDef)
-                : (chartDetails.getSeries(chartDetails.isWithSeriesInclusion() ? chartDetails.getSeriesInclusion()
-                        : chartDef.getSeriesInclusion()));
-        final ChartCategoryDataType categoryType = chartDetails.getCategoryType();
+        final ChartSeries[] series = chartDetails.getSeries();
+        final ChartCategory[] categories = chartDetails.getCategories();
 
         // Colors
         if (chartDef.getPaletteType() != null) {
@@ -131,23 +125,13 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
         }
 
         // Title & Sub-title
-        String title = !StringUtils.isBlank(chartDetails.getTitle()) ? chartDetails.getTitle() : chartDef.getTitle();
-        String subTitle = !StringUtils.isBlank(chartDetails.getSubTitle()) ? chartDetails.getSubTitle()
-                : chartDef.getSubTitle();
+        String title = chartDef.getTitle();
+        String subTitle = chartDef.getSubTitle();
         if (!StringUtils.isBlank(title) || !StringUtils.isBlank(subTitle)) {
             jw.beginObject("title");
 
             if (!StringUtils.isBlank(title)) {
                 jw.write("text", title);
-                if (chartDetails.getTitleOffsetX() > 0) {
-                    jw.write("left", chartDetails.getTitleOffsetX());
-                }
-
-                if (chartDetails.getTitleFontSize() > 0) {
-                    jw.beginObject("textStyle");
-                    jw.write("fontSize", chartDetails.getTitleFontSize());
-                    jw.endObject();
-                }
             }
 
             if (!StringUtils.isBlank(subTitle)) {
@@ -155,10 +139,6 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                 jw.beginObject("subtextStyle");
                 jw.write("color", "#a0a0a0");
-                if (chartDetails.getSubTitleFontSize() > 0) {
-                    jw.write("fontSize", chartDetails.getSubTitleFontSize());
-                }
-
                 jw.endObject();
             }
 
@@ -171,17 +151,13 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
         }
         jw.endObject();
 
-        final Set<String> categoryInclusion = isDynamicCategories ? Collections.emptySet()
-                : (chartDetails.isWithCategoryInclusion() ? chartDetails.getCategoryInclusion()
-                        : chartDef.getCategoryInclusion());
-        List<AbstractSeries<?, ?>> actseries = new ArrayList<AbstractSeries<?, ?>>(series.values());
-        if (!DataUtils.isBlank(actseries)) {
+        if (!DataUtils.isBlank(series)) {
             if (chartType.triggerAxisChart()) {
                 // Legend
                 jw.beginObject("legend");
                 jw.beginArray("data");
-                for (AbstractSeries<?, ?> _series : actseries) {
-                    jw.writeObject(_series.getName());
+                for (ChartSeries _series : series) {
+                    jw.writeObject(_series.getLabel());
                 }
                 jw.endArray();
                 jw.endObject();
@@ -193,10 +169,9 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                 // Category
                 jw.beginArray(chartType.isHorizontal() ? "yAxis" : "xAxis");
-                for (AbstractSeries<?, ?> _series : actseries) {
-                    _series.setCategoryInclusion(categoryInclusion);
+                for (ChartSeries _series : series) {
                     jw.beginObject();
-                    jw.write("type",categoryType.isDate() ? "time": "category");
+                    jw.write("type",_series.isTime() ? "time": "category");
                     if (!chartType.isHorizontal()) {
                         jw.write("position", "bottom");
                     }
@@ -206,8 +181,8 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     }
 
                     jw.beginArray("data");
-                    for (Object cat : _series.getXList()) {
-                        jw.writeObject(cat);
+                    for (ChartCategory cat : categories) {
+                        jw.writeObject(cat.getVal());
                     }
 
                     jw.endArray();
@@ -223,7 +198,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                 // Series
                 jw.beginArray("series");
-                for (AbstractSeries<?, ?> _series : actseries) {
+                for (ChartSeries _series : series) {
                     jw.beginObject();
                     jw.write("name", _series.getName());
                     jw.write("type", chartType.isArea() ? "line" : chartType.optionsType());
@@ -232,7 +207,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.write("showSymbol", false);
 
                     jw.beginArray("data");
-                    for (Number num : _series.getYList()) {
+                    for (Object num : _series.getVals()) {
                         jw.writeObject(num);
                     }
 
@@ -248,9 +223,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                 jw.endArray();
             } else {
-                AbstractSeries<?, ?> pseries = actseries.get(0);
-                pseries.setCategoryInclusion(categoryInclusion);
-
+                ChartSeries pseries = series[0];
                 if (chartType.isCircularChart()) {
                     // Legend
                     jw.beginObject("legend");
@@ -276,10 +249,11 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.write("top", 40);
 
                     jw.beginArray("data");
-                    for (AbstractSeriesData _data : pseries.getDataList()) {
+                    final Object[] vals = pseries.getVals();
+                    for (int i = 0; i < categories.length; i++) {
                         jw.beginObject();
-                        jw.write("name", _data.resolveX(_data.getX()));
-                        jw.write("value", _data.getY());
+                        jw.write("name", categories[i].getLabel());
+                        jw.write("value", (Number) vals[i]);
                         jw.endObject();
                     }
                     jw.endArray();
@@ -305,8 +279,8 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.write("type", "category");
                     jw.write("startAngle", 75);
                     jw.beginArray("data");
-                    for (Object cat : pseries.getXList()) {
-                        jw.writeObject(cat);
+                    for (ChartCategory cat : categories) {
+                        jw.writeObject(cat.getVal());
                     }
 
                     jw.endArray();
@@ -320,7 +294,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.write("coordinateSystem", "polar");
 
                     jw.beginArray("data");
-                    for (Number num : pseries.getYList()) {
+                    for (Object num : pseries.getVals()) {
                         jw.writeObject(num);
                     }
                     jw.endArray();
@@ -331,8 +305,8 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     // Legend
                     jw.beginObject("legend");
                     jw.beginArray("data");
-                    for (AbstractSeries<?, ?> _series : actseries) {
-                        jw.writeObject(_series.getName());
+                    for (ChartSeries _series : series) {
+                        jw.writeObject(_series.getLabel());
                     }
                     jw.endArray();
                     jw.endObject();
@@ -340,9 +314,9 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     // Radar
                     jw.beginObject("radar");
                     jw.beginArray("indicator");
-                    for (Object cat : pseries.getXList()) {
+                    for (ChartCategory cat : categories) {
                         jw.beginObject();
-                        jw.write("name", (String) cat);
+                        jw.write("name", cat.getLabel());
                         jw.endObject();
                     }
 
@@ -356,11 +330,11 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.write("type", ChartType.RADAR.optionsType());
 
                     jw.beginArray("data");
-                    for (AbstractSeries<?, ?> _series : actseries) {
+                    for (ChartSeries _series : series) {
                         jw.beginObject();
                         jw.write("name", _series.getName());
                         jw.beginArray("value");
-                        for (Number num : _series.getYList()) {
+                        for (Object num : _series.getVals()) {
                             jw.writeObject(num);
                         }
                         jw.endArray();

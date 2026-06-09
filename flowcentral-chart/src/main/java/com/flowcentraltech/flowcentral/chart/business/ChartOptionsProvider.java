@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.chart.business;
 
-import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -28,30 +27,25 @@ import com.tcdng.unify.core.util.json.JsonWriter;
  * @since 4.1
  */
 public interface ChartOptionsProvider extends UnifyComponent {
-    
+
     /**
      * Get options type.
+     * 
      * @return the options type
-     * @throws UnifyException if an error occurs
+     * @throws UnifyException
+     *                        if an error occurs
      */
     String getOptionsType() throws UnifyException;
-    
+
     /**
      * Gets chart options.
      * 
-     * @param chartDef
-     *                        the chart definition.
      * @param chartDetails
-     *                        the chart details
-     * @param sparkLine
-     *                        spark line flag
-     * @param preferredHeight
-     *                        preferred chart height
+     *                     the chart details
      * @return the chart options in JSON writer
      * @throws UnifyException
      *                        if an error occurs
      */
-    JsonWriter getChartOptions(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine, int preferredHeight)
-            throws UnifyException;
-   
+    JsonWriter getChartOptions(ChartDetails chartDetails) throws UnifyException;
+
 }

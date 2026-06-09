@@ -44,11 +44,10 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ResolvedCondition;
-import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
+import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
-import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
-import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
-import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
+import com.flowcentraltech.flowcentral.chart.data.ChartSeries;
+import com.flowcentraltech.flowcentral.chart.data.SimpleChartConfiguration;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
@@ -148,8 +147,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private ReportServer reportServer;
 
-    @Configurable(ChartModuleNameConstants.CHARTDATASOURCE_PROVIDER)
-    private ChartDetailsProvider chartDetailsProvider;
+    @Configurable
+    private ChartModuleService chartModuleService;
 
     private final Map<String, Set<ReportInfo>> groupMemberBackup;
 
@@ -443,9 +442,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         try {
             generateDynamicReport(reportOptions, uploadedFile.getOut());
         } finally {
-            uploadedFile.closeOut(); 
+            uploadedFile.closeOut();
         }
-        
+
         return uploadedFile;
     }
 
@@ -658,9 +657,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         try {
             generateReport(report, uploadedFile.getOut());
         } finally {
-            uploadedFile.closeOut(); 
+            uploadedFile.closeOut();
         }
-        
+
         return uploadedFile;
     }
 
@@ -942,10 +941,10 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
 
         // Chart summary
         if (reportOptions.isChartSummary()) {
-            ChartDetails chartDetails = chartDetailsProvider.provide(reportOptions.getSummaryDataSource(),
-                    ChartViewOption.DEFAULT/*reportOptions.getRestriction()*/);
-            ChartTableColumn[] tableColumn = null;//TODO chartDetails.getTableHeaders();
-            for (ChartTableColumn _tableColumn : tableColumn) {
+            ChartDetails chartDetails = chartModuleService.getChartDetails(new SimpleChartConfiguration(
+                    reportOptions.getSummaryDataSource())/* reportOptions.getRestriction() */);
+            ChartSeries[] tableColumn = chartDetails.getSeries();
+            for (ChartSeries _tableColumn : tableColumn) {
                 final DataType dataType = _tableColumn.getType().dataType();
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
                 reportColumnOptions.setDescription(_tableColumn.getLabel());
@@ -954,7 +953,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                 reportColumnOptions.setSum(dataType.isInteger() || dataType.isDecimal());
                 reportColumnOptions.setIncluded(true);
 
-                reportColumnOptions.setColumnName(_tableColumn.getFieldName());
+                reportColumnOptions.setColumnName(_tableColumn.getField());
                 reportColumnOptions.setType(dataType.javaClass().getName());
                 reportColumnOptions.setFormatter(FormatterOptions.DEFAULT.getFormatter(dataType));
                 reportColumnOptions.setHAlignType(dataType.alignType());
@@ -963,12 +962,15 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                 reportOptions.addColumnOptions(reportColumnOptions);
             }
 
+            final int rows = tableColumn[0].getVals().length;
             List<Map<String, ?>> content = new ArrayList<Map<String, ?>>();
-            for (Object[] row : new ArrayList<Object[]>()) { // TODO
+            for (int r = 0; r < rows; r++) { // TODO
                 Map<String, Object> mrow = new HashMap<String, Object>();
-                for (int i = 0; i < row.length; i++) {
-                    Object val = DataUtils.convert(tableColumn[i].getType().dataType().javaClass(), row[i]);
-                    mrow.put(tableColumn[i].getFieldName(), val);
+                for (int c = 0; c < tableColumn.length; c++) {
+                    final ChartSeries _tableColumn = tableColumn[c];
+                    Object val = DataUtils.convert(_tableColumn.getType().dataType().javaClass(),
+                            _tableColumn.getVals()[c]);
+                    mrow.put(_tableColumn.getField(), val);
                 }
 
                 content.add(mrow);
@@ -980,7 +982,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall) throws UnifyException {
+    protected void doInstallModuleFeatures(final InstallationContext ctx, ModuleInstall moduleInstall)
+            throws UnifyException {
 
     }
 
@@ -1050,7 +1053,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     FilterConditionType type = restrictionDef.getType();
-                    SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getListFieldInfo(restrictionDef.getFieldName());                   
+                    SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getListFieldInfo(restrictionDef.getFieldName());
                     ColumnType columnType = sqlFieldInfo.getColumnType();
                     if (columnType.isDate() || columnType.isTimestamp()) {
                         ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(

@@ -24,6 +24,8 @@ package com.flowcentraltech.flowcentral.chart.data;
  */
 public class ChartDetails {
 
+    public static final ChartDetails BLANK = new ChartDetails();
+    
     private ChartDef chartDef;
 
     private ChartSeries[] series;
@@ -36,6 +38,10 @@ public class ChartDetails {
         this.categories = categories;
     }
 
+    private ChartDetails() {
+        
+    }
+    
     public ChartDef getChartDef() {
         return chartDef;
     }
@@ -48,6 +54,10 @@ public class ChartDetails {
         return categories;
     }
 
+    public boolean isPresent() {
+        return chartDef != null;
+    }
+    
     public boolean isWithSeries () {
         return series != null && series.length > 0;
     }

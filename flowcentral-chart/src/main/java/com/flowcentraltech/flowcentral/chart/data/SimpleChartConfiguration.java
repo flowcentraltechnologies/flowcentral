@@ -37,7 +37,12 @@ public class SimpleChartConfiguration implements ChartConfiguration {
     }
 
     @Override
-    public FilterDef getCatBase(String dataSourceName) {
+    public String getViewOptionName() {
+        return null;
+    }
+
+    @Override
+    public FilterDef getViewOptionCatBase(String dataSourceName) {
         return null;
     }
 

@@ -16,26 +16,12 @@
 
 package com.flowcentraltech.flowcentral.chart.web.writers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
-import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.business.ChartOptionsProvider;
-import com.flowcentraltech.flowcentral.chart.constants.ChartRequestAttributeConstants;
-import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
-import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
-import com.flowcentraltech.flowcentral.chart.data.ChartDetailsProvider;
-import com.flowcentraltech.flowcentral.chart.data.ChartTableColumn;
+import com.flowcentraltech.flowcentral.chart.data.ChartSeries;
 import com.flowcentraltech.flowcentral.chart.util.ChartUtils;
 import com.flowcentraltech.flowcentral.chart.web.widgets.ChartWidget;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
@@ -43,8 +29,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
-import com.tcdng.unify.core.constant.TimeResolutionType;
-import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -76,11 +60,11 @@ public class ChartWriter extends AbstractWidgetWriter {
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         ChartWidget chartWidget = (ChartWidget) widget;
-        final ChartConfiguration configuration = chartWidget.getChartConfiguration();
         final String chartLongName = chartWidget.getValue(String.class);
         if (!StringUtils.isBlank(chartLongName)) {
-            final ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-            final ChartDetails chartDetails = getChartDetails(configuration, chartDef);
+            final ChartDetails chartDetails = chartModuleService.getChartDetails(chartWidget.getChartConfiguration());
+            final ChartDef chartDef = chartDetails.getChartDef();
+
             writer.write("<div ");
             writeTagAttributes(writer, chartWidget);
             if (chartDef.getHeight() > 0 && !chartDef.getType().isTable()) {
@@ -107,8 +91,8 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.write("<span class=\"content\" style=\"color:");
                     writer.write(chartDef.isWithColor() ? chartDef.getColor() : "#606060");
                     writer.write(";\">");
-                    Number num = null;//TODO chartDetails.getSeries().get(chartDef.getSeries()).getData(chartDef.getCategory());
-                    String fmt = null;//TODO ChartUtils.getFormattedCardValue(num);
+                    Number num = (Number) chartDetails.getSeries()[0].getVals()[0];
+                    String fmt = ChartUtils.getFormattedCardValue(num);
                     writer.writeWithHtmlEscape(fmt);
                     writer.write("</span>");
 
@@ -137,36 +121,30 @@ public class ChartWriter extends AbstractWidgetWriter {
                     writer.write("</span>");
 
                     // Header
-                    final int cols = 0;//TODO chartDetails.getTableHeaders().length;
-                    final ChartTableColumn[] headers = null;//chartDetails.getTableHeaders();
+                    final ChartSeries[] series = chartDetails.getSeries();
+                    final int cols = series.length;
+                    final int rows = series[0].getVals().length;
                     writer.write("<div class=\"bdy\" style=\"width:100%;overflow-y:auto;overflow-x: hidden;\">");
                     writer.write("<table class=\"cont\" style=\"width:100%;\"><thead>");
                     writer.write("<tr style=\"background-color:");
                     writer.write(chartDef.getColor());
                     writer.write(";position: sticky;top: 0px;\">");
-                    for (ChartTableColumn header : headers) {
-                        if (header.isSeries()/* && !chartDetails.isSeriesFieldInclusion(header.getFieldName())*/) {
-                            continue;
-                        }
-
+                    for (ChartSeries _series : series) {
                         writer.write("<th>");
-                        writer.writeWithHtmlEscape(header.getLabel());
+                        writer.writeWithHtmlEscape(_series.getLabel());
                         writer.write("</th>");
                     }
                     writer.write("</tr></thead>");
 
                     writer.write("<tbody>");
-                    for (Object[] row : new ArrayList<Object[]>()) { // TODO
+                    for (int r = 0; r < rows; r++) {
                         writer.write("<tr>");
-                        for (int i = 0; i < cols; i++) {
-                            ChartTableColumn header = headers[i];
-                            if (header.isSeries()/* && !chartDetails.isSeriesFieldInclusion(header.getFieldName())*/) {
-                                continue;
-                            }
+                        for (int c = 0; c < cols; c++) {
+                            ChartSeries _series = series[c];
 
-                            String[] sval = options.format(header.getType(), row[i]);
+                            String[] sval = options.format(_series.getType(), _series.getVals()[r]);
                             writer.write("<td><span class=\"");
-                            writer.write(header.getType().alignType().styleClass());
+                            writer.write(_series.getType().alignType().styleClass());
                             writer.write("\">");
                             writer.writeWithHtmlEscape(sval[0]);
                             writer.write("</span></td>");
@@ -204,16 +182,10 @@ public class ChartWriter extends AbstractWidgetWriter {
                 writer.beginFunction("fux.rigChart");
                 writer.writeParam("pId", chartWidget.getId());
                 writer.writeParam("pType", chartOptionsProvider.getOptionsType());
-                writer.writeParam("pOptions", chartOptionsProvider.getChartOptions(chartDef, chartDetails,
-                        chartWidget.isSparkLine(), chartWidget.getPreferredHeight()));
+                writer.writeParam("pOptions", chartOptionsProvider.getChartOptions(chartDetails));
                 writer.endFunction();
             }
         }
-    }
-
-    private ChartDetails getChartDetails(ChartConfiguration configuration, ChartDef chartDef) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

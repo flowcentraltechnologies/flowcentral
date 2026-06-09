@@ -45,7 +45,12 @@ public class DashboardSlotDef implements ChartConfiguration {
     }
 
     @Override
-    public FilterDef getCatBase(String dataSourceName) {
+    public String getViewOptionName() {
+        return optionDef.getName();
+    }
+
+    @Override
+    public FilterDef getViewOptionCatBase(String dataSourceName) {
         return optionDef != null && optionDef.isWithCatBase(dataSourceName) ? optionDef.getCatBase(dataSourceName)
                 : null;
     }

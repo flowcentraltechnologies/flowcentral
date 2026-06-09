@@ -16,6 +16,9 @@
 
 package com.flowcentraltech.flowcentral.chart.util;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 /**
  * Chart utilities.
  * 
@@ -23,18 +26,18 @@ package com.flowcentraltech.flowcentral.chart.util;
  * @since 4.1
  */
 public final class ChartUtils {
-//
-//    private static final BigDecimal QUINTILION = BigDecimal.valueOf(1000000000000000L);
-//
-//    private static final BigDecimal TRILLION = BigDecimal.valueOf(1000000000000L);
-//
-//    private static final BigDecimal BILLION = BigDecimal.valueOf(1000000000L);
-//
-//    private static final BigDecimal MILLION = BigDecimal.valueOf(1000000);
-//
-//    private ChartUtils() {
-//
-//    }
+
+    private static final BigDecimal QUINTILION = BigDecimal.valueOf(1000000000000000L);
+
+    private static final BigDecimal TRILLION = BigDecimal.valueOf(1000000000000L);
+
+    private static final BigDecimal BILLION = BigDecimal.valueOf(1000000000L);
+
+    private static final BigDecimal MILLION = BigDecimal.valueOf(1000000);
+
+    private ChartUtils() {
+
+    }
 //    
 //    private static final List<ChartTimeSeriesType> mergedTypeList =
 //            Arrays.asList(
@@ -84,30 +87,30 @@ public final class ChartUtils {
 //        return type;
 //    }
 //
-//    public static String getFormattedCardValue(Number num) {
-//        if (num != null) {
-//            BigDecimal _num = BigDecimal.valueOf(num.longValue());
-//            if (_num.compareTo(MILLION) < 0) {
-//                return new DecimalFormat("###,###").format(_num);
-//            }
-//
-//            if (_num.compareTo(BILLION) < 0) {
-//                return new DecimalFormat("###,###.0").format(_num.divide(MILLION)) + "M";
-//            }
-//
-//            if (_num.compareTo(TRILLION) < 0) {
-//                return new DecimalFormat("###,###.0").format(_num.divide(BILLION)) + "B";
-//            }
-//
-//            if (_num.compareTo(QUINTILION) < 0) {
-//                return new DecimalFormat("###,###.0").format(_num.divide(TRILLION)) + "T";
-//            }
-//
-//            return new DecimalFormat("###,###.0").format(_num.divide(QUINTILION)) + "Q";
-//        }
-//
-//        return "";
-//    }
+    public static String getFormattedCardValue(Number num) {
+        if (num != null) {
+            BigDecimal _num = BigDecimal.valueOf(num.longValue());
+            if (_num.compareTo(MILLION) < 0) {
+                return new DecimalFormat("###,###").format(_num);
+            }
+
+            if (_num.compareTo(BILLION) < 0) {
+                return new DecimalFormat("###,###.0").format(_num.divide(MILLION)) + "M";
+            }
+
+            if (_num.compareTo(TRILLION) < 0) {
+                return new DecimalFormat("###,###.0").format(_num.divide(BILLION)) + "B";
+            }
+
+            if (_num.compareTo(QUINTILION) < 0) {
+                return new DecimalFormat("###,###.0").format(_num.divide(TRILLION)) + "T";
+            }
+
+            return new DecimalFormat("###,###.0").format(_num.divide(QUINTILION)) + "Q";
+        }
+
+        return "";
+    }
 //
 //    public static List<GroupingAggregation> fill(EntityDef entityDef, List<GroupingAggregation> gaggregations,
 //            ChartTimeSeriesType timeSeriesType) throws UnifyException {

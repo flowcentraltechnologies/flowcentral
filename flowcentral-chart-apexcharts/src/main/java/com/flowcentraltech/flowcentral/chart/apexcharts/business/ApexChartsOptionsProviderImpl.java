@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.chart.apexcharts.business;
 
 import com.flowcentraltech.flowcentral.chart.apexcharts.constants.ApexChartsNameConstants;
 import com.flowcentraltech.flowcentral.chart.business.AbstractChartOptionsProvider;
-import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -29,6 +28,7 @@ import com.tcdng.unify.core.util.json.JsonWriter;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
+@Deprecated
 @Component(ApexChartsNameConstants.APEXCHARTS_OPTIONS_PROVIDER)
 public class ApexChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
@@ -38,8 +38,7 @@ public class ApexChartsOptionsProviderImpl extends AbstractChartOptionsProvider 
     }
 
     @Override
-    public JsonWriter getChartOptions(ChartDef chartDef, ChartDetails chartDetails, boolean sparkLine, int preferredHeight)
-            throws UnifyException {
+    public JsonWriter getChartOptions(ChartDetails chartDetails) throws UnifyException {
         JsonWriter jw = new JsonWriter();
         jw.beginObject();
 //        final ChartType chartType = chartDef.getType();

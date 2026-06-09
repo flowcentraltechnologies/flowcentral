@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotCategory;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotSeries;
+import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
@@ -165,7 +166,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
-    public ChartDetails getChartDetails(String chartName, ChartViewOption chartViewOption) throws UnifyException {
+    public ChartDetails getChartDetails(String chartName, ChartConfiguration chartConfiguration) throws UnifyException {
         // TODO Auto-generated method stub
         return null;
     }
@@ -312,6 +313,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     _series.setNm(aggregation.getName());
                     _series.setLbl(aggregation.getFieldLabel());
                     _series.setGrouping(0);
+                    _series.setTime(false);
                     _series.setVals(new String[dataLen]);
                 }
 
@@ -330,6 +332,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     _series.setNm(grouping.getName());
                     _series.setLbl(grouping.getFieldLabel());
                     _series.setGrouping(grouping.isString() ? 1 : 2);
+                    _series.setTime(grouping.isDate());
                     _series.setVals(new String[dataLen]);
                 }
 
