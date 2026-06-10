@@ -4086,8 +4086,6 @@
 							switchOnChange="true" />
 						<field name="color" inputWidget="studio.chartcolorlist"
 							column="0" required="true" />
-						<field name="provider" column="0" required="true"
-							switchOnChange="true" />
 						<field name="rule" column="0" switchOnChange="true" />
 						<field name="category" column="0" />
 						<field name="series" column="0" required="true" />

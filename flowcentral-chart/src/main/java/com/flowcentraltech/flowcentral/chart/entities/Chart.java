@@ -45,9 +45,6 @@ public class Chart extends BaseApplicationEntity {
     @Column(length = 128, nullable = true)
     private String subTitle;
 
-    @Column(length = 64)
-    private String provider;
-
     @Column(name = "CHART_RULE", length = 64, nullable = true)
     private String rule;
 
@@ -108,14 +105,6 @@ public class Chart extends BaseApplicationEntity {
 
     public void setSubTitle(String subTitle) {
         this.subTitle = subTitle;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
     }
 
     public String getRule() {

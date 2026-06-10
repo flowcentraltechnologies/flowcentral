@@ -47,8 +47,6 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     private String subTitle;
 
-    private String provider;
-
     private String rule;
 
     private String color;
@@ -61,7 +59,7 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     private boolean smooth;
 
-    private ChartDef(ChartType type, ChartPaletteType paletteType, String title, String subTitle, String provider,
+    private ChartDef(ChartType type, ChartPaletteType paletteType, String title, String subTitle,
             String rule, String category, String series, String color, int width, int height, boolean stacked,
             boolean smooth, ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
@@ -69,7 +67,6 @@ public class ChartDef extends BaseApplicationEntityDef {
         this.paletteType = paletteType;
         this.title = title;
         this.subTitle = subTitle;
-        this.provider = provider;
         this.rule = rule;
         this.color = color;
         this.width = width;
@@ -102,10 +99,6 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     public boolean isWithSubtitle() {
         return !StringUtils.isBlank(subTitle);
-    }
-
-    public String getProvider() {
-        return provider;
     }
 
     public String getRule() {
@@ -144,9 +137,9 @@ public class ChartDef extends BaseApplicationEntityDef {
         return smooth;
     }
 
-    public static Builder newBuilder(ChartType type, ChartPaletteType paletteType, String provider, String rule,
+    public static Builder newBuilder(ChartType type, ChartPaletteType paletteType, String rule,
             String longName, String description, Long id, long version) {
-        return new Builder(type, paletteType, provider, rule, longName, description, id, version);
+        return new Builder(type, paletteType, rule, longName, description, id, version);
     }
 
     public static class Builder {
@@ -158,8 +151,6 @@ public class ChartDef extends BaseApplicationEntityDef {
         private String title;
 
         private String subTitle;
-
-        private String provider;
 
         private String rule;
 
@@ -185,11 +176,10 @@ public class ChartDef extends BaseApplicationEntityDef {
 
         private long version;
 
-        public Builder(ChartType type, ChartPaletteType paletteType, String provider, String rule, String longName,
-                String description, Long id, long version) {
+        public Builder(ChartType type, ChartPaletteType paletteType, String rule, String longName, String description,
+                Long id, long version) {
             this.type = type;
             this.paletteType = paletteType;
-            this.provider = provider;
             this.rule = rule;
             this.longName = longName;
             this.description = description;
@@ -243,7 +233,7 @@ public class ChartDef extends BaseApplicationEntityDef {
         }
 
         public ChartDef build() throws UnifyException {
-            return new ChartDef(type, paletteType, title, subTitle, provider, rule, category, series, color, width,
+            return new ChartDef(type, paletteType, title, subTitle, rule, category, series, color, width,
                     height, stacked, smooth,
                     ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         }

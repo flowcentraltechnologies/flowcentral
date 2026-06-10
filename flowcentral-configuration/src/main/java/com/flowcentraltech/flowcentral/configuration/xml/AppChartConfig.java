@@ -54,9 +54,6 @@ public class AppChartConfig extends BaseClassifiedConfig {
     private String subTitle;
 
     @JacksonXmlProperty(isAttribute = true)
-    private String provider;
-
-    @JacksonXmlProperty(isAttribute = true)
     private String category;
 
     @JacksonXmlProperty(isAttribute = true)
@@ -114,14 +111,6 @@ public class AppChartConfig extends BaseClassifiedConfig {
 
     public void setSubTitle(String subTitle) {
         this.subTitle = subTitle;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
     }
 
     public String getRule() {

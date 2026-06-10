@@ -22,15 +22,10 @@
 			inputType="STRING"
 			editor="!ui-select list:chartlist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="chartproviderlist"
-			description="$m{chart.widgettype.chartproviderlist}"
-			dataType="STRING" inputType="STRING"
-			editor="!ui-select list:chartproviderlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
 		<widgetType name="chartproviderrulelist"
 			description="$m{chart.widgettype.chartproviderrulelist}"
 			dataType="STRING" inputType="STRING"
-			editor="!ui-select list:rulelist listParams:$l{provider} blankOption:$m{blank.none}"
+			editor="!ui-select list:chartdatasourcelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="chartdatasourcerulecategorylist"
 			description="$m{chart.widgettype.chartdatasourcerulecategorylist}"
@@ -76,8 +71,6 @@
 					inputWidget="application.text" nullable="true" />
 				<field name="subTitle" label="$m{chart.chart.subtitle}"
 					type="STRING" inputWidget="application.text" nullable="true" />
-				<field name="provider" label="$m{chart.chart.provider}"
-					type="STRING" inputWidget="chartproviderlist" />
 				<field name="rule" label="$m{chart.chart.rule}" type="STRING"
 					inputWidget="chartproviderrulelist" nullable="true" />
 				<field name="category" label="$m{chart.chart.category}"

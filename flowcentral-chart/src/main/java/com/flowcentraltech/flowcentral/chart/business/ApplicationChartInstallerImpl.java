@@ -86,7 +86,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chart.setSubTitle(subTitle);
                     chart.setWidth(appChartConfig.getWidth());
                     chart.setHeight(appChartConfig.getHeight());
-                    chart.setProvider(appChartConfig.getProvider());
                     chart.setRule(appChartConfig.getRule());
                     chart.setCategory(appChartConfig.getCategory());
                     chart.setColor(appChartConfig.getColor());
@@ -105,7 +104,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     oldChart.setSubTitle(subTitle);
                     oldChart.setWidth(appChartConfig.getWidth());
                     oldChart.setHeight(appChartConfig.getHeight());
-                    oldChart.setProvider(appChartConfig.getProvider());
                     oldChart.setRule(appChartConfig.getRule());
                     oldChart.setCategory(appChartConfig.getCategory());
                     oldChart.setColor(appChartConfig.getColor());
@@ -202,7 +200,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 chart.setSubTitle(subTitle);
                 chart.setWidth(appChartConfig.getWidth());
                 chart.setHeight(appChartConfig.getHeight());
-                chart.setProvider(appChartConfig.getProvider());
                 chart.setRule(appChartConfig.getRule());
                 chart.setCategory(appChartConfig.getCategory());
                 chart.setColor(appChartConfig.getColor());
@@ -261,7 +258,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
             srcChart.setDescription(ctx.messageSwap(srcChart.getDescription()));
             srcChart.setTitle(ctx.messageSwap(srcChart.getTitle()));
             srcChart.setSubTitle(ctx.messageSwap(srcChart.getSubTitle()));
-            srcChart.setProvider(ctx.componentSwap(srcChart.getProvider()));
             srcChart.setDeprecated(false);
             srcChart.setConfigType(ConfigType.CUSTOM);
             environment().create(srcChart);

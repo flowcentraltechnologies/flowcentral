@@ -72,7 +72,6 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 appChartConfig.setSubTitle(ctx.isSnapshotMode() ? chart.getSubTitle() :"$m{" + subTitleKey + "}");
                 appChartConfig.setWidth(chart.getWidth());
                 appChartConfig.setHeight(chart.getHeight());
-                appChartConfig.setProvider(chart.getProvider());
                 appChartConfig.setRule(chart.getRule());
                 appChartConfig.setCategory(chart.getCategory());
                 appChartConfig.setSeries(chart.getSeries());

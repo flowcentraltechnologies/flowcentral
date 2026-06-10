@@ -121,7 +121,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     }
 
                     ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(),
-                            chart.getProvider(), chart.getRule(), longName, chart.getDescription(), chart.getId(),
+                            chart.getRule(), longName, chart.getDescription(), chart.getId(),
                             chart.getVersionNo());
                     cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
                             .series(chart.getSeries()).color(chart.getColor())
