@@ -941,19 +941,20 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
 
         // Chart summary
         if (reportOptions.isChartSummary()) {
-            ChartDetails chartDetails = chartModuleService.getChartDetails(new SimpleChartConfiguration(
+            final ChartDetails chartDetails = chartModuleService.getChartDetails(new SimpleChartConfiguration(
                     reportOptions.getSummaryDataSource())/* reportOptions.getRestriction() */);
-            ChartSeries[] tableColumn = chartDetails.getSeries();
-            for (ChartSeries _tableColumn : tableColumn) {
-                final DataType dataType = _tableColumn.getType().dataType();
+            final int cols = chartDetails.getSeriesCount();
+            for (int c = 0; c < cols; c++) {
+                final ChartSeries series = chartDetails.getSeries(c);
+                final DataType dataType = series.getType().dataType();
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
-                reportColumnOptions.setDescription(_tableColumn.getLabel());
+                reportColumnOptions.setDescription(series.getLabel());
                 reportColumnOptions.setGroup(false);
                 reportColumnOptions.setGroupOnNewPage(false);
                 reportColumnOptions.setSum(dataType.isInteger() || dataType.isDecimal());
                 reportColumnOptions.setIncluded(true);
 
-                reportColumnOptions.setColumnName(_tableColumn.getField());
+                reportColumnOptions.setColumnName(series.getField());
                 reportColumnOptions.setType(dataType.javaClass().getName());
                 reportColumnOptions.setFormatter(FormatterOptions.DEFAULT.getFormatter(dataType));
                 reportColumnOptions.setHAlignType(dataType.alignType());
@@ -962,15 +963,15 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                 reportOptions.addColumnOptions(reportColumnOptions);
             }
 
-            final int rows = tableColumn[0].getVals().length;
+            final int rows = chartDetails.getDataDepth();
             List<Map<String, ?>> content = new ArrayList<Map<String, ?>>();
-            for (int r = 0; r < rows; r++) { // TODO
+            for (int r = 0; r < rows; r++) {
                 Map<String, Object> mrow = new HashMap<String, Object>();
-                for (int c = 0; c < tableColumn.length; c++) {
-                    final ChartSeries _tableColumn = tableColumn[c];
-                    Object val = DataUtils.convert(_tableColumn.getType().dataType().javaClass(),
-                            _tableColumn.getVals()[c]);
-                    mrow.put(_tableColumn.getField(), val);
+                for (int c = 0; c < cols; c++) {
+                    final ChartSeries series = chartDetails.getSeries(c);
+                    Object val = DataUtils.convert(series.getType().dataType().javaClass(),
+                            series.getVal(r));
+                    mrow.put(series.getField(), val);
                 }
 
                 content.add(mrow);

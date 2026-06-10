@@ -204,14 +204,14 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         final ChartType chartType = chartDef.getType();
         final List<String> cseries = chartDef.getSeries();
         final List<String> ccategories = chartDef.getCategories();
-        ChartSeries[] series = null;
-        ChartCategory[] categories = null;
         if (chartType.isCard()) {
             CDSnapshotCategory cdcat = cdSnapshot.getCategories()[0];
             categories = new ChartCategory[]{ChartUtils.getChartCategory(cdcat)};
-            
+            return new ChartDetails(chartDef, series, categories);
         }
 
+        ChartSeries[] series = null;
+        ChartCategory[] categories = null;
         return new ChartDetails(chartDef, series, categories);
     }
 
