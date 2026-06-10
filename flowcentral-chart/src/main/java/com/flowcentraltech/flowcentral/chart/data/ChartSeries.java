@@ -25,6 +25,8 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
  */
 public class ChartSeries {
 
+    public static final ChartSeries BLANK = new ChartSeries();
+    
     private EntityFieldDataType type;
 
     private String name;
@@ -37,17 +39,21 @@ public class ChartSeries {
 
     private int grouping; // 0 - No grouping, 1 - Text and 2 - Datetime
 
-    private boolean time;
+    private boolean datetime;
 
     public ChartSeries(EntityFieldDataType type, String name, String label, String field, int grouping, Object[] vals,
-            boolean time) {
+            boolean datetime) {
         this.type = type;
         this.name = name;
         this.label = label;
         this.field = field;
         this.grouping = grouping;
         this.vals = vals;
-        this.time = time;
+        this.datetime = datetime;
+    }
+
+    private ChartSeries() {
+        
     }
 
     public EntityFieldDataType getType() {
@@ -78,8 +84,8 @@ public class ChartSeries {
         return vals[index];
     }
 
-    public boolean isTime() {
-        return time;
+    public boolean isDatetime() {
+        return datetime;
     }
 
 }

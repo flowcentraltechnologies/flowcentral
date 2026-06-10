@@ -28,6 +28,10 @@ public class CDSnapshotCategory {
     private String lbl;
 
     private int groupingStart;
+
+    private boolean datetimeGrouping;
+
+    private boolean numericMerged;
     
     private CDSnapshotSeries[] series;
 
@@ -61,6 +65,22 @@ public class CDSnapshotCategory {
 
     public void setSeries(CDSnapshotSeries[] series) {
         this.series = series;
+    }
+
+    public boolean isDatetimeGrouping() {
+        return datetimeGrouping;
+    }
+
+    public void setDatetimeGrouping(boolean datetimeGrouping) {
+        this.datetimeGrouping = datetimeGrouping;
+    }
+
+    public boolean isNumericMerged() {
+        return numericMerged;
+    }
+
+    public void setNumericMerged(boolean numericMerged) {
+        this.numericMerged = numericMerged;
     }
 
 }

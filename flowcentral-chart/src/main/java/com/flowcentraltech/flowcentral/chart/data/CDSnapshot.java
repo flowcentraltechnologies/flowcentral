@@ -32,8 +32,16 @@ public class CDSnapshot {
     private Date takenOn;
     
     private Date expiresOn;
+
+    private int groupingStart;
+
+    private boolean datetimeGrouping;
+
+    private boolean numericMerged;
     
     private CDSnapshotCategory[] categories;
+
+    private String[] groupingNames;
 
     public String getChartDatasourceName() {
         return chartDatasourceName;
@@ -73,6 +81,38 @@ public class CDSnapshot {
 
     public void setCategories(CDSnapshotCategory[] categories) {
         this.categories = categories;
+    }
+
+    public String[] getGroupingNames() {
+        return groupingNames;
+    }
+
+    public void setGroupingNames(String[] groupingNames) {
+        this.groupingNames = groupingNames;
+    }
+
+    public int getGroupingStart() {
+        return groupingStart;
+    }
+
+    public void setGroupingStart(int groupingStart) {
+        this.groupingStart = groupingStart;
+    }
+
+    public boolean isDatetimeGrouping() {
+        return datetimeGrouping;
+    }
+
+    public void setDatetimeGrouping(boolean datetimeGrouping) {
+        this.datetimeGrouping = datetimeGrouping;
+    }
+
+    public boolean isNumericMerged() {
+        return numericMerged;
+    }
+
+    public void setNumericMerged(boolean numericMerged) {
+        this.numericMerged = numericMerged;
     }
 
 }

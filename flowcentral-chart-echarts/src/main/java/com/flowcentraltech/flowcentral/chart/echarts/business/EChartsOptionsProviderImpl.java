@@ -171,7 +171,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 jw.beginArray(chartType.isHorizontal() ? "yAxis" : "xAxis");
                 for (int s = 0; s < scount; s++) {
                     jw.beginObject();
-                    jw.write("type", chartDetails.getSeries(s).isTime() ? "time" : "category");
+                    jw.write("type", chartDetails.getSeries(s).isDatetime() ? "time" : "category");
                     if (!chartType.isHorizontal()) {
                         jw.write("position", "bottom");
                     }
