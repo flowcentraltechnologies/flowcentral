@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 
 /**
  * Simple chart configuration.
@@ -38,7 +39,7 @@ public class SimpleChartConfiguration implements ChartConfiguration {
 
     @Override
     public String getViewOptionName() {
-        return null;
+        return ChartModuleNameConstants.CHART_DEFAULT_VIEW_NAME;
     }
 
     @Override

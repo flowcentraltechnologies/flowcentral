@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
@@ -40,7 +41,7 @@ import com.tcdng.unify.core.list.StringParam;
 @Component("chartdatasourcerulecategorylist")
 public class ChartDataSourceRuleCategoryListCommand extends AbstractListCommand<StringParam> {
 
-    private static final List<ListData> DEFAULT_CATEGORY = Arrays.asList(new ListData("default", "Default"));
+    private static final List<ListData> DEFAULT_CATEGORY = Arrays.asList(new ListData(ChartModuleNameConstants.CHART_DEFAULT_VIEW_NAME, "Default"));
     @Configurable
     private ChartModuleService chartModuleService;
 

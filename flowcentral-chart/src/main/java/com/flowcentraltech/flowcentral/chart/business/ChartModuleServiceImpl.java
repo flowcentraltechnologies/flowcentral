@@ -198,9 +198,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public ChartDetails getChartDetails(ChartConfiguration chartConfiguration) throws UnifyException {
         final ChartDef chartDef = getChartDef(chartConfiguration.getChart());
-        final String viewOption = !StringUtils.isBlank(chartConfiguration.getViewOptionName())
-                ? chartConfiguration.getViewOptionName()
-                : "default";
+        final String viewOption = chartConfiguration.getViewOptionName();
         final ChartDetailsContext ctx = chartDetailsContextFactoryMap.get(chartDef.getRule() + "." + viewOption,
                 chartConfiguration);
 
@@ -336,7 +334,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         } else {
                             categories = new CDSnapshotCategory[1];
                             categories[0] = getChartDatasourceSnapshotSeries(cdSnapshot, entityDef, aggregateFunctions,
-                                    baseRestriction, groupingFunctions, "default", "Default");
+                                    baseRestriction, groupingFunctions, ChartModuleNameConstants.CHART_DEFAULT_VIEW_NAME, "Default");
                         }
 
                         cdSnapshot.setCategories(categories);

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.chart.data;
 
+import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.tcdng.unify.core.criterion.Restriction;
 
 /**
@@ -25,7 +26,7 @@ import com.tcdng.unify.core.criterion.Restriction;
  */
 public class ChartViewOption {
 
-    public static final ChartViewOption DEFAULT = new ChartViewOption("default");
+    public static final ChartViewOption DEFAULT = new ChartViewOption(ChartModuleNameConstants.CHART_DEFAULT_VIEW_NAME);
 
     private String name;
 
