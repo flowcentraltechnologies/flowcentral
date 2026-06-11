@@ -169,26 +169,24 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
                 // Category
                 jw.beginArray(chartType.isHorizontal() ? "yAxis" : "xAxis");
-                for (int s = 0; s < scount; s++) {
-                    jw.beginObject();
-                    jw.write("type", chartDetails.getSeries(s).isDatetime() ? "time" : "category");
-                    if (!chartType.isHorizontal()) {
-                        jw.write("position", "bottom");
-                    }
-
-                    if (chartType.isArea()) {
-                        jw.write("boundaryGap", false);
-                    }
-
-                    jw.beginArray("data");
-                    for (int c = 0; c < ccount; c++) {
-                        jw.writeObject(chartDetails.getCategoryVal(c));
-                    }
-
-                    jw.endArray();
-
-                    jw.endObject();
+                jw.beginObject();
+                jw.write("type", chartDetails.getSeries(0).isDatetime() ? "time" : "category");
+                if (!chartType.isHorizontal()) {
+                    jw.write("position", "bottom");
                 }
+
+                if (chartType.isArea()) {
+                    jw.write("boundaryGap", false);
+                }
+
+                jw.beginArray("data");
+                for (int c = 0; c < ccount; c++) {
+                    jw.writeObject(chartDetails.getCategoryVal(c));
+                }
+
+                jw.endArray();
+
+                jw.endObject();
 
                 jw.endArray();
 
@@ -200,10 +198,13 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                 jw.beginArray("series");
                 for (int s = 0; s < scount; s++) {
                     jw.beginObject();
-                    jw.write("name", chartDetails.getSeries(s).getName());
+                    jw.write("name", chartDetails.getSeries(s).getLabel());
                     jw.write("type", chartType.isArea() ? "line" : chartType.optionsType());
                     jw.write("smooth", chartDef.isSmooth());
-                    jw.write("stack", "total");
+                    if (chartDef.isStacked()) {
+                        jw.write("stack", "total");
+                    }
+                    
                     jw.write("showSymbol", false);
 
                     jw.beginArray("data");
@@ -349,6 +350,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
         }
 
         jw.endObject(); // Main body end
+
         return jw;
     }
 

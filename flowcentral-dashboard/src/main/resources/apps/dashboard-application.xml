@@ -74,33 +74,32 @@
 			description="$m{dashboard.samplechart1.description}" type="BAR"
 			title="$m{dashboard.samplechart1.title}"
 			subTitle="$m{dashboard.samplechart1.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot"
+			rule="sampleSalesChartSnapshot"
 			smooth="true" />
 		<chart name="sampleChart2"
 			description="$m{dashboard.samplechart2.description}" type="BAR"
 			palette="PALETTE3" title="$m{dashboard.samplechart2.title}"
 			subTitle="$m{dashboard.samplechart2.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
+			rule="sampleCostsChartSnapshot"
 			smooth="true" />
 
 		<chart name="sampleChart3"
 			description="$m{dashboard.samplechart3.description}" type="AREA"
 			title="$m{dashboard.samplechart3.title}"
 			subTitle="$m{dashboard.samplechart3.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot"
+			rule="sampleSalesChartSnapshot"
 			smooth="false" />
 		<chart name="sampleChart4"
 			description="$m{dashboard.samplechart4.description}" type="AREA"
 			palette="PALETTE7" title="$m{dashboard.samplechart4.title}"
 			subTitle="$m{dashboard.samplechart4.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
+			rule="sampleCostsChartSnapshot"
 			smooth="false" />
 
 		<chart name="sampleChart5"
 			description="$m{dashboard.samplechart5.description}" type="COLUMN"
 			title="$m{dashboard.samplechart5.title}"
 			subTitle="$m{dashboard.samplechart5.subtitle}"
-			provider="chartsnapshot-provider"
 			rule="sampleSalesAndCostsChartSnapshot"
 			smooth="true"
 			stacked="true" />
@@ -108,7 +107,7 @@
 			description="$m{dashboard.samplechart6.description}" type="DONUT"
 			title="$m{dashboard.samplechart6.title}"
 			subTitle="$m{dashboard.samplechart6.subtitle}" height="300"
-			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
+			rule="sampleCostsChartSnapshot"
 			smooth="true" stacked="false" />
 	</charts>
 	<!-- References -->
