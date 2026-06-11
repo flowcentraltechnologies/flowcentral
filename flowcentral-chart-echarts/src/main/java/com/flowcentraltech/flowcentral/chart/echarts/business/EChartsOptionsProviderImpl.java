@@ -145,6 +145,10 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
         jw.beginObject("tooltip");
         if (chartType.triggerAxisChart()) {
             jw.write("trigger", "axis");
+            
+            jw.beginObject("axisPointer");
+            jw.write("type", "shadow");
+            jw.endObject();
         }
         jw.endObject();
 
