@@ -4186,7 +4186,7 @@
 					description="$m{studio.chart.form.multicategoryseries.policycat}">
 					<onCondition>
 						<restriction type="NOT_AMONGST" field="type"
-							paramA="CRD|TBL|PIE|DNT" />
+							paramA="CRD|TBL" />
 					</onCondition>
 					<widgetRules>
 						<entry field="category"
