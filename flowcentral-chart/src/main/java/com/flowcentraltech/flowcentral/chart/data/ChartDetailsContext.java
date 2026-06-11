@@ -16,9 +16,11 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,26 +115,7 @@ public class ChartDetailsContext {
 
         final CDSnapshotSeries series = catinfo.getSeries(seriesName);
         final EntityFieldDataType type = EntityFieldDataType.fromCode(series.getTy());
-        final String[] svals = series.getVals();
-        final Object[] vals = new Object[svals.length];
-        if (type.isInteger()) {
-            for (int i = 0; i < vals.length; i++) {
-                vals[i] = Integer.parseInt(svals[i]);
-            }
-        } else if (type.isDecimal()) {
-            for (int i = 0; i < vals.length; i++) {
-                vals[i] = new BigDecimal(svals[i]);
-            }
-        } else if (type.isDatetime()) {
-            for (int i = 0; i < vals.length; i++) {
-                vals[i] = Long.parseLong(svals[i]);
-            }
-        } else {
-            for (int i = 0; i < vals.length; i++) {
-                vals[i] = svals[i];
-            }
-        }
-
+        final Object[] vals = convertVals(type, series.getVals());
         return new ChartSeries(type, series.getNm(), series.getLbl(), series.getFld(), series.getGrouping(), vals,
                 type.isDatetime());
     }
@@ -147,17 +130,17 @@ public class ChartDetailsContext {
         return series;
     }
 
-    public ChartSeries[] newChartSeriesAcross(List<String> catNames, List<String> seriesNames) {
+    public ChartSeries[] newChartSeriesAcrossFirst(List<String> catNames, List<String> seriesNames) {
         final int len = seriesNames.size();
         ChartSeries[] series = new ChartSeries[len];
         for (int i = 0; i < len; i++) {
-            series[i] = newChartSeriesAcross(catNames, seriesNames.get(i));
+            series[i] = newChartSeriesAcrossFirst(catNames, seriesNames.get(i));
         }
 
         return series;
     }
 
-    public ChartSeries newChartSeriesAcross(List<String> catNames, String seriesName) {
+    public ChartSeries newChartSeriesAcrossFirst(List<String> catNames, String seriesName) {
         CDSnapshotSeries series = null;
         EntityFieldDataType type = null;
         final int len = catNames.size();
@@ -176,16 +159,7 @@ public class ChartDetailsContext {
                 type = _type;
             }
 
-            String sval = _series.getVals()[0]; // Zero Index
-            if (_type.isInteger()) {
-                vals[i] = Integer.parseInt(sval);
-            } else if (_type.isDecimal()) {
-                vals[i] = new BigDecimal(sval);
-            } else if (_type.isDatetime()) {
-                vals[i] = Long.parseLong(sval);
-            } else {
-                vals[i] = sval;
-            }
+            vals[i] = convertVal(_type, _series.getVals()[0]); // Zero Index (first)
         }
 
         if (series != null) {
@@ -194,6 +168,66 @@ public class ChartDetailsContext {
         }
 
         return ChartSeries.BLANK;
+    }
+
+    public ChartSeries[] newChartSeriesAcrossAll(List<String> catNames, List<String> seriesNames) {
+        List<ChartSeries> series = new ArrayList<ChartSeries>();
+        for (String seriesName : seriesNames) {
+            for (ChartSeries _series : newChartSeriesAcrossAll(catNames, seriesName)) {
+                series.add(_series);
+            }
+        }
+
+        return series.toArray(new ChartSeries[series.size()]);
+    }
+
+    public ChartSeries[] newChartSeriesAcrossAll(List<String> catNames, String seriesName) {
+        final Map<String, SeriesInfo> map = new LinkedHashMap<String, SeriesInfo>();
+        final int clen = catNames.size();
+        CDSnapshotSeries _series = null;
+        EntityFieldDataType _type = null;
+        for (int i = 0; i < clen; i++) {
+            final String catName = catNames.get(i);
+            final CatInfo catinfo = catmap.get(catName);
+            if (catinfo == null) {
+                throw new IllegalArgumentException("Category with name [" + catName + "] is unknown.");
+            }
+
+            _series = catinfo.getSeries(seriesName);
+            _type = EntityFieldDataType.fromCode(_series.getTy());
+
+            final String[] svals = _series.getVals();
+            for (int d = 0; d < svals.length; d++) {
+                StringBuilder ksb = new StringBuilder(_series.getNm());
+                StringBuilder lsb = new StringBuilder(_series.getLbl());
+                for (String groupName : groupingNames) {
+                    final String gval = catinfo.getSeries(groupName).getVals()[d];
+                    ksb.append(" - ").append(gval);
+                    lsb.append(" - ").append(gval);
+                }
+
+                final String key = ksb.toString();
+                final String label = lsb.toString();
+                SeriesInfo seriesinfo = map.get(key);
+                if (seriesinfo == null) {
+                    seriesinfo = new SeriesInfo(new Object[clen], label);
+                    map.put(key, seriesinfo);
+                }
+
+                seriesinfo.getVals()[i] = convertVal(_type, svals[d]);
+            }
+        }
+
+        final ChartSeries[] res = new ChartSeries[map.size()];
+        int i = 0;
+        for (Map.Entry<String, SeriesInfo> entry : map.entrySet()) {
+            final SeriesInfo seriesinfo = entry.getValue();
+            res[i] = new ChartSeries(_type, entry.getKey(), seriesinfo.getLabel(), _series.getFld(),
+                    _series.getGrouping(), seriesinfo.getVals(), _type.isDatetime());
+            i++;
+        }
+
+        return res;
     }
 
     private class CatInfo {
@@ -220,4 +254,73 @@ public class ChartDetailsContext {
             return _series;
         }
     }
+
+    private class SeriesInfo {
+
+        private final Object[] vals;
+
+        private final String label;
+
+        public SeriesInfo(Object[] vals, String label) {
+            this.vals = vals;
+            this.label = label;
+        }
+
+        public Object[] getVals() {
+            return vals;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+    }
+
+    private Object[] convertVals(EntityFieldDataType type, String[] svals) {
+        final Object[] vals = new Object[svals.length];
+        if (type.isInteger()) {
+            for (int i = 0; i < vals.length; i++) {
+                if (svals[i] != null) {
+                    vals[i] = Integer.parseInt(svals[i]);
+                }
+            }
+        } else if (type.isDecimal()) {
+            for (int i = 0; i < vals.length; i++) {
+                if (svals[i] != null) {
+                    vals[i] = new BigDecimal(svals[i]);
+                }
+            }
+        } else if (type.isDatetime()) {
+            for (int i = 0; i < vals.length; i++) {
+                if (svals[i] != null) {
+                    vals[i] = Long.parseLong(svals[i]);
+                }
+            }
+        } else {
+            for (int i = 0; i < vals.length; i++) {
+                if (svals[i] != null) {
+                    vals[i] = svals[i];
+                }
+            }
+        }
+
+        return vals;
+    }
+
+    private Object convertVal(EntityFieldDataType type, String sval) {
+        if (sval != null) {
+            if (type.isInteger()) {
+                return Integer.parseInt(sval);
+            } else if (type.isDecimal()) {
+                return new BigDecimal(sval);
+            } else if (type.isDatetime()) {
+                return Long.parseLong(sval);
+            } else {
+                return sval;
+            }
+        }
+
+        return null;
+    }
+
 }

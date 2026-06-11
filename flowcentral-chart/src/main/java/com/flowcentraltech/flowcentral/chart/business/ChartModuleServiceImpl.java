@@ -219,18 +219,19 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                 if (ctx.isDatetimeGrouping()) {
 
                 } else {
-
+                    return new ChartDetails(chartDef, ctx.newChartSeriesAcrossAll(ccategories, cseries),
+                            ctx.newChartCategories(ccategories));
                 }
             } else {
-                return new ChartDetails(chartDef, ctx.newChartSeriesAcross(ccategories, cseries),
+                return new ChartDetails(chartDef, ctx.newChartSeriesAcrossFirst(ccategories, cseries),
                         ctx.newChartCategories(ccategories));
             }
         } else if (chartType.isCircularChart() || chartType.isPolarChart()) {
             return new ChartDetails(chartDef,
-                    new ChartSeries[] { ctx.newChartSeriesAcross(ccategories, cseries.get(0)) },
+                    new ChartSeries[] { ctx.newChartSeriesAcrossFirst(ccategories, cseries.get(0)) },
                     ctx.newChartCategories(ccategories));
         } else if (chartType.isRadarChart()) {
-            return new ChartDetails(chartDef, ctx.newChartSeriesAcross(ccategories, cseries),
+            return new ChartDetails(chartDef, ctx.newChartSeriesAcrossFirst(ccategories, cseries),
                     ctx.newChartCategories(ccategories));
         }
 

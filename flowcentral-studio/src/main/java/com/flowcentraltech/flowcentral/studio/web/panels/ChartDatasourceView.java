@@ -116,12 +116,11 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
             final List<ValueStore> list = new ArrayList<ValueStore>();
             for (CDSnapshotCategory _category : categories) {
                 if (_category.getSeries() != null && _category.getSeries().length > 0) {
-                    final int len = _category.getSeries()[0].getVals() != null ? _category.getSeries()[0].getVals().length
-                            : 0;
+                    final String[] vals = _category.getSeries()[0].getVals();
+                    final int len = vals != null && vals.length > 0 ? vals.length : 0;
                     for (int i = 0; i < len; i++) {
                         final Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("category",
-                                _category.getLbl() != null ? _category.getLbl() : _category.getCat());
+                        map.put("category", _category.getLbl() != null ? _category.getLbl() : _category.getCat());
 
                         for (CDSnapshotSeries series : _category.getSeries()) {
                             final int grouping = series.getGrouping();

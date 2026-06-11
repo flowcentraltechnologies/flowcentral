@@ -35,7 +35,7 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.core.util.json.JsonWriter;
 
 /**
- * Echart options provider implementation.
+ * Echarts options provider implementation.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
@@ -336,7 +336,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
                     jw.beginArray("data");
                     for (int s = 0; s < scount; s++) {
                         jw.beginObject();
-                        jw.write("name", chartDetails.getSeries(s).getName());
+                        jw.write("name", chartDetails.getSeries(s).getLabel());
                         jw.beginArray("value");
                         for (int d = 0; d < ddepth; d++) {
                             jw.writeObject(chartDetails.getSeriesVal(s, d));
@@ -355,6 +355,7 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
         jw.endObject(); // Main body end
 
+        System.out.println("@prime: dm = " + jw.toString());
         return jw;
     }
 
