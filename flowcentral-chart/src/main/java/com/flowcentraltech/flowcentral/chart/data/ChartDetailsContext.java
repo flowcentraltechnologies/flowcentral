@@ -230,6 +230,36 @@ public class ChartDetailsContext {
         return res;
     }
 
+    public ChartAxisSet newChartAxisSetAcrossDatetime(String catName, List<String> seriesNames) {
+        final CatInfo catinfo = catmap.get(catName);
+        if (catinfo == null) {
+            throw new IllegalArgumentException("Category with name [" + catName + "] is unknown.");
+        }
+
+        final int slen = seriesNames.size();
+        ChartSeries[] series = new ChartSeries[slen];
+        for (int i = 0; i < slen; i++) {
+            CDSnapshotSeries _series = catinfo.getSeries(seriesNames.get(i));
+            final EntityFieldDataType _type = EntityFieldDataType.fromCode(_series.getTy());
+            Object[] vals = convertVals(_type, _series.getVals());
+            series[i] = new ChartSeries(_type, _series.getNm(), _series.getLbl(),
+                    _series.getFld(), _series.getGrouping(), vals, _type.isDatetime());
+        }
+
+        final CDSnapshotSeries _gseries = catinfo.getSeries("group0");
+        final EntityFieldDataType _type = EntityFieldDataType.fromCode(_gseries.getTy());
+        Object[] vals = convertVals(_type, _gseries.getVals());
+        ChartCategory[] categories = new ChartCategory[vals.length];
+        for (int c = 0; c < vals.length; c++) {
+            // TODO Formatting and filling
+            final Object val = vals[c];
+            final String name = String.valueOf(val);
+            categories[c] = new ChartCategory(name, name, val);
+        }
+        
+        return new ChartAxisSet(categories, series);
+    }
+
     private class CatInfo {
 
         private final CDSnapshotCategory cat;

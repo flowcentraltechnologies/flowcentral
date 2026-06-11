@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotCategory;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotSeries;
+import com.flowcentraltech.flowcentral.chart.data.ChartAxisSet;
 import com.flowcentraltech.flowcentral.chart.data.ChartCategory;
 import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataSourceDef;
@@ -217,7 +218,9 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         } else if (chartType.triggerAxisChart()) {
             if (ctx.isWithGrouping()) {
                 if (ctx.isDatetimeGrouping()) {
-
+                    ChartAxisSet set = ctx.newChartAxisSetAcrossDatetime(ccategories.get(0), cseries); // TODO
+                                                                                                       // Multi-categories
+                    return new ChartDetails(chartDef, set.getSeries(), set.getCategories());
                 } else {
                     return new ChartDetails(chartDef, ctx.newChartSeriesAcrossAll(ccategories, cseries),
                             ctx.newChartCategories(ccategories));
