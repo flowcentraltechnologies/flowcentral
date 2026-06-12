@@ -40,6 +40,22 @@ public class ChartDetailsContext {
 
     static {
         Map<TimeSeriesType, String[]> map = new HashMap<TimeSeriesType, String[]>();
+        for (TimeSeriesType _timeSeriesType: TimeSeriesType.FILL_TIMESERIES) {
+            final int len = _timeSeriesType.fillLength();
+            final String[] fill = new String[len];
+            if (_timeSeriesType.zeroBased()) {
+                for (int i = 0; i < len; i++) {
+                    fill[i] = String.valueOf(i);
+                }
+            } else {
+                for (int i = 0; i < len; i++) {
+                    fill[i] = String.valueOf(i + 1);
+                }
+            }
+            
+            map.put(_timeSeriesType, fill);
+        }
+        
         categoryFills = Collections.unmodifiableMap(map);
     }
 
