@@ -146,11 +146,15 @@ public class ChartDetailsContext {
             throw new IllegalArgumentException("Category with name [" + catName + "] is unknown.");
         }
 
-        final CDSnapshotSeries series = catinfo.getSeries(seriesName);
-        final EntityFieldDataType type = EntityFieldDataType.fromCode(series.getTy());
-        final Object[] vals = convertVals(type, series.getVals());
-        return new ChartSeries(type, series.getNm(), series.getLbl(), series.getFld(), series.getGrouping(), vals,
-                type.isDatetime());
+        if (seriesName != null) {
+            final CDSnapshotSeries series = catinfo.getSeries(seriesName);
+            final EntityFieldDataType type = EntityFieldDataType.fromCode(series.getTy());
+            final Object[] vals = convertVals(type, series.getVals());
+            return new ChartSeries(type, series.getNm(), series.getLbl(), series.getFld(), series.getGrouping(), vals,
+                    type.isDatetime());
+        }
+
+        return ChartSeries.BLANK;
     }
 
     public ChartSeries[] newChartSeries(String catName, List<String> seriesNames) {

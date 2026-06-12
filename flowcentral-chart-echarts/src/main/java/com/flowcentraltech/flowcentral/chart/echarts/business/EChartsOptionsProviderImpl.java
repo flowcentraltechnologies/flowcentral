@@ -355,7 +355,6 @@ public class EChartsOptionsProviderImpl extends AbstractChartOptionsProvider {
 
         jw.endObject(); // Main body end
 
-        System.out.println("@prime: dm = " + jw.toString());
         return jw;
     }
 

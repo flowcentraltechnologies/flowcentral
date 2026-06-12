@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Chart series object.
@@ -53,7 +54,7 @@ public class ChartSeries {
     }
 
     private ChartSeries() {
-        
+        this.vals = DataUtils.ZEROLEN_OBJECT_ARRAY;
     }
 
     public EntityFieldDataType getType() {
