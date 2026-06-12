@@ -4089,7 +4089,7 @@
 						<field name="rule" column="0" switchOnChange="true" />
 						<field name="category" column="0" />
 						<field name="series" column="0" required="true" />
-						<field name="height" column="0" />
+						<field name="height" column="0" required="true" />
 					</section>
 					<section name="chartFlags" columns="TYPE_2">
 						<field name="stacked" column="0" />

@@ -43,7 +43,7 @@ public final class ChartUtils {
     }
 
     public static ChartCategory getChartCategory(CDSnapshotCategory cdSnapshotCategory) {
-        return new ChartCategory(cdSnapshotCategory.getCat(), cdSnapshotCategory.getLbl(), cdSnapshotCategory.getCat());
+        return new ChartCategory(cdSnapshotCategory.getNm(), cdSnapshotCategory.getLbl(), cdSnapshotCategory.getNm());
     }
     
     public static String getFormattedCardValue(Number num) {

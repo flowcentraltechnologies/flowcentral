@@ -35,9 +35,7 @@ public class CDSnapshot {
 
     private int groupingStart;
 
-    private boolean datetimeGrouping;
-
-    private boolean numericMerged;
+    private String timeSeries;
     
     private CDSnapshotCategory[] categories;
 
@@ -99,20 +97,12 @@ public class CDSnapshot {
         this.groupingStart = groupingStart;
     }
 
-    public boolean isDatetimeGrouping() {
-        return datetimeGrouping;
+    public String getTimeSeries() {
+        return timeSeries;
     }
 
-    public void setDatetimeGrouping(boolean datetimeGrouping) {
-        this.datetimeGrouping = datetimeGrouping;
-    }
-
-    public boolean isNumericMerged() {
-        return numericMerged;
-    }
-
-    public void setNumericMerged(boolean numericMerged) {
-        this.numericMerged = numericMerged;
+    public void setTimeSeries(String timeSeries) {
+        this.timeSeries = timeSeries;
     }
 
 }

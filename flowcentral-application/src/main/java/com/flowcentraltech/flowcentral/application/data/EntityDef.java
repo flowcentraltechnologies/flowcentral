@@ -638,6 +638,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return entitySearchInputDef;
     }
 
+    public boolean isEntitySeriesDef(String name) {
+        return seriesDefs.containsKey(name);
+    }
+
     public EntitySeriesDef getEntitySeriesDef(String name) {
         EntitySeriesDef entitySeriesDef = seriesDefs.get(name);
         if (entitySeriesDef == null) {
@@ -648,11 +652,11 @@ public class EntityDef extends BaseApplicationEntityDef {
         return entitySeriesDef;
     }
 
-    public boolean isEntityCategorysDef(String name) {
+    public boolean isEntityCategoryDef(String name) {
         return categoryDefs.containsKey(name);
     }
 
-    public EntityCategoryDef getEntityCategorysDef(String name) {
+    public EntityCategoryDef getEntityCategoryDef(String name) {
         EntityCategoryDef entityCategoryDef = categoryDefs.get(name);
         if (entityCategoryDef == null) {
             throw new RuntimeException(

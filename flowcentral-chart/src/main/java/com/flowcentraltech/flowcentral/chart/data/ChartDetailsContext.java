@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.chart.data;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.tcdng.unify.core.constant.TimeSeriesType;
 
 /**
  * Chart details context.
@@ -34,6 +36,13 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
  */
 public class ChartDetailsContext {
 
+    private static final Map<TimeSeriesType, String[]> categoryFills;
+
+    static {
+        Map<TimeSeriesType, String[]> map = new HashMap<TimeSeriesType, String[]>();
+        categoryFills = Collections.unmodifiableMap(map);
+    }
+
     private final CDSnapshot cdSnapshot;
 
     private final Long chartDatasourceId;
@@ -41,6 +50,8 @@ public class ChartDetailsContext {
     private final Map<String, CatInfo> catmap;
 
     private final List<String> groupingNames;
+
+    private final TimeSeriesType timeSeriesType;
 
     public ChartDetailsContext(CDSnapshot cdSnapshot, Long chartDatasourceId) {
         this.cdSnapshot = cdSnapshot;
@@ -53,10 +64,12 @@ public class ChartDetailsContext {
                 series.put(_series.getNm(), _series);
             }
 
-            this.catmap.put(cat.getCat(), new CatInfo(cat, series));
+            this.catmap.put(cat.getNm(), new CatInfo(cat, series));
         }
 
         this.groupingNames = Arrays.asList(cdSnapshot.getGroupingNames());
+
+        timeSeriesType = TimeSeriesType.fromCode(cdSnapshot.getTimeSeries());
     }
 
     public Long getChartDatasourceId() {
@@ -80,11 +93,15 @@ public class ChartDetailsContext {
     }
 
     public boolean isDatetimeGrouping() {
-        return cdSnapshot.isDatetimeGrouping();
+        return timeSeriesType != null;
     }
 
     public boolean isNumericMerged() {
-        return cdSnapshot.isNumericMerged();
+        return timeSeriesType != null && timeSeriesType.numericMerged();
+    }
+
+    public boolean isFill() {
+        return timeSeriesType != null && timeSeriesType.fill();
     }
 
     public ChartCategory newChartCategory(String catName) {
@@ -94,7 +111,7 @@ public class ChartDetailsContext {
         }
 
         final CDSnapshotCategory cat = catinfo.getCat();
-        return new ChartCategory(cat.getCat(), cat.getLbl(), cat.getCat());
+        return new ChartCategory(cat.getNm(), cat.getLbl(), cat.getNm());
     }
 
     public ChartCategory[] newChartCategories(List<String> catNames) {
@@ -230,34 +247,86 @@ public class ChartDetailsContext {
         return res;
     }
 
+    public ChartAxisSet newChartAxisSetAcrossDatetime(List<String> catNames, List<String> seriesNames) {
+        ChartSeries[] series = new ChartSeries[catNames.size() * seriesNames.size()];
+        ChartCategory[] categories = null;
+        int k = 0;
+        for (String catName: catNames) {
+            ChartAxisSet set = newChartAxisSetAcrossDatetime(catName, seriesNames, true, k == 0 );
+            if (k == 0) {
+                categories = set.getCategories();
+            }
+            
+            for (ChartSeries _series: set.getSeries()) {
+                series[k] = _series;
+                k++;
+            }
+        }
+        
+        return new ChartAxisSet(categories, series);
+    }
+
     public ChartAxisSet newChartAxisSetAcrossDatetime(String catName, List<String> seriesNames) {
+        return newChartAxisSetAcrossDatetime(catName, seriesNames, false, true);
+    }
+
+    private ChartAxisSet newChartAxisSetAcrossDatetime(String catName, List<String> seriesNames, boolean byCategory, boolean getCat) {
         final CatInfo catinfo = catmap.get(catName);
         if (catinfo == null) {
             throw new IllegalArgumentException("Category with name [" + catName + "] is unknown.");
         }
 
+        final CDSnapshotCategory cat = byCategory ? catinfo.getCat() : null;
+        final CDSnapshotSeries _gseries = catinfo.getSeries("group0");
+        final EntityFieldDataType _gtype = EntityFieldDataType.fromCode(_gseries.getTy());
+        final String[] _gvals = _gseries.getVals();
+        int[] _givals = null;
+        final boolean fill = isFill();
+        if (fill) {
+            _givals = new int[_gvals.length];
+            final boolean zeroOffset = timeSeriesType.zeroBased();
+            for (int i = 0; i < _gvals.length; i++) {
+                _givals[i] = Integer.parseInt(_gvals[i]) - (zeroOffset ? 0 : 1);
+            }
+        }
+
+        final int flen = timeSeriesType.fillLength();
         final int slen = seriesNames.size();
         ChartSeries[] series = new ChartSeries[slen];
         for (int i = 0; i < slen; i++) {
             CDSnapshotSeries _series = catinfo.getSeries(seriesNames.get(i));
             final EntityFieldDataType _type = EntityFieldDataType.fromCode(_series.getTy());
             Object[] vals = convertVals(_type, _series.getVals());
-            series[i] = new ChartSeries(_type, _series.getNm(), _series.getLbl(),
-                    _series.getFld(), _series.getGrouping(), vals, _type.isDatetime());
+            if (fill && vals.length < flen) {
+                Object[] _vals = new Object[flen];
+                for (int j = 0; j < vals.length; i++) {
+                    _vals[_givals[j]] = vals[j];
+                }
+
+                vals = _vals;
+            }
+
+            series[i] = byCategory
+                    ? new ChartSeries(_type, _series.getNm() + " - " + cat.getNm(),
+                            _series.getLbl() + " - " + cat.getLbl(), _series.getFld(), _series.getGrouping(), vals,
+                            _type.isDatetime())
+                    : new ChartSeries(_type, _series.getNm(), _series.getLbl(), _series.getFld(), _series.getGrouping(),
+                            vals, _type.isDatetime());
         }
 
-        final CDSnapshotSeries _gseries = catinfo.getSeries("group0");
-        final EntityFieldDataType _type = EntityFieldDataType.fromCode(_gseries.getTy());
-        Object[] vals = convertVals(_type, _gseries.getVals());
+        if (getCat) {
+        Object[] vals = fill ? categoryFills.get(timeSeriesType) : convertVals(_gtype, _gvals);
         ChartCategory[] categories = new ChartCategory[vals.length];
         for (int c = 0; c < vals.length; c++) {
-            // TODO Formatting and filling
             final Object val = vals[c];
             final String name = String.valueOf(val);
             categories[c] = new ChartCategory(name, name, val);
         }
-        
+
         return new ChartAxisSet(categories, series);
+        }
+        
+        return new ChartAxisSet(null, series);
     }
 
     private class CatInfo {

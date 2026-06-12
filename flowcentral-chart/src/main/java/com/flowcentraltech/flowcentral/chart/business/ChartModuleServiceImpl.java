@@ -121,9 +121,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         throw new UnifyException(ChartModuleErrorConstants.CANNOT_FIND_APPLICATION_CHART, longName);
                     }
 
-                    ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(),
-                            chart.getRule(), longName, chart.getDescription(), chart.getId(),
-                            chart.getVersionNo());
+                    ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(), chart.getRule(),
+                            longName, chart.getDescription(), chart.getId(), chart.getVersionNo());
                     cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
                             .series(chart.getSeries()).color(chart.getColor())
                             .width(DataUtils.convert(int.class, chart.getWidth()))
@@ -218,8 +217,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         } else if (chartType.triggerAxisChart()) {
             if (ctx.isWithGrouping()) {
                 if (ctx.isDatetimeGrouping()) {
-                    ChartAxisSet set = ctx.newChartAxisSetAcrossDatetime(ccategories.get(0), cseries); // TODO
-                                                                                                       // Multi-categories
+                    ChartAxisSet set = ctx.isFill() ? ctx.newChartAxisSetAcrossDatetime(ccategories, cseries)
+                            : ctx.newChartAxisSetAcrossDatetime(ccategories.get(0), cseries);
                     return new ChartDetails(chartDef, set.getSeries(), set.getCategories());
                 } else {
                     return new ChartDetails(chartDef, ctx.newChartSeriesAcrossAll(ccategories, cseries),
@@ -264,15 +263,19 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     }
 
                     String[] groupingNames = new String[0];
+                    TimeSeriesType timeSeriesType = null;
                     if (chartDataSourceDef.isWithSeries()) {
                         final EntityDef entityDef = chartDataSourceDef.getEntityDef();
                         final List<AggregateFunction> aggregateFunctions = new ArrayList<AggregateFunction>();
                         for (PropertySequenceEntryDef sequenceDef : chartDataSourceDef.getSeries().getSequenceList()) {
-                            EntitySeriesDef entitySeriesDef = entityDef.getEntitySeriesDef(sequenceDef.getProperty());
-                            aggregateFunctions.add(entitySeriesDef.getType().function(entitySeriesDef.getName(),
-                                    entitySeriesDef.getFieldName(),
-                                    entitySeriesDef.getLabel() != null ? entitySeriesDef.getLabel()
-                                            : entitySeriesDef.getName()));
+                            if (entityDef.isEntitySeriesDef(sequenceDef.getProperty())) {
+                                EntitySeriesDef entitySeriesDef = entityDef
+                                        .getEntitySeriesDef(sequenceDef.getProperty());
+                                aggregateFunctions.add(entitySeriesDef.getType().function(entitySeriesDef.getName(),
+                                        entitySeriesDef.getFieldName(),
+                                        entitySeriesDef.getLabel() != null ? entitySeriesDef.getLabel()
+                                                : entitySeriesDef.getName()));
+                            }
                         }
 
                         final FilterDef catBaseFilterDef = chartDataSourceDef.getCategoryBase();
@@ -298,9 +301,9 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                                 final EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
                                 final GroupingFunction _groupingFunction = entityFieldDef.isDateTime()
                                         ? new GroupingFunction(grpName, fieldName, entityFieldDef.getFieldLabel(),
-                                                fieldSequenceDef.isWithParam()
+                                                timeSeriesType = (fieldSequenceDef.isWithParam()
                                                         ? TimeSeriesType.fromCode(fieldSequenceDef.getParam())
-                                                        : TimeSeriesType.DAY)
+                                                        : TimeSeriesType.DAY))
                                         : new GroupingFunction(fieldName, entityFieldDef.getFieldLabel());
                                 groupingFunctions.add(_groupingFunction);
                                 g++;
@@ -317,7 +320,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             for (PropertySequenceEntryDef propertySequenceEntryDef : chartDataSourceDef.getCategories()
                                     .getSequenceList()) {
                                 final EntityCategoryDef entityCategoryDef = entityDef
-                                        .getEntityCategorysDef(propertySequenceEntryDef.getProperty());
+                                        .getEntityCategoryDef(propertySequenceEntryDef.getProperty());
                                 final String cat = entityCategoryDef.getName();
                                 final String catlabel = !StringUtils.isBlank(propertySequenceEntryDef.getLabel())
                                         ? propertySequenceEntryDef.getLabel()
@@ -338,11 +341,14 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                         } else {
                             categories = new CDSnapshotCategory[1];
                             categories[0] = getChartDatasourceSnapshotSeries(cdSnapshot, entityDef, aggregateFunctions,
-                                    baseRestriction, groupingFunctions, ChartModuleNameConstants.CHART_DEFAULT_VIEW_NAME, "Default");
+                                    baseRestriction, groupingFunctions,
+                                    ChartModuleNameConstants.CHART_DEFAULT_VIEW_NAME, "Default");
                         }
 
                         cdSnapshot.setCategories(categories);
                     }
+
+                    cdSnapshot.setTimeSeries(timeSeriesType != null ? timeSeriesType.code() : null);
 
                     final Date takenOn = getNow();
                     final Date expiresOn = CalendarUtils.getDateWithFrequencyOffset(takenOn, FrequencyUnit.SECOND,
@@ -370,7 +376,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
             List<AggregateFunction> aggregateFunctions, Restriction restriction,
             List<GroupingFunction> groupingFunctions, String catName, String catLabel) throws UnifyException {
         final CDSnapshotCategory cdSnapshotCategory = new CDSnapshotCategory();
-        cdSnapshotCategory.setCat(catName);
+        cdSnapshotCategory.setNm(catName);
         cdSnapshotCategory.setLbl(catLabel);
 
         final Query<?> query = appletUtilities.application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true);
@@ -379,8 +385,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         }
 
         int groupingStart = 0;
-        boolean datetimeGrouping = false;
-        boolean numericMerged = false;
         final List<GroupingAggregation> aggregations = environment().aggregate(aggregateFunctions, query,
                 groupingFunctions);
         final int seriesLen = aggregateFunctions.size() + groupingFunctions.size();
@@ -414,8 +418,9 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                 if (_series == null) {
                     groupingStart = j;
                     final EntityFieldDataType otype = entityDef.getFieldDef(grouping.getFieldName()).getDataType();
-                    final EntityFieldDataType type = (numericMerged = (datetimeGrouping = otype.isDatetime())
-                            && grouping.isString()) ? EntityFieldDataType.STRING : otype;
+                    final EntityFieldDataType type = otype.isDatetime() && grouping.isString()
+                            ? EntityFieldDataType.STRING
+                            : otype;
                     _series = series[j] = new CDSnapshotSeries();
                     _series.setTy(type.code());
                     _series.setNm(grouping.getName());
@@ -436,8 +441,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
         }
 
         cdSnapshot.setGroupingStart(groupingStart);
-        cdSnapshot.setDatetimeGrouping(datetimeGrouping);
-        cdSnapshot.setNumericMerged(numericMerged);
 
         cdSnapshotCategory.setSeries(series);
         return cdSnapshotCategory;

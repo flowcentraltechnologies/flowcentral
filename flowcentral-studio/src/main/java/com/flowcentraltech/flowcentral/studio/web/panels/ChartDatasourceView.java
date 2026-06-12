@@ -75,7 +75,7 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
     public boolean isWithSnapshot() {
         return snapshotTable != null;
     }
-    
+
     public void reloadContent() throws UnifyException {
         final CDSnapshot cdSnapshot = cms.getChartDatasourceSnapshot(chartDatasourceName, ChartViewOption.DEFAULT);
         final CDSnapshotCategory[] categories = cdSnapshot.getCategories();
@@ -116,30 +116,32 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
             final List<ValueStore> list = new ArrayList<ValueStore>();
             for (CDSnapshotCategory _category : categories) {
                 if (_category.getSeries() != null && _category.getSeries().length > 0) {
-                    final String[] vals = _category.getSeries()[0].getVals();
-                    final int len = vals != null && vals.length > 0 ? vals.length : 0;
-                    for (int i = 0; i < len; i++) {
-                        final Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("category", _category.getLbl() != null ? _category.getLbl() : _category.getCat());
+                    if (_category.getSeries()[0] != null) {
+                        final String[] vals = _category.getSeries()[0].getVals();
+                        final int len = vals != null && vals.length > 0 ? vals.length : 0;
+                        for (int i = 0; i < len; i++) {
+                            final Map<String, Object> map = new HashMap<String, Object>();
+                            map.put("category", _category.getLbl() != null ? _category.getLbl() : _category.getNm());
 
-                        for (CDSnapshotSeries series : _category.getSeries()) {
-                            final int grouping = series.getGrouping();
-                            final String val = series.getVals()[i];
-                            Object _val = null;
-                            if (val != null) {
-                                if (grouping == 0) {
-                                    _val = new BigDecimal(val);
-                                } else if (grouping == 1) {
-                                    _val = val;
-                                } else {
-                                    _val = new Date(Long.parseLong(val));
+                            for (CDSnapshotSeries series : _category.getSeries()) {
+                                final int grouping = series.getGrouping();
+                                final String val = series.getVals()[i];
+                                Object _val = null;
+                                if (val != null) {
+                                    if (grouping == 0) {
+                                        _val = new BigDecimal(val);
+                                    } else if (grouping == 1) {
+                                        _val = val;
+                                    } else {
+                                        _val = new Date(Long.parseLong(val));
+                                    }
                                 }
+
+                                map.put(series.getNm(), _val);
                             }
 
-                            map.put(series.getNm(), _val);
+                            list.add(new MapValueStore(map));
                         }
-
-                        list.add(new MapValueStore(map));
                     }
                 }
             }

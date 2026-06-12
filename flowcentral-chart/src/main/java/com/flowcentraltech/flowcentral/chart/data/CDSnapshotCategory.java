@@ -23,24 +23,18 @@ package com.flowcentraltech.flowcentral.chart.data;
  */
 public class CDSnapshotCategory {
     
-    private String cat;
+    private String nm;
 
     private String lbl;
-
-    private int groupingStart;
-
-    private boolean datetimeGrouping;
-
-    private boolean numericMerged;
     
     private CDSnapshotSeries[] series;
 
-    public String getCat() {
-        return cat;
+    public String getNm() {
+        return nm;
     }
 
-    public void setCat(String cat) {
-        this.cat = cat;
+    public void setNm(String nm) {
+        this.nm = nm;
     }
 
     public String getLbl() {
@@ -51,36 +45,12 @@ public class CDSnapshotCategory {
         this.lbl = lbl;
     }
 
-    public int getGroupingStart() {
-        return groupingStart;
-    }
-
-    public void setGroupingStart(int groupingStart) {
-        this.groupingStart = groupingStart;
-    }
-
     public CDSnapshotSeries[] getSeries() {
         return series;
     }
 
     public void setSeries(CDSnapshotSeries[] series) {
         this.series = series;
-    }
-
-    public boolean isDatetimeGrouping() {
-        return datetimeGrouping;
-    }
-
-    public void setDatetimeGrouping(boolean datetimeGrouping) {
-        this.datetimeGrouping = datetimeGrouping;
-    }
-
-    public boolean isNumericMerged() {
-        return numericMerged;
-    }
-
-    public void setNumericMerged(boolean numericMerged) {
-        this.numericMerged = numericMerged;
     }
 
 }
