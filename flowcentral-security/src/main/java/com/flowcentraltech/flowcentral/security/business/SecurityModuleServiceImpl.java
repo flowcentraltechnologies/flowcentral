@@ -93,7 +93,6 @@ import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.UnifyCoreSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
-import com.tcdng.unify.core.UserTokenProvider;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
@@ -125,7 +124,7 @@ import com.tcdng.unify.web.ui.constant.PageRequestParameterConstants;
 @Transactional
 @Component(SecurityModuleNameConstants.SECURITY_MODULE_SERVICE)
 public class SecurityModuleServiceImpl extends AbstractFlowCentralService
-        implements SecurityModuleService, NotificationRecipientProvider, UserTokenProvider, SecuredLinkManager {
+        implements SecurityModuleService, NotificationRecipientProvider, SecuredLinkManager {
 
     private static final int SECURED_LINK_ACCESS_SUFFIX_LEN = 16;
 
@@ -396,6 +395,18 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     public User findUserByCredentials(String userName, String password) throws UnifyException {
         password = passwordCryptograph.encrypt(password);
         return environment().list(new UserQuery().loginId(userName).password(password));
+    }
+
+    @Override
+    public boolean loginUser(String loginId, String password) throws UnifyException {
+        try {
+            loginUser(loginId, password, getApplicationLocale(), null);
+        } catch (UnifyException ex) {
+            logSilent(ex);
+            return false;
+        }
+
+        return true;
     }
 
     @Override

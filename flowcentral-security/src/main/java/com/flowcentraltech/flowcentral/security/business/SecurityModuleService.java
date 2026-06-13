@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.security.entities.UserQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserRole;
 import com.flowcentraltech.flowcentral.security.entities.UserRoleQuery;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserTokenProvider;
 
 /**
  * Security module service.
@@ -39,7 +40,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface SecurityModuleService extends FlowCentralService, UserLoginActivityProvider {
+public interface SecurityModuleService extends FlowCentralService, UserLoginActivityProvider, UserTokenProvider {
 
     /**
      * Gets system password complexity.
@@ -113,6 +114,19 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
      *                      the login ID
      * @param password
      *                      the password
+     * @return true on success otherwise false
+     * @throws UnifyException
+     *                        if login ID or password is invalid
+     */
+    boolean loginUser(String loginId, String password) throws UnifyException;
+    
+    /**
+     * Login user to application with login ID and password.
+     * 
+     * @param loginId
+     *                      the login ID
+     * @param password
+     *                      the password
      * @param loginLocale
      *                      optional login locale
      * @param loginTenantId
@@ -122,7 +136,7 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
      *                        if login ID or password is invalid
      */
     User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId) throws UnifyException;
-
+    
     /**
      * Changes a user password for current session user.
      * 

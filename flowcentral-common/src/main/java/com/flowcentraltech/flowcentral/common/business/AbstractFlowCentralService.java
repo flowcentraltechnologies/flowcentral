@@ -32,6 +32,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.business.AbstractBusinessService;
+import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.system.HeartbeatManager;
 import com.tcdng.unify.core.util.PostResp;
@@ -88,6 +89,12 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         return msg == null ? super.resolveApplicationMessage(message, params) : msg;
     }
 
+    protected void logSilent(UnifyException ex) throws UnifyException {
+        setSessionAttribute(FlowCentralSessionAttributeConstants.SILENT_EXCEPTION_MESSAGE,
+                getErrorMessage(LocaleType.APPLICATION, ex.getUnifyError()));
+        logError(ex);
+    }
+    
     protected void executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {
         if (ctx.isWithActionPolicy()) {
             ((EntityActionPolicy) getComponent(ctx.getActionPolicyName())).executePreAction(ctx);

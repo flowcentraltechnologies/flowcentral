@@ -73,4 +73,7 @@ public interface FlowCentralSessionAttributeConstants {
 
     /** Secured link access */
     String SECURED_LINK_ACCESS = "fc.SECURED_LINK_ACCESS";
+
+    /** Silent exception message */
+    String SILENT_EXCEPTION_MESSAGE = "fc.SILENT_EXCEPTION_MESSAGE";
 }
