@@ -60,7 +60,7 @@ import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
-import com.flowcentraltech.flowcentral.security.business.data.UserDetail;
+import com.flowcentraltech.flowcentral.security.business.data.UserDetails;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleEntityConstants;
@@ -207,16 +207,17 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-	public Long createUser(UserDetail userDetail) throws UnifyException {
-			String loginId = generateLoginId(userDetail.getFullName());
+	public Long createUser(UserDetails userDetails) throws UnifyException {
+			String loginId = generateLoginId(userDetails.getFullName());
 			User user = new User();
-			user.setFullName(userDetail.getFullName());
+			user.setFullName(userDetails.getFullName());
 			user.setLoginId(loginId);
 			user.setPassword(passwordCryptograph.encrypt(loginId.toLowerCase()));
-			user.setEmail(userDetail.getEmail());
-			user.setMobileNo(userDetail.getMobileNo());
-			user.setSupervisor(userDetail.getSupervisor());
-			user.setUserRoleList(getUserRoles(userDetail.getUserRoleCode()));
+			user.setEmail(userDetails.getEmail());
+			user.setMobileNo(userDetails.getMobileNo());
+			user.setSuperBranchUser(userDetails.getSuperBranchUser());
+			user.setSuperDepartmentUser(userDetails.getSuperDepartmentUser());
+			user.setUserRoleList(getUserRoles(userDetails.getUserRoleCode()));
 			
 			user.setWorkflowStatus(UserWorkflowStatus.REGISTERED);
 			user.setStatus(RecordStatus.ACTIVE);
@@ -558,7 +559,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BUSINESSUNITDESC, businessUnitDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, user.isReserved());
-        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPERVISORFLAG, user.getSupervisor());
+        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPER_BRANCH_FLAG, user.getSuperBranchUser());
+        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPER_DEPARTMENT_FLAG, user.getSuperDepartmentUser());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SHORTCUTDECK, null);
         return user;
     }

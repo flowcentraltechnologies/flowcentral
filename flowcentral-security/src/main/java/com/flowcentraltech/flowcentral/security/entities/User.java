@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntity;
+import com.flowcentraltech.flowcentral.organization.entities.Branch;
+import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
@@ -27,7 +29,6 @@ import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
-import com.tcdng.unify.core.annotation.Mapped;
 import com.tcdng.unify.core.annotation.Policy;
 
 /**
@@ -43,9 +44,11 @@ public class User extends BaseStatusWorkEntity {
     @ForeignKey(name = "WORKFLOW_STATUS")
     private UserWorkflowStatus workflowStatus;
     
-    @Mapped("organization.mappedBranch")
-    @Column(nullable = true)
+    @ForeignKey(type = Branch.class, nullable = true)
     private Long branchId;
+    
+    @ForeignKey(type = Department.class, nullable = true)
+    private Long departmentId;
 
     @Column(length = 96)
     private String fullName;
@@ -89,8 +92,11 @@ public class User extends BaseStatusWorkEntity {
     @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date lastLoginDt;
 
-    @Column(name = "SUPERVISOR_FG")
-    private Boolean supervisor;
+    @Column(name = "SUPER_BRANCH_USER_FG")
+    private Boolean superBranchUser;
+
+    @Column(name = "SUPER_DEPARTMENT_USER_FG")
+    private Boolean superDepartmentUser;
     
     @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date resetExpireOn;
@@ -103,9 +109,24 @@ public class User extends BaseStatusWorkEntity {
     
     @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date emailVerifiedOn;
+    
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
+    private Date onboardedOn;
 
     @ListOnly(key = "workflowStatus", property = "description")
     private String workflowStatusDesc;
+
+    @ListOnly(key = "branchId", property = "code")
+    private String branchCode;
+
+    @ListOnly(key = "branchId", property = "description")
+    private String branchDesc;
+
+    @ListOnly(key = "departmentId", property = "code")
+    private String departmentCode;
+
+    @ListOnly(key = "departmentId", property = "description")
+    private String departmentDesc;
 
     @ChildList
     private List<UserRole> userRoleList;
@@ -119,7 +140,8 @@ public class User extends BaseStatusWorkEntity {
         this.loginId = loginId;
         this.email = email;
         this.passwordExpires = passwordExpires;
-        this.supervisor = Boolean.FALSE;
+        this.superBranchUser = Boolean.FALSE;
+        this.superDepartmentUser = Boolean.FALSE;
     }
 
     public User() {
@@ -263,12 +285,28 @@ public class User extends BaseStatusWorkEntity {
         this.allowLoginWithoutOtp = allowLoginWithoutOtp;
     }
 
-    public Boolean getSupervisor() {
-        return supervisor;
+    public Long getDepartmentId() {
+        return departmentId;
     }
 
-    public void setSupervisor(Boolean supervisor) {
-        this.supervisor = supervisor;
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public Boolean getSuperBranchUser() {
+        return superBranchUser;
+    }
+
+    public void setSuperBranchUser(Boolean superBranchUser) {
+        this.superBranchUser = superBranchUser;
+    }
+
+    public Boolean getSuperDepartmentUser() {
+        return superDepartmentUser;
+    }
+
+    public void setSuperDepartmentUser(Boolean superDepartmentUser) {
+        this.superDepartmentUser = superDepartmentUser;
     }
 
     public Date getResetExpireOn() {
@@ -303,12 +341,52 @@ public class User extends BaseStatusWorkEntity {
         this.emailVerifiedOn = emailVerifiedOn;
     }
 
+    public Date getOnboardedOn() {
+        return onboardedOn;
+    }
+
+    public void setOnboardedOn(Date onboardedOn) {
+        this.onboardedOn = onboardedOn;
+    }
+
     public String getWorkflowStatusDesc() {
         return workflowStatusDesc;
     }
 
     public void setWorkflowStatusDesc(String workflowStatusDesc) {
         this.workflowStatusDesc = workflowStatusDesc;
+    }
+
+    public String getBranchCode() {
+        return branchCode;
+    }
+
+    public void setBranchCode(String branchCode) {
+        this.branchCode = branchCode;
+    }
+
+    public String getBranchDesc() {
+        return branchDesc;
+    }
+
+    public void setBranchDesc(String branchDesc) {
+        this.branchDesc = branchDesc;
+    }
+
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
+
+    public String getDepartmentDesc() {
+        return departmentDesc;
+    }
+
+    public void setDepartmentDesc(String departmentDesc) {
+        this.departmentDesc = departmentDesc;
     }
 
     public List<UserRole> getUserRoleList() {

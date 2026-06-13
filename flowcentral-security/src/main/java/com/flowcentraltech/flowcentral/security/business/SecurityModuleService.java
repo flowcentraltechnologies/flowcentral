@@ -26,7 +26,7 @@ import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
-import com.flowcentraltech.flowcentral.security.business.data.UserDetail;
+import com.flowcentraltech.flowcentral.security.business.data.UserDetails;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserRole;
@@ -81,7 +81,7 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
      * @throws UnifyException
      *                        if an error occurs
      */
-     Long createUser(UserDetail userdetail) throws UnifyException;
+     Long createUser(UserDetails userdetail) throws UnifyException;
      
     /**
      * Finds users by criteria.

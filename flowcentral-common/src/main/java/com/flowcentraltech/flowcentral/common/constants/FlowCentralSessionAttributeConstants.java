@@ -56,8 +56,11 @@ public interface FlowCentralSessionAttributeConstants {
     /** Reserved flag */
     String RESERVEDFLAG = "fc.reservedflag";
 
-    /** Supervisor flag */
-    String SUPERVISORFLAG = "fc.supervisorflag";
+    /** Super branch flag */
+    String SUPER_BRANCH_FLAG = "fc.superbranchflag";
+
+    /** Super department flag */
+    String SUPER_DEPARTMENT_FLAG = "fc.superdepartmentflag";
 
     /** Workspace code */
     String WORKSPACE_CODE = "fc.workspacecode";
