@@ -31,23 +31,24 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "userworkflowstatuslist", description = "$m{staticlist.userworkflowstatuslist}")
 public enum UserWorkflowStatus implements EnumConst {
 
-    NEW(
-            "NEW"),
-    PROCESS_ERROR(
-            "ERR"),
-    AWAITING_SUBMISSION(
-            "AWS"),
-    AWAITING_APPROVAL(
-            "AWA"),
-    AWAITING_REVIEW(
-            "AWR"),
-    APPROVED(
-            "APR");
+    REGISTERED("REG", true),
+    AWAITING_VERIFICATION("AWV", true),
+    VERIFIED("VER", false),
+    VERIFICATION_FAILED("VFD", false),
+    AWAITING_APPROVAL("AWA", true),
+    APPROVAL_FAILED("APF", false),
+    RESET_EMAIL("RES", false),
+    AWAITING_RESET_EMAIL("ARE", true),
+    ONBOARDED("ONB", true),
+    DEACTIVATED("DCT", true);
 
     private final String code;
 
-    private UserWorkflowStatus(String code) {
+    private final boolean noChange;
+
+    private UserWorkflowStatus(String code, boolean noChange) {
         this.code = code;
+        this.noChange = noChange;
     }
 
     @Override
@@ -57,7 +58,11 @@ public enum UserWorkflowStatus implements EnumConst {
 
     @Override
     public String defaultCode() {
-        return APPROVED.code;
+        return REGISTERED.code;
+    }
+
+    public boolean isNoChange() {
+        return noChange;
     }
 
     public static UserWorkflowStatus fromCode(String code) {

@@ -219,7 +219,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 			user.setSupervisor(userDetail.getSupervisor());
 			user.setUserRoleList(getUserRoles(userDetail.getUserRoleCode()));
 			
-			user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
+			user.setWorkflowStatus(UserWorkflowStatus.REGISTERED);
 			user.setStatus(RecordStatus.ACTIVE);
 			
 			// send User Welcome Notification
@@ -428,8 +428,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_IS_LOCKED);
         }
 
-        if (!UserWorkflowStatus.APPROVED.equals(user.getWorkflowStatus())) {
-            throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_NOT_APPROVED);
+        if (!UserWorkflowStatus.ONBOARDED.equals(user.getWorkflowStatus())) {
+            throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_NOT_ONBOARDED);
         }
 
         if (!RecordStatus.ACTIVE.equals(user.getStatus())) {
@@ -795,7 +795,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                         resolveSessionMessage(DefaultApplicationConstants.SYSTEM_FULLNAME),
                         DefaultApplicationConstants.SYSTEM_LOGINID, email, Boolean.FALSE);
                 String password = generatePasswordAndSendEmail(user);
-                user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
+                user.setWorkflowStatus(UserWorkflowStatus.ONBOARDED);
                 user.setPassword(passwordCryptograph.encrypt(password));
                 environment().create(user);
             } else {

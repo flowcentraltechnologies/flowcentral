@@ -90,7 +90,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
                     SecurityModuleErrorConstants.USER_ACCOUNT_NOT_ACTIVE,
                     SecurityModuleErrorConstants.INVALID_ONETIME_PASSWORD,
                     SecurityModuleErrorConstants.USER_ROLE_HAS_NO_WORKSPACE,
-                    SecurityModuleErrorConstants.USER_ACCOUNT_NOT_APPROVED,
+                    SecurityModuleErrorConstants.USER_ACCOUNT_NOT_ONBOARDED,
                     SecurityModuleErrorConstants.TENANCY_IS_REQUIRED,
                     SecurityModuleErrorConstants.TENANT_WITH_ID_NOT_FOUND)));
     
