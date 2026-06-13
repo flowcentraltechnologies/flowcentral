@@ -91,6 +91,18 @@ public class User extends BaseStatusWorkEntity {
 
     @Column(name = "SUPERVISOR_FG")
     private Boolean supervisor;
+    
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
+    private Date resetExpireOn;
+
+    @Column(length = 256, nullable = true)
+    private String emailVerifyHash;
+    
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
+    private Date emailVerifyExpireOn;
+    
+    @Column(type = ColumnType.TIMESTAMP, nullable = true)
+    private Date emailVerifiedOn;
 
     @ListOnly(key = "workflowStatus", property = "description")
     private String workflowStatusDesc;
@@ -257,6 +269,38 @@ public class User extends BaseStatusWorkEntity {
 
     public void setSupervisor(Boolean supervisor) {
         this.supervisor = supervisor;
+    }
+
+    public Date getResetExpireOn() {
+        return resetExpireOn;
+    }
+
+    public void setResetExpireOn(Date resetExpireOn) {
+        this.resetExpireOn = resetExpireOn;
+    }
+
+    public String getEmailVerifyHash() {
+        return emailVerifyHash;
+    }
+
+    public void setEmailVerifyHash(String emailVerifyHash) {
+        this.emailVerifyHash = emailVerifyHash;
+    }
+
+    public Date getEmailVerifyExpireOn() {
+        return emailVerifyExpireOn;
+    }
+
+    public void setEmailVerifyExpireOn(Date emailVerifyExpireOn) {
+        this.emailVerifyExpireOn = emailVerifyExpireOn;
+    }
+
+    public Date getEmailVerifiedOn() {
+        return emailVerifiedOn;
+    }
+
+    public void setEmailVerifiedOn(Date emailVerifiedOn) {
+        this.emailVerifiedOn = emailVerifiedOn;
     }
 
     public String getWorkflowStatusDesc() {
