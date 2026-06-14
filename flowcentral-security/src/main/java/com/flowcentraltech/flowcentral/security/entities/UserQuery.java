@@ -19,7 +19,6 @@ import java.util.Collection;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
-import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
 
 /**
  * Query class for user records.
@@ -64,12 +63,8 @@ public class UserQuery extends BaseStatusWorkEntityQuery<User> {
     public UserQuery password(String password) {
         return (UserQuery) addEquals("password", password);
     }
-    
+
     public UserQuery branchId(Long branchId) {
         return (UserQuery) addEquals("branchId", branchId);
-    }
-    
-    public UserQuery workflowStatus(UserWorkflowStatus workflowStatus) {
-        return (UserQuery) addEquals("workflowStatus", workflowStatus);
     }
 }

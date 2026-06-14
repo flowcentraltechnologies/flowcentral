@@ -60,7 +60,7 @@ import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexityCheck;
 import com.flowcentraltech.flowcentral.security.business.data.PasswordComplexitySettings;
-import com.flowcentraltech.flowcentral.security.business.data.UserDetails;
+import com.flowcentraltech.flowcentral.security.business.data.UserDetail;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleEntityConstants;
@@ -93,6 +93,7 @@ import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.UnifyCoreSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
+import com.tcdng.unify.core.UserTokenProvider;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
@@ -124,7 +125,7 @@ import com.tcdng.unify.web.ui.constant.PageRequestParameterConstants;
 @Transactional
 @Component(SecurityModuleNameConstants.SECURITY_MODULE_SERVICE)
 public class SecurityModuleServiceImpl extends AbstractFlowCentralService
-        implements SecurityModuleService, NotificationRecipientProvider, SecuredLinkManager {
+        implements SecurityModuleService, NotificationRecipientProvider, UserTokenProvider, SecuredLinkManager {
 
     private static final int SECURED_LINK_ACCESS_SUFFIX_LEN = 16;
 
@@ -207,19 +208,18 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-	public Long createUser(UserDetails userDetails) throws UnifyException {
-			String loginId = generateLoginId(userDetails.getFullName());
+	public Long createUser(UserDetail userDetail) throws UnifyException {
+			String loginId = generateLoginId(userDetail.getFullName());
 			User user = new User();
-			user.setFullName(userDetails.getFullName());
+			user.setFullName(userDetail.getFullName());
 			user.setLoginId(loginId);
 			user.setPassword(passwordCryptograph.encrypt(loginId.toLowerCase()));
-			user.setEmail(userDetails.getEmail());
-			user.setMobileNo(userDetails.getMobileNo());
-			user.setSuperBranchUser(userDetails.getSuperBranchUser());
-			user.setSuperDepartmentUser(userDetails.getSuperDepartmentUser());
-			user.setUserRoleList(getUserRoles(userDetails.getUserRoleCode()));
+			user.setEmail(userDetail.getEmail());
+			user.setMobileNo(userDetail.getMobileNo());
+			user.setSupervisor(userDetail.getSupervisor());
+			user.setUserRoleList(getUserRoles(userDetail.getUserRoleCode()));
 			
-			user.setWorkflowStatus(UserWorkflowStatus.REGISTERED);
+			user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
 			user.setStatus(RecordStatus.ACTIVE);
 			
 			// send User Welcome Notification
@@ -399,18 +399,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public boolean loginUser(String loginId, String password) throws UnifyException {
-        try {
-            loginUser(loginId, password, getApplicationLocale(), null);
-        } catch (UnifyException ex) {
-            logSilent(ex);
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
     public User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId)
             throws UnifyException {
         final boolean isSystem = DefaultApplicationConstants.SYSTEM_LOGINID.equalsIgnoreCase(loginId);
@@ -440,8 +428,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_IS_LOCKED);
         }
 
-        if (!UserWorkflowStatus.ONBOARDED.equals(user.getWorkflowStatus())) {
-            throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_NOT_ONBOARDED);
+        if (!UserWorkflowStatus.APPROVED.equals(user.getWorkflowStatus())) {
+            throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_NOT_APPROVED);
         }
 
         if (!RecordStatus.ACTIVE.equals(user.getStatus())) {
@@ -559,8 +547,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BUSINESSUNITDESC, businessUnitDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, user.isReserved());
-        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPER_BRANCH_FLAG, user.getSuperBranchUser());
-        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPER_DEPARTMENT_FLAG, user.getSuperDepartmentUser());
+        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPERVISORFLAG, user.getSupervisor());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SHORTCUTDECK, null);
         return user;
     }
@@ -808,7 +795,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                         resolveSessionMessage(DefaultApplicationConstants.SYSTEM_FULLNAME),
                         DefaultApplicationConstants.SYSTEM_LOGINID, email, Boolean.FALSE);
                 String password = generatePasswordAndSendEmail(user);
-                user.setWorkflowStatus(UserWorkflowStatus.ONBOARDED);
+                user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
                 user.setPassword(passwordCryptograph.encrypt(password));
                 environment().create(user);
             } else {

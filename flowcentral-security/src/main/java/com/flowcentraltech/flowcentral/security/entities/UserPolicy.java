@@ -59,7 +59,7 @@ public class UserPolicy extends BaseStatusWorkEntityPolicy {
             }
 
             if (user.getWorkflowStatus() == null) {
-                user.setWorkflowStatus(UserWorkflowStatus.REGISTERED);
+                user.setWorkflowStatus(UserWorkflowStatus.NEW);
             }
 
             calcPasswordExpiryDate(user, now);

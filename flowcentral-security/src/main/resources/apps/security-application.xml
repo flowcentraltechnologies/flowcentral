@@ -111,6 +111,37 @@
 				<property name="maintainForm.update" value="true" />
 				<property name="maintainForm.delete" value="true" />
 				<property name="maintainForm.attachments" value="true" />
+				<property name="workflowCopy" value="true" />
+				<property name="workflowCopy.create.copy.setvalues"
+					value="onCopySetValues" />
+				<property name="workflowCopy.create.alert"
+					value="userCreationApproval" />
+				<property name="workflowCopy.create.approval.alert"
+					value="userCreationApproved" />
+				<property name="workflowCopy.create.rejection.alert"
+					value="userCreationReject" />
+				<property name="workflowCopy.create.resubmit.alert"
+					value="userCreationResubmit" />
+				<property name="workflowCopy.update.alert"
+					value="userUpdateApproval" />
+				<property name="workflowCopy.update.rejection.alert"
+					value="userUpdateReject" />
+				<property name="workflowCopy.update.resubmit.alert"
+					value="userUpdateResubmit" />
+				<property name="workflowCopy.create.setvalues"
+					value="onSubmitSetValues" />
+				<property name="workflowCopy.create.approval.setvalues"
+					value="onCreateApproveSetValues" />
+				<property name="workflowCopy.create.rejection.setvalues"
+					value="onRejectSetValues" />
+				<property name="workflowCopy.update.copy.setvalues"
+					value="onCopySetValues" />
+				<property name="workflowCopy.update.setvalues"
+					value="onSubmitSetValues" />
+				<property name="workflowCopy.update.approval.setvalues"
+					value="onApproveSetValues" />
+				<property name="workflowCopy.update.rejection.setvalues"
+					value="onRejectSetValues" />
 			</properties>
 			<alerts>
 				<alert name="userCreationApproval"
@@ -414,30 +445,9 @@
 					label="$m{security.user.workflowstatus.description}"
 					type="LIST_ONLY" inputWidget="application.text" key="workflowStatus"
 					property="description" />
-				<field name="branchCode"
-					label="$m{security.user.workflowstatus.branchcode}"
-					type="LIST_ONLY" inputWidget="application.text" key="branchId"
-					property="code" />
-				<field name="branchDesc"
-					label="$m{security.user.workflowstatus.branchdesc}"
-					type="LIST_ONLY" inputWidget="application.text" key="branchId"
-					property="description" />
-				<field name="departmentCode"
-					label="$m{security.user.workflowstatus.departmentcode}"
-					type="LIST_ONLY" inputWidget="application.text" key="departmentId"
-					property="code" />
-				<field name="departmentDesc"
-					label="$m{security.user.workflowstatus.departmentdesc}"
-					type="LIST_ONLY" inputWidget="application.text" key="departmentId"
-					property="description" />
 				<field name="branchId" label="$m{security.user.branch}"
-					references="organization.branchRef"
-					type="REF" inputWidget="organization.branchlist"
-					basicSearch="true" auditable="true"/>
-				<field name="departmentId" label="$m{security.user.department}"
-					references="organization.departmentRef"
-					type="REF" inputWidget="organization.departmentlist"
-					auditable="true"/>
+					type="MAPPED" inputWidget="organization.branchlist"
+					mapped="organization.mappedBranch" basicSearch="true" auditable="true"/>
 				<field name="fullName" label="$m{security.user.fullname}"
 					type="STRING" inputWidget="application.fullname" maxLen="96"
 					basicSearch="true" auditable="true"/>
@@ -472,21 +482,8 @@
 				<field name="allowLoginWithoutOtp"
 					label="$m{security.user.allowloginwithoutotp}" type="BOOLEAN"
 					inputWidget="application.checkbox" auditable="true"/>
-				<field name="superBranchUser" label="$m{security.user.superbranchuser}"
+				<field name="supervisor" label="$m{security.user.supervisor}"
 					type="BOOLEAN" inputWidget="application.checkbox" auditable="true"/>
-				<field name="superDepartmentUser" label="$m{security.user.superdepartmentuser}"
-					type="BOOLEAN" inputWidget="application.checkbox" auditable="true"/>
-				<field name="resetExpireOn" label="$m{security.user.resetexpireon}"
-					type="TIMESTAMP" inputWidget="application.datetime" nullable="true" />
-				<field name="emailVerifyHash" label="$m{security.user.emailverifyhash}"
-					type="STRING" inputWidget="application.text" maxLen="256"
-					nullable="true" auditable="true"/>
-				<field name="emailVerifyExpireOn" label="$m{security.user.emailverifyexpireon}"
-					type="TIMESTAMP" inputWidget="application.datetime" nullable="true" />
-				<field name="emailVerifiedOn" label="$m{security.user.emailverifiedon}"
-					type="TIMESTAMP" inputWidget="application.datetime" nullable="true" />
-				<field name="onboardedOn" label="$m{security.user.onboardedon}"
-					type="TIMESTAMP" inputWidget="application.datetime" nullable="true" />
 				<field name="passwordExpiryDt"
 					label="$m{security.user.passwordexpirydt}" type="DATE"
 					inputWidget="application.date" />

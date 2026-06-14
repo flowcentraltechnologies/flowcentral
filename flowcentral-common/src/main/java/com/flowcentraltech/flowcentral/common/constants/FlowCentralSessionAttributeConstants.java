@@ -56,11 +56,8 @@ public interface FlowCentralSessionAttributeConstants {
     /** Reserved flag */
     String RESERVEDFLAG = "fc.reservedflag";
 
-    /** Super branch flag */
-    String SUPER_BRANCH_FLAG = "fc.superbranchflag";
-
-    /** Super department flag */
-    String SUPER_DEPARTMENT_FLAG = "fc.superdepartmentflag";
+    /** Supervisor flag */
+    String SUPERVISORFLAG = "fc.supervisorflag";
 
     /** Workspace code */
     String WORKSPACE_CODE = "fc.workspacecode";
@@ -76,7 +73,4 @@ public interface FlowCentralSessionAttributeConstants {
 
     /** Secured link access */
     String SECURED_LINK_ACCESS = "fc.SECURED_LINK_ACCESS";
-
-    /** Silent exception message */
-    String SILENT_EXCEPTION_MESSAGE = "fc.SILENT_EXCEPTION_MESSAGE";
 }

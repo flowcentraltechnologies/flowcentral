@@ -50,8 +50,8 @@ public interface SecurityModuleErrorConstants {
     /** User role {0} has no workspace */
     String USER_ROLE_HAS_NO_WORKSPACE = "SECURITY_0009";
 
-    /** User account is not onboarded */
-    String USER_ACCOUNT_NOT_ONBOARDED = "SECURITY_000A";
+    /** User account is not approved */
+    String USER_ACCOUNT_NOT_APPROVED = "SECURITY_000A";
 
     /** Tenancy is required */
     String TENANCY_IS_REQUIRED = "SECURITY_000B";
