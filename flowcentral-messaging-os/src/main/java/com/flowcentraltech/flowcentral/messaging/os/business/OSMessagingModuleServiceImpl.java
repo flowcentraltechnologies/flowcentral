@@ -355,9 +355,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             U request) throws UnifyException {
-        if (StringUtils.isBlank(request.getCorrelationId())) {
-            request.setCorrelationId(RandomUtils.generateUUIDInBase64());
-        }
+        request.setCorrelationId(RandomUtils.generateUUIDInBase64());
 
         if (StringUtils.isBlank(request.getUserId())) {
             request.setUserId(getUserLoginId());
@@ -382,9 +380,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request, long delayInSeconds)
             throws UnifyException {
-        if (StringUtils.isBlank(request.getCorrelationId())) {
-            request.setCorrelationId(RandomUtils.generateUUIDInBase64());
-        }
+        request.setCorrelationId(RandomUtils.generateUUIDInBase64());
 
         if (StringUtils.isBlank(request.getUserId())) {
             request.setUserId(getUserLoginId());
