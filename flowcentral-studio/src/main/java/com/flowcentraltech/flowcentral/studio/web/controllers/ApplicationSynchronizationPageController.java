@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationSynchronizationProvider;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
