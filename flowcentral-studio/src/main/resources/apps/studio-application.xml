@@ -614,6 +614,13 @@
 			label="$m{studio.application.launch.label}" icon="rocket"
 			type="PATH_WINDOW" path="/applicationstudio" menuAccess="true">
 		</applet>
+		<applet name="applicationSynchronization"
+			description="$m{studio.applicationsynchronization.manage}"
+			label="$m{studio.applicationsynchronization.manage.label}"
+			icon="lock" type="PATH_PAGE"
+			path="/studio/applicationsynchronization/openPage"
+			menuAccess="false">
+		</applet>
 		<applet name="delegateCreateSynchronization"
 			description="$m{studio.delegatecreatesynchronization.manage}"
 			label="$m{studio.delegatecreatesynchronization.manage.label}"
