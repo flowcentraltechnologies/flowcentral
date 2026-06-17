@@ -1950,6 +1950,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public List<AppApplet> findDataImportApplets() throws UnifyException {
+        return environment().listAll(new AppAppletQuery().type(AppletType.DATA_IMPORT));
+    }
+
+    @Override
     public List<AppApplet> findManageEntityListApplets(String entity) throws UnifyException {
         return environment().listAll(new AppAppletQuery().typeIn(AppletType.MANAGE_ENTITY_LIST_TYPES).entity(entity));
     }

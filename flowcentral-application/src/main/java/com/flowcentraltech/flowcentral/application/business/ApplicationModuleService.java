@@ -512,6 +512,15 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<AppAPI> findAppAPIs(AppAPIQuery query) throws UnifyException;
 
     /**
+     * Finds data import applets.
+     * 
+     * @return list of data import applets
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<AppApplet> findDataImportApplets() throws UnifyException;
+
+    /**
      * Finds manage list applets.
      * 
      * @param entity
