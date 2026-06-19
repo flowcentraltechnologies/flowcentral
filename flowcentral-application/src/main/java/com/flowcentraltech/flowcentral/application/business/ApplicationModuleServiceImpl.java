@@ -16,8 +16,8 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -293,6 +293,7 @@ import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.ArgumentTypeInfo;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -4380,7 +4381,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         logDebug(taskMonitor, "[{1}] application {0} deleted.", name, deletion);
         return deletion;
     }
-
+ 
     @Taskable(name = ApplicationImportDataTaskConstants.IMPORTDATA_TASK_NAME, description = "Import Data Task",
             parameters = { @Parameter(name = ApplicationImportDataTaskConstants.IMPORTDATA_ENTITY,
                     description = "$m{dataimportappletpanel.dataimport.entity}", type = String.class, mandatory = true),
@@ -4388,16 +4389,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             description = "$m{dataimportappletpanel.dataimport.uploadconfig}", type = String.class,
                             mandatory = true),
                     @Parameter(name = ApplicationImportDataTaskConstants.IMPORTDATA_UPLOAD_FILE,
-                            description = "$m{dataimportappletpanel.dataimport.selectfile}", type = byte[].class,
+                            description = "$m{dataimportappletpanel.dataimport.selectfile}", type = UploadedFile.class,
                             mandatory = true),
                     @Parameter(name = ApplicationImportDataTaskConstants.IMPORTDATA_WITH_HEADER_FLAG,
                             description = "$m{dataimportappletpanel.dataimport.hasheader}", type = boolean.class,
                             mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
-    public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, byte[] uploadFile,
+    public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, UploadedFile uploadFile,
             boolean withHeaderFlag) throws UnifyException {
-        return executeImportDataTask(taskMonitor, entity, uploadConfig,
-                new InputStreamReader(new ByteArrayInputStream(uploadFile)), withHeaderFlag);
+        final InputStream in = uploadFile.getIn();
+        try {
+            return executeImportDataTask(taskMonitor, entity, uploadConfig,
+                    new InputStreamReader(uploadFile.getIn()), withHeaderFlag);
+        } finally {
+            IOUtils.close(in);
+        }
     }
 
     @SuppressWarnings({ "unchecked" })

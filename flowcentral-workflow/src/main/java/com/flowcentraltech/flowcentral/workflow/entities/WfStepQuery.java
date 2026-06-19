@@ -35,8 +35,8 @@ import com.tcdng.unify.core.criterion.NotEquals;
 public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
 
     private static final List<WorkflowStepType> ACTIONABLES = Arrays.asList(
-            WorkflowStepType.USER_ACTION,
             WorkflowStepType.START,
+            WorkflowStepType.USER_ACTION,
             WorkflowStepType.ERROR);
 
     public WfStepQuery() {
@@ -45,10 +45,6 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
 
     public WfStepQuery workflowId(Long workflowId) {
         return (WfStepQuery) addEquals("workflowId", workflowId);
-    }
-
-    public WfStepQuery startActionable() {
-        return (WfStepQuery) addIsNotNull("appletName").addEquals("type",  WorkflowStepType.START);
     }
 
     public WfStepQuery userActionable() {

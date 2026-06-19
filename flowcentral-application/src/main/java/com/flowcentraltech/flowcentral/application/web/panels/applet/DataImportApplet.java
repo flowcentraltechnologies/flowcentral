@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
@@ -32,7 +33,7 @@ public class DataImportApplet extends AbstractApplet {
 
     private String headerDetails;
     
-    private byte[] uploadFile;
+    private UploadedFile uploadFile;
 
     private boolean hasHeader;
 
@@ -54,11 +55,11 @@ public class DataImportApplet extends AbstractApplet {
         this.headerDetails = headerDetails;
     }
 
-    public byte[] getUploadFile() {
+    public UploadedFile getUploadFile() {
         return uploadFile;
     }
 
-    public void setUploadFile(byte[] uploadFile) {
+    public void setUploadFile(UploadedFile uploadFile) {
         this.uploadFile = uploadFile;
     }
 
