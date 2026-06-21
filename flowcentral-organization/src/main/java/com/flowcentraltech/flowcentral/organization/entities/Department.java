@@ -27,7 +27,9 @@ import com.tcdng.unify.core.annotation.Column;
  * @version 1.0
  */
 @Table(name = "FC_DEPARTMENT",
-        uniqueConstraints = { @UniqueConstraint({ "code" }), @UniqueConstraint({ "description" }) })
+        uniqueConstraints = {
+                @UniqueConstraint({ "code" }),
+                @UniqueConstraint({ "description" }) })
 public class Department extends BaseStatusEntity {
 
     @Column(name = "DEPARTMENT_CD", length = 16)
@@ -35,6 +37,9 @@ public class Department extends BaseStatusEntity {
 
     @Column(name = "DEPARTMENT_DESC", length = 64)
     private String description;
+
+    @Column(name = "EMAIL", length = 128, nullable = true)
+    private String email;
 
     @Override
     public String getDescription() {
@@ -51,5 +56,13 @@ public class Department extends BaseStatusEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

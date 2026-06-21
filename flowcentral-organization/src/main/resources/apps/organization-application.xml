@@ -512,6 +512,9 @@
 				<field name="description"
 					label="$m{organization.department.description}" type="STRING"
 					inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
+				<field name="email"
+					label="$m{organization.department.email}" type="STRING"
+					inputWidget="application.text" maxLen="128" nullable="true" auditable="true"/>
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="codeUc"
