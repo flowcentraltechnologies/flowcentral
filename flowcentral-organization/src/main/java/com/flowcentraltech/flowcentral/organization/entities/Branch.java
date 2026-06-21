@@ -225,4 +225,12 @@ public class Branch extends BaseStatusEntity {
     public void setLanguageTag(String languageTag) {
         this.languageTag = languageTag;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
