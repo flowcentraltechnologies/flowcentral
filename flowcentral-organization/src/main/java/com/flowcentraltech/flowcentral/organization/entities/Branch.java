@@ -31,6 +31,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
 @Table(name = "FC_BRANCH",
     uniqueConstraints = {
         @UniqueConstraint({ "code" }),
+        @UniqueConstraint({ "description" }),
         @UniqueConstraint({ "sortCode" }) })
 public class Branch extends BaseStatusEntity {
 
@@ -46,7 +47,7 @@ public class Branch extends BaseStatusEntity {
     @Column(name = "BRANCH_CD", length = 16)
     private String code;
 
-    @Column(name = "BRANCH_DESC", length = 64)
+    @Column(name = "BRANCH_DESC", length = 128)
     private String description;
 
     @Column(name = "SORT_CD", length = 32, nullable = true)
@@ -54,6 +55,9 @@ public class Branch extends BaseStatusEntity {
 
     @Column(name = "ALT_SORT_CD", length = 32, nullable = true)
     private String altSortCode;
+
+    @Column(name = "EMAIL", length = 128, nullable = true)
+    private String email;
 
     @Column(name = "HEAD_OFFICE_FG")
     private boolean headOffice;

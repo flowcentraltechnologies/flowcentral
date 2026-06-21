@@ -40,7 +40,7 @@ public class PrivilegeCategoryListCommand extends AbstractOrganizationListComman
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return getOrganizationModuleService().findPrivilegeCategories(
+        return org().findPrivilegeCategories(
                 (PrivilegeCategoryQuery) new PrivilegeCategoryQuery().ignoreEmptyCriteria(true));
     }
 

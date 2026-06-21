@@ -35,7 +35,7 @@ public abstract class AbstractOrganizationListCommand<T extends ListParam> exten
         super(paramType);
     }
 
-    protected OrganizationModuleService getOrganizationModuleService() {
+    protected OrganizationModuleService org() {
         return organizationModuleService;
     }
 

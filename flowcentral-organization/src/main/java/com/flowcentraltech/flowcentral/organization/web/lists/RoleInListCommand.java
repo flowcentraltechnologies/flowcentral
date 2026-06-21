@@ -44,7 +44,7 @@ public class RoleInListCommand extends AbstractOrganizationListCommand<AssignPar
             RoleQuery query = new RoleQuery();
             query.idIn(params.getAssignedIdList(Long.class));
             query.addSelect("id", "description").addOrder("description");
-            return getOrganizationModuleService().findRoles(query);
+            return org().findRoles(query);
         }
 
         return Collections.emptyList();

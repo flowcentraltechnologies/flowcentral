@@ -39,8 +39,12 @@ import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.constants.OrganizationModuleNameConstants;
 import com.flowcentraltech.flowcentral.organization.entities.Branch;
 import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
+import com.flowcentraltech.flowcentral.organization.entities.Country;
+import com.flowcentraltech.flowcentral.organization.entities.CountryQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
+import com.flowcentraltech.flowcentral.organization.entities.Hub;
+import com.flowcentraltech.flowcentral.organization.entities.HubQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
@@ -53,6 +57,10 @@ import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RolePrivilege;
 import com.flowcentraltech.flowcentral.organization.entities.RolePrivilegeQuery;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
+import com.flowcentraltech.flowcentral.organization.entities.State;
+import com.flowcentraltech.flowcentral.organization.entities.StateQuery;
+import com.flowcentraltech.flowcentral.organization.entities.Zone;
+import com.flowcentraltech.flowcentral.organization.entities.ZoneQuery;
 import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -160,6 +168,26 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public Department findDepartment(DepartmentQuery query) throws UnifyException {
         return environment().find(query);
+    }
+
+    @Override
+    public List<Zone> findZones(ZoneQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
+    public List<Country> findCountries(CountryQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
+    public List<State> findStates(StateQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
+    public List<Hub> findHub(HubQuery query) throws UnifyException {
+        return environment().listAll(query);
     }
 
     @Override
