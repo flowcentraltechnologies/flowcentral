@@ -29,13 +29,10 @@ public class PortalDataImport {
 
     private String label;
 
-    private String appletName;
-
-    public PortalDataImport(String name, String description, String label, String appletName) {
+    public PortalDataImport(String name, String description, String label) {
         this.name = name;
         this.description = description;
         this.label = label;
-        this.appletName = appletName;
     }
 
     public String getName() {
@@ -48,10 +45,6 @@ public class PortalDataImport {
 
     public String getLabel() {
         return label;
-    }
-
-    public String getAppletName() {
-        return appletName;
     }
 
 }
