@@ -108,6 +108,7 @@ import com.flowcentraltech.flowcentral.application.data.portal.PortalApplet;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalAppletOption;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalApplication;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalDashboard;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalDataImport;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntity;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityAttachment;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField;
@@ -335,7 +336,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     ApplicationPredefinedEntityConstants.SNAPSHOT_ENTITY)));
 
     private List<ProcessVariableDef> sysProcessVariableDefs;
-    
+
     private static final int MAX_LIST_DEPTH = 8;
 
     private static final long CLEAR_SYSTEM_CACHE_WAIT_MILLISEC = 5000;
@@ -1158,10 +1159,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
                                     appFormElement.getEditAllowAddition(), appFormElement.getEditFixedRows(),
                                     appFormElement.isIgnoreParentCondition(), appFormElement.isIncludeSysParam(),
-                                    appFormElement.isIncludeProcessVariable(),
-                                    appFormElement.isShowSearch(), appFormElement.isQuickEdit(),
-                                    appFormElement.isQuickOrder(), appFormElement.isVisible(),
-                                    appFormElement.isEditable(), appFormElement.isDisabled());
+                                    appFormElement.isIncludeProcessVariable(), appFormElement.isShowSearch(),
+                                    appFormElement.isQuickEdit(), appFormElement.isQuickOrder(),
+                                    appFormElement.isVisible(), appFormElement.isEditable(),
+                                    appFormElement.isDisabled());
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),
@@ -1291,8 +1292,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             }
 
                             fdb.addFormWidgetRulesPolicy(appFormWidgetRulesPolicy.getName(),
-                                    appFormWidgetRulesPolicy.getDescription(), InputWidgetUtils
-                                            .getFilterDef(appletUtilities, null, appFormWidgetRulesPolicy.getOnCondition()),
+                                    appFormWidgetRulesPolicy.getDescription(),
+                                    InputWidgetUtils.getFilterDef(appletUtilities, null,
+                                            appFormWidgetRulesPolicy.getOnCondition()),
                                     widgetRulesDef, ruleEditors);
                         }
                     }
@@ -4065,14 +4067,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         final ApplicationDef applicationDef = getApplicationDef(applicationName);
         final Map<String, PortalApplet> applets = new HashMap<String, PortalApplet>();
+        final Map<String, PortalDataImport> dataImports = new HashMap<String, PortalDataImport>();
         final Map<String, PortalTable> tables = new HashMap<String, PortalTable>();
         final Map<String, PortalForm> forms = new HashMap<String, PortalForm>();
         final Map<String, PortalEntity> entities = new HashMap<String, PortalEntity>();
         final Map<String, PortalReference> references = new HashMap<String, PortalReference>();
-        for (String appletName : environment().valueList(String.class, "name",
-                new AppAppletQuery().portalAccess(true).applicationName(applicationName))) {
+        for (String appletName : environment().valueList(String.class, "name", new AppAppletQuery()
+                .type(AppletType.MANAGE_ENTITYLIST).portalAccess(true).applicationName(applicationName))) {
             final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
             extractPortalDependencies(applet, applets, tables, forms, entities, references);
+        }
+
+        for (String appletName : environment().valueList(String.class, "name", new AppAppletQuery()
+                .type(AppletType.DATA_IMPORT).portalAccess(true).applicationName(applicationName))) {
+            final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
+            AppletDef appletDef = getAppletDef(applet);
+            dataImports.put(applet, new PortalDataImport(appletDef.getName(), appletDef.getDescription(),
+                    appletDef.getLabel(), applet));
         }
 
         for (PortalWorkflow workflow : workflows) {
@@ -4099,10 +4110,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
                 applicationDef.getLabel(), applicationDef.getModuleName(), DataUtils.unmodifiableList(dashboards),
-                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(tables.values()),
-                DataUtils.unmodifiableList(forms.values()), DataUtils.unmodifiableList(entities.values()),
-                DataUtils.unmodifiableList(references.values()), DataUtils.unmodifiableList(enums),
-                DataUtils.unmodifiableList(workflows), DataUtils.unmodifiableList(reports)));
+                DataUtils.unmodifiableList(applets.values()), DataUtils.unmodifiableList(dataImports.values()),
+                DataUtils.unmodifiableList(tables.values()), DataUtils.unmodifiableList(forms.values()),
+                DataUtils.unmodifiableList(entities.values()), DataUtils.unmodifiableList(references.values()),
+                DataUtils.unmodifiableList(enums), DataUtils.unmodifiableList(workflows),
+                DataUtils.unmodifiableList(reports)));
     }
 
     private void extractPortalDependencies(String applet, Map<String, PortalApplet> applets,
@@ -4381,7 +4393,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         logDebug(taskMonitor, "[{1}] application {0} deleted.", name, deletion);
         return deletion;
     }
- 
+
     @Taskable(name = ApplicationImportDataTaskConstants.IMPORTDATA_TASK_NAME, description = "Import Data Task",
             parameters = { @Parameter(name = ApplicationImportDataTaskConstants.IMPORTDATA_ENTITY,
                     description = "$m{dataimportappletpanel.dataimport.entity}", type = String.class, mandatory = true),
@@ -4395,12 +4407,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             description = "$m{dataimportappletpanel.dataimport.hasheader}", type = boolean.class,
                             mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
-    public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, UploadedFile uploadFile,
-            boolean withHeaderFlag) throws UnifyException {
+    public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig,
+            UploadedFile uploadFile, boolean withHeaderFlag) throws UnifyException {
         final InputStream in = uploadFile.getIn();
         try {
-            return executeImportDataTask(taskMonitor, entity, uploadConfig,
-                    new InputStreamReader(uploadFile.getIn()), withHeaderFlag);
+            return executeImportDataTask(taskMonitor, entity, uploadConfig, new InputStreamReader(uploadFile.getIn()),
+                    withHeaderFlag);
         } finally {
             IOUtils.close(in);
         }
@@ -4452,8 +4464,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef
                                         .getFieldSequenceDef().getFieldSequenceEntryDef(listProp.getFieldName());
                                 formatter = fieldSequenceEntryDef.isWithParam()
-                                        ? appletUtilities.formatHelper()
-                                                .newFormatter(fieldSequenceEntryDef.getParam())
+                                        ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
                                         : null;
                                 Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
                                         csvRecord.get(listProp.getFieldName()), formatter);
@@ -4466,8 +4477,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef.getFieldSequenceDef()
                                 .getFieldSequenceEntryDef(fieldName);
                         formatter = fieldSequenceEntryDef.isWithParam()
-                                ? appletUtilities.formatHelper()
-                                        .newFormatter(fieldSequenceEntryDef.getParam())
+                                ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
                                 : null;
                         val = csvRecord.get(fieldName);
                     }
