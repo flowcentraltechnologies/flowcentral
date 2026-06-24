@@ -3101,7 +3101,7 @@
 				<tab name="attachments"
 					label="$m{studio.appentity.form.attachments}"
 					contentType="CHILD_LIST" applet="manageAppEntityAttachment"
-					reference="attachmentList" visible="false" />
+					reference="attachmentList" />
 				<tab name="uniqueConstraints"
 					label="$m{studio.appentity.form.uniqueconstraints}"
 					contentType="CHILD_LIST" applet="manageAppEntityUniqueConstraint"
