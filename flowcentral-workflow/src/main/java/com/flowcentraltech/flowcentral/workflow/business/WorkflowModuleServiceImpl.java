@@ -2063,7 +2063,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 case USER_ACTION:
                 case ERROR:
                     // External accessibility
-                    if (isPerformExternal && currWfStepDef.isWithStepAppletName()) {
+                    if (isPerformExternal) {
                         if (type.isUserAction()) {
                             if (workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.USER_ACTION, accessible)) {
                                 wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
