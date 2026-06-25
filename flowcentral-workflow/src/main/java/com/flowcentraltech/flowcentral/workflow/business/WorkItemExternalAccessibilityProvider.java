@@ -36,9 +36,10 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
     /**
      * Notify external system.
      * 
-     * @param state the access state
+     * @param state
+     *              the access state
      * @param item
-     *             the workflow item
+     *              the workflow item
      * @return true if transferred otherwise false
      * @throws UnifyException
      *                        if an error occurs
@@ -59,10 +60,47 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
      * @param requestedOn
      *                     requested on
      * @return true if successfully submitted
-     * @throws UnifyException if an error occurs
+     * @throws UnifyException
+     *                        if an error occurs
      */
-    boolean submitFromExternal(Long workRecId, String workflowName, String entityName,
-            String requestedBy, Date requestedOn) throws UnifyException;
+    boolean submitFromExternal(Long workRecId, String workflowName, String entityName, String requestedBy,
+            Date requestedOn) throws UnifyException;
+
+    /**
+     * Fetches error work record from external system.
+     * 
+     * @param workRecId
+     *                     the work record ID
+     * @param workflowName
+     *                     the workflow name
+     * @param requestedBy
+     *                     the requester
+     * @param requestedOn
+     *                     requested on
+     * @return the error if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String fetchErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
+            throws UnifyException;
+
+    /**
+     * Recovers error work record from external system.
+     * 
+     * @param workRecId
+     *                     the work record ID
+     * @param workflowName
+     *                     the workflow name
+     * @param requestedBy
+     *                     the requester
+     * @param requestedOn
+     *                     requested on
+     * @return true if successful otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean recoverErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
+            throws UnifyException;
 
     /**
      * Releases work record ID from external system.

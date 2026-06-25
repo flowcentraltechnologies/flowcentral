@@ -1249,6 +1249,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
+    public String fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName, Date requestedOn,
+            String requestedBy) throws UnifyException {
+        Optional<String> optional = environment().valueOptional(String.class, "errorTrace",
+                new WfItemQuery().workRecId(workRecId).workflowName(workflowName).wfStepName("error"));
+        return optional.isPresent() ? optional.get() : null;
+    }
+
+    @Override
     public boolean applyUserAction(Long workRecId, String workflowName, String stepName, String userAction,
             Date actionDate, String actionBy) throws UnifyException {
         final Long wfItemId = environment().value(Long.class, "id",
@@ -1390,6 +1398,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             loadTransitionVariables(currentTransitionItem);
             sendUserActionAlertsByAction(currentWfStepDef, currentTransitionItem, userAction);
 
+            // Notify External to recovery
+            if (workItemExternalAccessibilityProvider != null && "recover".equals(userAction)
+                    && "error".equals(stepName) && appletUtil.system().getSysParameterValue(boolean.class,
+                            WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT)) {
+                WfItemAccessible accessible = createWfItemAccessible(wfItem, wfEntityInst);
+                workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.RECOVER, accessible);
+            }
+
+            // Transition out of error
             pushToWfTransitionQueue(wfItemId, true);
 //            commitTransactions();
             return true;

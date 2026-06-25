@@ -537,4 +537,16 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      */
     List<WfStep> generateWorkflowSteps(final DesignType type, final String stepLabel,
             final AppletWorkflowCopyInfo appletWorkflowCopyInfo) throws UnifyException;
+
+    /**
+     * Fetches error work item error trace
+     * @param workRecId the work record Id
+     * @param workflowName the workflow name
+     * @param requestedOn requested on
+     * @param requestedBy Requested by
+     * @return the error trace if found otherwise null
+     * @throws UnifyException
+     */
+    String fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName, Date requestedOn,
+            String requestedBy) throws UnifyException;
 }
