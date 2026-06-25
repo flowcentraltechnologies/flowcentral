@@ -291,20 +291,6 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request) throws UnifyException;
-
-    /**
-     * Sends asynchronous message with a delay.
-     * 
-     * @param request
-     *                    the message
-     * @param delayInSecs
-     *                    the delay in seconds.
-     * @return the correlation ID
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request, long delayInSecs)
-            throws UnifyException;
     
     /**
      * Get asynchronous acknowledgement.

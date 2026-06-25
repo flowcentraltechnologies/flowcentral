@@ -156,12 +156,6 @@
 				<field name="message"
 					label="$m{osmessaging.osmessagingasync.message}" type="CLOB"
 					inputWidget="application.textareamedium" />
-				<field name="nextAttemptOn"
-					label="$m{osmessaging.osmessagingasync.nextattempton}"
-					type="TIMESTAMP" inputWidget="application.text"/>
-				<field name="processBefore"
-					label="$m{osmessaging.osmessagingasync.processbefore}"
-					type="TIMESTAMP" inputWidget="application.text" nullable="true"/>
 				<field name="sentOn"
 					label="$m{osmessaging.osmessagingasync.senton}"
 					type="TIMESTAMP" inputWidget="application.text" nullable="true"/>
@@ -171,9 +165,6 @@
 				<field name="responseMsg"
 					label="$m{osmessaging.osmessagingasync.responsemsg}" type="STRING"
 					inputWidget="application.textarea" maxLen="256" />
-				<field name="processing"
-					label="$m{osmessaging.osmessagingasync.processing}" type="BOOLEAN"
-					inputWidget="application.checkbox" nullable="true" />
 			</fields>
 		</entity>
 		<entity name="osMessagingLog"
@@ -270,8 +261,6 @@
 					widthRatio="1" linkAct="maintainAct" />
 				<column field="target" renderWidget="application.name"
 					widthRatio="1"/>
-				<column field="nextAttemptOn" renderWidget="application.text"
-					widthRatio="1" />
 				<column field="sentOn" renderWidget="application.datetime"
 					widthRatio="1"/>
 				<column field="responseCode" renderWidget="application.text"
@@ -370,8 +359,6 @@
 					</section>
 					<section name="processingDetails" columns="TYPE_2"
 						label="$m{osmessaging.osmessagingasync.form.section.processing}">
-						<field name="nextAttemptOn" column="0" />
-						<field name="processBefore" column="0"/>
 						<field name="sentOn" column="1" />
 					</section>
 					<section name="responseDetails" columns="TYPE_2"

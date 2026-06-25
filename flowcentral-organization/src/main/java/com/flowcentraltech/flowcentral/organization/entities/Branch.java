@@ -31,7 +31,6 @@ import com.tcdng.unify.core.annotation.ListOnly;
 @Table(name = "FC_BRANCH",
     uniqueConstraints = {
         @UniqueConstraint({ "code" }),
-        @UniqueConstraint({ "description" }),
         @UniqueConstraint({ "sortCode" }) })
 public class Branch extends BaseStatusEntity {
 

@@ -15,14 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.entities;
 
-import java.util.Date;
-
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
-import com.tcdng.unify.core.criterion.And;
-import com.tcdng.unify.core.criterion.Equals;
-import com.tcdng.unify.core.criterion.IsNull;
-import com.tcdng.unify.core.criterion.LessOrEqual;
-import com.tcdng.unify.core.criterion.Or;
 
 /**
  * OS messaging async query.
@@ -40,20 +33,11 @@ public class OSMessagingAsyncQuery extends BaseAuditEntityQuery<OSMessagingAsync
         return (OSMessagingAsyncQuery) addEquals("correlationId", correlationId);
     }
 
-    public OSMessagingAsyncQuery endpoint(String endpoint) {
-        return (OSMessagingAsyncQuery) addEquals("endpoint", endpoint);
+    public OSMessagingAsyncQuery target(String target) {
+        return (OSMessagingAsyncQuery) addEquals("target", target);
     }
 
-    public OSMessagingAsyncQuery isDue(Date now) {
-        return (OSMessagingAsyncQuery) addLessThanEqual("nextAttemptOn", now);
-    }
-
-    public OSMessagingAsyncQuery isDead(Date now) {
-        return (OSMessagingAsyncQuery) addRestriction(
-                new And().add(new LessOrEqual("processBefore", now)).add(new Equals("processing", Boolean.TRUE)));
-    }
-
-    public OSMessagingAsyncQuery isResponseNull() {
+    public OSMessagingAsyncQuery isUnresolved() {
         return (OSMessagingAsyncQuery) addIsNull("responseCode");
     }
 
@@ -63,15 +47,6 @@ public class OSMessagingAsyncQuery extends BaseAuditEntityQuery<OSMessagingAsync
 
     public OSMessagingAsyncQuery isNotSent() {
         return (OSMessagingAsyncQuery) addIsNull("sentOn");
-    }
-
-    public OSMessagingAsyncQuery isNotProcessing() {
-        return (OSMessagingAsyncQuery) addRestriction(
-                new Or().add(new IsNull("processing")).add(new Equals("processing", Boolean.FALSE)));
-    }
-
-    public OSMessagingAsyncQuery isProcessing() {
-        return (OSMessagingAsyncQuery) addEquals("processing", Boolean.TRUE);
     }
 
 }

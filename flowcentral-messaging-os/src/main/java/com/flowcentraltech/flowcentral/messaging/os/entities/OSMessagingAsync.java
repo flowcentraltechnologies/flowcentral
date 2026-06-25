@@ -53,12 +53,6 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "ASYNC_MESSAGE", type = ColumnType.CLOB)
     private String message;
 
-    @Column(name = "NEXT_ATTEMPT_ON", type = ColumnType.TIMESTAMP)
-    private Date nextAttemptOn;
-
-    @Column(name = "PROCESS_BEFORE", type = ColumnType.TIMESTAMP, nullable = true)
-    private Date processBefore;
-
     @Column(name = "SENT_ON", type = ColumnType.TIMESTAMP, nullable = true)
     private Date sentOn;
 
@@ -67,9 +61,6 @@ public class OSMessagingAsync extends BaseAuditEntity {
 
     @Column(name = "RESP_MSG", length = 1024, nullable = true)
     private String responseMsg;
-
-    @Column(name = "PROCESSING_FG", nullable = true)
-    private Boolean processing;
 
     @Override
     public String getDescription() {
@@ -132,22 +123,6 @@ public class OSMessagingAsync extends BaseAuditEntity {
         this.message = message;
     }
 
-    public Date getNextAttemptOn() {
-        return nextAttemptOn;
-    }
-
-    public void setNextAttemptOn(Date nextAttemptOn) {
-        this.nextAttemptOn = nextAttemptOn;
-    }
-
-    public Date getProcessBefore() {
-        return processBefore;
-    }
-
-    public void setProcessBefore(Date processBefore) {
-        this.processBefore = processBefore;
-    }
-
     public Date getSentOn() {
         return sentOn;
     }
@@ -170,14 +145,6 @@ public class OSMessagingAsync extends BaseAuditEntity {
 
     public void setResponseMsg(String responseMsg) {
         this.responseMsg = responseMsg;
-    }
-
-    public Boolean getProcessing() {
-        return processing;
-    }
-
-    public void setProcessing(Boolean processing) {
-        this.processing = processing;
     }
 
 }
