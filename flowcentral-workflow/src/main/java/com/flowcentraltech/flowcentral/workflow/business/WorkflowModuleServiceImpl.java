@@ -2068,8 +2068,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             if (workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.USER_ACTION, accessible)) {
                                 wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
                             }
-                        } else {
-                            workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.ERROR, accessible);
                         }
                     }
 
@@ -2174,6 +2172,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                                 wfEntityInst.getId()),
                         new Update().add("processingStatus", errWfStepDef.getProcessingStatus()));
 
+                if (isPerformExternal) {
+                    workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.ERROR, accessible);
+                }
+                
                 logInfo("Transition of workflow item [{0}] with ID [{1}] in step [{2}] failed. Routed to error step.",
                         wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel());
                 commitTransactions();
