@@ -192,10 +192,14 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected void doExecute(List<Long> osMessagingAsyncIds) {
-                    for (Long osMessagingAsyncId : osMessagingAsyncIds) {
-                        if (!sendAsynchronousMessage(osMessagingAsyncId)) {
-                            break;
+                    try {
+                        for (Long osMessagingAsyncId : osMessagingAsyncIds) {
+                            if (!sendAsynchronousMessage(osMessagingAsyncId)) {
+                                break;
+                            }
                         }
+                    } catch (UnifyException e) {
+                        logError(e);
                     }
                 }
 
@@ -447,7 +451,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         }
     }
 
-    private boolean sendAsynchronousMessage(Long osMessagingAsyncId) {
+    public boolean sendAsynchronousMessage(Long osMessagingAsyncId) throws UnifyException {
         try {
             final OSMessagingAsync osMessagingAsync = environment().find(OSMessagingAsync.class, osMessagingAsyncId);
             final OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class,
