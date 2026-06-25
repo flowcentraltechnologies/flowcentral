@@ -265,9 +265,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 @Override
                 protected WfDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    final String workflowRunnableName = WorkflowNameUtils.getWorkflowRunnableName(nameParts.getEntityName());
-                    Workflow workflow = environment().list(new WorkflowQuery().runnable()
-                            .applicationName(nameParts.getApplicationName()).nameIn(Arrays.asList(workflowRunnableName, nameParts.getEntityName())));
+                    final String workflowRunnableName = WorkflowNameUtils
+                            .getWorkflowRunnableName(nameParts.getEntityName());
+                    Workflow workflow = environment()
+                            .list(new WorkflowQuery().runnable().applicationName(nameParts.getApplicationName())
+                                    .nameIn(Arrays.asList(workflowRunnableName, nameParts.getEntityName())));
                     if (workflow == null) {
                         throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_FIND_RUNNABLE_APPLICATION_WORKFLOW,
                                 longName);
@@ -507,13 +509,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     wrProcessVariableDefs = new ArrayList<ProcessVariableDef>();
                     // Transition variables
                     wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARDED_BY,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardedby}"), true, false, true));
-                    wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARDED_BY_NAME,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardedbyname}"), true, false, true));
+                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardedby}"), true, false,
+                            true));
+                    wrProcessVariableDefs
+                            .add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARDED_BY_NAME,
+                                    resolveApplicationMessage("$m{workflow.system.processvariable.forwardedbyname}"),
+                                    true, false, true));
                     wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARD_TO,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardto}"), true, false, true));
+                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardto}"), true, false,
+                            true));
                     wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.HELD_BY,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.heldby}"), true, false, true));
+                            resolveApplicationMessage("$m{workflow.system.processvariable.heldby}"), true, false,
+                            true));
                     wrProcessVariableDefs = Collections.unmodifiableList(wrProcessVariableDefs);
                 }
             }
@@ -537,9 +544,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     @Override
     public List<PortalWorkflow> getPortalWorkflows(String applicationName) throws UnifyException {
-        Set<Long> workflowIds = environment().valueSet(Long.class, "workflowId",
-                new WfStepQuery().applicationName(applicationName).workflowRunnable(true).withCasePrefix()
-                        .userActionable());
+        Set<Long> workflowIds = environment().valueSet(Long.class, "workflowId", new WfStepQuery()
+                .applicationName(applicationName).workflowRunnable(true).withCasePrefix().userActionable());
         if (!DataUtils.isBlank(workflowIds)) {
             final List<PortalWorkflow> workflows = new ArrayList<PortalWorkflow>();
             for (Long workflowId : workflowIds) {
@@ -1334,8 +1340,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             .getObjectFilter(entityDef, wfEntityInstValueStore.getReader(), now)
                             .matchReader(wfEntityInstValueStore.getReader())) {
                         if (wfSetValuesDef.isWithSetValues()) {
-                            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
-                                    null);
+                            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst, null);
                         }
                     }
                 }
@@ -1344,8 +1349,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     final AppletDef appletDef = appletUtil.getAppletDef(currentWfStepDef.getStepAppletName());
                     final AppletSetValuesDef appletSetValuesDef = appletDef
                             .getSetValues(userActionDef.getAppletSetValuesName());
-                    appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, wfEntityInst,
-                            null);
+                    appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, wfEntityInst, null);
                 }
 
                 update = true;
@@ -1557,8 +1561,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 final ValueStoreReader reader = new BeanValueStore(inst).getReader();
                 final String heldBy = wfItem.getHeldBy();
                 SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(), wfItem);
-                reader.setTempValue(NotificationTransitionVariableConstants.WFITEM_LINK_VARIABLE, securedLinkInfo.getLinkUrl());
-                reader.setTempValue(NotificationTransitionVariableConstants.WFITEM_HTMLLINK_VARIABLE, securedLinkInfo.getHtmlLink());
+                reader.setTempValue(NotificationTransitionVariableConstants.WFITEM_LINK_VARIABLE,
+                        securedLinkInfo.getLinkUrl());
+                reader.setTempValue(NotificationTransitionVariableConstants.WFITEM_HTMLLINK_VARIABLE,
+                        securedLinkInfo.getHtmlLink());
 
                 final Long tenantId = getTenantIdFromTransitionItem(entityClassDef, reader);
                 for (WfAlertDef wfAlertDef : alertList) {
@@ -1787,7 +1793,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             throws UnifyException {
 
     }
-    
+
     private void updateEmails(WfDef wfDef, WorkEntity wfEntityInst, InputArrayEntries emails) throws UnifyException {
         if (emails != null) {
             final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
@@ -1835,8 +1841,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             .getObjectFilter(entityDef, instValueStore.getReader(), now)
                             .matchReader(instValueStore.getReader())) {
                         if (wfSetValuesDef.isWithSetValues()) {
-                            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, workInst,
-                                    null);
+                            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, workInst, null);
                         }
                     }
                 }
@@ -1893,12 +1898,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             Map<String, String> variables = appletUtil.getInitialProcessVariables(wfDef.getEntity());
             WfProcessVariable wfProcessVariable = new WfProcessVariable();
             wfProcessVariable.setWfItemHistId(wfItemHistId);
-            for (Map.Entry<String, String> entry: variables.entrySet()) {
+            for (Map.Entry<String, String> entry : variables.entrySet()) {
                 wfProcessVariable.setVariableName(entry.getKey());
                 wfProcessVariable.setVariableValue(entry.getValue());
                 environment().create(wfProcessVariable);
             }
-            
+
             // Create actual work item
             final String userFullName = securityModuleService.getUserFullName(userLoginId);
             WfItem wfItem = new WfItem();
@@ -1940,7 +1945,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         final boolean isPerformExternal = workItemExternalAccessibilityProvider != null && type.supportExternal()
                 && appletUtil.system().getSysParameterValue(boolean.class,
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT);
-        final WfItemAccessible accessible = isPerformExternal ? createWfItemAccessible(wfItem, wfEntityInst) : null;
+        WfItemAccessible accessible = isPerformExternal ? createWfItemAccessible(wfItem, wfEntityInst) : null;
 
         loadTransitionVariables(transitionItem);
 
@@ -2065,7 +2070,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                     // External accessibility
                     if (isPerformExternal) {
                         if (type.isUserAction()) {
-                            if (workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.USER_ACTION, accessible)) {
+                            if (workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.USER_ACTION,
+                                    accessible)) {
                                 wfItem.setHeldBy(DefaultApplicationConstants.EXTERNAL_LOGINID);
                             }
                         }
@@ -2172,10 +2178,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                                 wfEntityInst.getId()),
                         new Update().add("processingStatus", errWfStepDef.getProcessingStatus()));
 
-                if (isPerformExternal) {
+                if (workItemExternalAccessibilityProvider != null && appletUtil.system().getSysParameterValue(
+                        boolean.class, WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT)) {
+                    accessible = createWfItemAccessible(wfItem, wfEntityInst);
                     workItemExternalAccessibilityProvider.notifyExternal(WfAccessState.ERROR, accessible);
                 }
-                
+
                 logInfo("Transition of workflow item [{0}] with ID [{1}] in step [{2}] failed. Routed to error step.",
                         wfItem.getWfItemDesc(), wfItem.getOriginWorkRecId(), currWfStepDef.getLabel());
                 commitTransactions();
@@ -2236,15 +2244,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         if (wfStepDef.isWithAppletSetValues()) {
             final AppletDef appletDef = appletUtil.getAppletDef(wfStepDef.getStepAppletName());
             final AppletSetValuesDef appletSetValuesDef = appletDef.getSetValues(wfStepDef.getAppletSetValuesName());
-            appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, valueStore,
-                    null);
+            appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, valueStore, null);
             updated = true;
         }
 
         WfStepSetValuesDef wfSetValuesDef = wfStepDef.getWfSetValuesDef();
         if (wfSetValuesDef != null && wfSetValuesDef.isSetValues()) {
-            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, valueStore,
-                    null);
+            wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, valueStore, null);
             updated = true;
         }
 
@@ -2488,7 +2494,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         public Long getWfItemHistId() {
             return wfItem.getWfItemHistId();
         }
-        
+
         public WfDef getWfDef() {
             return wfDef;
         }
