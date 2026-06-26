@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingResponseConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
@@ -35,9 +36,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
 public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
         extends AbstractFlowCentralComponent implements OSMessagingProcessor<T, U> {
 
-    protected static final OSMessagingError NO_ERROR = new OSMessagingError();
-
-    private static final Object[] SUMMARY_PARAMS = new Object[0];
+    private static final OSMessagingError NO_ERROR = new OSMessagingError();
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
@@ -107,10 +106,17 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
 
     }
 
-    protected Object[] getSummaryParameters(U request) {
-        return SUMMARY_PARAMS;
+    protected final OSMessagingError validationPass() {
+        return NO_ERROR;
     }
-
+    
+    protected final T successResult() throws UnifyException {
+        T resp = ReflectUtils.newInstance(responseClass);
+        resp.setResponseCode(OSMessagingResponseConstants.SUCCESS_CODE);
+        resp.setResponseMessage(OSMessagingResponseConstants.SUCCESS_MSG);
+        return resp;
+    }
+    
     protected final OSMessagingModuleService osmessaging() {
         return osMessagingModuleService;
     }

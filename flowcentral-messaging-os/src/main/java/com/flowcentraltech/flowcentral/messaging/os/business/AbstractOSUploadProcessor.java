@@ -35,7 +35,7 @@ import com.tcdng.unify.web.util.ContentDisposition;
 public abstract class AbstractOSUploadProcessor<T extends BaseOSMessagingResp> extends AbstractFlowCentralComponent
         implements OSUploadProcessor<T> {
 
-    protected static final OSMessagingError NO_ERROR = new OSMessagingError();
+    private static final OSMessagingError NO_ERROR = new OSMessagingError();
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
@@ -64,6 +64,10 @@ public abstract class AbstractOSUploadProcessor<T extends BaseOSMessagingResp> e
     @Override
     protected void onTerminate() throws UnifyException {
 
+    }
+
+    protected final OSMessagingError validationPass() {
+        return NO_ERROR;
     }
 
     protected final OSMessagingModuleService osmessaging() {
