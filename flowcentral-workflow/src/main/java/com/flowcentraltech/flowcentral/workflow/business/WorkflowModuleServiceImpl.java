@@ -1515,7 +1515,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         return Collections.emptyList();
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FAST)
     public void sendWorkItemAlerts(TaskMonitor taskMonitor) throws UnifyException {
         if (tryGrabLock(WFITEMALERT_QUEUE_LOCK)) {
             try {

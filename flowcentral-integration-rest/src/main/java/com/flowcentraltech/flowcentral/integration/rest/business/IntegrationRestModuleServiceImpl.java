@@ -51,7 +51,7 @@ public class IntegrationRestModuleServiceImpl extends AbstractFlowCentralService
 
     private boolean init;
     
-    @Periodic(PeriodicType.FAST)
+    @Periodic(PeriodicType.FASTER)
     public void checkRestEndpointChange(TaskMonitor taskMonitor) throws UnifyException {
         if (init) {
             Set<String> restEndpointNames = endpointManager.getAndClearChangedRestEndpoint();
