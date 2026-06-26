@@ -24,13 +24,13 @@ import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 
 /**
- * OS messaging async.
+ * OS messaging async out.
  *
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Table(name = "FC_OSMESSAGINGASYNC", indexes = { @Index({ "target" }), @Index({ "correlationId" }) })
-public class OSMessagingAsync extends BaseAuditEntity {
+@Table(name = "FC_OSMESSAGINGASYNCOUT", indexes = { @Index({ "target" }), @Index({ "correlationId" }) })
+public class OSMessagingAsyncOut extends BaseAuditEntity {
 
     @Column(name = "TARGET", length = 32)
     private String target;
@@ -56,12 +56,12 @@ public class OSMessagingAsync extends BaseAuditEntity {
     @Column(name = "SENT_ON", type = ColumnType.TIMESTAMP, nullable = true)
     private Date sentOn;
 
-    @Column(name = "RESP_CD", length = 10, nullable = true)
-    private String responseCode;
-
-    @Column(name = "RESP_MSG", length = 1024, nullable = true)
-    private String responseMsg;
-
+    @Column(name = "ERROR_CD", length = 10, nullable = true)
+    private String errorCode;
+    
+    @Column(name = "ERROR_MSG", length = 1024, nullable = true)
+    private String errorMessage;
+    
     @Override
     public String getDescription() {
         return target + " " + processor + (correlationId != null ? " " + correlationId : "");
@@ -131,20 +131,20 @@ public class OSMessagingAsync extends BaseAuditEntity {
         this.sentOn = sentOn;
     }
 
-    public String getResponseCode() {
-        return responseCode;
+    public String getErrorCode() {
+        return errorCode;
     }
 
-    public void setResponseCode(String responseCode) {
-        this.responseCode = responseCode;
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
     }
 
-    public String getResponseMsg() {
-        return responseMsg;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
-    public void setResponseMsg(String responseMsg) {
-        this.responseMsg = responseMsg;
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
 }

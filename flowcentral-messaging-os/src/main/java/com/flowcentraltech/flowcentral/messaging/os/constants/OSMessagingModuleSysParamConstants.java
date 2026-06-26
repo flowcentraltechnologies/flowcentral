@@ -23,5 +23,4 @@ package com.flowcentraltech.flowcentral.messaging.os.constants;
  */
 public interface OSMessagingModuleSysParamConstants {
 
-    String MESSAGE_LOGGING_ENABLED = "OMG-0001";
 }

@@ -18,35 +18,31 @@ package com.flowcentraltech.flowcentral.messaging.os.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
- * OS messaging async query.
+ * OS messaging async out query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class OSMessagingAsyncQuery extends BaseAuditEntityQuery<OSMessagingAsync> {
+public class OSMessagingAsyncOutQuery extends BaseAuditEntityQuery<OSMessagingAsyncOut> {
 
-    public OSMessagingAsyncQuery() {
-        super(OSMessagingAsync.class);
+    public OSMessagingAsyncOutQuery() {
+        super(OSMessagingAsyncOut.class);
     }
 
-    public OSMessagingAsyncQuery correlationId(String correlationId) {
-        return (OSMessagingAsyncQuery) addEquals("correlationId", correlationId);
+    public OSMessagingAsyncOutQuery correlationId(String correlationId) {
+        return (OSMessagingAsyncOutQuery) addEquals("correlationId", correlationId);
     }
 
-    public OSMessagingAsyncQuery target(String target) {
-        return (OSMessagingAsyncQuery) addEquals("target", target);
+    public OSMessagingAsyncOutQuery target(String target) {
+        return (OSMessagingAsyncOutQuery) addEquals("target", target);
     }
 
-    public OSMessagingAsyncQuery isUnresolved() {
-        return (OSMessagingAsyncQuery) addIsNull("responseCode");
+    public OSMessagingAsyncOutQuery isSent() {
+        return (OSMessagingAsyncOutQuery) addIsNotNull("sentOn");
     }
 
-    public OSMessagingAsyncQuery isSent() {
-        return (OSMessagingAsyncQuery) addIsNotNull("sentOn");
-    }
-
-    public OSMessagingAsyncQuery isNotSent() {
-        return (OSMessagingAsyncQuery) addIsNull("sentOn");
+    public OSMessagingAsyncOutQuery isNotSent() {
+        return (OSMessagingAsyncOutQuery) addIsNull("sentOn");
     }
 
 }

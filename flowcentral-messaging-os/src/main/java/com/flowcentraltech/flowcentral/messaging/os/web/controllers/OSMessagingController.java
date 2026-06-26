@@ -164,7 +164,7 @@ public class OSMessagingController extends AbstractPlainJsonController implement
                                             OSMessagingProcessor.class, header.getProcessor());
                                     BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
                                             requestJson);
-                                    response = _processor.process(headers, (BaseOSMessagingReq) request);
+                                    response = _processor.process(request);
                                 } else {
                                     error = getOSMessagingError(OSMessagingErrorConstants.PROCESSOR_NOT_FOUND);
                                 }

@@ -51,6 +51,14 @@ public enum OSMessagingMode implements EnumConst {
         return SYNCHRONOUS.code;
     }
 
+    public boolean isSynchronous() {
+        return SYNCHRONOUS.equals(this);
+    }
+
+    public boolean isAsynchronous() {
+        return ASYNCHRONOUS.equals(this);
+    }
+    
     public static OSMessagingMode fromCode(String code) {
         return EnumUtils.fromCode(OSMessagingMode.class, code);
     }

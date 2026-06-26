@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.entities;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Index;
@@ -22,44 +24,29 @@ import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 
 /**
- * OS messaging log.
- * 
- * @author Lateef Ojulari
- * @since 1.0
+ * OS messaging async in.
+ *
+ * @author FlowCentral Technologies Limited
+ * @since 4.1
  */
-@Table(name = "FC_OSMESSAGINGLOG", indexes = {
-        @Index({ "target" }), @Index({ "processor" })})
-public class OSMessagingLog extends BaseAuditEntity {
-
-    @Column(length = 32)
-    private String target;
+@Table(name = "FC_OSMESSAGINGASYNCIN", indexes = { @Index({ "correlationId" }) })
+public class OSMessagingAsyncIn extends BaseAuditEntity {
 
     @Column(name = "CORRELATION_ID", length = 32, nullable = true)
     private String correlationId;
-    
-    @Column(length = 64, nullable = true)
+
+    @Column(name = "PROCESSOR", length = 64)
     private String processor;
 
-    @Column(type = ColumnType.CLOB, nullable = true)
-    private String requestBody;
+    @Column(name = "ASYNC_MESSAGE", type = ColumnType.CLOB)
+    private String message;
 
-    @Column(type = ColumnType.CLOB, nullable = true)
-    private String responseBody;
-    
-    @Column(nullable = true)
-    private Long runtimeInMilliSec;
+    @Column(name = "PROCESSED_ON", type = ColumnType.TIMESTAMP, nullable = true)
+    private Date processedOn;
 
     @Override
     public String getDescription() {
-        return target;
-    }
-
-	public String getTarget() {
-        return target;
-    }
-
-    public void setTarget(String target) {
-        this.target = target;
+        return  processor + (correlationId != null ? " " + correlationId : "");
     }
 
     public String getCorrelationId() {
@@ -71,35 +58,27 @@ public class OSMessagingLog extends BaseAuditEntity {
     }
 
     public String getProcessor() {
-		return processor;
-	}
+        return processor;
+    }
 
-	public void setProcessor(String processor) {
-		this.processor = processor;
-	}
+    public void setProcessor(String processor) {
+        this.processor = processor;
+    }
 
-	public String getRequestBody() {
-		return requestBody;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setRequestBody(String requestBody) {
-		this.requestBody = requestBody;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public String getResponseBody() {
-		return responseBody;
-	}
+    public Date getProcessedOn() {
+        return processedOn;
+    }
 
-	public void setResponseBody(String responseBody) {
-		this.responseBody = responseBody;
-	}
-
-	public Long getRuntimeInMilliSec() {
-		return runtimeInMilliSec;
-	}
-
-	public void setRuntimeInMilliSec(Long runtimeInMilliSec) {
-		this.runtimeInMilliSec = runtimeInMilliSec;
-	}
+    public void setProcessedOn(Date processedOn) {
+        this.processedOn = processedOn;
+    }
 
 }

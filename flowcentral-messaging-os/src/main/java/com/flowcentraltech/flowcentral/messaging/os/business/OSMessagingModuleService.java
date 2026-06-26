@@ -21,13 +21,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerInfo;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
@@ -291,38 +289,5 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request) throws UnifyException;
-    
-    /**
-     * Get asynchronous acknowledgement.
-     * 
-     * @param correlationdId
-     *                       the message correlation ID
-     * @return the response object
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    OSResponse getAsynchronousAck(String correlationdId) throws UnifyException;
-    
-    /**
-     * Logs message processing.
-     * 
-     * @param mode
-     *                     the messaging mode
-     * @param correlationdId the correlation 
-     * @param source
-     *                     the source
-     * @param processor
-     *                     the processor
-     * @param summary
-     *                     the summary
-     * @param responseCode
-     *                     the response code
-     * @param responseMsg
-     *                     the response message
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void logProcessing(OSMessagingMode mode, String correlationdId, String source, String processor, String summary,
-            String responseCode, String responseMsg) throws UnifyException;
 
 }

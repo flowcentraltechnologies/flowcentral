@@ -19,7 +19,6 @@ import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.http.HttpRequestHeaders;
 
 /**
  * OS messaging processor.
@@ -41,16 +40,19 @@ public interface OSMessagingProcessor<T extends BaseOSMessagingResp, U extends B
     Class<? extends BaseOSMessagingResp> getResponseClass();
 
     /**
+     * Returns true if processor is for synchronous messages.
+     */
+    boolean isSynchronous();
+
+    /**
      * Processes a gateway request.
      * 
-     * @param headers
-     *                the request headers
      * @param request
      *                the request to process
      * @return the gateway response
      * @throws UnifyException
      *                        if an error occurs
      */
-    T process(HttpRequestHeaders headers, U request) throws UnifyException;
+    T process(U request) throws UnifyException;
 
 }
