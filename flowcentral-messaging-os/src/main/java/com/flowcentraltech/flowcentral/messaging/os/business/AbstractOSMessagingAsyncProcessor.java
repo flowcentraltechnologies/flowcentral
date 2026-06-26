@@ -35,7 +35,8 @@ public abstract class AbstractOSMessagingAsyncProcessor<U extends BaseOSMessagin
 
     @Override
     protected final OSMessagingAsyncResponse doProcess(U request) throws UnifyException {
-        return doAsyncProcess(request);
+        OSMessagingAsyncResponse resp = doAsyncProcess(request);
+        return resp != null ? resp : OSMessagingAsyncResponse.SUCCESS_RESPONSE;
     }
 
     protected abstract OSMessagingAsyncResponse doAsyncProcess(U request) throws UnifyException;

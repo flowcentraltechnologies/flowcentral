@@ -79,7 +79,11 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
         T resp = null;
         try {
             error = validateRequest(request);
-            if (error == null || !error.isErrorPresent()) {
+            if (error == null) {
+                error = NO_ERROR;
+            }
+            
+            if (!error.isErrorPresent()) {
                 resp = doProcess(request);
             }
         } catch (Exception e) {
@@ -104,10 +108,6 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
     @Override
     protected void onTerminate() throws UnifyException {
 
-    }
-
-    protected final OSMessagingError validationPass() {
-        return NO_ERROR;
     }
     
     protected final T successResult() throws UnifyException {
