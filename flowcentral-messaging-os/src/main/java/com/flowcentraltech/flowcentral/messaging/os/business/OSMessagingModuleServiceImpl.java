@@ -42,6 +42,8 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerEndpoint
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.UnknownTargetResp;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncIn;
+import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncInQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncOut;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncOutQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
@@ -63,6 +65,7 @@ import com.tcdng.unify.core.business.QueuedExec;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
+import com.tcdng.unify.core.stream.JsonObjectStreamer;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
@@ -82,11 +85,17 @@ import com.tcdng.unify.web.util.HttpUtils;
 @Component(OSMessagingModuleNameConstants.OSMESSAGING_MODULE_SERVICE)
 public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService implements OSMessagingModuleService {
 
-    private static final String PROCESS_MESSAGE_ASYNC = "os::processmessageasync";
-    
-    private static final long BASE_TIMEOUT= 5 * 1000L; // 5 seconds
+    private static final String PROCESS_OUTGOING_MESSAGE_ASYNC = "os::processoutmessageasync";
 
-    private static final long MESSAGE_TIMEOUT_OVERHEAD= 250L; // .25 seconds
+    private static final String PROCESS_INCOMING_MESSAGE_ASYNC = "os::processinmessageasync";
+
+    private static final long BASE_OUTGOING_TIMEOUT = 5 * 1000L; // 5 seconds
+
+    private static final long MESSAGE_OUTGOING_OVERHEAD = 250L; // .25 seconds
+
+    private static final long BASE_INCOMING_TIMEOUT = 5 * 1000L; // 5 seconds
+
+    private static final long MESSAGE_INCOMING_OVERHEAD = 10 * 1000L; // 10 seconds
 
     private static final int MAX_MESSAGING_THREADS = 32;
 
@@ -97,10 +106,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Configurable
     private OSDownloadLocalController osDownloadLocalController;
-    
+
     @Configurable
     private OSMessagingLocalController osMessagingLocalController;
-    
+
     @Configurable
     private SystemModuleService systemModuleService;
 
@@ -110,11 +119,16 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Configurable
     private OSAsyncMessagingErrorProcessor osAsyncMessagingErrorProcessor;
 
+    @Configurable
+    private JsonObjectStreamer jsonObjectStreamer;
+
     private final FactoryMap<String, OSMessagingPeerEndpointDef> osPeerEndpointDefFactoryMap;
 
     private final FactoryMap<String, OSMessagingHeader> osHeaderFactoryMap;
 
-    private final QueuedExec<List<Long>> queuedExec;
+    private final QueuedExec<List<Long>> outgoingQueuedExec;
+
+    private final QueuedExec<List<Long>> incomingQueuedExec;
 
     private OSInfo osInfo;
 
@@ -186,7 +200,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
             };
 
-        this.queuedExec = new AbstractQueuedExec<List<Long>>(MAX_MESSAGING_THREADS)
+        this.outgoingQueuedExec = new AbstractQueuedExec<List<Long>>(MAX_MESSAGING_THREADS)
             {
                 @Override
                 protected void doExecute(List<Long> osMessagingAsyncIds) {
@@ -202,7 +216,22 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 }
 
             };
-    }
+
+            this.incomingQueuedExec = new AbstractQueuedExec<List<Long>>(MAX_MESSAGING_THREADS)
+                {
+                    @Override
+                    protected void doExecute(List<Long> osMessagingAsyncIds) {
+                            for (Long osMessagingAsyncId : osMessagingAsyncIds) {
+                                try {
+                                processAsynchronousMessage(osMessagingAsyncId);
+                            } catch (UnifyException e) {
+                                logError(e);
+                            }
+                            }
+                    }
+
+                };
+   }
 
     @Override
     public OSInfo getOSInfo() throws UnifyException {
@@ -347,9 +376,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public <T extends BaseOSMessagingResp, U extends BaseOSMessagingReq> T sendSynchronousMessage(Class<T> respClass,
             U request) throws UnifyException {
-        if (request.getCorrelationId() == null) {
-            request.setCorrelationId(RandomUtils.generateUUIDInBase64());
-        }
+        final String correlationId = RandomUtils.generateUUIDInBase64();
 
         if (StringUtils.isBlank(request.getUserId())) {
             request.setUserId(getUserLoginId());
@@ -363,14 +390,12 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
         final String reqJson = prettyJson(request);
         return sendMessage(respClass, request.getTarget(), request.getProcessor(), request.getFunction(),
-                request.getService(), request.getCorrelationId(), request.getUserId(), reqJson, true);
+                request.getService(), correlationId, request.getUserId(), reqJson, true);
     }
 
     @Override
     public <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request) throws UnifyException {
-        if (request.getCorrelationId() == null) {
-            request.setCorrelationId(RandomUtils.generateUUIDInBase64());
-        }
+        final String correlationId = RandomUtils.generateUUIDInBase64();
 
         if (StringUtils.isBlank(request.getUserId())) {
             request.setUserId(getUserLoginId());
@@ -385,7 +410,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         final String reqJson = prettyJson(request);
         OSMessagingAsyncOut osMessagingAsync = new OSMessagingAsyncOut();
         osMessagingAsync.setTarget(request.getTarget());
-        osMessagingAsync.setCorrelationId(request.getCorrelationId());
+        osMessagingAsync.setCorrelationId(correlationId);
         osMessagingAsync.setUserLoginId(request.getUserId());
         osMessagingAsync.setProcessor(request.getProcessor());
         osMessagingAsync.setFunction(request.getFunction());
@@ -393,39 +418,91 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         osMessagingAsync.setMessage(reqJson);
         environment().create(osMessagingAsync);
 
-        return request.getCorrelationId();
+        return correlationId;
+    }
+
+    @Override
+    public void saveIncomingAsynchronousMessage(String processor, String correlationId, String requestJson)
+            throws UnifyException {
+        Optional<Long> optional = environment().valueOptional(Long.class, "id",
+                new OSMessagingAsyncInQuery().correlationId(correlationId));
+        if (!optional.isPresent()) {
+            OSMessagingAsyncIn async = new OSMessagingAsyncIn();
+            async.setCorrelationId(correlationId);
+            async.setProcessor(processor);
+            async.setMessage(requestJson);
+            environment().create(async);
+        }
     }
 
     @Periodic(PeriodicType.FASTER)
-    public void processMessageAsync(TaskMonitor taskMonitor) throws UnifyException {
-        if (tryGrabLock(PROCESS_MESSAGE_ASYNC)) {
+    public void processOutgoingAsyncMessages(TaskMonitor taskMonitor) throws UnifyException {
+        if (tryGrabLock(PROCESS_OUTGOING_MESSAGE_ASYNC)) {
             try {
                 // Get targets
-                Set<String> targets = environment().valueSet(String.class, "appId", new OSMessagingPeerEndpointQuery().ignoreEmptyCriteria(true));
+                Set<String> targets = environment().valueSet(String.class, "appId",
+                        new OSMessagingPeerEndpointQuery().ignoreEmptyCriteria(true));
 
                 // Concurrent send by target
                 long messageCount = 0;
-                for(String target: targets) {
+                for (String target : targets) {
                     final List<Long> osMessagingAsyncIdList = environment().valueList(Long.class, "id",
                             new OSMessagingAsyncOutQuery().target(target).isNotSent()
-                            .setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
+                                    .setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
                     if (!DataUtils.isBlank(osMessagingAsyncIdList)) {
-                        queuedExec.execute(osMessagingAsyncIdList);
+                        outgoingQueuedExec.execute(osMessagingAsyncIdList);
                         messageCount += osMessagingAsyncIdList.size();
-                    }                    
+                    }
                 }
 
                 // Wait till messages sent
                 if (messageCount > 0) {
                     try {
-                        queuedExec.waitTillCompleted(BASE_TIMEOUT + messageCount * MESSAGE_TIMEOUT_OVERHEAD);
+                        outgoingQueuedExec
+                                .waitTillCompleted(BASE_OUTGOING_TIMEOUT + messageCount * MESSAGE_OUTGOING_OVERHEAD);
                     } catch (TimeoutException e) {
                         logError(e);
                     }
                 }
 
             } finally {
-                releaseLock(PROCESS_MESSAGE_ASYNC);
+                releaseLock(PROCESS_OUTGOING_MESSAGE_ASYNC);
+            }
+        }
+    }
+
+    @Periodic(PeriodicType.FASTER)
+    public void processIncomingAsyncMessages(TaskMonitor taskMonitor) throws UnifyException {
+        if (tryGrabLock(PROCESS_INCOMING_MESSAGE_ASYNC)) {
+            try {
+                // Get processors
+                Set<String> processors = environment().valueSet(String.class, "processor",
+                        new OSMessagingAsyncInQuery().isNotProcessed());
+
+                // Concurrent process by processors
+                long messageCount = 0;
+                for (String processor : processors) {
+                    final List<Long> osMessagingInAsyncIdList = environment().valueList(Long.class, "id",
+                            new OSMessagingAsyncInQuery().processor(processor).isNotProcessed()
+                                    .setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
+                    if (!DataUtils.isBlank(osMessagingInAsyncIdList)) {
+                        incomingQueuedExec.execute(osMessagingInAsyncIdList);
+                        messageCount += osMessagingInAsyncIdList.size();
+                    }
+                }
+
+                // Wait till messages sent
+                if (messageCount > 0) {
+                    try {
+                        incomingQueuedExec
+                                .waitTillCompleted(BASE_INCOMING_TIMEOUT + messageCount * MESSAGE_INCOMING_OVERHEAD);
+                    } catch (TimeoutException e) {
+                        logError(e);
+                    }
+                }
+
+            } finally {
+                releaseLock(PROCESS_INCOMING_MESSAGE_ASYNC);
             }
         }
     }
@@ -452,6 +529,31 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void processAsynchronousMessage(Long osMessagingAsyncId) throws UnifyException {
+        String errorCode = null;
+        String errorMessage = null;
+        try {
+            final OSMessagingAsyncIn osMessagingAsyncIn = environment().find(OSMessagingAsyncIn.class,
+                    osMessagingAsyncId);
+            final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
+                    OSMessagingProcessor.class, osMessagingAsyncIn.getProcessor());
+            final BaseOSMessagingReq request = jsonObjectStreamer.unmarshal(_processor.getRequestClass(),
+                    osMessagingAsyncIn.getMessage());
+            final BaseOSMessagingResp resp = _processor.process(request);
+            if (!resp.isSuccessful()) {
+                errorCode = resp.getResponseCode();
+                errorMessage = resp.getResponseMessage();
+            }
+        } catch (UnifyException e) {
+            errorCode = "X01";
+            errorMessage = e.getMessage();
+        }
+
+        environment().updateById(OSMessagingAsyncIn.class, osMessagingAsyncId, new Update().add("processedOn", getNow())
+                .add("errorCode", errorCode).add("errorMessage", errorMessage));
     }
 
     @Override

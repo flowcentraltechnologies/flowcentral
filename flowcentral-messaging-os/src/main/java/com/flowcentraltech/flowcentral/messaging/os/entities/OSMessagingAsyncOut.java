@@ -35,7 +35,7 @@ public class OSMessagingAsyncOut extends BaseAuditEntity {
     @Column(name = "TARGET", length = 32)
     private String target;
 
-    @Column(name = "CORRELATION_ID", length = 32, nullable = true)
+    @Column(name = "CORRELATION_ID", length = 32)
     private String correlationId;
 
     @Column(name = "PROCESSOR", length = 64)

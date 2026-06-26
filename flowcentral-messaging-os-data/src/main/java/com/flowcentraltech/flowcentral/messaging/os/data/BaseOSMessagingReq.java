@@ -25,8 +25,6 @@ public abstract class BaseOSMessagingReq {
     
     private final String processor;
 
-    private String correlationId;
-
     private String userId;
 
     private String function;
@@ -47,14 +45,6 @@ public abstract class BaseOSMessagingReq {
 
     public final String getProcessor() {
         return processor;
-    }
-
-    public final String getCorrelationId() {
-        return correlationId;
-    }
-
-    public final void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
     }
 
     public final String getUserId() {

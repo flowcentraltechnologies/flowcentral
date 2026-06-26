@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingProcesso
 import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingModuleNameConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
@@ -71,12 +72,11 @@ public class OSMessagingController extends AbstractPlainJsonController implement
         String target = headers.get(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
         target = !StringUtils.isBlank(target) ? target
                 : headers.get(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
-        target = !StringUtils.isBlank(target) ? target
-                : getApplicationName();
+        target = !StringUtils.isBlank(target) ? target : getApplicationName();
         if (debugging) {
             logDebug("Performing local messaging to [{0}]...", target);
         }
-        
+
         final long start = System.currentTimeMillis();
         boolean success = true;
         String jsonResponse = null;
@@ -112,18 +112,19 @@ public class OSMessagingController extends AbstractPlainJsonController implement
                     final OSMessagingHeader header = osMessagingModuleService.getOSMessagingHeader(authorization);
                     if (header.isSourcePresent()) {
                         osMessagingAccessManager.checkAccess(header);
+                        final boolean sync = "sync"
+                                .equalsIgnoreCase(headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE));
                         final String service = headers.getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
                         if (!StringUtils.isBlank(service)) {
                             if (debugging) {
                                 logDebug("Relaying controller request to delegate service = [{0}]...", service);
                             }
-                            
+
                             final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
-                            final String sync = headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
-                            final Optional<String> optional = "sync".equalsIgnoreCase(sync)
+                            final Optional<String> optional = sync
                                     ? osMessagingModuleService.sendSynchronousMessageToService(header, service,
                                             correlationId, userloginId, requestJson)
-                                    : osMessagingModuleService.sendSynchronousMessageToService(header, service,
+                                    : osMessagingModuleService.sendAsynchronousMessageToService(header, service,
                                             correlationId, userloginId, requestJson);
                             if (optional.isPresent()) {
                                 if (debugging) {
@@ -141,10 +142,9 @@ public class OSMessagingController extends AbstractPlainJsonController implement
                                 if (debugging) {
                                     logDebug("Relaying controller request to delegate function = [{0}]...", function);
                                 }
-                                
-                                final String sync = headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
+
                                 final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
-                                final Optional<String> optional = "sync".equalsIgnoreCase(sync)
+                                final Optional<String> optional = sync
                                         ? osMessagingModuleService.sendSynchronousMessageToDelegate(header, function,
                                                 correlationId, userloginId, requestJson)
                                         : osMessagingModuleService.sendAsynchronousMessageToDelegate(header, function,
@@ -162,9 +162,19 @@ public class OSMessagingController extends AbstractPlainJsonController implement
                                 if (header.isProcessorPresent()) {
                                     final OSMessagingProcessor<BaseOSMessagingResp, BaseOSMessagingReq> _processor = getComponent(
                                             OSMessagingProcessor.class, header.getProcessor());
-                                    BaseOSMessagingReq request = getObjectFromRequestJson(_processor.getRequestClass(),
-                                            requestJson);
-                                    response = _processor.process(request);
+                                    if (sync == _processor.isSynchronous()) { // Matching synchronicity
+                                        if (sync) {
+                                            BaseOSMessagingReq request = getObjectFromRequestJson(
+                                                    _processor.getRequestClass(), requestJson);
+                                            response = _processor.process(request);
+                                        } else {
+                                            osMessagingModuleService.saveIncomingAsynchronousMessage(header.getProcessor(), correlationId, requestJson);
+                                            response = OSMessagingAsyncResponse.SUCCESS_RESPONSE;
+                                        }
+                                    } else {
+                                        error = getOSMessagingError(
+                                                OSMessagingErrorConstants.PROCESSOR_MESSAGING_MISMATCH);
+                                    }
                                 } else {
                                     error = getOSMessagingError(OSMessagingErrorConstants.PROCESSOR_NOT_FOUND);
                                 }

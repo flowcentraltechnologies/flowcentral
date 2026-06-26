@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.Column;
 @Table(name = "FC_OSMESSAGINGASYNCIN", indexes = { @Index({ "correlationId" }) })
 public class OSMessagingAsyncIn extends BaseAuditEntity {
 
-    @Column(name = "CORRELATION_ID", length = 32, nullable = true)
+    @Column(name = "CORRELATION_ID", length = 32)
     private String correlationId;
 
     @Column(name = "PROCESSOR", length = 64)
@@ -43,6 +43,12 @@ public class OSMessagingAsyncIn extends BaseAuditEntity {
 
     @Column(name = "PROCESSED_ON", type = ColumnType.TIMESTAMP, nullable = true)
     private Date processedOn;
+
+    @Column(name = "ERROR_CD", length = 10, nullable = true)
+    private String errorCode;
+    
+    @Column(name = "ERROR_MSG", length = 1024, nullable = true)
+    private String errorMessage;
 
     @Override
     public String getDescription() {
@@ -79,6 +85,22 @@ public class OSMessagingAsyncIn extends BaseAuditEntity {
 
     public void setProcessedOn(Date processedOn) {
         this.processedOn = processedOn;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
 }

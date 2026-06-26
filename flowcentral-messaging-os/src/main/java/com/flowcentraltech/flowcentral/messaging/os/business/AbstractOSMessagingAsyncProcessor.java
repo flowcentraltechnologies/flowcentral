@@ -28,8 +28,6 @@ import com.tcdng.unify.core.UnifyException;
  */
 public abstract class AbstractOSMessagingAsyncProcessor<U extends BaseOSMessagingReq>
         extends AbstractOSMessagingProcessor<OSMessagingAsyncResponse, U> {
-
-    private static final OSMessagingAsyncResponse RESPONSE = new OSMessagingAsyncResponse();
     
     public AbstractOSMessagingAsyncProcessor(Class<U> requestClass) {
         super(OSMessagingAsyncResponse.class, requestClass, OSMessagingMode.ASYNCHRONOUS);
@@ -37,9 +35,8 @@ public abstract class AbstractOSMessagingAsyncProcessor<U extends BaseOSMessagin
 
     @Override
     protected final OSMessagingAsyncResponse doProcess(U request) throws UnifyException {
-        doAsyncProcess(request);
-        return RESPONSE;
+        return doAsyncProcess(request);
     }
 
-    protected abstract void doAsyncProcess(U request) throws UnifyException;
+    protected abstract OSMessagingAsyncResponse doAsyncProcess(U request) throws UnifyException;
 }

@@ -39,4 +39,6 @@ public interface OSMessagingErrorConstants {
 
     String DELEGATE_FUNCTION_NOT_RESOLVED = "GP08";
 
+    String PROCESSOR_MESSAGING_MISMATCH = "GP09";
+
 }

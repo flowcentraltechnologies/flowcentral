@@ -290,4 +290,19 @@ public interface OSMessagingModuleService extends FlowCentralService {
      */
     <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request) throws UnifyException;
 
+    /**
+     * Saves an incoming asynchronous message.
+     * 
+     * @param processor
+     *                      the target processor
+     * @param correlationId
+     *                      the correlation ID
+     * @param requestJson
+     *                      the request object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveIncomingAsynchronousMessage(String processor, String correlationId, String requestJson)
+            throws UnifyException;
+
 }
