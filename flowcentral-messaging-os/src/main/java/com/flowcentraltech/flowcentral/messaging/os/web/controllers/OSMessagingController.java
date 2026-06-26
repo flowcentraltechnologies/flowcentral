@@ -73,7 +73,10 @@ public class OSMessagingController extends AbstractPlainJsonController implement
                 : headers.get(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
         target = !StringUtils.isBlank(target) ? target
                 : getApplicationName();
-       logDebug("Performing local messaging to [{0}]...", target);
+        if (debugging) {
+            logDebug("Performing local messaging to [{0}]...", target);
+        }
+        
         final long start = System.currentTimeMillis();
         boolean success = true;
         String jsonResponse = null;
@@ -111,7 +114,10 @@ public class OSMessagingController extends AbstractPlainJsonController implement
                         osMessagingAccessManager.checkAccess(header);
                         final String service = headers.getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
                         if (!StringUtils.isBlank(service)) {
-                            logDebug("Relaying controller request to delegate service = [{0}]...", service);
+                            if (debugging) {
+                                logDebug("Relaying controller request to delegate service = [{0}]...", service);
+                            }
+                            
                             final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                             final String sync = headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
                             final Optional<String> optional = "sync".equalsIgnoreCase(sync)
@@ -132,7 +138,10 @@ public class OSMessagingController extends AbstractPlainJsonController implement
                             final String function = headers
                                     .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
                             if (!StringUtils.isBlank(function)) {
-                                logDebug("Relaying controller request to delegate function = [{0}]...", function);
+                                if (debugging) {
+                                    logDebug("Relaying controller request to delegate function = [{0}]...", function);
+                                }
+                                
                                 final String sync = headers.getHeader(OSMessagingRequestHeaderConstants.ROUTING_TYPE);
                                 final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                                 final Optional<String> optional = "sync".equalsIgnoreCase(sync)

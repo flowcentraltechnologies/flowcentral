@@ -76,7 +76,10 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
 
     @Override
     public PostResp<String> handleLocalDownload(Map<String, String> headers, OutputStream out) throws UnifyException {
-        logDebug("Performing local download using signature [{0}]...", headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
+        if (debugging) {
+            logDebug("Performing local download using signature [{0}]...", headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
+        }
+        
         final long start = System.currentTimeMillis();
         boolean success = true;
         String jsonResponse = null;
@@ -94,7 +97,10 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
     @SuppressWarnings("unchecked")
     @Override
     protected void handleDownload(HttpRequestHeaders headers, OutputStream out) throws UnifyException {
-        logDebug("Executing controller request ...");
+        if (debugging) {
+            logDebug("Executing controller download request...");
+        }
+        
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
         final String correlationId = headers.getHeader(OSMessagingRequestHeaderConstants.CORRELATION_ID);
@@ -109,7 +115,10 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
                         osMessagingAccessManager.checkAccess(header);
                         final String service = headers.getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
                         if (!StringUtils.isBlank(service)) {
-                            logDebug("Relaying controller request to delegate service = [{0}]...", service);
+                            if (debugging) {
+                                logDebug("Relaying controller request to delegate service = [{0}]...", service);
+                            }
+                            
                             final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                             final String fileSignature = headers
                                     .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
@@ -128,7 +137,10 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
                             final String function = headers
                                     .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
                             if (!StringUtils.isBlank(function)) {
-                                logDebug("Relaying controller request to delegate function = [{0}]...", function);
+                                if (debugging) {
+                                    logDebug("Relaying controller request to delegate function = [{0}]...", function);
+                                }
+                                
                                 final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                                 final String fileSignature = headers
                                         .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
