@@ -547,7 +547,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 errorCode = resp.getResponseCode();
                 errorMessage = resp.getResponseMessage();
             }
-        } catch (UnifyException e) {
+        } catch (Exception e) {
             errorCode = "X01";
             errorMessage = e.getMessage();
         }

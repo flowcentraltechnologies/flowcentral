@@ -1374,9 +1374,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
             if (update) {
                 // Update
-                final AppletDef stepAppletDef = appletUtil.getAppletDef(currentWfStepDef.getStepAppletName());
-                final String updatePolicy = stepAppletDef.getPropValue(String.class,
-                        AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
+                final AppletDef stepAppletDef = currentWfStepDef.getStepAppletName() != null
+                        ? appletUtil.getAppletDef(currentWfStepDef.getStepAppletName())
+                        : null;
+                final String updatePolicy = stepAppletDef != null
+                        ? stepAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY)
+                        : null;
                 EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE,
                         null, updatePolicy);
                 if (wfReviewMode.lean()) {
