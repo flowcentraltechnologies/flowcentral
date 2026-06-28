@@ -22,6 +22,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
+import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
 import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.tcdng.unify.core.UnifyException;
 
@@ -77,11 +78,11 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
      *                     the requester
      * @param requestedOn
      *                     requested on
-     * @return the error if found otherwise null
+     * @return the error trace if found otherwise null
      * @throws UnifyException
      *                        if an error occurs
      */
-    String fetchErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
+    WfErrorTrace fetchErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
             throws UnifyException;
 
     /**

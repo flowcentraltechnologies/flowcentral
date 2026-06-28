@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
+import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 
@@ -44,7 +45,7 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
     }
 
     @Override
-    public String fetchErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
+    public WfErrorTrace fetchErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
             throws UnifyException {
         return workflowModuleService.fetchErrorWorkItemExceptionMessage(workRecId, workflowName, requestedOn,
                 requestedBy);

@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
+import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
@@ -547,6 +548,6 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * @return the error trace if found otherwise null
      * @throws UnifyException
      */
-    String fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName, Date requestedOn,
+    WfErrorTrace fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName, Date requestedOn,
             String requestedBy) throws UnifyException;
 }

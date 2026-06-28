@@ -114,6 +114,7 @@ import com.flowcentraltech.flowcentral.workflow.constants.WorkflowTransitionVari
 import com.flowcentraltech.flowcentral.workflow.data.WfAlertDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
+import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
 import com.flowcentraltech.flowcentral.workflow.data.WfFilterDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfItemAccessible;
 import com.flowcentraltech.flowcentral.workflow.data.WfRoutingDef;
@@ -1249,11 +1250,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
-    public String fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName, Date requestedOn,
+    public WfErrorTrace fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName, Date requestedOn,
             String requestedBy) throws UnifyException {
-        Optional<String> optional = environment().valueOptional(String.class, "errorTrace",
-                new WfItemQuery().workRecId(workRecId).workflowName(workflowName).wfStepName("error"));
-        return optional.isPresent() ? optional.get() : null;
+        final WfItem wfItem = environment().list(new WfItemQuery().workRecId(workRecId).workflowName(workflowName)
+                .wfStepName("error").addSelect("errorTrace", "stepDt"));
+        if (wfItem != null && !StringUtils.isBlank(wfItem.getErrorTrace())) {
+            return new WfErrorTrace(wfItem.getErrorTrace(), wfItem.getStepDt());
+        }
+
+        return WfErrorTrace.BLANK;
     }
 
     @Override
@@ -1786,10 +1791,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
         if (wfEntityInst != null) {
             try {
-                final UserToken userToken = UserToken.newBuilder().userLoginId(wfItem.getForwardedBy())
-                        .userName(wfItem.getForwardedByName()).branchCode(wfEntityInst.getWorkBranchCode())
-                        .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(wfItem.getForwardedBy()))
-                        .build();
+                final String forwardedBy = wfItem.getForwardedBy() != null ? wfItem.getForwardedBy()
+                        : DefaultApplicationConstants.SYSTEM_LOGINID;
+                final UserToken userToken = UserToken.newBuilder().userLoginId(forwardedBy)
+                        .userName(wfItem.getForwardedByName() != null ? wfItem.getForwardedByName()
+                                : DefaultApplicationConstants.SYSTEM_FULLNAME)
+                        .branchCode(wfEntityInst.getWorkBranchCode())
+                        .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(forwardedBy)).build();
                 getSessionContext().setUserToken(userToken);
 
                 final TransitionItem transitionItem = createTransitionItem(wfItem, wfDef, wfEntityInst,
