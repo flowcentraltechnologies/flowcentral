@@ -74,16 +74,11 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
      *                     the work record ID
      * @param workflowName
      *                     the workflow name
-     * @param requestedBy
-     *                     the requester
-     * @param requestedOn
-     *                     requested on
      * @return the error trace if found otherwise null
      * @throws UnifyException
      *                        if an error occurs
      */
-    WfErrorTrace fetchErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
-            throws UnifyException;
+    WfErrorTrace fetchErrorFromExternal(Long workRecId, String workflowName) throws UnifyException;
 
     /**
      * Recovers error work record from external system.

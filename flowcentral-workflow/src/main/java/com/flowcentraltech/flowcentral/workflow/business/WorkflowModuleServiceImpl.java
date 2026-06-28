@@ -1250,8 +1250,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
-    public WfErrorTrace fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName, Date requestedOn,
-            String requestedBy) throws UnifyException {
+    public WfErrorTrace fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName) throws UnifyException {
         final WfItem wfItem = environment().list(new WfItemQuery().workRecId(workRecId).workflowName(workflowName)
                 .wfStepName("error").addSelect("errorTrace", "stepDt"));
         if (wfItem != null && !StringUtils.isBlank(wfItem.getErrorTrace())) {

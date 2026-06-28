@@ -45,10 +45,8 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
     }
 
     @Override
-    public WfErrorTrace fetchErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
-            throws UnifyException {
-        return workflowModuleService.fetchErrorWorkItemExceptionMessage(workRecId, workflowName, requestedOn,
-                requestedBy);
+    public WfErrorTrace fetchErrorFromExternal(Long workRecId, String workflowName) throws UnifyException {
+        return workflowModuleService.fetchErrorWorkItemExceptionMessage(workRecId, workflowName);
     }
 
     @Override
