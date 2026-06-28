@@ -97,6 +97,7 @@ import com.flowcentraltech.flowcentral.common.data.GenerateListingReportOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
@@ -132,6 +133,28 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 4.1
  */
 public interface AppletUtilities extends FlowCentralComponent {
+
+    /**
+     * Gets process variable definitions.
+     * 
+     * @param entity
+     *               optional entity long name
+     * @return the list of process variable definitions
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException;
+    
+    /**
+     * Gets initial process variables.
+     * 
+     * @param entity
+     *               optional entity long name
+     * @return the process variables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Map<String, String> getInitialProcessVariables(String entity) throws UnifyException;
 
     /**
      * Gets a static list enumeration type.
@@ -1592,13 +1615,15 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                                ignore parent condition flag
      * @param includeSysParam
      *                                include system parameter filters
+     * @param includeProcessVariable
+     *                                include process variable
      * @return the entity filter
      * @throws UnifyException
      *                        if an error occurs
      */
     EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam)
-            throws UnifyException;
+            EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition, boolean includeSysParam,
+            boolean includeProcessVariable) throws UnifyException;
 
     /**
      * Constructs entity search input.
@@ -1706,12 +1731,17 @@ public interface AppletUtilities extends FlowCentralComponent {
      *                                the entity set values mode
      * @param isIgnoreParentCondition
      *                                ignore parent condition flag
+     * @param includeSysParam
+     *                                include system parameter filters
+     * @param includeProcessVariable
+     *                                include process variable
      * @return the entity set values
      * @throws UnifyException
      *                        if an error occurs
      */
     EntitySetValues constructEntitySetValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int entitySetValuesMode, boolean isIgnoreParentCondition) throws UnifyException;
+            EntityDef ownerEntityDef, int entitySetValuesMode, boolean isIgnoreParentCondition,
+            boolean includeSysParam, boolean includeProcessVariable) throws UnifyException;
 
     /**
      * Constructs entity parameter values.

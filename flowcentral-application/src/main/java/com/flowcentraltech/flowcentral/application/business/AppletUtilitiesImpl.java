@@ -154,6 +154,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.common.data.Listable;
@@ -283,6 +284,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     private MappedEntityProviderInfo mappedEntityProviderInfo;
 
+    private List<ProcessVariablesProvider> processVariablesProviders;
+
     public AppletUtilitiesImpl() {
         this.singleFormBeanClassByPanelName = new FactoryMap<String, Class<? extends SingleFormBean>>()
             {
@@ -402,6 +405,34 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException {
+        if (!DataUtils.isBlank(processVariablesProviders)) {
+            List<ProcessVariableDef> variables = new ArrayList<ProcessVariableDef>();
+            for (ProcessVariablesProvider provider : processVariablesProviders) {
+                variables.addAll(provider.getProcessVariables(entity));
+            }
+
+            return variables;
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Map<String, String> getInitialProcessVariables(String entity) throws UnifyException {
+        if (!DataUtils.isBlank(processVariablesProviders)) {
+            Map<String, String> variables = new HashMap<String, String>();
+            for (ProcessVariablesProvider provider : processVariablesProviders) {
+                variables.putAll(provider.getInitialProcessVariables(entity));
+            }
+
+            return variables;
+        }
+
+        return Collections.emptyMap();
     }
 
     @Override
@@ -1248,7 +1279,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntityFilter _entityFilter = constructEntityFilter(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), formDef.getEntityDef(), EntityFilter.ENABLE_ALL,
-                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam());
+                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam(),
+                                formTabDef.isIncludeProcessVariable());
                         _entityFilter.setListType(categoryType.listType());
                         _entityFilter.setParamList(categoryType.paramList());
                         _entityFilter.setCategory(categoryType.category());
@@ -1334,7 +1366,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntitySetValues _entitySetValues = constructEntitySetValues(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), formDef.getEntityDef(), EntitySetValues.ENABLE_ALL,
-                                formTabDef.isIgnoreParentCondition());
+                                formTabDef.isIgnoreParentCondition(), formTabDef.isIncludeSysParam(),
+                                formTabDef.isIncludeProcessVariable());
                         _entitySetValues.setCategory(categoryType.category());
                         _entitySetValues.setOwnerInstId((Long) inst.getId());
                         _entitySetValues.load(_entityDef);
@@ -1939,9 +1972,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition,
-            boolean includeSysParam) throws UnifyException {
+            boolean includeSysParam, boolean includeProcessVariable) throws UnifyException {
         return new EntityFilter(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFilterMode,
-                isIgnoreParentCondition, includeSysParam);
+                isIgnoreParentCondition, includeSysParam, includeProcessVariable);
     }
 
     @Override
@@ -1976,10 +2009,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public EntitySetValues constructEntitySetValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, EntityDef ownerEntityDef, int entitySetValuesMode, boolean isIgnoreParentCondition)
-            throws UnifyException {
+            String tabName, EntityDef ownerEntityDef, int entitySetValuesMode, boolean isIgnoreParentCondition,
+            boolean includeSysParam, boolean includeProcessVariable) throws UnifyException {
         return new EntitySetValues(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entitySetValuesMode,
-                isIgnoreParentCondition);
+                isIgnoreParentCondition, includeSysParam, includeProcessVariable);
     }
 
     @Override
@@ -2076,7 +2109,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         return true;
     }
-    
+
     @Override
     public boolean formBeanMatchAppletPropertyConditionWhenPresent(AppletDef appletDef, AbstractForm form,
             String conditionPropName) throws UnifyException {
@@ -2090,7 +2123,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         return false;
     }
-    
+
     @Override
     public FormValidation validateFormUsingComponentValidation(String formName, Object inst,
             EvaluationMode evaluationMode) throws UnifyException {
@@ -2156,6 +2189,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void onInitialize() throws UnifyException {
+        // Process variable providers
+        processVariablesProviders = getComponents(ProcessVariablesProvider.class);
+
+        // Mapped entity providers
         Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
         List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
         for (MappedEntityProvider _provider : _providers) {
@@ -2327,7 +2364,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     AppletPropertyConstants.WORKFLOWCOPY_CREATE_COPY_SETVALUES);
             if (!StringUtils.isBlank(wfCopyCreateSetValuesName)) {
                 AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopyCreateSetValuesName);
-                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst, Collections.emptyMap(),
+                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst,
                         null);
             }
         }
@@ -2390,13 +2427,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         // Create workflow copy
         EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
         ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
-        wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_WORKFLOW_BASE_FIELDS);
+        wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst),
+                ApplicationEntityUtils.RESERVED_WORKFLOW_BASE_FIELDS);
         final String wfCopyUpdateSetValuesName = formAppletDef.getPropValue(String.class,
                 AppletPropertyConstants.WORKFLOWCOPY_UPDATE_COPY_SETVALUES);
         if (!StringUtils.isBlank(wfCopyUpdateSetValuesName)) {
             AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopyUpdateSetValuesName);
-            appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(), wfCopyValueStore,
-                    Collections.emptyMap(), null);
+            appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(), wfCopyValueStore, null);
         }
 
         WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
@@ -2448,7 +2485,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     AppletPropertyConstants.MAINTAIN_FORM_DELETE_PSEUDO_SETVALUES);
             if (!StringUtils.isBlank(pseudoDeleteSetValuesName)) {
                 AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(pseudoDeleteSetValuesName);
-                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst, Collections.emptyMap(),
+                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst,
                         null);
             }
 
@@ -2528,7 +2565,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, valueStore.getReader(), now)
                     : null;
             if (objectFilter == null || objectFilter.matchReader(valueStore.getReader())) {
-                formStatePolicyDef.getSetValuesDef().apply(this, entityDef, now, valueStore, Collections.emptyMap(),
+                formStatePolicyDef.getSetValuesDef().apply(this, entityDef, now, valueStore,
                         null);
             }
         }
@@ -2763,7 +2800,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final Date now = getNow();
 
         // Execute delayed set values
-        final Map<String, Object> variables = Collections.emptyMap();
         for (FormStatePolicyDef formStatePolicyDef : _formDef.getOnDelayedSetValuesFormStatePolicyDefList()) {
             ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
                     ? formStatePolicyDef.getOnCondition().getObjectFilter(_formDef.getEntityDef(),
@@ -2771,8 +2807,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     : null;
             if (objectFilter == null || objectFilter.matchReader(_formValueStoreReader)) {
                 if (formStatePolicyDef.isSetValues()) {
-                    formStatePolicyDef.getSetValuesDef().apply(this, _formDef.getEntityDef(), now, _formValueStore,
-                            variables, null);
+                    formStatePolicyDef.getSetValuesDef().apply(this, _formDef.getEntityDef(), now, _formValueStore, null);
                 }
             }
         }
@@ -2855,8 +2890,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             if (type != null) {
                 final String resourceName = ApplicationNameUtils
                         .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
-                enterReadOnlyMode = !collaborationProvider.isLockedBy(type, resourceName,
-                        getUserLoginId());
+                enterReadOnlyMode = !collaborationProvider.isLockedBy(type, resourceName, getUserLoginId());
             }
         }
 

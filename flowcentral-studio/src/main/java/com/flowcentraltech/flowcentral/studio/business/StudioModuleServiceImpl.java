@@ -367,11 +367,11 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Taskable(name = StudioSnapshotTaskConstants.STUDIO_TAKE_SNAPSHOT_TASK_NAME,
-            description = "Studio Take Snapshot Task",
+            description = "Studio Take CDSnapshot Task",
             parameters = {
-                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, description = "Snapshot Type",
+                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_TYPE, description = "CDSnapshot Type",
                             type = StudioSnapshotType.class),
-                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, description = "Snapshot Name",
+                    @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_NAME, description = "CDSnapshot Name",
                             type = String.class, mandatory = true),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_MESSAGE, description = "Message",
                             type = String.class),
@@ -398,7 +398,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         studioSnapshot.setSnapshot(snapshot.getData());
         Long snapshotId = (Long) environment().create(studioSnapshot);
         commitTransactions();
-        logDebug(taskMonitor, "Snapshot successfully taken.");
+        logDebug(taskMonitor, "CDSnapshot successfully taken.");
 
         if (appletUtilities.getSysParameterValue(boolean.class,
                 CodeGenerationModuleSysParamConstants.ENABLE_SNAPSHOT_TO_LOCAL_WORKING_FOLDER)) {
@@ -410,23 +410,23 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
             IOUtils.ensureDirectoryExists(path);
             IOUtils.writeToFile(fullSnapshotName, snapshot.getData());
-            logDebug(taskMonitor, "Snapshot local image successfully written.");
+            logDebug(taskMonitor, "CDSnapshot local image successfully written.");
         }
 
         resultDetails.setSnapshotId(snapshotId);
         resultDetails.setFileName(snapshot.getFilename());
         resultDetails.setSnapshot(snapshot.getData());
-        logDebug(taskMonitor, "Snapshot process completed.");
+        logDebug(taskMonitor, "CDSnapshot process completed.");
         return 0;
     }
 
     @Taskable(name = StudioSnapshotTaskConstants.STUDIO_UPLOAD_SNAPSHOT_TASK_NAME,
-            description = "Studio Upload Snapshot Task",
+            description = "Studio Upload CDSnapshot Task",
             parameters = {
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_CONFIG,
-                            description = "Snapshot Configuration", type = SnapshotConfig.class),
+                            description = "CDSnapshot Configuration", type = SnapshotConfig.class),
                     @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_UPLOAD_FILE,
-                            description = "Snapshot File", type = UploadedFile.class, mandatory = true) },
+                            description = "CDSnapshot File", type = UploadedFile.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE)
     public int uploadStudioSnapshotTask(TaskMonitor taskMonitor, SnapshotConfig snapshotConfig,
             UploadedFile snapshotUploadFile) throws UnifyException {
@@ -439,7 +439,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             }
 
             if (!getApplicationCode().equals(snapshotConfig.getApplicationCode())) {
-                throwOperationErrorException(new IllegalArgumentException("Snapshot application is unmatching."));
+                throwOperationErrorException(new IllegalArgumentException("CDSnapshot application is unmatching."));
             }
         }
 
@@ -455,7 +455,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         studioSnapshot.setSnapshotDetailsId(studioSnapshotDetailsId);
         studioSnapshot.setSnapshot(snapshotUploadFile.getData());
         environment().create(studioSnapshot);
-        logDebug(taskMonitor, "Snapshot file [{0}] upload successfully completed.", snapshotUploadFile.getFilename());
+        logDebug(taskMonitor, "CDSnapshot file [{0}] upload successfully completed.", snapshotUploadFile.getFilename());
         
         snapshotUploadFile.invalidate();
         return 0;
@@ -466,9 +466,9 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     private static final String XML_SUFFIX = ".xml";
 
     @Taskable(name = StudioSnapshotTaskConstants.STUDIO_RESTORE_SNAPSHOT_TASK_NAME,
-            description = "Studio Restore from Snapshot Task",
+            description = "Studio Restore from CDSnapshot Task",
             parameters = { @Parameter(name = StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_DETAILS_ID,
-                    description = "Snapshot Details ID", type = Long.class, mandatory = true) },
+                    description = "CDSnapshot Details ID", type = Long.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_SINGLE)
     public int restoreStudioSnapshotTask(TaskMonitor taskMonitor, Long snapshotDetailsId) throws UnifyException {
         logDebug(taskMonitor, "Restoring studio from snapshot...");

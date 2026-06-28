@@ -16,29 +16,18 @@
 !fc-editpropertylistpanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{headerBar propertiesBodyPanel}
 
 // Header Bar
-!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{36% none 36%}}
-	components:$c{headerLeftPanel headerCenterPanel headerRightPanel}
-	
-!ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{sectorIcon titleBlock}
-!fc-sectoricon:sectorIcon binding:sectorIcon
-!fc-formbreadcrumbs:titleBlock binding:breadCrumbs
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
+	components:$c{headerRightPanel}
 
 !ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
 	components:$c{saveBtn}
 	components:$f{moreActionButtons}
-	
-!ui-panel:headerCenterPanel style:$s{display:inline-block; width:100%;}
-	layout:$d{!ui-horizontal style:$s{width:100%;} cellType:middle  cellStyle:$s{text-align:center;}}
-	components:$c{displayCounterLabel}
-!ui-label:displayCounterLabel styleClass:$e{fc-dispcounter}
-	styleClassBinding:displayItemCounterClass binding:displayItemCounter
 
 !ui-button:saveBtn caption:$m{button.save}
 	eventHandler:$d{!ui-event event:onclick action:$c{savePropertiesAct}}
 
 // Properties form panel
-!ui-panel:propertiesBodyPanel style:$s{width:60%; margin: 8px auto;} 
+!ui-panel:propertiesBodyPanel style:$s{margin: 8px auto;} 
 	components:$c{headlessTabsFormPanel}
 !fc-headlesstabsformpanel:headlessTabsFormPanel binding:headlessForm
 	

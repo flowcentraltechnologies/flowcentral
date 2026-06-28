@@ -61,7 +61,7 @@ public class EntityCategoryDef implements Listable {
     public String getLabel() {
         return label;
     }
-
+    
     public FilterDef getFilterDef() {
         return filterDef;
     }

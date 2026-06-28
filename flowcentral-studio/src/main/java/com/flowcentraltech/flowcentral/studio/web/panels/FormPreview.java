@@ -59,6 +59,8 @@ public class FormPreview {
 
     private final FormEditor formEditor;
 
+    private final String formName;
+
     private HeaderWithTabsForm form;
 
     private Design oldDesign;
@@ -66,6 +68,13 @@ public class FormPreview {
     public FormPreview(AppletUtilities au, FormEditor formEditor) {
         this.au = au;
         this.formEditor = formEditor;
+        this.formName = null;
+    }
+
+    public FormPreview(AppletUtilities au, String formName) {
+        this.au = au;
+        this.formEditor = null;
+        this.formName = formName;
     }
 
     public HeaderWithTabsForm getForm() {
@@ -73,6 +82,15 @@ public class FormPreview {
     }
 
     public void reload() throws UnifyException {
+        if (formEditor == null) {
+            final FormDef formDef = au.getFormDef(formName);
+            final Object inst = ReflectUtils
+                    .newInstance(au.getEntityClassDef(formDef.getEntityDef().getListKey()).getEntityClass());
+            form = au.constructHeaderWithTabsForm(null, "Preview Subtitle", "Preview Title", formDef, (Entity) inst,
+                    FormMode.MAINTAIN, null, null);
+            return;
+        }
+        
         Design design = formEditor.getDesign();
         if (oldDesign != design) {
             final FormDef originFormDef = formEditor.getFormDef();
@@ -90,14 +108,16 @@ public class FormPreview {
                             formTab.getLabel(), formTab.getApplet(), formTab.getReference(),
                             formTab.getMappedFieldName(), formTab.getMappedForm(), formTab.getEditAction(),
                             formTab.getEditViewOnly(), formTab.getEditAllowAddition(), formTab.getEditFixedRows(),
-                            formTab.isIgnoreParentCondition(), formTab.isIncludeSysParam(), formTab.isShowSearch(), formTab.isQuickEdit(),
+                            formTab.isIgnoreParentCondition(), formTab.isIncludeSysParam(),
+                            formTab.isIncludeProcessVariable(), formTab.isShowSearch(), formTab.isQuickEdit(),
                             formTab.isQuickOrder(), formTab.isVisible(), formTab.isEditable(), formTab.isDisabled());
                     int sectionIndex = -1;
                     for (FormSection formSection : formTab.getSections()) {
                         sectionIndex++;
                         fdb.addFormSection(tabIndex, formSection.getName(), formSection.getLabel(),
-                                FormColumnsType.fromCode(formSection.getColumns()), formSection.getPanel(), formSection.getIcon(),
-                                formSection.isVisible(), formSection.isEditable(), formSection.isDisabled());
+                                FormColumnsType.fromCode(formSection.getColumns()), formSection.getPanel(),
+                                formSection.getIcon(), formSection.isVisible(), formSection.isEditable(),
+                                formSection.isDisabled());
                         for (FormField formField : formSection.getFields()) {
                             final String fieldName = formField.getName();
                             if (entityDef.isWithFieldDef(fieldName)) {

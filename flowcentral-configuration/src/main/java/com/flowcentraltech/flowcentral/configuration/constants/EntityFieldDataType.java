@@ -600,6 +600,10 @@ public enum EntityFieldDataType implements EnumConst {
         return TIMESTAMP.equals(this) || TIMESTAMP_UTC.equals(this);
     }
 
+    public boolean isDatetime() {
+        return DATE.equals(this) || TIMESTAMP.equals(this) || TIMESTAMP_UTC.equals(this);
+    }
+
     public boolean isBoolean() {
         return BOOLEAN.equals(this);
     }

@@ -46,7 +46,7 @@ public class Branch extends BaseStatusEntity {
     @Column(name = "BRANCH_CD", length = 16)
     private String code;
 
-    @Column(name = "BRANCH_DESC", length = 64)
+    @Column(name = "BRANCH_DESC", length = 128)
     private String description;
 
     @Column(name = "SORT_CD", length = 32, nullable = true)
@@ -54,6 +54,9 @@ public class Branch extends BaseStatusEntity {
 
     @Column(name = "ALT_SORT_CD", length = 32, nullable = true)
     private String altSortCode;
+
+    @Column(name = "EMAIL", length = 128, nullable = true)
+    private String email;
 
     @Column(name = "HEAD_OFFICE_FG")
     private boolean headOffice;
@@ -220,5 +223,13 @@ public class Branch extends BaseStatusEntity {
 
     public void setLanguageTag(String languageTag) {
         this.languageTag = languageTag;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

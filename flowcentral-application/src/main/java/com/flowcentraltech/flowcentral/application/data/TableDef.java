@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.flowcentraltech.flowcentral.application.business.DynamicEnumProvider;
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.LinkActConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -714,7 +714,15 @@ public class TableDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public TableDef build(DynamicEnumProvider dynamicEnumProvider) throws UnifyException {
+        public TableDef build(final AppletUtilities au) throws UnifyException {
+           if (DataUtils.isBlank(visibleColumnDefList)) {
+                for (EntityFieldDef entityFieldDef : entityDef.getColumnFieldDefList()) {
+                    final String renderer = InputWidgetUtils
+                            .constructRenderer(au.getWidgetTypeDef(entityFieldDef.getInputWidget()), entityFieldDef);
+                    addColumnDef(entityFieldDef.getFieldLabel(), entityFieldDef.getFieldName(), renderer, 1, false);
+                }
+            }
+
             List<TableColumnDef> _visibleColumnDefList = new ArrayList<TableColumnDef>();
             int usedPercent = 0;
             final int len = visibleColumnDefList.size();
@@ -753,7 +761,7 @@ public class TableDef extends BaseApplicationEntityDef {
                                 + linkAct + "}}";
                     } else {
                         if (entityFieldDef.isEnumDynamic()) {
-                            badgeInfo = dynamicEnumProvider.getEnumerationDef(entityFieldDef.getReferences())
+                            badgeInfo = au.enumProvider().getEnumerationDef(entityFieldDef.getReferences())
                                     .getBadgeInfo();
                             renderer = "!ui-badge badgeInfoBinding:$s{__badgeInfo} alwaysValueIndex:true binding:$s{"
                                     + fieldName + "}";
@@ -793,11 +801,6 @@ public class TableDef extends BaseApplicationEntityDef {
                     basicSearch, totalSummary, headerless, multiSelect, nonConforming, fixedRows, limitSelectToColumns,
                     nameParts, description, id, version);
         }
-    }
-
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
     }
 
 }

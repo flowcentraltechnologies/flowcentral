@@ -41,10 +41,6 @@ public enum SysParamType implements EnumConst {
     CONTACT(
             "C", String.class);
 
-    private static final String PREFIX = "sp:";
-
-    private static final String PREFIX_UPPERCASE = PREFIX.toUpperCase();
-
     private final String code;
 
     private final Class<?> dataType;
@@ -64,24 +60,8 @@ public enum SysParamType implements EnumConst {
         return STRING.code;
     }
 
-    public String encodeFilterCode(String param) {
-        return PREFIX + param + ":" + code;
-    }
-
-    public String encodeFilterName(String name) {
-        return PREFIX_UPPERCASE + name;
-    }
-
     public Class<?> dataType() {
         return dataType;
-    }
-    
-    public static boolean isSysParam(String encoded) {
-        return encoded.startsWith(PREFIX);
-    }
-    
-    public static String getSysParamCode(String encoded) {
-        return encoded.substring(PREFIX.length(), encoded.length() - 2);
     }
     
     public static SysParamType fromEncoded(String encoded) {

@@ -66,12 +66,12 @@ public class ConfigurationLoaderImpl extends AbstractFlowCentralComponent implem
                 FlowCentralStaticSettings fcStaticSettings = (FlowCentralStaticSettings) unifyStaticSettings;
                 if (!StringUtils.isBlank(fcStaticSettings.moduleConfigName())) {
                     moduleXmlList.add(fcStaticSettings.moduleConfigName());
+                }
 
-                    String installerName = fcStaticSettings.installerName();
-                    if (!StringUtils.isBlank(installerName)) {
-                        logDebug("Identified feature installer [{0}]...", installerName);
-                        installerList.add(installerName);
-                    }
+                String installerName = fcStaticSettings.installerName();
+                if (!StringUtils.isBlank(installerName)) {
+                    logDebug("Identified feature installer [{0}]...", installerName);
+                    installerList.add(installerName);
                 }
             }
         }

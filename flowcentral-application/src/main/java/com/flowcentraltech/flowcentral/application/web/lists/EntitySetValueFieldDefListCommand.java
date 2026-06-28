@@ -15,14 +15,17 @@
  */
 package com.flowcentraltech.flowcentral.application.web.lists;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 
 /**
  * Entity set value field definition list command.
@@ -31,19 +34,31 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("entitysetvaluefielddeflist")
-public class EntitySetValueFieldDefListCommand extends AbstractFlowCentralListCommand<EntityDefListParams> {
+public class EntitySetValueFieldDefListCommand extends AbstractFlowCentralListCommand<EntityProcessVarListParams> {
+
+    @Configurable
+    private AppletUtilities au;
 
     public EntitySetValueFieldDefListCommand() {
-        super(EntityDefListParams.class);
+        super(EntityProcessVarListParams.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, EntityDefListParams params) throws UnifyException {
+    public List<? extends Listable> execute(Locale locale, EntityProcessVarListParams params) throws UnifyException {
+        List<Listable> list = new ArrayList<>();
         if (params.isPresent()) {
-            return params.getEntityDef().getSetValueFieldDefList();
+            list.addAll(params.getEntityDef().getSetValueFieldDefList());
         }
 
-        return Collections.emptyList();
+        if (params.isIncludeProcessVariable()) {
+            for (ProcessVariableDef def : au.getProcessVariables(params.getEntityDef().getLongName())) {
+                if (def.isSupportValues()) {
+                    list.add(def);
+                }
+            }
+        }
+
+        return list;
     }
 
 }

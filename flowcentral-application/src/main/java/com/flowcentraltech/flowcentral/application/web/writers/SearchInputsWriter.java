@@ -60,7 +60,6 @@ public class SearchInputsWriter extends AbstractControlWriter {
             Control moveUpCtrl = searchInputsWidget.getMoveUpCtrl();
             Control moveDownCtrl = searchInputsWidget.getMoveDownCtrl();
             Control deleteCtrl = searchInputsWidget.getDeleteCtrl();
-            final int last = len - 1;
 
             final String labelLabel = resolveSessionMessage("$m{searchinputs.label}");
             final String fieldLabel = resolveSessionMessage("$m{searchinputs.field}");
@@ -68,57 +67,46 @@ public class SearchInputsWriter extends AbstractControlWriter {
             final String conditionLabel = resolveSessionMessage("$m{searchinputs.condition}");
             final String defValLabel = resolveSessionMessage("$m{searchinputs.default}");
             final String fixedLabel = resolveSessionMessage("$m{searchinputs.fixed}");
-            writer.write("<table class=\"editor\" style=\"display: block;width:100%;table-layout:fixed;\">");
+            writer.write("<div style=\"display:table;table-layout:fixed;width:100%;\">");
+
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = searchInputsWidget.getItemValueStoreAt(i);
                 SearchInputEntry sie = searchInputsWidget.getItemAt();
-                writer.write("<tr class=\"line\"><td>");
-                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
-                if (sie.isWithFieldName()) {
-                    writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel);
-                    if (sie.isWithLabel()) {
-                        writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel);
-                        if (sie.isWithWidget() && sie.isFieldInput()) {
-                            writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel);
-                            if (sie.isWithDefValInput()) {
-                                writeValuesItem(writer, lineValueStore, defValCtrl, defValLabel);
-                                writeValuesItem(writer, lineValueStore, fixedCtrl, fixedLabel);
-                            } else {
-                                writeBlankValuesItem(writer);
-                                writeBlankValuesItem(writer);
-                            }
-                        } else {
-                            writeBlankValuesItem(writer);
-                            writeBlankValuesItem(writer);
-                            writeBlankValuesItem(writer);
-                        }
-                    } else {
-                        writeBlankValuesItem(writer);
-                        writeBlankValuesItem(writer);
-                        writeBlankValuesItem(writer);
-                        writeBlankValuesItem(writer);
+                final boolean isWithFieldName = sie.isWithFieldName();
+                final boolean isWithLabel = sie.isWithLabel();
+                final boolean isWithWidget = sie.isWithWidget();
+                writer.write("<div class=\"line\">");
+                writer.write("<div class=\"itab\">");
+                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel, true);
+                if (isWithFieldName) {
+                    writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel, false);
+                    if (isWithLabel) {
+                        writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel, false);
                     }
-                } else {
-                    writeBlankValuesItem(writer);
-                    writeBlankValuesItem(writer);
-                    writeBlankValuesItem(writer);
-                    writeBlankValuesItem(writer);
-                    writeBlankValuesItem(writer);
                 }
+                if (isWithFieldName && isWithLabel && isWithWidget) {
+                    writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel, false);
+                    if (sie.isWithDefValInput()) {
+                        writeValuesItem(writer, lineValueStore, defValCtrl, defValLabel, false);
+                        writeValuesItem(writer, lineValueStore, fixedCtrl, fixedLabel, false);
+                    }
+                }
+                writer.write("</div>");
 
-                writer.write("</td><td class=\"atab\">");
-                moveUpCtrl.setDisabled(i == 0);
-                moveDownCtrl.setDisabled(i >= (len - 2));
-                writeActionItem(writer, lineValueStore, moveUpCtrl);
-                writeActionItem(writer, lineValueStore, moveDownCtrl);
-                if (i < last) {
+                writer.write("<div class=\"atab\">");
+                if (isWithFieldName) {
+                    moveUpCtrl.setDisabled(i == 0);
+                    moveDownCtrl.setDisabled(i >= (len - 2));
+                    writeActionItem(writer, lineValueStore, moveUpCtrl);
+                    writeActionItem(writer, lineValueStore, moveDownCtrl);
                     writeActionItem(writer, lineValueStore, deleteCtrl);
                 }
-                writer.write("</td>");
-                writer.write("</tr>");
+                writer.write("</div>");
+
+                writer.write("</div>");
             }
 
-            writer.write("</table>");
+            writer.write("</div>");
         }
 
         writer.write("</div>");
@@ -159,7 +147,7 @@ public class SearchInputsWriter extends AbstractControlWriter {
                                 csb.add(defValCtrl.getId());
                                 csb.add(fixedCtrl.getId());
                             }
-                       }
+                        }
                     }
                 }
             }
@@ -176,28 +164,15 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writer.endFunction();
     }
 
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
+    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label, boolean bar)
             throws UnifyException {
-        writer.write("<div class=\"vitem\">");
-        writer.write("<div style=\"display:table;width:100%;\">");
-        writer.write("<div style=\"display:table-row;\">");
-        writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
-        writer.write("</div>");
-        writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
+        writer.write(bar ? "<span class=\"item bar\">" : "<span class=\"item\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
-        writer.write("</div>");
-        writer.write("</div>");
-        writer.write("</div>");
-        writer.write("</div>");
-    }
-
-    private void writeBlankValuesItem(ResponseWriter writer) throws UnifyException {
-        writer.write("<div class=\"vitem\">");
-        writer.write("</div>");
+        writer.write("</span>");
     }
 
     private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {

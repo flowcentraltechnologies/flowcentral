@@ -32,4 +32,6 @@ public interface ChartModuleNameConstants {
     String CHARTSNAPSHOT_PROVIDER = "chartsnapshot-provider";
 
     String CHARTDATASOURCE_PROVIDER = "chartdatasource-provider";
+
+    String CHART_DEFAULT_VIEW_NAME = "default";
 }

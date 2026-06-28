@@ -497,7 +497,7 @@ public class EntityFieldDef implements SqlFieldTypeInfo, Listable, EntityFieldAt
         return dataType.isTimestamp();
     }
 
-    public boolean isTime() {
+    public boolean isDateTime() {
         return dataType.isDate() || dataType.isTimestamp();
     }
 

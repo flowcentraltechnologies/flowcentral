@@ -23,8 +23,12 @@ import com.flowcentraltech.flowcentral.common.data.BranchInfo;
 import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.entities.Branch;
 import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
+import com.flowcentraltech.flowcentral.organization.entities.Country;
+import com.flowcentraltech.flowcentral.organization.entities.CountryQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
+import com.flowcentraltech.flowcentral.organization.entities.Hub;
+import com.flowcentraltech.flowcentral.organization.entities.HubQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
@@ -35,6 +39,10 @@ import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategoryQu
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
+import com.flowcentraltech.flowcentral.organization.entities.State;
+import com.flowcentraltech.flowcentral.organization.entities.StateQuery;
+import com.flowcentraltech.flowcentral.organization.entities.Zone;
+import com.flowcentraltech.flowcentral.organization.entities.ZoneQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.FactoryMap;
 
@@ -282,5 +290,49 @@ public interface OrganizationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Department findDepartment(DepartmentQuery query) throws UnifyException;
+
+    /**
+     * Finds zones by criteria.
+     * 
+     * @param query
+     *              the zone query
+     * @return the zone list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Zone> findZones(ZoneQuery query) throws UnifyException;
+
+    /**
+     * Finds countries by criteria.
+     * 
+     * @param query
+     *              the country query
+     * @return the country list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Country> findCountries(CountryQuery query) throws UnifyException;
+
+    /**
+     * Finds states by criteria.
+     * 
+     * @param query
+     *              the state query
+     * @return the state list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<State> findStates(StateQuery query) throws UnifyException;
+
+    /**
+     * Finds hubs by criteria.
+     * 
+     * @param query
+     *              the hub query
+     * @return the hub list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Hub> findHub(HubQuery query) throws UnifyException;
 
 }

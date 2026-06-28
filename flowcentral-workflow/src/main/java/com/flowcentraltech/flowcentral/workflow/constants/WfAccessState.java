@@ -33,6 +33,7 @@ public enum WfAccessState implements EnumConst {
 
     START("S"),
     USER_ACTION("U"),
+    RECOVER("C"),
     END("E"),
     ERROR("R");
 
@@ -58,6 +59,10 @@ public enum WfAccessState implements EnumConst {
 
     public boolean isUserAction() {
         return USER_ACTION.equals(this);
+    }
+
+    public boolean isRecover() {
+        return RECOVER.equals(this);
     }
 
     public boolean isEnd() {

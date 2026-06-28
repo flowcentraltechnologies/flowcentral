@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.lists;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.tcdng.unify.core.list.AbstractListParam;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity definition and label suggestion list parameters.
@@ -31,9 +32,16 @@ public class EntityLabelSuggestionDefListParams extends AbstractListParam {
 
     private LabelSuggestionDef labelSuggestionDef;
 
-    public EntityLabelSuggestionDefListParams(EntityDef entityDef, LabelSuggestionDef labelSuggestionDef) {
+    private boolean includeSysParam;
+
+    private boolean includeProcessVariable;
+ 
+    public EntityLabelSuggestionDefListParams(EntityDef entityDef, LabelSuggestionDef labelSuggestionDef,
+            boolean includeSysParam, boolean includeProcessVariable) {
         this.entityDef = entityDef;
         this.labelSuggestionDef = labelSuggestionDef;
+        this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public EntityDef getEntityDef() {
@@ -44,6 +52,14 @@ public class EntityLabelSuggestionDefListParams extends AbstractListParam {
         return labelSuggestionDef;
     }
 
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
+    }
+
     @Override
     public boolean isPresent() {
         return entityDef != null;
@@ -51,8 +67,7 @@ public class EntityLabelSuggestionDefListParams extends AbstractListParam {
 
     @Override
     public String toString() {
-        return "EntityLabelSuggestionDefListParams [entityDef=" + entityDef + ", labelSuggestionDef="
-                + labelSuggestionDef + "]";
+        return StringUtils.toXmlString(this);
     }
 
 }

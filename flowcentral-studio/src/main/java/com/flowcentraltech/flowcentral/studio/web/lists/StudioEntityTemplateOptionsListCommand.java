@@ -16,14 +16,16 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.list.StringParam;
 
 /**
@@ -41,11 +43,16 @@ public class StudioEntityTemplateOptionsListCommand extends AbstractApplicationL
 
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
+        List<Listable> list = new ArrayList<>();
         if (param.isPresent()) {
-            return au().getEntityDef(param.getValue()).getTemplateOptionsList();
+            list.addAll(au().getEntityDef(param.getValue()).getTemplateOptionsList());
         }
 
-        return Collections.emptyList();
+        for (ProcessVariableDef def: au().getProcessVariables(param.getValue())) {
+            list.add(new ListData(def.getParameter(), def.getListDescription()));
+        }
+        
+        return list;
     }
 
 }

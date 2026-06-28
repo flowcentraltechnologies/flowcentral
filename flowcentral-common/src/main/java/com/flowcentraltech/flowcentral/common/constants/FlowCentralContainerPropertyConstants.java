@@ -54,4 +54,6 @@ public interface FlowCentralContainerPropertyConstants {
     
     String FLOWCENTRAL_APPLICATION_OS_INTEGRATION_SERVICE_ID = "flowcentral.application.os.integrationserviceid";
 
+    String FLOWCENTRAL_RESTRICTED_STUDIO_MODE = "flowcentral.restricted.studio.mode";
+
 }

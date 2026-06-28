@@ -62,6 +62,10 @@ public class AppFormAnnotation extends BaseConfigNamedEntity {
     @Child(category = "formannotation")
     private AppFilter onCondition;
 
+    public AppFormAnnotation() {
+        this.html = true;
+    }
+    
     public Long getAppFormId() {
         return appFormId;
     }

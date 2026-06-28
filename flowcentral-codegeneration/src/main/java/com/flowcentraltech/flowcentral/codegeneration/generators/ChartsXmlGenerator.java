@@ -72,15 +72,10 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 appChartConfig.setSubTitle(ctx.isSnapshotMode() ? chart.getSubTitle() :"$m{" + subTitleKey + "}");
                 appChartConfig.setWidth(chart.getWidth());
                 appChartConfig.setHeight(chart.getHeight());
-                appChartConfig.setProvider(chart.getProvider());
                 appChartConfig.setRule(chart.getRule());
                 appChartConfig.setCategory(chart.getCategory());
                 appChartConfig.setSeries(chart.getSeries());
                 appChartConfig.setColor(chart.getColor());
-                appChartConfig.setShowGrid(chart.isShowGrid());
-                appChartConfig.setShowDataLabels(chart.isShowDataLabels());
-                appChartConfig.setFormatDataLabels(chart.isFormatDataLabels());
-                appChartConfig.setFormatYLabels(chart.isFormatYLabels());
                 appChartConfig.setStacked(chart.isStacked());
                 appChartConfig.setSmooth(chart.isSmooth());
                 appChartConfig.setClassified(chart.isClassified());
@@ -105,9 +100,7 @@ public class ChartsXmlGenerator extends AbstractStaticModuleArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.CHART, descKey, chartDataSource.getDescription());
 
                 appChartDataSourceConfig.setType(chartDataSource.getType());
-                appChartDataSourceConfig.setLimit(chartDataSource.getLimit());
-                appChartDataSourceConfig.setTimeSeriesType(chartDataSource.getTimeSeriesType());
-                appChartDataSourceConfig.setCategoryField(chartDataSource.getCategoryField());
+                appChartDataSourceConfig.setCacheRefreshRate(chartDataSource.getCacheRefreshRate());
                 appChartDataSourceConfig.setName(chartDataSource.getName());
                 appChartDataSourceConfig.setDescription(ctx.isSnapshotMode() ? chartDataSource.getDescription() :"$m{" + descKey + "}");
                 appChartDataSourceConfig.setEntity(chartDataSource.getEntity());

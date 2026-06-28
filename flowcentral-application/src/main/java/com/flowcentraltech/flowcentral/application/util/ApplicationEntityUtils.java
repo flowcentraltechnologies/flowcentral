@@ -74,6 +74,11 @@ public final class ApplicationEntityUtils {
                     "workBranchCode", "workDepartmentCode", "processingStatus", "processingStatusDesc", "configType",
                     "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
 
+    private static final Set<String> RESERVED_NON_FILTER_FIELDS = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "originWorkRecId", "originalCopyId",
+                    "wfItemVersionType", "inWorkflow", "processingStatus", "processingStatusDesc", "configType",
+                    "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
+
     public static final Set<String> RESERVED_EDITOR_FIELDS = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo",
                     "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow",
@@ -132,6 +137,10 @@ public final class ApplicationEntityUtils {
 
     }
 
+    public static boolean isValidFilterField(String fieldName) {
+        return !RESERVED_NON_FILTER_FIELDS.contains(fieldName);
+    }
+    
     public static Collection<String> getReservedFieldNames() {
         return RESERVED_BASE_FIELDS;
     }
@@ -304,7 +313,7 @@ public final class ApplicationEntityUtils {
         AppFormElement appFormElement = new AppFormElement();
         appFormElement.setType(FormElementType.SECTION);
         appFormElement.setElementName("changeLog");
-        appFormElement.setSectionColumns(FormColumnsType.TYPE_2);
+        appFormElement.setSectionColumns(FormColumnsType.TYPE_1);
         appFormElement.setVisible(true);
         appFormElement.setDisabled(true);
         appFormElement.setConfigType(ConfigType.STATIC);
@@ -322,6 +331,15 @@ public final class ApplicationEntityUtils {
 
         appFormElement = new AppFormElement();
         appFormElement.setType(FormElementType.FIELD);
+        appFormElement.setElementName("createDt");
+        appFormElement.setInputWidget("application.datetimetext");
+        appFormElement.setFieldColumn(0);
+        appFormElement.setVisible(true);
+        appFormElement.setConfigType(ConfigType.STATIC);
+        elementList.add(appFormElement);
+
+        appFormElement = new AppFormElement();
+        appFormElement.setType(FormElementType.FIELD);
         appFormElement.setElementName("updatedBy");
         appFormElement.setInputWidget("application.name");
         appFormElement.setFieldColumn(0);
@@ -331,18 +349,9 @@ public final class ApplicationEntityUtils {
 
         appFormElement = new AppFormElement();
         appFormElement.setType(FormElementType.FIELD);
-        appFormElement.setElementName("createDt");
-        appFormElement.setInputWidget("application.datetimetext");
-        appFormElement.setFieldColumn(1);
-        appFormElement.setVisible(true);
-        appFormElement.setConfigType(ConfigType.STATIC);
-        elementList.add(appFormElement);
-
-        appFormElement = new AppFormElement();
-        appFormElement.setType(FormElementType.FIELD);
         appFormElement.setElementName("updateDt");
         appFormElement.setInputWidget("application.datetimetext");
-        appFormElement.setFieldColumn(1);
+        appFormElement.setFieldColumn(0);
         appFormElement.setVisible(true);
         appFormElement.setConfigType(ConfigType.STATIC);
         elementList.add(appFormElement);

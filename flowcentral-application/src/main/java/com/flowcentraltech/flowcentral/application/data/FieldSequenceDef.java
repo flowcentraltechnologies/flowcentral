@@ -113,8 +113,8 @@ public class FieldSequenceDef {
 
         for (int i = 0; i < line.length; i++) {
             FieldSequenceEntryDef fieldSequenceEntryDef = fieldSequenceList.get(i);
-            Formatter<?> formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
-                    ? au.formatHelper().newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
+            Formatter<?> formatter = fieldSequenceEntryDef.isWithParam()
+                    ? au.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
                     : null;
             DataUtils.setBeanProperty(inst, fieldSequenceEntryDef.getFieldName(), line[i], formatter);
         }

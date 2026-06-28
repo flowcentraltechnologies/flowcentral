@@ -40,7 +40,7 @@ public class State extends BaseStatusEntity {
     @Column(name = "STATE_CD", length = 16)
     private String code;
 
-    @Column(name = "STATE_DESC", length = 64)
+    @Column(name = "STATE_DESC", length = 96)
     private String description;
 
     @ListOnly(key = "countryId", property = "iso3Code")

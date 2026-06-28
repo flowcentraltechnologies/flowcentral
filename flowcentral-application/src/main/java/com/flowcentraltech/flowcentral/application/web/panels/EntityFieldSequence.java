@@ -46,6 +46,8 @@ public class EntityFieldSequence extends AbstractPanelFormBinding {
 
     private Long ownerInstId;
 
+    private boolean useTimeSeries;
+
     public EntityFieldSequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
@@ -69,6 +71,7 @@ public class EntityFieldSequence extends AbstractPanelFormBinding {
         FieldSequenceDef fieldSequenceDef = getAppletCtx().au().retrieveFieldSequenceDef(category,
                 ownerEntityDef.getLongName(), ownerInstId);
         fieldSequence = new FieldSequence(entityDef, fieldSequenceDef, Editable.fromBoolean(isApplyButtonVisible()));
+        fieldSequence.setUseTimeSeries(useTimeSeries);
     }
 
     public void save() throws UnifyException {
@@ -81,6 +84,13 @@ public class EntityFieldSequence extends AbstractPanelFormBinding {
     public void clear() throws UnifyException {
         if (fieldSequence != null) {
             fieldSequence.clear();
+        }
+    }
+
+    public void setUseTimeSeries(boolean useTimeSeries) throws UnifyException {
+        this.useTimeSeries = useTimeSeries;
+        if (fieldSequence != null) {
+            fieldSequence.setUseTimeSeries(useTimeSeries);
         }
     }
 

@@ -226,7 +226,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_STUDIO_SNAPSHOT_TASK_NAME,
-            description = "Generate Studio Snapshot Task",
+            description = "Generate Studio CDSnapshot Task",
             parameters = { @Parameter(name = CodeGenerationTaskConstants.CODEGENERATION_ITEM,
                     description = "Code Generation Item", type = CodeGenerationItem.class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)

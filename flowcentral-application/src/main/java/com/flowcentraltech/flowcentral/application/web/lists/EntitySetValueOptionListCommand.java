@@ -23,6 +23,7 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -71,6 +72,10 @@ public class EntitySetValueOptionListCommand extends AbstractFlowCentralListComm
     public List<? extends Listable> execute(Locale locale, EntityDefFieldListParams params) throws UnifyException {
         if (params.isPresent()) {
             OptionsInfo optionsInfo = map.get(locale);
+            if (SystemUtils.isProcessVariable(params.getFieldName())) {
+                return optionsInfo.getLingualList();
+            }
+            
             EntityFieldDataType type = params.getEntityDef().getFieldDef(params.getFieldName()).getDataType();
             if (type.isSupportLingual()) {
                 return optionsInfo.getLingualList();

@@ -70,7 +70,10 @@ public class OSUploadController extends AbstractHttpUploadController implements 
     @Override
     public PostResp<String> handleLocalUpload(Map<String, String> headers, ContentDisposition disposition,
             InputStream in) throws UnifyException {
-        logDebug("Performing local upload using signature [{0}]...", headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
+        if (debugging) {
+            logDebug("Performing local upload using signature [{0}]...", headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
+        }
+        
         final long start = System.currentTimeMillis();
         boolean success = true;
         String jsonResponse = null;
@@ -89,7 +92,10 @@ public class OSUploadController extends AbstractHttpUploadController implements 
     @Override
     protected String handleUpload(HttpRequestHeaders headers, ContentDisposition disposition, InputStream in)
             throws UnifyException {
-        logDebug("Executing controller request = [{0}]...", disposition);
+        if (debugging) {
+            logDebug("Executing controller upload request = [{0}]...", disposition);
+        }
+        
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
         final String correlationId = headers.getHeader(OSMessagingRequestHeaderConstants.CORRELATION_ID);
@@ -104,7 +110,10 @@ public class OSUploadController extends AbstractHttpUploadController implements 
                         osMessagingAccessManager.checkAccess(header);
                         final String service = headers.getHeader(OSMessagingRequestHeaderConstants.DELEGATE_SERVICE);
                         if (!StringUtils.isBlank(service)) {
-                            logDebug("Relaying controller request to delegate service = [{0}]...", service);
+                            if (debugging) {
+                                logDebug("Relaying controller request to delegate service = [{0}]...", service);
+                            }
+                            
                             final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                             final String fileSignature = headers
                                     .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
@@ -123,7 +132,10 @@ public class OSUploadController extends AbstractHttpUploadController implements 
                             final String function = headers
                                     .getHeader(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION);
                             if (!StringUtils.isBlank(function)) {
-                                logDebug("Relaying controller request to delegate function = [{0}]...", function);
+                                if (debugging) {
+                                    logDebug("Relaying controller request to delegate function = [{0}]...", function);
+                                }
+                                
                                 final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                                 final String fileSignature = headers
                                         .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);

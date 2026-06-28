@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
 import com.tcdng.unify.core.UnifyException;
@@ -38,6 +39,8 @@ public class FieldSequence {
 
     private List<FieldSequenceEntry> entryList;
 
+    private boolean useTimeSeries;
+    
     public FieldSequence(EntityDef entityDef, FieldSequenceDef fieldSequenceDef) throws UnifyException {
         this(entityDef, fieldSequenceDef, Editable.TRUE);
     }
@@ -95,6 +98,15 @@ public class FieldSequence {
         return entryList.size();
     }
 
+    public boolean isUseTimeSeries() {
+        return useTimeSeries;
+    }
+
+    public void setUseTimeSeries(boolean useTimeSeries) throws UnifyException {
+        this.useTimeSeries = useTimeSeries;
+        normalize();
+    }
+
     public void normalize() throws UnifyException {
         ListIterator<FieldSequenceEntry> it = entryList.listIterator();
         int i = 0;
@@ -113,6 +125,18 @@ public class FieldSequence {
         FieldSequenceEntry last = entryList.get(entryList.size() - 1);
         if (last.isWithFieldName()) {
             entryList.add(new FieldSequenceEntry(entityDef, true));
+        }
+        
+        if (useTimeSeries) {
+            final FieldSequenceEntry first = entryList.get(0);
+            if (first.isWithFieldName()) {
+                EntityFieldDef entityFieldDef = entityDef.getFieldDef(first.getFieldName());
+                final int mode = entityFieldDef.isDateTime() ? 2 : 1;
+                final int len = entryList.size();
+                for (int j = 1; j < len; j++) {
+                    entryList.get(j).setMode(mode);
+                }
+            }
         }
     }
 
@@ -137,7 +161,7 @@ public class FieldSequence {
             for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
                 FieldSequenceEntry fso = new FieldSequenceEntry(entityDef, editable.isTrue());
                 setFieldAndInputParams(fso, fieldSequenceEntryDef.getFieldName(),
-                        fieldSequenceEntryDef.getStandardFormatCode());
+                        fieldSequenceEntryDef.getParam());
                 entryList.add(fso);
             }
         }

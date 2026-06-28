@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.dashboard.data;
 
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 
 /**
@@ -45,7 +46,12 @@ public class DashboardSlotDef implements ChartConfiguration {
     }
 
     @Override
-    public FilterDef getCatBase(String dataSourceName) {
+    public String getViewOptionName() {
+        return optionDef != null ? optionDef.getName() : ChartModuleNameConstants.CHART_DEFAULT_VIEW_NAME;
+    }
+
+    @Override
+    public FilterDef getViewOptionCatBase(String dataSourceName) {
         return optionDef != null && optionDef.isWithCatBase(dataSourceName) ? optionDef.getCatBase(dataSourceName)
                 : null;
     }

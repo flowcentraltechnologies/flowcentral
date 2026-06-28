@@ -45,9 +45,6 @@ public class Chart extends BaseApplicationEntity {
     @Column(length = 128, nullable = true)
     private String subTitle;
 
-    @Column(length = 64)
-    private String provider;
-
     @Column(name = "CHART_RULE", length = 64, nullable = true)
     private String rule;
 
@@ -68,18 +65,6 @@ public class Chart extends BaseApplicationEntity {
 
     @Column
     private boolean stacked;
-
-    @Column
-    private boolean showGrid;
-
-    @Column
-    private boolean showDataLabels;
-
-    @Column
-    private boolean formatDataLabels;
-
-    @Column
-    private boolean formatYLabels;
 
     @Column
     private boolean smooth;
@@ -120,14 +105,6 @@ public class Chart extends BaseApplicationEntity {
 
     public void setSubTitle(String subTitle) {
         this.subTitle = subTitle;
-    }
-
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
     }
 
     public String getRule() {
@@ -184,38 +161,6 @@ public class Chart extends BaseApplicationEntity {
 
     public void setStacked(boolean stacked) {
         this.stacked = stacked;
-    }
-
-    public boolean isShowGrid() {
-        return showGrid;
-    }
-
-    public void setShowGrid(boolean showGrid) {
-        this.showGrid = showGrid;
-    }
-
-    public boolean isShowDataLabels() {
-        return showDataLabels;
-    }
-
-    public void setShowDataLabels(boolean showDataLabels) {
-        this.showDataLabels = showDataLabels;
-    }
-
-    public boolean isFormatDataLabels() {
-        return formatDataLabels;
-    }
-
-    public void setFormatDataLabels(boolean formatDataLabels) {
-        this.formatDataLabels = formatDataLabels;
-    }
-
-    public boolean isFormatYLabels() {
-        return formatYLabels;
-    }
-
-    public void setFormatYLabels(boolean formatYLabels) {
-        this.formatYLabels = formatYLabels;
     }
 
     public boolean isSmooth() {

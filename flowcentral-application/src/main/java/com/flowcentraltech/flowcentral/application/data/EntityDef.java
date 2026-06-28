@@ -76,6 +76,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> sortedFieldDefList;
 
+    private List<EntityFieldDef> sortedNoDatetimeFieldDefList;
+
     private List<EntityFieldDef> filterFieldDefList;
 
     private List<EntityFieldDef> filterStringFieldDefList;
@@ -423,6 +425,25 @@ public class EntityDef extends BaseApplicationEntityDef {
         return sortedFieldDefList;
     }
 
+    public List<EntityFieldDef> getSortedNoDatetimeFieldDefList() throws UnifyException {
+        if (sortedNoDatetimeFieldDefList == null) {
+            synchronized (this) {
+                if (sortedNoDatetimeFieldDefList == null) {
+                    sortedNoDatetimeFieldDefList = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : getSortedFieldDefList()) {
+                        if (!entityFieldDef.isDateTime()) {
+                            sortedNoDatetimeFieldDefList.add(entityFieldDef);
+                        }
+                    }
+
+                    sortedNoDatetimeFieldDefList = DataUtils.unmodifiableList(sortedNoDatetimeFieldDefList);
+                }
+            }
+        }
+
+        return sortedNoDatetimeFieldDefList;
+    }
+
     public List<EntityFieldDef> getAuditableFieldDefList() throws UnifyException {
         if (auditableFieldDefList == null) {
             synchronized (this) {
@@ -617,6 +638,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return entitySearchInputDef;
     }
 
+    public boolean isEntitySeriesDef(String name) {
+        return seriesDefs.containsKey(name);
+    }
+
     public EntitySeriesDef getEntitySeriesDef(String name) {
         EntitySeriesDef entitySeriesDef = seriesDefs.get(name);
         if (entitySeriesDef == null) {
@@ -627,11 +652,11 @@ public class EntityDef extends BaseApplicationEntityDef {
         return entitySeriesDef;
     }
 
-    public boolean isEntityCategorysDef(String name) {
+    public boolean isEntityCategoryDef(String name) {
         return categoryDefs.containsKey(name);
     }
 
-    public EntityCategoryDef getEntityCategorysDef(String name) {
+    public EntityCategoryDef getEntityCategoryDef(String name) {
         EntityCategoryDef entityCategoryDef = categoryDefs.get(name);
         if (entityCategoryDef == null) {
             throw new RuntimeException(
@@ -659,7 +684,11 @@ public class EntityDef extends BaseApplicationEntityDef {
         if (categoryDefList == null) {
             synchronized (this) {
                 if (categoryDefList == null) {
-                    categoryDefList = new ArrayList<EntityCategoryDef>(categoryDefs.values());
+                    categoryDefList = new ArrayList<EntityCategoryDef>();
+                    for (EntityCategoryDef entityCategoryDef: categoryDefs.values()) {
+                        categoryDefList.add(entityCategoryDef);
+                    }
+                    
                     DataUtils.sortAscending(categoryDefList, EntityCategoryDef.class, "description");
                     categoryDefList = DataUtils.unmodifiableList(categoryDefList);
                 }
@@ -678,7 +707,8 @@ public class EntityDef extends BaseApplicationEntityDef {
         if (labelSuggestionDef != null) {
             List<ListData> list = new ArrayList<ListData>();
             for (EntityFieldDef entityFieldDef : fieldDefList) {
-                if (entityFieldDef.isWithInputWidget() && entityFieldDef.isSupportFilter()) {
+                if (entityFieldDef.isWithInputWidget() && entityFieldDef.isSupportFilter()
+                        && ApplicationEntityUtils.isValidFilterField(entityFieldDef.getFieldName())) {
                     String suggestedLabel = labelSuggestionDef.getSuggestedLabel(entityFieldDef.getFieldName());
                     ListData item = StringUtils.isBlank(suggestedLabel)
                             ? new ListData(entityFieldDef.getListKey(), entityFieldDef.getListDescription())
@@ -696,7 +726,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                 if (filterFieldDefList == null) {
                     List<EntityFieldDef> list = new ArrayList<EntityFieldDef>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
-                        if (entityFieldDef.isWithInputWidget() && entityFieldDef.isSupportFilter()) {
+                        if (entityFieldDef.isWithInputWidget() && entityFieldDef.isSupportFilter()
+                                && ApplicationEntityUtils.isValidFilterField(entityFieldDef.getFieldName())) {
                             list.add(entityFieldDef);
                         }
                     }
@@ -866,7 +897,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                             baseFieldDefList.add(entityFieldDef);
                         }
                     }
-                    
+
                     baseFieldDefList = DataUtils.unmodifiableList(baseFieldDefList);
                 }
             }
@@ -1725,7 +1756,7 @@ public class EntityDef extends BaseApplicationEntityDef {
         public EntityDef build(AppletUtilities au) throws UnifyException {
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             List<EntityFieldDef> fieldDefList = new ArrayList<EntityFieldDef>(fieldDefMap.values());
-            DataUtils.sortDescending(fieldDefList, EntityFieldDef.class, "sortIndex");
+//            DataUtils.sortDescending(fieldDefList, EntityFieldDef.class, "sortIndex");
             return new EntityDef(au, baseType, type, DataUtils.unmodifiableMap(fieldDefMap),
                     DataUtils.unmodifiableList(fieldDefList), DataUtils.unmodifiableValuesList(attachmentDefMap),
                     DataUtils.unmodifiableMap(expressionDefMap), DataUtils.unmodifiableList(uniqueConstraintList),

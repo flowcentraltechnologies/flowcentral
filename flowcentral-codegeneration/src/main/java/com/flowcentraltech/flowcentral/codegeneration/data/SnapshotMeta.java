@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.codegeneration.data;
 
 /**
- * Snapshot META.
+ * CDSnapshot META.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1

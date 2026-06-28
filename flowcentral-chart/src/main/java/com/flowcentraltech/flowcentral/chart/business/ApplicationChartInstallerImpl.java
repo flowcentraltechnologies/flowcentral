@@ -86,15 +86,10 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chart.setSubTitle(subTitle);
                     chart.setWidth(appChartConfig.getWidth());
                     chart.setHeight(appChartConfig.getHeight());
-                    chart.setProvider(appChartConfig.getProvider());
                     chart.setRule(appChartConfig.getRule());
                     chart.setCategory(appChartConfig.getCategory());
                     chart.setColor(appChartConfig.getColor());
                     chart.setSeries(appChartConfig.getSeries());
-                    chart.setShowGrid(appChartConfig.isShowGrid());
-                    chart.setShowDataLabels(appChartConfig.isShowDataLabels());
-                    chart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
-                    chart.setFormatYLabels(appChartConfig.isFormatYLabels());
                     chart.setStacked(appChartConfig.isStacked());
                     chart.setSmooth(appChartConfig.isSmooth());
                     chart.setClassified(appChartConfig.getClassified());
@@ -109,15 +104,10 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     oldChart.setSubTitle(subTitle);
                     oldChart.setWidth(appChartConfig.getWidth());
                     oldChart.setHeight(appChartConfig.getHeight());
-                    oldChart.setProvider(appChartConfig.getProvider());
                     oldChart.setRule(appChartConfig.getRule());
                     oldChart.setCategory(appChartConfig.getCategory());
                     oldChart.setColor(appChartConfig.getColor());
                     oldChart.setSeries(appChartConfig.getSeries());
-                    oldChart.setShowGrid(appChartConfig.isShowGrid());
-                    oldChart.setShowDataLabels(appChartConfig.isShowDataLabels());
-                    oldChart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
-                    oldChart.setFormatYLabels(appChartConfig.isFormatYLabels());
                     oldChart.setStacked(appChartConfig.isStacked());
                     oldChart.setSmooth(appChartConfig.isSmooth());
                     oldChart.setClassified(appChartConfig.getClassified());
@@ -147,12 +137,10 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     ChartDataSource chartDataSource = new ChartDataSource();
                     chartDataSource.setApplicationId(applicationId);
                     chartDataSource.setType(appChartDataSourceConfig.getType());
-                    chartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
-                    chartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
                     chartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                     chartDataSource.setName(appChartDataSourceConfig.getName());
                     chartDataSource.setDescription(description);
-                    chartDataSource.setLimit(appChartDataSourceConfig.getLimit());
+                    chartDataSource.setCacheRefreshRate(appChartDataSourceConfig.getCacheRefreshRate());
                     chartDataSource
                             .setCategoryBase(InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
                     chartDataSource
@@ -166,11 +154,9 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     environment().create(chartDataSource);
                 } else {
                     oldChartDataSource.setType(appChartDataSourceConfig.getType());
-                    oldChartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
-                    oldChartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
                     oldChartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                     oldChartDataSource.setDescription(description);
-                    oldChartDataSource.setLimit(appChartDataSourceConfig.getLimit());
+                    oldChartDataSource.setCacheRefreshRate(appChartDataSourceConfig.getCacheRefreshRate());
                     oldChartDataSource
                             .setCategoryBase(InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
                     oldChartDataSource
@@ -214,15 +200,10 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 chart.setSubTitle(subTitle);
                 chart.setWidth(appChartConfig.getWidth());
                 chart.setHeight(appChartConfig.getHeight());
-                chart.setProvider(appChartConfig.getProvider());
                 chart.setRule(appChartConfig.getRule());
                 chart.setCategory(appChartConfig.getCategory());
                 chart.setColor(appChartConfig.getColor());
                 chart.setSeries(appChartConfig.getSeries());
-                chart.setShowGrid(appChartConfig.isShowGrid());
-                chart.setShowDataLabels(appChartConfig.isShowDataLabels());
-                chart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
-                chart.setFormatYLabels(appChartConfig.isFormatYLabels());
                 chart.setStacked(appChartConfig.isStacked());
                 chart.setSmooth(appChartConfig.isSmooth());
                 chart.setClassified(appChartConfig.getClassified());
@@ -242,12 +223,10 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 ChartDataSource chartDataSource = new ChartDataSource();
                 chartDataSource.setApplicationId(applicationId);
                 chartDataSource.setType(appChartDataSourceConfig.getType());
-                chartDataSource.setTimeSeriesType(appChartDataSourceConfig.getTimeSeriesType());
-                chartDataSource.setCategoryField(appChartDataSourceConfig.getCategoryField());
                 chartDataSource.setEntity(appChartDataSourceConfig.getEntity());
                 chartDataSource.setName(appChartDataSourceConfig.getName());
                 chartDataSource.setDescription(description);
-                chartDataSource.setLimit(appChartDataSourceConfig.getLimit());
+                chartDataSource.setCacheRefreshRate(appChartDataSourceConfig.getCacheRefreshRate());
                 chartDataSource
                         .setCategoryBase(InputWidgetUtils.newAppFilter(appChartDataSourceConfig.getCategoryBase()));
                 chartDataSource
@@ -279,7 +258,6 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
             srcChart.setDescription(ctx.messageSwap(srcChart.getDescription()));
             srcChart.setTitle(ctx.messageSwap(srcChart.getTitle()));
             srcChart.setSubTitle(ctx.messageSwap(srcChart.getSubTitle()));
-            srcChart.setProvider(ctx.componentSwap(srcChart.getProvider()));
             srcChart.setDeprecated(false);
             srcChart.setConfigType(ConfigType.CUSTOM);
             environment().create(srcChart);

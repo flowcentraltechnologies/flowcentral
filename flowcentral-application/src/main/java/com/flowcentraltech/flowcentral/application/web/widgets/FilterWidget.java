@@ -34,9 +34,8 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  * @since 4.1
  */
 @Component("fc-filter")
-@UplAttributes({
-    @UplAttribute(name = "includeSysParam", type = boolean.class),
-    @UplAttribute(name = "includeSysParamBinding", type = String.class)})
+@UplAttributes({ @UplAttribute(name = "includeSysParam", type = boolean.class),
+        @UplAttribute(name = "includeSysParamBinding", type = String.class) })
 public class FilterWidget extends AbstractItemListWidget<FilterCondition> {
 
     private Control fieldSelectCtrl;
@@ -117,14 +116,13 @@ public class FilterWidget extends AbstractItemListWidget<FilterCondition> {
     public boolean isIncludeSysParam() throws UnifyException {
         return getUplAttribute(boolean.class, "includeSysParam", "includeSysParamBinding");
     }
-    
+
     public Control getFieldSelectCtrl() throws UnifyException {
         if (fieldSelectCtrl == null) {
-            fieldSelectCtrl = (Control) addInternalChildWidget(isIncludeSysParam()
-                    ? "!ui-select style:$s{width:100%;} blankOption:$s{} list:sysentityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName"
-                    : "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef} binding:fieldName");
+            fieldSelectCtrl = (Control) addInternalChildWidget(
+                    "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef includeSysParam includeProcessVariable} binding:fieldName");
         }
-        
+
         return fieldSelectCtrl;
     }
 
@@ -191,15 +189,17 @@ public class FilterWidget extends AbstractItemListWidget<FilterCondition> {
                 switch (filter.getListType()) {
                     case IMMEDIATE_FIELD:
                         fieldParamCtrlA = (Control) addInternalChildWidget(
-                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef} binding:paramFieldA");
+                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef includeSysParam includeProcessVariable} binding:paramFieldA");
                         fieldParamCtrlB = (Control) addInternalChildWidget(
-                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef} binding:paramFieldB");
+                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:entityfilterfielddeflist listParams:$l{entityDef labelSuggestionDef includeSysParam includeProcessVariable} binding:paramFieldB");
                         break;
                     case IMMEDIATE_PARAM:
-                        fieldParamCtrlA = (Control) addInternalChildWidget("!ui-select style:$s{width:100%;} blankOption:$s{} list:"
-                                + filter.getParamList() + " listParams:$s{ownerInstId} binding:paramFieldA");
-                        fieldParamCtrlB = (Control) addInternalChildWidget("!ui-select style:$s{width:100%;} blankOption:$s{} list:"
-                                + filter.getParamList() + " listParams:$s{ownerInstId} binding:paramFieldB");
+                        fieldParamCtrlA = (Control) addInternalChildWidget(
+                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:" + filter.getParamList()
+                                        + " listParams:$s{ownerInstId} binding:paramFieldA");
+                        fieldParamCtrlB = (Control) addInternalChildWidget(
+                                "!ui-select style:$s{width:100%;} blankOption:$s{} list:" + filter.getParamList()
+                                        + " listParams:$s{ownerInstId} binding:paramFieldB");
                         break;
                     case IMMEDIATE_ONLY:
                     default:

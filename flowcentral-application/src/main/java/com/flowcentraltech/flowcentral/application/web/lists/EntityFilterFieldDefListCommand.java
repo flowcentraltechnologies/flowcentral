@@ -15,14 +15,17 @@
  */
 package com.flowcentraltech.flowcentral.application.web.lists;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 
 /**
  * Entity filter field definition list command.
@@ -33,6 +36,9 @@ import com.tcdng.unify.core.annotation.Component;
 @Component("entityfilterfielddeflist")
 public class EntityFilterFieldDefListCommand extends AbstractFlowCentralListCommand<EntityLabelSuggestionDefListParams> {
 
+    @Configurable
+    private AppletUtilities au;
+    
     public EntityFilterFieldDefListCommand() {
         super(EntityLabelSuggestionDefListParams.class);
     }
@@ -40,11 +46,24 @@ public class EntityFilterFieldDefListCommand extends AbstractFlowCentralListComm
     @Override
     public List<? extends Listable> execute(Locale locale, EntityLabelSuggestionDefListParams params)
             throws UnifyException {
+        List<Listable> list = new ArrayList<>();
         if (params.isPresent()) {
-            return params.getEntityDef().getFilterFieldListables(params.getLabelSuggestionDef());
+            list.addAll(params.getEntityDef().getFilterFieldListables(params.getLabelSuggestionDef()));
         }
 
-        return Collections.emptyList();
+        if (params.isIncludeProcessVariable()) {
+            for (ProcessVariableDef def : au.getProcessVariables(params.getEntityDef().getLongName())) {
+                if (def.isSupportFilter()) {
+                    list.add(def);
+                }
+            }
+        }
+
+        if (params.isIncludeSysParam()) {
+            list.addAll(au.system().getFilterSystemParameters());
+        }
+
+        return list;
     }
 
 }

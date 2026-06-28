@@ -21,12 +21,11 @@ import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingResponseConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.ReflectUtils;
-import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.http.HttpRequestHeaders;
 
 /**
  * Convenient abstract base class for OS messaging processors.
@@ -37,14 +36,10 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
 public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp, U extends BaseOSMessagingReq>
         extends AbstractFlowCentralComponent implements OSMessagingProcessor<T, U> {
 
-    protected static final OSMessagingError NO_ERROR = new OSMessagingError();
-
-    private static final Object[] SUMMARY_PARAMS = new Object[0];
+    private static final OSMessagingError NO_ERROR = new OSMessagingError();
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
-
-    private final String summary;
 
     private final Class<T> responseClass;
 
@@ -52,15 +47,14 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
 
     private final OSMessagingMode messagingMode;
 
-    protected AbstractOSMessagingProcessor(Class<T> responseClass, Class<U> requestClass, String summary) {
-        this(responseClass, requestClass, summary, OSMessagingMode.SYNCHRONOUS);
+    protected AbstractOSMessagingProcessor(Class<T> responseClass, Class<U> requestClass) {
+        this(responseClass, requestClass, OSMessagingMode.SYNCHRONOUS);
     }
 
-    protected AbstractOSMessagingProcessor(Class<T> responseClass, Class<U> requestClass, String summary,
+    protected AbstractOSMessagingProcessor(Class<T> responseClass, Class<U> requestClass,
             OSMessagingMode messagingMode) {
         this.responseClass = responseClass;
         this.requestClass = requestClass;
-        this.summary = summary;
         this.messagingMode = messagingMode;
     }
 
@@ -75,13 +69,22 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
     }
 
     @Override
-    public final T process(HttpRequestHeaders headers, U request) throws UnifyException {
+    public boolean isSynchronous() {
+        return messagingMode.isSynchronous();
+    }
+
+    @Override
+    public final T process(U request) throws UnifyException {
         OSMessagingError error = null;
         T resp = null;
         try {
             error = validateRequest(request);
-            if (error == null || !error.isErrorPresent()) {
-                resp = doProcess(headers, request);
+            if (error == null) {
+                error = NO_ERROR;
+            }
+            
+            if (!error.isErrorPresent()) {
+                resp = doProcess(request);
             }
         } catch (Exception e) {
             logError(e);
@@ -94,10 +97,6 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
             resp.setResponseMessage(error.getErrorMessage());
         }
 
-        osMessagingModuleService.logProcessing(messagingMode, request.getCorrelationId(),
-                !StringUtils.isBlank(request.getOriginSource()) ? request.getOriginSource() : request.getSource(),
-                request.getProcessor(), resolveApplicationMessage(summary, getSummaryParameters(request)),
-                resp.getResponseCode(), resp.getResponseMessage());
         return resp;
     }
 
@@ -110,11 +109,14 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
     protected void onTerminate() throws UnifyException {
 
     }
-
-    protected Object[] getSummaryParameters(U request) {
-        return SUMMARY_PARAMS;
+    
+    protected final T successResult() throws UnifyException {
+        T resp = ReflectUtils.newInstance(responseClass);
+        resp.setResponseCode(OSMessagingResponseConstants.SUCCESS_CODE);
+        resp.setResponseMessage(OSMessagingResponseConstants.SUCCESS_MSG);
+        return resp;
     }
-
+    
     protected final OSMessagingModuleService osmessaging() {
         return osMessagingModuleService;
     }
@@ -133,5 +135,5 @@ public abstract class AbstractOSMessagingProcessor<T extends BaseOSMessagingResp
 
     protected abstract OSMessagingError validateRequest(U request) throws UnifyException;
 
-    protected abstract T doProcess(HttpRequestHeaders headers, U request) throws UnifyException;
+    protected abstract T doProcess(U request) throws UnifyException;
 }

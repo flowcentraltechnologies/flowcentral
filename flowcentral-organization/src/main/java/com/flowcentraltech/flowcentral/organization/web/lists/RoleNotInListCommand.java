@@ -45,7 +45,7 @@ public class RoleNotInListCommand extends AbstractOrganizationListCommand<Assign
         }
 
         query.addSelect("id", "description").addOrder("description").ignoreEmptyCriteria(true);
-        return getOrganizationModuleService().findRoles(query);
+        return org().findRoles(query);
     }
 
 }

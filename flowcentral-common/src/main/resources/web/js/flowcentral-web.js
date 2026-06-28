@@ -295,42 +295,66 @@ fux.rigMenuSectionResult = function(rgp) {
 fux.chartList = [];
 fux.rigChart = function(rgp) {
 	const id = rgp.pId;
+	const type = rgp.pType;
 	const options = rgp.pOptions
-	if (options._yformatter) {
-		options.yaxis.labels.formatter = function(val, opts) {
-				if (options._yintegers) {
-					val = parseInt(val.toFixed(0));
-				}				
-		        return val.toLocaleString();
-		      };
-	} else if (options._yintegers) {
-		options.yaxis.labels.formatter = function(val, opts) {
-		        return val.toFixed(0);
-		      };
-	}
-	
-	if (options.dataLabels._cformatter) {
-		options.dataLabels.formatter = function(val, opts) {
-			        return (Math.round(val * 10) / 10).toFixed(1) + "%";
-			      };
-	} else if (options.dataLabels._dformatter) {
-		options.dataLabels.formatter = function(val, opts) {
+//	console.log("@prime: options = " + JSON.stringify(options));
+	if (type === "apexcharts") {
+		if (options._yformatter) {
+			options.yaxis.labels.formatter = function(val, opts) {
+					if (options._yintegers) {
+						val = parseInt(val.toFixed(0));
+					}				
 			        return val.toLocaleString();
 			      };
+		} else if (options._yintegers) {
+			options.yaxis.labels.formatter = function(val, opts) {
+			        return val.toFixed(0);
+			      };
+		}
+
+		if (options.dataLabels._cformatter) {
+			options.dataLabels.formatter = function(val, opts) {
+				        return (Math.round(val * 10) / 10).toFixed(1) + "%";
+				      };
+		} else if (options.dataLabels._dformatter) {
+			options.dataLabels.formatter = function(val, opts) {
+				        return val.toLocaleString();
+				      };
+		}
+
+		var chart = new ApexCharts(_id(id), options);
+		chart.render();
+		fux.chartList.push({type:type, chart:chart});
+	} else if (type === "echarts") {
+		var chart = echarts.init(_id(id));
+		chart.setOption(options);
+		fux.chartList.push({type:type, chart:chart});
 	}
-	
-	var chart = new ApexCharts(_id(id), options);
-	chart.render();
-	fux.chartList.push(chart);
 }
 
 fux.clearCharts = function() {
 	if (fux.chartList.length > 0) {
-		for(var i = 0; i < fux.chartList.length; i++) {
-			fux.chartList[i].destroy();
+		for (var i = 0; i < fux.chartList.length; i++) {
+			const item = fux.chartList[i];
+			if (item.type === "apexcharts") {
+				item.chart.destroy();
+			} else if (item.type === "echarts") {
+				item.chart.dispose();
+			}
 		}
 
 		fux.chartList = [];
+	}
+}
+
+fux.rewireCharts = function() {
+	if (fux.chartList.length > 0) {
+		for (var i = 0; i < fux.chartList.length; i++) {
+			const item = fux.chartList[i];
+			if (item.type === "echarts") {
+				item.chart.resize();
+			}
+		}
 	}
 }
 
@@ -1256,6 +1280,8 @@ fux.init = function() {
 	ux.registerExtension("fux", fux);
 	ux.registerPageReset("clearFuxChart", fux.clearCharts);
 	ux.setHintTimeout(FC_USER_HINT_TIMEOUT);
+	ux.addHdl(window, "resize", fux.rewireCharts, {});
+		
 	// Perform
 	ux.setfn(fux.rigMenu,"fux01");  
 	ux.setfn(fux.rigMenuSearch,"fux02");  

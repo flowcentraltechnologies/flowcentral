@@ -90,7 +90,7 @@ public class StudioUploadSnapshotPageController extends AbstractStudioPageContro
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_CONFIG, snapshotConfig)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_UPLOAD_FILE, snapshotFile).logMessages()
                 .build();
-        return launchTaskWithMonitorBox(taskSetup, "Upload Studio Snapshot", "/studio/snapshots/openPage", null);
+        return launchTaskWithMonitorBox(taskSetup, "Upload Studio CDSnapshot", "/studio/snapshots/openPage", null);
     }
 
     @Override

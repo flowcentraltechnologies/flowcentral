@@ -50,15 +50,19 @@ public class EntityFilter extends AbstractPanelFormBinding {
     private String paramList;
 
     private FilterConditionListType listType;
-    
+
     private boolean includeSysParam;
 
+    private boolean includeProcessVariable;
+
     public EntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled, boolean includeSysParam) {
+            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled, boolean includeSysParam,
+            boolean includeProcessVariable) {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
         this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public Filter getFilter() {
@@ -85,19 +89,23 @@ public class EntityFilter extends AbstractPanelFormBinding {
         return includeSysParam;
     }
 
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
+    }
+
     public void load(EntityDef entityDef) throws UnifyException {
         try {
             FilterDef filterDef = getAppletCtx().au().retrieveFilterDef(category, ownerEntityDef.getLongName(),
                     ownerInstId, null);
-            filter = new Filter(getAppletCtx().au(), ownerInstId, paramList, entityDef, filterDef,
-                    "application.sessionparamtypelist", listType,
+            filter = new Filter(getAppletCtx().au(), ownerInstId, paramList, entityDef, filterDef, includeSysParam,
+                    includeProcessVariable, "application.sessionparamtypelist", listType,
                     Editable.fromBoolean(isApplyButtonVisible()));
         } catch (RuntimeException e) {
             getAppletCtx().au().saveFilterDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
                     ownerInstId, null);
             FilterDef filterDef = null;
-            filter = new Filter(getAppletCtx().au(), ownerInstId, paramList, entityDef, filterDef,
-                    "application.sessionparamtypelist", listType,
+            filter = new Filter(getAppletCtx().au(), ownerInstId, paramList, entityDef, filterDef, includeSysParam,
+                    includeProcessVariable, "application.sessionparamtypelist", listType,
                     Editable.fromBoolean(isApplyButtonVisible()));
         }
     }

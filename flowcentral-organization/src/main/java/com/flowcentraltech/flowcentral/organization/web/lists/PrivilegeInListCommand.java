@@ -50,7 +50,7 @@ public class PrivilegeInListCommand extends AbstractOrganizationListCommand<Assi
 
             query.idIn(params.getAssignedIdList(Long.class));
             query.addSelect("id", "description").addOrder("description");
-            return getOrganizationModuleService().findPrivileges(query);
+            return org().findPrivileges(query);
         }
 
         return Collections.emptyList();

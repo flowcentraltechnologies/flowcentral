@@ -49,7 +49,7 @@ import com.tcdng.unify.core.util.DataUtils;
 public class Filter {
 
     private final AppletUtilities au;
-    
+
     private final String sessionParamWidget;
 
     private EntityDef entityDef;
@@ -62,38 +62,50 @@ public class Filter {
 
     private final FilterConditionListType listType;
 
+    private boolean includeSysParam;
+
+    private boolean includeProcessVariable;
+
     private Long ownerInstId;
 
     private String paramList;
 
-    public Filter(AppletUtilities au, Long ownerInstId, String paramList, EntityDef entityDef, LabelSuggestionDef labelSuggestionDef,
+    public Filter(AppletUtilities au, Long ownerInstId, String paramList, EntityDef entityDef,
+            LabelSuggestionDef labelSuggestionDef, boolean includeSysParam, boolean includeProcessVariable,
             String sessionParamWidget, FilterConditionListType listType) {
-        this(au, ownerInstId, paramList, entityDef, labelSuggestionDef, sessionParamWidget, listType, Editable.TRUE);
+        this(au, ownerInstId, paramList, entityDef, labelSuggestionDef, includeSysParam, includeProcessVariable,
+                sessionParamWidget, listType, Editable.TRUE);
     }
 
-    public Filter(AppletUtilities au, Long ownerInstId, String paramList, EntityDef entityDef, LabelSuggestionDef labelSuggestionDef,
+    public Filter(AppletUtilities au, Long ownerInstId, String paramList, EntityDef entityDef,
+            LabelSuggestionDef labelSuggestionDef, boolean includeSysParam, boolean includeProcessVariable,
             String sessionParamWidget, FilterConditionListType listType, Editable rootEditable) {
         this.au = au;
         this.sessionParamWidget = sessionParamWidget;
         this.entityDef = entityDef;
         this.labelSuggestionDef = labelSuggestionDef;
         this.conditionList = new FilterConditionList();
-        this.conditionList.add(new FilterCondition(au, entityDef, labelSuggestionDef, sessionParamWidget,
-                ownerInstId, FilterConditionType.AND, listType, 0, rootEditable.isTrue()));
+        this.conditionList
+                .add(new FilterCondition(au, entityDef, labelSuggestionDef, includeSysParam, includeProcessVariable,
+                        sessionParamWidget, ownerInstId, FilterConditionType.AND, listType, 0, rootEditable.isTrue()));
         this.viewConditionList = Collections.unmodifiableList(conditionList);
         this.listType = listType;
         this.ownerInstId = ownerInstId;
         this.paramList = paramList;
+        this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public Filter(AppletUtilities au, Long ownerInstId, String paramList, EntityDef entityDef, FilterDef filterDef,
-            String sessionParamWidget, FilterConditionListType listType) throws UnifyException {
-        this(au, ownerInstId, paramList, entityDef, filterDef, sessionParamWidget, listType, Editable.TRUE);
+            boolean includeSysParam, boolean includeProcessVariable, String sessionParamWidget,
+            FilterConditionListType listType) throws UnifyException {
+        this(au, ownerInstId, paramList, entityDef, filterDef, includeSysParam, includeProcessVariable,
+                sessionParamWidget, listType, Editable.TRUE);
     }
 
     public Filter(AppletUtilities au, Long ownerInstId, String paramList, EntityDef entityDef, FilterDef filterDef,
-            String sessionParamWidget, FilterConditionListType listType, Editable editable)
-            throws UnifyException {
+            boolean includeSysParam, boolean includeProcessVariable, String sessionParamWidget,
+            FilterConditionListType listType, Editable editable) throws UnifyException {
         this.au = au;
         this.sessionParamWidget = sessionParamWidget;
         this.entityDef = entityDef;
@@ -102,6 +114,8 @@ public class Filter {
         this.listType = listType;
         this.ownerInstId = ownerInstId;
         this.paramList = paramList;
+        this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
         loadConditionList(filterDef, editable);
     }
 
@@ -196,6 +210,14 @@ public class Filter {
         return labelSuggestionDef;
     }
 
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
+    }
+
     public Long getOwnerInstId() {
         return ownerInstId;
     }
@@ -280,11 +302,11 @@ public class Filter {
         }
 
         if (i < conditionList.size()) {
-            conditionList.set(i, new FilterCondition(au, entityDef, labelSuggestionDef, sessionParamWidget,
-                    ownerInstId, type, listType, cDepth, editable));
+            conditionList.set(i, new FilterCondition(au, entityDef, labelSuggestionDef, includeSysParam,
+                    includeProcessVariable, sessionParamWidget, ownerInstId, type, listType, cDepth, editable));
         } else {
-            conditionList.add(new FilterCondition(au, entityDef, labelSuggestionDef, sessionParamWidget, ownerInstId,
-                    type, listType, cDepth, editable));
+            conditionList.add(new FilterCondition(au, entityDef, labelSuggestionDef, includeSysParam,
+                    includeProcessVariable, sessionParamWidget, ownerInstId, type, listType, cDepth, editable));
         }
 
         return i;
@@ -294,16 +316,17 @@ public class Filter {
         int depthOffset = 0;
         if (filterDef == null || filterDef.isBlank()
                 || !filterDef.getFilterRestrictionDefList().get(0).getType().isCompound()) {
-            conditionList.add(new FilterCondition(au, entityDef, labelSuggestionDef, sessionParamWidget, ownerInstId,
-                    FilterConditionType.AND, listType, 0, editable.isTrue()));
+            conditionList
+                    .add(new FilterCondition(au, entityDef, labelSuggestionDef, includeSysParam, includeProcessVariable,
+                            sessionParamWidget, ownerInstId, FilterConditionType.AND, listType, 0, editable.isTrue()));
             depthOffset++;
         }
 
         if (filterDef != null) {
             for (FilterRestrictionDef filterRestrictionDef : filterDef.getFilterRestrictionDefList()) {
-                FilterCondition fo = new FilterCondition(au, entityDef, labelSuggestionDef, sessionParamWidget,
-                        ownerInstId, filterRestrictionDef.getType(), listType,
-                        filterRestrictionDef.getDepth() + depthOffset, editable.isTrue());
+                FilterCondition fo = new FilterCondition(au, entityDef, labelSuggestionDef, includeSysParam,
+                        includeProcessVariable, sessionParamWidget, ownerInstId, filterRestrictionDef.getType(),
+                        listType, filterRestrictionDef.getDepth() + depthOffset, editable.isTrue());
                 setFieldAndInputParams(fo, filterRestrictionDef.getFieldName(), filterRestrictionDef.getParamA(),
                         filterRestrictionDef.getParamB());
                 conditionList.add(fo);

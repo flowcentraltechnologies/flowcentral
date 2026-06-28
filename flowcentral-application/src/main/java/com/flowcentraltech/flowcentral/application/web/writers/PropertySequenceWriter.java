@@ -61,26 +61,36 @@ public class PropertySequenceWriter extends AbstractControlWriter {
             Control moveUpCtrl = propertySequenceWidget.getMoveUpCtrl();
             Control moveDownCtrl = propertySequenceWidget.getMoveDownCtrl();
             Control deleteCtrl = propertySequenceWidget.getDeleteCtrl();
+            writer.write("<div style=\"display:table;table-layout:fixed;width:100%;\">");
 
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = propertySequenceWidget.getItemValueStoreAt(i);
                 PropertySequenceEntry pso = (PropertySequenceEntry) propertySequenceWidget.getItemAt();
                 writer.write("<div class=\"line\">");
-                writeValuesItem(writer, lineValueStore, propertySelectCtrl, lineTypeLabel);
-                if (!StringUtils.isBlank(pso.getProperty())) {
-                    writeValuesItem(writer, lineValueStore, labelCtrl, lineLabel);
-                    writer.write("<div class=\"atab\">");
-                    moveUpCtrl.setDisabled(i == 0);
-                    moveDownCtrl.setDisabled(i >= (len - 2));
-                    writeActionItem(writer, lineValueStore, moveUpCtrl);
-                    writeActionItem(writer, lineValueStore, moveDownCtrl);
-                    writeActionItem(writer, lineValueStore, deleteCtrl);
-                    writer.write("</div>");
+                final boolean isWithProperty = !StringUtils.isBlank(pso.getProperty());
+                writer.write("<div class=\"itab\">");
+                writeValuesItem(writer, lineValueStore, propertySelectCtrl, lineTypeLabel, true);
+                if (isWithProperty) {
+                    writeValuesItem(writer, lineValueStore, labelCtrl, lineLabel, false);
                 }
+                writer.write("</div>");
+                
+                writer.write("<div class=\"atab\">");
+                if (isWithProperty) {
+                  moveUpCtrl.setDisabled(i == 0);
+                  moveDownCtrl.setDisabled(i >= (len - 2));
+                  writeActionItem(writer, lineValueStore, moveUpCtrl);
+                  writeActionItem(writer, lineValueStore, moveDownCtrl);
+                  writeActionItem(writer, lineValueStore, deleteCtrl);
+                }
+                writer.write("</div>");
+                
                 writer.write("</div>");
             }
 
+            writer.write("</div>");
         }
+        
         writer.write("</div>");
     }
 
@@ -117,12 +127,12 @@ public class PropertySequenceWriter extends AbstractControlWriter {
         writer.endFunction();
     }
 
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
+    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label, boolean bar)
             throws UnifyException {
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
-        writer.write("<span class=\"item\">");
+        writer.write(bar ? "<span class=\"item bar\">" : "<span class=\"item\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");

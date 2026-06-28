@@ -53,7 +53,7 @@ public class PrivilegeNotInListCommand extends AbstractOrganizationListCommand<A
             }
 
             query.addSelect("id", "description").addOrder("description").ignoreEmptyCriteria(true);
-            return getOrganizationModuleService().findPrivileges(query);
+            return org().findPrivileges(query);
         }
 
         return Collections.emptyList();

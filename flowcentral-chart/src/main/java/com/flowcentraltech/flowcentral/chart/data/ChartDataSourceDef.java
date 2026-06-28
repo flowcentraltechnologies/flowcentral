@@ -16,20 +16,13 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.PropertySequenceDef;
 import com.flowcentraltech.flowcentral.common.data.VersionedEntityDef;
+import com.flowcentraltech.flowcentral.configuration.constants.CacheRefreshRate;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartDataSourceType;
-import com.flowcentraltech.flowcentral.configuration.constants.ChartTimeSeriesType;
-import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Chart snapshot definition.
@@ -41,13 +34,9 @@ public class ChartDataSourceDef implements VersionedEntityDef {
 
     private final ChartDataSourceType type;
 
-    private final ChartTimeSeriesType timeSeriesType;
-
     private final String longName;
 
     private final String description;
-
-    private final String categoryField;
 
     private final EntityDef entityDef;
 
@@ -57,49 +46,32 @@ public class ChartDataSourceDef implements VersionedEntityDef {
 
     private final PropertySequenceDef categories;
 
-    private final Integer limit;
-
     private final Long id;
 
     private final long version;
 
     private FieldSequenceDef groupingFieldSequenceDef;
 
-    private List<String> groupingFieldNames;
-    
-    public ChartDataSourceDef(ChartDataSourceType type, ChartTimeSeriesType timeSeriesType, String longName,
-            String description, String categoryField, EntityDef entityDef, FilterDef categoryBase,
-            PropertySequenceDef series, PropertySequenceDef categories, FieldSequenceDef groupingFieldSequenceDef,
-            Integer limit, Long id, long version) {
+    private CacheRefreshRate cacheRefreshRate;
+
+    public ChartDataSourceDef(ChartDataSourceType type, String longName, String description, EntityDef entityDef,
+            FilterDef categoryBase, PropertySequenceDef series, PropertySequenceDef categories,
+            FieldSequenceDef groupingFieldSequenceDef, CacheRefreshRate cacheRefreshRate, Long id, long version) {
         this.type = type;
-        this.timeSeriesType = timeSeriesType;
         this.longName = longName;
         this.description = description;
-        this.categoryField = categoryField;
         this.entityDef = entityDef;
         this.categoryBase = categoryBase;
         this.series = series;
         this.categories = categories;
         this.groupingFieldSequenceDef = groupingFieldSequenceDef;
-        this.limit = limit;
+        this.cacheRefreshRate = cacheRefreshRate;
         this.id = id;
         this.version = version;
     }
 
     public ChartDataSourceType getType() {
         return type;
-    }
-
-    public ChartTimeSeriesType getTimeSeriesType() {
-        return timeSeriesType;
-    }
-
-    public String getCategoryField() {
-        return categoryField;
-    }
-
-    public EntityFieldDef getCategoryEntityFieldDef() throws UnifyException {
-        return !StringUtils.isBlank(categoryField) ? entityDef.getFieldDef(categoryField) : null;
     }
 
     public String getLongName() {
@@ -126,8 +98,12 @@ public class ChartDataSourceDef implements VersionedEntityDef {
         return categories;
     }
 
-    public Integer getLimit() {
-        return limit;
+    public FieldSequenceDef getGroupingFieldSequenceDef() {
+        return groupingFieldSequenceDef;
+    }
+
+    public CacheRefreshRate getCacheRefreshRate() {
+        return cacheRefreshRate;
     }
 
     @Override
@@ -140,48 +116,16 @@ public class ChartDataSourceDef implements VersionedEntityDef {
         return version;
     }
 
-    public boolean isMerged() {
-        return timeSeriesType != null && timeSeriesType.merged();
-    }
-
     public boolean isWithSeries() {
-        return series != null;
+        return series != null && !series.isBlank();
     }
 
     public boolean isWithCategories() {
-        return categories != null;
-    }
-
-    public List<String> getGroupingFieldNames() {
-        if (groupingFieldNames == null) {
-            synchronized(this) {
-                if (groupingFieldNames == null) {
-                    groupingFieldNames = new ArrayList<String>();
-                    if (isTimeSeries()) {
-                        groupingFieldNames.add(categoryField);
-                    }
-                    
-                    if (isWithGroupingFields()) {
-                        groupingFieldNames.addAll(groupingFieldSequenceDef.getFieldNames());
-                    }
-                    
-                    groupingFieldNames = Collections.unmodifiableList(groupingFieldNames);
-                }
-            }
-        }
-        
-        return groupingFieldNames;
-    }
-
-    public boolean isTimeSeries() {
-        return timeSeriesType != null && categoryField != null && entityDef.getFieldDef(categoryField).isTime();
+        return categories != null && !categories.isBlank();
     }
 
     public boolean isWithGroupingFields() {
         return groupingFieldSequenceDef != null && !groupingFieldSequenceDef.isBlank();
     }
-    
-    public boolean isWithGroupingFieldsAndOrTimeSeries() {
-        return isWithGroupingFields() || isTimeSeries();
-    }
+
 }

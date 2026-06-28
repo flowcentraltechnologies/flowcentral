@@ -400,6 +400,9 @@
 				<field name="altSortCode" label="$m{organization.branch.altsortcode}"
 					type="STRING" inputWidget="application.text" maxLen="32"
 					nullable="true" auditable="true"/>
+				<field name="email" label="$m{organization.branch.email}"
+					type="STRING" inputWidget="application.text" maxLen="128"
+					nullable="true" auditable="true"/>
 				<field name="address" label="$m{organization.branch.address}"
 					type="STRING" inputWidget="application.textarea" maxLen="512"
 					nullable="true" auditable="true"/>
@@ -509,6 +512,9 @@
 				<field name="description"
 					label="$m{organization.department.description}" type="STRING"
 					inputWidget="application.text" maxLen="64" basicSearch="true" auditable="true"/>
+				<field name="email"
+					label="$m{organization.department.email}" type="STRING"
+					inputWidget="application.text" maxLen="128" nullable="true" auditable="true"/>
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="codeUc"

@@ -19,7 +19,6 @@ import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncResponse;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.http.HttpRequestHeaders;
 
 /**
  * Convenient abstract base class for OS messaging asynchronous processors.
@@ -29,18 +28,16 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
  */
 public abstract class AbstractOSMessagingAsyncProcessor<U extends BaseOSMessagingReq>
         extends AbstractOSMessagingProcessor<OSMessagingAsyncResponse, U> {
-
-    private static final OSMessagingAsyncResponse RESPONSE = new OSMessagingAsyncResponse();
     
-    public AbstractOSMessagingAsyncProcessor(Class<U> requestClass, String summary) {
-        super(OSMessagingAsyncResponse.class, requestClass, summary, OSMessagingMode.ASYNCHRONOUS);
+    public AbstractOSMessagingAsyncProcessor(Class<U> requestClass) {
+        super(OSMessagingAsyncResponse.class, requestClass, OSMessagingMode.ASYNCHRONOUS);
     }
 
     @Override
-    protected final OSMessagingAsyncResponse doProcess(HttpRequestHeaders headers, U request) throws UnifyException {
-        doAsyncProcess( headers, request);
-        return RESPONSE;
+    protected final OSMessagingAsyncResponse doProcess(U request) throws UnifyException {
+        OSMessagingAsyncResponse resp = doAsyncProcess(request);
+        return resp != null ? resp : OSMessagingAsyncResponse.SUCCESS_RESPONSE;
     }
 
-    protected abstract void doAsyncProcess(HttpRequestHeaders headers, U request) throws UnifyException;
+    protected abstract OSMessagingAsyncResponse doAsyncProcess(U request) throws UnifyException;
 }

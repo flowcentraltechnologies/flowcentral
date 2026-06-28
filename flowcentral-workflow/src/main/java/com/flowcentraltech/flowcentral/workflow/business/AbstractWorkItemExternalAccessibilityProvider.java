@@ -20,11 +20,13 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
+import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 
 /**
- * Convenient abstract base class for work-item external accessibility providers.
+ * Convenient abstract base class for work-item external accessibility
+ * providers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
@@ -40,6 +42,18 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
             Date requestedOn) throws UnifyException {
         workflowModuleService.submitToWorkflowByName(workflowName, entityName, workRecId, requestedBy, requestedOn);
         return true;
+    }
+
+    @Override
+    public WfErrorTrace fetchErrorFromExternal(Long workRecId, String workflowName) throws UnifyException {
+        return workflowModuleService.fetchErrorWorkItemExceptionMessage(workRecId, workflowName);
+    }
+
+    @Override
+    public boolean recoverErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
+            throws UnifyException {
+        return workflowModuleService.applyUserAction(workRecId, workflowName, "error", "recover", requestedOn,
+                requestedBy);
     }
 
     @Override

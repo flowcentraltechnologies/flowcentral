@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -66,10 +65,9 @@ public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet {
     private EntityEditorPage constructNewEntityEditorPage(String entityName, Object id, String subTitle)
             throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
-        EntityDef entityDef = getEntityDef(entityName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{entityeditor.entitydesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new EntityEditorPage(au(), entityDef, id, breadCrumbs);
+        return new EntityEditorPage(au(), entityName, id, breadCrumbs);
     }
 
 }

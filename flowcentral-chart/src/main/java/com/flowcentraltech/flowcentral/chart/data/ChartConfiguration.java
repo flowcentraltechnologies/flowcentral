@@ -27,5 +27,7 @@ public interface ChartConfiguration {
 
     String getChart();
 
-    FilterDef getCatBase(String dataSourceName);
+    String getViewOptionName();
+
+    FilterDef getViewOptionCatBase(String dataSourceName);
 }

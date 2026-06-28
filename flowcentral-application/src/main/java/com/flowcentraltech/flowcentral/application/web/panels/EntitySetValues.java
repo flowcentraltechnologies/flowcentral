@@ -46,11 +46,18 @@ public class EntitySetValues extends AbstractPanelFormBinding {
 
     private Long ownerInstId;
 
+    private boolean includeSysParam;
+
+    private boolean includeProcessVariable;
+
     public EntitySetValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
+            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled, boolean includeSysParam,
+            boolean includeProcessVariable) {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
+        this.includeSysParam = includeSysParam;
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public SetValueEntries getSetValueEntries() {
@@ -65,10 +72,19 @@ public class EntitySetValues extends AbstractPanelFormBinding {
         this.ownerInstId = ownerInstId;
     }
 
+    public boolean isIncludeSysParam() {
+        return includeSysParam;
+    }
+
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
+    }
+
     public void load(EntityDef entityDef) throws UnifyException {
         SetValuesDef setValuesDef = getAppletCtx().au().retrieveSetValuesDef(category, ownerEntityDef.getLongName(),
                 ownerInstId);
-        setValueEntries = new SetValueEntries(getAppletCtx().au(), entityDef, setValuesDef, Editable.fromBoolean(isApplyButtonVisible()));
+        setValueEntries = new SetValueEntries(getAppletCtx().au(), entityDef, setValuesDef,
+                Editable.fromBoolean(isApplyButtonVisible()), includeSysParam, includeProcessVariable);
     }
 
     public void save() throws UnifyException {

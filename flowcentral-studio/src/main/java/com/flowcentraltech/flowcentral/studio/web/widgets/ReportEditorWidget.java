@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @since 4.1
  */
 @Component("fc-reporteditor")
-@UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "200px") })
+@UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "164px") })
 public class ReportEditorWidget extends AbstractFlowCentralMultiControl {
 
     public static final String WORK_CONTENT = "content";

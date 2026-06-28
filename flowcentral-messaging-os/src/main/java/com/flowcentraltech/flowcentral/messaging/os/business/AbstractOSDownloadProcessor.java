@@ -34,7 +34,7 @@ import com.tcdng.unify.web.http.HttpRequestHeaders;
 public abstract class AbstractOSDownloadProcessor<T extends BaseOSMessagingResp> extends AbstractFlowCentralComponent
         implements OSDownloadProcessor<T> {
 
-    protected static final OSMessagingError NO_ERROR = new OSMessagingError();
+    private static final OSMessagingError NO_ERROR = new OSMessagingError();
 
     @Configurable
     private OSMessagingModuleService osMessagingModuleService;
@@ -63,6 +63,10 @@ public abstract class AbstractOSDownloadProcessor<T extends BaseOSMessagingResp>
     @Override
     protected void onTerminate() throws UnifyException {
 
+    }
+
+    protected final OSMessagingError validationPass() {
+        return NO_ERROR;
     }
 
     protected final OSMessagingModuleService osmessaging() {

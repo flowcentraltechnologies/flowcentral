@@ -66,8 +66,12 @@ public enum SeriesType implements EnumConst {
         return aggregateType;
     }
 
-    public AggregateFunction function(String fieldName) {
-        return aggregateType.function(fieldName);
+    public AggregateFunction function(String name, String fieldName, String fieldLabel) {
+        return aggregateType.function(name, fieldName, fieldLabel);
+    }
+
+    public AggregateFunction function(String name, String fieldName) {
+        return aggregateType.function(name, fieldName);
     }
     
     public static SeriesType fromCode(String code) {

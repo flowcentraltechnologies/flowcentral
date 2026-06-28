@@ -50,33 +50,48 @@ public class FieldSequenceWriter extends AbstractControlWriter {
         writer.write(">");
         final int len = fieldSequenceWidget.getItemCount();
         if (len > 0) {
-            Control fieldSelectCtrl = fieldSequenceWidget.getFieldSelectCtrl();
-            Control paramCtrl = fieldSequenceWidget.getParamCtrl();
-            Control moveUpCtrl = fieldSequenceWidget.getMoveUpCtrl();
-            Control moveDownCtrl = fieldSequenceWidget.getMoveDownCtrl();
-            Control deleteCtrl = fieldSequenceWidget.getDeleteCtrl();
+            final Control fieldSelectCtrl = fieldSequenceWidget.getFieldSelectCtrl();
+            final Control timeSeriesCtrl = fieldSequenceWidget.getTimeSeriesCtrl();
+            final Control paramCtrl = fieldSequenceWidget.getParamCtrl();
+            final Control moveUpCtrl = fieldSequenceWidget.getMoveUpCtrl();
+            final Control moveDownCtrl = fieldSequenceWidget.getMoveDownCtrl();
+            final Control deleteCtrl = fieldSequenceWidget.getDeleteCtrl();
 
             final String usesLabel = resolveSessionMessage("$m{fieldsequence.usesformatter}");
+            final boolean useTimeSeries = fieldSequenceWidget.isUseTimeSeries();
+            writer.write("<div style=\"display:table;table-layout:fixed;width:100%;\">");
+
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = fieldSequenceWidget.getItemValueStoreAt(i);
                 FieldSequenceEntry fso = fieldSequenceWidget.getItemAt();
                 writer.write("<div class=\"line\">");
+
                 final String columnLabel = resolveSessionMessage("$m{fieldsequence.column}", i + 1);
-                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, columnLabel);
-                if (!StringUtils.isBlank(fso.getFieldName())) {
-                    writeValuesItem(writer, lineValueStore, paramCtrl, usesLabel);
-                    writer.write("<div class=\"atab\">");
+                final boolean isWithFieldName = !StringUtils.isBlank(fso.getFieldName());
+                writer.write("<div class=\"itab\">");
+                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, columnLabel, true);
+                if (isWithFieldName) {
+                    writeValuesItem(writer, lineValueStore,
+                            useTimeSeries && fso.isDateTimeField() ? timeSeriesCtrl : paramCtrl, usesLabel, false);
+                }
+                writer.write("</div>");
+
+                writer.write("<div class=\"atab\">");
+                if (isWithFieldName) {
                     moveUpCtrl.setDisabled(i == 0);
                     moveDownCtrl.setDisabled(i >= (len - 2));
                     writeActionItem(writer, lineValueStore, moveUpCtrl);
                     writeActionItem(writer, lineValueStore, moveDownCtrl);
                     writeActionItem(writer, lineValueStore, deleteCtrl);
-                    writer.write("</div>");
                 }
+                writer.write("</div>");
+
                 writer.write("</div>");
             }
 
+            writer.write("</div>");
         }
+
         writer.write("</div>");
     }
 
@@ -88,8 +103,10 @@ public class FieldSequenceWriter extends AbstractControlWriter {
         List<String> csb = new ArrayList<String>();
         final int len = fieldSequenceWidget.getItemCount();
         if (len > 0) {
-            Control fieldSelectCtrl = fieldSequenceWidget.getFieldSelectCtrl();
-            Control paramCtrl = fieldSequenceWidget.getParamCtrl();
+            final Control fieldSelectCtrl = fieldSequenceWidget.getFieldSelectCtrl();
+            final Control paramCtrl = fieldSequenceWidget.getParamCtrl();
+            final Control timeSeriesCtrl = fieldSequenceWidget.getTimeSeriesCtrl();
+            final boolean useTimeSeries = fieldSequenceWidget.isUseTimeSeries();
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = fieldSequenceWidget.getItemValueStoreAt(i);
                 FieldSequenceEntry fso = (FieldSequenceEntry) fieldSequenceWidget.getItemAt();
@@ -97,7 +114,8 @@ public class FieldSequenceWriter extends AbstractControlWriter {
                 csb.add(fieldSelectCtrl.getId());
 
                 if (!StringUtils.isBlank(fso.getFieldName())) {
-                    writeBehavior(writer, fieldSequenceWidget, lineValueStore, paramCtrl);
+                    writeBehavior(writer, fieldSequenceWidget, lineValueStore,
+                            useTimeSeries && fso.isDateTimeField() ? timeSeriesCtrl : paramCtrl);
                 }
             }
         }
@@ -113,12 +131,12 @@ public class FieldSequenceWriter extends AbstractControlWriter {
         writer.endFunction();
     }
 
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
-            throws UnifyException {
+    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label,
+            boolean bar) throws UnifyException {
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
-        writer.write("<span class=\"item\">");
+        writer.write(bar ? "<span class=\"item bar\">" : "<span class=\"item\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
         writer.write("</span>");

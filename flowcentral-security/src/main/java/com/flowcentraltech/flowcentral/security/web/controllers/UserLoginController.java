@@ -81,7 +81,8 @@ import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
 public class UserLoginController extends AbstractApplicationForwarderController<UserLoginPageBean> {
 
     private static final Set<String> NO_LOGGING_REQUIRED_EXCEPTIONS = Collections
-            .unmodifiableSet(new HashSet<String>(Arrays.asList(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD,
+            .unmodifiableSet(new HashSet<String>(Arrays.asList(
+                    SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD,
                     SecurityModuleErrorConstants.INVALID_OLD_PASSWORD,
                     SecurityModuleErrorConstants.NEW_PASSWORD_IS_STALE,
                     SecurityModuleErrorConstants.USER_ROLE_NOT_ACTIVE_AT_CURRENTTIME,

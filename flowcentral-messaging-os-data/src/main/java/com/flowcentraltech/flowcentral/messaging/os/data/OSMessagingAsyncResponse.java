@@ -23,6 +23,8 @@ package com.flowcentraltech.flowcentral.messaging.os.data;
  */
 public class OSMessagingAsyncResponse extends BaseOSMessagingResp {
 
+    public static final OSMessagingAsyncResponse SUCCESS_RESPONSE = new OSMessagingAsyncResponse();
+
     public OSMessagingAsyncResponse(String responseCode, String responseMessage) {
         super(responseCode, responseMessage);
     }

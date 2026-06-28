@@ -26,7 +26,10 @@ import com.tcdng.unify.core.annotation.Column;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-@Table(name = "FC_ZONE", uniqueConstraints = { @UniqueConstraint({ "code" }), @UniqueConstraint({ "description" }) })
+@Table(name = "FC_ZONE",
+        uniqueConstraints = {
+                @UniqueConstraint({ "code" }),
+                @UniqueConstraint({ "description" }) })
 public class Zone extends BaseStatusEntity {
 
     @Column(name = "ZONE_CD", length = 16)

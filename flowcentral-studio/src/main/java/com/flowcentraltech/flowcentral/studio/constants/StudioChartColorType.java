@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.constants;
 
+import com.flowcentraltech.flowcentral.configuration.constants.ChartColorType;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.util.EnumUtils;
@@ -29,14 +30,14 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "studiochartcolorlist", description="Studio Chart Color List")
 public enum StudioChartColorType implements EnumConst {
 
-    RED("#72170e"),
-    ORANGE("#e65c00"),
-    YELLOW("#f1c927"),
-    GREEN("#1d6355"),
-    CYAN("#199a95"),
-    BLUE("#13496c"),
-    VIOLET("#4a2759"),
-    GRAY("#22262b");
+    RED(ChartColorType.RED.code()),
+    ORANGE(ChartColorType.ORANGE.code()),
+    YELLOW(ChartColorType.YELLOW.code()),
+    GREEN(ChartColorType.GREEN.code()),
+    CYAN(ChartColorType.CYAN.code()),
+    BLUE(ChartColorType.BLUE.code()),
+    VIOLET(ChartColorType.VIOLET.code()),
+    GRAY(ChartColorType.GRAY.code());
 
     private final String code;
     

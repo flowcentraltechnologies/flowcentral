@@ -21,13 +21,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.messaging.os.constants.OSMessagingMode;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSInfo;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerInfo;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSResponse;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
 import com.tcdng.unify.core.UnifyException;
@@ -293,50 +291,18 @@ public interface OSMessagingModuleService extends FlowCentralService {
     <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request) throws UnifyException;
 
     /**
-     * Sends asynchronous message with a delay.
+     * Saves an incoming asynchronous message.
      * 
-     * @param request
-     *                    the message
-     * @param delayInSecs
-     *                    the delay in seconds.
-     * @return the correlation ID
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    <T extends BaseOSMessagingReq> String sendAsynchronousMessage(T request, long delayInSecs)
-            throws UnifyException;
-    
-    /**
-     * Get asynchronous acknowledgement.
-     * 
-     * @param correlationdId
-     *                       the message correlation ID
-     * @return the response object
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    OSResponse getAsynchronousAck(String correlationdId) throws UnifyException;
-    
-    /**
-     * Logs message processing.
-     * 
-     * @param mode
-     *                     the messaging mode
-     * @param correlationdId the correlation 
-     * @param source
-     *                     the source
      * @param processor
-     *                     the processor
-     * @param summary
-     *                     the summary
-     * @param responseCode
-     *                     the response code
-     * @param responseMsg
-     *                     the response message
+     *                      the target processor
+     * @param correlationId
+     *                      the correlation ID
+     * @param requestJson
+     *                      the request object
      * @throws UnifyException
      *                        if an error occurs
      */
-    void logProcessing(OSMessagingMode mode, String correlationdId, String source, String processor, String summary,
-            String responseCode, String responseMsg) throws UnifyException;
+    void saveIncomingAsynchronousMessage(String processor, String correlationId, String requestJson)
+            throws UnifyException;
 
 }

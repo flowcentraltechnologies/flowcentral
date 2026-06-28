@@ -1,0 +1,50 @@
+/*
+ * Copyright (c) 2021-2026 FlowCentral Technologies Limited.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.flowcentraltech.flowcentral.chart.entities;
+
+import java.util.Date;
+
+import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
+
+/**
+ * Chart data source snapshot query.
+ * 
+ * @author FlowCentral Technologies Limited
+ * @since 4.1
+ */
+public class ChartDataSourceSnapshotQuery extends BaseEntityQuery<ChartDatasourceSnapshot> {
+
+    public ChartDataSourceSnapshotQuery() {
+        super(ChartDatasourceSnapshot.class);
+    }
+
+    public ChartDataSourceSnapshotQuery chartDataSourceId(Long chartDataSourceId) {
+        return (ChartDataSourceSnapshotQuery) addEquals("chartDataSourceId", chartDataSourceId);
+    }
+
+    public ChartDataSourceSnapshotQuery viewOption(String viewOption) {
+        return (ChartDataSourceSnapshotQuery) addEquals("viewOption", viewOption);
+    }
+
+    public ChartDataSourceSnapshotQuery isExpired(Date now) {
+        return (ChartDataSourceSnapshotQuery) addLessThan("snapshotExpiresOn", now);
+    }
+
+    public ChartDataSourceSnapshotQuery isNotExpired(Date now) {
+        return (ChartDataSourceSnapshotQuery) addGreaterThanEqual("snapshotExpiresOn", now);
+    }
+
+}

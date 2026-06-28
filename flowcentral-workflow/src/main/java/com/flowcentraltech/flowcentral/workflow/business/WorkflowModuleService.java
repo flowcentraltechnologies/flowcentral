@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
+import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
@@ -537,4 +538,13 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      */
     List<WfStep> generateWorkflowSteps(final DesignType type, final String stepLabel,
             final AppletWorkflowCopyInfo appletWorkflowCopyInfo) throws UnifyException;
+
+    /**
+     * Fetches error work item error trace
+     * @param workRecId the work record Id
+     * @param workflowName the workflow name
+     * @return the error trace if found otherwise null
+     * @throws UnifyException
+     */
+    WfErrorTrace fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName) throws UnifyException;
 }

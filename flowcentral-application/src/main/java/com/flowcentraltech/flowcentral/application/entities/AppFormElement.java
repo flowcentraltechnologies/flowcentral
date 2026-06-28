@@ -116,6 +116,9 @@ public class AppFormElement extends BaseConfigEntity {
     private boolean includeSysParam;
     
     @Column
+    private boolean includeProcessVariable;
+    
+    @Column
     private boolean showSearch;
 
     @Column
@@ -367,6 +370,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setIncludeSysParam(boolean includeSysParam) {
         this.includeSysParam = includeSysParam;
+    }
+
+    public boolean isIncludeProcessVariable() {
+        return includeProcessVariable;
+    }
+
+    public void setIncludeProcessVariable(boolean includeProcessVariable) {
+        this.includeProcessVariable = includeProcessVariable;
     }
 
     public boolean isShowSearch() {
