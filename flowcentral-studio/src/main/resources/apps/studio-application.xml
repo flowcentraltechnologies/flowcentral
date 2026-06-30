@@ -2602,7 +2602,7 @@
 					<section name="source" columns="TYPE_1"
 						label="$m{studio.jsonentity.form.source}" icon="file">
 						<field name="sourceJson"
-							inputWidget="application.textareaxlarge" column="0"
+							inputWidget="application.jsonuploadlarge" column="0"
 							required="true" editable="true" />
 					</section>
 					<section name="structure" columns="TYPE_1"
@@ -2645,7 +2645,7 @@
 							editable="true" />
 						<field name="entityName" inputWidget="application.name"
 							column="0" required="true" />
-						<field name="baseType" column="0"
+						<field name="baseType" column="0" inputWidget="entitybasetypelist"
 							label="$m{studio.csventity.basetype}" required="true"
 							editable="true" />
 						<field name="dateFormatter"
@@ -2660,7 +2660,7 @@
 					<section name="source" columns="TYPE_1"
 						label="$m{studio.csventity.form.source}" icon="file">
 						<field name="sourceJson"
-							inputWidget="application.textareaxlarge" column="0"
+							inputWidget="application.csvuploadlarge" column="0"
 							required="true" editable="true"
 							label="$m{studio.csventity.sourcecsv}" />
 					</section>

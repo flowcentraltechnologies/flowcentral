@@ -344,7 +344,43 @@
 			description="$m{application.widgettype.textareaxxlarge}"
 			dataType="STRING" inputType="STRING"
 			editor="!ui-textarea minLen:%s maxLen:%s trim:%s rows:64"
+			renderer="!ui-label" />	
+		<widgetType name="textupload" listOption="true"
+			description="$m{application.widgettype.textupload}" dataType="STRING"
+			inputType="STRING" editor="!ui-textupload accept:text rows:8"
 			renderer="!ui-label" />
+		<widgetType name="textuploadmedium" listOption="true"
+			description="$m{application.widgettype.textuploadmedium}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-textupload accept:text rows:16" renderer="!ui-label" />
+		<widgetType name="textuploadlarge" listOption="true"
+			description="$m{application.widgettype.textuploadlarge}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-textupload accept:text rows:32" renderer="!ui-label" />
+		<widgetType name="csvupload" listOption="true"
+			description="$m{application.widgettype.csvupload}" dataType="STRING"
+			inputType="STRING" editor="!ui-textupload accept:csv rows:8"
+			renderer="!ui-label" />
+		<widgetType name="csvuploadmedium" listOption="true"
+			description="$m{application.widgettype.csvuploadmedium}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-textupload accept:csv rows:16" renderer="!ui-label" />
+		<widgetType name="csvuploadlarge" listOption="true"
+			description="$m{application.widgettype.csvuploadlarge}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-textupload accept:csv rows:32" renderer="!ui-label" />						
+		<widgetType name="jsonupload" listOption="true"
+			description="$m{application.widgettype.jsonupload}" dataType="STRING"
+			inputType="STRING" editor="!ui-textupload accept:json rows:8"
+			renderer="!ui-label" />
+		<widgetType name="jsonuploadmedium" listOption="true"
+			description="$m{application.widgettype.jsonuploadmedium}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-textupload accept:json rows:16" renderer="!ui-label" />
+		<widgetType name="jsonuploadlarge" listOption="true"
+			description="$m{application.widgettype.jsonuploadlarge}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-textupload accept:json rows:32" renderer="!ui-label" />															
 		<widgetType name="richtexteditor" listOption="true"
 			description="$m{application.widgettype.richtexteditor}"
 			dataType="STRING"
