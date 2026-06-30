@@ -2596,8 +2596,6 @@
 						<field name="dateTimeFormatter"
 							inputWidget="studio.datetimeformatterlist" column="0"
 							required="false" />
-						<field name="delegate" inputWidget="environmentdelegatelist"
-							column="0" />
 					</section>
 					<section name="source" columns="TYPE_1"
 						label="$m{studio.jsonentity.form.source}" icon="file">
@@ -2654,8 +2652,6 @@
 						<field name="dateTimeFormatter"
 							inputWidget="studio.datetimeformatterlist" column="0"
 							required="false" />
-						<field name="delegate" inputWidget="environmentdelegatelist"
-							column="0" />
 					</section>
 					<section name="source" columns="TYPE_1"
 						label="$m{studio.csventity.form.source}" icon="file">
