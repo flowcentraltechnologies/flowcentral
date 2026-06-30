@@ -4530,7 +4530,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 if (createRecord) {
                     for (RecLoadInfo recLoadInfo : recMap.values()) {
-                        System.out.println("@prime: recLoadInfo.getFormatter() = " + recLoadInfo.getFormatter());
                         DataUtils.setBeanProperty(inst, recLoadInfo.getFieldName(), recLoadInfo.getVal(),
                                 recLoadInfo.getFormatter());
                     }

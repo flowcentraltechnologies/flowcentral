@@ -753,7 +753,8 @@ public class TableDef extends BaseApplicationEntityDef {
                     if (fromIndex > 0) {
                         int toIndex = renderer.indexOf('}', fromIndex);
                         if (toIndex > 0) {
-                            formatter = renderer.substring(fromIndex - 1, toIndex + 1);
+                            formatter = renderer.substring(fromIndex - 1,
+                                    renderer.indexOf("pattern", fromIndex) > 0 ? (toIndex + 2) : (toIndex + 1));
                         }
                     }
 

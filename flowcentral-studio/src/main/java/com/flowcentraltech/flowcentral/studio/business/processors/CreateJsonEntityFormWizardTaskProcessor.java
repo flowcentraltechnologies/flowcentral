@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.processors;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
@@ -25,7 +24,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Create JSON entity form wizard policies.
@@ -41,12 +39,6 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractCreateEntit
     @Override
     protected void loadSource(TaskMonitor taskMonitor, String source, String entity) throws UnifyException {
         final EntityClassDef entityClassDef = au().getEntityClassDef(entity);
-        System.out.println("@prime: comp = " + StringUtils.toXmlString(entityClassDef.getJsonComposition(au())));
-        System.out.println("@prime: source = " + source);
-        for (Field field : entityClassDef.getEntityClass().getDeclaredFields()) {
-            System.out.println("@prime: field = " + field.getName());
-        }
-
         final List<? extends Entity> items = DataUtils.listFromJsonString(entityClassDef.getJsonComposition(au()),
                 (Class<? extends Entity>) entityClassDef.getEntityClass(), source);
         for (Entity inst : items) {

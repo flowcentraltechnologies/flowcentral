@@ -78,12 +78,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             .unmodifiableList(Arrays.asList("studio.createJsonEntity", "studio.createCsvEntity"));
 
     private static final List<StudioAppComponentType> utilMenuCategoryList = Collections
-            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY_TOOLS, StudioAppComponentType.SNAPSHOT,
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.SNAPSHOT,
                     StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.CODEGENERATION,
                     StudioAppComponentType.APPLICATION));
 
     private static final List<StudioAppComponentType> collabUtilMenuCategoryList = Collections
-            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY_TOOLS, StudioAppComponentType.SNAPSHOT,
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.SNAPSHOT,
                     StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.CODEGENERATION,
                     StudioAppComponentType.APPLICATION, StudioAppComponentType.COLLABORATION));
 
@@ -141,7 +141,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
         if (currCategory == null || (application && !currCategory.isComponentType())
                 || (!application && currCategory.isComponentType())) {
-            currCategory = application ? StudioAppComponentType.ENTITY : StudioAppComponentType.ENTITY_TOOLS;
+            currCategory = application ? StudioAppComponentType.ENTITY : StudioAppComponentType.SNAPSHOT;
         }
 
         studioMenuWidget.setCurrentSel(currCategory);
@@ -236,7 +236,6 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     && StudioAppComponentType.CODEGENERATION.equals(currCategory);
             final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
             final boolean isSnapshot = StudioAppComponentType.SNAPSHOT.equals(currCategory);
-            final boolean isEntityTools = StudioAppComponentType.ENTITY_TOOLS.equals(currCategory);
 
             final String searchInput = studioMenuWidget.isSearchable() ? studioMenuWidget.getSearchInput() : null;
             final List<AppletDef> appletDefList = isApplications
@@ -245,14 +244,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                             : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
                                     : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
                                             : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
-                                                    : (isEntityTools
-                                                            ? getEntityToolsAppletDefs(applicationName, searchInput)
-                                                            : studioModuleService.findAppletDefs(applicationName,
-                                                                    currCategory, searchInput))))));
+                                                    : studioModuleService.findAppletDefs(applicationName,
+                                                                    currCategory, searchInput)))));
 
             for (AppletDef appletDef : appletDefList) {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
-                        || isEntityTools || appletDef.isMenuAccess()) {
+                        || appletDef.isMenuAccess() || entityToolsAppletList.contains(appletDef.getLongName())) {
                     writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
                     writer.write("<span>").writeWithHtmlEscape(resolveSessionMessage(appletDef.getLabel()))
                             .write("</span>");
@@ -340,10 +337,6 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
     private List<AppletDef> getSnapshotAppletDefs(String applicationName, String filter) throws UnifyException {
         return getRoleAppletDefs(applicationName, snapshotAppletList, filter);
-    }
-
-    private List<AppletDef> getEntityToolsAppletDefs(String applicationName, String filter) throws UnifyException {
-        return getRoleAppletDefs(applicationName, entityToolsAppletList, filter);
     }
 
     private List<AppletDef> getRoleAppletDefs(String applicationName, List<String> applets, String filter)
