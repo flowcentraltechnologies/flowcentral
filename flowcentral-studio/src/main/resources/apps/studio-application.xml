@@ -2587,7 +2587,7 @@
 							editable="true" />
 						<field name="entityName" inputWidget="application.name"
 							column="0" required="true" />
-						<field name="baseType" column="0"
+						<field name="baseType" column="0" inputWidget="entitybasetypelist"
 							label="$m{studio.jsonentity.basetype}" required="true"
 							editable="true" />
 						<field name="dateFormatter"

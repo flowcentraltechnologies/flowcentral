@@ -541,7 +541,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             fields.add(new JsonFieldComposition(DynamicEntityFieldType.FIELD, entityFieldDef.getDataType().dataType(),
                     fieldName, entityFieldDef.getJsonName(),
                     StandardFormatType.fromCode(entityFieldDef.getJsonFormatter()),
-                    ApplicationEntityUtils.isReservedFieldName(fieldName)));
+                    ApplicationEntityUtils.isReservedFieldName(baseType, fieldName)));
         }
 
         for (EntityFieldDef entityFieldDef : entityDef.getChildFieldDefList()) {
@@ -581,7 +581,7 @@ public class EntityDef extends BaseApplicationEntityDef {
         ValueStore instValueStore = new BeanValueStore(inst);
         for (EntityFieldDef entityFieldDef : getColumnFieldDefList()) {
             final String fieldName = entityFieldDef.getFieldName();
-            if (!ApplicationEntityUtils.isReservedFieldName(fieldName)) {
+            if (!ApplicationEntityUtils.isReservedFieldName(baseType, fieldName)) {
                 if (!entityFieldDef.isNullable() && instValueStore.isNull(fieldName)) {
                     errors.add(au.resolveSessionMessage("$m{entitydef.validation.required}",
                             parent != null ? parent + "." + fieldName : fieldName));

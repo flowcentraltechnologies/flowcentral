@@ -55,6 +55,7 @@ import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.data.FormatterOptions;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
@@ -131,7 +132,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
 
             List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
             for (EntityFieldSchema entityFieldSchema : entitySchema.getFields()) {
-                AppEntityField appEntityField = newAppEntityField(null, entityFieldSchema);
+                AppEntityField appEntityField = newAppEntityField(appEntity.getBaseType(), null, entityFieldSchema);
                 fieldList.add(appEntityField);
             }
             appEntity.setFieldList(fieldList);
@@ -192,7 +193,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                             new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
                             update);
                 } else {
-                    AppEntityField appEntityField = newAppEntityField(appEntityId, entityFieldSchema);
+                    AppEntityField appEntityField = newAppEntityField(appEntity.getBaseType(), appEntityId, entityFieldSchema);
                     au.environment().create(appEntityField);
                 }
             }
@@ -618,12 +619,12 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
         return null;
     }
 
-    private AppEntityField newAppEntityField(Long appEntityId, EntityFieldSchema entityFieldSchema) {
+    private AppEntityField newAppEntityField(EntityBaseType baseType, Long appEntityId, EntityFieldSchema entityFieldSchema) {
         AppEntityField appEntityField = new AppEntityField();
         appEntityField.setAppEntityId(appEntityId);
         appEntityField.setConfigType(ConfigType.CUSTOM);
         appEntityField
-                .setType(ApplicationEntityUtils.isReservedFieldName(entityFieldSchema.getName()) ? EntityFieldType.BASE
+                .setType(ApplicationEntityUtils.isReservedFieldName(baseType, entityFieldSchema.getName()) ? EntityFieldType.BASE
                         : EntityFieldType.CUSTOM);
         appEntityField.setDataType(entityFieldSchema.getDataType());
         appEntityField.setName(entityFieldSchema.getName());
@@ -641,7 +642,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 : null);
         appEntityField.setPrecision(entityFieldSchema.getPrecision() > 0 ? entityFieldSchema.getPrecision() : null);
         appEntityField.setScale(entityFieldSchema.getScale() > 0 ? entityFieldSchema.getScale() : null);
-        appEntityField.setAuditable(!ApplicationEntityUtils.isReservedFieldName(entityFieldSchema.getName())
+        appEntityField.setAuditable(!ApplicationEntityUtils.isReservedFieldName(baseType, entityFieldSchema.getName())
                 || ApplicationEntityUtils.isAuditableReservedFieldName(entityFieldSchema.getName()));
         appEntityField.setReportable(entityFieldSchema.getDataType().isReportable());
         appEntityField.setNullable(entityFieldSchema.isNullable());
