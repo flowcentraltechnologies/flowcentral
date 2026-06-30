@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.data.ValidationErrors;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.core.UnifyException;
@@ -57,6 +58,12 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
 
     public CreateJsonEntityNavigationPolicy() {
         super(Arrays.asList("composition"));
+    }
+
+    @Override
+    public void onInit(ValueStore inst) throws UnifyException {
+        inst.store("applicationId",
+                getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
     }
 
     @Override

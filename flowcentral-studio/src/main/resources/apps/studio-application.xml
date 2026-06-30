@@ -2584,7 +2584,7 @@
 							inputWidget="application.entitysearch" column="0"
 							reference="studio.applicationDevelopableRef"
 							label="$m{studio.jsonentity.application}" required="true"
-							editable="true" />
+							editable="true" disabled ="true" />
 						<field name="entityName" inputWidget="application.name"
 							column="0" required="true" />
 						<field name="baseType" column="0" inputWidget="entitybasetypelist"
@@ -2642,7 +2642,7 @@
 							inputWidget="application.entitysearch" column="0"
 							label="$m{studio.csventity.application}"
 							reference="studio.applicationDevelopableRef" required="true"
-							editable="true" />
+							editable="false" disabled ="true"/>
 						<field name="entityName" inputWidget="application.name"
 							column="0" required="true" />
 						<field name="baseType" column="0" inputWidget="entitybasetypelist"

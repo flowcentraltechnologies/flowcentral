@@ -40,6 +40,16 @@ public interface FormWizardNavigationPolicy extends FlowCentralComponent {
     List<String> pageAttributeNames();
     
     /**
+     * Runs on initialization.
+     * 
+     * @param inst
+     *             the entity instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void onInit(ValueStore inst) throws UnifyException;
+    
+    /**
      * Executes on next navigation.
      * 
      * @param inst
