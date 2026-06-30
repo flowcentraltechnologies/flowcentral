@@ -497,6 +497,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private boolean limitSelectToColumns;
 
+        private boolean preview;
+
         private String longName;
 
         private String description;
@@ -590,6 +592,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder summaryTitleColumns(int summaryTitleColumns) {
             this.summaryTitleColumns = summaryTitleColumns;
+            return this;
+        }
+
+        public Builder preview(boolean preview) {
+            this.preview = preview;
             return this;
         }
 
@@ -715,7 +722,7 @@ public class TableDef extends BaseApplicationEntityDef {
         }
 
         public TableDef build(final AppletUtilities au) throws UnifyException {
-           if (DataUtils.isBlank(visibleColumnDefList)) {
+            if (DataUtils.isBlank(visibleColumnDefList)) {
                 for (EntityFieldDef entityFieldDef : entityDef.getColumnFieldDefList()) {
                     final String renderer = InputWidgetUtils
                             .constructRenderer(au.getWidgetTypeDef(entityFieldDef.getInputWidget()), entityFieldDef);
@@ -771,10 +778,17 @@ public class TableDef extends BaseApplicationEntityDef {
                                             ? " styleClass:$e{link-right ui-link-classic}"
                                             : " styleClass:$e{ui-link-classic}")
                                     : (entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "");
-                            renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter
-                                    + " binding:" + fieldName + styleClass
-                                    + " alwaysValueIndex:true copyEventHandlers:true eventHandler:$d{!ui-event event:onclick action:$c{"
-                                    + linkAct + "}}";
+                            if (preview) {
+                                renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter
+                                        + " binding:" + fieldName + styleClass
+                                        + " alwaysValueIndex:true copyEventHandlers:true";
+
+                            } else {
+                                renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter
+                                        + " binding:" + fieldName + styleClass
+                                        + " alwaysValueIndex:true copyEventHandlers:true eventHandler:$d{!ui-event event:onclick action:$c{"
+                                        + linkAct + "}}";
+                            }
                         }
                     }
                 } else {
