@@ -112,7 +112,6 @@ import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.security.SecurityComponents;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
@@ -141,9 +140,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private ConfigurationLoader configurationLoader;
-
-    @Configurable
-    private DynamicSqlDataSourceManager dataSourceManager;
 
     @Configurable
     private TaskManager taskManager;
