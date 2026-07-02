@@ -64,12 +64,15 @@ import com.flowcentraltech.flowcentral.system.constants.SystemModuleErrorConstan
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.data.CredentialDef;
+import com.flowcentraltech.flowcentral.system.data.DataSourceConnectionDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseEntryDef;
 import com.flowcentraltech.flowcentral.system.data.ScheduledTaskDef;
 import com.flowcentraltech.flowcentral.system.data.SysParamInfo;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnectionQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
@@ -157,6 +160,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     private final FactoryMap<String, CredentialDef> authDefFactoryMap;
 
+    private final FactoryMap<String, DataSourceConnectionDef> connectionDefFactoryMap;
+
     private final FactoryMap<String, LicenseDef> licenseDefFactoryMap;
 
     private final List<String> featureList = Collections.unmodifiableList(Arrays
@@ -181,6 +186,31 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
                     return new CredentialDef(authName, credential.getUserName(), credential.getPassword(),
                             credential.getBase64Encoded(), credential.getVersionNo());
+                }
+            };
+
+        this.connectionDefFactoryMap = new StaleableFactoryMap<String, DataSourceConnectionDef>()
+            {
+
+                @Override
+                protected boolean stale(String connectionName, DataSourceConnectionDef connectionDef) throws Exception {
+                    return (environment().value(long.class, "versionNo",
+                            new DataSourceConnectionQuery().name(connectionName)) > connectionDef.getVersionNo());
+                }
+
+                @Override
+                protected DataSourceConnectionDef create(String connectionName, Object... arg1) throws Exception {
+                    DataSourceConnection connection = environment()
+                            .find(new DataSourceConnectionQuery().name(connectionName));
+                    if (connection == null) {
+                        throw new UnifyException(SystemModuleErrorConstants.CANNOT_FIND_CREDENTIAL, connectionName);
+                    }
+
+                    return new DataSourceConnectionDef(connection.getName(), connection.getDescription(),
+                            connection.getDialect(), connection.getHost(), connection.getPort(),
+                            connection.getDatabase(), connection.getService(), connection.getSchema(),
+                            connection.getUserName(), connection.getPassword(), connection.getId(),
+                            connection.getVersionNo());
                 }
             };
 
@@ -294,6 +324,11 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public CredentialDef getCredentialDef(String credName) throws UnifyException {
         return authDefFactoryMap.get(credName);
+    }
+
+    @Override
+    public DataSourceConnectionDef getDataSourceConnectionDef(String name) throws UnifyException {
+        return connectionDefFactoryMap.get(name);
     }
 
     @Override
