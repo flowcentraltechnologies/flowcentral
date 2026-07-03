@@ -18,6 +18,11 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-symbolselect blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="sqldialectlist"
+			description="$m{application.widgettype.sqldialectlist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:$s{sqldialectlist} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="restapilist"
 			description="$m{application.widgettype.restapilist}"
 			dataType="STRING" inputType="STRING"
