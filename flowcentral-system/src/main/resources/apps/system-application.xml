@@ -1297,11 +1297,11 @@
 			description="$m{system.datasourceconnection.form}" entity="dataSourceConnection">
 			<actions>
 				<action type="BUTTON" name="testConnection" symbol="exclamation-circle"
-					styleClass="fc-actbutton"
+					styleClass="fc-actbutton" highlight="ORANGE"
 					description="$m{system.datasourceconnection.form.action.testdatasourceconnection}"
 					label="$m{system.datasourceconnection.form.action.testdatasourceconnection.label}"
 					policy="testdatasourceconnection-actionpolicy" showOnMaintain="true"
-					showOnCreate="true"/>
+					showOnCreate="true" validateForm="true"/>
 			</actions>
 			<tabs>
 				<tab name="basicDetails"
