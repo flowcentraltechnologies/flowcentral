@@ -43,7 +43,11 @@ public class EntityFormEventHandlers {
     private List<EventHandler> saveAsSwitchOnChangeHandlers;
 
     private List<EventHandler> maintainActHandlers;
-
+    
+    public EntityFormEventHandlers(EventHandler[] formSwitchOnChangeHandlers) {
+        this(formSwitchOnChangeHandlers, null, null, null, null, null, null);
+    }
+    
     public EntityFormEventHandlers(EventHandler[] formSwitchOnChangeHandlers, EventHandler[] assnSwitchOnChangeHandlers,
             EventHandler[] entrySwitchOnChangeHandlers, EventHandler[] crudActionHandlers,
             EventHandler[] crudSwitchOnChangeHandlers, EventHandler[] saveAsSwitchOnChangeHandlers,

@@ -140,7 +140,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
         if (currCategory == null || (application && !currCategory.isComponentType())
                 || (!application && currCategory.isComponentType())) {
-            currCategory = application ? StudioAppComponentType.ENTITY : StudioAppComponentType.SNAPSHOT;
+            currCategory = application ? StudioAppComponentType.ENTITY : StudioAppComponentType.APPLICATION;
         }
 
         studioMenuWidget.setCurrentSel(currCategory);

@@ -33,8 +33,10 @@
 !fc-formmessages:formMessages binding:messages
 
 // Form
-!ui-panel:pageFormPanel styleClass:$s{fwzfrm} components:$c{pageForm}
+!ui-panel:pageFormPanel styleClass:$s{fwzfrm} components:$c{pageForm} 
 !fc-miniform:pageForm  style:$s{width:98%;} sectionHeaders:false binding:form
+!ui-hidden:switchOnChangeHolder
+	eventHandler:$d{!ui-event event:onchange action:$c{switchOnChangeAct}}
 
 // Action panel
 !ui-panel:actionPanel styleClass:$e{fwzAct} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{50% 50%} cellPadding:false}
@@ -62,4 +64,5 @@
 // Actions
 !ui-postcommand:prevAct command:previous components:$c{pageForm}
 !ui-postcommand:nextAct command:next components:$c{pageForm}
+!ui-postcommand:switchOnChangeAct command:performChange components:$c{pageForm}
 	

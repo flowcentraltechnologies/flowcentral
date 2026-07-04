@@ -102,9 +102,9 @@ public class DataSourceConnectionFormStatePolicy extends AbstractConsolidatedFor
                     break;
                 case SqlDialectNameConstants.POSTGRESQL:
                     states.setFieldState(TriState.TRUE, TriState.CONFORMING, TriState.CONFORMING, TriState.CONFORMING,
-                            "database");
+                            "database", "schema");
                     states.setFieldState(TriState.FALSE, TriState.CONFORMING, TriState.CONFORMING, TriState.TRUE,
-                            "schema", "service");
+                            "service");
                     break;
                 case SqlDialectNameConstants.MARIADB:
                 case SqlDialectNameConstants.MYSQL:

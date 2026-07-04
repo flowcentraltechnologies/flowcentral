@@ -48,6 +48,11 @@ public class FormWizardPanel extends AbstractFormPanel {
     private AppletUtilities appletUtilities;
 
     @Action
+    public void performChange() throws UnifyException {
+        
+    }
+    
+    @Action
     public void previous() throws UnifyException {
         FormWizard formWizard = getFormWizard();
         FormContext ctx = getFormWizard().getFormContext();
