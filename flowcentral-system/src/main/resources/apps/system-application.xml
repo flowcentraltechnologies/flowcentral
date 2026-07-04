@@ -686,6 +686,10 @@
 					type="STRING" maxLen="64" auditable="true"/>
 				<field name="password" label="$m{system.datasourceconnection.password}"
 					type="STRING" maxLen="128" auditable="false"/>
+				<field name="lastResult" label="$m{system.datasourceconnection.lastresult}"
+					type="STRING" maxLen="512" auditable="false"/>
+				<field name="lastOn" label="$m{system.datasourceconnection.laston}"
+					type="TIMESTAMP" auditable="false"/>
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="nameUc"
@@ -1296,8 +1300,8 @@
 		<form name="dataSourceConnectionForm"
 			description="$m{system.datasourceconnection.form}" entity="dataSourceConnection">
 			<actions>
-				<action type="BUTTON" name="testConnection" symbol="exclamation-circle"
-					styleClass="fc-actbutton" highlight="ORANGE"
+				<action type="BUTTON" name="testConnection" symbol="double-check"
+					styleClass="fc-actbutton" highlight="BLUE"
 					description="$m{system.datasourceconnection.form.action.testdatasourceconnection}"
 					label="$m{system.datasourceconnection.form.action.testdatasourceconnection.label}"
 					policy="testdatasourceconnection-actionpolicy" showOnMaintain="true"
@@ -1334,6 +1338,14 @@
 							column="0" required="true" />
 						<field name="password" inputWidget="application.password"
 							column="1" />
+					</section>
+					<section name="test" columns="TYPE_1"
+						label="$m{system.datasourceconnection.form.test}"
+						editable="false">
+						<field name="lastOn" inputWidget="application.text"
+							column="0"/>
+						<field name="lastResult" inputWidget="application.textarea"
+							column="0" color="YELLOW"/>
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"

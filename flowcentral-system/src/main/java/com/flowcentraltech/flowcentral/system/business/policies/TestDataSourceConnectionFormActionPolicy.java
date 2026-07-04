@@ -58,12 +58,24 @@ public class TestDataSourceConnectionFormActionPolicy extends AbstractFormAction
                 dataSourceConnection.getService(), dataSourceConnection.getSchema(), dataSourceConnection.getUserName(),
                 dataSourceConnection.getPassword());
         final Optional<String> error = SqlUtils.testJDBCConnection(jdbcConnectionInfo);
+        String msg = null;
         if (error.isPresent()) {
-            result.setFailureHint("DataSource connection test failed! Reason: " + error.get());
+           msg = "DataSource connection test failed! Reason: " + error.get();
+            result.setFailureHint(msg);
         } else {
+            msg = "DataSource connection test successful!";
             result.setSuccessHint("DataSource connection test successful!");
         }
-
+        
+        dataSourceConnection.setLastResult(msg);
+        dataSourceConnection.setLastOn(environment().getNow());
+        
+        if (dataSourceConnection.getId() == null) {
+            result.setSkipUpdate(true);
+        } else {
+           environment().updateByIdVersion(dataSourceConnection);
+        }
+        
         return result;
     }
 

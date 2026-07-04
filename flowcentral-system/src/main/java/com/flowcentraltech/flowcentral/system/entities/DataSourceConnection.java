@@ -16,7 +16,10 @@
 
 package com.flowcentraltech.flowcentral.system.entities;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
@@ -29,9 +32,7 @@ import com.tcdng.unify.core.security.SecurityComponents;
  * @since 4.1
  */
 @Table(name = "FC_DATASOURCECONNECTION",
-        uniqueConstraints = {
-                @UniqueConstraint({ "name" }),
-                @UniqueConstraint({ "description" }) })
+        uniqueConstraints = { @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
 public class DataSourceConnection extends BaseAuditEntity {
 
     @Column(name = "CONNECTION_NM", length = 64)
@@ -61,8 +62,15 @@ public class DataSourceConnection extends BaseAuditEntity {
     @Column(name = "USER_NAME", length = 64, nullable = true)
     private String userName;
 
-    @Column(name = "PASSWORD", length = 2048, transformer = SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH, nullable = true)
+    @Column(name = "PASSWORD", length = 2048, transformer = SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
+            nullable = true)
     private String password;
+
+    @Column(type = ColumnType.TIMESTAMP, name = "LAST_TEST_ON", nullable = true)
+    private Date lastOn;
+
+    @Column(name = "LAST_TEST_RESULT", length = 512, nullable = true)
+    private String lastResult;
 
     @Override
     public String getDescription() {
@@ -143,6 +151,22 @@ public class DataSourceConnection extends BaseAuditEntity {
 
     public void setSchema(String schema) {
         this.schema = schema;
+    }
+
+    public Date getLastOn() {
+        return lastOn;
+    }
+
+    public void setLastOn(Date lastOn) {
+        this.lastOn = lastOn;
+    }
+
+    public String getLastResult() {
+        return lastResult;
+    }
+
+    public void setLastResult(String lastResult) {
+        this.lastResult = lastResult;
     }
 
 }
