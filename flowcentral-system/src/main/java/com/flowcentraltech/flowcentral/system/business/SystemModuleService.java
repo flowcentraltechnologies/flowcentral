@@ -27,6 +27,8 @@ import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.data.SysParamInfo;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnectionQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
@@ -217,6 +219,29 @@ public interface SystemModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     CredentialDef getCredentialDef(String credName) throws UnifyException;
+    
+    /**
+     * Finds data source connection based on supplied query.
+     * 
+     * @param query
+     *              the data source connection query
+     * @return the list of data source connections
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<DataSourceConnection> findDataSourceConnections(DataSourceConnectionQuery query) throws UnifyException;
+
+    
+    /**
+     * Finds list of tables in data source connection.
+     * 
+     * @param dataSourceConnectonName
+     *                                the data source connection name
+     * @return the list of data source tables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findDataSourceTables(String dataSourceConnectonName) throws UnifyException;
 
     /**
      * Gets data source connection definition.

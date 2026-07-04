@@ -115,6 +115,12 @@ import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.database.JDBCConnectionComponentDef.Type;
+import com.tcdng.unify.core.database.JDBCConnectionDef;
+import com.tcdng.unify.core.database.JDBCConnectionInfo;
+import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceConfig;
+import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
+import com.tcdng.unify.core.database.sql.SqlTableType;
 import com.tcdng.unify.core.security.SecurityComponents;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
@@ -124,6 +130,7 @@ import com.tcdng.unify.core.task.TaskParameterConstants;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.SqlUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -153,6 +160,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private SecuredLinkManager securedLinkManager;
 
+    @Configurable
+    private DynamicSqlDataSourceManager dynamicSqlDataSourceManager;
+    
     @Configurable(CommonModuleNameConstants.PARAMGENERATORMANAGER)
     private ParamGeneratorManager paramGeneratorManager;
 
@@ -329,6 +339,41 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public DataSourceConnectionDef getDataSourceConnectionDef(String name) throws UnifyException {
         return connectionDefFactoryMap.get(name);
+    }
+
+    @Override
+    public List<DataSourceConnection> findDataSourceConnections(DataSourceConnectionQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
+    public List<? extends Listable> findDataSourceTables(String dataSourceConnectonName) throws UnifyException {
+        DataSourceConnectionDef dataSourceConnectionDef = getDataSourceConnectionDef(dataSourceConnectonName);
+        final JDBCConnectionInfo jdbcConnectionInfo = SqlUtils.getJDBCConnectionInfo(dataSourceConnectionDef.getDialect(),
+                dataSourceConnectionDef.getHost(), dataSourceConnectionDef.getPort(), dataSourceConnectionDef.getDatabase(),
+                dataSourceConnectionDef.getService(), dataSourceConnectionDef.getSchema(), dataSourceConnectionDef.getUserName(),
+                dataSourceConnectionDef.getPassword());
+
+        if (dynamicSqlDataSourceManager.isStale(dataSourceConnectonName, dataSourceConnectionDef.getVersionNo())) {
+            synchronized (this) {
+                if (dynamicSqlDataSourceManager.isStale(dataSourceConnectonName,
+                        dataSourceConnectionDef.getVersionNo())) {
+                    JDBCConnectionDef jdbcConnectionDef = SqlUtils
+                            .getConnectionDef(dataSourceConnectionDef.getDialect());
+                    final String jdbcUrl = SqlUtils.getJDBCConnectionString(jdbcConnectionInfo);
+                    final DynamicSqlDataSourceConfig config = new DynamicSqlDataSourceConfig(
+                            dataSourceConnectionDef.getName(), jdbcConnectionInfo.getDialect(),
+                            jdbcConnectionDef.getJDBCConnectionComponentDef(Type.DRIVER).getDefaultVal(), jdbcUrl,
+                            jdbcConnectionInfo.getSchema(), jdbcConnectionInfo.getUserName(),
+                            jdbcConnectionInfo.getPassword(), 40 /* TODO */, false,
+                            dataSourceConnectionDef.getVersionNo());
+                    dynamicSqlDataSourceManager.reconfigure(config);
+                }
+            }
+        }
+
+        return dynamicSqlDataSourceManager.getTables(dataSourceConnectonName, jdbcConnectionInfo.getSchema(),
+                SqlTableType.TABLE); // TODO Add views.
     }
 
     @Override

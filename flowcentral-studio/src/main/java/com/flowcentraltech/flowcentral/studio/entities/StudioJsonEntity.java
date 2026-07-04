@@ -51,11 +51,17 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @Column(length = 64, nullable = true)
     private String delegate;
+
+    @Column(name = "DATASOURCE_NM", length = 64, nullable = true)
+    private String datasource;
+
+    @Column(name = "TABLE_NM", length = 64, nullable = true)
+    private String table;
     
-    @Column(name = "SOURCE_JSON", type = ColumnType.CLOB)
+    @Column(name = "SOURCE_JSON", type = ColumnType.CLOB, nullable = true)
     private String sourceJson;
     
-    @Column(name = "REFINE_STRUCTURE", type = ColumnType.CLOB)
+    @Column(name = "REFINE_STRUCTURE", type = ColumnType.CLOB, nullable = true)
     private String refinedStructure;
 
     @Column(nullable = true)
@@ -139,6 +145,22 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setDelegate(String delegate) {
         this.delegate = delegate;
+    }
+
+    public String getDatasource() {
+        return datasource;
+    }
+
+    public void setDatasource(String datasource) {
+        this.datasource = datasource;
+    }
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
     }
 
     public String getSourceJson() {

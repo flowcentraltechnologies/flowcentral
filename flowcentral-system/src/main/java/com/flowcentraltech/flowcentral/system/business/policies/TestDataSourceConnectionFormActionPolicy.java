@@ -53,7 +53,7 @@ public class TestDataSourceConnectionFormActionPolicy extends AbstractFormAction
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = new EntityActionResult(ctx);
         final DataSourceConnection dataSourceConnection = (DataSourceConnection) ctx.getInst();
-        final JDBCConnectionInfo jdbcConnectionInfo = new JDBCConnectionInfo(dataSourceConnection.getDialect(),
+        final JDBCConnectionInfo jdbcConnectionInfo = SqlUtils.getJDBCConnectionInfo(dataSourceConnection.getDialect(),
                 dataSourceConnection.getHost(), dataSourceConnection.getPort(), dataSourceConnection.getDatabase(),
                 dataSourceConnection.getService(), dataSourceConnection.getSchema(), dataSourceConnection.getUserName(),
                 dataSourceConnection.getPassword());

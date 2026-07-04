@@ -2686,6 +2686,68 @@
 					fieldName="entityName" validator="fc-entitynameexistvalidator" />
 			</fieldValidationPolicies>
 		</form>
+		<form name="studioTableEntityForm"
+			description="$m{studio.tableentity.form}" entity="studioJsonEntity">
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{studio.tableentity.form.application}"
+					contentType="MINIFORM">
+					<section name="structureDetails" columns="TYPE_2"
+						label="$m{studio.tableentity.form.application}" icon="application">
+						<field name="applicationId"
+							inputWidget="application.entitysearch" column="0"
+							label="$m{studio.tableentity.application}"
+							reference="studio.applicationDevelopableRef" required="true"
+							editable="false" disabled ="true"/>
+						<field name="entityName" inputWidget="application.name"
+							column="0" required="true" />
+						<field name="baseType" column="0" inputWidget="entitybasetypelist"
+							label="$m{studio.tableentity.basetype}" required="true"
+							editable="true" />
+						<field name="dateFormatter"
+							inputWidget="studio.dateformatterlist" column="0"
+							required="false" />
+						<field name="dateTimeFormatter"
+							inputWidget="studio.datetimeformatterlist" column="0"
+							required="false" />
+					</section>
+					<section name="source" columns="TYPE_1"
+						label="$m{studio.tableentity.form.source}" icon="database">
+						<field name="datasource"
+							inputWidget="system.datasourceconnectionlist" column="0"
+							required="true" editable="true"
+							label="$m{studio.tableentity.datasource}" switchOnChange="true"/>
+						<field name="table"
+							inputWidget="system.datasourcetablelist" column="0"
+							required="true" editable="true"
+							label="$m{studio.tableentity.table}"/>
+					</section>
+					<section name="structure" columns="TYPE_1"
+						label="$m{studio.tableentity.form.structure}" icon="scroll">
+						<field name="refinedStructure"
+							inputWidget="application.entitycomposition" column="0"
+							required="true" editable="true" />
+					</section>
+					<section name="options" columns="TYPE_1"
+						label="$m{studio.tableentity.form.options}" icon="rocket">
+						<field name="generateEntity"
+							inputWidget="application.checkbox" column="0" disabled="true" />
+						<field name="loadSourceJSON"
+							inputWidget="application.checkbox" column="0" editable="true"
+							label="$m{studio.tableentity.loadsourcecsv}" />
+						<field name="generateApplet"
+							inputWidget="application.checkbox" column="0" editable="true" />
+						<field name="generateRest"
+							inputWidget="application.checkbox" column="0" editable="true" />
+					</section>
+				</tab>
+			</tabs>
+			<fieldValidationPolicies>
+				<fieldValidationPolicy name="entityValidation"
+					description="$m{studio.tableentity.form.fieldvalidationpolicy.entity}"
+					fieldName="entityName" validator="fc-entitynameexistvalidator" />
+			</fieldValidationPolicies>
+		</form>
 		<form name="appAppletForm"
 			description="$m{studio.appapplet.form}"
 			entity="application.appApplet">

@@ -13,6 +13,16 @@
 			description="$m{system.widgettype.sysparamvalue}" dataType="STRING"
 			inputType="STRING" editor="!ui-dynamic descriptorBinding:editor"
 			renderer="!ui-label" />
+		<widgetType name="datasourceconnectionlist"
+			description="$m{system.widgettype.datasourceconnectionlist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:datasourceconnectionlist listKey:$s{name} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="datasourcetablelist"
+			description="$m{system.widgettype.datasourcetablelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:datasourcetablelist listParam:$l{datasource} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="schedulabletasklist"
 			description="$m{system.widgettype.schedulabletasklist}"
 			dataType="STRING" inputType="STRING"
