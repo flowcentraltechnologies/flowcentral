@@ -1298,7 +1298,8 @@
 			</tabs>
 		</form>
 		<form name="dataSourceConnectionForm"
-			description="$m{system.datasourceconnection.form}" entity="dataSourceConnection">
+			description="$m{system.datasourceconnection.form}" entity="dataSourceConnection"
+			consolidatedState="datasourceconnection-formstatepolicy">
 			<actions>
 				<action type="BUTTON" name="testConnection" symbol="double-check"
 					styleClass="fc-actbutton" highlight="BLUE"
@@ -1317,7 +1318,7 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" />
 						<field name="dialect" inputWidget="application.sqldialectlist"
-							column="1" required="true" />
+							column="1" required="true" switchOnChange="true"/>
 					</section>
 					<section name="hostDetails" columns="TYPE_2"
 						label="$m{system.datasourceconnection.form.hostdetails}">
