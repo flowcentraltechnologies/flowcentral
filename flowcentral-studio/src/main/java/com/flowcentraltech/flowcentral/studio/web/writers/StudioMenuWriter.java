@@ -75,8 +75,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             .unmodifiableList(Arrays.asList("codegeneration.manageSnapshotSettings", "studio.takeSnapshot",
                     "studio.uploadSnapshot", "studio.snapshots"));
 
-    private static final List<String> entityToolsAppletList = Collections
-            .unmodifiableList(Arrays.asList("studio.createJsonEntity", "studio.createCsvEntity"));
+    private static final List<String> entityToolsAppletList = Collections.unmodifiableList(
+            Arrays.asList("studio.createJsonEntity", "studio.createCsvEntity", "studio.createTableEntity"));
 
     private static final List<StudioAppComponentType> utilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.SNAPSHOT,

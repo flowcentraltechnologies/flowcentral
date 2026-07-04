@@ -678,6 +678,19 @@
 					value="createcsventity-formwizardprocessor" />
 			</properties>
 		</applet>
+		<applet name="createTableEntity"
+			description="$m{studio.tableentity.manage}"
+			label="$m{studio.tableentity.manage.label}" type="FORM_WIZARD"
+			entity="studio.studioJsonEntity" menuAccess="false">
+			<properties>
+				<property name="createForm" value="studioTableEntityForm" />
+				<property name="createForm.navigation.policy"
+					value="createtableentity-navigationpolicy" />
+				<property name="wizardForm.completion" value="EXE" />
+				<property name="wizardForm.task.processor"
+					value="createtableentity-formwizardprocessor" />
+			</properties>
+		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
 			label="$m{studio.module.manage.label}" icon="cubes"
