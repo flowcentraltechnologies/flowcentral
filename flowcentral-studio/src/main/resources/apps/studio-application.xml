@@ -1729,6 +1729,9 @@
 		<reference name="studioCsvEntityRef"
 			description="$m{studio.csventity.reference}"
 			entity="studioJsonEntity" />
+		<reference name="studioTableEntityRef"
+			description="$m{studio.tableentity.reference}"
+			entity="studioJsonEntity" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -1822,9 +1825,15 @@
 				<field name="delegate" maxLen="64"
 					label="$m{studio.jsonentity.delegate}" type="STRING"
 					nullable="true" />
+				<field name="datasource" maxLen="64"
+					label="$m{studio.jsonentity.datasource}" type="STRING"
+					nullable="true" />
+				<field name="table" maxLen="64"
+					label="$m{studio.jsonentity.table}" type="STRING"
+					nullable="true" />
 				<field name="sourceJson"
 					inputWidget="application.textarealarge"
-					label="$m{studio.jsonentity.sourcejson}" type="CLOB" />
+					label="$m{studio.jsonentity.sourcejson}" type="CLOB" nullable="true"/>
 				<field name="refinedStructure"
 					inputWidget="application.entitycomposition"
 					label="$m{studio.jsonentity.refinedstructure}" type="CLOB" />
