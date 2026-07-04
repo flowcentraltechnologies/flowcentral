@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTableWidget;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -58,8 +59,10 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         EntitySearch entitySearch = getEntitySearch();
         if (entitySearch != null) {
             final boolean showHeaderParts = !entitySearch.isExpandedMode();
+            final boolean restrictedMode = getContainerSetting(boolean.class,
+                    FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
             setVisible("sectorIcon", showHeaderParts && entitySearch.isWithSectorIcon());
-            setVisible("titleBlock", showHeaderParts);
+            setVisible("titleBlock", showHeaderParts && !restrictedMode);
             setVisible("headerRightPanel", showHeaderParts);
 
             // Makes sure edit button does not break on page scroll
@@ -103,7 +106,8 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
 
             setVisible("colorLegend", entityTable.isWithColorLegendInfo());
             if (entitySearch.isBasicSearchOnly() || entityTable.isBasicSearchMode()) {
-                setVisible("searchEntriesPanel", showHeaderParts && entitySearch.isShowSearch() && entitySearch.isWithSearchInput());
+                setVisible("searchEntriesPanel",
+                        showHeaderParts && entitySearch.isShowSearch() && entitySearch.isWithSearchInput());
                 setVisible("searchFilterPanel", false);
                 setVisible("quickFilterBlock", showHeaderParts && entitySearch.isShowQuickFilter());
                 setVisible("footerActionPanel", showHeaderParts && entitySearch.isShowActionFooter());
@@ -142,7 +146,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
 
             setEditable("searchResultTbl", entitySearch.isTabEditable());
             setDisabled("searchResultTbl", entitySearch.isTabDisabled());
-            
+
             if (!entityTable.isWithRefreshPanels()) {
                 entityTable.setRefreshPanelIds(new String[] { getWidgetByShortName("headerRightPanel").getId() });
             }
@@ -330,15 +334,15 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         if (entityActionResult != null && entityActionResult.isWithTaskResult()) {
             fireEntityActionResultTask(entityActionResult);
         }
-        
+
         if (entityActionResult != null) {
             if (entityActionResult.getSuccessHint() != null) {
-                hintUser(entityActionResult.getSuccessHint() );
+                hintUser(entityActionResult.getSuccessHint());
                 return;
             }
-            
+
             if (entityActionResult.getFailureHint() != null) {
-                hintUser(MODE.ERROR, entityActionResult.getFailureHint() );
+                hintUser(MODE.ERROR, entityActionResult.getFailureHint());
                 return;
             }
         }

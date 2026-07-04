@@ -17,6 +17,8 @@
 package com.flowcentraltech.flowcentral.application.web.writers;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormBreadCrumbsWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -41,19 +43,62 @@ public class FormBreadCrumbsWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, frmBreadCrumbsWidget);
         writer.write(">");
+        final boolean restrictedMode = getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
         BreadCrumbs frmBreadCrumbs = frmBreadCrumbsWidget.getBreadCrumbs();
         if (frmBreadCrumbs != null) {
-            writer.write("<span class=\"base\">");
-            if (frmBreadCrumbs.getDepth() == 0) {
-                writeFontIcon(writer, "stop");
-            } else {
-                writeFontIcon(writer, "arrow-left");
+            writer.write("<ul class=\"base\">");
+            if (!restrictedMode) {
+                // History
+                for (BreadCrumb breadCrumb : frmBreadCrumbs.getHistCrumbList()) {
+                    writeCrumb(writer, breadCrumb, true);
+                }
             }
-            
-            writer.write("</span>");
+
+            // Current
+            writeCrumb(writer, frmBreadCrumbs.getLastBreadCrumb(), false);
+            writer.write("</ul>");
         }
-        
+
         writer.write("</div>");
+    }
+
+    private void writeCrumb(ResponseWriter writer, BreadCrumb breadCrumb, boolean history) {
+        writer.write("<li class=\"");
+        if (!history) {
+            writer.write("last");
+        }
+        writer.write("\">");
+        if (breadCrumb.getStepIndex() > 0) {
+            writer.write("<span class=\"hdstep\">").write(breadCrumb.getStepIndex()).write("</span>");
+        }
+
+        writer.write("<div style=\"display: inline-block;\">");
+        writer.write("<span class=\"hdtitle");
+        if (history) {
+            writer.write(" hist");
+        }
+        writer.write("\"");
+
+        final String title = breadCrumb.isWithTitle() ? breadCrumb.getTitle() : "";
+        writer.write(" title=\"").writeWithHtmlEscape(title).write("\"");
+        writer.write(">").writeWithHtmlEscape(title).write("</span>");
+
+        writer.write("<span class=\"hdsubtitle");
+        if (history) {
+            writer.write(" hist");
+        }
+        writer.write("\"");
+
+        final String subtitle = breadCrumb.isWithSubTitle() ? breadCrumb.getSubTitle() : "";
+        writer.write(" title=\"").writeWithHtmlEscape(subtitle).write("\"");
+        writer.write(">").writeWithHtmlEscape(subtitle).write("</span>");
+
+        writer.write("</div>");
+        if (history) {
+            writer.write("<i class=\"chev\"></i>");
+        }
+        writer.write("</li>");
     }
 
 }
