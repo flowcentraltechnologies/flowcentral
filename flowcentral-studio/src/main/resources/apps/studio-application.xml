@@ -1831,6 +1831,9 @@
 				<field name="table" maxLen="64"
 					label="$m{studio.jsonentity.table}" type="STRING"
 					nullable="true" />
+				<field name="columns" maxLen="2048"
+					label="$m{studio.jsonentity.columns}" type="STRING"
+					nullable="true" />
 				<field name="sourceJson"
 					inputWidget="application.textarealarge"
 					label="$m{studio.jsonentity.sourcejson}" type="CLOB" nullable="true"/>
@@ -2733,7 +2736,7 @@
 							inputWidget="studio.datetimeformatterlist" column="0"
 							required="false" />
 					</section>
-					<section name="source" columns="TYPE_1"
+					<section name="source" columns="TYPE_2"
 						label="$m{studio.tableentity.form.source}" icon="database">
 						<field name="datasource"
 							inputWidget="system.datasourceconnectionlist" column="0"
@@ -2742,7 +2745,11 @@
 						<field name="table"
 							inputWidget="system.datasourcetablelist" column="0"
 							required="true" editable="true"
-							label="$m{studio.tableentity.table}"/>
+							label="$m{studio.tableentity.table}" switchOnChange="true"/>
+						<field name="columns"
+							inputWidget="system.datasourcecolumnselect" column="0"
+							required="true" editable="true"
+							label="$m{studio.tableentity.columns}"/>
 					</section>
 					<section name="structure" columns="TYPE_1"
 						label="$m{studio.tableentity.form.structure}" icon="scroll">

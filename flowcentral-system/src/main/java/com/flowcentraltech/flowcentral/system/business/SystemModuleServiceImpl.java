@@ -348,34 +348,19 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<? extends Listable> findDataSourceTables(String dataSourceConnectonName) throws UnifyException {
-        DataSourceConnectionDef dataSourceConnectionDef = getDataSourceConnectionDef(dataSourceConnectonName);
-        final JDBCConnectionInfo jdbcConnectionInfo = SqlUtils.getJDBCConnectionInfo(dataSourceConnectionDef.getDialect(),
-                dataSourceConnectionDef.getHost(), dataSourceConnectionDef.getPort(), dataSourceConnectionDef.getDatabase(),
-                dataSourceConnectionDef.getService(), dataSourceConnectionDef.getSchema(), dataSourceConnectionDef.getUserName(),
-                dataSourceConnectionDef.getPassword());
-
-        if (dynamicSqlDataSourceManager.isStale(dataSourceConnectonName, dataSourceConnectionDef.getVersionNo())) {
-            synchronized (this) {
-                if (dynamicSqlDataSourceManager.isStale(dataSourceConnectonName,
-                        dataSourceConnectionDef.getVersionNo())) {
-                    JDBCConnectionDef jdbcConnectionDef = SqlUtils
-                            .getConnectionDef(dataSourceConnectionDef.getDialect());
-                    final String jdbcUrl = SqlUtils.getJDBCConnectionString(jdbcConnectionInfo);
-                    final DynamicSqlDataSourceConfig config = new DynamicSqlDataSourceConfig(
-                            dataSourceConnectionDef.getName(), jdbcConnectionInfo.getDialect(),
-                            jdbcConnectionDef.getJDBCConnectionComponentDef(Type.DRIVER).getDefaultVal(), jdbcUrl,
-                            jdbcConnectionInfo.getSchema(), jdbcConnectionInfo.getUserName(),
-                            jdbcConnectionInfo.getPassword(), 40 /* TODO */, false,
-                            dataSourceConnectionDef.getVersionNo());
-                    dynamicSqlDataSourceManager.reconfigure(config);
-                }
-            }
-        }
-
+        final JDBCConnectionInfo jdbcConnectionInfo = getJDBCConnectionInfo(dataSourceConnectonName);
         return dynamicSqlDataSourceManager.getTables(dataSourceConnectonName, jdbcConnectionInfo.getSchema(),
                 SqlTableType.TABLE); // TODO Add views.
     }
 
+    @Override
+    public List<? extends Listable> findDataSourceColumns(String dataSourceConnectonName, String tableName)
+            throws UnifyException {
+        final JDBCConnectionInfo jdbcConnectionInfo = getJDBCConnectionInfo(dataSourceConnectonName);
+        return dynamicSqlDataSourceManager.getColumns(dataSourceConnectonName, jdbcConnectionInfo.getSchema(),
+                tableName);
+    }
+    
     @Override
     public Long createModule(Module module) throws UnifyException {
         return (Long) environment().create(module);
@@ -803,6 +788,34 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
             throws UnifyException {
         installModuleAndSystemParameters(moduleInstall);
+    }
+
+    private JDBCConnectionInfo getJDBCConnectionInfo(String dataSourceConnectonName) throws UnifyException {
+        DataSourceConnectionDef dataSourceConnectionDef = getDataSourceConnectionDef(dataSourceConnectonName);
+        final JDBCConnectionInfo jdbcConnectionInfo = SqlUtils.getJDBCConnectionInfo(dataSourceConnectionDef.getDialect(),
+                dataSourceConnectionDef.getHost(), dataSourceConnectionDef.getPort(), dataSourceConnectionDef.getDatabase(),
+                dataSourceConnectionDef.getService(), dataSourceConnectionDef.getSchema(), dataSourceConnectionDef.getUserName(),
+                dataSourceConnectionDef.getPassword());
+
+        if (dynamicSqlDataSourceManager.isStale(dataSourceConnectonName, dataSourceConnectionDef.getVersionNo())) {
+            synchronized (this) {
+                if (dynamicSqlDataSourceManager.isStale(dataSourceConnectonName,
+                        dataSourceConnectionDef.getVersionNo())) {
+                    JDBCConnectionDef jdbcConnectionDef = SqlUtils
+                            .getConnectionDef(dataSourceConnectionDef.getDialect());
+                    final String jdbcUrl = SqlUtils.getJDBCConnectionString(jdbcConnectionInfo);
+                    final DynamicSqlDataSourceConfig config = new DynamicSqlDataSourceConfig(
+                            dataSourceConnectionDef.getName(), jdbcConnectionInfo.getDialect(),
+                            jdbcConnectionDef.getJDBCConnectionComponentDef(Type.DRIVER).getDefaultVal(), jdbcUrl,
+                            jdbcConnectionInfo.getSchema(), jdbcConnectionInfo.getUserName(),
+                            jdbcConnectionInfo.getPassword(), 40 /* TODO */, false,
+                            dataSourceConnectionDef.getVersionNo());
+                    dynamicSqlDataSourceManager.reconfigure(config);
+                }
+            }
+        }
+        
+        return jdbcConnectionInfo;
     }
 
     private LicenseDef getLicenseDef(Attachment attachment) throws UnifyException {

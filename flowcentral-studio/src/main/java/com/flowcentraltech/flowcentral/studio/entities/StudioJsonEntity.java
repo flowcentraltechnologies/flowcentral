@@ -57,6 +57,9 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     @Column(name = "TABLE_NM", length = 64, nullable = true)
     private String table;
+
+    @Column(name = "COLUMNS", length = 2048, nullable = true)
+    private String columns;
     
     @Column(name = "SOURCE_JSON", type = ColumnType.CLOB, nullable = true)
     private String sourceJson;
@@ -161,6 +164,14 @@ public class StudioJsonEntity extends BaseAuditEntity {
 
     public void setTable(String table) {
         this.table = table;
+    }
+
+    public String getColumns() {
+        return columns;
+    }
+
+    public void setColumns(String columns) {
+        this.columns = columns;
     }
 
     public String getSourceJson() {

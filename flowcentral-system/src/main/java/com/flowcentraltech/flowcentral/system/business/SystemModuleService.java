@@ -230,7 +230,6 @@ public interface SystemModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<DataSourceConnection> findDataSourceConnections(DataSourceConnectionQuery query) throws UnifyException;
-
     
     /**
      * Finds list of tables in data source connection.
@@ -242,6 +241,20 @@ public interface SystemModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<? extends Listable> findDataSourceTables(String dataSourceConnectonName) throws UnifyException;
+
+    /**
+     * Finds list of columns in data source connection.
+     * 
+     * @param dataSourceConnectonName
+     *                                the data source connection name
+     * @param tableName
+     *                                the table name
+     * @return the list of data source tables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findDataSourceColumns(String dataSourceConnectonName, String tableName)
+            throws UnifyException;
 
     /**
      * Gets data source connection definition.

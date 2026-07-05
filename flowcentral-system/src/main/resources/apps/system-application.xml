@@ -23,6 +23,11 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:datasourcetablelist listParams:$l{datasource} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="datasourcecolumnselect"
+			description="$m{system.widgettype.datasourcecolumnselect}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-checklist list:datasourcecolumnlist listParams:$l{datasource table}"
+			renderer="!ui-label" stretch="false"/>
 		<widgetType name="schedulabletasklist"
 			description="$m{system.widgettype.schedulabletasklist}"
 			dataType="STRING" inputType="STRING"

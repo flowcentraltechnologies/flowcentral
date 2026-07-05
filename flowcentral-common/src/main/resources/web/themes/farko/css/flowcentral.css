@@ -50,7 +50,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 
 /** Checkbox */ 
-.ui-checkbox {width: 18px; height: 18px;} 
+.ui-checkbox {width: 18px; height: 18px;}
+
+.ui-checklist {margin:4px;} 
 
 /** Date field */
 .ui-date {}
