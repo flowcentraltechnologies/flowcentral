@@ -45,13 +45,10 @@ public class EntityCompositionFieldDataTypeListCommand extends AbstractApplicati
     private ListManager listManager;
 
     private List<EntityFieldDataType> supportedTypeList = Collections
-            .unmodifiableList(Arrays.asList(EntityFieldDataType.STRING, EntityFieldDataType.STRING_ARRAY,
-                    EntityFieldDataType.CHAR, EntityFieldDataType.BOOLEAN, EntityFieldDataType.BOOLEAN_ARRAY,
-                    EntityFieldDataType.LONG, EntityFieldDataType.LONG_ARRAY, EntityFieldDataType.INTEGER,
-                    EntityFieldDataType.INTEGER_ARRAY, EntityFieldDataType.SHORT, EntityFieldDataType.SHORT_ARRAY,
-                    EntityFieldDataType.DECIMAL, EntityFieldDataType.DECIMAL_ARRAY, EntityFieldDataType.DOUBLE,
-                    EntityFieldDataType.DOUBLE_ARRAY, EntityFieldDataType.FLOAT, EntityFieldDataType.FLOAT_ARRAY,
-                    EntityFieldDataType.DATE, EntityFieldDataType.DATE_ARRAY, EntityFieldDataType.TIMESTAMP,
+            .unmodifiableList(Arrays.asList(EntityFieldDataType.STRING, EntityFieldDataType.CHAR,
+                    EntityFieldDataType.BOOLEAN, EntityFieldDataType.LONG, EntityFieldDataType.INTEGER,
+                    EntityFieldDataType.SHORT, EntityFieldDataType.DECIMAL, EntityFieldDataType.DOUBLE,
+                    EntityFieldDataType.FLOAT, EntityFieldDataType.DATE, EntityFieldDataType.TIMESTAMP,
                     EntityFieldDataType.TIMESTAMP_UTC, EntityFieldDataType.CLOB, EntityFieldDataType.BLOB));
 
     private LocaleFactoryMap<List<Listable>> listFactory;

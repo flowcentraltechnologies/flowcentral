@@ -56,6 +56,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final Control dataTypeCtrl = entityCompositionWidget.getDataTypeCtrl();
             final Control fieldNameCtrl = entityCompositionWidget.getFieldNameCtrl();
             final Control columnCtrl = entityCompositionWidget.getColumnCtrl();
+            final Control pkListCtrl = entityCompositionWidget.getPkSelectCtrl();
             final Control referencesCtrl = entityCompositionWidget.getReferencesCtrl();
             
             final String entityLabel = resolveSessionMessage("$m{entitycomposition.entity}");
@@ -64,6 +65,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final String typeLabel = resolveSessionMessage("$m{entitycomposition.type}");
             final String nameLabel = resolveSessionMessage("$m{entitycomposition.name}");
             final String colLabel = resolveSessionMessage("$m{entitycomposition.column}");
+            final String pkLabel = resolveSessionMessage("$m{entitycomposition.pk}");
             final String referencesLabel = resolveSessionMessage("$m{entitycomposition.references}");
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = entityCompositionWidget.getItemValueStoreAt(i);
@@ -85,8 +87,12 @@ public class EntityCompositionWriter extends AbstractControlWriter {
                 }
 
                 if (fieldType == null) {
+                    entityTableCtrl.setDisabled(entry.isTableMode());
                     writeCompositionItem(writer, lineValueStore, entityNameCtrl, entityLabel, "eccelll");
                     writeCompositionItem(writer, lineValueStore, entityTableCtrl, tableLabel, "eccelll");
+                    if (entry.isTableMode()) {
+                        writeCompositionItem(writer, lineValueStore, pkListCtrl, pkLabel, "eccelll");
+                    }
                 } else {
                     if (fieldType.isChild() || fieldType.isChildList()) {
                         writeCompositionItem(writer, lineValueStore, fieldTypeCtrl, fieldLabel, "eccellll");
@@ -139,6 +145,7 @@ public class EntityCompositionWriter extends AbstractControlWriter {
             final Control dataTypeCtrl = entityCompositionWidget.getDataTypeCtrl();
             final Control fieldNameCtrl = entityCompositionWidget.getFieldNameCtrl();
             final Control columnCtrl = entityCompositionWidget.getColumnCtrl();
+            final Control pkListCtrl = entityCompositionWidget.getPkSelectCtrl();
             final Control referencesCtrl = entityCompositionWidget.getReferencesCtrl();
 
             for (int i = 0; i < len; i++) {
@@ -151,6 +158,10 @@ public class EntityCompositionWriter extends AbstractControlWriter {
                     writeBehavior(writer, entityCompositionWidget, lineValueStore, entityTableCtrl);
                     csb.add(entityNameCtrl.getId());
                     csb.add(entityTableCtrl.getId());
+                    if (entry.isTableMode()) {
+                        writeBehavior(writer, entityCompositionWidget, lineValueStore, pkListCtrl);
+                        csb.add(pkListCtrl.getId());
+                    }
                 } else {
                     if (fieldType.isChild() || fieldType.isChildList()) {
                         writeBehavior(writer, entityCompositionWidget, lineValueStore, fieldTypeCtrl);

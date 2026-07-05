@@ -31,6 +31,10 @@ public class EntityCompositionEntry {
 
     private String table;
     
+    private String pkFieldName;
+    
+    private PkList pkList;
+    
     private DynamicEntityFieldType fieldType;
     
     private EntityFieldDataType dataType;
@@ -46,6 +50,8 @@ public class EntityCompositionEntry {
     private String references;
     
     private String sample;
+    
+    private boolean tableMode;
     
     private int depth;
 
@@ -63,6 +69,22 @@ public class EntityCompositionEntry {
 
     public void setTable(String table) {
         this.table = table;
+    }
+
+    public String getPkFieldName() {
+        return pkFieldName;
+    }
+
+    public void setPkFieldName(String pkFieldName) {
+        this.pkFieldName = pkFieldName;
+    }
+
+    public PkList getPkList() {
+        return pkList;
+    }
+
+    public void setPkList(PkList pkList) {
+        this.pkList = pkList;
     }
 
     public DynamicEntityFieldType getFieldType() {
@@ -137,6 +159,14 @@ public class EntityCompositionEntry {
         this.depth = depth;
     }
     
+    public boolean isTableMode() {
+        return tableMode;
+    }
+
+    public void setTableMode(boolean tableMode) {
+        this.tableMode = tableMode;
+    }
+
     public void normalize() throws UnifyException {
         
     }

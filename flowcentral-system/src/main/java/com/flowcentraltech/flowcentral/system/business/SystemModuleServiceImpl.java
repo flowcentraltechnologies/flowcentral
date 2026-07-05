@@ -120,6 +120,8 @@ import com.tcdng.unify.core.database.JDBCConnectionDef;
 import com.tcdng.unify.core.database.JDBCConnectionInfo;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceConfig;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
+import com.tcdng.unify.core.database.sql.SqlColumnInfo;
+import com.tcdng.unify.core.database.sql.SqlTableInfo;
 import com.tcdng.unify.core.database.sql.SqlTableType;
 import com.tcdng.unify.core.security.SecurityComponents;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
@@ -347,14 +349,14 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<? extends Listable> findDataSourceTables(String dataSourceConnectonName) throws UnifyException {
+    public List<SqlTableInfo> findDataSourceTables(String dataSourceConnectonName) throws UnifyException {
         final JDBCConnectionInfo jdbcConnectionInfo = getJDBCConnectionInfo(dataSourceConnectonName);
         return dynamicSqlDataSourceManager.getTables(dataSourceConnectonName, jdbcConnectionInfo.getSchema(),
                 SqlTableType.TABLE); // TODO Add views.
     }
 
     @Override
-    public List<? extends Listable> findDataSourceColumns(String dataSourceConnectonName, String tableName)
+    public List<SqlColumnInfo> findDataSourceColumns(String dataSourceConnectonName, String tableName)
             throws UnifyException {
         final JDBCConnectionInfo jdbcConnectionInfo = getJDBCConnectionInfo(dataSourceConnectonName);
         return dynamicSqlDataSourceManager.getColumns(dataSourceConnectonName, jdbcConnectionInfo.getSchema(),

@@ -2728,7 +2728,7 @@
 							column="0" required="true" />
 						<field name="baseType" column="0" inputWidget="entitybasetypelist"
 							label="$m{studio.tableentity.basetype}" required="true"
-							editable="true" />
+							disabled="true" />
 						<field name="dateFormatter"
 							inputWidget="studio.dateformatterlist" column="0"
 							required="false" />

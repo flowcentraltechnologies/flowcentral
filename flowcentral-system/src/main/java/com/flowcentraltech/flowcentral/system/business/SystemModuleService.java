@@ -36,6 +36,8 @@ import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.flowcentraltech.flowcentral.system.entities.ModuleQuery;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.database.sql.SqlColumnInfo;
+import com.tcdng.unify.core.database.sql.SqlTableInfo;
 
 /**
  * System module service.
@@ -240,7 +242,7 @@ public interface SystemModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Listable> findDataSourceTables(String dataSourceConnectonName) throws UnifyException;
+    List<SqlTableInfo> findDataSourceTables(String dataSourceConnectonName) throws UnifyException;
 
     /**
      * Finds list of columns in data source connection.
@@ -253,7 +255,7 @@ public interface SystemModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Listable> findDataSourceColumns(String dataSourceConnectonName, String tableName)
+    List<SqlColumnInfo> findDataSourceColumns(String dataSourceConnectonName, String tableName)
             throws UnifyException;
 
     /**
