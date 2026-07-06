@@ -45,8 +45,6 @@ import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.PseudoDataSourceResponse;
 import com.tcdng.unify.common.constants.EnumConst;
-import com.tcdng.unify.common.data.DelegateEntityListingDTO;
-import com.tcdng.unify.common.data.EntityDTO;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
@@ -85,10 +83,6 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     public boolean isDirect() {
         return false;
     }
-
-    protected abstract DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException;
-
-    protected abstract EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException;
 
     @Override
     public boolean isReadOnly() throws UnifyException {

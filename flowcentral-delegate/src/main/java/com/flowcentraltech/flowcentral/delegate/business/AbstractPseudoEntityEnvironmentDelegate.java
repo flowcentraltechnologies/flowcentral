@@ -23,8 +23,6 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.PseudoDataSourceResponse;
-import com.tcdng.unify.common.data.DelegateEntityListingDTO;
-import com.tcdng.unify.common.data.EntityDTO;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -56,16 +54,6 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
 
     protected final EnvironmentService environment() {
         return environmentService;
-    }
-
-    @Override
-    protected DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException {
-        return null;
-    }
-
-    @Override
-    protected EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException {
-        return null;
     }
 
     @Override

@@ -39,6 +39,11 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioenvironmentdelegatelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="delegatedatasourcelist"
+			description="$m{studio.widgettype.delegatedatasourcelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:studiodelegatedatasourcelist listParams:$l{delegate} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="formwizardcompletiontypelist"
 			description="$m{studio.widgettype.formwizardcompletiontypelist}"
 			dataType="STRING" inputType="STRING"
@@ -3176,6 +3181,8 @@
 							column="0" required="true" saveAs="true" />
 						<field name="delegate" inputWidget="environmentdelegatelist"
 							column="0" switchOnChange="true" />
+						<field name="dataSourceName" inputWidget="delegatedatasourcelist"
+							column="0" visible="false" />
 					</section>
 				</tab>
 				<tab name="fields" label="$m{studio.appentity.form.fields}"

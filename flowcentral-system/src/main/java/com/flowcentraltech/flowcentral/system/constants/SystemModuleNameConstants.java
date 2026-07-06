@@ -38,4 +38,6 @@ public interface SystemModuleNameConstants {
     String APPLICATION_ATTRIBUTE_PROVIDER = "system-applicationattributeprovider";
 
     String SESSION_ATTRIBUTE_PROVIDER = "system-sessionattributeprovider";
+    
+    String DIRECT_ENVIRONMENT_DELEGATE = "direct-environmentdelegate";
 }

@@ -23,8 +23,6 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.tcdng.unify.common.data.DelegateEntityListingDTO;
-import com.tcdng.unify.common.data.EntityDTO;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -306,16 +304,6 @@ public class MissingEnvironmentDelegate extends AbstractEnvironmentDelegate {
 
     @Override
     public String getDataSourceByEntityAlias(String entityLongName) throws UnifyException {
-        throw new IllegalArgumentException("Environment delegate component is missing.");
-    }
-
-    @Override
-    protected DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException {
-        throw new IllegalArgumentException("Environment delegate component is missing.");
-    }
-
-    @Override
-    protected EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException {
         throw new IllegalArgumentException("Environment delegate component is missing.");
     }
 

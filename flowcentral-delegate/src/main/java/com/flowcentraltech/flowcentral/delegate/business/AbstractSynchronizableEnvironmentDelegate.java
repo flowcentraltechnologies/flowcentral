@@ -177,4 +177,8 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
         }
     }
 
+    protected abstract DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException;
+
+    protected abstract EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException;
+
 }

@@ -26,8 +26,6 @@ import com.flowcentraltech.flowcentral.application.business.AbstractEnvironmentD
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.tcdng.unify.common.data.DelegateEntityListingDTO;
-import com.tcdng.unify.common.data.EntityDTO;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -354,16 +352,6 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public String getDataSourceByEntityAlias(String entityLongName) throws UnifyException {
-        return null;
-    }
-
-    @Override
-    protected DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException {
-        return null;
-    }
-
-    @Override
-    protected EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException {
         return null;
     }
 
