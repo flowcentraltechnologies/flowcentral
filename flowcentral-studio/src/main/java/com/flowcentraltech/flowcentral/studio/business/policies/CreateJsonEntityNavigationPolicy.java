@@ -97,7 +97,7 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
         } else if (currentPage == 2) {
             inst.store("generateEntity", true);
             if (inst.isNull("loadSourceJSON")) {
-                inst.store("loadSourceJSON", true);
+                inst.store("loadSourceJSON", false);
             }
 
             if (inst.isNull("generateApplet")) {

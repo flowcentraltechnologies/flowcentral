@@ -91,6 +91,8 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
         final boolean generateImport = instValueStore.retrieve(boolean.class, "generateImport");
         final List<String> importList = new ArrayList<String>();
         AppEntity appEntity = null;
+        AppEntityField appIdField = null;
+        String pkFieldName = null;
         for (EntityCompositionEntry entry : entityComposition.getEntries()) {
             if (entry.getFieldType() == null) {
                 if (appEntity != null) {
@@ -105,6 +107,16 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 List<AppEntityField> baseFieldList = au.application().getEntityBaseTypeFieldList(_baseType,
                         ConfigType.CUSTOM);
                 appEntity.setFieldList(new ArrayList<AppEntityField>(baseFieldList));
+
+                if (entry.isTableMode()) {
+                    pkFieldName = entry.getPkFieldName();
+                    for (AppEntityField field : baseFieldList) {
+                        if ("id".equals(field.getName())) {
+                            appIdField = field;
+                            break;
+                        }
+                    }
+                }
 
                 // Create entity
                 appEntity.setApplicationId(applicationId);
@@ -126,9 +138,14 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 appEntity.setSchemaUpdateRequired(true);
             } else {
                 AppEntityField appEntityField = newAppEntityField(applicationName, entry);
-                appEntity.getFieldList().add(appEntityField);
-                if (generateImport && entityNames.size() == 0) {
-                    importList.add(appEntityField.getName());
+                if (entry.isTableMode() && appEntityField.getName().equals(pkFieldName)) {
+                    appIdField.setDataType(appEntityField.getDataType());
+                    appIdField.setColumnName(appEntityField.getColumnName());
+                } else {
+                    appEntity.getFieldList().add(appEntityField);
+                    if (generateImport && entityNames.size() == 0) {
+                        importList.add(appEntityField.getName());
+                    }
                 }
             }
         }

@@ -2762,7 +2762,7 @@
 						<field name="generateEntity"
 							inputWidget="application.checkbox" column="0" disabled="true" />
 						<field name="loadSourceJSON"
-							inputWidget="application.checkbox" column="0" editable="true"
+							inputWidget="application.checkbox" column="0" disabled="true"
 							label="$m{studio.tableentity.loadsourcecsv}" />
 						<field name="generateApplet"
 							inputWidget="application.checkbox" column="0" editable="true" />

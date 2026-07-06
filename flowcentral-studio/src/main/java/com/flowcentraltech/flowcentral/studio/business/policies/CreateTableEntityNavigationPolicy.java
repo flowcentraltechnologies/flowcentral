@@ -107,11 +107,15 @@ public class CreateTableEntityNavigationPolicy extends AbstractStudioAppletNavig
                     dateTimeFormatter, tablePrefix, applicationDef.getModuleShortCode(), Arrays.asList(entityTypeInfo));
             final String compositionJson = DataUtils.asJsonString(entityComposition, PrintFormat.PRETTY);
             inst.store("refinedStructure", compositionJson);
+
+            if (StringUtils.isBlank(entityComposition.getEntries().get(0).getPkFieldName())) {
+                errors.addValidationError("Primary key has not been selected!");
+            }
         } else if (currentPage == 2) {
             inst.store("generateEntity", true);
             inst.store("generateImport", true);
             if (inst.isNull("loadSourceJSON")) {
-                inst.store("loadSourceJSON", true);
+                inst.store("loadSourceJSON", false);
             }
 
             if (inst.isNull("generateApplet")) {

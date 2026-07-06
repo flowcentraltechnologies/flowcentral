@@ -97,7 +97,7 @@ public class CreateCsvEntityNavigationPolicy extends AbstractStudioAppletNavigat
             inst.store("generateEntity", true);
             inst.store("generateImport", true);
             if (inst.isNull("loadSourceJSON")) {
-                inst.store("loadSourceJSON", true);
+                inst.store("loadSourceJSON", false);
             }
 
             if (inst.isNull("generateApplet")) {
