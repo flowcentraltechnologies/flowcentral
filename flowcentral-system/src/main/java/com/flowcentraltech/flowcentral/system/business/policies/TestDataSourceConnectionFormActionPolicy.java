@@ -26,7 +26,8 @@ import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.database.JDBCConnectionInfo;
+import com.tcdng.unify.core.database.dynamic.DynamicDataSourceConfig;
+import com.tcdng.unify.core.database.dynamic.DynamicDataSourceDef;
 import com.tcdng.unify.core.util.SqlUtils;
 
 /**
@@ -53,29 +54,33 @@ public class TestDataSourceConnectionFormActionPolicy extends AbstractFormAction
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = new EntityActionResult(ctx);
         final DataSourceConnection dataSourceConnection = (DataSourceConnection) ctx.getInst();
-        final JDBCConnectionInfo jdbcConnectionInfo = SqlUtils.getJDBCConnectionInfo(dataSourceConnection.getDialect(),
-                dataSourceConnection.getHost(), dataSourceConnection.getPort(), dataSourceConnection.getDatabase(),
-                dataSourceConnection.getService(), dataSourceConnection.getSchema(), dataSourceConnection.getUserName(),
-                dataSourceConnection.getPassword());
-        final Optional<String> error = SqlUtils.testJDBCConnection(jdbcConnectionInfo);
+        final DynamicDataSourceConfig dynamicDataSourceConfig = SqlUtils.getDynamicDataSourceConfig(
+                new DynamicDataSourceDef(dataSourceConnection.getName(), null, dataSourceConnection.getDescription(),
+                        dataSourceConnection.getDialect(), dataSourceConnection.getHost(),
+                        dataSourceConnection.getPort(), dataSourceConnection.getDatabase(),
+                        dataSourceConnection.getService(), dataSourceConnection.getSchema(),
+                        dataSourceConnection.getUserName(), dataSourceConnection.getPassword(), 4 /* TODO */, false,
+                        false, dataSourceConnection.getId(), dataSourceConnection.getVersionNo()));
+        final Optional<String> error = SqlUtils.testJDBCConnection(dynamicDataSourceConfig);
+
         String msg = null;
         if (error.isPresent()) {
-           msg = "DataSource connection test failed! Reason: " + error.get();
+            msg = "DataSource connection test failed! Reason: " + error.get();
             result.setFailureHint(msg);
         } else {
             msg = "DataSource connection test successful!";
             result.setSuccessHint("DataSource connection test successful!");
         }
-        
+
         dataSourceConnection.setLastResult(msg);
         dataSourceConnection.setLastOn(environment().getNow());
-        
+
         if (dataSourceConnection.getId() == null) {
             result.setSkipUpdate(true);
         } else {
-           environment().updateByIdVersion(dataSourceConnection);
+            environment().updateByIdVersion(dataSourceConnection);
         }
-        
+
         return result;
     }
 

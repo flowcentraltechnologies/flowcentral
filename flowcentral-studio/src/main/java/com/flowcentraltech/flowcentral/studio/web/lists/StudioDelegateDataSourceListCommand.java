@@ -16,16 +16,19 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
 import com.flowcentraltech.flowcentral.system.entities.DataSourceConnectionQuery;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.list.StringParam;
 
 /**
@@ -45,9 +48,14 @@ public class StudioDelegateDataSourceListCommand extends AbstractApplicationList
     public List<? extends Listable> execute(Locale locale, StringParam params) throws UnifyException {
         if (params.isPresent()) {
             if (SystemModuleNameConstants.DIRECT_ENVIRONMENT_DELEGATE.equals(params.getValue())) {
-                return au().system()
+                List<ListData> list = new ArrayList<ListData>();
+                for (DataSourceConnection conn : au().system()
                         .findDataSourceConnections((DataSourceConnectionQuery) new DataSourceConnectionQuery()
-                                .addSelect("id", "name", "description").ignoreEmptyCriteria(true));
+                                .addSelect("name", "description").addOrder("description").ignoreEmptyCriteria(true))) {
+                    list.add(new ListData(conn.getName(), conn.getDescription()));
+                }
+
+                return list;
             }
         }
 

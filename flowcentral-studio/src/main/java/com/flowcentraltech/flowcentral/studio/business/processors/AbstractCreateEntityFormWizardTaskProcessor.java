@@ -141,7 +141,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 appEntity.setSchemaUpdateRequired(true);
             } else {
                 AppEntityField appEntityField = newAppEntityField(applicationName, entry);
-                if (entry.isTableMode() && appEntityField.getName().equals(pkFieldName)) {
+                if (appEntityField.getName().equals(pkFieldName)) {
                     appIdField.setDataType(appEntityField.getDataType());
                     appIdField.setColumnName(appEntityField.getColumnName());
                 } else {
