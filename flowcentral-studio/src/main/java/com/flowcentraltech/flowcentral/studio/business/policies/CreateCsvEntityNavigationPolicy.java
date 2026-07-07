@@ -104,10 +104,6 @@ public class CreateCsvEntityNavigationPolicy extends AbstractStudioAppletNavigat
                 inst.store("generateApplet", true);
             }
 
-            if (inst.isNull("generateRest")) {
-                inst.store("generateRest", true);
-            }
-
             final EntityComposition entityComposition = (EntityComposition) pageAttributes.get("composition");
             final String compositionJson = DataUtils.asJsonString(entityComposition, PrintFormat.PRETTY);
             inst.store("refinedStructure", compositionJson);
