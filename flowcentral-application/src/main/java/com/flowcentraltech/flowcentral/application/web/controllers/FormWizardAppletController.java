@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.FormWizardApplet;
 import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralAppletPathConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -23,6 +24,8 @@ import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
+import com.tcdng.unify.web.ui.widget.EventHandler;
+import com.tcdng.unify.web.ui.widget.Widget;
 
 /**
  * Form wizard applet controller.
@@ -44,7 +47,11 @@ public class FormWizardAppletController extends AbstractAppletController<FormWiz
 
         FormWizardAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            FormWizardApplet applet = new FormWizardApplet(getPage(), au(), getPathVariables());
+            EventHandler[] formSwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
+                    "appletPanel.formWizardPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class, "eventHandler");
+            EntityFormEventHandlers handlers = new EntityFormEventHandlers(formSwitchOnChangeHandlers);
+            
+            FormWizardApplet applet = new FormWizardApplet(getPage(), au(), getPathVariables(), handlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

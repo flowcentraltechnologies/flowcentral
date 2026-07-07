@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import com.tcdng.unify.common.annotation.StaticList;
@@ -690,11 +689,11 @@ public enum EntityFieldDataType implements EnumConst {
                 try {
                     dateTimeFormatter.parse(entityTypeFieldInfo.getSample());
                     dataType = DataType.TIMESTAMP;
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     try {
                         dateFormatter.parse(entityTypeFieldInfo.getSample());
                         dataType = DataType.DATE;
-                    } catch (ParseException e1) {
+                    } catch (Exception e1) {
                     }
                 }
             }

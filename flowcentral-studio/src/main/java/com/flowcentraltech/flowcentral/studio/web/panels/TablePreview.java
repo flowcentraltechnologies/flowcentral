@@ -77,7 +77,7 @@ public class TablePreview {
         if (oldDesign != design) {
             final EntityDef entityDef = tableEditor.getEntityDef();
             TableDef.Builder tdb = TableDef.newBuilder(entityDef, "Preview", false, false, "studio.previewTable",
-                    "Priview Table", 0L, 0L);
+                    "Priview Table", 0L, 0L).preview(true);
             tdb.sortHistory(4);
             tdb.itemsPerPage(PRIVIEW_ITEMS_PER_PAGE);
             if (design != null && design.getColumns() != null) {

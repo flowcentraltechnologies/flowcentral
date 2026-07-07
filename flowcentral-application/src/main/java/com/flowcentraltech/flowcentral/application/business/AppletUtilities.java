@@ -1377,6 +1377,8 @@ public interface AppletUtilities extends FlowCentralComponent {
      * 
      * @param applet
      *                    the applet
+     * @param handlers
+     *                    the handlers
      * @param formDef
      *                    the form definition
      * @param inst
@@ -1391,8 +1393,8 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst, String rootTitle,
-            String beanTitle, BreadCrumbs breadCrumbs) throws UnifyException;
+    FormWizard constructFormWizard(AbstractApplet applet, EntityFormEventHandlers handlers, FormDef formDef,
+            Entity inst, String rootTitle, String beanTitle, BreadCrumbs breadCrumbs) throws UnifyException;
 
     /**
      * Constructs a header with tabs form.

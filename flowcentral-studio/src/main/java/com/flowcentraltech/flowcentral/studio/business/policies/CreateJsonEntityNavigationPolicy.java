@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.data.ValidationErrors;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.core.UnifyException;
@@ -60,6 +61,12 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
     }
 
     @Override
+    public void onInit(ValueStore inst) throws UnifyException {
+        inst.store("applicationId",
+                getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
+    }
+
+    @Override
     public void onNext(ValueStore inst, ValidationErrors errors, int currentPage, Map<String, Object> pageAttributes)
             throws UnifyException {
         if (currentPage == 1) {
@@ -90,15 +97,11 @@ public class CreateJsonEntityNavigationPolicy extends AbstractStudioAppletNaviga
         } else if (currentPage == 2) {
             inst.store("generateEntity", true);
             if (inst.isNull("loadSourceJSON")) {
-                inst.store("loadSourceJSON", true);
+                inst.store("loadSourceJSON", false);
             }
 
             if (inst.isNull("generateApplet")) {
                 inst.store("generateApplet", true);
-            }
-
-            if (inst.isNull("generateRest")) {
-                inst.store("generateRest", true);
             }
 
             final EntityComposition entityComposition = (EntityComposition) pageAttributes.get("composition");

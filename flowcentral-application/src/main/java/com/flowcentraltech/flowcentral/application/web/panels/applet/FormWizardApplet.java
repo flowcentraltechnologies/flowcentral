@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.FormWizard;
@@ -28,12 +29,14 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.common.business.policies.ActionMode;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.FormReviewContext;
+import com.flowcentraltech.flowcentral.common.business.policies.FormWizardNavigationPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
 import com.tcdng.unify.web.ui.widget.Page;
@@ -50,9 +53,10 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
     
     private String closePath;
     
-    public FormWizardApplet(Page page, AppletUtilities au, List<String> pathVariables) throws UnifyException {
+    public FormWizardApplet(Page page, AppletUtilities au, List<String> pathVariables, EntityFormEventHandlers handlers)
+            throws UnifyException {
         super(page, au, pathVariables.get(APPLET_NAME_INDEX));
-        
+
         final AppletDef appletDef = getRootAppletDef();
         final String formName = appletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
         final FormDef formDef = au.getFormDef(formName);
@@ -63,7 +67,12 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
         bcb.addHistoryCrumb(appletDesc, formLabel, 0);
         BreadCrumbs crumbs = bcb.build();
 
-        this.formWizard = au.constructFormWizard(this, formDef, inst, appletDesc, formLabel, crumbs);
+        this.formWizard = au.constructFormWizard(this, handlers, formDef, inst, appletDesc, formLabel, crumbs);
+        if (this.formWizard.isWithNavPolicy()) {
+            au.getComponent(FormWizardNavigationPolicy.class, this.formWizard.getNavPolicy())
+                    .onInit(new BeanValueStore(inst));
+        }
+
         setAltSubCaption(au.resolveSessionMessage("$m{formwizardpanel.creation}"));
     }
     

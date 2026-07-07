@@ -41,6 +41,8 @@ public class EntityCompositionWidget extends AbstractItemListWidget<EntityCompos
 
     private Control entityTableCtrl;
 
+    private Control pkSelectCtrl;
+
     private Control fieldTypeCtrl;
 
     private Control dataTypeCtrl;
@@ -63,6 +65,8 @@ public class EntityCompositionWidget extends AbstractItemListWidget<EntityCompos
     protected void doOnPageConstruct() throws UnifyException {
         entityNameCtrl = (Control) addInternalChildWidget("!ui-name case:camel binding:entityName");
         entityTableCtrl = (Control) addInternalChildWidget("!ui-name case:upper underscore:true binding:table size:48");
+        pkSelectCtrl = (Control) addInternalChildWidget(
+                "!ui-select list:entitycompositionpkfieldlist listParams:$l{pkList} binding:pkFieldName");
         fieldTypeCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:dynamicentityfieldtypelist binding:fieldType disabled:true");
         dataTypeCtrl = (Control) addInternalChildWidget(
@@ -114,6 +118,10 @@ public class EntityCompositionWidget extends AbstractItemListWidget<EntityCompos
 
     public Control getEntityTableCtrl() {
         return entityTableCtrl;
+    }
+
+    public Control getPkSelectCtrl() {
+        return pkSelectCtrl;
     }
 
     public Control getFieldTypeCtrl() {

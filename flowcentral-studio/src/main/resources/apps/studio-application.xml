@@ -3,7 +3,7 @@
 <application
 	xmlns="http://flowcentraltech.com/schema-common"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.0.xsd"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.1.xsd"
 	name="studio" description="$m{studio.application.short.description}"
 	label="$m{studio.application.mainlabel}" module="studio"
 	displayIndex="1000">
@@ -38,6 +38,11 @@
 			description="$m{studio.widgettype.environmentdelegatelist}"
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioenvironmentdelegatelist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="delegatedatasourcelist"
+			description="$m{studio.widgettype.delegatedatasourcelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:studiodelegatedatasourcelist listParams:$l{delegate} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formwizardcompletiontypelist"
 			description="$m{studio.widgettype.formwizardcompletiontypelist}"
@@ -676,6 +681,19 @@
 				<property name="wizardForm.completion" value="EXE" />
 				<property name="wizardForm.task.processor"
 					value="createcsventity-formwizardprocessor" />
+			</properties>
+		</applet>
+		<applet name="createTableEntity"
+			description="$m{studio.tableentity.manage}"
+			label="$m{studio.tableentity.manage.label}" type="FORM_WIZARD"
+			entity="studio.studioJsonEntity" menuAccess="false">
+			<properties>
+				<property name="createForm" value="studioTableEntityForm" />
+				<property name="createForm.navigation.policy"
+					value="createtableentity-navigationpolicy" />
+				<property name="wizardForm.completion" value="EXE" />
+				<property name="wizardForm.task.processor"
+					value="createtableentity-formwizardprocessor" />
 			</properties>
 		</applet>
 		<applet name="stuManageModule"
@@ -1716,6 +1734,9 @@
 		<reference name="studioCsvEntityRef"
 			description="$m{studio.csventity.reference}"
 			entity="studioJsonEntity" />
+		<reference name="studioTableEntityRef"
+			description="$m{studio.tableentity.reference}"
+			entity="studioJsonEntity" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -1809,9 +1830,18 @@
 				<field name="delegate" maxLen="64"
 					label="$m{studio.jsonentity.delegate}" type="STRING"
 					nullable="true" />
+				<field name="datasource" maxLen="64"
+					label="$m{studio.jsonentity.datasource}" type="STRING"
+					nullable="true" />
+				<field name="table" maxLen="64"
+					label="$m{studio.jsonentity.table}" type="STRING"
+					nullable="true" />
+				<field name="columns" maxLen="2048"
+					label="$m{studio.jsonentity.columns}" type="STRING"
+					nullable="true" />
 				<field name="sourceJson"
 					inputWidget="application.textarealarge"
-					label="$m{studio.jsonentity.sourcejson}" type="CLOB" />
+					label="$m{studio.jsonentity.sourcejson}" type="CLOB" nullable="true"/>
 				<field name="refinedStructure"
 					inputWidget="application.entitycomposition"
 					label="$m{studio.jsonentity.refinedstructure}" type="CLOB" />
@@ -2584,25 +2614,23 @@
 							inputWidget="application.entitysearch" column="0"
 							reference="studio.applicationDevelopableRef"
 							label="$m{studio.jsonentity.application}" required="true"
+							editable="true" disabled ="true" />
+						<field name="baseType" column="0" inputWidget="entitybasetypelist"
+							label="$m{studio.jsonentity.basetype}" required="true"
 							editable="true" />
 						<field name="entityName" inputWidget="application.name"
 							column="0" required="true" />
-						<field name="baseType" column="0"
-							label="$m{studio.jsonentity.basetype}" required="true"
-							editable="true" />
 						<field name="dateFormatter"
 							inputWidget="studio.dateformatterlist" column="0"
 							required="false" />
 						<field name="dateTimeFormatter"
 							inputWidget="studio.datetimeformatterlist" column="0"
 							required="false" />
-						<field name="delegate" inputWidget="environmentdelegatelist"
-							column="0" />
 					</section>
 					<section name="source" columns="TYPE_1"
 						label="$m{studio.jsonentity.form.source}" icon="file">
 						<field name="sourceJson"
-							inputWidget="application.textareaxlarge" column="0"
+							inputWidget="application.jsonuploadlarge" column="0"
 							required="true" editable="true" />
 					</section>
 					<section name="structure" columns="TYPE_1"
@@ -2642,25 +2670,23 @@
 							inputWidget="application.entitysearch" column="0"
 							label="$m{studio.csventity.application}"
 							reference="studio.applicationDevelopableRef" required="true"
+							editable="false" disabled ="true"/>
+						<field name="baseType" column="0" inputWidget="entitybasetypelist"
+							label="$m{studio.csventity.basetype}" required="true"
 							editable="true" />
 						<field name="entityName" inputWidget="application.name"
 							column="0" required="true" />
-						<field name="baseType" column="0"
-							label="$m{studio.csventity.basetype}" required="true"
-							editable="true" />
 						<field name="dateFormatter"
 							inputWidget="studio.dateformatterlist" column="0"
 							required="false" />
 						<field name="dateTimeFormatter"
 							inputWidget="studio.datetimeformatterlist" column="0"
 							required="false" />
-						<field name="delegate" inputWidget="environmentdelegatelist"
-							column="0" />
 					</section>
 					<section name="source" columns="TYPE_1"
 						label="$m{studio.csventity.form.source}" icon="file">
 						<field name="sourceJson"
-							inputWidget="application.textareaxlarge" column="0"
+							inputWidget="application.csvuploadlarge" column="0"
 							required="true" editable="true"
 							label="$m{studio.csventity.sourcecsv}" />
 					</section>
@@ -2687,6 +2713,72 @@
 			<fieldValidationPolicies>
 				<fieldValidationPolicy name="entityValidation"
 					description="$m{studio.csventity.form.fieldvalidationpolicy.entity}"
+					fieldName="entityName" validator="fc-entitynameexistvalidator" />
+			</fieldValidationPolicies>
+		</form>
+		<form name="studioTableEntityForm"
+			description="$m{studio.tableentity.form}" entity="studioJsonEntity">
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{studio.tableentity.form.application}"
+					contentType="MINIFORM">
+					<section name="structureDetails" columns="TYPE_2"
+						label="$m{studio.tableentity.form.application}" icon="application">
+						<field name="applicationId"
+							inputWidget="application.entitysearch" column="0"
+							label="$m{studio.tableentity.application}"
+							reference="studio.applicationDevelopableRef" required="true"
+							editable="false" disabled ="true"/>
+						<field name="baseType" column="0" inputWidget="entitybasetypelist"
+							label="$m{studio.tableentity.basetype}" required="true"
+							disabled="true" />
+						<field name="entityName" inputWidget="application.name"
+							column="0" required="true" />
+						<field name="dateFormatter"
+							inputWidget="studio.dateformatterlist" column="0"
+							required="false" />
+						<field name="dateTimeFormatter"
+							inputWidget="studio.datetimeformatterlist" column="0"
+							required="false" />
+					</section>
+					<section name="source" columns="TYPE_2"
+						label="$m{studio.tableentity.form.source}" icon="database">
+						<field name="datasource"
+							inputWidget="system.datasourceconnectionlist" column="0"
+							required="true" editable="true"
+							label="$m{studio.tableentity.datasource}" switchOnChange="true"/>
+						<field name="table"
+							inputWidget="system.datasourcetablelist" column="0"
+							required="true" editable="true"
+							label="$m{studio.tableentity.table}" switchOnChange="true"/>
+						<field name="columns"
+							inputWidget="system.datasourcecolumnselect" column="0"
+							required="true" editable="true"
+							label="$m{studio.tableentity.columns}"/>
+					</section>
+					<section name="structure" columns="TYPE_1"
+						label="$m{studio.tableentity.form.structure}" icon="scroll">
+						<field name="refinedStructure"
+							inputWidget="application.entitycomposition" column="0"
+							required="true" editable="true" />
+					</section>
+					<section name="options" columns="TYPE_1"
+						label="$m{studio.tableentity.form.options}" icon="rocket">
+						<field name="generateEntity"
+							inputWidget="application.checkbox" column="0" disabled="true" />
+						<field name="loadSourceJSON"
+							inputWidget="application.checkbox" column="0" disabled="true"
+							label="$m{studio.tableentity.loadsourcecsv}" />
+						<field name="generateApplet"
+							inputWidget="application.checkbox" column="0" editable="true" />
+						<field name="generateRest"
+							inputWidget="application.checkbox" column="0" editable="true" />
+					</section>
+				</tab>
+			</tabs>
+			<fieldValidationPolicies>
+				<fieldValidationPolicy name="entityValidation"
+					description="$m{studio.tableentity.form.fieldvalidationpolicy.entity}"
 					fieldName="entityName" validator="fc-entitynameexistvalidator" />
 			</fieldValidationPolicies>
 		</form>
@@ -3089,6 +3181,8 @@
 							column="0" required="true" saveAs="true" />
 						<field name="delegate" inputWidget="environmentdelegatelist"
 							column="0" switchOnChange="true" />
+						<field name="dataSourceName" inputWidget="delegatedatasourcelist"
+							column="0" visible="false" />
 					</section>
 				</tab>
 				<tab name="fields" label="$m{studio.appentity.form.fields}"

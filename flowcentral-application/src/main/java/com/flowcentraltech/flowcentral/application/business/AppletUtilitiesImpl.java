@@ -1078,8 +1078,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public FormWizard constructFormWizard(AbstractApplet applet, FormDef formDef, Entity inst, String rootTitle,
-            String beanTitle, BreadCrumbs breadCrumbs) throws UnifyException {
+    public FormWizard constructFormWizard(AbstractApplet applet, EntityFormEventHandlers handlers, FormDef formDef,
+            Entity inst, String rootTitle, String beanTitle, BreadCrumbs breadCrumbs) throws UnifyException {
         final AppletContext appletContext = applet != null ? applet.appletCtx() : new AppletContext(null, applet, this);
         final FormTabDef mainFormTabDef = formDef.getFormTabDef(0);
         initSkeletonForAutoFormatFields(formDef.getEntityDef(), inst);
@@ -1087,7 +1087,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         List<MiniForm> forms = new ArrayList<MiniForm>();
         IconBar.Builder ibb = IconBar.newBuilder();
         for (FormTabDef formTabDef : mainFormTabDef.wizardParts()) {
-            final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
+            final FormContext formContext = new FormContext(appletContext, formDef, handlers, inst);
             formContext.evaluateTabStates();
             MiniForm miniForm = new MiniForm(MiniFormScope.MAIN_FORM, formContext, formTabDef);
             forms.add(miniForm);

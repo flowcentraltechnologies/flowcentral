@@ -245,6 +245,7 @@ import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
@@ -2355,7 +2356,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             String val = DataUtils.getBeanProperty(String.class, inst, listOnlyFieldDef.getFieldName());
             if (val != null) {
                 RecLoadInfo recLoadInfo = resolveListOnlyRecordLoadInformation(entityDef,
-                        listOnlyFieldDef.getFieldName(), val, null);
+                        listOnlyFieldDef.getFieldName(), val, resolveFormatter(entityDef, listOnlyFieldDef));
                 if (recLoadInfo != null) {
                     DataUtils.setBeanProperty(inst, recLoadInfo.getFieldName(), recLoadInfo.getVal(),
                             recLoadInfo.getFormatter());
@@ -2364,6 +2365,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
+    private Formatter<?> resolveFormatter(EntityDef entityDef, EntityFieldDef fieldDef) throws UnifyException {
+        StandardFormatType formatType = fieldDef.isDate() ? StandardFormatType.fromCode(entityDef.getDateFormatter())
+                : (fieldDef.isDateTime() ? StandardFormatType.fromCode(entityDef.getDateTimeFormatter()) : null);
+        return formatType != null ? appletUtilities.formatHelper().newFormatter(formatType) : null;
+    }
+    
     @Override
     public EntityFieldDataType resolveListOnlyEntityDataType(AppEntityField appEntityField) throws UnifyException {
         logDebug("Resolving list-only entity data type for field [{1}] in entity [{0}]...",
@@ -4466,6 +4473,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 formatter = fieldSequenceEntryDef.isWithParam()
                                         ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
                                         : null;
+                                if (formatter == null) {
+                                    EntityDef refEntityDef = refEntityClassDef.getEntityDef();
+                                    formatter = resolveFormatter(refEntityDef, refEntityDef.getFieldDef(listProp.getProperty()));    
+                                }
+                                
                                 Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
                                         csvRecord.get(listProp.getFieldName()), formatter);
                                 query.addEquals(listProp.getProperty(), cval);
@@ -4479,7 +4491,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         formatter = fieldSequenceEntryDef.isWithParam()
                                 ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
                                 : null;
-                        val = csvRecord.get(fieldName);
+                        if (formatter == null) {
+                            formatter = resolveFormatter(entityDef, entityDef.getFieldDef(fieldName));    
+                        }
+                        
+                       val = csvRecord.get(fieldName);
                     }
 
                     recMap.put(fieldName, new RecLoadInfo(fieldName, val, formatter));

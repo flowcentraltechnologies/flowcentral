@@ -70,6 +70,8 @@ import com.flowcentraltech.flowcentral.system.data.ScheduledTaskDef;
 import com.flowcentraltech.flowcentral.system.data.SysParamInfo;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnectionQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
@@ -112,7 +114,12 @@ import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.database.dynamic.DynamicDataSourceDef;
+import com.tcdng.unify.core.database.dynamic.DynamicDataSourceDefinitionProvider;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
+import com.tcdng.unify.core.database.sql.SqlColumnInfo;
+import com.tcdng.unify.core.database.sql.SqlTableInfo;
+import com.tcdng.unify.core.database.sql.SqlTableType;
 import com.tcdng.unify.core.security.SecurityComponents;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
@@ -132,8 +139,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(SystemModuleNameConstants.SYSTEM_MODULE_SERVICE)
-public class SystemModuleServiceImpl extends AbstractFlowCentralService
-        implements SystemModuleService, LicenseProvider, SpecialParamProvider, SystemParameterProvider {
+public class SystemModuleServiceImpl extends AbstractFlowCentralService implements SystemModuleService, LicenseProvider,
+        SpecialParamProvider, SystemParameterProvider, DynamicDataSourceDefinitionProvider {
 
     private static final String SCHEDULED_TASK_EXECUTION_LOCK = "sys:scheduledtaskexecution-lock";
 
@@ -141,9 +148,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private ConfigurationLoader configurationLoader;
-
-    @Configurable
-    private DynamicSqlDataSourceManager dataSourceManager;
 
     @Configurable
     private TaskManager taskManager;
@@ -154,12 +158,17 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private SecuredLinkManager securedLinkManager;
 
+    @Configurable
+    private DynamicSqlDataSourceManager dynamicSqlDataSourceManager;
+    
     @Configurable(CommonModuleNameConstants.PARAMGENERATORMANAGER)
     private ParamGeneratorManager paramGeneratorManager;
 
     private final FactoryMap<Long, ScheduledTaskDef> scheduledTaskDefs;
 
     private final FactoryMap<String, CredentialDef> authDefFactoryMap;
+
+    private final FactoryMap<String, DynamicDataSourceDef> connectionDefFactoryMap;
 
     private final FactoryMap<String, LicenseDef> licenseDefFactoryMap;
 
@@ -185,6 +194,27 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
                     return new CredentialDef(authName, credential.getUserName(), credential.getPassword(),
                             credential.getBase64Encoded(), credential.getVersionNo());
+                }
+            };
+
+        this.connectionDefFactoryMap = new StaleableFactoryMap<String, DynamicDataSourceDef>()
+            {
+
+                @Override
+                protected boolean stale(String connectionName, DynamicDataSourceDef connectionDef) throws Exception {
+                    return (environment().value(long.class, "versionNo",
+                            new DataSourceConnectionQuery().name(connectionName)) > connectionDef.getVersionNo());
+                }
+
+                @Override
+                protected DynamicDataSourceDef create(String connectionName, Object... arg1) throws Exception {
+                    DataSourceConnection connection = environment()
+                            .find(new DataSourceConnectionQuery().name(connectionName));
+                    if (connection == null) {
+                        throw new UnifyException(SystemModuleErrorConstants.CANNOT_FIND_CREDENTIAL, connectionName);
+                    }
+
+                    return SystemUtils.getDynamicDataSourceDef(connection);
                 }
             };
 
@@ -246,6 +276,16 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean exists(String datasourceName) throws UnifyException {
+        return environment().countAll(new DataSourceConnectionQuery().name(datasourceName)) > 0;
+    }
+
+    @Override
+    public DynamicDataSourceDef provide(String datasourceName) throws UnifyException {
+        return connectionDefFactoryMap.get(datasourceName);
+    }
+
+    @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");
         authDefFactoryMap.clear();
@@ -300,6 +340,22 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         return authDefFactoryMap.get(credName);
     }
 
+    @Override
+    public List<DataSourceConnection> findDataSourceConnections(DataSourceConnectionQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
+    public List<SqlTableInfo> findDataSourceTables(String dataSourceConnectonName) throws UnifyException {
+        return dynamicSqlDataSourceManager.getTables(dataSourceConnectonName, SqlTableType.TABLE); // TODO Add views.
+    }
+
+    @Override
+    public List<SqlColumnInfo> findDataSourceColumns(String dataSourceConnectonName, String tableName)
+            throws UnifyException {
+        return dynamicSqlDataSourceManager.getColumns(dataSourceConnectonName, tableName);
+    }
+    
     @Override
     public Long createModule(Module module) throws UnifyException {
         return (Long) environment().create(module);

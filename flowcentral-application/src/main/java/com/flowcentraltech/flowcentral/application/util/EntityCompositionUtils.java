@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityCompositionEntry;
+import com.flowcentraltech.flowcentral.application.web.widgets.PkList;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.DynamicEntityFieldType;
@@ -46,15 +47,19 @@ public final class EntityCompositionUtils {
         List<EntityCompositionEntry> entries = new ArrayList<EntityCompositionEntry>();
         for (EntityTypeInfo entityTypeInfo : entityTypeList) {
             final int depth = entityTypeInfo.getDepth();
-            EntityCompositionEntry entry = new EntityCompositionEntry();
-            entry.setEntityName(entityTypeInfo.getName());
-            entry.setTable(ApplicationCodeGenUtils.generateCustomEntityTableName(tablePrefix, moduleShortCode,
-                    entityTypeInfo.getName()));
-            entry.setDepth(depth);
-            entries.add(entry);
+            final boolean tableMode = !StringUtils.isBlank(entityTypeInfo.getTableName());
+            EntityCompositionEntry mentry = new EntityCompositionEntry();
+            mentry.setEntityName(entityTypeInfo.getName());
+            mentry.setTable(tableMode ? entityTypeInfo.getTableName()
+                    : ApplicationCodeGenUtils.generateCustomEntityTableName(tablePrefix, moduleShortCode,
+                            entityTypeInfo.getName()));
+            mentry.setDepth(depth);
+            mentry.setTableMode(tableMode);
+            entries.add(mentry);
 
+            List<String> list = new ArrayList<String>();
             for (EntityTypeFieldInfo entityTypeFieldInfo : entityTypeInfo.getFields()) {
-                entry = new EntityCompositionEntry();
+                EntityCompositionEntry entry = new EntityCompositionEntry();
                 DynamicEntityFieldType fieldType = entityTypeFieldInfo.getType();
                 entry.setFieldType(fieldType);
                 entry.setDataType(EntityFieldDataType.fromData(dateFormatter, dateTimeFormatter, entityTypeFieldInfo));
@@ -70,8 +75,15 @@ public final class EntityCompositionUtils {
                     entry.setReferences(entityTypeFieldInfo.getParentEntityName());
                 }
 
+                // For now support integer primary keys only
+                if (fieldType.isTableColumn() && (entry.getDataType().isInteger()/* || entry.getDataType().isString()*/)) {
+                    list.add(entry.getName());
+                }
+
                 entries.add(entry);
             }
+
+            mentry.setPkList(new PkList(list));
         }
 
         return new EntityComposition(entries);

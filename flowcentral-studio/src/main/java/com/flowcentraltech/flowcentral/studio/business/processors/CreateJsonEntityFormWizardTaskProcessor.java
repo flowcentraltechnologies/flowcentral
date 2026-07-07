@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.processors;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.tcdng.unify.common.database.Entity;
@@ -37,9 +39,11 @@ public class CreateJsonEntityFormWizardTaskProcessor extends AbstractCreateEntit
     @Override
     protected void loadSource(TaskMonitor taskMonitor, String source, String entity) throws UnifyException {
         final EntityClassDef entityClassDef = au().getEntityClassDef(entity);
-        final Entity inst = DataUtils.fromJsonString(entityClassDef.getJsonComposition(au()),
+        final List<? extends Entity> items = DataUtils.listFromJsonString(entityClassDef.getJsonComposition(au()),
                 (Class<? extends Entity>) entityClassDef.getEntityClass(), source);
-        au().environment().create(inst);
+        for (Entity inst : items) {
+            au().environment().create(inst);
+        }
     }
 
 }

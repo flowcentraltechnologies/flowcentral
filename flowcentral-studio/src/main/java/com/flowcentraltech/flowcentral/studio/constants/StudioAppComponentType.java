@@ -120,20 +120,6 @@ public enum StudioAppComponentType implements EnumConst {
             0,
             AppletType.MANAGE_ENTITYLIST,
             null),
-    ENTITY_TOOLS( 
-            "eto_",
-            null,
-            "$m{studio.application.component.type.entitytool}",
-            "$m{studio.application.component.type.entitytools}",
-            "studio.menu.label.entitytool",
-            "database",
-            null,
-            null,
-            null,
-            null,
-            0,
-            AppletType.MANAGE_ENTITYLIST,
-            null),
     ENUMERATION(
             "enm_",
             "appEnumerationForm",
@@ -493,6 +479,10 @@ public enum StudioAppComponentType implements EnumConst {
     
     public boolean isComponentType() {
         return componentType != null;
+    }
+    
+    public boolean isEntityType() {
+        return ENTITY.equals(this);
     }
     
     public String labelKey() {

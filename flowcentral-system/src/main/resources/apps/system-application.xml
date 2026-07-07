@@ -3,7 +3,7 @@
 <application
 	xmlns="http://flowcentraltech.com/schema-common"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.0.xsd"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.1.xsd"
 	name="system"
 	description="$m{system.short.description}" label="$m{system.label}"
 	module="system">
@@ -13,6 +13,21 @@
 			description="$m{system.widgettype.sysparamvalue}" dataType="STRING"
 			inputType="STRING" editor="!ui-dynamic descriptorBinding:editor"
 			renderer="!ui-label" />
+		<widgetType name="datasourceconnectionlist"
+			description="$m{system.widgettype.datasourceconnectionlist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:datasourceconnectionlist listKey:$s{name} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="datasourcetablelist"
+			description="$m{system.widgettype.datasourcetablelist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:datasourcetablelist listParams:$l{datasource} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="datasourcecolumnselect"
+			description="$m{system.widgettype.datasourcecolumnselect}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-checklist list:datasourcecolumnlist listParams:$l{datasource table}"
+			renderer="!ui-label" stretch="false"/>
 		<widgetType name="schedulabletasklist"
 			description="$m{system.widgettype.schedulabletasklist}"
 			dataType="STRING" inputType="STRING"
@@ -210,6 +225,24 @@
 				<property name="maintainForm.delete" value="true" />
 			</properties>
 		</applet>
+		<applet name="manageDataSourceConnection"
+			description="$m{system.datasourceconnection.manage}"
+			label="$m{system.datasourceconnection.manage.label}" icon="key"
+			type="MANAGE_ENTITYLIST" entity="dataSourceConnection" menuAccess="false">
+			<properties>
+				<property name="searchTable" value="dataSourceConnectionTable" />
+				<property name="searchTable.new" value="true" />
+				<property name="searchTable.report" value="false" />
+				<property name="searchTable.basicSearchOnly" value="true" />
+				<property name="createForm" value="dataSourceConnectionForm" />
+				<property name="createForm.save" value="true" />
+				<property name="createForm.save.next" value="true" />
+				<property name="createForm.save.close" value="true" />
+				<property name="maintainForm" value="dataSourceConnectionForm" />
+				<property name="maintainForm.update" value="true" />
+				<property name="maintainForm.delete" value="true" />
+			</properties>
+		</applet>
 		<applet name="manageDelegate"
 			description="$m{system.delegate.manage}"
 			label="$m{system.delegate.manage.label}" icon="network-wired"
@@ -329,6 +362,9 @@
 			entity="scheduledTaskHist" searchField="scheduledTaskDesc" />
 		<reference name="credentialRef"
 			description="$m{system.credential.reference}" entity="credential"
+			searchField="description" />
+		<reference name="dataSourceConnectionRef"
+			description="$m{system.datasourceconnection.reference}" entity="dataSourceConnection"
 			searchField="description" />
 		<reference name="delegateRef"
 			description="$m{system.delegate.reference}" entity="delegate"
@@ -632,6 +668,52 @@
 					fieldList="description" />
 			</uniqueConstraints>
 		</entity>
+		<entity name="dataSourceConnection" description="$m{system.datasourceconnection}"
+			label="$m{system.datasourceconnection.label}"
+			type="com.flowcentraltech.flowcentral.system.entities.DataSourceConnection"
+			auditable="true" reportable="true" changeEvents = "true">
+			<fields>
+				<field name="name" label="$m{system.datasourceconnection.name}"
+					type="STRING" inputWidget="application.name" maxLen="64"
+					basicSearch="true" auditable="true"/>
+				<field name="description"
+					label="$m{system.datasourceconnection.description}" type="STRING"
+					inputWidget="application.text" maxLen="128" basicSearch="true" auditable="true"/>
+				<field name="dialect"
+					label="$m{system.datasourceconnection.dialect}" type="STRING"
+					inputWidget="application.text" maxLen="32" auditable="true"/>
+				<field name="host"
+					label="$m{system.datasourceconnection.host}" type="STRING"
+					inputWidget="application.text" maxLen="96" auditable="true"/>
+				<field name="port"
+					label="$m{system.datasourceconnection.port}" type="STRING"
+					inputWidget="application.integertext" maxLen="8" auditable="true"/>
+				<field name="database"
+					label="$m{system.datasourceconnection.database}" type="STRING"
+					inputWidget="application.text" maxLen="96" auditable="true" nullable="true"/>
+				<field name="service"
+					label="$m{system.datasourceconnection.service}" type="STRING"
+					inputWidget="application.text" maxLen="96" auditable="true" nullable="true"/>
+				<field name="schema"
+					label="$m{system.datasourceconnection.schema}" type="STRING"
+					inputWidget="application.text" maxLen="96" auditable="true" nullable="true"/>					
+				<field name="userName" label="$m{system.datasourceconnection.username}"
+					type="STRING" maxLen="64" auditable="true"/>
+				<field name="password" label="$m{system.datasourceconnection.password}"
+					type="STRING" maxLen="128" auditable="false"/>
+				<field name="lastResult" label="$m{system.datasourceconnection.lastresult}"
+					type="STRING" maxLen="512" auditable="false"/>
+				<field name="lastOn" label="$m{system.datasourceconnection.laston}"
+					type="TIMESTAMP" auditable="false"/>
+			</fields>
+			<uniqueConstraints>
+				<uniqueConstraint name="nameUc"
+					description="$m{system.datasourceconnection.uc.name}" fieldList="name" />
+				<uniqueConstraint name="descUc"
+					description="$m{system.datasourceconnection.uc.description}"
+					fieldList="description" />
+			</uniqueConstraints>
+		</entity>
 		<entity name="delegate" description="$m{system.delegate}"
 			label="$m{system.delegate.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Delegate"
@@ -894,7 +976,24 @@
 					widthRatio="1" order="DESC" />
 				<column field="createdBy" renderWidget="application.text"
 					widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
+			</columns>
+		</table>
+		<table name="dataSourceConnectionTable"
+			description="$m{system.datasourceconnection.table}"
+			label="$m{system.datasourceconnection.table.label}" entity="dataSourceConnection"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<columns>
+				<column field="name" renderWidget="application.text"
+					widthRatio="1" linkAct="maintainAct" />
+				<column field="description" renderWidget="application.text"
+					widthRatio="2" />
+				<column field="host" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="port" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="createDt" renderWidget="application.datetime"
+					widthRatio="1" order="DESC" />
+				<column field="createdBy" renderWidget="application.text"
 					widthRatio="1" />
 			</columns>
 		</table>
@@ -1207,6 +1306,62 @@
 							column="1" />
 						<field name="base64Encoded" inputWidget="application.textarea"
 							column="1" editable="false" />
+					</section>
+				</tab>
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
+		</form>
+		<form name="dataSourceConnectionForm"
+			description="$m{system.datasourceconnection.form}" entity="dataSourceConnection"
+			consolidatedState="datasourceconnection-formstatepolicy">
+			<actions>
+				<action type="BUTTON" name="testConnection" symbol="double-check"
+					styleClass="fc-actbutton" highlight="BLUE"
+					description="$m{system.datasourceconnection.form.action.testdatasourceconnection}"
+					label="$m{system.datasourceconnection.form.action.testdatasourceconnection.label}"
+					policy="testdatasourceconnection-actionpolicy" showOnMaintain="true"
+					showOnCreate="true" validateForm="true"/>
+			</actions>
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{system.datasourceconnection.form.basicdetails}"
+					contentType="MINIFORM">
+					<section name="dataSourceConnectionDetails" columns="TYPE_2">
+						<field name="name" inputWidget="application.name" column="0"
+							required="true" />
+						<field name="description" inputWidget="application.text"
+							column="0" required="true" />
+						<field name="dialect" inputWidget="application.sqldialectlist"
+							column="1" required="true" switchOnChange="true"/>
+					</section>
+					<section name="hostDetails" columns="TYPE_2"
+						label="$m{system.datasourceconnection.form.hostdetails}">
+						<field name="host" inputWidget="application.text"
+							column="0" required="true" />
+						<field name="database" inputWidget="application.text"
+							column="0" />
+						<field name="service" inputWidget="application.text"
+							column="0" />
+						<field name="port" inputWidget="application.integertext"
+							column="1" required="true" />
+						<field name="schema" inputWidget="application.text"
+							column="1" />							
+					</section>
+					<section name="credentials" columns="TYPE_2"
+						label="$m{system.datasourceconnection.form.credentials}">
+						<field name="userName" inputWidget="application.name"
+							column="0" required="true" />
+						<field name="password" inputWidget="application.password"
+							column="1" />
+					</section>
+					<section name="test" columns="TYPE_1"
+						label="$m{system.datasourceconnection.form.test}"
+						editable="false">
+						<field name="lastOn" inputWidget="application.text"
+							column="0"/>
+						<field name="lastResult" inputWidget="application.textarea"
+							column="0" color="YELLOW"/>
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"

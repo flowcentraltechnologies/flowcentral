@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfig;
+import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -73,6 +74,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
         logDebug(taskMonitor, "Processing form wizard create JSON entity item...");
         final String refinedStructure = instValueStore.retrieve(String.class, "refinedStructure");
         final String delegate = instValueStore.retrieve(String.class, "delegate");
+        final String datasource = instValueStore.retrieve(String.class, "datasource");
         EntityComposition entityComposition = DataUtils.fromJsonString(EntityComposition.class, refinedStructure);
 
         // Save source
@@ -91,6 +93,8 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
         final boolean generateImport = instValueStore.retrieve(boolean.class, "generateImport");
         final List<String> importList = new ArrayList<String>();
         AppEntity appEntity = null;
+        AppEntityField appIdField = null;
+        String pkFieldName = null;
         for (EntityCompositionEntry entry : entityComposition.getEntries()) {
             if (entry.getFieldType() == null) {
                 if (appEntity != null) {
@@ -106,6 +110,16 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                         ConfigType.CUSTOM);
                 appEntity.setFieldList(new ArrayList<AppEntityField>(baseFieldList));
 
+                if (entry.isTableMode()) {
+                    pkFieldName = entry.getPkFieldName();
+                    for (AppEntityField field : baseFieldList) {
+                        if ("id".equals(field.getName())) {
+                            appIdField = field;
+                            break;
+                        }
+                    }
+                }
+
                 // Create entity
                 appEntity.setApplicationId(applicationId);
                 appEntity.setConfigType(ConfigType.CUSTOM);
@@ -119,16 +133,22 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.STATIC,
                         applicationName, entry.getEntityName());
                 appEntity.setEntityClass(entityClass);
-                appEntity.setDelegate(delegate);
+                appEntity.setDelegate(entry.isTableMode() ? SystemModuleNameConstants.DIRECT_ENVIRONMENT_DELEGATE : delegate);
+                appEntity.setDataSourceName(datasource);
                 appEntity.setActionPolicy(false);
                 appEntity.setAuditable(true);
                 appEntity.setReportable(true);
                 appEntity.setSchemaUpdateRequired(true);
             } else {
                 AppEntityField appEntityField = newAppEntityField(applicationName, entry);
-                appEntity.getFieldList().add(appEntityField);
-                if (generateImport && entityNames.size() == 0) {
-                    importList.add(appEntityField.getName());
+                if (appEntityField.getName().equals(pkFieldName)) {
+                    appIdField.setDataType(appEntityField.getDataType());
+                    appIdField.setColumnName(appEntityField.getColumnName());
+                } else {
+                    appEntity.getFieldList().add(appEntityField);
+                    if (generateImport && entityNames.size() == 0) {
+                        importList.add(appEntityField.getName());
+                    }
                 }
             }
         }

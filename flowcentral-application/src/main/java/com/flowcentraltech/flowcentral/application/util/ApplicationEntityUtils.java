@@ -108,7 +108,64 @@ public final class ApplicationEntityUtils {
 
     private static final Map<EntityBaseType, Class<? extends BaseEntity>> entityClassMap;
 
+    private static final Map<EntityBaseType, Set<String>> entityBaseMap;
+
+    private static final Set<String> RESERVED_BASE_FIELD_0 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_1 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_2 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_3 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "status")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_4 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "originalCopyId", "wfItemVersionType", "inWorkflow",
+                    "workBranchCode", "workDepartmentCode", "processingStatus")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_5 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "status", "originalCopyId", "wfItemVersionType", "inWorkflow",
+                    "workBranchCode", "workDepartmentCode", "processingStatus")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_6 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "configType")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_7 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "name", "description")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_8 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "configType", "name", "description")));
+
+    private static final Set<String> RESERVED_BASE_FIELD_9 = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "configType", "name", "description", "applicationId", "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
+
+
     static {
+        Map<EntityBaseType, Set<String>> _map = new EnumMap<EntityBaseType, Set<String>>(
+                EntityBaseType.class);
+        _map.put(EntityBaseType.BASE_APPLICATION_ENTITY, RESERVED_BASE_FIELD_9);
+        _map.put(EntityBaseType.BASE_AUDIT_ENTITY, RESERVED_BASE_FIELD_2);
+        _map.put(EntityBaseType.BASE_ENTITY, RESERVED_BASE_FIELD_0);
+        _map.put(EntityBaseType.BASE_VERSION_ENTITY, RESERVED_BASE_FIELD_1);
+        _map.put(EntityBaseType.BASE_NAMED_ENTITY, RESERVED_BASE_FIELD_7);
+        _map.put(EntityBaseType.BASE_STATUS_ENTITY, RESERVED_BASE_FIELD_3);
+        _map.put(EntityBaseType.BASE_STATUS_WORK_ENTITY, RESERVED_BASE_FIELD_5);
+        _map.put(EntityBaseType.BASE_WORK_ENTITY, RESERVED_BASE_FIELD_4);
+        _map.put(EntityBaseType.BASE_CONFIG_ENTITY, RESERVED_BASE_FIELD_6);
+        _map.put(EntityBaseType.BASE_CONFIG_NAMED_ENTITY, RESERVED_BASE_FIELD_8);
+        entityBaseMap = Collections.unmodifiableMap(_map);
+
         Map<EntityBaseType, Class<? extends BaseEntity>> map = new EnumMap<EntityBaseType, Class<? extends BaseEntity>>(
                 EntityBaseType.class);
         map.put(EntityBaseType.BASE_APPLICATION_ENTITY, BaseApplicationEntity.class);
@@ -123,14 +180,14 @@ public final class ApplicationEntityUtils {
         map.put(EntityBaseType.BASE_CONFIG_NAMED_ENTITY, BaseConfigNamedEntity.class);
         entityClassMap = Collections.unmodifiableMap(map);
 
-        Map<String, String> _map = new HashMap<String, String>();
-        _map.put("versionNo", "VERSION_NO");
-        _map.put("createdBy", "CREATED_BY");
-        _map.put("updatedBy", "UPDATE_BY");
-        _map.put("createDt", "CREATE_DT");
-        _map.put("updateDt", "UPDATE_DT");
-        _map.put("tenantId", "TENANT_ID");
-        baseFieldColumns = Collections.unmodifiableMap(_map);
+        Map<String, String> __map = new HashMap<String, String>();
+        __map.put("versionNo", "VERSION_NO");
+        __map.put("createdBy", "CREATED_BY");
+        __map.put("updatedBy", "UPDATE_BY");
+        __map.put("createDt", "CREATE_DT");
+        __map.put("updateDt", "UPDATE_DT");
+        __map.put("tenantId", "TENANT_ID");
+        baseFieldColumns = Collections.unmodifiableMap(__map);
     }
 
     private ApplicationEntityUtils() {
@@ -141,12 +198,12 @@ public final class ApplicationEntityUtils {
         return !RESERVED_NON_FILTER_FIELDS.contains(fieldName);
     }
     
-    public static Collection<String> getReservedFieldNames() {
-        return RESERVED_BASE_FIELDS;
+    public static Collection<String> getReservedFieldNames(EntityBaseType baseType) {
+        return entityBaseMap.get(baseType);
     }
 
-    public static boolean isReservedFieldName(String fieldName) {
-        return RESERVED_BASE_FIELDS.contains(fieldName);
+    public static boolean isReservedFieldName(EntityBaseType baseType, String fieldName) {
+        return entityBaseMap.get(baseType).contains(fieldName);
     }
 
     public static boolean isAuditableReservedFieldName(String fieldName) {

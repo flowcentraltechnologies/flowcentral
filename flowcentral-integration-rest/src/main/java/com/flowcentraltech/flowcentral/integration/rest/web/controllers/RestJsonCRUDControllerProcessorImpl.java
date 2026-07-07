@@ -189,11 +189,12 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
         }
 
         final EntityClassDef entityClassDef = instItem.getEntityClassDef();
+        final EntityDef entityDef = entityClassDef.getEntityDef();
         final Entity destInst = appletUtilities.environment()
                 .find((Class<? extends Entity>) entityClassDef.getEntityClass(), resourceId);
         if (destInst != null) {
             new BeanValueStore(destInst).copyWithExclusions(new BeanValueStore(instItem.getInst()),
-                    ApplicationEntityUtils.getReservedFieldNames());
+                    ApplicationEntityUtils.getReservedFieldNames(entityDef.getBaseType()));
             appletUtilities.environment().updateByIdVersion(destInst);
             return getResponse(HttpResponseConstants.OK,
                     new UpdateResult(entityClassDef.getEntityDef().getDescription(), resourceId));

@@ -26,6 +26,8 @@ import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.data.SysParamInfo;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnectionQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
@@ -33,6 +35,8 @@ import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.flowcentraltech.flowcentral.system.entities.ModuleQuery;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.database.sql.SqlColumnInfo;
+import com.tcdng.unify.core.database.sql.SqlTableInfo;
 
 /**
  * System module service.
@@ -216,7 +220,43 @@ public interface SystemModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     CredentialDef getCredentialDef(String credName) throws UnifyException;
+    
+    /**
+     * Finds data source connection based on supplied query.
+     * 
+     * @param query
+     *              the data source connection query
+     * @return the list of data source connections
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<DataSourceConnection> findDataSourceConnections(DataSourceConnectionQuery query) throws UnifyException;
+    
+    /**
+     * Finds list of tables in data source connection.
+     * 
+     * @param dataSourceConnectonName
+     *                                the data source connection name
+     * @return the list of data source tables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<SqlTableInfo> findDataSourceTables(String dataSourceConnectonName) throws UnifyException;
 
+    /**
+     * Finds list of columns in data source connection.
+     * 
+     * @param dataSourceConnectonName
+     *                                the data source connection name
+     * @param tableName
+     *                                the table name
+     * @return the list of data source tables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<SqlColumnInfo> findDataSourceColumns(String dataSourceConnectonName, String tableName)
+            throws UnifyException;
+    
     /**
      * Creates a new module.
      * 

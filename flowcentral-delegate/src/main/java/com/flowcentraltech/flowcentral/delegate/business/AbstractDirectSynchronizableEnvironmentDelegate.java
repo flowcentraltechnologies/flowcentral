@@ -38,7 +38,7 @@ import com.tcdng.unify.core.database.sql.SqlEntityInfo;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractDirectEnvironmentDelegate extends AbstractSynchronizableEnvironmentDelegate
+public abstract class AbstractDirectSynchronizableEnvironmentDelegate extends AbstractSynchronizableEnvironmentDelegate
         implements DirectEnvironmentDelegate {
 
     private final String dataSourceName;
@@ -47,7 +47,7 @@ public abstract class AbstractDirectEnvironmentDelegate extends AbstractSynchron
 
     private Map<String, EntityDTO> entities;
 
-    public AbstractDirectEnvironmentDelegate(String dataSourceName) {
+    public AbstractDirectSynchronizableEnvironmentDelegate(String dataSourceName) {
         this.dataSourceName = dataSourceName;
     }
 

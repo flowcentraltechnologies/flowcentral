@@ -35,52 +35,78 @@ public enum EntityBaseType implements EnumConst {
     BASE_ENTITY(
             "ENI",
             false,
+            false,
+            false,
             false),
     BASE_VERSION_ENTITY(
             "ENT",
+            true,
+            false,
             false,
             false),
     BASE_AUDIT_ENTITY(
             "ADE",
             true,
+            false,
+            true,
             false),
     BASE_STATUS_ENTITY(
             "STA",
+            true,
+            true,
             true,
             false),
     BASE_WORK_ENTITY(
             "WKE",
             true,
+            false,
+            true,
             true),
     BASE_STATUS_WORK_ENTITY(
             "SWK",
             true,
+            true,
+            true,
             true),
     BASE_NAMED_ENTITY(
             "NME",
+            false,
+            false,
             true,
             false),
     BASE_CONFIG_ENTITY(
             "CGE",
             true,
+            false,
+            true,
             false),
     BASE_CONFIG_NAMED_ENTITY(
             "CNE",
+            true,
+            false,
             true,
             false),
     BASE_APPLICATION_ENTITY(
             "APE",
             true,
+            false,
+            true,
             false);
 
     private final String code;
+
+    private final boolean version;
+
+    private final boolean status;
 
     private final boolean audit;
 
     private final boolean work;
 
-    private EntityBaseType(String code, boolean audit, boolean work) {
+    private EntityBaseType(String code, boolean version, boolean status, boolean audit, boolean work) {
         this.code = code;
+        this.version = version;
+        this.status = status;
         this.audit = audit;
         this.work = work;
     }
@@ -97,6 +123,14 @@ public enum EntityBaseType implements EnumConst {
 
     public boolean isTenantType() {
         return false;
+    }
+
+    public boolean isVersionType() {
+        return version;
+    }
+
+    public boolean isStatusType() {
+        return status;
     }
 
     public boolean isAuditType() {
