@@ -2615,11 +2615,11 @@
 							reference="studio.applicationDevelopableRef"
 							label="$m{studio.jsonentity.application}" required="true"
 							editable="true" disabled ="true" />
-						<field name="entityName" inputWidget="application.name"
-							column="0" required="true" />
 						<field name="baseType" column="0" inputWidget="entitybasetypelist"
 							label="$m{studio.jsonentity.basetype}" required="true"
 							editable="true" />
+						<field name="entityName" inputWidget="application.name"
+							column="0" required="true" />
 						<field name="dateFormatter"
 							inputWidget="studio.dateformatterlist" column="0"
 							required="false" />
@@ -2671,11 +2671,11 @@
 							label="$m{studio.csventity.application}"
 							reference="studio.applicationDevelopableRef" required="true"
 							editable="false" disabled ="true"/>
-						<field name="entityName" inputWidget="application.name"
-							column="0" required="true" />
 						<field name="baseType" column="0" inputWidget="entitybasetypelist"
 							label="$m{studio.csventity.basetype}" required="true"
 							editable="true" />
+						<field name="entityName" inputWidget="application.name"
+							column="0" required="true" />
 						<field name="dateFormatter"
 							inputWidget="studio.dateformatterlist" column="0"
 							required="false" />
@@ -2729,11 +2729,11 @@
 							label="$m{studio.tableentity.application}"
 							reference="studio.applicationDevelopableRef" required="true"
 							editable="false" disabled ="true"/>
-						<field name="entityName" inputWidget="application.name"
-							column="0" required="true" />
 						<field name="baseType" column="0" inputWidget="entitybasetypelist"
 							label="$m{studio.tableentity.basetype}" required="true"
 							disabled="true" />
+						<field name="entityName" inputWidget="application.name"
+							column="0" required="true" />
 						<field name="dateFormatter"
 							inputWidget="studio.dateformatterlist" column="0"
 							required="false" />
