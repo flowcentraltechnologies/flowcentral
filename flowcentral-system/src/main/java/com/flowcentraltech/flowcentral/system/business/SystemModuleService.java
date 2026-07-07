@@ -22,7 +22,6 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.system.data.CredentialDef;
-import com.flowcentraltech.flowcentral.system.data.DataSourceConnectionDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.data.SysParamInfo;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
@@ -257,17 +256,6 @@ public interface SystemModuleService extends FlowCentralService {
      */
     List<SqlColumnInfo> findDataSourceColumns(String dataSourceConnectonName, String tableName)
             throws UnifyException;
-
-    /**
-     * Gets data source connection definition.
-     * 
-     * @param name
-     *             the connection name
-     * @return the current definition
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    DataSourceConnectionDef getDataSourceConnectionDef(String name) throws UnifyException;
     
     /**
      * Creates a new module.

@@ -64,7 +64,6 @@ import com.flowcentraltech.flowcentral.system.constants.SystemModuleErrorConstan
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.data.CredentialDef;
-import com.flowcentraltech.flowcentral.system.data.DataSourceConnectionDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseDef;
 import com.flowcentraltech.flowcentral.system.data.LicenseEntryDef;
 import com.flowcentraltech.flowcentral.system.data.ScheduledTaskDef;
@@ -115,6 +114,8 @@ import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.database.dynamic.DynamicDataSourceDef;
+import com.tcdng.unify.core.database.dynamic.DynamicDataSourceDefinitionProvider;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.database.sql.SqlColumnInfo;
 import com.tcdng.unify.core.database.sql.SqlTableInfo;
@@ -138,8 +139,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(SystemModuleNameConstants.SYSTEM_MODULE_SERVICE)
-public class SystemModuleServiceImpl extends AbstractFlowCentralService
-        implements SystemModuleService, LicenseProvider, SpecialParamProvider, SystemParameterProvider {
+public class SystemModuleServiceImpl extends AbstractFlowCentralService implements SystemModuleService, LicenseProvider,
+        SpecialParamProvider, SystemParameterProvider, DynamicDataSourceDefinitionProvider {
 
     private static final String SCHEDULED_TASK_EXECUTION_LOCK = "sys:scheduledtaskexecution-lock";
 
@@ -167,7 +168,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     private final FactoryMap<String, CredentialDef> authDefFactoryMap;
 
-    private final FactoryMap<String, DataSourceConnectionDef> connectionDefFactoryMap;
+    private final FactoryMap<String, DynamicDataSourceDef> connectionDefFactoryMap;
 
     private final FactoryMap<String, LicenseDef> licenseDefFactoryMap;
 
@@ -196,28 +197,24 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 }
             };
 
-        this.connectionDefFactoryMap = new StaleableFactoryMap<String, DataSourceConnectionDef>()
+        this.connectionDefFactoryMap = new StaleableFactoryMap<String, DynamicDataSourceDef>()
             {
 
                 @Override
-                protected boolean stale(String connectionName, DataSourceConnectionDef connectionDef) throws Exception {
+                protected boolean stale(String connectionName, DynamicDataSourceDef connectionDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
                             new DataSourceConnectionQuery().name(connectionName)) > connectionDef.getVersionNo());
                 }
 
                 @Override
-                protected DataSourceConnectionDef create(String connectionName, Object... arg1) throws Exception {
+                protected DynamicDataSourceDef create(String connectionName, Object... arg1) throws Exception {
                     DataSourceConnection connection = environment()
                             .find(new DataSourceConnectionQuery().name(connectionName));
                     if (connection == null) {
                         throw new UnifyException(SystemModuleErrorConstants.CANNOT_FIND_CREDENTIAL, connectionName);
                     }
 
-                    return new DataSourceConnectionDef(connection.getName(), connection.getDescription(),
-                            connection.getDialect(), connection.getHost(), connection.getPort(),
-                            connection.getDatabase(), connection.getService(), connection.getSchema(),
-                            connection.getUserName(), connection.getPassword(), connection.getId(),
-                            connection.getVersionNo());
+                    return SystemUtils.getDynamicDataSourceDef(connection);
                 }
             };
 
@@ -279,6 +276,16 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean exists(String datasourceName) throws UnifyException {
+        return environment().countAll(new DataSourceConnectionQuery().name(datasourceName)) > 0;
+    }
+
+    @Override
+    public DynamicDataSourceDef provide(String datasourceName) throws UnifyException {
+        return connectionDefFactoryMap.get(datasourceName);
+    }
+
+    @Override
     public void clearDefinitionsCache() throws UnifyException {
         logDebug("Clearing definitions cache...");
         authDefFactoryMap.clear();
@@ -331,11 +338,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public CredentialDef getCredentialDef(String credName) throws UnifyException {
         return authDefFactoryMap.get(credName);
-    }
-
-    @Override
-    public DataSourceConnectionDef getDataSourceConnectionDef(String name) throws UnifyException {
-        return connectionDefFactoryMap.get(name);
     }
 
     @Override

@@ -23,15 +23,15 @@ import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActi
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.dynamic.DynamicDataSourceConfig;
-import com.tcdng.unify.core.database.dynamic.DynamicDataSourceDef;
 import com.tcdng.unify.core.util.SqlUtils;
 
 /**
- * Form action policy for testing datasource connections.
+ * Form action policy for testing data source connections.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
@@ -54,13 +54,8 @@ public class TestDataSourceConnectionFormActionPolicy extends AbstractFormAction
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = new EntityActionResult(ctx);
         final DataSourceConnection dataSourceConnection = (DataSourceConnection) ctx.getInst();
-        final DynamicDataSourceConfig dynamicDataSourceConfig = SqlUtils.getDynamicDataSourceConfig(
-                new DynamicDataSourceDef(dataSourceConnection.getName(), null, dataSourceConnection.getDescription(),
-                        dataSourceConnection.getDialect(), dataSourceConnection.getHost(),
-                        dataSourceConnection.getPort(), dataSourceConnection.getDatabase(),
-                        dataSourceConnection.getService(), dataSourceConnection.getSchema(),
-                        dataSourceConnection.getUserName(), dataSourceConnection.getPassword(), 4 /* TODO */, false,
-                        false, dataSourceConnection.getId(), dataSourceConnection.getVersionNo()));
+        final DynamicDataSourceConfig dynamicDataSourceConfig = SystemUtils
+                .getDynamicDataSourceConfig(dataSourceConnection);
         final Optional<String> error = SqlUtils.testJDBCConnection(dynamicDataSourceConfig);
 
         String msg = null;

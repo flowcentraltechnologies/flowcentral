@@ -17,6 +17,10 @@
 package com.flowcentraltech.flowcentral.system.util;
 
 import com.flowcentraltech.flowcentral.configuration.constants.SysParamType;
+import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
+import com.tcdng.unify.core.database.dynamic.DynamicDataSourceConfig;
+import com.tcdng.unify.core.database.dynamic.DynamicDataSourceDef;
+import com.tcdng.unify.core.util.SqlUtils;
 
 /**
  * System utilities.
@@ -38,6 +42,18 @@ public final class SystemUtils {
 
     }
 
+    public static DynamicDataSourceConfig getDynamicDataSourceConfig(DataSourceConnection dataSourceConnection) {
+        return SqlUtils.getDynamicDataSourceConfig(getDynamicDataSourceDef(dataSourceConnection));
+    }
+
+    public static DynamicDataSourceDef getDynamicDataSourceDef(DataSourceConnection dataSourceConnection) {
+        return new DynamicDataSourceDef(dataSourceConnection.getName(), null, dataSourceConnection.getDescription(),
+                dataSourceConnection.getDialect(), dataSourceConnection.getHost(), dataSourceConnection.getPort(),
+                dataSourceConnection.getDatabase(), dataSourceConnection.getService(), dataSourceConnection.getSchema(),
+                dataSourceConnection.getUserName(), dataSourceConnection.getPassword(), 4 /* TODO */, false, false,
+                dataSourceConnection.getId(), dataSourceConnection.getVersionNo());
+    }
+    
     public static String encodeProcessVariableCode(String code) {
         return PRC_PREFIX + code;
     }
