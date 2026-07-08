@@ -442,7 +442,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     if (dataType != null) {
                         ReportableField reportableField = new ReportableField();
                         String description = null;
-                        Format fa = entityClass != null
+                        Format fa = entityClass != null && ReflectUtils.isGettableField(entityClass, rfd.getName())
                                 ? ReflectUtils.getField(entityClass, rfd.getName()).getAnnotation(Format.class)
                                 : null;
                         if (fa != null) {
