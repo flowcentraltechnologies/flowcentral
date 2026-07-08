@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.messaging.os.data;
+package com.flowcentraltech.flowcentral.messaging.os.data.constants;
 
 /**
  * OS messaging response constants.

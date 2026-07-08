@@ -29,8 +29,9 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
-import com.flowcentraltech.flowcentral.messaging.os.local.OSUploadLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingFunction;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.local.OSUploadLocalController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -140,7 +141,7 @@ public class OSUploadController extends AbstractHttpUploadController implements 
                                 final String fileSignature = headers
                                         .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
                                 final Optional<String> optional = osMessagingModuleService.sendUploadMessageToDelegate(
-                                        header, function, correlationId, userloginId, fileSignature, disposition, in);
+                                        header, OSMessagingFunction.fromCode(function), correlationId, userloginId, fileSignature, disposition, in);
                                 if (optional.isPresent()) {
                                     if (debugging) {
                                         logDebug("Response message [\n{0}]", optional.get());

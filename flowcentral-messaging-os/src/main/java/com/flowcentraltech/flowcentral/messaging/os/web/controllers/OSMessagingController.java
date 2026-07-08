@@ -30,8 +30,9 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
-import com.flowcentraltech.flowcentral.messaging.os.local.OSMessagingLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingFunction;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.local.OSMessagingLocalController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -145,10 +146,12 @@ public class OSMessagingController extends AbstractPlainJsonController implement
 
                                 final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                                 final Optional<String> optional = sync
-                                        ? osMessagingModuleService.sendSynchronousMessageToDelegate(header, function,
-                                                correlationId, userloginId, requestJson)
-                                        : osMessagingModuleService.sendAsynchronousMessageToDelegate(header, function,
-                                                correlationId, userloginId, requestJson);
+                                        ? osMessagingModuleService.sendSynchronousMessageToDelegate(header,
+                                                OSMessagingFunction.fromCode(function), correlationId, userloginId,
+                                                requestJson)
+                                        : osMessagingModuleService.sendAsynchronousMessageToDelegate(header,
+                                                OSMessagingFunction.fromCode(function), correlationId, userloginId,
+                                                requestJson);
                                 if (optional.isPresent()) {
                                     if (debugging) {
                                         logDebug("Response message [\n{0}]", optional.get());
@@ -168,7 +171,8 @@ public class OSMessagingController extends AbstractPlainJsonController implement
                                                     _processor.getRequestClass(), requestJson);
                                             response = _processor.process(request);
                                         } else {
-                                            osMessagingModuleService.saveIncomingAsynchronousMessage(header.getProcessor(), correlationId, requestJson);
+                                            osMessagingModuleService.saveIncomingAsynchronousMessage(
+                                                    header.getProcessor(), correlationId, requestJson);
                                             response = OSMessagingAsyncResponse.SUCCESS_RESPONSE;
                                         }
                                     } else {

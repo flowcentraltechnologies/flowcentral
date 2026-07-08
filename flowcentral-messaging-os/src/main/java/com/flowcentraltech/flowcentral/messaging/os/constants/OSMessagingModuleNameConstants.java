@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.constants;
 
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingEndpointConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingEndpointConstants;
 
 /**
  * OS messaging module name constants.

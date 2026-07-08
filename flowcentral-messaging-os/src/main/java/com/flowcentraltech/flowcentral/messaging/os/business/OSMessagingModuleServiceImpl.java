@@ -40,17 +40,18 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingAsyncRespons
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerEndpointDef;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingPeerInfo;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.UnknownTargetResp;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingFunction;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.local.OSDownloadLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.data.local.OSMessagingLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.data.local.OSUploadLocalController;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncIn;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncInQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncOut;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingAsyncOutQuery;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpoint;
 import com.flowcentraltech.flowcentral.messaging.os.entities.OSMessagingPeerEndpointQuery;
-import com.flowcentraltech.flowcentral.messaging.os.local.OSDownloadLocalController;
-import com.flowcentraltech.flowcentral.messaging.os.local.OSMessagingLocalController;
-import com.flowcentraltech.flowcentral.messaging.os.local.OSUploadLocalController;
 import com.flowcentraltech.flowcentral.messaging.os.util.OSMessagingUtils;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -217,21 +218,21 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
             };
 
-            this.incomingQueuedExec = new AbstractQueuedExec<List<Long>>(MAX_MESSAGING_THREADS)
-                {
-                    @Override
-                    protected void doExecute(List<Long> osMessagingAsyncIds) {
-                            for (Long osMessagingAsyncId : osMessagingAsyncIds) {
-                                try {
-                                processAsynchronousMessage(osMessagingAsyncId);
-                            } catch (UnifyException e) {
-                                logError(e);
-                            }
-                            }
+        this.incomingQueuedExec = new AbstractQueuedExec<List<Long>>(MAX_MESSAGING_THREADS)
+            {
+                @Override
+                protected void doExecute(List<Long> osMessagingAsyncIds) {
+                    for (Long osMessagingAsyncId : osMessagingAsyncIds) {
+                        try {
+                            processAsynchronousMessage(osMessagingAsyncId);
+                        } catch (UnifyException e) {
+                            logError(e);
+                        }
                     }
+                }
 
-                };
-   }
+            };
+    }
 
     @Override
     public OSInfo getOSInfo() throws UnifyException {
@@ -296,7 +297,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, String function,
+    public Optional<String> sendSynchronousMessageToDelegate(OSMessagingHeader header, OSMessagingFunction function,
             String correlationId, String userLoginId, String requestJson) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
@@ -315,7 +316,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, String function,
+    public Optional<String> sendAsynchronousMessageToDelegate(OSMessagingHeader header, OSMessagingFunction function,
             String correlationId, String userLoginId, String requestJson) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
@@ -334,7 +335,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, String function, String correlationId,
+    public Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, OSMessagingFunction function, String correlationId,
             String userLoginId, String fileSignature, ContentDisposition disposition, InputStream in)
             throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
@@ -355,7 +356,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public Optional<String> sendDownloadMessageToDelegate(OSMessagingHeader header, String function,
+    public Optional<String> sendDownloadMessageToDelegate(OSMessagingHeader header, OSMessagingFunction function,
             String correlationId, String userLoginId, String fileSignature, OutputStream out) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
@@ -413,7 +414,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         osMessagingAsync.setCorrelationId(correlationId);
         osMessagingAsync.setUserLoginId(request.getUserId());
         osMessagingAsync.setProcessor(request.getProcessor());
-        osMessagingAsync.setFunction(request.getFunction());
+        osMessagingAsync.setFunction(request.getFunction() != null ? request.getFunction().code() : null);
         osMessagingAsync.setService(request.getService());
         osMessagingAsync.setMessage(reqJson);
         environment().create(osMessagingAsync);
@@ -514,7 +515,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     osMessagingAsyncId);
             final OSMessagingAsyncResponse resp = sendMessage(OSMessagingAsyncResponse.class,
                     osMessagingAsyncOut.getTarget(), osMessagingAsyncOut.getProcessor(),
-                    osMessagingAsyncOut.getFunction(), osMessagingAsyncOut.getService(),
+                    OSMessagingFunction.fromCode(osMessagingAsyncOut.getFunction()), osMessagingAsyncOut.getService(),
                     osMessagingAsyncOut.getCorrelationId(), osMessagingAsyncOut.getUserLoginId(),
                     osMessagingAsyncOut.getMessage(), false);
             final Update update = new Update().add("sentOn", now);
@@ -580,14 +581,16 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private <T extends BaseOSMessagingResp> T sendMessage(Class<T> respClass, final String target,
-            final String processor, final String function, final String service, final String correlationId,
-            final String userLoginId, final String reqJson, final boolean sync) throws UnifyException {
+            final String processor, final OSMessagingFunction function, final String service,
+            final String correlationId, final String userLoginId, final String reqJson, final boolean sync)
+            throws UnifyException {
         return fromJson(respClass,
                 sendMessage(target, processor, function, service, correlationId, userLoginId, reqJson, sync));
     }
 
-    private String sendMessage(final String target, final String processor, final String function, final String service,
-            final String correlationId, final String userLoginId, String reqJson, boolean sync) throws UnifyException {
+    private String sendMessage(final String target, final String processor, final OSMessagingFunction function,
+            final String service, final String correlationId, final String userLoginId, String reqJson, boolean sync)
+            throws UnifyException {
         if (osInfo.isDebugging()) {
             logDebug(sync ? "Sending synchronous message [\n{0}]..." : "Sending asynchronous message [\n{0}]...",
                     reqJson);
@@ -610,8 +613,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             headers.put(OSMessagingRequestHeaderConstants.USER_ID, userLoginId);
         }
 
-        if (!StringUtils.isBlank(function)) {
-            headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function);
+        if (function != null) {
+            headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function.code());
         }
 
         if (!StringUtils.isBlank(service)) {
@@ -632,7 +635,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         return resp.getRespJson();
     }
 
-    private String sendUploadMessage(final String target, final String processor, final String function,
+    private String sendUploadMessage(final String target, final String processor, final OSMessagingFunction function,
             final String service, final String correlationId, final String userLoginId, final String fileSignature,
             ContentDisposition disposition, InputStream in) throws UnifyException {
         logDebug("Sending upload message [\n{0}]...", correlationId);
@@ -657,8 +660,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             headers.put(OSMessagingRequestHeaderConstants.FILE_SIGNATURE, fileSignature);
         }
 
-        if (!StringUtils.isBlank(function)) {
-            headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function);
+        if (function != null) {
+            headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function.code());
         }
 
         if (!StringUtils.isBlank(service)) {
@@ -683,7 +686,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         return resp.getRespJson();
     }
 
-    private String sendDownloadMessage(final String target, final String processor, final String function,
+    private String sendDownloadMessage(final String target, final String processor, final OSMessagingFunction function,
             final String service, final String correlationId, final String userLoginId, final String fileSignature,
             OutputStream out) throws UnifyException {
         logDebug("Sending download message [\n{0}]...", correlationId);
@@ -708,8 +711,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
             headers.put(OSMessagingRequestHeaderConstants.FILE_SIGNATURE, fileSignature);
         }
 
-        if (!StringUtils.isBlank(function)) {
-            headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function);
+        if (function != null) {
+            headers.put(OSMessagingRequestHeaderConstants.DELEGATE_FUNCTION, function.code());
         }
 
         if (!StringUtils.isBlank(service)) {
