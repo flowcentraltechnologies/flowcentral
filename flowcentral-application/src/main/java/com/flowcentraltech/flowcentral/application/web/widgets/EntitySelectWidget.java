@@ -150,7 +150,6 @@ public class EntitySelectWidget extends AbstractFlowCentralPopupTextField {
 
     @SuppressWarnings("unchecked")
     private Listable doCurrentSelect(Object keyVal) throws UnifyException {
-        logDebug("Decoding reference value [{0}]...", keyVal);
         RefDef refDef = getRefDef();
         final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
         Query<? extends Entity> query = null;
