@@ -29,12 +29,9 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivileg
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
-import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.data.BranchInfo;
-import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
-import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.constants.OrganizationModuleNameConstants;
 import com.flowcentraltech.flowcentral.organization.entities.Branch;
@@ -66,7 +63,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Broadcast;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
@@ -89,20 +85,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     private static final String ASSIGN_PRIVILEGE_LOCK = "org::assignprivtorole";
 
-    private static final String DEVOPS_DEPARTMENT_CODE = "DEVOPS";
-
-    private static final String DEVOPS_DEVELOPER_CODE = "DEVELOPER";
-
-    private static final String DEVOPS_JUNIOR_DEVELOPER_CODE = "JDEVELOPER";
-
     private final FactoryMap<Long, TenantRolePrivileges> tenantRolePrivileges;
 
     private final Map<String, Set<String>> privilegeBackup;
 
     private List<RolePrivilegeBackupAgent> roleBackupAgentList;
-
-    @Configurable
-    private StudioProvider studioProvider;
 
     public OrganizationModuleServiceImpl() {
         this.tenantRolePrivileges = new FactoryMap<Long, TenantRolePrivileges>()
@@ -454,71 +441,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
-        if (studioProvider != null && studioProvider.isInstallDefaultDeveloperRoles()) {
-            // Ensure DevOps department
-            Department department = environment().find(new DepartmentQuery().code(DEVOPS_DEPARTMENT_CODE));
-            if (department == null) {
-                department = new Department();
-                department.setId(DefaultApplicationConstants.DEVOPS_DEPARTMENT_ID);
-                department.setCode(DEVOPS_DEPARTMENT_CODE);
-                department.setDescription(resolveApplicationMessage("$m{organization.default.department.devops.desc}"));
-                environment().create(department);
-            }
-
-            // Ensure developer role
-            Role role = environment().findLean(new RoleQuery().code(DEVOPS_DEVELOPER_CODE));
-            if (role == null) {
-                role = new Role();
-                role.setDepartmentId(department.getId());
-                role.setCode(DEVOPS_DEVELOPER_CODE);
-                role.setDescription(resolveApplicationMessage("$m{organization.default.department.developer.desc}"));
-                Long roleId = (Long) environment().create(role);
-
-                List<String> privilegeCodeList = ConfigurationUtils.readStringList(
-                        "data/organization-privileges-developer.dat", getUnifyComponentContext().getWorkingPath());
-                RolePrivilege rolePrivilege = new RolePrivilege();
-                rolePrivilege.setRoleId(roleId);
-                for (Long privilegeId : environment().valueList(Long.class, "id",
-                        new PrivilegeQuery().codeIn(privilegeCodeList))) {
-                    rolePrivilege.setPrivilegeId(privilegeId);
-                    environment().create(rolePrivilege);
-                }
-            } else { // TODO Remove
-                if (environment().countAll(new RolePrivilegeQuery().roleId(role.getId())) == 0) {
-                    List<String> privilegeCodeList = ConfigurationUtils.readStringList(
-                            "data/organization-privileges-developer.dat", getUnifyComponentContext().getWorkingPath());
-                    RolePrivilege rolePrivilege = new RolePrivilege();
-                    rolePrivilege.setRoleId(role.getId());
-                    for (Long privilegeId : environment().valueList(Long.class, "id",
-                            new PrivilegeQuery().codeIn(privilegeCodeList))) {
-                        rolePrivilege.setPrivilegeId(privilegeId);
-                        environment().create(rolePrivilege);
-                    }
-                }
-            }
-
-            // Ensure junior developer role
-            role = environment().findLean(new RoleQuery().code(DEVOPS_JUNIOR_DEVELOPER_CODE));
-            if (role == null) {
-                role = new Role();
-                role.setDepartmentId(department.getId());
-                role.setCode(DEVOPS_JUNIOR_DEVELOPER_CODE);
-                role.setDescription(
-                        resolveApplicationMessage("$m{organization.default.department.juniordeveloper.desc}"));
-                Long roleId = (Long) environment().create(role);
-
-                List<String> privilegeCodeList = ConfigurationUtils.readStringList(
-                        "data/organization-privileges-juniordeveloper.dat",
-                        getUnifyComponentContext().getWorkingPath());
-                RolePrivilege rolePrivilege = new RolePrivilege();
-                rolePrivilege.setRoleId(roleId);
-                for (Long privilegeId : environment().valueList(Long.class, "id",
-                        new PrivilegeQuery().codeIn(privilegeCodeList))) {
-                    rolePrivilege.setPrivilegeId(privilegeId);
-                    environment().create(rolePrivilege);
-                }
-            }
-        }
+        
     }
 
     @Override

@@ -50,12 +50,10 @@ import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationMo
 import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
 import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.HelpSheetRestore;
 import com.flowcentraltech.flowcentral.configuration.data.Messages;
@@ -130,7 +128,7 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(StudioModuleNameConstants.STUDIO_MODULE_SERVICE)
-public class StudioModuleServiceImpl extends AbstractFlowCentralService implements StudioModuleService, StudioProvider {
+public class StudioModuleServiceImpl extends AbstractFlowCentralService implements StudioModuleService {
 
     static {
         ApplicationCollaborationUtils.registerCollaborationType(Chart.class, CollaborationType.CHART);
@@ -271,12 +269,6 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         logDebug("Clearing definitions cache...");
         appletDefMap.clear();
         logDebug("Definitions cache clearing successfully completed.");
-    }
-
-    @Override
-    public boolean isInstallDefaultDeveloperRoles() throws UnifyException {
-        return getContainerSetting(boolean.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALL_DEVELOPER_ROLES, true);
     }
 
     @Override
