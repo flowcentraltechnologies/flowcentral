@@ -2942,10 +2942,21 @@
 					</setStates>
 				</formStatePolicy>
 				<formStatePolicy type="ON_SWITCH"
+					name="dataImportPolicy"
+					description="$m{studio.appapplet.form.formstatepolicy.dataimport}">
+					<onCondition>
+						<restriction type="EQUALS" field="type"
+							paramA="DIM" />
+					</onCondition>
+					<setStates>
+						<setState type="TAB" target="routeToApplets,filters,setValues,alerts" visible="FALSE" />
+					</setStates>
+				</formStatePolicy>
+				<formStatePolicy type="ON_SWITCH"
 					name="portalAccessPolicy"
 					description="$m{studio.appapplet.form.formstatepolicy.portalaccess}">
 					<onCondition>
-						<restriction type="AMONGST" field="type" paramA="MEL" />
+						<restriction type="EQUALS" field="type" paramA="MEL" />
 					</onCondition>
 					<setStates>
 						<setState type="FIELD" target="portalAccess"

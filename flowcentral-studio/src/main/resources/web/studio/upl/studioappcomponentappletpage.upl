@@ -15,8 +15,8 @@
 
 !ui-page captionBinding:$s{instTitle} subCaptionBinding:$s{typeTitle}
 	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{none 324px}}
-	components:$c{designBasePanel}
 	components:$c{appletPanel}
+	components:$c{designBasePanel}
 
 // Design panel
 !ui-panel:designBasePanel style:$s{width:100%;height:100%;padding-right:4px;box-sizing:border-box;}
