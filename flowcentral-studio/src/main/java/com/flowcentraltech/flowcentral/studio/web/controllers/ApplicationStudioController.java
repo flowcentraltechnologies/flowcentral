@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationSynchronizationProvider;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
@@ -24,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractApplicationForwarderController;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
@@ -40,6 +42,7 @@ import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.widget.ContentPanel;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Application studio controller.
@@ -79,6 +82,9 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     @Configurable
     private UserLoginActivityProvider userLoginActivityProvider;
 
+    @Configurable
+    private ApplicationSynchronizationProvider provider;
+
     public ApplicationStudioController() {
         super(ApplicationStudioPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -115,6 +121,18 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
 
         closeAllPages();
         return ApplicationResultMappingConstants.REFRESH_ALL;
+    }
+
+    @Action
+    public String publishApplications() throws UnifyException {
+        if (provider != null) {
+            provider.synchronizeApplication();
+            hintUser("$m{studio.applicationsynchronization.success.hint}");
+        } else {
+            hintUser(MODE.WARNING, "$m{studio.applicationsynchronization.nocomponent.hint}");
+        }
+        
+        return noResult();
     }
 
     @Action
@@ -185,8 +203,11 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         final boolean clientUpdateSync = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
 
-        pageBean.setClientPushSync(clientUpdateSync);       
+        pageBean.setClientPushSync(clientUpdateSync);
         setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
+
+        setPageWidgetVisible("publishAppBtn", getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE));
     }
 
     @Override

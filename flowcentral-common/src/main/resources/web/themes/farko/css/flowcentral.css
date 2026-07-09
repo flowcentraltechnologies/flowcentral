@@ -275,8 +275,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-greenbutton {background-color:#32c854; font-weight:bold; color: #FFF; border: 1px solid #22b844;}
 .fc-greenbutton:hover:enabled {background-color:#22b844;color: #FFF;}
 
-.fc-orangebutton {background-color:#f0ad4e; font-weight:bold; color: #FFF; border: 1px solid #e09d3e;}
-.fc-orangebutton:hover:enabled {background-color:#e09d3e;color: #FFF;}
+.fc-orangebutton {background-color:#e67e22; font-weight:bold; color: #FFF; border: 1px solid #d68910;}
+.fc-orangebutton:hover:enabled {background-color:#c95f00;color: #FFF;border: 1px solid #a84f00;}
 
 .fc-purplebutton {background-color:#6d1fcb; font-weight:bold; color: #FFF; border: 1px solid #5d1fbb;}
 .fc-purplebutton:hover:enabled {background-color:#5d1fbb;color: #FFF;}
