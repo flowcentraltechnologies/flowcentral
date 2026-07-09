@@ -748,6 +748,7 @@
 					value="appEditable" />
 				<property name="maintainForm.delete.policy"
 					value="studioondeleteapplication-policy" />
+				<property name="baseRestriction" value="appEditable" />
 			</properties>
 			<filters>
 				<filter name="appEditable"
