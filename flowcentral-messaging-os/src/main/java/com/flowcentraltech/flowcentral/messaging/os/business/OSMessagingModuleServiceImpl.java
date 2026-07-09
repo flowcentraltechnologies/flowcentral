@@ -638,7 +638,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     private String sendUploadMessage(final String target, final String processor, final OSMessagingFunction function,
             final String service, final String correlationId, final String userLoginId, final String fileSignature,
             ContentDisposition disposition, InputStream in) throws UnifyException {
-        logDebug("Sending upload message [\n{0}]...", correlationId);
+        if (osInfo.isDebugging()) {
+            logDebug("Sending upload message [\n{0}]...", correlationId);
+        }
+
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
             return prettyJson(new UnknownTargetResp(target));
@@ -689,7 +692,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     private String sendDownloadMessage(final String target, final String processor, final OSMessagingFunction function,
             final String service, final String correlationId, final String userLoginId, final String fileSignature,
             OutputStream out) throws UnifyException {
-        logDebug("Sending download message [\n{0}]...", correlationId);
+        if (osInfo.isDebugging()) {
+            logDebug("Sending download message [\n{0}]...", correlationId);
+        }
+
         final OSMessagingPeerEndpointDef osPeerEndpointDef = osPeerEndpointDefFactoryMap.get(target);
         if (!osPeerEndpointDef.isPresent()) {
             return prettyJson(new UnknownTargetResp(target));
