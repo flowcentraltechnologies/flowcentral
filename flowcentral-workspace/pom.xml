@@ -18,6 +18,11 @@
 		<!-- Main dependencies -->
 		<dependency>
 			<groupId>com.flowcentraltech.flowcentral</groupId>
+			<artifactId>flowcentral-organization</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.flowcentraltech.flowcentral</groupId>
 			<artifactId>flowcentral-application</artifactId>
 			<version>${project.version}</version>
 		</dependency>
