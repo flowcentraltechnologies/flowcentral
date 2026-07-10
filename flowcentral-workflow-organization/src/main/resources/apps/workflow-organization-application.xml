@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!-- Workflow application -->
+<application
+	xmlns="http://flowcentraltech.com/schema-common"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://flowcentraltech.com/schema-common https://schema.flowcentralplatform.com/xsd/flowcentral-application-4.0.1.xsd"
+	name="workflow"
+	description="$m{workflow.short.description}" label="$m{workflow.label}"
+	module="workflow">
+	<!-- Applets -->
+	<applets>
+		<applet name="manageWfStepRoles"
+			description="$m{workflow.steprole.manage}"
+			label="$m{workflow.steprole.manage.label}"
+			type="MANAGE_ENTITYLIST_ASSIGN" entity="wfStepRole"
+			menuAccess="false">
+			<properties>
+				<property name="searchTable" value="wfStepRoleTable" />
+				<property name="searchTable.edit" value="true" />
+				<property name="searchTable.report" value="false" />
+				<property name="assignmentPage" value="wfStepRoleAssignment" />
+			</properties>
+		</applet>
+	</applets>
+	<!-- References -->
+	<references>
+		<reference name="wfStepRoleRef"
+			description="$m{workflow.steprole.reference}" entity="wfStepRole"
+			searchField="description" />
+	</references>
+	<!-- Entities -->
+	<entities>
+		<entity name="wfStepRole" description="$m{workflow.steprole}"
+			label="$m{workflow.steprole.label}"
+			type="com.flowcentraltech.flowcentral.workflow.organization.entities.WfStepRole"
+			reportable="false" auditable="false">
+			<fields>
+				<field name="wfStepId" label="$m{workflow.steprole.stepid}"
+					type="REF" references="wfStepRef"
+					inputLabel="$m{workflow.steprole.step}"
+					inputWidget="application.entitylist" />
+				<field name="roleId" label="$m{workflow.steprole.roleid}"
+					type="REF" references="organization.roleRef"
+					inputLabel="$m{workflow.steprole.role}"
+					inputWidget="application.entitysearch" />
+				<field name="wfStepName" label="$m{workflow.steprole.stepname}"
+					type="LIST_ONLY" key="wfStepId" property="name" />
+				<field name="wfStepDesc" label="$m{workflow.steprole.stepdesc}"
+					type="LIST_ONLY" key="wfStepId" property="description" />
+				<field name="workflowName"
+					label="$m{workflow.steprole.workflowname}" type="LIST_ONLY"
+					key="wfStepId" property="workflowName" />
+				<field name="workflowDesc"
+					label="$m{workflow.steprole.workflowdesc}" type="LIST_ONLY"
+					key="wfStepId" property="workflowDesc" />
+				<field name="applicationId"
+					label="$m{workflow.steprole.applicationid}" type="LIST_ONLY"
+					key="wfStepId" property="applicationId" />
+				<field name="applicationName"
+					label="$m{workflow.steprole.applicationname}" type="LIST_ONLY"
+					key="wfStepId" property="applicationName" />
+				<field name="applicationDesc"
+					label="$m{workflow.steprole.applicationdesc}" type="LIST_ONLY"
+					key="wfStepId" property="applicationDesc" />
+				<field name="configType"
+					label="$m{workflow.steprole.configtype}" type="LIST_ONLY"
+					key="wfStepId" property="configType" />
+				<field name="roleCode" label="$m{workflow.steprole.rolecode}"
+					type="LIST_ONLY" key="roleId" property="code" />
+				<field name="roleDesc" label="$m{workflow.steprole.roledesc}"
+					type="LIST_ONLY" key="roleId" property="description" />
+			</fields>
+		</entity>
+	</entities>
+	<!-- Tables -->
+	<tables>
+		<table name="wfStepRoleTable"
+			description="$m{workflow.steprole.table}"
+			label="$m{workflow.steprole.table.label}" entity="wfStepRole"
+			itemsPerPage="20" serialNo="true">
+			<columns>
+				<column field="wfStepDesc" renderWidget="application.text"
+					label="$m{workflow.steprole.step}" widthRatio="1" />
+				<column field="roleDesc" renderWidget="application.text"
+					label="$m{workflow.steprole.role}" widthRatio="1" />
+				<column field="roleCode" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="updatedBy" renderWidget="application.text"
+					label="$m{workflow.steprole.assignedby}" widthRatio="1" />
+				<column field="updateDt" renderWidget="application.datetime"
+					label="$m{workflow.steprole.assignedon}" widthRatio="1" />
+			</columns>
+		</table>
+	</tables>
+	<!-- Assignment Pages -->
+	<assignmentPages>
+		<assignmentPage name="wfStepRoleAssignment"
+			description="$m{workflow.step.role.assignment}"
+			label="$m{workflow.step.role.assignment}" entity="wfStepRole"
+			baseField="wfStepId" assignField="roleId"
+			assignCaption="$m{workflow.step.role.assigned}"
+			unassignCaption="$m{workflow.step.role.available}"
+			assignList="roleinlist" unassignList="rolenotinlist" />
+	</assignmentPages>
+</application>

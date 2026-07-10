@@ -49,6 +49,8 @@ public interface ModuleInstallLevelConstants {
 
     int WORKFLOW_MODULE_LEVEL = 24;
 
+    int WORKFLOW_MODULE_EXT_LEVEL = 26;
+
     int INTEGRATION_MODULE_LEVEL = 28;
 
     int SECURITY_MODULE_LEVEL = 32;

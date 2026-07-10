@@ -32,7 +32,7 @@ public class WorkflowOrganizationModuleStaticSettings extends AbstractFlowCentra
         super(WorkflowOrganizationModuleNameConstants.WORKFLOW_ORGANIZATION_MODULE_SERVICE,
                 "config/workflow-organization-module.xml",
                 "com.flowcentraltech.flowcentral.resources.workflow-organization-messages",
-                ModuleInstallLevelConstants.REPORT_MODULE_EXT_LEVEL);
+                ModuleInstallLevelConstants.WORKFLOW_MODULE_EXT_LEVEL);
     }
 
 }

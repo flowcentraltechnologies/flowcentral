@@ -80,18 +80,6 @@
 				</filter>
 			</filters>
 		</applet>
-		<applet name="manageWfStepRoles"
-			description="$m{workflow.steprole.manage}"
-			label="$m{workflow.steprole.manage.label}"
-			type="MANAGE_ENTITYLIST_ASSIGN" entity="wfStepRole"
-			menuAccess="false">
-			<properties>
-				<property name="searchTable" value="wfStepRoleTable" />
-				<property name="searchTable.edit" value="true" />
-				<property name="searchTable.report" value="false" />
-				<property name="assignmentPage" value="wfStepRoleAssignment" />
-			</properties>
-		</applet>
 		<applet name="manageWorkflowChannel"
 			description="$m{workflow.workflowchannel.manage}"
 			label="$m{workflow.workflowchannel.manage.label}"
@@ -156,9 +144,6 @@
 			entity="wfStepUserAction" searchField="description" />
 		<reference name="wfStepAlertRef"
 			description="$m{workflow.stepalert.reference}" entity="wfStepAlert"
-			searchField="description" />
-		<reference name="wfStepRoleRef"
-			description="$m{workflow.steprole.reference}" entity="wfStepRole"
 			searchField="description" />
 		<reference name="wfItemHistRef"
 			description="$m{workflow.wfitemhist.reference}" entity="wfItemHist" />
@@ -507,47 +492,6 @@
 					type="LIST_ONLY" key="type" property="description" />
 			</fields>
 		</entity>
-		<entity name="wfStepRole" description="$m{workflow.steprole}"
-			label="$m{workflow.steprole.label}"
-			type="com.flowcentraltech.flowcentral.workflow.organization.entities.WfStepRole"
-			reportable="false" auditable="false">
-			<fields>
-				<field name="wfStepId" label="$m{workflow.steprole.stepid}"
-					type="REF" references="wfStepRef"
-					inputLabel="$m{workflow.steprole.step}"
-					inputWidget="application.entitylist" />
-				<field name="roleId" label="$m{workflow.steprole.roleid}"
-					type="REF" references="organization.roleRef"
-					inputLabel="$m{workflow.steprole.role}"
-					inputWidget="application.entitysearch" />
-				<field name="wfStepName" label="$m{workflow.steprole.stepname}"
-					type="LIST_ONLY" key="wfStepId" property="name" />
-				<field name="wfStepDesc" label="$m{workflow.steprole.stepdesc}"
-					type="LIST_ONLY" key="wfStepId" property="description" />
-				<field name="workflowName"
-					label="$m{workflow.steprole.workflowname}" type="LIST_ONLY"
-					key="wfStepId" property="workflowName" />
-				<field name="workflowDesc"
-					label="$m{workflow.steprole.workflowdesc}" type="LIST_ONLY"
-					key="wfStepId" property="workflowDesc" />
-				<field name="applicationId"
-					label="$m{workflow.steprole.applicationid}" type="LIST_ONLY"
-					key="wfStepId" property="applicationId" />
-				<field name="applicationName"
-					label="$m{workflow.steprole.applicationname}" type="LIST_ONLY"
-					key="wfStepId" property="applicationName" />
-				<field name="applicationDesc"
-					label="$m{workflow.steprole.applicationdesc}" type="LIST_ONLY"
-					key="wfStepId" property="applicationDesc" />
-				<field name="configType"
-					label="$m{workflow.steprole.configtype}" type="LIST_ONLY"
-					key="wfStepId" property="configType" />
-				<field name="roleCode" label="$m{workflow.steprole.rolecode}"
-					type="LIST_ONLY" key="roleId" property="code" />
-				<field name="roleDesc" label="$m{workflow.steprole.roledesc}"
-					type="LIST_ONLY" key="roleId" property="description" />
-			</fields>
-		</entity>
 		<entity name="wfItemHist" description="$m{workflow.wfitemhist}"
 			label="$m{workflow.wfitemhist.label}"
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfItemHist">
@@ -824,23 +768,6 @@
 					label="$m{workflow.step.type}" widthRatio="1" />
 				<column field="priorityDesc" renderWidget="application.text"
 					label="$m{workflow.step.priority}" widthRatio="1" />
-			</columns>
-		</table>
-		<table name="wfStepRoleTable"
-			description="$m{workflow.steprole.table}"
-			label="$m{workflow.steprole.table.label}" entity="wfStepRole"
-			itemsPerPage="20" serialNo="true">
-			<columns>
-				<column field="wfStepDesc" renderWidget="application.text"
-					label="$m{workflow.steprole.step}" widthRatio="1" />
-				<column field="roleDesc" renderWidget="application.text"
-					label="$m{workflow.steprole.role}" widthRatio="1" />
-				<column field="roleCode" renderWidget="application.text"
-					widthRatio="1" />
-				<column field="updatedBy" renderWidget="application.text"
-					label="$m{workflow.steprole.assignedby}" widthRatio="1" />
-				<column field="updateDt" renderWidget="application.datetime"
-					label="$m{workflow.steprole.assignedon}" widthRatio="1" />
 			</columns>
 		</table>
 		<table name="wfItemTable"
@@ -1140,14 +1067,4 @@
 			</formStatePolicies>
 		</form>
 	</forms>
-	<!-- Assignment Pages -->
-	<assignmentPages>
-		<assignmentPage name="wfStepRoleAssignment"
-			description="$m{workflow.step.role.assignment}"
-			label="$m{workflow.step.role.assignment}" entity="wfStepRole"
-			baseField="wfStepId" assignField="roleId"
-			assignCaption="$m{workflow.step.role.assigned}"
-			unassignCaption="$m{workflow.step.role.available}"
-			assignList="roleinlist" unassignList="rolenotinlist" />
-	</assignmentPages>
 </application>
