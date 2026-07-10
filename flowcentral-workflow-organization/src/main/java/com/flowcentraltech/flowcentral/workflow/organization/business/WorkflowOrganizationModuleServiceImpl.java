@@ -38,6 +38,8 @@ import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
+import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
+import com.flowcentraltech.flowcentral.workflow.business.WorkflowRoleProvider;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
@@ -63,7 +65,8 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(WorkflowOrganizationModuleNameConstants.WORKFLOW_ORGANIZATION_MODULE_SERVICE)
 public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralService
-        implements WorkflowOrganizationModuleService, RolePrivilegeBackupAgent, ApplicationWorkItemRoleUtilities {
+        implements WorkflowOrganizationModuleService, RolePrivilegeBackupAgent, ApplicationWorkItemRoleUtilities,
+        WorkflowRoleProvider {
 
     private static final List<WorkflowStepType> USER_INTERACTIVE_STEP_TYPES = Arrays
             .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR, WorkflowStepType.DELAY);
@@ -71,10 +74,35 @@ public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralSe
     @Configurable
     private AppletUtilities appletUtil;
 
+    @Configurable
+    private SecurityModuleService securityModuleService;
+
     private final Map<String, Set<WfStepInfo>> roleWfStepBackup;
 
     public WorkflowOrganizationModuleServiceImpl() {
         this.roleWfStepBackup = new HashMap<String, Set<WfStepInfo>>();
+    }
+
+    @Override
+    public List<String> getParticipatingRoles(String workflow, String step) throws UnifyException {
+        ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(workflow);
+        return environment().valueList(String.class, "roleCode", new WfStepRoleQuery().workflowRunnable(true)
+                .applicationName(parts.getApplicationName()).workflowName(parts.getEntityName()).wfStepName(step));
+    }
+
+    @Override
+    public void keepAlreadyAssignedRoles(String applicationName, String workflowName, List<WfStep> stepList)
+            throws UnifyException {
+//        for (WfStep wfStep : stepList) {
+//            List<WfStepRole> participatingRoleList = environment().findAll(new WfStepRoleQuery().workflowRunnable(true)
+//                    .applicationName(applicationName).workflowName(workflowName).wfStepName(wfStep.getName()));
+//            wfStep.setRoleList(participatingRoleList);
+//        }
+    }
+
+    @Override
+    public String getUserFullName(String userLoginId) throws UnifyException {
+        return securityModuleService.getUserFullName(userLoginId);
     }
 
     @Override
