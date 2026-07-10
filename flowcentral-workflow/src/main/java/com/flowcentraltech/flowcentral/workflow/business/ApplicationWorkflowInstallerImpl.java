@@ -58,8 +58,6 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
-import com.flowcentraltech.flowcentral.workflow.entities.WfStepRole;
-import com.flowcentraltech.flowcentral.workflow.entities.WfStepRoleQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
@@ -573,10 +571,6 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setRule(stepConfig.getRule());
                 wfStep.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC);
                 populateChildList(stepConfig, applicationName, wfStep);
-                List<WfStepRole> participatingRoleList = environment()
-                        .findAll(new WfStepRoleQuery().applicationName(applicationName).workflowName(workflow.getName())
-                                .wfStepName(stepConfig.getName()));
-                wfStep.setRoleList(participatingRoleList);
                 stepList.add(wfStep);
             }
         }

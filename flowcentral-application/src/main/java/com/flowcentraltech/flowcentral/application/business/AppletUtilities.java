@@ -626,6 +626,13 @@ public interface AppletUtilities extends FlowCentralComponent {
     ApplicationWorkItemUtilities workItemUtilities();
 
     /**
+     * Gets the application work item utilities.
+     * 
+     * @return the application work item utilities
+     */
+    ApplicationWorkItemRoleUtilities workItemRoleUtilities();
+
+    /**
      * Gets the environment delegate utilities.
      * 
      * @return the environment delegate utilities

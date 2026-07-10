@@ -22,7 +22,6 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractLoadingApplet;
-import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
@@ -44,8 +43,7 @@ public class MyWorkItemApplet extends AbstractLoadingApplet {
 
     @Override
     protected WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId) throws UnifyException {
-        WorkflowModuleService workflow = au.getComponent(WorkflowModuleService.class);
-        return workflow.getWorkflowLoadingStepInfoByWorkItemEventId(sourceItemId, null, null);
+        return au.workItemRoleUtilities().getWorkflowLoadingStepInfoByWorkItemEventId(sourceItemId, null, null);
     }
 
 }

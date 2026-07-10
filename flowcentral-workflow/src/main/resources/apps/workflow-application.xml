@@ -509,7 +509,7 @@
 		</entity>
 		<entity name="wfStepRole" description="$m{workflow.steprole}"
 			label="$m{workflow.steprole.label}"
-			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepRole"
+			type="com.flowcentraltech.flowcentral.workflow.organization.entities.WfStepRole"
 			reportable="false" auditable="false">
 			<fields>
 				<field name="wfStepId" label="$m{workflow.steprole.stepid}"

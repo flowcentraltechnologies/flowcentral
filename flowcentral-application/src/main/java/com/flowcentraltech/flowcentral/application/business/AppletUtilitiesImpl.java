@@ -246,6 +246,9 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private ApplicationWorkItemUtilities applicationWorkItemUtilies;
 
     @Configurable
+    private ApplicationWorkItemRoleUtilities applicationWorkItemRoleUtilies;
+
+    @Configurable
     private EnvironmentDelegateUtilities environmentDelegateUtilities;
 
     @Configurable
@@ -765,6 +768,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public ApplicationWorkItemUtilities workItemUtilities() {
         return applicationWorkItemUtilies;
+    }
+
+    @Override
+    public ApplicationWorkItemRoleUtilities workItemRoleUtilities() {
+        return applicationWorkItemRoleUtilies;
     }
 
     @Override

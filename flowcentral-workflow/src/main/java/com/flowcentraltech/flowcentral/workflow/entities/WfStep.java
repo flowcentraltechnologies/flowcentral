@@ -193,9 +193,6 @@ public class WfStep extends BaseConfigNamedEntity {
     @ChildList
     private List<WfStepAlert> alertList;
 
-    @ChildList
-    private List<WfStepRole> roleList;
-
     public Long getWorkflowId() {
         return workflowId;
     }
@@ -602,14 +599,6 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setApplicationDesc(String applicationDesc) {
         this.applicationDesc = applicationDesc;
-    }
-
-    public List<WfStepRole> getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(List<WfStepRole> roleList) {
-        this.roleList = roleList;
     }
 
 }

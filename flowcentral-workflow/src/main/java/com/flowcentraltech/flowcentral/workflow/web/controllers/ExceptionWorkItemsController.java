@@ -102,7 +102,7 @@ public class ExceptionWorkItemsController extends AbstractEntityFormAppletContro
 
         if (StringUtils.isBlank(pageBean.getSelLoadingTableName())) {
             UserToken userToken = getUserToken();
-            List<WorkflowLoadingTableInfo> loadingTableInfoList = workflowModuleService
+            List<WorkflowLoadingTableInfo> loadingTableInfoList = au().workItemRoleUtilities()
                     .findWorkflowLoadingTableInfoByRole(userToken.getRoleCode());
             pageBean.setSelLoadingTableName(
                     !loadingTableInfoList.isEmpty() ? loadingTableInfoList.get(0).getLongName() : null);

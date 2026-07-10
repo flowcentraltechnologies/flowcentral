@@ -48,7 +48,7 @@ public class MyWorkItemsApplet extends AbstractWorkItemsApplet {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         List<TableLoadingDef> altTableLoadingDefs = new ArrayList<TableLoadingDef>();
         UserToken userToken = au.getSessionUserToken();
-        List<WorkflowStepInfo> workflowStepList = workflowModuleService.findWorkflowLoadingStepInfoByRole(
+        List<WorkflowStepInfo> workflowStepList = au.workItemRoleUtilities().findWorkflowLoadingStepInfoByRole(
                 loadingTableName, roleCode, userToken.getBranchCode(), userToken.getDepartmentCode());
         int orderIndex = 0;
         boolean withTableActions = false;
