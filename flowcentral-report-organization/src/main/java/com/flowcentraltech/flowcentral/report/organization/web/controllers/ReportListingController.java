@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.report.web.controllers;
+package com.flowcentraltech.flowcentral.report.organization.web.controllers;
 
 import java.util.List;
 
@@ -24,7 +24,8 @@ import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.constants.ReportModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
-import com.flowcentraltech.flowcentral.report.entities.ReportGroup;
+import com.flowcentraltech.flowcentral.report.organization.business.ReportOrganizationModuleService;
+import com.flowcentraltech.flowcentral.report.organization.entities.ReportGroup;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -57,6 +58,9 @@ public class ReportListingController extends AbstractPageController<ReportListin
     private ReportModuleService reportModuleService;
 
     @Configurable
+    private ReportOrganizationModuleService reportOrganizationModuleService;
+
+    @Configurable
     private SystemModuleService systemModuleService;
 
     public ReportListingController() {
@@ -85,8 +89,8 @@ public class ReportListingController extends AbstractPageController<ReportListin
         final UserToken userToken = getUserToken();
         final String roleCode = !userToken.isReservedUser() ? userToken.getRoleCode() : null;
         LinkGridInfo.Builder lb = LinkGridInfo.newBuilder();
-        for (ReportGroup reportGroup : reportModuleService.findReportGroupsByRole(roleCode)) {
-            List<ReportConfiguration> configurationList = reportModuleService
+        for (ReportGroup reportGroup : reportOrganizationModuleService.findReportGroupsByRole(roleCode)) {
+            List<ReportConfiguration> configurationList = reportOrganizationModuleService
                     .findReportConfigurationsByGroup(reportGroup.getId());
             if (!DataUtils.isBlank(configurationList)) {
                 lb.addCategory(reportGroup.getName(), reportGroup.getLabel().toUpperCase(),

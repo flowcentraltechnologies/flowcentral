@@ -13,29 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.report.entities;
-
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
+package com.flowcentraltech.flowcentral.report.organization.constants;
 
 /**
- * Query class for report group records.
+ * Report organization module name constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class ReportGroupQuery extends BaseStatusEntityQuery<ReportGroup> {
+public interface ReportOrganizationModuleNameConstants {
 
-    public ReportGroupQuery() {
-        super(ReportGroup.class);
-    }
-
-    @Override
-    public ReportGroupQuery id(Long id) {
-        return (ReportGroupQuery) super.id(id);
-    }
-
-    public ReportGroupQuery name(String name) {
-        return (ReportGroupQuery) addEquals("name", name);
-    }
+    String REPORT_ORGANIZATION_MODULE_SERVICE = "report-organization-moduleservice";
 
 }

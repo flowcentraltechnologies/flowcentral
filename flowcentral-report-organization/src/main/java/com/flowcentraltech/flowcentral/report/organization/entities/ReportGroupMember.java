@@ -13,10 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.report.entities;
+package com.flowcentraltech.flowcentral.report.organization.entities;
 
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.common.data.Describable;
@@ -30,7 +31,9 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Table(name = "FC_REPORTGROUPMEMBER", uniqueConstraints = { @UniqueConstraint({ "reportGroupId", "reportConfigurationId" }) })
+@Table(name = "FC_REPORTGROUPMEMBER",
+    uniqueConstraints = {
+            @UniqueConstraint({ "reportGroupId", "reportConfigurationId" }) })
 public class ReportGroupMember extends BaseAuditEntity implements Describable {
 
     @ForeignKey(ReportGroup.class)

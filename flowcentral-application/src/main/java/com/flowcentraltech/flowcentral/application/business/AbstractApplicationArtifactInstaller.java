@@ -100,7 +100,7 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
         return environmentService;
     }
 
-    protected class DeletionParams {
+    public static class DeletionParams {
         private final String name;
 
         private final BaseApplicationEntityQuery<?> query;

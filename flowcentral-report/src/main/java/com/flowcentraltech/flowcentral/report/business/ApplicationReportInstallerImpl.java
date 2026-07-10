@@ -49,7 +49,6 @@ import com.flowcentraltech.flowcentral.report.constants.ReportModuleNameConstant
 import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfigurationQuery;
-import com.flowcentraltech.flowcentral.report.entities.ReportGroupMemberQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameter;
 import com.flowcentraltech.flowcentral.report.entities.ReportPlacement;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
@@ -86,6 +85,9 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     @Configurable
     private MessageResolver messageResolver;
 
+    @Configurable
+    private ReportModuleExtProvider reportModuleExtProvider;
+    
     @Override
     public void installApplicationArtifacts(final TaskMonitor taskMonitor, final InstallationContext ctx,
             final ApplicationInstall applicationInstall) throws UnifyException {
@@ -423,8 +425,10 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
     @Override
     protected int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId,
             boolean customOnly) throws UnifyException {
-        environment().deleteAll(customOnly ? new ReportGroupMemberQuery().applicationId(applicationId).isCustom()
-                : new ReportGroupMemberQuery().applicationId(applicationId));
+        if (reportModuleExtProvider != null) {
+            reportModuleExtProvider.deleteApplicationArtifacts(taskMonitor, deletionParams, applicationId, customOnly);
+        }
+        
         return super.deleteApplicationArtifacts(taskMonitor, deletionParams, applicationId, customOnly);
     }
 
