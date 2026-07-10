@@ -153,6 +153,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public MappedBranch findMappedBranch(Long branchId) throws UnifyException {
+        return environment().find(MappedBranch.class, branchId);
+    }
+
+    @Override
     public Department findDepartment(DepartmentQuery query) throws UnifyException {
         return environment().find(query);
     }

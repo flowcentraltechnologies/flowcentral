@@ -281,6 +281,17 @@ public interface OrganizationModuleService extends FlowCentralService {
     List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException;
 
     /**
+     * Finds mapped branch by ID
+     * 
+     * @param branchId
+     *                 the branch ID
+     * @return the mapped branch
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    MappedBranch findMappedBranch(Long branchId) throws UnifyException;
+    
+    /**
      * Finds department by criteria.
      * 
      * @param query

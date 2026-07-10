@@ -16,41 +16,30 @@
 package com.flowcentraltech.flowcentral.studio.business.data;
 
 /**
- * Snapshot result details.
+ * Lock profile.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class SnapshotResultDetails {
+public class LockProfile {
 
-    private Long snapshotId;
+    private String userFullName;
     
-    private String fileName;
+    private String userBranchDesc;
+
+    public LockProfile(String userFullName, String userBranchDesc) {
+        this.userFullName = userFullName;
+        this.userBranchDesc = userBranchDesc;
+    }
+
+    public String getUserFullName() {
+        return userFullName;
+    }
+
+    public String getUserBranchDesc() {
+        return userBranchDesc;
+    }
     
-    private byte[] snapshot;
-
-    public Long getSnapshotId() {
-        return snapshotId;
-    }
-
-    public void setSnapshotId(Long snapshotId) {
-        this.snapshotId = snapshotId;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public byte[] getSnapshot() {
-        return snapshot;
-    }
-
-    public void setSnapshot(byte[] snapshot) {
-        this.snapshot = snapshot;
-    }
+    
     
 }

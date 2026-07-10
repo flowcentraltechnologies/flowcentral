@@ -28,9 +28,8 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.CollaborationLockInfo;
 import com.flowcentraltech.flowcentral.common.data.CollaborationLockedResourceInfo;
-import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
-import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
-import com.flowcentraltech.flowcentral.security.entities.User;
+import com.flowcentraltech.flowcentral.studio.business.StudioLockProfileProvider;
+import com.flowcentraltech.flowcentral.studio.business.data.LockProfile;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -46,7 +45,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public class StudioLockResourceActionPolicy extends AbstractCollaborationFormActionPolicy {
 
     @Configurable
-    private SecurityModuleService securityModuleService;
+    private StudioLockProfileProvider studioLockProfileProvider;
 
     @Configurable
     private RequestUserPhotoGenerator requestUserPhotoGenerator;
@@ -84,15 +83,10 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
         if (!getCollaborationProvider().lock(type, resourceName, getUserLoginId())) {
             CollaborationLockInfo collaborationLockInfo = getCollaborationProvider().getLockInfo(type, resourceName);
             if (collaborationLockInfo != null) {
-                User user = securityModuleService.findUser(collaborationLockInfo.getLockedBy());
-                final MappedBranch userBranch = user.getBranchId() != null
-                        ? environment().find(MappedBranch.class, user.getBranchId())
-                        : null;
-                String branchDesc = userBranch != null ? userBranch.getDescription() : null;
-                branchDesc = branchDesc == null ? getSessionMessage("application.no.branch") : branchDesc;
+                final LockProfile lockProfile = studioLockProfileProvider.provide(collaborationLockInfo.getLockedBy());
                 CollaborationLockedResourceInfo collaborationLockedResourceInfo = new CollaborationLockedResourceInfo(
                         requestUserPhotoGenerator, type, resourceName, collaborationLockInfo.getLockedBy(),
-                        user.getFullName(), branchDesc, collaborationLockInfo.getLockDate());
+                        lockProfile.getUserFullName(), lockProfile.getUserBranchDesc(), collaborationLockInfo.getLockDate());
                 setSessionAttribute(FlowCentralSessionAttributeConstants.LOCKED_RESOURCEOPTIONS,
                         collaborationLockedResourceInfo);
                 return new EntityActionResult(ctx, "/application/commonutilities/showLockedResource");

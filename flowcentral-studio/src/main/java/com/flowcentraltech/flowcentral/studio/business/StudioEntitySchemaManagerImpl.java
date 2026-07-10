@@ -77,6 +77,12 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.NameUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
+/**
+ * Studio entity schema manager.
+ * 
+ * @author FlowCentral Technologies Limited
+ * @since 4.1
+ */
 @Component("studio-entityschemamanger")
 public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
 
