@@ -496,23 +496,25 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public List<Long> getPrimaryMappedTenantIds() throws UnifyException {
-        List<Long> tenantIds = environment().valueList(Long.class, "id",
-                new MappedTenantQuery().ignoreEmptyCriteria(true));
-        Long actualPrimaryTenantId = getSysParameterValue(Long.class,
-                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
-        if (actualPrimaryTenantId != null) {
-            final int len = tenantIds.size();
-            for (int i = 0; i < len; i++) {
-                if (tenantIds.get(i).equals(actualPrimaryTenantId)) {
-                    tenantIds.set(i, Entity.PRIMARY_TENANT_ID);
-                    break;
-                }
-            }
-        } else {
-            return Arrays.asList(Entity.PRIMARY_TENANT_ID);
-        }
-
-        return tenantIds;
+        // TODO Mapped
+        return Arrays.asList(Entity.PRIMARY_TENANT_ID);
+//        List<Long> tenantIds = environment().valueList(Long.class, "id",
+//                new MappedTenantQuery().ignoreEmptyCriteria(true));
+//        Long actualPrimaryTenantId = getSysParameterValue(Long.class,
+//                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
+//        if (actualPrimaryTenantId != null) {
+//            final int len = tenantIds.size();
+//            for (int i = 0; i < len; i++) {
+//                if (tenantIds.get(i).equals(actualPrimaryTenantId)) {
+//                    tenantIds.set(i, Entity.PRIMARY_TENANT_ID);
+//                    break;
+//                }
+//            }
+//        } else {
+//            return Arrays.asList(Entity.PRIMARY_TENANT_ID);
+//        }
+//
+//        return tenantIds;
     }
 
     @Override

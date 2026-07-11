@@ -4991,12 +4991,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private void resolveMappedEntities() throws UnifyException {
-        List<AppEntity> entityList = environment()
-                .listAll(new AppEntityQuery().delegate(ApplicationModuleNameConstants.MAPPEDENTITY_ENVIRONMENT_DELEGATE)
-                        .addSelect("applicationName", "name"));
-        for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
-            getEntityClassDef(entityLongName);
-        }
+        // TODO Mapped
+//        List<AppEntity> entityList = environment()
+//                .listAll(new AppEntityQuery().delegate(ApplicationModuleNameConstants.MAPPEDENTITY_ENVIRONMENT_DELEGATE)
+//                        .addSelect("applicationName", "name"));
+//        for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
+//            getEntityClassDef(entityLongName);
+//        }
     }
 
     private void ensureAllWorkflowCopyComponents(boolean isInstallationPerformed) throws UnifyException {

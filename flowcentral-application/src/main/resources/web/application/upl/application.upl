@@ -56,7 +56,7 @@
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.ROLEDESCRIPTION}
 !ui-labeledtext:branchLabel caption:$m{application.login.branch}
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.BRANCHDESC}
-!ui-labeledtext:businessUnitLabel style:$s{float:left;} caption:$m{security.application.businessunit}
+!ui-labeledtext:businessUnitLabel style:$s{float:left;} caption:$m{application.application.businessunit}
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.BUSINESSUNITDESC}
 
 !ui-panel:navigationBand styleClass:$e{fc-topnavcontrol} components:$c{switchRoleLabel logoutLabel}

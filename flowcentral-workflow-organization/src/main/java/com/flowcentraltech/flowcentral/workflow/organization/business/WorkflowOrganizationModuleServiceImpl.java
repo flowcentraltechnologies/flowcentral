@@ -93,6 +93,7 @@ public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralSe
     @Override
     public void keepAlreadyAssignedRoles(String applicationName, String workflowName, List<WfStep> stepList)
             throws UnifyException {
+        // TODO Mapped
 //        for (WfStep wfStep : stepList) {
 //            List<WfStepRole> participatingRoleList = environment().findAll(new WfStepRoleQuery().workflowRunnable(true)
 //                    .applicationName(applicationName).workflowName(workflowName).wfStepName(wfStep.getName()));
