@@ -820,6 +820,7 @@
 				<property name="quickEdit.policy"
 					value="studioappentityfield-tablepolicy" />
 				<property name="quickEdit.width" value="1124" />
+				<property name="baseRestriction" value="customFieldFilter" />
 			</properties>
 			<filters>
 				<filter name="appEntityFieldEditable"
