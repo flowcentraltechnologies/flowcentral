@@ -310,7 +310,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 environment().create(workflow);
                 
                 // Restore original
-                workflow.setName(WorkflowNameUtils.getWorkflowRunnableName(wfConfig.getName()));
+                workflow.setName(WorkflowNameUtils.getWorkflowNameFromRunnable(wfConfig.getName()));
                 workflow.setDescription(WorkflowNameUtils.getWorkflowDescriptionFromRunnable(description));
                 workflow.setRunnable(false);
                 environment().create(workflow);
