@@ -72,7 +72,7 @@ public class StudioSnapshotsPageController extends AbstractStudioPageController<
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_DETAILS_ID,
                         snapshotDetails.getSnapshotDetailsId())
                 .logMessages().build();
-        return launchTaskWithMonitorBox(taskSetup, "Studio Restore from CDSnapshot");
+        return launchTaskWithMonitorBox(taskSetup, "Studio Restore from Snapshot");
     }
 
     @Action

@@ -70,6 +70,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -289,6 +290,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 String label = resolveApplicationMessage(wfConfig.getLabel());
                 logDebug(taskMonitor, "Restoring configured workflow [{0}]...", description);
 
+                // Restore runnable from snapshot
                 Workflow workflow = new Workflow();
                 workflow.setApplicationId(applicationId);
                 workflow.setName(wfConfig.getName());
@@ -305,6 +307,12 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 workflow.setDeprecated(false);
                 workflow.setConfigType(ConfigType.CUSTOM);
                 populateChildList(wfConfig, workflow, applicationName, true);
+                environment().create(workflow);
+                
+                // Restore original
+                workflow.setName(WorkflowNameUtils.getWorkflowRunnableName(wfConfig.getName()));
+                workflow.setDescription(WorkflowNameUtils.getWorkflowDescriptionFromRunnable(description));
+                workflow.setRunnable(false);
                 environment().create(workflow);
             }
         }
