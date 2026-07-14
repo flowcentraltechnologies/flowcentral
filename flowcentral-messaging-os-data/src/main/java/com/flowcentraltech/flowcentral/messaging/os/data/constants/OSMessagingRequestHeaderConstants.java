@@ -31,6 +31,8 @@ public interface OSMessagingRequestHeaderConstants {
     
     String USER_ID = "OS-User-Id";
     
+    String FILE_CHECKSUM = "OS-File-Checksum";
+    
     String FILE_SIGNATURE = "OS-File-Signature";
     
     String ROUTING_TYPE = "OS-Routing-Type";

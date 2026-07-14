@@ -345,7 +345,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public UploadedFile generateDynamicReport(ReportOptions reportOptions) throws UnifyException {
-        UploadedFile uploadedFile = UploadedFile.create(reportOptions.getFilename());
+        UploadedFile uploadedFile = UploadedFile.createWithChecksum(reportOptions.getFilename());
         try {
             generateDynamicReport(reportOptions, uploadedFile.getOut());
         } finally {
@@ -560,7 +560,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public UploadedFile generateReport(Report report) throws UnifyException {
-        UploadedFile uploadedFile = UploadedFile.create(report.getTitle());
+        UploadedFile uploadedFile = UploadedFile.createWithChecksum(report.getTitle());
         try {
             generateReport(report, uploadedFile.getOut());
         } finally {

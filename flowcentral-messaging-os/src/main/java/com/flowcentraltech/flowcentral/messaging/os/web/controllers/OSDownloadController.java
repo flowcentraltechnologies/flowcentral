@@ -71,7 +71,12 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
     @Override
     public UploadedFile handleLocalDownload(Map<String, String> headers) throws UnifyException {
         final UploadedFile uploadedFile = UploadedFile.create("file");
-        handleLocalDownload(headers, uploadedFile.getOut());
+        try {
+            handleLocalDownload(headers, uploadedFile.getOut());
+        } finally {
+            uploadedFile.closeOut();
+        }
+        
         return uploadedFile;
     }
 
