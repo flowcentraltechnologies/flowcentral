@@ -20,7 +20,6 @@ import java.util.Date;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
 import com.flowcentraltech.flowcentral.common.util.WorkspaceNamingUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -31,14 +30,13 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("workspace-entitypolicy")
-public class WorkspacePolicy extends BaseStatusEntityPolicy {
+public class WorkspacePolicy extends BaseStatusEntityPolicy<Workspace> {
 
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        Workspace workspace = (Workspace) record;
-        Long id = (Long) super.preCreate(workspace, now);
-        if (!DefaultApplicationConstants.ROOT_WORKSPACE_CODE.equals(workspace.getCode())) {
-            workspace.setCode(WorkspaceNamingUtils.getWorkspaceCodeFromId(id));
+    public Object preCreate(Workspace record, Date now) throws UnifyException {
+        Long id = (Long) super.preCreate(record, now);
+        if (!DefaultApplicationConstants.ROOT_WORKSPACE_CODE.equals(record.getCode())) {
+            record.setCode(WorkspaceNamingUtils.getWorkspaceCodeFromId(id));
         }
 
         return id;

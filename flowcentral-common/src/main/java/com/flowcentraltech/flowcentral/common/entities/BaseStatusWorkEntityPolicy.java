@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.common.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -29,13 +28,12 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("basestatuswork-entitypolicy")
-public class BaseStatusWorkEntityPolicy extends BaseWorkEntityPolicy {
+public class BaseStatusWorkEntityPolicy<T extends BaseStatusWorkEntity> extends BaseWorkEntityPolicy<T> {
 
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        BaseStatusWorkEntity baseStatusWorkEntity = (BaseStatusWorkEntity) record;
-        if (baseStatusWorkEntity.getStatus() == null) {
-            baseStatusWorkEntity.setStatus(RecordStatus.ACTIVE);
+    public Object preCreate(T record, Date now) throws UnifyException {
+        if (record.getStatus() == null) {
+            record.setStatus(RecordStatus.ACTIVE);
         }
 
         return super.preCreate(record, now);

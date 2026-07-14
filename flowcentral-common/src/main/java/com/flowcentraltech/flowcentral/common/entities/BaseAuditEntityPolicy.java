@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.common.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -30,33 +29,31 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("baseaudit-entitypolicy")
-public class BaseAuditEntityPolicy extends BaseVersionEntityPolicy {
+public class BaseAuditEntityPolicy<T extends BaseAuditEntity> extends BaseVersionEntityPolicy<T> {
 
     @Override
-    public Object preCreate(final Entity record, Date now) throws UnifyException {
-        final BaseAuditEntity baseAuditEntity = ((BaseAuditEntity) record);
-        baseAuditEntity.setCreateDt(now);
-        baseAuditEntity.setUpdateDt(now);
+    public Object preCreate(final T record, Date now) throws UnifyException {
+        record.setCreateDt(now);
+        record.setUpdateDt(now);
 
-        if (baseAuditEntity.getCreatedBy() == null) {
-            baseAuditEntity.setCreatedBy(getUserLoginId());
-        }
-        
-        if (baseAuditEntity.getUpdatedBy() == null) {
-            baseAuditEntity.setUpdatedBy(getUserLoginId());
+        if (record.getCreatedBy() == null) {
+            record.setCreatedBy(getUserLoginId());
         }
 
-        return super.preCreate(baseAuditEntity, now);
+        if (record.getUpdatedBy() == null) {
+            record.setUpdatedBy(getUserLoginId());
+        }
+
+        return super.preCreate(record, now);
     }
 
     @Override
-    public void preUpdate(final Entity record, Date now) throws UnifyException {
+    public void preUpdate(final T record, Date now) throws UnifyException {
         super.preUpdate(record, now);
-        final BaseAuditEntity baseAuditEntity = ((BaseAuditEntity) record);
-        baseAuditEntity.setUpdateDt(now);
+        record.setUpdateDt(now);
 
         final String loginId = getUserLoginId();
-        baseAuditEntity.setUpdatedBy(loginId);
+        record.setUpdatedBy(loginId);
     }
 
     @Override

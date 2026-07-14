@@ -21,7 +21,6 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointManager;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointType;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -33,32 +32,31 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @since 4.1
  */
 @Component("endpointconfig-entitypolicy")
-public class EndpointConfigPolicy extends BaseStatusEntityPolicy {
+public class EndpointConfigPolicy extends BaseStatusEntityPolicy<EndpointConfig> {
     
     @Configurable
     private EndpointManager endpointManager;
     
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
+    public Object preCreate(EndpointConfig record, Date now) throws UnifyException {
         setTransportType(record);
         return super.preCreate(record, now);
     }
 
     @Override
-    public void preUpdate(Entity record, Date now) throws UnifyException {
+    public void preUpdate(EndpointConfig record, Date now) throws UnifyException {
         setTransportType(record);
         super.preUpdate(record, now);
     }
 
     @SuppressWarnings("unchecked")
-    private void setTransportType(Entity record) throws UnifyException {
-        final EndpointConfig endpointConfig = (EndpointConfig) record;
+    private void setTransportType(EndpointConfig record) throws UnifyException {
         final Class<? extends Endpoint> type = (Class<? extends Endpoint>) this
-                .getComponentConfig(Endpoint.class, endpointConfig.getEndpoint()).getType();
+                .getComponentConfig(Endpoint.class, record.getEndpoint()).getType();
         final EndpointType _type = EndpointType.fromType(type);
-        endpointConfig.setEndpointType(_type);   
+        record.setEndpointType(_type);   
         if (_type.isRest()) {
-            endpointManager.setRestEndpointChanged(endpointConfig.getName());
+            endpointManager.setRestEndpointChanged(record.getName());
         }
     }
 }

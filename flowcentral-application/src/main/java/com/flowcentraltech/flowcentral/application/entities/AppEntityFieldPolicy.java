@@ -20,7 +20,6 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigEntityPolicy;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -31,13 +30,12 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("appentityfield-entitypolicy")
-public class AppEntityFieldPolicy extends BaseConfigEntityPolicy {
+public class AppEntityFieldPolicy extends BaseConfigEntityPolicy<AppEntityField> {
 
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        AppEntityField appEntityField = ((AppEntityField) record);
-        if (appEntityField.getType() == null) {
-            appEntityField.setType(EntityFieldType.CUSTOM);
+    public Object preCreate(AppEntityField record, Date now) throws UnifyException {
+        if (record.getType() == null) {
+            record.setType(EntityFieldType.CUSTOM);
         }
 
         return super.preCreate(record, now);

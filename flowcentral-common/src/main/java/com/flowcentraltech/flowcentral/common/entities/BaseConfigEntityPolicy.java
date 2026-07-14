@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.common.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -29,17 +28,17 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("baseconfig-entitypolicy")
-public class BaseConfigEntityPolicy extends BaseAuditEntityPolicy {
+public class BaseConfigEntityPolicy<T extends BaseConfigEntity> extends BaseAuditEntityPolicy<T> {
 
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        ConfigUtils.preCreate((BaseConfigEntity) record);
+    public Object preCreate(T record, Date now) throws UnifyException {
+        ConfigUtils.preCreate(record);
         return super.preCreate(record, now);
     }
 
     @Override
-    public void preDelete(Entity record, Date now) throws UnifyException {
-        ConfigUtils.preDelete((BaseConfigEntity) record);
+    public void preDelete(T record, Date now) throws UnifyException {
+        ConfigUtils.preDelete(record);
         super.preDelete(record, now);
     }
 }
