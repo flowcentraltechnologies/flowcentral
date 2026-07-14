@@ -336,12 +336,12 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, OSMessagingFunction function, String correlationId,
-            String userLoginId, String fileSignature, ContentDisposition disposition, InputStream in)
+            String userLoginId, String fileSignature, String fileChecksum, ContentDisposition disposition, InputStream in)
             throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(sendUploadMessage(target.get(), header.getProcessor(), null, null, correlationId,
-                    userLoginId, fileSignature, disposition, in));
+                    userLoginId, fileSignature, fileChecksum, disposition, in));
         }
 
         return Optional.empty();
@@ -349,10 +349,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendUploadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String userLoginId, String fileSignature, ContentDisposition disposition, InputStream in)
+            String userLoginId, String fileSignature, String fileChecksum, ContentDisposition disposition, InputStream in)
             throws UnifyException {
         return Optional.ofNullable(sendUploadMessage(service, header.getProcessor(), null, null, correlationId,
-                userLoginId, fileSignature, disposition, in));
+                userLoginId, fileSignature, fileChecksum, disposition, in));
     }
 
     @Override
@@ -637,7 +637,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     private String sendUploadMessage(final String target, final String processor, final OSMessagingFunction function,
             final String service, final String correlationId, final String userLoginId, final String fileSignature,
-            ContentDisposition disposition, InputStream in) throws UnifyException {
+            final String fileChecksum, ContentDisposition disposition, InputStream in) throws UnifyException {
         if (osInfo.isDebugging()) {
             logDebug("Sending upload message [\n{0}]...", correlationId);
         }
@@ -661,6 +661,10 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
         if (!StringUtils.isBlank(fileSignature)) {
             headers.put(OSMessagingRequestHeaderConstants.FILE_SIGNATURE, fileSignature);
+        }
+
+        if (!StringUtils.isBlank(fileChecksum)) {
+            headers.put(OSMessagingRequestHeaderConstants.FILE_CHECKSUM, fileChecksum);
         }
 
         if (function != null) {

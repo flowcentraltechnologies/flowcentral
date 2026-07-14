@@ -195,7 +195,9 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @param userloginId
      *                      the user login ID
      * @param fileSignature
-     *                      the file Signature
+     *                      the file Signature (optional)
+     * @param fileChecksum
+     *                      the file checksum (optional)
      * @param disposition
      *                      the content disposition
      * @param in
@@ -205,8 +207,8 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, OSMessagingFunction function,
-            String correlationId, String userloginId, String fileSignature, ContentDisposition disposition,
-            InputStream in) throws UnifyException;
+            String correlationId, String userloginId, String fileSignature, String fileChecksum,
+            ContentDisposition disposition, InputStream in) throws UnifyException;
 
     /**
      * Sends an upload message to delegate service.
@@ -220,7 +222,9 @@ public interface OSMessagingModuleService extends FlowCentralService {
      * @param userloginId
      *                      the user login ID
      * @param fileSignature
-     *                      the file Signature
+     *                      the file Signature (optional)
+     * @param fileChecksum
+     *                      the file checksum (optional)
      * @param disposition
      *                      the content disposition
      * @param in
@@ -230,8 +234,8 @@ public interface OSMessagingModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     Optional<String> sendUploadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String userloginId, String fileSignature, ContentDisposition disposition, InputStream in)
-            throws UnifyException;
+            String userloginId, String fileSignature, String fileChecksum, ContentDisposition disposition,
+            InputStream in) throws UnifyException;
 
     /**
      * Sends a download message to delegate function.

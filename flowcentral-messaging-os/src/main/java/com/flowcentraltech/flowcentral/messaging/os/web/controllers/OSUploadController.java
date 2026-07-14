@@ -72,9 +72,10 @@ public class OSUploadController extends AbstractHttpUploadController implements 
     public PostResp<String> handleLocalUpload(Map<String, String> headers, ContentDisposition disposition,
             InputStream in) throws UnifyException {
         if (debugging) {
-            logDebug("Performing local upload using signature [{0}]...", headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
+            logDebug("Performing local upload using signature [{0}]...",
+                    headers.get(OSMessagingRequestHeaderConstants.FILE_SIGNATURE));
         }
-        
+
         final long start = System.currentTimeMillis();
         boolean success = true;
         String jsonResponse = null;
@@ -85,8 +86,8 @@ public class OSUploadController extends AbstractHttpUploadController implements 
             success = false;
         }
 
-        return new PostResp<String>(success ? jsonResponse : null, success ? null : jsonResponse, "",
-                jsonResponse, 200, System.currentTimeMillis() - start);
+        return new PostResp<String>(success ? jsonResponse : null, success ? null : jsonResponse, "", jsonResponse, 200,
+                System.currentTimeMillis() - start);
     }
 
     @SuppressWarnings("unchecked")
@@ -96,7 +97,7 @@ public class OSUploadController extends AbstractHttpUploadController implements 
         if (debugging) {
             logDebug("Executing controller upload request = [{0}]...", disposition);
         }
-        
+
         OSMessagingError error = null;
         BaseOSMessagingResp response = null;
         final String correlationId = headers.getHeader(OSMessagingRequestHeaderConstants.CORRELATION_ID);
@@ -114,12 +115,15 @@ public class OSUploadController extends AbstractHttpUploadController implements 
                             if (debugging) {
                                 logDebug("Relaying controller request to delegate service = [{0}]...", service);
                             }
-                            
+
                             final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                             final String fileSignature = headers
                                     .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
+                            final String fileChecksum = headers
+                                    .getHeader(OSMessagingRequestHeaderConstants.FILE_CHECKSUM);
                             final Optional<String> optional = osMessagingModuleService.sendUploadMessageToService(
-                                    header, service, correlationId, userloginId, fileSignature, disposition, in);
+                                    header, service, correlationId, userloginId, fileSignature, fileChecksum,
+                                    disposition, in);
                             if (optional.isPresent()) {
                                 if (debugging) {
                                     logDebug("Response message [\n{0}]", optional.get());
@@ -136,12 +140,15 @@ public class OSUploadController extends AbstractHttpUploadController implements 
                                 if (debugging) {
                                     logDebug("Relaying controller request to delegate function = [{0}]...", function);
                                 }
-                                
+
                                 final String userloginId = headers.getHeader(OSMessagingRequestHeaderConstants.USER_ID);
                                 final String fileSignature = headers
                                         .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
+                                final String fileChecksum = headers
+                                        .getHeader(OSMessagingRequestHeaderConstants.FILE_CHECKSUM);
                                 final Optional<String> optional = osMessagingModuleService.sendUploadMessageToDelegate(
-                                        header, OSMessagingFunction.fromCode(function), correlationId, userloginId, fileSignature, disposition, in);
+                                        header, OSMessagingFunction.fromCode(function), correlationId, userloginId,
+                                        fileSignature, fileChecksum, disposition, in);
                                 if (optional.isPresent()) {
                                     if (debugging) {
                                         logDebug("Response message [\n{0}]", optional.get());
