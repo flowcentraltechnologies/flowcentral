@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data.constants;
 
+import com.tcdng.unify.web.http.HttpRequestHeaderConstants;
+
 /**
  * OS messaging request header constants.
  * 
@@ -25,7 +27,7 @@ public interface OSMessagingRequestHeaderConstants {
 
     String AUTHORIZATION = "Authorization";
 
-    String UPLOAD_DETAIL = "X-Unify-Upload";
+    String UPLOAD_DETAIL = HttpRequestHeaderConstants.X_UNIFY_DISPOSITION;
     
     String CORRELATION_ID = "OS-Correlation-Id";
     

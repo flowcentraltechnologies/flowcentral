@@ -335,9 +335,9 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, OSMessagingFunction function, String correlationId,
-            String userLoginId, String fileSignature, String fileChecksum, ContentDisposition disposition, InputStream in)
-            throws UnifyException {
+    public Optional<String> sendUploadMessageToDelegate(OSMessagingHeader header, OSMessagingFunction function,
+            String correlationId, String userLoginId, String fileSignature, String fileChecksum,
+            ContentDisposition disposition, InputStream in) throws UnifyException {
         Optional<String> target = osMessagingAccessManager.resolveDelegateFunctionTarget(function);
         if (target.isPresent()) {
             return Optional.ofNullable(sendUploadMessage(target.get(), header.getProcessor(), null, null, correlationId,
@@ -349,8 +349,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public Optional<String> sendUploadMessageToService(OSMessagingHeader header, String service, String correlationId,
-            String userLoginId, String fileSignature, String fileChecksum, ContentDisposition disposition, InputStream in)
-            throws UnifyException {
+            String userLoginId, String fileSignature, String fileChecksum, ContentDisposition disposition,
+            InputStream in) throws UnifyException {
         return Optional.ofNullable(sendUploadMessage(service, header.getProcessor(), null, null, correlationId,
                 userLoginId, fileSignature, fileChecksum, disposition, in));
     }
@@ -676,7 +676,8 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         if (disposition != null) {
-            headers.put(OSMessagingRequestHeaderConstants.UPLOAD_DETAIL, HttpUtils.getUploadHeader(disposition));
+            headers.put(OSMessagingRequestHeaderConstants.UPLOAD_DETAIL,
+                    HttpUtils.getUnifyContentDisposition(disposition));
         }
 
         final PostResp<String> resp = osPeerEndpointDef.isLocalTarget()
