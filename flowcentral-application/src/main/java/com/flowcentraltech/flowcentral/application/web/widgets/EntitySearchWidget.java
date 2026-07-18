@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.util.RefEncodingUtils;
@@ -31,6 +32,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
+import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.ILike;
 import com.tcdng.unify.core.criterion.Like;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -94,11 +96,14 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
     }
 
     protected List<? extends Listable> doSearch(String input, int limit) throws UnifyException {
-        return getResultByRef(input, limit);
+        final String applicationName = getPageAttribute(String.class,
+                AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
+        return getResultByRef(applicationName, input, limit);
     }
 
     @SuppressWarnings("unchecked")
-    protected final List<? extends Listable> getResultByRef(String input, int limit) throws UnifyException {
+    protected final List<? extends Listable> getResultByRef(String applicationName, String input, int limit)
+            throws UnifyException {
         final ApplicationModuleService applicationModuleService = application();
         final RefDef[] refDefs = getRefDefs();
         if (refDefs != null) {
@@ -129,6 +134,10 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
 
                 Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                 query.ignoreEmptyCriteria(true);
+                if (!StringUtils.isBlank(applicationName)) {
+                    query.addRestriction(new Equals("applicationName", applicationName));
+                }
+                
                 if (br != null) {
                     query.addRestriction(br);
                 }

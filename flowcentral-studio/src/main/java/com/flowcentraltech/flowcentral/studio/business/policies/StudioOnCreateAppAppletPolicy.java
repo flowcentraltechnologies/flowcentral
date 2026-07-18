@@ -17,10 +17,10 @@
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
 import com.flowcentraltech.flowcentral.application.business.EntitySchemaManager;
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -40,14 +40,14 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
     @Override
     protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-        final AppApplet appApplet = (AppApplet) ctx.getInst(); 
+        final String applicationName = getPageAttribute(String.class,
+                AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
+        final AppApplet appApplet = (AppApplet) ctx.getInst();
         appApplet.setPortalAccess(true);
         if (ctx.getActionType() != null && ctx.getActionType().isCreate()) {
             entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet, false);
         }
-        
+
         return null;
     }
 

@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationSynchronizationProvider;
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
@@ -107,9 +108,9 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         final Long applicationId = pageBean.getCurrentApplicationId();
         if (applicationId == null) {
             // Utilities
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC);
+            removeSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
+            removeSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
+            removeSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_DESC);
             removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
             clearCategorySelect();
         } else {
@@ -120,6 +121,8 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         }
 
         closeAllPages();
+
+        au().updatePageContextWithApplicationDetailsSessionAttributes();
         return ApplicationResultMappingConstants.REFRESH_ALL;
     }
 
@@ -184,7 +187,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
 
     @Action
     public String onDeleteApplication() throws UnifyException {
-        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        final Long applicationId = getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
         if (environment().countAll(new ApplicationQuery().id(applicationId)) == 0) {
             ApplicationStudioPageBean pageBean = getPageBean();
             pageBean.setCurrentApplicationId(null);
@@ -214,8 +217,9 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     protected void onIndexPage() throws UnifyException {
         super.onIndexPage();
         ApplicationStudioPageBean pageBean = getPageBean();
-
-        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        
+        au().updatePageContextWithApplicationDetailsSessionAttributes();
+        final Long applicationId = getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
         pageBean.setCurrentApplicationId(applicationId);
 
         if (/*!QueryUtils.isValidLongCriteria(applicationId)
@@ -230,9 +234,9 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     }
 
     private void setApplicationSessionAttributes(Application application) throws UnifyException {
-        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID, application.getId());
-        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME, application.getName());
-        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
+        setSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_ID, application.getId());
+        setSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_NAME, application.getName());
+        setSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
         setSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES, Boolean.TRUE);
     }
 

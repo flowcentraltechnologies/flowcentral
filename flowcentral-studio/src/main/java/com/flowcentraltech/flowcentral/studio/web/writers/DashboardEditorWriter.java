@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditorWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -81,8 +81,8 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         writer.write("<div class=\"hdr\">").write(getSessionMessage("dashboardeditor.availablecharts")).write("</div>");
         jsonWriter.beginArray("charts");
         int i = 0;
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+        final String applicationName = getPageAttribute(String.class,
+                AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
         for (ChartDef chartDef : chartModuleService.findChartDefs(applicationName)) {
             writer.write("<div class=\"tle\" id=\"").write(dashboardEditorWidget.getChoiceId()).write(i)
                     .write("\"><span>");

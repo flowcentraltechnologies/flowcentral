@@ -2714,8 +2714,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<? extends Listable> getDynamicEnumLists(String label, int limit) throws UnifyException {
-        AppEnumerationQuery query = (AppEnumerationQuery) new AppEnumerationQuery()
+    public List<? extends Listable> getDynamicEnumLists(String applicationName, String label, int limit)
+            throws UnifyException {
+        AppEnumerationQuery query = (AppEnumerationQuery) new AppEnumerationQuery().applicationName(applicationName)
                 .addSelect("applicationName", "name", "label").addOrder("label");
         if (!StringUtils.isBlank(label)) {
             query.labelLike(label);
@@ -2726,8 +2727,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         List<AppEnumeration> enumerations = environment().listAll(query);
         List<ListData> list = new ArrayList<ListData>();
         for (AppEnumeration enumeration : enumerations) {
-            String longName = ApplicationNameUtils.getApplicationEntityLongName(enumeration.getApplicationName(),
-                    enumeration.getName());
+            String longName = ApplicationNameUtils.getApplicationEntityLongName(applicationName, enumeration.getName());
             list.add(new ListData(longName, enumeration.getLabel()));
         }
 

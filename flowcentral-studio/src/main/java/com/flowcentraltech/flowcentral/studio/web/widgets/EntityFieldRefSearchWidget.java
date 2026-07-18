@@ -116,36 +116,35 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
     }
 
     @Override
-    protected List<? extends Listable> doSearch(String input, int limit) throws UnifyException {
+    protected List<? extends Listable> doSearch(String input, int limit) throws UnifyException { 
         EntityFieldDataType type = getEntityFieldDataType();
         if (type != null) {
+            final String applicationName = getValue(String.class, getUplAttribute(String.class, "appName"));
             switch (type) {
                 case ENUM:
                 case ENUM_REF:
                     return listManager.getCaseInsensitiveSubList(getApplicationLocale(), "staticlistlist", input,
                             limit);
                 case ENUM_DYN:
-                    return application().getDynamicEnumLists(input, limit);
+                    return application().getDynamicEnumLists(applicationName, input, limit);
                 case CHILD:
                 case CHILD_LIST:
                 case REF_FILEUPLOAD: {
-                    String entityName = ApplicationNameUtils.getApplicationEntityLongName(
-                            getValue(String.class, getUplAttribute(String.class, "appName")),
+                    String entityName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                             getValue(String.class, getUplAttribute(String.class, "entityName")));
                     Set<String> childEntityList = EntityFieldDataType.REF_FILEUPLOAD.equals(type)
                             ? application().findBlobEntities(entityName)
                             : application().findChildAppEntities(entityName);
                     if (!childEntityList.isEmpty()) {
                         getWriteWork().set("ref.childentitylist", childEntityList);
-                        return getResultByRef(input, limit);
+                        return getResultByRef(applicationName, input, limit);
                     }
 
                     return Collections.emptyList();
                 }
                 case REF:
                 case REF_UNLINKABLE: {
-                    String entityName = ApplicationNameUtils.getApplicationEntityLongName(
-                            getValue(String.class, getUplAttribute(String.class, "appName")),
+                    String entityName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                             getValue(String.class, getUplAttribute(String.class, "entityName")));
                     DelegateEntityInfo delegateEntityInfo = au().getEntityDelegate(entityName);
                     Restriction restriction = delegateEntityInfo.isWithDelegate()
@@ -154,7 +153,7 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                                             au().getDelegateEntitiesByDelegate(delegateEntityInfo.getDelegate())))
                             : new NotAmongst("entity", DelegateEntityInfo.getEntityAliases(au().getDelegateEntities()));
                     getWriteWork().set("ref.restriction", restriction);
-                    return getResultByRef(input, limit);
+                    return getResultByRef(applicationName, input, limit);
                 }
                 case LIST_ONLY:
                 case BLOB:

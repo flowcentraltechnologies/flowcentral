@@ -21,11 +21,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -50,7 +50,7 @@ public class StudioWorkEntityByNameListCommand extends AbstractApplicationListCo
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam params) throws UnifyException {
         final Long applicationId = params.isPresent() ? params.getValue()
-                : (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+                : getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
             AppEntityQuery query = new AppEntityQuery();
             query.applicationId(applicationId);
@@ -58,8 +58,8 @@ public class StudioWorkEntityByNameListCommand extends AbstractApplicationListCo
             query.addSelect("name", "description");
             List<AppEntity> appEntityList = application().findAppEntities(query);
             if (!DataUtils.isBlank(appEntityList)) {
-                final String applicationName = (String) getSessionAttribute(
-                        StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+                final String applicationName = getPageAttribute(String.class,
+                        AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
                 List<ListData> list = new ArrayList<ListData>();
                 for (AppEntity appEntity : appEntityList) {
                     list.add(new ListData(

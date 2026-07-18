@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationQueryUtils;
@@ -40,7 +41,7 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 @Component("datatypeeditorlist")
 public class DataTypeEditorListCommand extends AbstractApplicationListCommand<StringParam> {
-    
+
     public DataTypeEditorListCommand() {
         super(StringParam.class);
     }
@@ -50,19 +51,21 @@ public class DataTypeEditorListCommand extends AbstractApplicationListCommand<St
         if (stringParam.isPresent()) {
             DataType dataType = DataType.fromCode(stringParam.getValue());
             if (dataType != null) {
+                final String applicationName = getPageAttribute(String.class,
+                        AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
                 AppWidgetTypeQuery query = new AppWidgetTypeQuery();
-                ApplicationQueryUtils.addWidgetTypeCriteria(query, dataType);
+                ApplicationQueryUtils.addWidgetTypeCriteria(query, applicationName, dataType);
                 query.addSelect("editor", "description").addOrder("description");
                 List<AppWidgetType> widgetTypeList = application().findAppWidgetTypes(query);
                 if (!DataUtils.isBlank(widgetTypeList)) {
                     final List<Listable> list = new ArrayList<Listable>();
-                    for (AppWidgetType appWidgetType: widgetTypeList) {
+                    for (AppWidgetType appWidgetType : widgetTypeList) {
                         final String editor = appWidgetType.getEditor();
                         if (editor.indexOf("%s") < 0) {
                             list.add(new ListData(editor, appWidgetType.getDescription()));
                         }
                     }
-                    
+
                     return list;
                 }
             }

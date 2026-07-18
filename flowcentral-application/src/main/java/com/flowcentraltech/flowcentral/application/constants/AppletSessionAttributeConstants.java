@@ -27,4 +27,6 @@ public interface AppletSessionAttributeConstants {
     String OPEN_TAB_INFO = "applet:session:opentabinfo";
     
     String MENU_OPEN_TAB_INFO = "applet:session:menuopentabinfo";
+
+    String CURRENT_MENU_CATEGORY = "fc.CURRENT_MENU_CATEGORY";
 }

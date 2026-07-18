@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.util.EntityCompositionUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition;
@@ -27,7 +28,6 @@ import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.common.data.ValidationErrors;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.core.UnifyException;
@@ -63,7 +63,7 @@ public class CreateCsvEntityNavigationPolicy extends AbstractStudioAppletNavigat
     @Override
     public void onInit(ValueStore inst) throws UnifyException {
         inst.store("applicationId",
-                getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
+                getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID));
     }
 
     @Override

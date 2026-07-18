@@ -49,9 +49,9 @@ public class StudioEntityFieldWidgetListCommand extends AbstractApplicationListC
     @Override
     public List<? extends Listable> execute(Locale locale, StudioEntityFieldFormParams params) throws UnifyException {
         if (params.isPresent()) {
+            ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getEntity());
             EntityFieldDataType type = DataUtils.convert(EntityFieldDataType.class, params.getDataType());
             if (EntityFieldDataType.LIST_ONLY.equals(type)) {
-                ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getEntity());
                 AppEntityField appEntityField = application().findAppEntityField(
                         (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())
                                 .appEntityName(np.getEntityName()).name(params.getName()));
@@ -59,7 +59,7 @@ public class StudioEntityFieldWidgetListCommand extends AbstractApplicationListC
             }
 
             AppWidgetTypeQuery query = new AppWidgetTypeQuery();
-            ApplicationQueryUtils.addWidgetTypeCriteria(query, type);
+            ApplicationQueryUtils.addWidgetTypeCriteria(query, np.getApplicationName(), type);
             return au().getApplicationEntityListables(query);
         }
 

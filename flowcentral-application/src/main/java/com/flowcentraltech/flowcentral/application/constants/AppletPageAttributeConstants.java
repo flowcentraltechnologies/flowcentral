@@ -28,4 +28,10 @@ public interface AppletPageAttributeConstants {
     
     String SECURED_LINK_ACCESSKEY= "applet:page:securedlinkaccesskey";
 
+    String CURRENT_APPLICATION_ID = "applet:page:CURRENT_APPLICATION_ID";
+
+    String CURRENT_APPLICATION_NAME = "applet:page:CURRENT_APPLICATION_NAME";
+
+    String CURRENT_APPLICATION_DESC = "applet:page:CURRENT_APPLICATION_DESC";
+
 }

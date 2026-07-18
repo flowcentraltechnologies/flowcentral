@@ -68,9 +68,6 @@ public interface FlowCentralSessionAttributeConstants {
     /** Alternative resources bundle */
     String ALTERNATIVE_RESOURCES_BUNDLE = "fc.alternativeresourcesbundle";
 
-    /** Current application ID */
-    String CURRENT_APPLICATION_ID = "fc.CURRENT_APPLICATION_ID";
-
     /** Secured link access */
     String SECURED_LINK_ACCESS = "fc.SECURED_LINK_ACCESS";
 }

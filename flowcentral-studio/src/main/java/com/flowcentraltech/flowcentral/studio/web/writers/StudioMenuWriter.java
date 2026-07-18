@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
@@ -106,8 +107,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         final StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
         final boolean searchable = studioMenuWidget.isSearchable();
 
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+        final String applicationName = getPageAttribute(String.class,
+                AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
         final boolean application = !StringUtils.isBlank(applicationName);
 
         writer.write("<div");
@@ -216,8 +217,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             throws UnifyException {
         final StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
         if (studioMenuWidget.getMenuSectionId().equals(sectionId)) {
-            final String applicationName = (String) getSessionAttribute(
-                    StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+            final String applicationName =  getPageAttribute(String.class,
+                    AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);;
             writer.write("<ul>");
             JsonWriter mjw = new JsonWriter();
             mjw.beginArray();

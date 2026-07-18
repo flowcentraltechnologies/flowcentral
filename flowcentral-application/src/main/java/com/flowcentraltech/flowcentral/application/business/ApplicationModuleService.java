@@ -1392,6 +1392,7 @@ public interface ApplicationModuleService extends FlowCentralService {
     /**
      * Gets application enumerations with label like.
      * 
+     * @param applicationName the application name
      * @param label
      *                 the label
      * @param limit    the limit
@@ -1399,8 +1400,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List <? extends Listable> getDynamicEnumLists(String label, int limit) throws UnifyException;
-    
+    List<? extends Listable> getDynamicEnumLists(String applicationName, String label, int limit) throws UnifyException;    
     
     /**
      * Gets a application related widget types.

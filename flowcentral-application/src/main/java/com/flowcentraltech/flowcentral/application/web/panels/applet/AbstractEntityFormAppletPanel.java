@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
@@ -58,7 +59,6 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.common.database.Entity;
@@ -661,9 +661,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = applet.saveEntityAs(saveAsPolicy);
             entityActionResult.setSuccessHint("$m{entityformapplet.saveas.success.hint}");
 
-            Long sessionApplicationId = (Long) getSessionAttribute(
-                    FlowCentralSessionAttributeConstants.CURRENT_APPLICATION_ID);
-            if (!DataUtils.equals(saveApplicatIonId, sessionApplicationId)) {
+            final Long pageApplicationId = getPageAttribute(Long.class,
+                    AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
+            if (!DataUtils.equals(saveApplicatIonId, pageApplicationId)) {
                 entityActionResult.setHidePopupOnly(true);
             }
 

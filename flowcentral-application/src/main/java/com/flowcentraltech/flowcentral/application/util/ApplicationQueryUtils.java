@@ -28,6 +28,7 @@ import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNull;
 import com.tcdng.unify.core.criterion.Or;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application query utilities.
@@ -41,12 +42,15 @@ public final class ApplicationQueryUtils {
 
     }
 
-    public static void addWidgetTypeCriteria(Query<AppWidgetType> query, EntityFieldDataType entityFieldDataType) {
+    public static void addWidgetTypeCriteria(Query<AppWidgetType> query, String applicationName, EntityFieldDataType entityFieldDataType) {
         if (entityFieldDataType == null) {
             query.addRestriction(new IsNull("dataType"));
+            if (!StringUtils.isBlank(applicationName)) {
+                query.addEquals("applicationName", applicationName);
+            }
         } else {
             if (entityFieldDataType.isArray()) {
-                query.addRestriction(new And().add(new Equals("applicationName", "application"))
+                query.addRestriction(new And().add( new Equals("applicationName", "application"))
                         .add(new Amongst("name", Arrays.asList("textarea", "textareamedium", "textarealarge",
                                 "textareaxlarge", "textareaxxlarge"))));
             } else if (entityFieldDataType.isEntityRef()) {
@@ -76,6 +80,9 @@ public final class ApplicationQueryUtils {
                 query.addEquals("applicationName", "application").addEquals("name", "enumlist");
             } else if (entityFieldDataType.isMapped()) {
                 query.addRestriction(new Equals("inputType", InputType.MAPPED));
+                if (!StringUtils.isBlank(applicationName)) {
+                    query.addEquals("applicationName", applicationName);
+                }
             } else {
                 DataType dataType = entityFieldDataType.dataType();
                 if (dataType == null) {
@@ -84,16 +91,24 @@ public final class ApplicationQueryUtils {
                     query.addRestriction(new And().add(new Amongst("dataType", dataType.convertibleFromTypes()))
                             .add(new Equals("listOption", true)));
                 }
+
+                if (!StringUtils.isBlank(applicationName)) {
+                    query.addEquals("applicationName", applicationName);
+                }
             }
         }
     }
 
-    public static void addWidgetTypeCriteria(Query<AppWidgetType> query, DataType dataType) {
+    public static void addWidgetTypeCriteria(Query<AppWidgetType> query, String applicationName, DataType dataType) {
         if (dataType == null) {
             query.addRestriction(new IsNull("dataType"));
         } else {
             query.addRestriction(new And().add(new Amongst("dataType", dataType.convertibleFromTypes()))
                     .add(new Equals("listOption", true)));
         }
-    }
+
+        if (!StringUtils.isBlank(applicationName)) {
+            query.addEquals("applicationName", applicationName);
+        }
+   }
 }

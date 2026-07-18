@@ -18,11 +18,11 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.AbstractStudioAppComponentApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -52,13 +52,14 @@ public abstract class AbstractStudioAppComponentAppletController<T extends Abstr
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
+        au().updatePageContextWithApplicationDetailsSessionAttributes();
 
         U pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
             T applet = createApplet(getPage(), studioModuleService, au(), getPathVariables(),
-                    (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
+                    getPageAttribute(String.class, AppletPageAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
         } else {

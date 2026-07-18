@@ -20,9 +20,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -44,10 +44,10 @@ public class StudioFormListCommand extends AbstractApplicationListCommand<ZeroPa
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
-        final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        final Long applicationId = getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
-            return application().findAppForms((AppFormQuery) new AppFormQuery()
-                    .applicationId(applicationId).addSelect("id", "name", "description"));
+            return application().findAppForms((AppFormQuery) new AppFormQuery().applicationId(applicationId)
+                    .addSelect("id", "name", "description"));
         }
 
         return Collections.emptyList();
