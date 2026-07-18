@@ -22,10 +22,9 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.ListParam;
-import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.PageRequestContextUtil;
 import com.tcdng.unify.web.ui.WebUIApplicationComponents;
-import com.tcdng.unify.web.ui.widget.Page;
+import com.tcdng.unify.web.ui.widget.Document;
 
 /**
  * Convenient abstract base class for flowcentral list command.
@@ -51,16 +50,15 @@ public abstract class AbstractFlowCentralListCommand<T extends ListParam> extend
         return environmentService;
     }
 
-    protected <U> U getPageAttribute(Class<U> clazz, String name) throws UnifyException {
-        Page page = resolveRequestPage();
-        return DataUtils.convert(clazz, page != null ? page.getAttribute(name) : null);
-    }
-
-    private Page resolveRequestPage() throws UnifyException {
-        PageRequestContextUtil rcUtil = getComponent(PageRequestContextUtil.class,
-                WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL);
-        Page contentPage = rcUtil.getContentPage();
-        return contentPage == null ? rcUtil.getRequestPage() : contentPage;
+    @SuppressWarnings("unchecked")
+    protected <U> U getDocumentAttribute(Class<U> clazz, String name) throws UnifyException {
+        Document document = getComponent(PageRequestContextUtil.class,
+                WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL).getRequestDocument();
+        if (document != null) {
+            return (U) document.getAttribute(name);
+        }
+        
+        return null;
     }
 
 }

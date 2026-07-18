@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -124,7 +124,7 @@ public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFor
     private void constructNewForm() throws UnifyException {
         form = constructNewForm(FormMode.ENTITY_CREATE, null, false);
         ((BaseApplicationEntity) form.getCtx().getInst()).setApplicationId(
-                au().getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID));
+                au().getDocumentAttribute(Long.class, AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID));
         viewMode = ViewMode.NEW_PRIMARY_FORM;
     }
 }

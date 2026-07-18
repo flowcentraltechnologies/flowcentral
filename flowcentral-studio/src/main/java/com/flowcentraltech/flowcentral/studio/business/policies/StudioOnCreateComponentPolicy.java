@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -50,9 +50,10 @@ public class StudioOnCreateComponentPolicy extends AbstractStudioAppletActionPol
     @SuppressWarnings("unchecked")
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
-        final String applicationName = getPageAttribute(String.class,
-                AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
-        final Long applicationId = getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
+        final String applicationName = getDocumentAttribute(String.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
+        final Long applicationId = getDocumentAttribute(Long.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         StudioAppComponentType type = StudioAppComponentType
                 .fromEntityClass((Class<? extends BaseApplicationEntity>) ctx.getInst().getClass());
         // Register instance as privilege based on type

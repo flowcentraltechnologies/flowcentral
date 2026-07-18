@@ -500,15 +500,7 @@ public interface AppletUtilities extends FlowCentralComponent {
     void setSessionAttribute(String name, Object val) throws UnifyException;
 
     /**
-     * Updates page context with application details session attributes.
-     * 
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void updatePageContextWithApplicationDetailsSessionAttributes() throws UnifyException;
-
-    /**
-     * Gets page attribute.
+     * Gets document attribute.
      * 
      * @param type
      *                      the attribute type
@@ -518,7 +510,7 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T> T getPageAttribute(Class<T> type, String attributeName) throws UnifyException;
+    <T> T getDocumentAttribute(Class<T> type, String attributeName) throws UnifyException;
 
     /**
      * Gets current system timestamp.

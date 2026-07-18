@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
@@ -43,8 +43,8 @@ public class StudioWidgetsListCommand extends AbstractApplicationListCommand<Zer
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
-        final String applicationName = getPageAttribute(String.class,
-                AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
+        final String applicationName = getDocumentAttribute(String.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
         if (!StringUtils.isBlank(applicationName)) {
             return application().getRelatedWidgetTypes(applicationName);
         }

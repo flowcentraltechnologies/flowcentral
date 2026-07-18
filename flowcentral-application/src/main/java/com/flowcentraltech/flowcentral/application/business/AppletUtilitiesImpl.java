@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
@@ -205,7 +204,7 @@ import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.font.FontSymbolManager;
 import com.tcdng.unify.web.ui.PageRequestContextUtil;
 import com.tcdng.unify.web.ui.WebUIApplicationComponents;
-import com.tcdng.unify.web.ui.widget.Page;
+import com.tcdng.unify.web.ui.widget.Document;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
@@ -684,28 +683,16 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return DataUtils.convert(clazz, getSessionAttribute(attributeName));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void updatePageContextWithApplicationDetailsSessionAttributes() throws UnifyException {
-        Page page = resolveRequestPage();
-        page.setAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_ID,
-                getSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_ID));
-        page.setAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_NAME,
-                getSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_NAME));
-        page.setAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_DESC,
-                getSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_DESC));
-    }
-
-    @Override
-    public <T> T getPageAttribute(Class<T> type, String attributeName) throws UnifyException {
-        Page page = resolveRequestPage();
-        return DataUtils.convert(type, page != null ? page.getAttribute(attributeName) : null);
-    }
-
-    private Page resolveRequestPage() throws UnifyException {
-        PageRequestContextUtil rcUtil = getComponent(PageRequestContextUtil.class,
-                WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL);
-        Page contentPage = rcUtil.getContentPage();
-        return contentPage == null ? rcUtil.getRequestPage() : contentPage;
+    public <T> T getDocumentAttribute(Class<T> type, String attributeName) throws UnifyException {
+        Document document = getComponent(PageRequestContextUtil.class,
+                WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL).getRequestDocument();
+        if (document != null) {
+            return (T) document.getAttribute(attributeName);
+        }
+        
+        return null;
     }
 
     @Override

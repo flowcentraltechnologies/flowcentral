@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationQueryUtils;
@@ -51,8 +51,8 @@ public class DataTypeEditorListCommand extends AbstractApplicationListCommand<St
         if (stringParam.isPresent()) {
             DataType dataType = DataType.fromCode(stringParam.getValue());
             if (dataType != null) {
-                final String applicationName = getPageAttribute(String.class,
-                        AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
+                final String applicationName = getDocumentAttribute(String.class,
+                        AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
                 AppWidgetTypeQuery query = new AppWidgetTypeQuery();
                 ApplicationQueryUtils.addWidgetTypeCriteria(query, applicationName, dataType);
                 query.addSelect("editor", "description").addOrder("description");

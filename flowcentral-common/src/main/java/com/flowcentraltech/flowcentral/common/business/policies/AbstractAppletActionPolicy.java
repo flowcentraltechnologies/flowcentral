@@ -17,10 +17,7 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.web.ui.PageRequestContextUtil;
-import com.tcdng.unify.web.ui.WebUIApplicationComponents;
-import com.tcdng.unify.web.ui.widget.Page;
+import com.tcdng.unify.web.ui.widget.Document;
 
 /**
  * Convenient abstract base class for applet action policies.
@@ -29,17 +26,15 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @since 4.1
  */
 public abstract class AbstractAppletActionPolicy extends AbstractEntityActionPolicy implements AppletActionPolicy {
-
-    protected <U> U getPageAttribute(Class<U> clazz, String name) throws UnifyException {
-        Page page = resolveRequestPage();
-        return DataUtils.convert(clazz, page != null ? page.getAttribute(name) : null);
-    }
-
-    private Page resolveRequestPage() throws UnifyException {
-        PageRequestContextUtil rcUtil = getComponent(PageRequestContextUtil.class,
-                WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL);
-        Page contentPage = rcUtil.getContentPage();
-        return contentPage == null ? rcUtil.getRequestPage() : contentPage;
+    
+    @SuppressWarnings("unchecked")
+    protected <U> U getDocumentAttribute(Class<U> clazz, String name) throws UnifyException {
+        Document document = getRequestContextUtil().getRequestDocument();
+        if (document != null) {
+            return (U) document.getAttribute(name);
+        }
+        
+        return null;
     }
 
 }

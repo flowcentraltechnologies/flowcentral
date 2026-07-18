@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.util.EntityCompositionUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityComposition;
@@ -63,7 +63,7 @@ public class CreateCsvEntityNavigationPolicy extends AbstractStudioAppletNavigat
     @Override
     public void onInit(ValueStore inst) throws UnifyException {
         inst.store("applicationId",
-                getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID));
+                getDocumentAttribute(Long.class, AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID));
     }
 
     @Override

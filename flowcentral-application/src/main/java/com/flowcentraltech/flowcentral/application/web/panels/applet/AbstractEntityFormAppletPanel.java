@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
@@ -661,9 +661,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = applet.saveEntityAs(saveAsPolicy);
             entityActionResult.setSuccessHint("$m{entityformapplet.saveas.success.hint}");
 
-            final Long pageApplicationId = getPageAttribute(Long.class,
-                    AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
-            if (!DataUtils.equals(saveApplicatIonId, pageApplicationId)) {
+            final Long docApplicationId = getDocumentAttribute(Long.class,
+                    AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
+            if (!DataUtils.equals(saveApplicatIonId, docApplicationId)) {
                 entityActionResult.setHidePopupOnly(true);
             }
 

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.util.RefEncodingUtils;
@@ -96,8 +96,8 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
     }
 
     protected List<? extends Listable> doSearch(String input, int limit) throws UnifyException {
-        final String applicationName = getPageAttribute(String.class,
-                AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
+        final String applicationName = getDocumentAttribute(String.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
         return getResultByRef(applicationName, input, limit);
     }
 

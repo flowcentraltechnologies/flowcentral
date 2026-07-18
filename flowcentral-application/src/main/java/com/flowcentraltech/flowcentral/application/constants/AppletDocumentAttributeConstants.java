@@ -17,15 +17,17 @@
 package com.flowcentraltech.flowcentral.application.constants;
 
 /**
- * Applet page attribute constants
+ * Applet document attribute constants
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface AppletPageAttributeConstants {
-    
-    String TABLE_ACTIONS = "applet:page:tableaction";
-    
-    String SECURED_LINK_ACCESSKEY= "applet:page:securedlinkaccesskey";
+public interface AppletDocumentAttributeConstants {
+
+    String CURRENT_APPLICATION_ID = "applet:doc:CURRENT_APPLICATION_ID";
+
+    String CURRENT_APPLICATION_NAME = "applet:doc:CURRENT_APPLICATION_NAME";
+
+    String CURRENT_APPLICATION_DESC = "applet:doc:CURRENT_APPLICATION_DESC";
 
 }

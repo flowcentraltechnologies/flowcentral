@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
@@ -54,14 +54,15 @@ public class StudioReportableByNameListCommand extends AbstractApplicationListCo
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
-        final Long applicationId = getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
+        final Long applicationId = getDocumentAttribute(Long.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
             List<ReportableDefinition> reportableDefinitionList = reportModuleService
                     .findReportDefinitions((ReportableDefinitionQuery) new ReportableDefinitionQuery()
                             .applicationId(applicationId).addSelect("name", "description"));
             if (!DataUtils.isBlank(reportableDefinitionList)) {
-                final String applicationName = getPageAttribute(String.class,
-                        AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
+                final String applicationName = getDocumentAttribute(String.class,
+                        AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
                 List<ListData> list = new ArrayList<ListData>();
                 for (ReportableDefinition reportableDefinition : reportableDefinitionList) {
                     list.add(new ListData(ApplicationNameUtils.getApplicationEntityLongName(applicationName,

@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.common.data.Listable;
@@ -44,7 +44,8 @@ public class StudioFormListCommand extends AbstractApplicationListCommand<ZeroPa
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
-        final Long applicationId = getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
+        final Long applicationId = getDocumentAttribute(Long.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
             return application().findAppForms((AppFormQuery) new AppFormQuery().applicationId(applicationId)
                     .addSelect("id", "name", "description"));

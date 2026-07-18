@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletPageAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAction;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
@@ -49,7 +49,8 @@ public class StudioOnUpdateFormActionPolicy extends AbstractStudioAppletActionPo
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         final AppFormAction appFormAction = (AppFormAction) ctx.getInst();
-        final Long applicationId = getPageAttribute(Long.class, AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
+        final Long applicationId = getDocumentAttribute(Long.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         String privilegeCode = PrivilegeNameUtils.getFormActionPrivilegeName(appFormAction.getName());
         registerPrivilege(ConfigType.CUSTOM, applicationId,
                 ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE, privilegeCode,
