@@ -39,8 +39,9 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
 
     @Override
     public boolean submitFromExternal(Long workRecId, String workflowName, String entityName, String requestedBy,
-            Date requestedOn) throws UnifyException {
-        workflowModuleService.submitToWorkflowByName(workflowName, entityName, workRecId, requestedBy, requestedOn);
+            Date requestedOn, String branchCode, String departmentCode) throws UnifyException {
+        workflowModuleService.submitToWorkflowByName(workflowName, entityName, workRecId, requestedBy, requestedOn,
+                branchCode, departmentCode);
         return true;
     }
 

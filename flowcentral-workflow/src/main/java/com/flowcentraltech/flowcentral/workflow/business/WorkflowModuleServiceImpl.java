@@ -826,10 +826,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     @SuppressWarnings("unchecked")
     @Override
     public void submitToWorkflowByName(String workflowName, String entity, Long id, String requestedBy,
-            Date requestedOn) throws UnifyException {
+            Date requestedOn, String branchCode, String departmentCode) throws UnifyException {
         EntityClassDef entityClassDef = appletUtil.getEntityClassDef(entity);
         WorkEntity inst = (WorkEntity) environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(),
                 id);
+        inst.setWorkBranchCode(branchCode);
+        inst.setWorkDepartmentCode(departmentCode);
         submitToWorkflow(getWfDef(workflowName), inst, requestedBy, requestedOn);
     }
 

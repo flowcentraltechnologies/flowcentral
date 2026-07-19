@@ -115,13 +115,17 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                     the requested by
      * @param requestedOn
      *                     the requested on
+     * @param branchCode
+     *                       the branch code
+     * @param departmentCode
+     *                       the department code
      * @throws UnifyException
      *                        if workflow channel is unknown. If instance type does
      *                        not match workflow entity definition. If an error
      *                        occurs
      */
-    void submitToWorkflowByName(String workflowName, String entity, Long id, String requestedBy, Date requestedOn)
-            throws UnifyException;
+    void submitToWorkflowByName(String workflowName, String entity, Long id, String requestedBy, Date requestedOn,
+            String branchCode, String departmentCode) throws UnifyException;
     
     /**
      * Submit entity instance to workflow by workflow name.
