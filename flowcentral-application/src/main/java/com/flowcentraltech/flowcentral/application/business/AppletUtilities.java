@@ -2736,4 +2736,12 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     void generateLetterListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
             String letterGenerator) throws UnifyException;
+
+    /**
+     * Logs an exception.
+     * 
+     * @param e
+     *          the exception to log
+     */
+    void logError(Exception e);
 }

@@ -2798,6 +2798,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         return _generator.generateHtmlReport(reader, new FormListingOptions(letterFormListing));
     }
 
+    @Override
+    public void logError(Exception e) {
+        super.logError(e);
+    }
+
     private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
         SequenceCodeGenerator gen = sequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
