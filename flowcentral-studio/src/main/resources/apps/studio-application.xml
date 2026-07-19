@@ -134,6 +134,11 @@
 			inputType="STRING"
 			editor="!fc-entitysearch ref:$s{application.appEntityLoadingRef} listKey:$s{longName}"
 			renderer="!ui-label" />
+		<widgetType name="workentitysearch"
+			description="$m{studio.widgettype.workentitysearch}" dataType="STRING"
+			inputType="STRING"
+			editor="!fc-workentitysearch ref:$s{application.appEntityLoadingRef} listKey:$s{longName}"
+			renderer="!ui-label" />
 		<widgetType name="entityfieldwidgetlist"
 			description="$m{studio.widgettype.entityfieldwidgetlist}"
 			dataType="STRING" inputType="STRING"
@@ -4343,7 +4348,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" />
 						<field name="cacheRefreshRate" column="0" required="true" />
 					</section>
@@ -4534,7 +4539,7 @@
 					<section name="basicDetails" columns="TYPE_1">
 						<field name="dashboardOptionId"
 							inputWidget="application.entitysearch" column="0" required="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" switchOnChange="true" required="true" />
 						<field name="chartDataSource" column="0" required="true"
 							switchOnChange="true" />
@@ -4593,7 +4598,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" />
 						<field name="notificationType"
 							inputWidget="application.enumlist" column="0" required="true"
@@ -4717,7 +4722,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" />
 						<field name="fontFamily" column="0" />
 						<field name="fontSizeInPixels"
@@ -5055,7 +5060,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" switchOnChange="true" />
 						<field name="itemsPerPage" inputWidget="application.integer"
 							column="0" />
@@ -5242,7 +5247,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" switchOnChange="true" />
 						<field name="titleFormat"
 							inputWidget="application.texttemplate" column="0" />
@@ -5759,7 +5764,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" switchOnChange="true" />
 						<field name="helpOverview"
 							inputWidget="application.richtexteditormedium" column="0" />
@@ -5943,7 +5948,7 @@
 						<field name="casePrefix" inputWidget="application.wordwithupper"
 							column="0"/>
 						<field name="entity"
-							inputWidget="studio.workentitybynamelist" column="0"
+							inputWidget="studio.workentitysearch" column="0"
 							required="true" saveAs="true" switchOnChange="true" />
 						<field name="loadingTable"
 							inputWidget="studio.workflowtablelist" column="0" />
