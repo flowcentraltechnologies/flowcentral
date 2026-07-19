@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.Diff;
 import com.flowcentraltech.flowcentral.application.data.DiffEntity;
 import com.flowcentraltech.flowcentral.application.data.DiffEntityField;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormDiffWidget;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
@@ -32,7 +33,6 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Form diff writer.
@@ -42,7 +42,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(FormDiffWidget.class)
 @Component("formdiff-writer")
-public class FormDiffWriter extends AbstractControlWriter {
+public class FormDiffWriter extends AbstractFlowCentralControlWriter {
 
     private Map<DataChangeType, String> hints;
 

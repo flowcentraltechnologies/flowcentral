@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditorWidget;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor;
@@ -30,7 +31,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Workflow editor widget writer.
@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(WorkflowEditorWidget.class)
 @Component("fc-workfloweditor-writer")
-public class WorkflowEditorWriter extends AbstractControlWriter {
+public class WorkflowEditorWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

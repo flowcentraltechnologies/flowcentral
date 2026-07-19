@@ -16,22 +16,16 @@
 package com.flowcentraltech.flowcentral.common.web.panels;
 
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
+import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
 
 /**
- * Convenient abstract base class for flowcentral panels.
+ * Base class for flowCentral panel writers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractFlowCentralPanel extends AbstractPanel {
-
-    protected final boolean isEnterprise() throws UnifyException {
-        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
-    }
+public abstract class AbstractFlowCentralPanelWriter extends AbstractPanelWriter {
 
     protected final boolean isRestrictedStudioMode() throws UnifyException {
         return getContainerSetting(boolean.class,

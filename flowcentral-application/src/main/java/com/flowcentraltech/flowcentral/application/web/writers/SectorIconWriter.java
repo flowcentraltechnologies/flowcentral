@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIconWidget;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.system.constants.SystemColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -25,7 +26,6 @@ import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Sector icon writer.
@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(SectorIconWidget.class)
 @Component("sectoricon-writer")
-public class SectorIconWriter extends AbstractControlWriter {
+public class SectorIconWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

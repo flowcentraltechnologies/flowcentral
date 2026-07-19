@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.studio.web.writers;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditorWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -27,7 +28,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Form editor widget writer.
@@ -37,7 +37,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(FormEditorWidget.class)
 @Component("fc-formeditor-writer")
-public class FormEditorWriter extends AbstractControlWriter {
+public class FormEditorWriter extends AbstractFlowCentralControlWriter {
 
     private static final String[] TAB_PROPERTY_KEYS = { "formeditor.tab.caption.prefix", "formeditor.tab.contenttype",
             "formeditor.tab.label", "formeditor.tab.applet", "formeditor.tab.reference", "formeditor.tab.editaction",

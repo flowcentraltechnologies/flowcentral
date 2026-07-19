@@ -13,25 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.web.panels;
+package com.flowcentraltech.flowcentral.common.web.writers;
 
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
+import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
- * Convenient abstract base class for flowcentral panels.
+ * Abstract base class for flowCentral control writers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractFlowCentralPanel extends AbstractPanel {
-
-    protected final boolean isEnterprise() throws UnifyException {
-        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
-    }
+public abstract class AbstractFlowCentralControlWriter extends AbstractControlWriter {
 
     protected final boolean isRestrictedStudioMode() throws UnifyException {
         return getContainerSetting(boolean.class,

@@ -55,6 +55,11 @@ public abstract class AbstractFlowCentralPageController<T extends AbstractPageBe
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
 
+    protected final boolean isRestrictedStudioMode() throws UnifyException {
+        return getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+    }
+
     protected EnvironmentService environment() {
         return environmentService;
     }

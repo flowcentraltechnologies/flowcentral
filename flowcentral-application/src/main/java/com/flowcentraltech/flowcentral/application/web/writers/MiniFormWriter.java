@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.common.annotation.FormSectionLoading;
 import com.flowcentraltech.flowcentral.common.business.policies.FormSectionBeanLoader;
 import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils;
 import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils.ColumnRenderInfo;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -42,7 +43,6 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Mini form widget writer.
@@ -52,7 +52,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(MiniFormWidget.class)
 @Component("fc-miniform-writer")
-public class MiniFormWriter extends AbstractControlWriter {
+public class MiniFormWriter extends AbstractFlowCentralControlWriter {
 
     @Configurable
     private SystemModuleService systemModuleService;

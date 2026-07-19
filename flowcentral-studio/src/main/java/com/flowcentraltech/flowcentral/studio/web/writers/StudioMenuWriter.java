@@ -26,7 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
 import com.flowcentraltech.flowcentral.common.business.CodeGenerationProvider;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanelWriter;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
@@ -41,7 +41,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
 
 /**
  * Studio menu writer.
@@ -51,7 +50,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
  */
 @Writes(StudioMenuWidget.class)
 @Component("fc-studiomenu-writer")
-public class StudioMenuWriter extends AbstractPanelWriter {
+public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
 
     private static final String ORIGINAL_MENU_PATHID = "originalStudio.menu.pathID";
 
@@ -128,8 +127,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         }
 
         final boolean isCollaborationEnabled = appletUtilities.collaborationProvider() != null;
-        final boolean restrictedStudio = getContainerSetting(boolean.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+        final boolean restrictedStudio = isRestrictedStudioMode();
         final List<StudioAppComponentType> selMenuCategoryList = application
                 ? (restrictedStudio ? restrictedMenuCategoryList : menuCategoryList)
                 : (isCollaborationEnabled ? collabUtilMenuCategoryList : utilMenuCategoryList);

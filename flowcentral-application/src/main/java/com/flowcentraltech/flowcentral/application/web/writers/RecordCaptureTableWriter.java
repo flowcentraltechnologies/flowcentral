@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.data.RecordCaptureError;
 import com.flowcentraltech.flowcentral.application.data.RecordCaptureTableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.RecordCaptureTableWidget;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -35,7 +36,6 @@ import com.tcdng.unify.web.ui.widget.AbstractMultiControl.ChildWidgetInfo;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Record capture table widget writer.
@@ -45,7 +45,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(RecordCaptureTableWidget.class)
 @Component("fc-recordcapturetable-writer")
-public class RecordCaptureTableWriter extends AbstractControlWriter {
+public class RecordCaptureTableWriter extends AbstractFlowCentralControlWriter {
 
     @Configurable
     private SystemModuleService systemModuleService;

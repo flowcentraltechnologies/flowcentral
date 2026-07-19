@@ -26,7 +26,6 @@ import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractApplicationForwarderController;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
@@ -206,8 +205,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         pageBean.setClientPushSync(clientUpdateSync);
         setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
 
-        setPageWidgetVisible("publishAppBtn", getContainerSetting(boolean.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE));
+        setPageWidgetVisible("publishAppBtn", isRestrictedStudioMode());
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.E
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.EntityTreeLevel;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.TableColumnInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTableWidget;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -36,7 +37,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.PushType;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Entity tree table widget writer.
@@ -46,7 +46,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(EntityTreeTableWidget.class)
 @Component("fc-entitytreetable-writer")
-public class EntityTreeTableWriter extends AbstractControlWriter {
+public class EntityTreeTableWriter extends AbstractFlowCentralControlWriter {
 
     @Configurable
     private AppletUtilities au;

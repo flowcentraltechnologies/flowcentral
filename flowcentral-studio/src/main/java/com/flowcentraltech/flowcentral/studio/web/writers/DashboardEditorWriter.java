@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.writers;
 import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditorWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -29,7 +30,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Dashboard editor widget writer.
@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(DashboardEditorWidget.class)
 @Component("fc-dashboardeditor-writer")
-public class DashboardEditorWriter extends AbstractControlWriter {
+public class DashboardEditorWriter extends AbstractFlowCentralControlWriter {
 
     private static final String[] SECTION_PROPERTY_KEYS = { "dashboardeditor.section.caption.prefix",
             "dashboardeditor.section.columns" };

@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityCompositionEntry;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityCompositionWidget;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
@@ -30,7 +31,6 @@ import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Entity composition widget writer.
@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(EntityCompositionWidget.class)
 @Component("fc-entitycomposition-writer")
-public class EntityCompositionWriter extends AbstractControlWriter {
+public class EntityCompositionWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

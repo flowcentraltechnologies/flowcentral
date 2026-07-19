@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.WidgetRuleEntry;
 import com.flowcentraltech.flowcentral.application.web.widgets.WidgetRulesWidget;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
@@ -30,7 +31,6 @@ import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Widget rules widget writer.
@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(WidgetRulesWidget.class)
 @Component("fc-widgetrules-writer")
-public class WidgetRulesWriter extends AbstractControlWriter {
+public class WidgetRulesWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

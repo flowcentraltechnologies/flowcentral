@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.studio.web.writers;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.studio.web.widgets.TableEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.TableEditorWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -27,7 +28,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Table editor widget writer.
@@ -37,7 +37,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(TableEditorWidget.class)
 @Component("fc-tableeditor-writer")
-public class TableEditorWriter extends AbstractControlWriter {
+public class TableEditorWriter extends AbstractFlowCentralControlWriter {
 
     private static final String[] COLUMN_PROPERTY_KEYS = { "tableeditor.field", "tableeditor.label", "tableeditor.link",
             "tableeditor.symbol", "tableeditor.order", "tableeditor.widget", "tableeditor.widthratio",

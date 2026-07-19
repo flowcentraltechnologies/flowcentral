@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.dashboard.web.writers;
 
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.dashboard.web.widgets.DashboardSlateWidget;
 import com.flowcentraltech.flowcentral.dashboard.web.widgets.DashboardSlateWidget.DashboardSlot;
 import com.tcdng.unify.core.UnifyException;
@@ -24,7 +25,6 @@ import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Dashboard slate writer.
@@ -34,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(DashboardSlateWidget.class)
 @Component("fc-dashboardslate-writer")
-public class DashboardSlateWriter extends AbstractControlWriter {
+public class DashboardSlateWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

@@ -18,14 +18,13 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormBreadCrumbsWidget;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Form bread crumbs writer.
@@ -35,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(FormBreadCrumbsWidget.class)
 @Component("formbreadcrumbs-writer")
-public class FormBreadCrumbsWriter extends AbstractControlWriter {
+public class FormBreadCrumbsWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -43,8 +42,7 @@ public class FormBreadCrumbsWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, frmBreadCrumbsWidget);
         writer.write(">");
-        final boolean restrictedMode = getContainerSetting(boolean.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+        final boolean restrictedMode = isRestrictedStudioMode();
         BreadCrumbs frmBreadCrumbs = frmBreadCrumbsWidget.getBreadCrumbs();
         if (frmBreadCrumbs != null) {
             writer.write("<ul class=\"base\">");

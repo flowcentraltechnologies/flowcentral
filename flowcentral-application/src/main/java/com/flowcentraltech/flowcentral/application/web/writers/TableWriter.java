@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -54,7 +55,6 @@ import com.tcdng.unify.web.ui.widget.UploadControlHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Table widget writer.
@@ -64,7 +64,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(AbstractTableWidget.class)
 @Component("fc-table-writer")
-public class TableWriter extends AbstractControlWriter {
+public class TableWriter extends AbstractFlowCentralControlWriter {
 
     @Configurable
     private SystemModuleService systemModuleService;
