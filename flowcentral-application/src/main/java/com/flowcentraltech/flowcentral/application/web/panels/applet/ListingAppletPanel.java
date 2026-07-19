@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import java.util.Optional;
+
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -59,13 +61,16 @@ public class ListingAppletPanel extends AbstractAppletPanel {
     public void performFormAction() throws UnifyException {
         String actionName = getRequestTarget(String.class);
         final ListingApplet applet = getListEntityApplet();
-        FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
-        FormContext ctx = evaluateCurrentFormContext(
-                new FormValidationContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()), actionName));
-        if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(),
-                    formActionDef.getRule(), actionName);
-            handleEntityActionResult(entityActionResult);
+        Optional<FormActionDef> optional = applet.getCurrentFormDef().getFormActionDef(actionName);
+        if (optional.isPresent()) {
+            FormActionDef formActionDef = optional.get();
+            FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(
+                    EvaluationMode.getRequiredMode(formActionDef.isValidateForm()), actionName));
+            if (!ctx.isWithFormErrors()) {
+                EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(),
+                        formActionDef.getRule(), actionName);
+                handleEntityActionResult(entityActionResult);
+            }
         }
     }
 

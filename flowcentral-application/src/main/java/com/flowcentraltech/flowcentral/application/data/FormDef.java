@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -464,24 +465,12 @@ public class FormDef extends BaseApplicationEntityDef {
         return formStatePolicyDef;
     }
 
-    public FormAnnotationDef getFormAnnotationDef(String name) {
-        FormAnnotationDef formAnnotationDef = formAnnotationDefMap.get(name);
-        if (formAnnotationDef == null) {
-            throw new RuntimeException("Form annotation definition with name [" + name
-                    + "] is unknown for form definition [" + getName() + "].");
-        }
-
-        return formAnnotationDef;
+    public Optional<FormAnnotationDef> getFormAnnotationDef(String name) {
+        return Optional.ofNullable(formAnnotationDefMap.get(name));
     }
 
-    public FormActionDef getFormActionDef(String name) {
-        FormActionDef formActionDef = formActionDefMap.get(name);
-        if (formActionDef == null) {
-            throw new RuntimeException("Form action definition with name [" + name
-                    + "] is unknown for form definition [" + getName() + "].");
-        }
-
-        return formActionDef;
+    public Optional<FormActionDef> getFormActionDef(String name) {
+        return Optional.ofNullable(formActionDefMap.get(name));
     }
 
     public FormRelatedListDef getFormRelatedListDef(String name) {
