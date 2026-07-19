@@ -54,7 +54,7 @@
 !ui-panel:topBannerSwitch layout:$d{!ui-horizontal cellType:middle style:$s{width:100%;}} styleClass:$e{fc-topbannerswitch}
     components:$c{publishAppBtn newAppBtn currentAppLabel currentAppSel}
 !ui-label:currentAppLabel caption:$m{studio.application.caption} styleClass:$s{fc-applicationlabel}
-!ui-select:currentAppSel style:$s{width:220px;} list:$s{devapplicationlist} binding:currentApplicationId
+!ui-select:currentAppSel style:$s{width:160px;} list:$s{devapplicationlist} binding:currentApplicationId
 	blankOption:$m{studio.application.utilities}
     eventHandler:$d{!ui-event event:onchange action:$c{currentAppChangeAct}}
 !ui-button:publishAppBtn caption:$m{button.publishapplication} styleClass:$e{fc-orangebutton} debounce:false
