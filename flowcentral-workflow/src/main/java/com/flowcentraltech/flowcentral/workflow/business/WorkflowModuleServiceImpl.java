@@ -116,6 +116,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntitySingleFormItem;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowDesignation;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
@@ -224,6 +225,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     @Configurable
     private WorkItemExternalAccessibilityProvider workItemExternalAccessibilityProvider;
 
+    @Configurable
+    private WorkflowDesignationProvider workflowDesignationProvider;
+    
     private final FactoryMap<String, WfDef> wfDefFactoryMap;
 
     private final FactoryMap<String, WfWizardDef> wfWizardDefFactoryMap;
@@ -837,7 +841,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     @Override
     public void submitToWorkflowByName(String workflowName, WorkEntity inst) throws UnifyException {
-        submitToWorkflow(getWfDef(workflowName), inst, null, null);
+        final String submittedBy = inst.getCreatedBy();
+        if (workflowDesignationProvider != null) {
+            WorkflowDesignation designation = workflowDesignationProvider.getDesignation(submittedBy);
+            inst.setWorkBranchCode(designation.getBranchCode());
+            inst.setWorkDepartmentCode(designation.getDepartmentCode());
+        }
+        
+        submitToWorkflow(getWfDef(workflowName), inst, submittedBy, getNow());
     }
 
     @SuppressWarnings("unchecked")
