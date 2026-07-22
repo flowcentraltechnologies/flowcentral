@@ -1074,19 +1074,20 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     for (AppTableColumn appTableColumn : appTable.getColumnList()) {
-                        final EntityFieldDef entityFieldDef = entityDef.getFieldDef(appTableColumn.getField());
-                        String renderer = InputWidgetUtils
-                                .constructRenderer(getWidgetTypeDef(appTableColumn.getRenderWidget()), entityFieldDef);
-                        String editor = !entityFieldDef.isListOnly()
-                                ? InputWidgetUtils.constructEditor(getWidgetTypeDef(appTableColumn.getRenderWidget()),
-                                        entityFieldDef)
-                                : null;
-                        OrderType order = OrderType.fromCode(appTableColumn.getOrder());
-                        tdb.addColumnDef(appTableColumn.getLabel(), appTableColumn.getField(), renderer, editor,
-                                appTableColumn.getLinkAct(), appTableColumn.getSymbol(), order,
-                                appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(),
-                                appTableColumn.isHiddenOnNull(), appTableColumn.isHidden(), appTableColumn.isDisabled(),
-                                appTableColumn.isEditable(), appTableColumn.isSortable(), appTableColumn.isSummary());
+                        if (entityDef.isWithFieldDef(appTableColumn.getField())) {
+                            final EntityFieldDef entityFieldDef = entityDef.getFieldDef(appTableColumn.getField());
+                            String renderer = InputWidgetUtils.constructRenderer(
+                                    getWidgetTypeDef(appTableColumn.getRenderWidget()), entityFieldDef);
+                            String editor = !entityFieldDef.isListOnly() ? InputWidgetUtils.constructEditor(
+                                    getWidgetTypeDef(appTableColumn.getRenderWidget()), entityFieldDef) : null;
+                            OrderType order = OrderType.fromCode(appTableColumn.getOrder());
+                            tdb.addColumnDef(appTableColumn.getLabel(), appTableColumn.getField(), renderer, editor,
+                                    appTableColumn.getLinkAct(), appTableColumn.getSymbol(), order,
+                                    appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(),
+                                    appTableColumn.isHiddenOnNull(), appTableColumn.isHidden(),
+                                    appTableColumn.isDisabled(), appTableColumn.isEditable(),
+                                    appTableColumn.isSortable(), appTableColumn.isSummary());
+                        }
                     }
 
                     for (AppTableAction appTableAction : appTable.getActionList()) {
