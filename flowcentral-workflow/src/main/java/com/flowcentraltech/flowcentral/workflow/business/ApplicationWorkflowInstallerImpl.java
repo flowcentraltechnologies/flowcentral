@@ -129,6 +129,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         workflow.setCasePrefix(wfConfig.getCasePrefix());
                         workflow.setLoadingTable(wfConfig.getLoadingTable());
                         workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
+                        workflow.setSupportManualSubmission(wfConfig.getSupportManualSubmission());
                         workflow.setPublished(wfConfig.getPublished());
                         workflow.setRunnable(wfConfig.getRunnable());
                         workflow.setClassified(wfConfig.getClassified());
@@ -145,6 +146,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         oldWorkflow.setCasePrefix(wfConfig.getCasePrefix());
                         oldWorkflow.setLoadingTable(wfConfig.getLoadingTable());
                         oldWorkflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
+                        oldWorkflow.setSupportManualSubmission(wfConfig.getSupportManualSubmission());
                         oldWorkflow.setPublished(wfConfig.getPublished());
                         oldWorkflow.setRunnable(wfConfig.getRunnable());
                         oldWorkflow.setClassified(wfConfig.getClassified());

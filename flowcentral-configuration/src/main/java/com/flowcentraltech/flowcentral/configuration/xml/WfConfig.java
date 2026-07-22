@@ -50,6 +50,9 @@ public class WfConfig extends BaseRootAppConfig {
     private Boolean supportMultiItemAction;
     
     @JacksonXmlProperty(isAttribute = true)
+    private Boolean supportManualSubmission;
+   
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean published;
     
     @JacksonXmlProperty(isAttribute = true)
@@ -64,6 +67,7 @@ public class WfConfig extends BaseRootAppConfig {
     public WfConfig() {
         super("flowcentral-workflow-4.0.0.xsd");
         this.supportMultiItemAction = Boolean.FALSE;
+        this.supportManualSubmission = Boolean.FALSE;
         this.published = Boolean.FALSE;
         this.runnable = Boolean.FALSE;
     }
@@ -114,6 +118,14 @@ public class WfConfig extends BaseRootAppConfig {
 
     public void setSupportMultiItemAction(Boolean supportMultiItemAction) {
         this.supportMultiItemAction = supportMultiItemAction;
+    }
+
+    public Boolean getSupportManualSubmission() {
+        return supportManualSubmission;
+    }
+
+    public void setSupportManualSubmission(Boolean supportManualSubmission) {
+        this.supportManualSubmission = supportManualSubmission;
     }
 
     public Boolean getPublished() {

@@ -120,6 +120,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 workflowConfig.setCasePrefix(workflow.getCasePrefix());
                 workflowConfig.setLoadingTable(workflow.getLoadingTable());
                 workflowConfig.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
+                workflowConfig.setSupportManualSubmission(workflow.isSupportManualSubmission());
                 workflowConfig.setPublished(workflow.isPublished());
                 workflowConfig.setRunnable(workflow.isRunnable());
                 workflowConfig.setClassified(workflow.isClassified());

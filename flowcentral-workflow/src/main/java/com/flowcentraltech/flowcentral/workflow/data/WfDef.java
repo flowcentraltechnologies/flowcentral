@@ -67,10 +67,13 @@ public class WfDef extends BaseApplicationEntityDef {
 
     private boolean supportMultiItemAction;
 
-    private WfDef(String entity, String label, String casePrefix, WfStepDef startStepDef, WfStepDef errorStepDef, Map<String, WfStepDef> steps,
-            Map<String, WfFilterDef> filterDefMap, Map<String, WfSetValuesDef> setValuesDefMap,
-            List<StringToken> descFormat, boolean supportMultiItemAction, ApplicationEntityNameParts nameParts,
-            String description, Long id, long version) {
+    private boolean supportManualSubmission;
+
+    private WfDef(String entity, String label, String casePrefix, WfStepDef startStepDef, WfStepDef errorStepDef,
+            Map<String, WfStepDef> steps, Map<String, WfFilterDef> filterDefMap,
+            Map<String, WfSetValuesDef> setValuesDefMap, List<StringToken> descFormat, boolean supportMultiItemAction,
+            boolean supportManualSubmission, ApplicationEntityNameParts nameParts, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.entity = entity;
         this.label = label;
@@ -82,6 +85,7 @@ public class WfDef extends BaseApplicationEntityDef {
         this.setValuesDefMap = setValuesDefMap;
         this.descFormat = descFormat;
         this.supportMultiItemAction = supportMultiItemAction;
+        this.supportManualSubmission = supportManualSubmission;
     }
 
     public WfStepDef getStartStepDef() {
@@ -102,6 +106,10 @@ public class WfDef extends BaseApplicationEntityDef {
 
     public boolean isSupportMultiItemAction() {
         return supportMultiItemAction;
+    }
+
+    public boolean isSupportManualSubmission() {
+        return supportManualSubmission;
     }
 
     public String getLabel() {
@@ -216,9 +224,11 @@ public class WfDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
-    public static Builder newBuilder(String entity, String label, String casePrefix, List<StringToken> descFormat, boolean supportMultiItemAction,
-            String longName, String description, Long id, long version) {
-        return new Builder(entity, label, casePrefix, descFormat, supportMultiItemAction, longName, description, id, version);
+    public static Builder newBuilder(String entity, String label, String casePrefix, List<StringToken> descFormat,
+            boolean supportMultiItemAction, boolean supportManualSubmission, String longName, String description,
+            Long id, long version) {
+        return new Builder(entity, label, casePrefix, descFormat, supportMultiItemAction, supportManualSubmission,
+                longName, description, id, version);
     }
 
     public static class Builder {
@@ -243,6 +253,8 @@ public class WfDef extends BaseApplicationEntityDef {
 
         private boolean supportMultiItemAction;
 
+        private boolean supportManualSubmission;
+
         private String longName;
 
         private String description;
@@ -252,7 +264,8 @@ public class WfDef extends BaseApplicationEntityDef {
         private long version;
 
         public Builder(String entity, String label, String casePrefix, List<StringToken> descFormat,
-                boolean supportMultiItemAction, String longName, String description, Long id, long version) {
+                boolean supportMultiItemAction, boolean supportManualSubmission, String longName, String description,
+                Long id, long version) {
             this.entity = entity;
             this.label = label;
             this.casePrefix = casePrefix;
@@ -260,6 +273,7 @@ public class WfDef extends BaseApplicationEntityDef {
             this.longName = longName;
             this.description = description;
             this.supportMultiItemAction = supportMultiItemAction;
+            this.supportManualSubmission = supportManualSubmission;
             this.id = id;
             this.version = version;
             this.steps = new HashMap<String, WfStepDef>();
@@ -330,7 +344,7 @@ public class WfDef extends BaseApplicationEntityDef {
             }
 
             return new WfDef(entity, label, casePrefix, startStepDef, errorStepDef, DataUtils.unmodifiableMap(steps),
-                    filterDefMap, setValuesDefMap, descFormat, supportMultiItemAction,
+                    filterDefMap, setValuesDefMap, descFormat, supportMultiItemAction, supportManualSubmission,
                     ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         }
     }

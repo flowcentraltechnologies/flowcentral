@@ -218,7 +218,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     @Configurable
     private WorkflowRoleProvider workflowRoleProvider;
-    
+
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
@@ -227,7 +227,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     @Configurable
     private WorkflowDesignationProvider workflowDesignationProvider;
-    
+
     private final FactoryMap<String, WfDef> wfDefFactoryMap;
 
     private final FactoryMap<String, WfWizardDef> wfWizardDefFactoryMap;
@@ -266,8 +266,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             : Collections.emptyList();
                     WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(),
                             resolveApplicationMessage(workflow.getLabel()), workflow.getCasePrefix(), descFormat,
-                            workflow.isSupportMultiItemAction(), longName, workflow.getDescription(), workflow.getId(),
-                            workflow.getVersionNo());
+                            workflow.isSupportMultiItemAction(), workflow.isSupportManualSubmission(), longName,
+                            workflow.getDescription(), workflow.getId(), workflow.getVersionNo());
 
                     Set<String> filterNames = new HashSet<String>();
                     for (WorkflowFilter workflowFilter : workflow.getFilterList()) {
@@ -554,7 +554,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         workflow.getName());
                 workflows.add(new PortalWorkflow(workflowName, resolveApplicationMessage(workflow.getDescription()),
                         resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(), workflow.getCasePrefix(),
-                        workflow.getDescFormat(), workflow.isSupportManualSubmission(), DataUtils.unmodifiableList(steps)));
+                        workflow.getDescFormat(), workflow.isSupportManualSubmission(),
+                        DataUtils.unmodifiableList(steps)));
             }
 
             return workflows;
@@ -614,6 +615,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             runWorkflow.setCasePrefix(workflow.getCasePrefix());
             runWorkflow.setLoadingTable(workflow.getLoadingTable());
             runWorkflow.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
+            runWorkflow.setSupportManualSubmission(workflow.isSupportManualSubmission());
             runWorkflow.setEntity(workflow.getEntity());
             runWorkflow.setLabel(workflow.getLabel());
             runWorkflow.setFilterList(workflow.getFilterList());
@@ -727,6 +729,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             workflow.setCasePrefix(designType.casePrefix());
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
             workflow.setSupportMultiItemAction(true);
+            workflow.setSupportManualSubmission(true);
             workflow.setPublished(false);
             workflow.setRunnable(true);
             workflow.setDescFormat(null);
@@ -744,6 +747,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 workflow.setCasePrefix(designType.casePrefix());
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 workflow.setSupportMultiItemAction(true);
+                workflow.setSupportManualSubmission(true);
                 workflow.setPublished(false);
                 workflow.setRunnable(true);
                 workflow.setClassified(true);
@@ -847,7 +851,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             inst.setWorkBranchCode(designation.getBranchCode());
             inst.setWorkDepartmentCode(designation.getDepartmentCode());
         }
-        
+
         submitToWorkflow(getWfDef(workflowName), inst, submittedBy, getNow());
     }
 
