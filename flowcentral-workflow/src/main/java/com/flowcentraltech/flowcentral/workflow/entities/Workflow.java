@@ -56,6 +56,9 @@ public class Workflow extends BaseApplicationEntity {
     private boolean supportMultiItemAction;
     
     @Column
+    private boolean supportManualSubmission;
+    
+    @Column
     private boolean published;
     
     @Column
@@ -140,6 +143,14 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setSupportMultiItemAction(boolean supportMultiItemAction) {
         this.supportMultiItemAction = supportMultiItemAction;
+    }
+
+    public boolean isSupportManualSubmission() {
+        return supportManualSubmission;
+    }
+
+    public void setSupportManualSubmission(boolean supportManualSubmission) {
+        this.supportManualSubmission = supportManualSubmission;
     }
 
     public List<WorkflowFilter> getFilterList() {

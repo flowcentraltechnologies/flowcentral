@@ -43,12 +43,13 @@ public class PortalApplet {
 
     private String table;
 
-    private boolean primary;
+    private boolean portalAccess;
 
     private List<PortalAppletOption> options;
 
     public PortalApplet(String type, String name, String description, String label, String entity, String icon,
-            String createForm, String maintainForm, String table, boolean primary, List<PortalAppletOption> options) {
+            String createForm, String maintainForm, String table, boolean portalAccess,
+            List<PortalAppletOption> options) {
         this.type = type;
         this.name = name;
         this.description = description;
@@ -58,7 +59,7 @@ public class PortalApplet {
         this.createForm = createForm;
         this.maintainForm = maintainForm;
         this.table = table;
-        this.primary = primary;
+        this.portalAccess = portalAccess;
         this.options = options;
     }
 
@@ -98,8 +99,8 @@ public class PortalApplet {
         return table;
     }
 
-    public boolean isPrimary() {
-        return primary;
+    public boolean isPortalAccess() {
+        return portalAccess;
     }
 
     public List<PortalAppletOption> getOptions() {

@@ -176,6 +176,8 @@
 					label="$m{workflow.workflow.appletversionno}" type="LONG" />
 				<field name="supportMultiItemAction"
 					label="$m{workflow.workflow.supportmultiitemaction}" type="BOOLEAN" />
+				<field name="supportManualSubmission"
+					label="$m{workflow.workflow.supportmanualsubmission}" type="BOOLEAN" />
 				<field name="descFormat"
 					label="$m{workflow.workflow.itemdescformat}" type="STRING"
 					nullable="true" />

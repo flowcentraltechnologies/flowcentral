@@ -554,7 +554,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         workflow.getName());
                 workflows.add(new PortalWorkflow(workflowName, resolveApplicationMessage(workflow.getDescription()),
                         resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(), workflow.getCasePrefix(),
-                        workflow.getDescFormat(), DataUtils.unmodifiableList(steps)));
+                        workflow.getDescFormat(), workflow.isSupportManualSubmission(), DataUtils.unmodifiableList(steps)));
             }
 
             return workflows;

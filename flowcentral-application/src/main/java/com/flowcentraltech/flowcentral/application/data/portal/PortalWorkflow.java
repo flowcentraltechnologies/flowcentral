@@ -37,16 +37,19 @@ public class PortalWorkflow {
     
     private String descFormat;
 
+    private boolean manualSubmission;
+
     private List<PortalWorkflowStep> steps;
 
     public PortalWorkflow(String name, String description, String label, String entity, String prefix,
-            String descFormat, List<PortalWorkflowStep> steps) {
+            String descFormat, boolean manualSubmission, List<PortalWorkflowStep> steps) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.entity = entity;
         this.prefix = prefix;
         this.descFormat = descFormat;
+        this.manualSubmission = manualSubmission;
         this.steps = steps;
     }
 
@@ -72,6 +75,10 @@ public class PortalWorkflow {
 
     public String getDescFormat() {
         return descFormat;
+    }
+
+    public boolean isManualSubmission() {
+        return manualSubmission;
     }
 
     public List<PortalWorkflowStep> getSteps() {

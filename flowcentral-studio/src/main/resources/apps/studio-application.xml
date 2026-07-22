@@ -2833,6 +2833,8 @@
 							column="0" required="true" switchOnChange="true" visible="false" />
 						<field name="titleFormat"
 							inputWidget="application.texttemplate" column="0" />
+						<field name="portalAccess"
+							inputWidget="application.checkbox" column="0" />
 						<field name="baseField"
 							inputWidget="studio.entityreffieldlist" column="0"
 							required="true" visible="false" />
@@ -5957,7 +5959,7 @@
 						<field name="filterGenerator"
 							inputWidget="studio.workflowfiltergeneratorlist"
 							switchOnChange="true" column="0" />
-						<field name="supportMultiItemAction"
+						<field name="supportManualSubmission"
 							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>

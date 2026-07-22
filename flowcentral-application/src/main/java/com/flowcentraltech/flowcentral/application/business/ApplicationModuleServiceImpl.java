@@ -4081,7 +4081,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final Map<String, PortalEntity> entities = new HashMap<String, PortalEntity>();
         final Map<String, PortalReference> references = new HashMap<String, PortalReference>();
         for (String appletName : environment().valueList(String.class, "name", new AppAppletQuery()
-                .type(AppletType.MANAGE_ENTITYLIST).portalAccess(true).applicationName(applicationName))) {
+                .type(AppletType.MANAGE_ENTITYLIST).applicationName(applicationName))) {
             final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
             extractPortalDependencies(applet, applets, tables, forms, entities, references);
         }
