@@ -29,15 +29,6 @@ import com.tcdng.unify.core.UnifyException;
  * @since 4.1
  */
 public interface PortalWorkflowProvider extends FlowCentralComponent {
-
-    /**
-     * Gets list of portal application names.
-     * 
-     * @return the application name
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<String> getPortalApplicationNames() throws UnifyException;
     
     /**
      * Gets all portal workflow information for particular application.

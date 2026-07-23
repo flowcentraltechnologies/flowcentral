@@ -160,6 +160,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         application.setDescription(createAppForm.getApplicationDesc());
         application.setLabel(createAppForm.getApplicationLabel());
         application.setDevelopable(true);
+        application.setInstallable(true);
         application.setMenuAccess(true);
         final Long applicationId = application().createApplication(application, module);
 

@@ -41,9 +41,12 @@ public class ApplicationQuery extends BaseConfigNamedEntityQuery<Application> {
         return (ApplicationQuery) addEquals("menuAccess", true);
     }
 
-
     public ApplicationQuery isDevelopable() {
         return (ApplicationQuery) addEquals("developable", true);
+    }
+
+    public ApplicationQuery isInstallable() {
+        return (ApplicationQuery) addEquals("installable", true);
     }
 
 }

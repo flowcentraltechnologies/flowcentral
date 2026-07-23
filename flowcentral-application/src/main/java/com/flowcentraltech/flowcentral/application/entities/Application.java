@@ -46,6 +46,9 @@ public class Application extends BaseConfigNamedEntity {
     @Column
     private boolean developable;
 
+    @Column
+    private boolean installable;
+
     @Column(defaultVal = "'Y'")
     private boolean menuAccess;
 
@@ -109,6 +112,14 @@ public class Application extends BaseConfigNamedEntity {
 
     public void setDevelopable(boolean developable) {
         this.developable = developable;
+    }
+
+    public boolean isInstallable() {
+        return installable;
+    }
+
+    public void setInstallable(boolean installable) {
+        this.installable = installable;
     }
 
     public boolean isMenuAccess() {

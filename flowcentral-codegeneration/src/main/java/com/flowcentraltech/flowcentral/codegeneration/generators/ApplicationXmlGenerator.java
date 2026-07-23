@@ -210,6 +210,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
         appConfig.setLabel(ctx.isSnapshotMode() ? application.getLabel() : "$m{" + labelKey + "}");
         appConfig.setDisplayIndex(application.getDisplayIndex());
         appConfig.setDevelopable(ctx.isSnapshotMode());
+        appConfig.setInstallable(application.isInstallable());
         appConfig.setMenuAccess(application.isMenuAccess());
         appConfig.setAllowSecondaryTenants(application.isAllowSecondaryTenants());
         appConfig.setCustom(application.getConfigType().isCustom());

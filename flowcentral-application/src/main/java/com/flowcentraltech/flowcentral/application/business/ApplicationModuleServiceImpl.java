@@ -438,9 +438,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     Application application = environment().list(new ApplicationQuery().name(name));
                     return new ApplicationDef(application.getName(), application.getDescription(),
                             application.getLabel(), application.getId(), application.getVersionNo(),
-                            application.isDevelopable(), application.isMenuAccess(), application.getModuleName(),
-                            application.getModuleDesc(), application.getModuleLabel(), application.getModuleShortCode(),
-                            application.getSectorShortCode(), application.getSectorColor());
+                            application.isDevelopable(), application.isInstallable(), application.isMenuAccess(),
+                            application.getModuleName(), application.getModuleDesc(), application.getModuleLabel(),
+                            application.getModuleShortCode(), application.getSectorShortCode(),
+                            application.getSectorColor());
                 }
 
             };
@@ -2371,7 +2372,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 : (fieldDef.isDateTime() ? StandardFormatType.fromCode(entityDef.getDateTimeFormatter()) : null);
         return formatType != null ? appletUtilities.formatHelper().newFormatter(formatType) : null;
     }
-    
+
     @Override
     public EntityFieldDataType resolveListOnlyEntityDataType(AppEntityField appEntityField) throws UnifyException {
         logDebug("Resolving list-only entity data type for field [{1}] in entity [{0}]...",
@@ -4045,14 +4046,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<String> getPortalApplicationNames() throws UnifyException {
-        Set<String> applicationNames = new HashSet<String>();
-        if (portalWorkflowProvider != null) {
-            applicationNames.addAll(portalWorkflowProvider.getPortalApplicationNames());
-        }
-
-        applicationNames.addAll(environment().valueSet(String.class, "applicationName",
-                new AppAppletQuery().portalAccess(true).developable(true)));
-        return new ArrayList<String>(applicationNames);
+        return environment().valueList(String.class, "name", new ApplicationQuery().isInstallable());
     }
 
     @Override
@@ -4080,8 +4074,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final Map<String, PortalForm> forms = new HashMap<String, PortalForm>();
         final Map<String, PortalEntity> entities = new HashMap<String, PortalEntity>();
         final Map<String, PortalReference> references = new HashMap<String, PortalReference>();
-        for (String appletName : environment().valueList(String.class, "name", new AppAppletQuery()
-                .type(AppletType.MANAGE_ENTITYLIST).applicationName(applicationName))) {
+        for (String appletName : environment().valueList(String.class, "name",
+                new AppAppletQuery().type(AppletType.MANAGE_ENTITYLIST).applicationName(applicationName))) {
             final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
             extractPortalDependencies(applet, applets, tables, forms, entities, references);
         }
@@ -4090,8 +4084,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 .type(AppletType.DATA_IMPORT).portalAccess(true).applicationName(applicationName))) {
             final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
             AppletDef appletDef = getAppletDef(applet);
-            dataImports.put(applet, new PortalDataImport(applet, appletDef.getDescription(),
-                    appletDef.getLabel()));
+            dataImports.put(applet, new PortalDataImport(applet, appletDef.getDescription(), appletDef.getLabel()));
         }
 
         for (PortalWorkflow workflow : workflows) {
@@ -4476,9 +4469,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                         : null;
                                 if (formatter == null) {
                                     EntityDef refEntityDef = refEntityClassDef.getEntityDef();
-                                    formatter = resolveFormatter(refEntityDef, refEntityDef.getFieldDef(listProp.getProperty()));    
+                                    formatter = resolveFormatter(refEntityDef,
+                                            refEntityDef.getFieldDef(listProp.getProperty()));
                                 }
-                                
+
                                 Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
                                         csvRecord.get(listProp.getFieldName()), formatter);
                                 query.addEquals(listProp.getProperty(), cval);
@@ -4493,10 +4487,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
                                 : null;
                         if (formatter == null) {
-                            formatter = resolveFormatter(entityDef, entityDef.getFieldDef(fieldName));    
+                            formatter = resolveFormatter(entityDef, entityDef.getFieldDef(fieldName));
                         }
-                        
-                       val = csvRecord.get(fieldName);
+
+                        val = csvRecord.get(fieldName);
                     }
 
                     recMap.put(fieldName, new RecLoadInfo(fieldName, val, formatter));
@@ -5039,6 +5033,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             application.setLabel(label);
             application.setDisplayIndex(applicationConfig.getDisplayIndex());
             application.setDevelopable(applicationConfig.getDevelopable());
+            application.setInstallable(applicationConfig.getInstallable());
             application.setMenuAccess(applicationConfig.getMenuAccess());
             application.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
             application.setConfigType(ConfigType.STATIC);
@@ -5049,6 +5044,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             oldApplication.setDescription(description);
             oldApplication.setLabel(label);
             oldApplication.setDevelopable(applicationConfig.getDevelopable());
+            oldApplication.setInstallable(applicationConfig.getInstallable());
             oldApplication.setMenuAccess(applicationConfig.getMenuAccess());
             oldApplication.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
             oldApplication.setDisplayIndex(applicationConfig.getDisplayIndex());
@@ -5877,6 +5873,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             application.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
             application.setDisplayIndex(applicationConfig.getDisplayIndex());
             application.setDevelopable(applicationConfig.getDevelopable());
+            application.setInstallable(applicationConfig.getInstallable());
             application.setMenuAccess(applicationConfig.getMenuAccess());
             application.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
             application.setConfigType(ConfigType.CUSTOM);

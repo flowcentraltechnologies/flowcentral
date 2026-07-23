@@ -520,13 +520,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
-    public List<String> getPortalApplicationNames() throws UnifyException {
-        Set<String> applicationNames = environment().valueSet(String.class, "applicationName",
-                new WfStepQuery().workflowDevelopable(true).userActionable().workflowRunnable(true));
-        return new ArrayList<String>(applicationNames);
-    }
-
-    @Override
     public List<PortalWorkflow> getPortalWorkflows(String applicationName) throws UnifyException {
         Set<Long> workflowIds = environment().valueSet(Long.class, "workflowId", new WfStepQuery()
                 .applicationName(applicationName).workflowRunnable(true).withCasePrefix().userActionable());

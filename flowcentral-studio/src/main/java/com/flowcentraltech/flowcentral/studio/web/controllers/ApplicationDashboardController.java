@@ -33,16 +33,6 @@ import com.tcdng.unify.web.ui.AbstractPageController;
  */
 @Component("/applicationstudio/dashboard")
 @UplBinding("web/studio/upl/studiodashboard.upl")
-//@ResultMappings({
-//    @ResultMapping(name = "showcreateapplication",
-//        response = {"!showpopupresponse popup:$s{createApplicationPopup}" }),
-//    @ResultMapping(name = "reloadapplicationstudio", response = { "!forwardresponse path:$s{/applicationstudio}" }),
-//    @ResultMapping(name = "cancelnewapplication", response = { "!hidepopupresponse" }),
-//    @ResultMapping(name = "switchsearchapplication",
-//                response = {
-//                        "!refreshpanelresponse panels:$l{createApplicationPopup}" }),
-//    @ResultMapping(name = "newcreateapplication", response = {
-//                "!refreshpanelresponse panels:$l{switchApplicationPopup.entitySearchActionPanel}" }) })
 public class ApplicationDashboardController extends AbstractPageController<ApplicationDashboardPageBean> {
 
     @Configurable
@@ -51,63 +41,6 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
     public ApplicationDashboardController() {
         super(ApplicationDashboardPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
-
-//    @Action
-//    public String showCreateApplication() throws UnifyException {
-//        ApplicationDashboardPageBean pageBean = getPageBean();
-//        pageBean.setCreateAppForm(new CreateAppForm());
-//        return "showcreateapplication";
-//    }
-//
-//    @Action
-//    public String openApplication() throws UnifyException {
-//        IndexedTarget target = getRequestTarget(IndexedTarget.class);
-//        if (target.isValidIndex()) {
-//            Application _inst = (Application) getPageBean().getSwitchApplicationSearch().getEntityTable()
-//                    .getDispItemList().get(target.getIndex());
-//            setApplicationSessionAttributes(_inst);
-//        }
-//
-//        return "reloadapplicationstudio";
-//    }
-//
-//    @Action
-//    public String createApplication() throws UnifyException {
-//        ApplicationDashboardPageBean pageBean = getPageBean();
-//        CreateAppForm createAppForm = pageBean.getCreateAppForm();
-//
-//        Module module = null;
-//        if (createAppForm.isCreateModule()) {
-//            module = new Module();
-//            module.setName(createAppForm.getModuleName());
-//            module.setDescription(createAppForm.getModuleDesc());
-//            module.setLabel(createAppForm.getModuleLabel());
-//            module.setShortCode(createAppForm.getModuleShortCode());
-//        }
-//
-//        Application application = new Application();
-//        application.setModuleId(createAppForm.getModuleId());
-//        application.setName(createAppForm.getApplicationName());
-//        application.setDescription(createAppForm.getApplicationDesc());
-//        application.setLabel(createAppForm.getApplicationLabel());
-//        application.setDevelopable(true);
-//        application.setMenuAccess(true);
-//        appletUtils.application().createApplication(application, module);
-//        setApplicationSessionAttributes(application);
-//        return "reloadapplicationstudio";
-//    }
-//
-//    @Action
-//    public String prepareNewApplication() throws UnifyException {
-//        ApplicationDashboardPageBean pageBean = getPageBean();
-//        pageBean.setCreateAppForm(new CreateAppForm());
-//        return "switchcreateapplication";
-//    }
-//
-//    @Action
-//    public String cancelNewApplication() throws UnifyException {
-//        return "cancelnewapplication";
-//    }
 
     @Override
     protected void onOpenPage() throws UnifyException {
