@@ -4054,10 +4054,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final List<PortalWorkflow> workflows = portalWorkflowProvider != null
                 ? portalWorkflowProvider.getPortalWorkflows(applicationName)
                 : Collections.emptyList();
-        if (workflows.isEmpty() && environment()
-                .countAll(new AppAppletQuery().portalAccess(true).applicationName(applicationName)) == 0) {
-            return Optional.empty();
-        }
 
         final List<PortalReport> reports = portalReportProvider != null
                 ? portalReportProvider.getPortalReports(applicationName)
@@ -4066,6 +4062,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final List<PortalDashboard> dashboards = portalDashboardProvider != null
                 ? portalDashboardProvider.getPortalDashboards(applicationName)
                 : Collections.emptyList();
+        
+        if (workflows.isEmpty() && reports.isEmpty() && dashboards.isEmpty() && environment()
+                .countAll(new AppAppletQuery().applicationName(applicationName)) == 0) {
+            return Optional.empty();
+        }
 
         final ApplicationDef applicationDef = getApplicationDef(applicationName);
         final Map<String, PortalApplet> applets = new HashMap<String, PortalApplet>();
