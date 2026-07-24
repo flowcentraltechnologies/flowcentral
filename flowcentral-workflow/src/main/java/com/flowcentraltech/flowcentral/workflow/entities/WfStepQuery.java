@@ -77,6 +77,10 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     public WfStepQuery withCasePrefix() {
         return (WfStepQuery) addIsNotNull("workflowCasePrefix");
     }
+    
+    public WfStepQuery withCaseApplet() {
+        return (WfStepQuery) addIsNotNull("workflowCaseApplet");
+    }
 
     public WfStepQuery withEjectionRestriction() {
         return (WfStepQuery) addIsNotNull("ejectionRestriction");

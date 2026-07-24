@@ -169,6 +169,9 @@
 				<field name="casePrefix"
 					label="$m{workflow.workflow.caseprefix}" type="STRING"
 					maxLen="3" nullable="true" />
+				<field name="caseApplet"
+					label="$m{workflow.workflow.caseapplet}" type="STRING"
+					maxLen="64" nullable="true" />
 				<field name="loadingTable"
 					label="$m{workflow.workflow.loadingtable}" type="STRING"
 					maxLen="128" nullable="true" />

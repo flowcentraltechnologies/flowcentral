@@ -39,6 +39,9 @@ public class WfConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String casePrefix;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private String caseApplet;
 
     @JacksonXmlProperty(isAttribute = true)
     private String loadingTable;
@@ -94,6 +97,14 @@ public class WfConfig extends BaseRootAppConfig {
 
     public void setCasePrefix(String casePrefix) {
         this.casePrefix = casePrefix;
+    }
+
+    public String getCaseApplet() {
+        return caseApplet;
+    }
+
+    public void setCaseApplet(String caseApplet) {
+        this.caseApplet = caseApplet;
     }
 
     public String getLoadingTable() {

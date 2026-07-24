@@ -265,9 +265,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
                     WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(),
-                            resolveApplicationMessage(workflow.getLabel()), workflow.getCasePrefix(), descFormat,
-                            workflow.isSupportMultiItemAction(), workflow.isSupportManualSubmission(), longName,
-                            workflow.getDescription(), workflow.getId(), workflow.getVersionNo());
+                            resolveApplicationMessage(workflow.getLabel()), workflow.getCasePrefix(),
+                            workflow.getCaseApplet(), descFormat, workflow.isSupportMultiItemAction(),
+                            workflow.isSupportManualSubmission(), longName, workflow.getDescription(), workflow.getId(),
+                            workflow.getVersionNo());
 
                     Set<String> filterNames = new HashSet<String>();
                     for (WorkflowFilter workflowFilter : workflow.getFilterList()) {
@@ -521,8 +522,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
     @Override
     public List<PortalWorkflow> getPortalWorkflows(String applicationName) throws UnifyException {
-        Set<Long> workflowIds = environment().valueSet(Long.class, "workflowId", new WfStepQuery()
-                .applicationName(applicationName).workflowRunnable(true).withCasePrefix().userActionable());
+        Set<Long> workflowIds = environment().valueSet(Long.class, "workflowId",
+                new WfStepQuery().applicationName(applicationName).workflowRunnable(true).withCasePrefix()
+                        .withCaseApplet().userActionable());
         if (!DataUtils.isBlank(workflowIds)) {
             final List<PortalWorkflow> workflows = new ArrayList<PortalWorkflow>();
             for (Long workflowId : workflowIds) {
@@ -547,7 +549,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         workflow.getName());
                 workflows.add(new PortalWorkflow(workflowName, resolveApplicationMessage(workflow.getDescription()),
                         resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(), workflow.getCasePrefix(),
-                        workflow.getDescFormat(), workflow.isSupportManualSubmission(),
+                        workflow.getCaseApplet(), workflow.getDescFormat(), workflow.isSupportManualSubmission(),
                         DataUtils.unmodifiableList(steps)));
             }
 
@@ -606,6 +608,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         } else {
             runWorkflow.setDescription(runnableDesc);
             runWorkflow.setCasePrefix(workflow.getCasePrefix());
+            runWorkflow.setCaseApplet(workflow.getCaseApplet());
             runWorkflow.setLoadingTable(workflow.getLoadingTable());
             runWorkflow.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
             runWorkflow.setSupportManualSubmission(workflow.isSupportManualSubmission());
@@ -719,7 +722,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             workflow.setDescription(workflowDesc);
             workflow.setLabel(workflowLabel);
             workflow.setEntity(entityDef.getLongName());
-            workflow.setCasePrefix(designType.casePrefix());
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
             workflow.setSupportMultiItemAction(true);
             workflow.setSupportManualSubmission(true);
@@ -737,7 +739,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 workflow.setConfigType(ConfigType.STATIC);
                 workflow.setDescription(workflowDesc);
                 workflow.setLabel(workflowLabel);
-                workflow.setCasePrefix(designType.casePrefix());
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 workflow.setSupportMultiItemAction(true);
                 workflow.setSupportManualSubmission(true);

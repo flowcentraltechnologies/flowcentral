@@ -47,6 +47,8 @@ public class WfDef extends BaseApplicationEntityDef {
 
     private final String casePrefix;
 
+    private final String caseApplet;
+
     private Map<String, WfStepDef> steps;
 
     private WfStepDef startStepDef;
@@ -69,8 +71,8 @@ public class WfDef extends BaseApplicationEntityDef {
 
     private boolean supportManualSubmission;
 
-    private WfDef(String entity, String label, String casePrefix, WfStepDef startStepDef, WfStepDef errorStepDef,
-            Map<String, WfStepDef> steps, Map<String, WfFilterDef> filterDefMap,
+    private WfDef(String entity, String label, String casePrefix, String caseApplet, WfStepDef startStepDef,
+            WfStepDef errorStepDef, Map<String, WfStepDef> steps, Map<String, WfFilterDef> filterDefMap,
             Map<String, WfSetValuesDef> setValuesDefMap, List<StringToken> descFormat, boolean supportMultiItemAction,
             boolean supportManualSubmission, ApplicationEntityNameParts nameParts, String description, Long id,
             long version) {
@@ -78,6 +80,7 @@ public class WfDef extends BaseApplicationEntityDef {
         this.entity = entity;
         this.label = label;
         this.casePrefix = casePrefix;
+        this.caseApplet = caseApplet;
         this.startStepDef = startStepDef;
         this.errorStepDef = errorStepDef;
         this.steps = steps;
@@ -122,6 +125,14 @@ public class WfDef extends BaseApplicationEntityDef {
 
     public boolean isWithCasePrefix() {
         return !StringUtils.isBlank(casePrefix);
+    }
+
+    public String getCaseApplet() {
+        return caseApplet;
+    }
+
+    public boolean isWithCaseApplet() {
+        return !StringUtils.isBlank(caseApplet);
     }
 
     public WfSetValuesDef getSetValuesDef(String name) {
@@ -224,11 +235,11 @@ public class WfDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
-    public static Builder newBuilder(String entity, String label, String casePrefix, List<StringToken> descFormat,
-            boolean supportMultiItemAction, boolean supportManualSubmission, String longName, String description,
-            Long id, long version) {
-        return new Builder(entity, label, casePrefix, descFormat, supportMultiItemAction, supportManualSubmission,
-                longName, description, id, version);
+    public static Builder newBuilder(String entity, String label, String casePrefix, String caseApplet,
+            List<StringToken> descFormat, boolean supportMultiItemAction, boolean supportManualSubmission,
+            String longName, String description, Long id, long version) {
+        return new Builder(entity, label, casePrefix, caseApplet, descFormat, supportMultiItemAction,
+                supportManualSubmission, longName, description, id, version);
     }
 
     public static class Builder {
@@ -238,6 +249,8 @@ public class WfDef extends BaseApplicationEntityDef {
         private String label;
 
         private String casePrefix;
+
+        private String caseApplet;
 
         private Map<String, WfStepDef> steps;
 
@@ -263,12 +276,13 @@ public class WfDef extends BaseApplicationEntityDef {
 
         private long version;
 
-        public Builder(String entity, String label, String casePrefix, List<StringToken> descFormat,
+        public Builder(String entity, String label, String casePrefix, String caseApplet, List<StringToken> descFormat,
                 boolean supportMultiItemAction, boolean supportManualSubmission, String longName, String description,
                 Long id, long version) {
             this.entity = entity;
             this.label = label;
             this.casePrefix = casePrefix;
+            this.caseApplet = caseApplet;
             this.descFormat = descFormat;
             this.longName = longName;
             this.description = description;
@@ -343,9 +357,10 @@ public class WfDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Workflow has no error step.");
             }
 
-            return new WfDef(entity, label, casePrefix, startStepDef, errorStepDef, DataUtils.unmodifiableMap(steps),
-                    filterDefMap, setValuesDefMap, descFormat, supportMultiItemAction, supportManualSubmission,
-                    ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
+            return new WfDef(entity, label, casePrefix, caseApplet, startStepDef, errorStepDef,
+                    DataUtils.unmodifiableMap(steps), filterDefMap, setValuesDefMap, descFormat, supportMultiItemAction,
+                    supportManualSubmission, ApplicationNameUtils.getApplicationEntityNameParts(longName), description,
+                    id, version);
         }
     }
 }

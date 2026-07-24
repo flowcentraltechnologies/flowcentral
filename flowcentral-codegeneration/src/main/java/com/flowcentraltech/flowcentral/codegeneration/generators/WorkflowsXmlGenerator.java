@@ -118,6 +118,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 workflowConfig.setDescription(ctx.isSnapshotMode() ? workflow.getDescription() : "$m{" + descKey + "}");
                 workflowConfig.setLabel(ctx.isSnapshotMode() ? workflow.getLabel() : "$m{" + labelKey + "}");
                 workflowConfig.setCasePrefix(workflow.getCasePrefix());
+                workflowConfig.setCaseApplet(workflow.getCaseApplet());
                 workflowConfig.setLoadingTable(workflow.getLoadingTable());
                 workflowConfig.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
                 workflowConfig.setSupportManualSubmission(workflow.isSupportManualSubmission());

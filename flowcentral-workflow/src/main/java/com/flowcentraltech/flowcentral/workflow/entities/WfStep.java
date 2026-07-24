@@ -154,6 +154,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @ListOnly(key = "workflowId", property = "casePrefix")
     private String workflowCasePrefix;
 
+    @ListOnly(key = "workflowId", property = "caseApplet")
+    private String workflowCaseApplet;
+
     @ListOnly(key = "workflowId", property = "description")
     private String workflowDesc;
 
@@ -495,6 +498,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setWorkflowCasePrefix(String workflowCasePrefix) {
         this.workflowCasePrefix = workflowCasePrefix;
+    }
+
+    public String getWorkflowCaseApplet() {
+        return workflowCaseApplet;
+    }
+
+    public void setWorkflowCaseApplet(String workflowCaseApplet) {
+        this.workflowCaseApplet = workflowCaseApplet;
     }
 
     public String getWorkflowDesc() {
