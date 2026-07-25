@@ -599,7 +599,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (systemModuleService.getSysParameterValue(boolean.class,
                 SecurityModuleSysParamConstants.ENABLE_PASSWORD_HISTORY)) {
             PasswordHistoryQuery query = new PasswordHistoryQuery().userId(userId).password(newPassword);
-            if (environment().countAll(query) > 0) {
+            if (environment().exists(query)) {
                 throw new UnifyException(SecurityModuleErrorConstants.NEW_PASSWORD_IS_STALE);
             }
 
@@ -790,7 +790,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             logDebug("Installing default users ...");
             String email = systemModuleService.getSysParameterValue(String.class,
                     SystemModuleSysParamConstants.SYSTEM_EMAIL);
-            if (environment().countAll(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID)) == 0) {
+            if (!environment().exists(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID))) {
                 User user = new User(DefaultApplicationConstants.SYSTEM_ENTITY_ID,
                         resolveSessionMessage(DefaultApplicationConstants.SYSTEM_FULLNAME),
                         DefaultApplicationConstants.SYSTEM_LOGINID, email, Boolean.FALSE);
@@ -803,7 +803,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                         new Update().add("email", email));
             }
 
-            if (environment().countAll(new PasswordComplexityQuery().ignoreEmptyCriteria(true)) == 0) {
+            if (!environment().exists(new PasswordComplexityQuery().ignoreEmptyCriteria(true))) {
                 PasswordComplexity passwordComplexity = new PasswordComplexity();
                 passwordComplexity.setMinimumPasswordLen(1);
                 passwordComplexity.setMinimumAlphabets(null);

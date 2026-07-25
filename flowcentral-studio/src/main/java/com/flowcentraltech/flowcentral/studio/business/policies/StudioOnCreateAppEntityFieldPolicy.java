@@ -46,8 +46,8 @@ public class StudioOnCreateAppEntityFieldPolicy extends AbstractStudioAppEntityF
         if (appEntityField.isReportable() && appEntityField.getDataType().isTableViewable()) {
             Long reportableDefinitionId = getReportableDefinitionId(appEntityField);
             if (QueryUtils.isValidLongCriteria(reportableDefinitionId)) {
-                if (environment().countAll(new ReportableFieldQuery().reportableId(reportableDefinitionId)
-                        .name(appEntityField.getName())) == 0) {
+                if (!environment().exists(new ReportableFieldQuery().reportableId(reportableDefinitionId)
+                        .name(appEntityField.getName()))) {
                     ReportableField reportableField = new ReportableField();
                     reportableField.setReportableId(reportableDefinitionId);
                     ReportEntityUtils.populateReportableField(reportableField, appEntityField,

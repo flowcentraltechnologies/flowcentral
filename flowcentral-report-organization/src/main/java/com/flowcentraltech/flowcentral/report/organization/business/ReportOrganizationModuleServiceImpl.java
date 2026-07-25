@@ -111,8 +111,8 @@ public class ReportOrganizationModuleServiceImpl extends AbstractFlowCentralServ
                 Optional<Long> reportConfigurationId = environment().valueOptional(Long.class, "id",
                         new ReportConfigurationQuery().applicationName(reportInfo.getApplicationName())
                                 .name(reportInfo.getReportName()));
-                if (reportConfigurationId.isPresent() && environment().countAll(new ReportGroupMemberQuery()
-                        .reportGroupId(reportGroupId).reportConfigurationId(reportConfigurationId.get())) == 0) {
+                if (reportConfigurationId.isPresent() && !environment().exists(new ReportGroupMemberQuery()
+                        .reportGroupId(reportGroupId).reportConfigurationId(reportConfigurationId.get()))) {
                     reportGroupMember.setId(null);
                     reportGroupMember.setReportGroupId(reportGroupId);
                     reportGroupMember.setReportConfigurationId(reportConfigurationId.get());

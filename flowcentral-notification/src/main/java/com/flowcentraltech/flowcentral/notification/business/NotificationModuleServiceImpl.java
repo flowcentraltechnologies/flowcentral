@@ -525,8 +525,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 final Date now = environment().getNow();
                 for (NotifType notifType : NOTIFICATION_TYPE_LIST) {
                     for (Long tenantId : au.system().getPrimaryMappedTenantIds()) {
-                        if (environment().countAll(new NotificationChannelQuery().notifType(notifType)
-                                .status(RecordStatus.ACTIVE)) > 0) {
+                        if (environment().exists(new NotificationChannelQuery().notifType(notifType)
+                                .status(RecordStatus.ACTIVE))) {
                             TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(tenantId);
                             final NotifChannelDef notifChannelDef = tenantChannelInfo
                                     .getNotificationChannelDef(notifType);

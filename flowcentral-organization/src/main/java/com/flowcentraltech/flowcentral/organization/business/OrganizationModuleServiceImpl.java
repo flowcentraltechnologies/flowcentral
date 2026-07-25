@@ -265,7 +265,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
         return environment()
-                .countAll(new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode).code(privilegeCode)) > 0;
+                .exists(new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode).code(privilegeCode));
     }
 
     @Override
@@ -298,8 +298,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                 Optional<Long> privilegeId = environment().valueOptional(Long.class, "id",
                         new PrivilegeQuery().code(privilegeCode));
                 if (privilegeId.isPresent()) {
-                    if (environment()
-                            .countAll(new RolePrivilegeQuery().privilegeId(privilegeId.get()).roleId(roleId)) == 0) {
+                    if (!environment()
+                            .exists(new RolePrivilegeQuery().privilegeId(privilegeId.get()).roleId(roleId))) {
                         rolePrivilege.setId(null);
                         rolePrivilege.setRoleId(roleId);
                         rolePrivilege.setPrivilegeId(privilegeId.get());

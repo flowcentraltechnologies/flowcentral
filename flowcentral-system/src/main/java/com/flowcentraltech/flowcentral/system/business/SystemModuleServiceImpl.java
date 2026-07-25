@@ -277,7 +277,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public boolean exists(String datasourceName) throws UnifyException {
-        return environment().countAll(new DataSourceConnectionQuery().name(datasourceName)) > 0;
+        return environment().exists(new DataSourceConnectionQuery().name(datasourceName));
     }
 
     @Override

@@ -185,7 +185,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     public String onDeleteApplication() throws UnifyException {
         final Long applicationId = getDocumentAttribute(Long.class,
                 AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
-        if (environment().countAll(new ApplicationQuery().id(applicationId)) == 0) {
+        if (!environment().exists(new ApplicationQuery().id(applicationId))) {
             ApplicationStudioPageBean pageBean = getPageBean();
             pageBean.setCurrentApplicationId(null);
             return switchApplication();

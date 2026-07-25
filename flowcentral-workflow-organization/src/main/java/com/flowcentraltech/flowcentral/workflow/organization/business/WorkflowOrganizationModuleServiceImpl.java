@@ -152,8 +152,8 @@ public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralSe
                 Optional<Long> stepId = environment().valueOptional(Long.class, "id",
                         new WfStepQuery().applicationName(wfStepInfo.getApplicationName())
                                 .workflowName(wfStepInfo.getWorkflowName()).name(wfStepInfo.getStepName()));
-                if (stepId.isPresent() && environment().countAll(
-                        new WfStepRoleQuery().workflowRunnable(true).roleId(roleId).wfStepId(stepId.get())) == 0) {
+                if (stepId.isPresent() && !environment().exists(
+                        new WfStepRoleQuery().workflowRunnable(true).roleId(roleId).wfStepId(stepId.get()))) {
                     wfStepRole.setId(null);
                     wfStepRole.setRoleId(roleId);
                     wfStepRole.setWfStepId(stepId.get());
