@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -170,7 +171,7 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
      *                        if an error occurs
      */
     protected void setProcessVariable(ValueStore valueStore, String name, Object val) throws UnifyException {
-        valueStore.setTempValue(name, val);
+        valueStore.setTempValue(SystemUtils.encodeProcessVariableCode(name), val);
     }
 
     /**
