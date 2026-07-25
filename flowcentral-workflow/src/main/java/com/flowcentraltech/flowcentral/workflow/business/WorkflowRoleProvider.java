@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.workflow.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowDesignation;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.tcdng.unify.core.UnifyException;
 
@@ -68,4 +69,13 @@ public interface WorkflowRoleProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     String getUserFullName(String userLoginId) throws UnifyException;
+
+    /**
+     * Gets workflow designation by user.
+     * 
+     * @param userName the user name
+     * @return the designation
+     * @throws UnifyException if an error occurs
+     */
+    WorkflowDesignation getDesignation(String userName) throws UnifyException;
 }

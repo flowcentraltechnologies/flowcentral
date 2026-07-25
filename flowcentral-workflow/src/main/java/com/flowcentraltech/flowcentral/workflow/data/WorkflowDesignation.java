@@ -23,6 +23,8 @@ package com.flowcentraltech.flowcentral.workflow.data;
  */
 public class WorkflowDesignation {
 
+    public static final WorkflowDesignation BLANK = new WorkflowDesignation();
+    
     private String branchCode;
 
     private String roleCode;
@@ -33,6 +35,10 @@ public class WorkflowDesignation {
         this.branchCode = branchCode;
         this.roleCode = roleCode;
         this.departmentCode = departmentCode;
+    }
+
+    private WorkflowDesignation() {
+
     }
 
     public String getBranchCode() {

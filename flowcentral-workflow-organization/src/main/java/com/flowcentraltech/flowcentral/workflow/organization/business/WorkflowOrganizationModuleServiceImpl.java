@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowRoleProvider;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowDesignation;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
@@ -104,6 +105,11 @@ public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralSe
     @Override
     public String getUserFullName(String userLoginId) throws UnifyException {
         return securityModuleService.getUserFullName(userLoginId);
+    }
+
+    @Override
+    public WorkflowDesignation getDesignation(String userName) throws UnifyException {
+        return WorkflowDesignation.BLANK;
     }
 
     @Override

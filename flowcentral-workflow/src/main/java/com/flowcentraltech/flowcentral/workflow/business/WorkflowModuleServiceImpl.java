@@ -225,9 +225,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     @Configurable
     private WorkItemExternalAccessibilityProvider workItemExternalAccessibilityProvider;
 
-    @Configurable
-    private WorkflowDesignationProvider workflowDesignationProvider;
-
     private final FactoryMap<String, WfDef> wfDefFactoryMap;
 
     private final FactoryMap<String, WfWizardDef> wfWizardDefFactoryMap;
@@ -840,8 +837,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     @Override
     public void submitToWorkflowByName(String workflowName, WorkEntity inst) throws UnifyException {
         final String submittedBy = inst.getCreatedBy();
-        if (workflowDesignationProvider != null) {
-            WorkflowDesignation designation = workflowDesignationProvider.getDesignation(submittedBy);
+        if (workflowRoleProvider != null) {
+            WorkflowDesignation designation = workflowRoleProvider.getDesignation(submittedBy);
             inst.setWorkBranchCode(designation.getBranchCode());
             inst.setWorkDepartmentCode(designation.getDepartmentCode());
         }
