@@ -184,6 +184,10 @@ public class DataSourceRequest extends BaseRequest {
         return DataSourceOperation.COUNT_ALL.equals(operation);
     }
     
+    public boolean exists() {
+        return DataSourceOperation.EXISTS.equals(operation);
+    }
+    
     public boolean delete() {
         return DataSourceOperation.DELETE_ALL.equals(operation);
     }

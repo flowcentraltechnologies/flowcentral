@@ -593,6 +593,13 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
+    public <T extends Entity> boolean exists(Query<T> query) throws UnifyException {
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.EXISTS);
+        setQueryDetails(req, query);
+        return singleValueResultOperation(boolean.class, query.getEntityClass(), req);
+    }
+
+    @Override
     public List<Set<String>> getUniqueConstraints(Class<? extends Entity> entityClass) throws UnifyException {
         // TODO 
         return Collections.emptyList();

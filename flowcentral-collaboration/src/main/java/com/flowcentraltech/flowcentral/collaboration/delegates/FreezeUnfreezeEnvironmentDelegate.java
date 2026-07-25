@@ -73,6 +73,31 @@ public class FreezeUnfreezeEnvironmentDelegate extends AbstractPseudoEntityEnvir
 	}
 
 	@Override
+    protected boolean exists(DataSourceRequest req) throws UnifyException {
+        QueryInfo info = getQueryInfo(req);
+        if (info.validQuery()) {
+            if (info.frozen()) {
+                CollaborationFreezeQuery query = new CollaborationFreezeQuery()
+                        .applicationName(info.getApplicationName()).type(info.getType());
+                return environment().exists(query);
+            } else if (info.unfrozen()) {
+                Query<? extends Entity> query = new CollaborationFreezeQuery()
+                        .applicationName(info.getApplicationName()).type(info.getType());
+                int frozen = environment().countAll(query);
+                query = Query.of(ApplicationCollaborationUtils.getEntityClass(info.getType()))
+                        .addEquals("applicationName", info.getApplicationName());
+                return (environment().countAll(query) - frozen) > 0;
+            } else {
+                Query<? extends Entity> query = Query.of(ApplicationCollaborationUtils.getEntityClass(info.getType()))
+                        .addEquals("applicationName", info.getApplicationName());
+                return environment().exists(query);
+            }
+        }
+
+        return false;
+    }
+
+    @Override
 	protected List<FreezeUnfreeze> findAll(DataSourceRequest req) throws UnifyException {
 		QueryInfo info = getQueryInfo(req);
 		if (info.validQuery()) {

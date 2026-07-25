@@ -226,6 +226,13 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                             Long count = em.createQuery(cq).getSingleResult();
                             result = new Object[] { count };
                         }
+                        case EXISTS: {
+                            CriteriaQuery<Integer> cq = createExistsQuery(entityInfo.getImplClass(), em, req);
+                            List<Integer> results = em.createQuery(cq)
+                                    .setMaxResults(1)
+                                    .getResultList();
+                            result = new Object[] { !results.isEmpty()};
+                        }
                             break;
                         case VALIDATE: {
                             Object reqBean = interconnect.getBeanFromJsonPayload(req);
@@ -506,7 +513,21 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
         return cq;
     }
+    
+    private <T> CriteriaQuery<Integer> createExistsQuery(Class<T> entityClass, EntityManager em, DataSourceRequest req)
+            throws Exception {
+        EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
+        Root<T> root = cq.from(entityClass);
+        cq.select(cb.literal(1));
+        Predicate restrictions = createRestriction(cb, root, entityInfo, req);
+        if (restrictions != null) {
+            cq.where(restrictions);
+        }
 
+        return cq;
+    }
     private <T> CriteriaDelete<T> createDeleteQuery(Class<T> entityClass, EntityManager em, DataSourceRequest req)
             throws Exception {
         EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
