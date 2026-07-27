@@ -830,6 +830,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     }
 
+                    for (AppEntityProcessVariable processVariable : appEntity.getProcessVariableList()) {
+                        edb.addProcessVariableDef(processVariable.getName(), processVariable.getLabel(),
+                                processVariable.isSupportFilter(), processVariable.isSupportValues());
+                    }
+                    
                     for (AppEntityAttachment appEntityAttachment : appEntity.getAttachmentList()) {
                         edb.addAttachmentDef(appEntityAttachment.getType(), appEntityAttachment.getName(),
                                 appEntityAttachment.getDescription(), appEntityAttachment.getLabel());
