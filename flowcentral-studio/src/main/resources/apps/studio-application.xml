@@ -3692,7 +3692,7 @@
 						<field name="supportFilter"
 							inputWidget="application.checkbox" column="0"  />
 						<field name="supportValues" inputWidget="application.checkbox"
-							column="0" visible="false" />
+							column="0" />
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"

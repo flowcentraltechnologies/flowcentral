@@ -1277,6 +1277,9 @@
 					label="$m{application.appentity.basetypedesc}"
 					type="LIST_ONLY"
 					key="baseType" property="description" />
+				<field name="processVariableList"
+					label="$m{application.appentity.processvariables}" type="CHILD_LIST"
+					references="appEntityProcessVariableRef" />
 				<field name="fieldList"
 					label="$m{application.appentity.fields}" type="CHILD_LIST"
 					references="appEntityFieldRef" />
@@ -1462,7 +1465,7 @@
 		</entity>
 		<entity name="appEntityProcessVariable"
 			description="$m{application.appentityprocessvariable}"
-			label="$m{application.appentityprocessvariable.label}"
+			label="$m{application.appentityprocessvariable.field.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppEntityProcessVariable"
 			changeEvents="true">
 			<fields>
