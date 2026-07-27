@@ -3676,11 +3676,6 @@
 		<form name="appEntityProcessVariableForm"
 			description="$m{studio.appentityprocessvariable.form}"
 			entity="application.appEntityProcessVariable">
-			<annotations>
-				<annotation name="baseStaticAnnotation"
-					description="$m{studio.appentityprocessvariable.form.annotation.basestatic}"
-					message="$m{studio.appentityprocessvariable.form.annotation.basestatic.message}" />
-			</annotations>
 			<tabs>
 				<tab name="basicDetails"
 					label="$m{studio.appentityprocessvariable.form.basicdetails}"
