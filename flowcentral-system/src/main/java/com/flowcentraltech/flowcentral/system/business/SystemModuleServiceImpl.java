@@ -418,8 +418,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
             result = new ArrayList<ListData>();
             for (SystemParameter systemParameter : params) {
                 final SysParamType type = systemParameter.getType();
-                result.add(new ListData(SystemUtils.encodeSysParamCode(type, systemParameter.getCode()),
-                        SystemUtils.encodeSysParamLabel(systemParameter.getFilterName())));
+                result.add(new ListData(SystemUtils.getSysParamCode(type, systemParameter.getCode()),
+                        SystemUtils.getSysParamLabel(systemParameter.getFilterName())));
             }
         }
 

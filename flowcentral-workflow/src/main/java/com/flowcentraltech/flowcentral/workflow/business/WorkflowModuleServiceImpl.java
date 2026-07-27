@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +30,6 @@ import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDef
 import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.business.EmailListProducerConsumer;
 import com.flowcentraltech.flowcentral.application.business.PortalWorkflowProvider;
-import com.flowcentraltech.flowcentral.application.business.ProcessVariablesProvider;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
@@ -76,6 +76,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfEnrichmentPoli
 import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.DefaultProcessVariableConstants;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
@@ -88,10 +89,10 @@ import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
-import com.flowcentraltech.flowcentral.notification.constants.NotificationTransitionVariableConstants;
 import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAccessState;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelErrorConstants;
@@ -101,7 +102,6 @@ import com.flowcentraltech.flowcentral.workflow.constants.WfWizardAppletProperty
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleErrorConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.workflow.constants.WorkflowTransitionVariableConstants;
 import com.flowcentraltech.flowcentral.workflow.data.WfAlertDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
@@ -124,8 +124,6 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfItemEvent;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemEventQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemHist;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
-import com.flowcentraltech.flowcentral.workflow.entities.WfProcessVariable;
-import com.flowcentraltech.flowcentral.workflow.entities.WfProcessVariableQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
@@ -195,8 +193,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(WorkflowModuleNameConstants.WORKFLOW_MODULE_SERVICE)
-public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implements WorkflowModuleService,
-        ApplicationAppletDefProvider, PortalWorkflowProvider, ProcessVariablesProvider {
+public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
+        implements WorkflowModuleService, ApplicationAppletDefProvider, PortalWorkflowProvider {
 
     private static final String WFITEM_EJECTION_LOCK = "wf::itemejection-lock";
 
@@ -232,8 +230,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     private final FactoryMap<String, WfChannelDef> wfChannelDefFactoryMap;
 
     private List<String> approvalPos;
-
-    private List<ProcessVariableDef> wrProcessVariableDefs;
 
     public WorkflowModuleServiceImpl() {
         this.wfDefFactoryMap = new StaleableFactoryMap<String, WfDef>()
@@ -481,40 +477,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         wfWizardDefFactoryMap.clear();
         wfChannelDefFactoryMap.clear();
         logInfo("Definitions cache clearing successfully completed.");
-    }
-
-    @Override
-    public List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException {
-        if (wrProcessVariableDefs == null) {
-            synchronized (this) {
-                if (wrProcessVariableDefs == null) {
-                    wrProcessVariableDefs = new ArrayList<ProcessVariableDef>();
-                    // Transition variables
-                    wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARDED_BY,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardedby}"), true, false,
-                            true));
-                    wrProcessVariableDefs
-                            .add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARDED_BY_NAME,
-                                    resolveApplicationMessage("$m{workflow.system.processvariable.forwardedbyname}"),
-                                    true, false, true));
-                    wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.FORWARD_TO,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.forwardto}"), true, false,
-                            true));
-                    wrProcessVariableDefs.add(new ProcessVariableDef(WorkflowTransitionVariableConstants.HELD_BY,
-                            resolveApplicationMessage("$m{workflow.system.processvariable.heldby}"), true, false,
-                            true));
-                    wrProcessVariableDefs = Collections.unmodifiableList(wrProcessVariableDefs);
-                }
-            }
-        }
-
-        // TODO Add entity process variables
-        return wrProcessVariableDefs;
-    }
-
-    @Override
-    public Map<String, String> getInitialProcessVariables(String entity) throws UnifyException {
-        return Collections.emptyMap();
     }
 
     @Override
@@ -1210,7 +1172,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
             // Check if action triggered notifications need to be sent
             final TransitionItem currentTransitionItem = createTransitionItem(wfItem, wfDef, wfEntityInst, false);
-            loadTransitionVariables(currentTransitionItem);
+            updateTransitionVariables(currentTransitionItem);
             sendUserActionAlertsByAction(currentWfStepDef, currentTransitionItem, userAction);
 
             // Notify External to recovery
@@ -1341,7 +1303,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 if (!DataUtils.isBlank(wfItemList)) {
                     logInfo("Sending [{0}] reminder work item alerts...", wfItemList.size());
                     for (WfItem wfItem : wfItemList) {
-                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.REMINDER_NOTIFICATION);
+                        boolean sent = sendWorkItemAlert(createTransitionItem(wfItem), now,
+                                WorkflowAlertType.REMINDER_NOTIFICATION);
                         environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
                                 sent ? new Update().add("reminderAlertSent", true)
                                         : new Update().add("reminderAlertSent", false).add("reminderDt", null));
@@ -1354,7 +1317,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 if (!DataUtils.isBlank(wfItemList)) {
                     logInfo("Sending [{0}] critical work item alerts...", wfItemList.size());
                     for (WfItem wfItem : wfItemList) {
-                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.CRITICAL_NOTIFICATION);
+                        boolean sent = sendWorkItemAlert(createTransitionItem(wfItem), now,
+                                WorkflowAlertType.CRITICAL_NOTIFICATION);
                         environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
                                 new Update().add("criticalAlertSent", sent).add("criticalDt", null));
                     }
@@ -1366,7 +1330,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 if (!DataUtils.isBlank(wfItemList)) {
                     logInfo("Sending [{0}] expiration work item alerts...", wfItemList.size());
                     for (WfItem wfItem : wfItemList) {
-                        boolean sent = sendWorkItemAlert(wfItem, now, WorkflowAlertType.EXPIRATION_NOTIFICATION);
+                        boolean sent = sendWorkItemAlert(createTransitionItem(wfItem), now,
+                                WorkflowAlertType.EXPIRATION_NOTIFICATION);
                         environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
                                 new Update().add("expirationAlertSent", sent).add("expectedDt", null));
                     }
@@ -1380,8 +1345,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
     }
 
     @SuppressWarnings("unchecked")
-    private boolean sendWorkItemAlert(WfItem wfItem, Date now, WorkflowAlertType type) {
+    private boolean sendWorkItemAlert(TransitionItem transitionItem, Date now, WorkflowAlertType type) {
         try {
+            final WfItem wfItem = transitionItem.getWfItem();
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
             final WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
             final List<WfAlertDef> alertList = type.isOnReminder() ? wfStepDef.getReminderAlertList()
@@ -1393,14 +1359,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 final ValueStoreReader reader = new BeanValueStore(inst).getReader();
                 final String heldBy = wfItem.getHeldBy();
                 SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(), wfItem);
-                reader.setTempValue(NotificationTransitionVariableConstants.WFITEM_LINK_VARIABLE,
+                transitionItem.setVariable(DefaultProcessVariableConstants.WFITEM_LINK_VARIABLE,
                         securedLinkInfo.getLinkUrl());
-                reader.setTempValue(NotificationTransitionVariableConstants.WFITEM_HTMLLINK_VARIABLE,
+                transitionItem.setVariable(DefaultProcessVariableConstants.WFITEM_HTMLLINK_VARIABLE,
                         securedLinkInfo.getHtmlLink());
 
                 final Long tenantId = getTenantIdFromTransitionItem(entityClassDef, reader);
                 for (WfAlertDef wfAlertDef : alertList) {
-                    sendAlert(wfStepDef, wfAlertDef, reader, tenantId, heldBy);
+                    sendAlert(transitionItem, wfStepDef, wfAlertDef, tenantId, heldBy);
                 }
 
                 if (type.isOnReminder()) {
@@ -1716,7 +1682,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             }
 
             // Work item history
-            WfItemHist wfItemHist = new WfItemHist();
+            final WfItemHist wfItemHist = new WfItemHist();
             wfItemHist.setApplicationName(wfDef.getApplicationName());
             wfItemHist.setWorkflowName(wfDef.getLongName());
             wfItemHist.setEntity(wfDef.getEntity());
@@ -1726,18 +1692,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             wfItemHist.setDepartmentCode(workInst.getWorkDepartmentCode());
             wfItemHist.setInitiatedBy(submittedBy != null ? submittedBy : userLoginId);
             wfItemHist.setInitiatedOn(submittedOn != null ? submittedOn : now);
-            Long wfItemHistId = (Long) environment().create(wfItemHist);
-            Long wfItemEventId = createWfItemEvent(startStepDef, wfItemHistId);
+            final Long wfItemHistId = (Long) environment().create(wfItemHist);
 
-            // Initialize process variables
-            Map<String, String> variables = appletUtil.getInitialProcessVariables(wfDef.getEntity());
-            WfProcessVariable wfProcessVariable = new WfProcessVariable();
-            wfProcessVariable.setWfItemHistId(wfItemHistId);
-            for (Map.Entry<String, String> entry : variables.entrySet()) {
-                wfProcessVariable.setVariableName(entry.getKey());
-                wfProcessVariable.setVariableValue(entry.getValue());
-                environment().create(wfProcessVariable);
-            }
+            final Long wfItemEventId = createWfItemEvent(startStepDef, wfItemHistId);
 
             // Create actual work item
             final String userFullName = workflowRoleProvider.getUserFullName(userLoginId);
@@ -1746,6 +1703,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             wfItem.setForwardedBy(userLoginId);
             wfItem.setForwardedByName(userFullName);
             wfItem.setWorkRecId(workRecId);
+            wfItem.setProcessVariables(
+                    StringUtils.mapToString(appletUtil.getInitialProcessVariables(wfDef.getEntity())));
             Long wfItemId = (Long) environment().create(wfItem);
 
             pushToWfTransitionQueue(wfItemId, false);
@@ -1782,7 +1741,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                         WorkflowModuleSysParamConstants.WF_WORKITEM_EXTERNAL_USERACTION_SUPPORT);
         WfItemAccessible accessible = isPerformExternal ? createWfItemAccessible(wfItem, wfEntityInst) : null;
 
-        loadTransitionVariables(transitionItem);
+        updateTransitionVariables(transitionItem);
 
         setSavePoint();
         wfItem.setHeldBy(null);
@@ -2038,39 +1997,37 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 wfItem.getStepDt(), wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());
     }
 
+    @SuppressWarnings("unchecked")
+    private TransitionItem createTransitionItem(WfItem wfItem) throws UnifyException {
+        final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
+        WorkEntity wfEntityInst = (WorkEntity) environment()
+                .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
+        final TransitionItem transitionItem = new TransitionItem(wfItem, wfDef, wfEntityInst, false);
+        transitionItem.loadVariables(StringUtils.mapFromString(wfItem.getProcessVariables()));
+        return transitionItem;
+    }
+
     private TransitionItem createTransitionItem(WfItem wfItem, WfDef wfDef, WorkEntity wfInst, boolean flowTransition)
             throws UnifyException {
         final TransitionItem transitionItem = new TransitionItem(wfItem, wfDef, wfInst, flowTransition);
-        final List<WfProcessVariable> list = environment()
-                .findAll(new WfProcessVariableQuery().wfItemHistId(transitionItem.getWfItemHistId()));
-        if (!DataUtils.isBlank(list)) {
-            for (WfProcessVariable variable : list) {
-                transitionItem.setVariable(variable.getVariableName(), variable.getVariableValue());
-            }
-        }
-
+        transitionItem.loadVariables(StringUtils.mapFromString(wfItem.getProcessVariables()));
         return transitionItem;
     }
 
     private void saveTransitionItem(TransitionItem transitionItem) throws UnifyException {
-        final List<ProcessVariableDef> variables = appletUtil
-                .getProcessVariables(transitionItem.getWfDef().getEntity());
-        final Long wfItemHistId = transitionItem.getWfItemHistId();
-        for (ProcessVariableDef variable : variables) {
-            environment().updateAll(
-                    new WfProcessVariableQuery().wfItemHistId(wfItemHistId).variableName(variable.getName()),
-                    new Update().add("variableValue", transitionItem.getVariable(variable.getName())));
-        }
-
-        environment().updateByIdVersion(transitionItem.getWfItem());
+        final List<ProcessVariableDef> defs = appletUtil.getProcessVariableDefs(transitionItem.getWfDef().getEntity());
+        final WfItem wfItem = transitionItem.getWfItem();
+        wfItem.setProcessVariables(StringUtils.mapToString(transitionItem.unloadVariables(defs)));
+        environment().updateByIdVersion(wfItem);
     }
 
-    private void loadTransitionVariables(TransitionItem transitionItem) throws UnifyException {
+    private void updateTransitionVariables(TransitionItem transitionItem) throws UnifyException {
         final WfItem wfItem = transitionItem.getWfItem();
-        transitionItem.setVariable(WorkflowTransitionVariableConstants.FORWARDED_BY, wfItem.getForwardedBy());
-        transitionItem.setVariable(WorkflowTransitionVariableConstants.FORWARDED_BY_NAME, wfItem.getForwardedByName());
-        transitionItem.setVariable(WorkflowTransitionVariableConstants.FORWARD_TO, wfItem.getForwardTo());
-        transitionItem.setVariable(WorkflowTransitionVariableConstants.HELD_BY, wfItem.getHeldBy());
+        transitionItem.setVariable(DefaultProcessVariableConstants.FORWARDED_BY, wfItem.getForwardedBy());
+        transitionItem.setVariable(DefaultProcessVariableConstants.FORWARDED_BY_NAME, wfItem.getForwardedByName());
+        transitionItem.setVariable(DefaultProcessVariableConstants.FORWARD_TO, wfItem.getForwardTo());
+        transitionItem.setVariable(DefaultProcessVariableConstants.HELD_BY, wfItem.getHeldBy());
     }
 
     private boolean applySetValues(EntityDef entityDef, WfStepDef wfStepDef, Date now, ValueStore valueStore)
@@ -2123,9 +2080,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         if (wfStepDef.isUserAction()) {
             final SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(),
                     transitionItem.getWfItem());
-            transitionItem.getReader().setTempValue(NotificationTransitionVariableConstants.WFITEM_LINK_VARIABLE,
+            transitionItem.setVariable(DefaultProcessVariableConstants.WFITEM_LINK_VARIABLE,
                     securedLinkInfo.getLinkUrl());
-            transitionItem.getReader().setTempValue(NotificationTransitionVariableConstants.WFITEM_HTMLLINK_VARIABLE,
+            transitionItem.setVariable(DefaultProcessVariableConstants.WFITEM_HTMLLINK_VARIABLE,
                     securedLinkInfo.getHtmlLink());
             logInfo("Setting work item link variables [{0}] and [{1}]...", securedLinkInfo.getLinkUrl(),
                     securedLinkInfo.getHtmlLink());
@@ -2133,7 +2090,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isPassThrough() && wfAlertDef.isFireAlertOnPreviousStep(prevStepName)) {
-                sendAlert(wfStepDef, wfAlertDef, transitionItem);
+                sendAlert(transitionItem, wfStepDef, wfAlertDef);
             }
         }
     }
@@ -2144,7 +2101,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 prevStepName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnPreviousStep(prevStepName)) {
-                sendAlert(wfStepDef, wfAlertDef, transitionItem);
+                sendAlert(transitionItem, wfStepDef, wfAlertDef);
             }
         }
     }
@@ -2155,12 +2112,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 actionName);
         for (WfAlertDef wfAlertDef : wfStepDef.getAlertList()) {
             if (wfAlertDef.isUserInteract() && wfAlertDef.isFireAlertOnAction(actionName)) {
-                sendAlert(wfStepDef, wfAlertDef, transitionItem);
+                sendAlert(transitionItem, wfStepDef, wfAlertDef);
             }
         }
     }
 
-    private void sendAlert(WfStepDef wfStepDef, WfAlertDef wfAlertDef, TransitionItem transitionItem)
+    private void sendAlert(TransitionItem transitionItem, WfStepDef wfStepDef, WfAlertDef wfAlertDef)
             throws UnifyException {
         final WfDef wfDef = transitionItem.getWfDef();
         final WfItem wfItem = transitionItem.getWfItem();
@@ -2177,18 +2134,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
         final Long tenantId = getTenantIdFromTransitionItem(transitionItem);
         final String heldBy = wfItem.getHeldBy();
-        sendAlert(wfStepDef, wfAlertDef, reader, tenantId, heldBy);
+        sendAlert(transitionItem, wfStepDef, wfAlertDef, tenantId, heldBy);
     }
 
-    private void sendAlert(WfStepDef wfStepDef, WfAlertDef wfAlertDef, ValueStoreReader reader, final Long tenantId,
-            final String heldBy) throws UnifyException {
+    private void sendAlert(TransitionItem transitionItem, WfStepDef wfStepDef, WfAlertDef wfAlertDef,
+            final Long tenantId, final String heldBy) throws UnifyException {
         if (!StringUtils.isBlank(wfAlertDef.getGenerator())) {
             NotificationAlertSender sender = getComponent(NotificationAlertSender.class, wfAlertDef.getGenerator());
             List<Recipient> recipientList = new ArrayList<Recipient>();
             if (wfAlertDef.isWithRecipientPolicy()) {
                 List<Recipient> policyRecipientList = ((WfRecipientPolicy) getComponent(
-                        wfAlertDef.getRecipientPolicy())).getRecipients(reader, wfAlertDef.getRecipientNameRule(),
-                                wfAlertDef.getRecipientContactRule());
+                        wfAlertDef.getRecipientPolicy())).getRecipients(transitionItem.getReader(),
+                                wfAlertDef.getRecipientNameRule(), wfAlertDef.getRecipientContactRule());
                 if (!DataUtils.isBlank(policyRecipientList)) {
                     recipientList.addAll(policyRecipientList);
                 }
@@ -2210,8 +2167,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 }
             }
 
-            reader.setTempValue(NotificationTransitionVariableConstants.TEMPLATE_VARIABLE, wfAlertDef.getTemplate());
-            sender.composeAndSend(reader, recipientList, wfAlertDef.getSendDelayInMinutes());
+            transitionItem.setVariable(DefaultProcessVariableConstants.TEMPLATE_VARIABLE, wfAlertDef.getTemplate());
+            sender.composeAndSend(transitionItem.getReader(), recipientList, wfAlertDef.getSendDelayInMinutes());
         }
     }
 
@@ -2298,10 +2255,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             return wfItem;
         }
 
-        public Long getWfItemHistId() {
-            return wfItem.getWfItemHistId();
-        }
-
         public WfDef getWfDef() {
             return wfDef;
         }
@@ -2322,12 +2275,25 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
             return wfEntityInst.getWfEntityInst();
         }
 
-        public void setVariable(String name, Object val) throws UnifyException {
-            getReader().setTempValue(name, val);
+        public Map<String, String> unloadVariables(List<ProcessVariableDef> variableDefs) throws UnifyException {
+            Map<String, String> variables = new LinkedHashMap<String, String>();
+            for (ProcessVariableDef variableDef : variableDefs) {
+                variables.put(variableDef.getKey(), getReader().getTempValue(String.class, variableDef.getKey()));
+            }
+
+            return variables;
         }
 
-        public String getVariable(String name) throws UnifyException {
-            return getReader().getTempValue(String.class, name);
+        public void loadVariables(Map<String, String> variables) throws UnifyException {
+            if (variables != null) {
+                for (Map.Entry<String, String> entry : variables.entrySet()) {
+                    getReader().setTempValue(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+
+        public void setVariable(String name, Object val) throws UnifyException {
+            getReader().setTempValue(SystemUtils.getProcessVariableCode(name), DataUtils.convert(String.class, val));
         }
 
         public boolean isFlowTransition() {

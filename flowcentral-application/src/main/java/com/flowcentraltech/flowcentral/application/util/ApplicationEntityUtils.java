@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.DefaultProcessVariableConstants;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
@@ -47,6 +49,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Amongst;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -150,7 +153,57 @@ public final class ApplicationEntityUtils {
             .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
                     "updatedBy", "configType", "name", "description", "applicationId", "devVersionType", "devMergeVersionNo", "classified", "deprecated")));
 
+    private static final Map<String, ProcessVariableDef> DEFAULT_PROCESS_VARIABLES;
 
+    private static final List<ProcessVariableDef> DEFAULT_PROCESS_VARIABLES_LIST;;
+
+    static {
+        Map<String, ProcessVariableDef> map = new LinkedHashMap<String, ProcessVariableDef>();
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.APP_TITLE,
+                        "$m{default.processvariable.apptitle}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.APP_CORRESPONDER,
+                        "$m{default.processvariable.appcorresponder}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE, new ProcessVariableDef(
+                DefaultProcessVariableConstants.APP_URL, "$m{default.processvariable.appurl}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.APP_HTML_LINK,
+                        "$m{default.processvariable.apphtmllink}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.ENTITY_NAME,
+                        "$m{default.processvariable.entityname}", true, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.ENTITY_DESC,
+                        "$m{default.processvariable.entitydesc}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.FORWARDED_BY,
+                        "$m{default.processvariable.forwardedby}", true, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.FORWARDED_BY_NAME,
+                        "$m{default.processvariable.forwardedbyname}", true, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.FORWARD_TO,
+                        "$m{default.processvariable.forwardto}", true, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE, new ProcessVariableDef(
+                DefaultProcessVariableConstants.HELD_BY, "$m{default.processvariable.heldby}", true, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.TEMPLATE_VARIABLE,
+                        "$m{default.processvariable.templatevariable}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.WFITEM_LINK_VARIABLE,
+                        "$m{default.processvariable.wfitemlink}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.WFITEM_HTMLLINK_VARIABLE,
+                        "$m{default.processvariable.wfitemhtmllink}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_TITLE,
+                new ProcessVariableDef(DefaultProcessVariableConstants.PLAIN_PASSWORD,
+                        "$m{default.processvariable.plainpassword}", false, true));
+        DEFAULT_PROCESS_VARIABLES = Collections.unmodifiableMap(map);
+        
+        DEFAULT_PROCESS_VARIABLES_LIST = Collections.unmodifiableList(new ArrayList<>(map.values()));
+    }
+    
     static {
         Map<EntityBaseType, Set<String>> _map = new EnumMap<EntityBaseType, Set<String>>(
                 EntityBaseType.class);
@@ -194,6 +247,18 @@ public final class ApplicationEntityUtils {
 
     }
 
+    public static List<ProcessVariableDef> getDefaultProcessVariableDefs() {
+        return DEFAULT_PROCESS_VARIABLES_LIST;
+    }
+
+    public static ProcessVariableDef getDefaultProcessVariableDef(String name) {
+        return DEFAULT_PROCESS_VARIABLES.get(name);
+    }
+
+    public static String getDefaultProcessVariableDefKey(String name) {
+        return DEFAULT_PROCESS_VARIABLES.get(name).getKey();
+    }
+    
     public static boolean isValidFilterField(String fieldName) {
         return !RESERVED_NON_FILTER_FIELDS.contains(fieldName);
     }

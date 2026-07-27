@@ -15,9 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.security.templatewrappers;
 
-import com.flowcentraltech.flowcentral.notification.constants.NotificationTransitionVariableConstants;
+import com.flowcentraltech.flowcentral.common.constants.DefaultProcessVariableConstants;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * User welcome notification template wrapper.
@@ -26,7 +27,7 @@ import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
  * @since 4.1
  */
 public class UserWelcomeTemplateWrapper extends BaseNotifTemplateWrapper {
-    
+
     public static final String __TEMPLATE_NAME = "security.userWelcome";
     private static final String FULL_NAME = "fullName";
     private static final String LOGIN_ID = "loginId";
@@ -43,7 +44,7 @@ public class UserWelcomeTemplateWrapper extends BaseNotifTemplateWrapper {
         nmb.addParam(LOGIN_ID, val);
     }
 
-    public void setPlainPassword(String val) {
-        nmb.addParam(NotificationTransitionVariableConstants.PLAIN_PASSWORD, val);
+    public void setPlainPassword(String val) throws UnifyException {
+        nmb.addParam(getProcessVariableKey(DefaultProcessVariableConstants.PLAIN_PASSWORD), val);
     }
 }

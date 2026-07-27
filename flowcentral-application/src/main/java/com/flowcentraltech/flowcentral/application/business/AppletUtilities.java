@@ -135,15 +135,15 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 public interface AppletUtilities extends FlowCentralComponent {
 
     /**
-     * Gets process variable definitions.
+     * Gets entity process variable definitions.
      * 
      * @param entity
-     *               optional entity long name
-     * @return the list of process variable definitions
+     *               the entity name
+     * @return the process variable definitions
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException;
+    List<ProcessVariableDef> getProcessVariableDefs(String entity) throws UnifyException;
     
     /**
      * Gets initial process variables.

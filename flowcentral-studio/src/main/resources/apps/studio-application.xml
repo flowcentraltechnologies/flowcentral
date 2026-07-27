@@ -904,6 +904,25 @@
 				</filter>
 			</filters>
 		</applet>
+		<applet name="manageAppEntityProcessVariable"
+			description="$m{studio.appentityprocessvariable.manage}"
+			label="$m{studio.appentityprocessvariable.manage.label}"
+			type="MANAGE_ENTITYLIST" entity="application.appEntityProcessVariable"
+			menuAccess="false">
+			<properties>
+				<property name="searchTable" value="appEntityProcessVariableTable" />
+				<property name="searchTable.new" value="true" />
+				<property name="searchTable.report" value="false" />
+				<property name="searchTable.quickFilter" value="false" />
+				<property name="createForm" value="appEntityProcessVariableForm" />
+				<property name="createForm.save" value="true" />
+				<property name="createForm.save.next" value="true" />
+				<property name="createForm.save.close" value="true" />
+				<property name="maintainForm" value="appEntityProcessVariableForm" />
+				<property name="maintainForm.update" value="true" />
+				<property name="maintainForm.delete" value="true" />
+			</properties>
+		</applet>
 		<applet name="manageAppEntitySeries"
 			description="$m{studio.appentityseries.manage}"
 			label="$m{studio.appentityseries.manage.label}"
@@ -1948,6 +1967,21 @@
 					widthRatio="1" />
 				<column field="dataTypeDesc" renderWidget="application.text"
 					label="$m{application.appentityfield.datatype}" widthRatio="1" />
+			</columns>
+		</table>
+		<table itemsPerPage="10" name="appEntityProcessVariableTable"
+			description="$m{studio.appentityprocessvariable.table}"
+			label="$m{studio.appentityprocessvariable.table.label}"
+			entity="application.appEntityProcessVariable" serialNo="true">
+			<columns>
+				<column field="name" renderWidget="application.name"
+					widthRatio="1" linkAct="maintainAct" />
+				<column field="label" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="supportFilter" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="supportValues" renderWidget="application.text"
+					widthRatio="1" />
 			</columns>
 		</table>
 		<table itemsPerPage="-1" name="appEntityFieldQuickEditTable"
@@ -3217,6 +3251,10 @@
 					label="$m{studio.appentity.form.expressions}"
 					contentType="CHILD_LIST" applet="manageAppEntityExpression"
 					reference="expressionList" />
+				<tab name="processVariables"
+					label="$m{studio.appentity.form.processvariables}"
+					contentType="CHILD_LIST" applet="manageAppEntityProcessVariable"
+					reference="processVariableList" />
 				<tab name="attachments"
 					label="$m{studio.appentity.form.attachments}"
 					contentType="CHILD_LIST" applet="manageAppEntityAttachment"
@@ -3634,6 +3672,37 @@
 					</errorCondition>
 				</formValidationPolicy>
 			</formValidationPolicies>
+		</form>
+		<form name="appEntityProcessVariableForm"
+			description="$m{studio.appentityprocessvariable.form}"
+			entity="application.appEntityProcessVariable">
+			<annotations>
+				<annotation name="baseStaticAnnotation"
+					description="$m{studio.appentityprocessvariable.form.annotation.basestatic}"
+					message="$m{studio.appentityprocessvariable.form.annotation.basestatic.message}" />
+			</annotations>
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{studio.appentityprocessvariable.form.basicdetails}"
+					contentType="MINIFORM" editable="true">
+					<section name="entityFieldDetails" columns="TYPE_1">
+						<field name="appEntityId"
+							inputWidget="application.entitysearch"
+							label="$m{application.appentityprocessvariable.appentity}" column="0"
+							required="true" />
+						<field name="name" inputWidget="application.name"
+							column="0" required="true" />
+						<field name="label" inputWidget="application.text"
+							column="0" required="true" />
+						<field name="supportFilter"
+							inputWidget="application.checkbox" column="0"  />
+						<field name="supportValues" inputWidget="application.checkbox"
+							column="0" visible="false" />
+					</section>
+				</tab>
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
 		</form>
 		<form name="appEntitySeriesForm"
 			description="$m{studio.appentityseries.form}"

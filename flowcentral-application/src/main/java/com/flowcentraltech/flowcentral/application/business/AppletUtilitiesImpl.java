@@ -126,8 +126,10 @@ import com.flowcentraltech.flowcentral.common.business.policies.ParamConfigListP
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.DefaultProcessVariableConstants;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.AuditSnapshot;
@@ -154,7 +156,9 @@ import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.constants.WfItemVersionType;
 import com.tcdng.unify.common.data.Listable;
@@ -289,8 +293,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     private MappedEntityProviderInfo mappedEntityProviderInfo;
 
-    private List<ProcessVariablesProvider> processVariablesProviders;
-
     public AppletUtilitiesImpl() {
         this.singleFormBeanClassByPanelName = new FactoryMap<String, Class<? extends SingleFormBean>>()
             {
@@ -413,31 +415,34 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException {
-        if (!DataUtils.isBlank(processVariablesProviders)) {
-            List<ProcessVariableDef> variables = new ArrayList<ProcessVariableDef>();
-            for (ProcessVariablesProvider provider : processVariablesProviders) {
-                variables.addAll(provider.getProcessVariables(entity));
-            }
-
-            return variables;
-        }
-
-        return Collections.emptyList();
+    public List<ProcessVariableDef> getProcessVariableDefs(String entity) throws UnifyException {
+        return getEntityDef(entity).getVariableDefList();
     }
 
     @Override
     public Map<String, String> getInitialProcessVariables(String entity) throws UnifyException {
-        if (!DataUtils.isBlank(processVariablesProviders)) {
-            Map<String, String> variables = new HashMap<String, String>();
-            for (ProcessVariablesProvider provider : processVariablesProviders) {
-                variables.putAll(provider.getInitialProcessVariables(entity));
-            }
+        Map<String, String> variables = new HashMap<String, String>();
+        final String appTitle = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
+        final String appCorresponder = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
+        final String appUrl = system().getSysParameterValue(String.class,
+                SystemModuleSysParamConstants.APPLICATION_BASE_URL);
 
-            return variables;
+        variables.put(SystemUtils.getProcessVariableCode(DefaultProcessVariableConstants.APP_TITLE), appTitle);
+        variables.put(SystemUtils.getProcessVariableCode(DefaultProcessVariableConstants.APP_CORRESPONDER),
+                appCorresponder);
+        variables.put(SystemUtils.getProcessVariableCode(DefaultProcessVariableConstants.APP_URL), appUrl);
+        variables.put(SystemUtils.getProcessVariableCode(DefaultProcessVariableConstants.APP_HTML_LINK), null);
+        if (!StringUtils.isBlank(entity)) {
+            final EntityDef entityDef = getEntityDef(entity);
+            variables.put(SystemUtils.getProcessVariableCode(DefaultProcessVariableConstants.ENTITY_NAME),
+                    entityDef.getName());
+            variables.put(SystemUtils.getProcessVariableCode(DefaultProcessVariableConstants.ENTITY_DESC),
+                    entityDef.getDescription());
         }
 
-        return Collections.emptyMap();
+        return variables;
     }
 
     @Override
@@ -2211,9 +2216,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void onInitialize() throws UnifyException {
-        // Process variable providers
-        processVariablesProviders = getComponents(ProcessVariablesProvider.class);
-
         // Mapped entity providers
         Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
         List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);

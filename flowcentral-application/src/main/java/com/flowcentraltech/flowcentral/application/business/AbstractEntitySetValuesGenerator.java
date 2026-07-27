@@ -171,7 +171,7 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
      *                        if an error occurs
      */
     protected void setProcessVariable(ValueStore valueStore, String name, Object val) throws UnifyException {
-        valueStore.setTempValue(SystemUtils.encodeProcessVariableCode(name), val);
+        valueStore.setTempValue(SystemUtils.getProcessVariableCode(name), val);
     }
 
     /**

@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.SeriesType;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
 import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.common.database.Entity;
@@ -68,6 +69,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private ConfigType type;
 
+    private List<ProcessVariableDef> variableDefList;
+    
     private List<EntityFieldDef> fieldDefList;
 
     private List<EntityFieldDef> auditableFieldDefList;
@@ -219,9 +222,10 @@ public class EntityDef extends BaseApplicationEntityDef {
     private boolean listOnlyTypesResolved;
 
     private EntityDef(AppletUtilities au, EntityBaseType baseType, ConfigType type,
-            Map<String, EntityFieldDef> fieldDefMap, List<EntityFieldDef> fieldDefList,
-            List<EntityAttachmentDef> attachmentList, Map<String, EntityExpressionDef> expressionDefMap,
-            List<UniqueConstraintDef> uniqueConstraintList, List<IndexDef> indexList, List<EntityUploadDef> uploadList,
+            List<ProcessVariableDef> variableDefList, Map<String, EntityFieldDef> fieldDefMap,
+            List<EntityFieldDef> fieldDefList, List<EntityAttachmentDef> attachmentList,
+            Map<String, EntityExpressionDef> expressionDefMap, List<UniqueConstraintDef> uniqueConstraintList,
+            List<IndexDef> indexList, List<EntityUploadDef> uploadList,
             Map<String, EntitySearchInputDef> searchInputDefs, Map<String, EntitySeriesDef> seriesDefs,
             Map<String, EntityCategoryDef> categoryDefs, ApplicationEntityNameParts nameParts, String originClassName,
             String tableName, String label, String emailProducerConsumer, String delegate, String dataSourceName,
@@ -244,6 +248,7 @@ public class EntityDef extends BaseApplicationEntityDef {
         this.auditable = auditable;
         this.reportable = reportable;
         this.actionPolicy = actionPolicy;
+        this.variableDefList = variableDefList;
         this.fieldDefList = fieldDefList;
         this.fieldDefMap = fieldDefMap;
         this.expressionDefMap = expressionDefMap;
@@ -405,6 +410,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public boolean isListOnlyTypesResolved() {
         return listOnlyTypesResolved;
+    }
+
+    public List<ProcessVariableDef> getVariableDefList() {
+        return variableDefList;
     }
 
     public List<EntityFieldDef> getFieldDefList() {
@@ -1461,6 +1470,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         private ConfigType type;
 
+        private List<ProcessVariableDef> variableDefList;
+        
         private Map<String, EntityFieldDef> fieldDefMap;
 
         private Map<String, EntityAttachmentDef> attachmentDefMap;
@@ -1526,6 +1537,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                 boolean reportable, boolean actionPolicy, String longName, String description, Long id, long version) {
             this.baseType = baseType;
             this.type = type;
+            this.variableDefList = new ArrayList<ProcessVariableDef>(
+                    ApplicationEntityUtils.getDefaultProcessVariableDefs());
             this.fieldDefMap = new LinkedHashMap<String, EntityFieldDef>();
             this.searchInputDefs = new HashMap<String, EntitySearchInputDef>();
             this.originClassName = originClassName;
@@ -1598,6 +1611,12 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         public Builder actionPolicy(boolean actionPolicy) {
             this.actionPolicy = actionPolicy;
+            return this;
+        }
+
+        public Builder addProcessVariableDef(String name, String label, boolean supportFilter, boolean supportValues)
+                throws UnifyException {
+            variableDefList.add(new ProcessVariableDef(name, label, supportFilter, supportValues));
             return this;
         }
 
@@ -1756,15 +1775,15 @@ public class EntityDef extends BaseApplicationEntityDef {
         public EntityDef build(AppletUtilities au) throws UnifyException {
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             List<EntityFieldDef> fieldDefList = new ArrayList<EntityFieldDef>(fieldDefMap.values());
-//            DataUtils.sortDescending(fieldDefList, EntityFieldDef.class, "sortIndex");
-            return new EntityDef(au, baseType, type, DataUtils.unmodifiableMap(fieldDefMap),
-                    DataUtils.unmodifiableList(fieldDefList), DataUtils.unmodifiableValuesList(attachmentDefMap),
-                    DataUtils.unmodifiableMap(expressionDefMap), DataUtils.unmodifiableList(uniqueConstraintList),
-                    DataUtils.unmodifiableList(indexList), DataUtils.unmodifiableList(uploadList),
-                    DataUtils.unmodifiableMap(searchInputDefs), DataUtils.unmodifiableMap(seriesDefMap),
-                    DataUtils.unmodifiableMap(categoryDefMap), nameParts, originClassName, tableName, label,
-                    emailProducerConsumer, delegate, dataSourceName, dateFormatter, dateTimeFormatter, mapped,
-                    supportsChangeEvents, auditable, reportable, actionPolicy, description, id, version);
+            return new EntityDef(au, baseType, type, DataUtils.unmodifiableList(variableDefList),
+                    DataUtils.unmodifiableMap(fieldDefMap), DataUtils.unmodifiableList(fieldDefList),
+                    DataUtils.unmodifiableValuesList(attachmentDefMap), DataUtils.unmodifiableMap(expressionDefMap),
+                    DataUtils.unmodifiableList(uniqueConstraintList), DataUtils.unmodifiableList(indexList),
+                    DataUtils.unmodifiableList(uploadList), DataUtils.unmodifiableMap(searchInputDefs),
+                    DataUtils.unmodifiableMap(seriesDefMap), DataUtils.unmodifiableMap(categoryDefMap), nameParts,
+                    originClassName, tableName, label, emailProducerConsumer, delegate, dataSourceName, dateFormatter,
+                    dateTimeFormatter, mapped, supportsChangeEvents, auditable, reportable, actionPolicy, description,
+                    id, version);
         }
     }
 

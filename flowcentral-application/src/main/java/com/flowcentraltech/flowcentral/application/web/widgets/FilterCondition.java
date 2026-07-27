@@ -197,9 +197,9 @@ public class FilterCondition {
             paramInputA = null;
             paramInputB = null;
         } else {
-            SysParamType sysParamType = SystemUtils.isSysParam(fieldName) ? SysParamType.fromEncoded(fieldName) : null;
+            SysParamType sysParamType = SystemUtils.isSysParamCode(fieldName) ? SysParamType.fromEncoded(fieldName) : null;
             EntityFieldDef entityFieldDef = sysParamType != null ? InputWidgetUtils.getEntityFieldDef(sysParamType)
-                    : (SystemUtils.isProcessVariable(fieldName) ?  InputWidgetUtils.getProcessVariableEntityFieldDef() : entityDef.getFieldDef(fieldName));
+                    : (SystemUtils.isProcessVariableCode(fieldName) ?  InputWidgetUtils.getProcessVariableEntityFieldDef() : entityDef.getFieldDef(fieldName));
 
             typeSelector = InputWidgetUtils.getFilterConditionTypeSelectDescriptior(entityFieldDef, listType);
             if (type != null) {

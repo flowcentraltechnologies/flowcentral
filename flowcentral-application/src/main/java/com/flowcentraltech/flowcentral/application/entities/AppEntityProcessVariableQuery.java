@@ -13,23 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.workflow.constants;
+package com.flowcentraltech.flowcentral.application.entities;
 
-import com.flowcentraltech.flowcentral.system.util.SystemUtils;
+import com.flowcentraltech.flowcentral.common.entities.BaseConfigEntityQuery;
 
 /**
- * Workflow transition variable constants.
+ * Application entity process variable query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public interface WorkflowTransitionVariableConstants {
-    
-    String FORWARDED_BY = SystemUtils.encodeProcessVariableCode("forwardedBy");
-    
-    String FORWARDED_BY_NAME = SystemUtils.encodeProcessVariableCode("forwardedByName");
-    
-    String FORWARD_TO = SystemUtils.encodeProcessVariableCode("forwardTo");
-    
-    String HELD_BY = SystemUtils.encodeProcessVariableCode("heldBy");
+public class AppEntityProcessVariableQuery extends BaseConfigEntityQuery<AppEntityProcessVariable> {
+
+    public AppEntityProcessVariableQuery() {
+        super(AppEntityProcessVariable.class);
+    }
+
+    public AppEntityProcessVariableQuery appEntityId(Long appEntityId) {
+        return (AppEntityProcessVariableQuery) addEquals("appEntityId", appEntityId);
+    }
+
 }
