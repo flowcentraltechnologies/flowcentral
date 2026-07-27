@@ -47,11 +47,11 @@ public class StudioEntityTemplateOptionsListCommand extends AbstractApplicationL
         List<Listable> list = new ArrayList<>();
         if (param.isPresent()) {
             list.addAll(au().getEntityDef(param.getValue()).getTemplateOptionsList());
-        }
 
-        for (ProcessVariableDef def : au().getEntityDef(param.getValue()).getVariableDefList()) {
-            list.add(new ListData(def.getParameter(),
-                    SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+            for (ProcessVariableDef def : au().getEntityDef(param.getValue()).getVariableDefList()) {
+                list.add(new ListData(def.getParameter(),
+                        SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+            }
         }
 
         return list;

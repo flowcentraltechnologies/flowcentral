@@ -50,13 +50,13 @@ public class EntitySetValueFieldDefListCommand extends AbstractFlowCentralListCo
         List<Listable> list = new ArrayList<>();
         if (params.isPresent()) {
             list.addAll(params.getEntityDef().getSetValueFieldDefList());
-        }
 
-        if (params.isIncludeProcessVariable()) {
-            for (ProcessVariableDef def : params.getEntityDef().getVariableDefList()) {
-                if (def.isSupportValues()) {
-                    list.add(new ListData(def.getKey(),
-                            SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+            if (params.isIncludeProcessVariable()) {
+                for (ProcessVariableDef def : params.getEntityDef().getVariableDefList()) {
+                    if (def.isSupportValues()) {
+                        list.add(new ListData(def.getKey(),
+                                SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+                    }
                 }
             }
         }

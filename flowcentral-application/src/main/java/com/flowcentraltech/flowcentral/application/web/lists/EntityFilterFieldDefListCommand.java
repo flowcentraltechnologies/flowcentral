@@ -52,13 +52,13 @@ public class EntityFilterFieldDefListCommand
         List<Listable> list = new ArrayList<>();
         if (params.isPresent()) {
             list.addAll(params.getEntityDef().getFilterFieldListables(params.getLabelSuggestionDef()));
-        }
 
-        if (params.isIncludeProcessVariable()) {
-            for (ProcessVariableDef def : params.getEntityDef().getVariableDefList()) {
-                if (def.isSupportFilter()) {
-                    list.add(new ListData(def.getKey(),
-                            SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+            if (params.isIncludeProcessVariable()) {
+                for (ProcessVariableDef def : params.getEntityDef().getVariableDefList()) {
+                    if (def.isSupportFilter()) {
+                        list.add(new ListData(def.getKey(),
+                                SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+                    }
                 }
             }
         }
