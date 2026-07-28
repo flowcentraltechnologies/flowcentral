@@ -32,6 +32,7 @@ import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Convenient abstract base class for entity set value generators.
@@ -171,7 +172,7 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractFlowCentr
      *                        if an error occurs
      */
     protected void setProcessVariable(ValueStore valueStore, String name, Object val) throws UnifyException {
-        valueStore.setTempValue(SystemUtils.getProcessVariableCode(name), val);
+        valueStore.setTempValue(SystemUtils.getProcessVariableCode(name), DataUtils.convert(String.class, val));
     }
 
     /**
