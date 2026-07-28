@@ -84,7 +84,7 @@ body, td, th, button, input, select, textarea {
 
 /** Entity Editor */
 .fc-entityeditor {width:100%;height:100%;}
-.fc-entityeditor .design {display:block;width:100%;max-width:100%;height:calc(100vh - 82px);max-height: calc(100vh - 82px); overflow:scroll;}
+.fc-entityeditor .design {display:block;width:100%;max-width:100%;height:calc(100vh - 48px);max-height: calc(100vh - 48px); overflow:scroll;}
 .fc-entityeditor .designbase {display:block;padding:4px;width: 100%;height:100%;box-sizing: border-box;}
 .fc-entityeditor .canvas {}
 
