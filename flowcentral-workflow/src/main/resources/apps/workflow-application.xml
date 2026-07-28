@@ -484,6 +484,8 @@
 					label="$m{workflow.stepalert.alertheldby}" type="BOOLEAN"/>
 				<field name="alertWorkflowRoles"
 					label="$m{workflow.stepalert.alertworkflowroles}" type="BOOLEAN"/>
+				<field name="individual"
+					label="$m{workflow.stepalert.individual}" type="BOOLEAN"/>
 				<field name="fireOnPrevStepName"
 					label="$m{workflow.stepalert.fireonprevstepname}" type="STRING"
 					nullable="true" maxLen="64" />

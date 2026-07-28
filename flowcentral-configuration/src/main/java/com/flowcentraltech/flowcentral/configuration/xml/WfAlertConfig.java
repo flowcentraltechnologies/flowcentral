@@ -71,6 +71,8 @@ public class WfAlertConfig extends BaseNameConfig {
     @JacksonXmlProperty(isAttribute = true)
     private boolean alertWorkflowRoles;
 
+    @JacksonXmlProperty(isAttribute = true)
+    private boolean individual;
 
     public WorkflowAlertType getType() {
         return type;
@@ -142,6 +144,14 @@ public class WfAlertConfig extends BaseNameConfig {
 
     public void setAlertWorkflowRoles(boolean alertWorkflowRoles) {
         this.alertWorkflowRoles = alertWorkflowRoles;
+    }
+
+    public boolean isIndividual() {
+        return individual;
+    }
+
+    public void setIndividual(boolean individual) {
+        this.individual = individual;
     }
 
     public String getFireOnPrevStepName() {

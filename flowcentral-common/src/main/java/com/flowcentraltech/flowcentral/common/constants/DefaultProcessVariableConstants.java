@@ -43,6 +43,8 @@ public interface DefaultProcessVariableConstants {
     String FORWARD_TO = "forwardTo";
     
     String HELD_BY = "heldBy";
+    
+    String RECIPIENT_NAME = "recipientName";
 
     String TEMPLATE_VARIABLE = "template";
 

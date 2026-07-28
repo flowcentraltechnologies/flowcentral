@@ -710,7 +710,7 @@ public class WfStepDef {
         public Builder addWfAlertDef(WorkflowAlertType type, String name, String description, String recipientPolicy,
                 String recipientNameRule, String recipientContactRule, String generator, String template,
                 String fireOnPrevStepName, String fireOnActionName, String fireOnCondition, int sendDelayinMinutes,
-                boolean alertHeldBy, boolean alertWorkflowRoles) {
+                boolean alertHeldBy, boolean alertWorkflowRoles, boolean individualAlert) {
             if (alertList == null) {
                 alertList = new LinkedHashMap<String, WfAlertDef>();
             }
@@ -722,7 +722,7 @@ public class WfStepDef {
             alertList.put(name,
                     new WfAlertDef(type, name, description, recipientPolicy, recipientNameRule, recipientContactRule,
                             generator, template, fireOnPrevStepName, fireOnActionName, fireOnCondition,
-                            sendDelayinMinutes, alertHeldBy, alertWorkflowRoles));
+                            sendDelayinMinutes, alertHeldBy, alertWorkflowRoles, individualAlert));
             return this;
         }
 

@@ -181,6 +181,8 @@ public final class ApplicationEntityUtils {
                 DefaultProcessVariableConstants.FORWARD_TO, "$m{default.processvariable.forwardto}", true, true));
         map.put(DefaultProcessVariableConstants.HELD_BY, new ProcessVariableDef(DefaultProcessVariableConstants.HELD_BY,
                 "$m{default.processvariable.heldby}", true, true));
+        map.put(DefaultProcessVariableConstants.RECIPIENT_NAME, new ProcessVariableDef(DefaultProcessVariableConstants.RECIPIENT_NAME,
+                "$m{default.processvariable.recipientname}", true, true));
         map.put(DefaultProcessVariableConstants.TEMPLATE_VARIABLE,
                 new ProcessVariableDef(DefaultProcessVariableConstants.TEMPLATE_VARIABLE,
                         "$m{default.processvariable.templatevariable}", false, true));

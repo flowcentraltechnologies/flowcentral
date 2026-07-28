@@ -301,6 +301,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                                 wfAlertConfig.setSendDelayInMinutes(wfStepAlert.getSendDelayInMinutes());
                                 wfAlertConfig.setAlertHeldBy(wfStepAlert.isAlertHeldBy());
                                 wfAlertConfig.setAlertWorkflowRoles(wfStepAlert.isAlertWorkflowRoles());
+                                wfAlertConfig.setIndividual(wfStepAlert.isIndividual());
                                 wfAlertConfig.setFireOnPrevStepName(wfStepAlert.getFireOnPrevStepName());
                                 wfAlertConfig.setFireOnActionName(wfStepAlert.getFireOnActionName());
                                 wfAlertConfig.setFireOnCondition(wfStepAlert.getFireOnConditionName());
