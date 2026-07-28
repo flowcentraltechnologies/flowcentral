@@ -159,48 +159,42 @@ public final class ApplicationEntityUtils {
 
     static {
         Map<String, ProcessVariableDef> map = new LinkedHashMap<String, ProcessVariableDef>();
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
-                new ProcessVariableDef(DefaultProcessVariableConstants.APP_TITLE,
-                        "$m{default.processvariable.apptitle}", false, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
+        map.put(DefaultProcessVariableConstants.APP_TITLE, new ProcessVariableDef(
+                DefaultProcessVariableConstants.APP_TITLE, "$m{default.processvariable.apptitle}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_CORRESPONDER,
                 new ProcessVariableDef(DefaultProcessVariableConstants.APP_CORRESPONDER,
                         "$m{default.processvariable.appcorresponder}", false, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE, new ProcessVariableDef(
-                DefaultProcessVariableConstants.APP_URL, "$m{default.processvariable.appurl}", false, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
-                new ProcessVariableDef(DefaultProcessVariableConstants.APP_HTML_LINK,
-                        "$m{default.processvariable.apphtmllink}", false, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
-                new ProcessVariableDef(DefaultProcessVariableConstants.ENTITY_NAME,
-                        "$m{default.processvariable.entityname}", true, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
-                new ProcessVariableDef(DefaultProcessVariableConstants.ENTITY_DESC,
-                        "$m{default.processvariable.entitydesc}", false, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
-                new ProcessVariableDef(DefaultProcessVariableConstants.FORWARDED_BY,
-                        "$m{default.processvariable.forwardedby}", true, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
+        map.put(DefaultProcessVariableConstants.APP_URL, new ProcessVariableDef(DefaultProcessVariableConstants.APP_URL,
+                "$m{default.processvariable.appurl}", false, true));
+        map.put(DefaultProcessVariableConstants.APP_HTML_LINK, new ProcessVariableDef(
+                DefaultProcessVariableConstants.APP_HTML_LINK, "$m{default.processvariable.apphtmllink}", false, true));
+        map.put(DefaultProcessVariableConstants.ENTITY_NAME, new ProcessVariableDef(
+                DefaultProcessVariableConstants.ENTITY_NAME, "$m{default.processvariable.entityname}", true, true));
+        map.put(DefaultProcessVariableConstants.ENTITY_DESC, new ProcessVariableDef(
+                DefaultProcessVariableConstants.ENTITY_DESC, "$m{default.processvariable.entitydesc}", false, true));
+        map.put(DefaultProcessVariableConstants.FORWARDED_BY, new ProcessVariableDef(
+                DefaultProcessVariableConstants.FORWARDED_BY, "$m{default.processvariable.forwardedby}", true, true));
+        map.put(DefaultProcessVariableConstants.FORWARDED_BY_NAME,
                 new ProcessVariableDef(DefaultProcessVariableConstants.FORWARDED_BY_NAME,
                         "$m{default.processvariable.forwardedbyname}", true, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
-                new ProcessVariableDef(DefaultProcessVariableConstants.FORWARD_TO,
-                        "$m{default.processvariable.forwardto}", true, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE, new ProcessVariableDef(
-                DefaultProcessVariableConstants.HELD_BY, "$m{default.processvariable.heldby}", true, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
+        map.put(DefaultProcessVariableConstants.FORWARD_TO, new ProcessVariableDef(
+                DefaultProcessVariableConstants.FORWARD_TO, "$m{default.processvariable.forwardto}", true, true));
+        map.put(DefaultProcessVariableConstants.HELD_BY, new ProcessVariableDef(DefaultProcessVariableConstants.HELD_BY,
+                "$m{default.processvariable.heldby}", true, true));
+        map.put(DefaultProcessVariableConstants.TEMPLATE_VARIABLE,
                 new ProcessVariableDef(DefaultProcessVariableConstants.TEMPLATE_VARIABLE,
                         "$m{default.processvariable.templatevariable}", false, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
+        map.put(DefaultProcessVariableConstants.WFITEM_LINK_VARIABLE,
                 new ProcessVariableDef(DefaultProcessVariableConstants.WFITEM_LINK_VARIABLE,
                         "$m{default.processvariable.wfitemlink}", false, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
+        map.put(DefaultProcessVariableConstants.WFITEM_HTMLLINK_VARIABLE,
                 new ProcessVariableDef(DefaultProcessVariableConstants.WFITEM_HTMLLINK_VARIABLE,
                         "$m{default.processvariable.wfitemhtmllink}", false, true));
-        map.put(DefaultProcessVariableConstants.APP_TITLE,
+        map.put(DefaultProcessVariableConstants.PLAIN_PASSWORD,
                 new ProcessVariableDef(DefaultProcessVariableConstants.PLAIN_PASSWORD,
                         "$m{default.processvariable.plainpassword}", false, true));
         DEFAULT_PROCESS_VARIABLES = Collections.unmodifiableMap(map);
-        
+
         DEFAULT_PROCESS_VARIABLES_LIST = Collections.unmodifiableList(new ArrayList<>(map.values()));
     }
     
