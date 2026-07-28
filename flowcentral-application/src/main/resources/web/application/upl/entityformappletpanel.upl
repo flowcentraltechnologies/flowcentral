@@ -134,6 +134,7 @@
 !ui-postcommand:navBackAct command:navBackToPrevious
 !ui-postcommand:switchOnChangeAct command:formSwitchOnChange components:$c{formPanel}
 	refresh:$c{formPanel.headerBar formPanel.formBodyPanel}
+	refresh:$f{refreshSwitchOnChange}	
 !ui-postcommand:crudSwitchOnChangeAct command:crudSwitchOnChange components:$c{entityCrudPanel}
 	refresh:$c{entityCrudPanel.crudEntityCrudPanel}
 !ui-postcommand:assnSwitchOnChangeAct command:assignSwitchOnChange components:$c{assignmentPanel}

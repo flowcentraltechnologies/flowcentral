@@ -979,13 +979,13 @@ public class EntityDef extends BaseApplicationEntityDef {
             synchronized (this) {
                 if (templateOptionsList == null) {
                     templateOptionsList = new ArrayList<ListData>();
-                    for (EntityFieldDef entityFieldDef : getBaseFieldDefList()) {
-                        if (!entityFieldDef.isPrimaryKey()) {
-                            templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
-                                    "f: " + entityFieldDef.getFieldLabel()));
-                        }
-                    }
-
+//                    for (EntityFieldDef entityFieldDef : getBaseFieldDefList()) {
+//                        if (!entityFieldDef.isPrimaryKey()) {
+//                            templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
+//                                    "f: " + entityFieldDef.getFieldLabel()));
+//                        }
+//                    }
+//
                     for (EntityFieldDef entityFieldDef : getActFieldDefList()) {
                         templateOptionsList.add(new ListData("{{" + entityFieldDef.getFieldName() + "}}",
                                 "f: " + entityFieldDef.getFieldLabel()));

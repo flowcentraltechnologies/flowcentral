@@ -4670,7 +4670,7 @@
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
-							column="0" />
+							column="0" switchOnChange="true"/>
 						<field name="notificationType"
 							inputWidget="application.enumlist" column="0" required="true"
 							switchOnChange="true" />

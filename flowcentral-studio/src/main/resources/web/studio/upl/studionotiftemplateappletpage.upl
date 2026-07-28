@@ -23,6 +23,7 @@
 !fc-studionotiftemplateappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
 	binding:applet
 	additionalUpdateComponents:$c{templateForm}
+	refreshSwitchOnChange:$c{designPanel}
 
 // Template form
 !fc-miniform:templateForm binding:applet.templateForm
