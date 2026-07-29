@@ -16,9 +16,9 @@
 !fc-studioheaderwithtabsformpanel mainForm:$c{mainFormPanel}
 
 !ui-panel:mainFormPanel
-	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{324px none}}
-	components:$c{detailsFormPanel}
+	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{none 324px}}
 	components:$c{designBasePanel}
+	components:$c{detailsFormPanel}
 	
 !ui-panel:detailsFormPanel
 	layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
