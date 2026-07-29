@@ -38,8 +38,6 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet {
 
-    private AppletEditorPage appletEditorPage;
-
     public StudioAppAppletApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
@@ -47,8 +45,18 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet {
         createDesign();
     }
 
-    public AppletEditorPage getAppletEditorPage() {
-        return appletEditorPage;
+    public static class Design {
+
+        private AppletEditorPage appletEditorPage;
+
+        public Design(AppletEditorPage appletEditorPage) {
+            this.appletEditorPage = appletEditorPage;
+        }
+
+        public AppletEditorPage getAppletEditorPage() {
+            return appletEditorPage;
+        }
+
     }
 
     public void createDesign() throws UnifyException {
@@ -57,10 +65,14 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet {
         if (appletId != null) {
             if (appApplet.getType().isEntityList()) {
                 String subTitle = appApplet.getDescription();
-                appletEditorPage = constructNewAppletEditorPage(appApplet.getEntity(), appletId, subTitle);
+                AppletEditorPage appletEditorPage = constructNewAppletEditorPage(appApplet.getEntity(), appletId, subTitle);
                 appletEditorPage.newEditor();
+                form.setDesign(new Design(appletEditorPage));
+                return;
             }
         }
+        
+        form.setDesign(null);
     }
 
     private AppletEditorPage constructNewAppletEditorPage(String entityName, Object id, String subTitle)

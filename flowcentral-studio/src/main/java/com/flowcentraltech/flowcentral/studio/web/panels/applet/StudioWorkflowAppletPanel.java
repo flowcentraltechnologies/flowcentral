@@ -48,7 +48,7 @@ public class StudioWorkflowAppletPanel extends AbstractStudioAppComponentAppletP
 
         final StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
         if (applet.isRootForm()) {
-            applet.getWorkflowEditorPage().commitDesign();
+            applet.commitDesign();
             applet.reload();
         }
     }

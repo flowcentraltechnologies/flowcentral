@@ -38,8 +38,6 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
 
-    private ChartView chartView;
-
     private final ChartModuleService cms;
 
     public StudioAppChartApplet(Page page, StudioModuleService sms, ChartModuleService cms, AppletUtilities au,
@@ -50,8 +48,18 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
         createDesign();
     }
 
-    public ChartView getChartView() {
-        return chartView;
+    public static class Design {
+
+        private ChartView chartView;
+
+        public Design(ChartView chartView) {
+            this.chartView = chartView;
+        }
+
+        public ChartView getChartView() {
+            return chartView;
+        }
+
     }
 
     public void createDesign() throws UnifyException {
@@ -59,15 +67,17 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
         final Long chartId = chart.getId();
         if (chartId != null) {
             String subTitle = chart.getDescription();
-            chartView = constructNewChartView(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()),
-                    chartId, subTitle);
+            ChartView chartView = constructNewChartView(
+                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()), chartId,
+                    subTitle);
             chartView.reloadContent();
+            form.setDesign(new Design(chartView));
+        } else {
+            form.setDesign(null);
         }
     }
 
-    private ChartView constructNewChartView(String chartName, Object id, String subTitle)
-            throws UnifyException {
+    private ChartView constructNewChartView(String chartName, Object id, String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{charteditor.chartdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);

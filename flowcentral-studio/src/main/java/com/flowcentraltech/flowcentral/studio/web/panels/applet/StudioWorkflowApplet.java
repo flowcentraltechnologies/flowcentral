@@ -38,8 +38,6 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet {
 
-    private WorkflowEditorPage workflowEditorPage;
-
     private final WorkflowModuleService workflowModuleService;
 
     public StudioWorkflowApplet(WorkflowModuleService workflowModuleService, Page page, StudioModuleService sms,
@@ -52,7 +50,27 @@ public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet {
     }
 
     public WorkflowEditorPage getWorkflowEditorPage() {
-        return workflowEditorPage;
+        return form.getDesign() != null ? ((Design) form.getDesign()).getWorkflowEditorPage() : null;
+    }
+
+    public static class Design {
+
+        private  WorkflowEditorPage workflowEditorPage;
+
+        public Design( WorkflowEditorPage workflowEditorPage) {
+            this.workflowEditorPage = workflowEditorPage;
+        }
+
+        public WorkflowEditorPage getWorkflowEditorPage() {
+            return workflowEditorPage;
+        }
+
+    }
+    
+    public void commitDesign() throws UnifyException {
+        if (form.getDesign() != null) {
+            ((Design) form.getDesign()).getWorkflowEditorPage().commitDesign();
+        }
     }
 
     public void createDesign() throws UnifyException {
@@ -60,8 +78,11 @@ public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet {
         Long workflowId = workflow.getId();
         if (workflowId != null) {
             String subTitle = workflow.getDescription();
-            workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId, subTitle);
+            WorkflowEditorPage workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId, subTitle);
             workflowEditorPage.newEditor();
+            form.setDesign(new Design(workflowEditorPage));
+        } else {
+            form.setDesign(null);
         }
     }
 
