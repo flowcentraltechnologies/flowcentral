@@ -37,8 +37,6 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioReportConfigurationApplet extends AbstractStudioAppComponentApplet {
 
-    private ReportEditorPage reportEditorPage;
-
     public StudioReportConfigurationApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
@@ -46,8 +44,24 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
         createDesign();
     }
 
-    public ReportEditorPage getReportEditorPage() {
-        return reportEditorPage;
+    public static class Design {
+
+        private ReportEditorPage reportEditorPage;
+
+        public Design(ReportEditorPage reportEditorPage) {
+            this.reportEditorPage = reportEditorPage;
+        }
+
+        public ReportEditorPage getReportEditorPage() {
+            return reportEditorPage;
+        }
+
+    }
+
+    public void commitDesign() throws UnifyException {
+        if (form.getDesign() != null) {
+            ((Design) form.getDesign()).getReportEditorPage().commitDesign();
+        }
     }
 
     public void createDesign() throws UnifyException {
@@ -55,9 +69,12 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
         Long reportConfigurationId = reportConfiguration.getId();
         if (reportConfigurationId != null) {
             String subTitle = reportConfiguration.getDescription();
-            reportEditorPage = constructNewReportEditorPage(reportConfiguration.getReportable(), reportConfigurationId,
-                    subTitle);
+            ReportEditorPage reportEditorPage = constructNewReportEditorPage(reportConfiguration.getReportable(),
+                    reportConfigurationId, subTitle);
             reportEditorPage.newEditor();
+            form.setDesign(new Design(reportEditorPage));
+        } else {
+            form.setDesign(null);
         }
     }
 

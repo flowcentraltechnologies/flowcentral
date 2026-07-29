@@ -37,7 +37,7 @@ public class StudioReportConfigurationAppletPanel extends AbstractStudioAppCompo
 
         final StudioReportConfigurationApplet applet = getValue(StudioReportConfigurationApplet.class);
         if (applet.isRootForm()) {
-            applet.getReportEditorPage().commitDesign();
+            applet.commitDesign();
             applet.reload();
         }
     }

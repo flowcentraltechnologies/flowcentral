@@ -37,7 +37,7 @@ public class StudioDashboardAppletPanel extends AbstractStudioAppComponentApplet
 
         final StudioDashboardApplet applet = getValue(StudioDashboardApplet.class);
         if (applet.isRootForm()) {
-            applet.getDashboardEditorPage().commitDesign();
+            applet.commitDesign();
             applet.reload();
         }
     }

@@ -37,7 +37,7 @@ public class StudioChartDatasourceAppletPanel extends AbstractStudioAppComponent
 
         final StudioChartDatasourceApplet applet = getValue(StudioChartDatasourceApplet.class);
         if (applet.isRootForm()) {
-            applet.getChartDatasourceView().reloadContent();
+            applet.reloadContent();
         }
     }
 

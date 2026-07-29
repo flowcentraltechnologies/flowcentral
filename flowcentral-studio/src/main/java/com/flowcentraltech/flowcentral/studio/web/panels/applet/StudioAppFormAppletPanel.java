@@ -37,7 +37,7 @@ public class StudioAppFormAppletPanel extends AbstractStudioAppComponentAppletPa
 
         final StudioAppFormApplet sapplet = getValue(StudioAppFormApplet.class);
         if (sapplet.isRootForm()) {
-            sapplet.getFormEditorPage().commitDesign();
+            sapplet.commitDesign();
             sapplet.reload();
         }
     }

@@ -39,8 +39,6 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApplet {
 
-    private ChartDatasourceView chartDatasourceView;
-
     private final ChartModuleService cms;
 
     public StudioChartDatasourceApplet(Page page, StudioModuleService sms, ChartModuleService cms, AppletUtilities au,
@@ -54,20 +52,39 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
                 .getValObject();
         entityFieldSequence.setUseTimeSeries(true);
     }
+    
+    public static class Design {
 
-    public ChartDatasourceView getChartDatasourceView() {
-        return chartDatasourceView;
+        private ChartDatasourceView chartDatasourceView;
+
+        public Design(ChartDatasourceView chartDatasourceView) {
+            this.chartDatasourceView = chartDatasourceView;
+        }
+
+        public ChartDatasourceView getChartDatasourceView() {
+            return chartDatasourceView;
+        }
+        
+    }
+    
+    public void reloadContent() throws UnifyException {
+        if (form.getDesign() != null) {
+            ((Design) form.getDesign()).getChartDatasourceView().reloadContent();
+        }
     }
 
-    public void createDesign() throws UnifyException {
+    private void createDesign() throws UnifyException {
         final ChartDataSource chartDataSource = (ChartDataSource) form.getFormBean();
         final Long chartDataSourceId = chartDataSource.getId();
         if (chartDataSourceId != null) {
             String subTitle = chartDataSource.getDescription();
-            chartDatasourceView = constructNewChartDatasourceView(
+            ChartDatasourceView chartDatasourceView = constructNewChartDatasourceView(
                     ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
                     chartDataSourceId, subTitle);
             chartDatasourceView.reloadContent();
+            form.setDesign(new Design(chartDatasourceView));
+        } else {
+            form.setDesign(null);
         }
     }
 

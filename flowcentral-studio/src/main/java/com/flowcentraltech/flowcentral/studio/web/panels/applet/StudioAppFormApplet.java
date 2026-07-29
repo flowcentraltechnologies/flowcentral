@@ -38,17 +38,31 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioAppFormApplet extends AbstractStudioAppComponentApplet {
 
-    private FormEditorPage formEditorPage;
-
     public StudioAppFormApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         createDesign();
     }
+    
+    public static class Design {
 
-    public FormEditorPage getFormEditorPage() {
-        return formEditorPage;
+        private FormEditorPage formEditorPage;
+
+        public Design(FormEditorPage formEditorPage) {
+            this.formEditorPage = formEditorPage;
+        }
+
+        public FormEditorPage getFormEditorPage() {
+            return formEditorPage;
+        }
+        
+    }
+    
+    public void commitDesign() throws UnifyException {
+        if (form.getDesign() != null) {
+            ((Design) form.getDesign()).getFormEditorPage().commitDesign();
+        }
     }
 
     public void createDesign() throws UnifyException {
@@ -56,10 +70,13 @@ public class StudioAppFormApplet extends AbstractStudioAppComponentApplet {
         Long formId = appForm.getId();
         if (formId != null) {
             String subTitle = appForm.getDescription();
-            formEditorPage = constructNewFormEditorPage(
+            FormEditorPage formEditorPage = constructNewFormEditorPage(
                     ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()), formId,
                     subTitle);
             formEditorPage.newEditor();
+            form.setDesign(new Design(formEditorPage));
+        } else {
+            form.setDesign(null);
         }
     }
 

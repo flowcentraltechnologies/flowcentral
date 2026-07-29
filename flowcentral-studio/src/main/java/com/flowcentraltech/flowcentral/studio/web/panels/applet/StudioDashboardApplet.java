@@ -40,8 +40,6 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioDashboardApplet extends AbstractStudioAppComponentApplet {
 
-    private DashboardEditorPage dashboardEditorPage;
-
     private final ChartModuleService cms;
 
     private final DashboardModuleService dms;
@@ -55,9 +53,25 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet {
         this.dms = dms;
         createDesign();
     }
+    
+    public static class Design {
 
-    public DashboardEditorPage getDashboardEditorPage() {
-        return dashboardEditorPage;
+        private DashboardEditorPage dashboardEditorPage;
+
+        public Design(DashboardEditorPage dashboardEditorPage) {
+            this.dashboardEditorPage = dashboardEditorPage;
+        }
+
+        public DashboardEditorPage getDashboardEditorPage() {
+            return dashboardEditorPage;
+        }
+        
+    }
+    
+    public void commitDesign() throws UnifyException {
+        if (form.getDesign() != null) {
+            ((Design) form.getDesign()).getDashboardEditorPage().commitDesign();
+        }
     }
 
     public void createDesign() throws UnifyException {
@@ -65,10 +79,13 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet {
         Long dashboardId = dashboard.getId();
         if (dashboardId != null) {
             String subTitle = dashboard.getDescription();
-            dashboardEditorPage = constructNewDashboardEditorPage(
+            DashboardEditorPage dashboardEditorPage = constructNewDashboardEditorPage(
                     ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), dashboard.getName()),
                     dashboardId, subTitle);
             dashboardEditorPage.newEditor();
+            form.setDesign(new Design(dashboardEditorPage));
+        } else {
+            form.setDesign(null);
         }
     }
 

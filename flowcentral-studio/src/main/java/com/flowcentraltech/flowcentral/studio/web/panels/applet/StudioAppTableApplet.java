@@ -37,17 +37,31 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioAppTableApplet extends AbstractStudioAppComponentApplet {
 
-    private TableEditorPage tableEditorPage;
-
     public StudioAppTableApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         createDesign();
     }
+    
+    public static class Design {
 
-    public TableEditorPage getTableEditorPage() {
-        return tableEditorPage;
+        private TableEditorPage tableEditorPage;
+
+        public Design(TableEditorPage tableEditorPage) {
+            this.tableEditorPage = tableEditorPage;
+        }
+
+        public TableEditorPage getTableEditorPage() {
+            return tableEditorPage;
+        }
+        
+    }
+    
+    public void commitDesign() throws UnifyException {
+        if (form.getDesign() != null) {
+            ((Design) form.getDesign()).getTableEditorPage().commitDesign();
+        }
     }
 
     public void createDesign() throws UnifyException {
@@ -55,8 +69,11 @@ public class StudioAppTableApplet extends AbstractStudioAppComponentApplet {
         Long tableId = appTable.getId();
         if (tableId != null) {
             String subTitle = appTable.getDescription();
-            tableEditorPage = constructNewTableEditorPage(appTable.getEntity(), tableId, subTitle);
+            TableEditorPage tableEditorPage = constructNewTableEditorPage(appTable.getEntity(), tableId, subTitle);
             tableEditorPage.newEditor();
+            form.setDesign(new Design(tableEditorPage));
+        } else {
+            form.setDesign(null);
         }
     }
 

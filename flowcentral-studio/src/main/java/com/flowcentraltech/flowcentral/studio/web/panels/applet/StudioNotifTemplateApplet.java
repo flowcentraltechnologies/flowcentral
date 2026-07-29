@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
@@ -47,23 +48,34 @@ import com.tcdng.unify.web.ui.widget.Page;
 public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet {
 
     private static FormTabDef formTabDef;
-    
-    private MiniForm templateForm;
 
     public StudioNotifTemplateApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        templateForm = new MiniForm(MiniFormScope.MAIN_FORM, form.getCtx(), getFormTabDef(au));
+        form.setDesign(new Design(new MiniForm(MiniFormScope.MAIN_FORM, form.getCtx(), getFormTabDef(au)), form));
     }
+    
+    public static class Design {
+        
+        private MiniForm templateForm;
+        
+        private HeaderWithTabsForm form;
 
-    public MiniForm getTemplateForm() {
-        return templateForm;
-    }
+        public Design(MiniForm templateForm, HeaderWithTabsForm form) {
+            this.templateForm = templateForm;
+            this.form = form;
+        }
 
-    public String getTemplateEntity() throws UnifyException {
-        final NotificationTemplate tempate = form != null? (NotificationTemplate) form.getFormBean() : null;
-        return tempate != null ? tempate.getEntity(): null;
+        public MiniForm getTemplateForm() {
+            return templateForm;
+        }
+
+        public String getTemplateEntity() throws UnifyException {
+            final NotificationTemplate tempate = form != null? (NotificationTemplate) form.getFormBean() : null;
+            return tempate != null ? tempate.getEntity(): null;
+        }
+        
     }
     
     private static FormTabDef getFormTabDef(AppletUtilities au) throws UnifyException {

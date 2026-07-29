@@ -50,6 +50,8 @@ public class HeaderWithTabsForm extends AbstractForm {
     private TabSheet relatedListTabSheet;
 
     private UpdateType updateType;
+
+    private Object design;
     
     public HeaderWithTabsForm(FormContext ctx, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
         super(ctx, sectorIcon, breadCrumbs);
@@ -74,6 +76,14 @@ public class HeaderWithTabsForm extends AbstractForm {
 
     public MiniForm getHeaderForm() {
         return headerForm;
+    }
+
+    public Object getDesign() {
+        return design;
+    }
+
+    public void setDesign(Object design) {
+        this.design = design;
     }
 
     public void setTabSheet(TabSheet tabSheet) {

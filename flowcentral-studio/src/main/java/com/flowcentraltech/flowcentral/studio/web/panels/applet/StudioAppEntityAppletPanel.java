@@ -37,7 +37,7 @@ public class StudioAppEntityAppletPanel extends AbstractStudioAppComponentApplet
 
         final StudioAppEntityApplet sapplet = getValue(StudioAppEntityApplet.class);
         if (sapplet.isRootForm()) {
-            sapplet.getEntityEditorPage().commitDesign();
+            sapplet.commitDesign();
             sapplet.reload();
             sapplet.createDesign();
         }

@@ -37,8 +37,6 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet {
 
-    private EntityEditorPage entityEditorPage;
-
     public StudioAppEntityApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
@@ -46,8 +44,24 @@ public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet {
         createDesign();
     }
 
-    public EntityEditorPage getEntityEditorPage() {
-        return entityEditorPage;
+    public static class Design {
+
+        private EntityEditorPage entityEditorPage;
+
+        public Design(EntityEditorPage entityEditorPage) {
+            this.entityEditorPage = entityEditorPage;
+        }
+
+        public EntityEditorPage getEntityEditorPage() {
+            return entityEditorPage;
+        }
+
+    }
+
+    public void commitDesign() throws UnifyException {
+        if (form.getDesign() != null) {
+            ((Design) form.getDesign()).getEntityEditorPage().commitDesign();
+        }
     }
 
     public void createDesign() throws UnifyException {
@@ -55,10 +69,13 @@ public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet {
         Long entityId = appEntity.getId();
         if (entityId != null) {
             String subTitle = appEntity.getDescription();
-            entityEditorPage = constructNewEntityEditorPage(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appEntity.getName()), entityId,
-                    subTitle);
+            EntityEditorPage entityEditorPage = constructNewEntityEditorPage(
+                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appEntity.getName()),
+                    entityId, subTitle);
             entityEditorPage.newEditor();
+            form.setDesign(new Design(entityEditorPage));
+        } else {
+            form.setDesign(null);
         }
     }
 
