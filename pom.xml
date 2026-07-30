@@ -62,7 +62,6 @@
     <module>flowcentral-web-ui</module>
     <module>flowcentral-fontawesome</module>
     <module>flowcentral-test</module>
-    <module>flowcentral-chart-apexcharts</module>
     <module>flowcentral-chart-echarts</module>
     <module>flowcentral-report-organization</module>
     <module>flowcentral-studio-organization</module>
