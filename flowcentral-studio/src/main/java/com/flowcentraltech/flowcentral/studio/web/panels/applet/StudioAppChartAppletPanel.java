@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
-import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 
@@ -29,11 +28,4 @@ import com.tcdng.unify.core.annotation.UplBinding;
 @UplBinding("web/studio/upl/studioappchartappletpanel.upl")
 public class StudioAppChartAppletPanel extends AbstractStudioAppComponentAppletPanel {
 
-    @Override
-    public void switchState() throws UnifyException {
-        super.switchState();
-
-        final StudioAppChartApplet applet = getValue(StudioAppChartApplet.class);
-        applet.setupQuickPreview();
-    }
 }

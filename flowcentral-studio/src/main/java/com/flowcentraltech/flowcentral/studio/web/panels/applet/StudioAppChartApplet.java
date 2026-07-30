@@ -75,10 +75,12 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
         form.setDesign(new Design(chartView));
     }
 
-    public void setupQuickPreview() throws UnifyException {
+    @Override
+    public void formSwitchOnChange() throws UnifyException {
+        super.formSwitchOnChange();
         final Chart chart = (Chart) form.getFormBean();
         ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(), chart.getRule(),
-                "", chart.getDescription(), chart.getId(), chart.getVersionNo());
+                "charts.preview", chart.getDescription(), chart.getId(), chart.getVersionNo());
         cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
                 .series(chart.getSeries()).color(chart.getColor())
                 .width(DataUtils.convert(int.class, chart.getWidth()))
