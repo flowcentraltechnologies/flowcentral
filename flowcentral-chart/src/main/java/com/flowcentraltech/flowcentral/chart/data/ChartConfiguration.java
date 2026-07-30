@@ -30,4 +30,10 @@ public interface ChartConfiguration {
     String getViewOptionName();
 
     FilterDef getViewOptionCatBase(String dataSourceName);
+    
+    void setPreviewChartDef(ChartDef chartDef);
+    
+    ChartDef getPreviewChartDef();
+    
+    boolean isWithPreviewChartDef();
 }

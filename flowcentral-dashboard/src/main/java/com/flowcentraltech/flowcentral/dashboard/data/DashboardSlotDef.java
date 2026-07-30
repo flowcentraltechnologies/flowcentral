@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.dashboard.data;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
+import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 
 /**
  * Dashboard slot definition object.
@@ -30,6 +31,8 @@ public class DashboardSlotDef implements ChartConfiguration {
     private final DashboardTileDef tileDef;
 
     private final DashboardOptionDef optionDef;
+    
+    private ChartDef previewChartDef;
 
     public DashboardSlotDef(DashboardTileDef tileDef, DashboardOptionDef optionDef) {
         this.tileDef = tileDef;
@@ -54,6 +57,21 @@ public class DashboardSlotDef implements ChartConfiguration {
     public FilterDef getViewOptionCatBase(String dataSourceName) {
         return optionDef != null && optionDef.isWithCatBase(dataSourceName) ? optionDef.getCatBase(dataSourceName)
                 : null;
+    }
+
+    @Override
+    public ChartDef getPreviewChartDef() {
+        return previewChartDef;
+    }
+
+    @Override
+    public void setPreviewChartDef(ChartDef previewChartDef) {
+        this.previewChartDef = previewChartDef;
+    }
+
+    @Override
+    public boolean isWithPreviewChartDef() {
+        return previewChartDef != null;
     }
 
 }

@@ -28,6 +28,8 @@ public class SimpleChartConfiguration implements ChartConfiguration {
 
     private String chart;
     
+    private ChartDef previewChartDef;
+    
     public SimpleChartConfiguration(String chart) {
         this.chart = chart;
     }
@@ -45,6 +47,21 @@ public class SimpleChartConfiguration implements ChartConfiguration {
     @Override
     public FilterDef getViewOptionCatBase(String dataSourceName) {
         return null;
+    }
+
+    @Override
+    public ChartDef getPreviewChartDef() {
+        return previewChartDef;
+    }
+
+    @Override
+    public void setPreviewChartDef(ChartDef previewChartDef) {
+        this.previewChartDef = previewChartDef;
+    }
+
+    @Override
+    public boolean isWithPreviewChartDef() {
+        return previewChartDef != null;
     }
 
 }

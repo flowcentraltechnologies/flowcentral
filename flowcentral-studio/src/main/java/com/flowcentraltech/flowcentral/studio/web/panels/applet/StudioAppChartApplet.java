@@ -24,10 +24,12 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ChartView;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
@@ -65,18 +67,26 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
     public void createDesign() throws UnifyException {
         final Chart chart = (Chart) form.getFormBean();
         final Long chartId = chart.getId();
-        if (chartId != null) {
-            String subTitle = chart.getDescription();
-            ChartView chartView = constructNewChartView(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()), chartId,
-                    subTitle);
-            chartView.reloadContent();
-            form.setDesign(new Design(chartView));
-        } else {
-            form.setDesign(null);
-        }
+        String subTitle = chart.getDescription();
+        ChartView chartView = constructNewChartView(
+                ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()), chartId,
+                subTitle);
+        chartView.reloadContent();
+        form.setDesign(new Design(chartView));
     }
 
+    public void setupQuickPreview() throws UnifyException {
+        final Chart chart = (Chart) form.getFormBean();
+        ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(), chart.getRule(),
+                "", chart.getDescription(), chart.getId(), chart.getVersionNo());
+        cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
+                .series(chart.getSeries()).color(chart.getColor())
+                .width(DataUtils.convert(int.class, chart.getWidth()))
+                .height(DataUtils.convert(int.class, chart.getHeight())).stacked(chart.isStacked())
+                .smooth(chart.isSmooth());
+        ((Design) form.getDesign()).getChartView().getConfiguration().setPreviewChartDef(cdb.build());
+    }
+    
     private ChartView constructNewChartView(String chartName, Object id, String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{charteditor.chartdesigner}"));
