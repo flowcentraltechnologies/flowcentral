@@ -18,7 +18,6 @@
 // Applet panel
 !fc-studioapptableappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
 	moreCommitComponents:$c{tableEditorPagePanel} binding:applet 
-	refreshOnUpdate:$c{tableEditorPagePanel}
 
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}
