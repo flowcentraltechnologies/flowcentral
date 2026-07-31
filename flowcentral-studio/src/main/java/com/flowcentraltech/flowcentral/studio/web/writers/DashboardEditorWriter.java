@@ -100,7 +100,7 @@ public class DashboardEditorWriter extends AbstractFlowCentralControlWriter {
         writer.write("</div></div>");
         // End charts
 
-        // Design
+        // NotifTemplateEditor
         writer.write("<div class=\"design\" style=\"display:table-cell;vertical-align:top;\">");
         writer.write("<div id=\"").write(dashboardEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");
         writer.write("</div></div>");

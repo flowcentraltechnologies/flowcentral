@@ -17,7 +17,7 @@
 
 // Applet panel
 !fc-studionotiftemplateappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
-	designPanel:$c{designPanel} binding:applet
+	moreCommitComponents:$c{templateForm} binding:applet 
 
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}

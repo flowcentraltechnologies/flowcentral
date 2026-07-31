@@ -30,12 +30,11 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
-import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
-import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
+import com.flowcentraltech.flowcentral.studio.web.panels.NotifTemplateEditor;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -45,7 +44,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet {
+public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet<NotifTemplateEditor> {
 
     private static FormTabDef formTabDef;
 
@@ -53,31 +52,10 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet 
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        form.setDesign(new Design(new MiniForm(MiniFormScope.MAIN_FORM, form.getCtx(), getFormTabDef(au)), form));
+        setDesign(
+                new NotifTemplateEditor(new MiniForm(MiniFormScope.MAIN_FORM, form.getCtx(), getFormTabDef(au)), form));
     }
-    
-    public static class Design {
-        
-        private MiniForm templateForm;
-        
-        private HeaderWithTabsForm form;
 
-        public Design(MiniForm templateForm, HeaderWithTabsForm form) {
-            this.templateForm = templateForm;
-            this.form = form;
-        }
-
-        public MiniForm getTemplateForm() {
-            return templateForm;
-        }
-
-        public String getTemplateEntity() throws UnifyException {
-            final NotificationTemplate tempate = form != null? (NotificationTemplate) form.getFormBean() : null;
-            return tempate != null ? tempate.getEntity(): null;
-        }
-        
-    }
-    
     private static FormTabDef getFormTabDef(AppletUtilities au) throws UnifyException {
         if (formTabDef == null) {
             synchronized (StudioNotifTemplateApplet.class) {
@@ -86,22 +64,19 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet 
                     final List<FormFieldDef> fieldDefs = new ArrayList<FormFieldDef>();
                     EntityFieldDef entityFieldDef = entityDef.getFieldDef("subject");
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef("studio.entitytemplatetext");
-                    String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
-                            entityFieldDef, null, null);
-                    fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null,
-                            null, entityFieldDef.getFieldLabel(), renderer, 0, false, false,
-                            true, true, true, false));
+                    String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef, entityFieldDef, null,
+                            null);
+                    fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null, null,
+                            entityFieldDef.getFieldLabel(), renderer, 0, false, false, true, true, true, false));
                     entityFieldDef = entityDef.getFieldDef("template");
                     widgetTypeDef = au.getWidgetTypeDef("studio.entitytemplaterichtexteditor");
-                    renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
-                            entityFieldDef, null, null);
-                    fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null,
-                            null, entityFieldDef.getFieldLabel(), renderer, 0, false, false,
-                            true, true, true, false));
-                    
+                    renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef, entityFieldDef, null, null);
+                    fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null, null,
+                            entityFieldDef.getFieldLabel(), renderer, 0, false, false, true, true, true, false));
+
                     formTabDef = new FormTabDef("template", "Template", "email",
-                            Arrays.asList(new FormSectionDef(fieldDefs, "details", null,
-                                    FormColumnsType.TYPE_1, null, null, true, true, false)));
+                            Arrays.asList(new FormSectionDef(fieldDefs, "details", null, FormColumnsType.TYPE_1, null,
+                                    null, true, true, false)));
                 }
             }
         }

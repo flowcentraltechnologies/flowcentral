@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioReportConfigurationApplet extends AbstractStudioAppComponentApplet {
+public class StudioReportConfigurationApplet extends AbstractStudioAppComponentApplet<ReportEditorPage> {
 
     public StudioReportConfigurationApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
@@ -44,23 +44,9 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
         createDesign();
     }
 
-    public static class Design {
-
-        private ReportEditorPage reportEditorPage;
-
-        public Design(ReportEditorPage reportEditorPage) {
-            this.reportEditorPage = reportEditorPage;
-        }
-
-        public ReportEditorPage getReportEditorPage() {
-            return reportEditorPage;
-        }
-
-    }
-
     public void commitDesign() throws UnifyException {
-        if (form.getDesign() != null) {
-            ((Design) form.getDesign()).getReportEditorPage().commitDesign();
+        if (getDesign() != null) {
+            getDesign().commitDesign();
         }
     }
 
@@ -72,9 +58,9 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
             ReportEditorPage reportEditorPage = constructNewReportEditorPage(reportConfiguration.getReportable(),
                     reportConfigurationId, subTitle);
             reportEditorPage.newEditor();
-            form.setDesign(new Design(reportEditorPage));
+            setDesign(reportEditorPage);
         } else {
-            form.setDesign(null);
+            setDesign(null);
         }
     }
 

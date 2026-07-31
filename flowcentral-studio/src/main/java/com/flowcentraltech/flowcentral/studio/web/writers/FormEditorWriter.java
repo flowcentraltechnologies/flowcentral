@@ -98,7 +98,7 @@ public class FormEditorWriter extends AbstractFlowCentralControlWriter {
         writer.write("</div></div>");
         // End fields
 
-        // Design
+        // NotifTemplateEditor
         writer.write("<div class=\"design\" style=\"display:table-cell;vertical-align:top;\">");
         writer.write("<div id=\"").write(formEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");
         writer.write("</div></div>");

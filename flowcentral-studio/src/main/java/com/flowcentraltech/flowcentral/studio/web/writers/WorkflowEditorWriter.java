@@ -99,7 +99,7 @@ public class WorkflowEditorWriter extends AbstractFlowCentralControlWriter {
             writer.write("</div>");
             // End tools
 
-            // Design
+            // NotifTemplateEditor
             writer.write("<div class=\"design\">");
 
             writer.write("<div id=\"").write(workflowEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");

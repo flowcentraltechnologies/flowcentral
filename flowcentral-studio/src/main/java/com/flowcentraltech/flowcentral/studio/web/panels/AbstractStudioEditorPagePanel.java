@@ -43,7 +43,7 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralP
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
-        final AbstractStudioAppComponentApplet applet = (AbstractStudioAppComponentApplet) getValueStore().getValueObject();
+        final AbstractStudioAppComponentApplet<?> applet = (AbstractStudioAppComponentApplet<?>) getValueStore().getValueObject();
         final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null;
         final boolean isEditable = !applet.appletCtx().isReadOnly();
         if (isCollaboration) {
@@ -69,7 +69,7 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralP
     }
 
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        return ((AbstractStudioAppComponentApplet) getValueStore().getValueObject()).appletCtx().isReadOnly();
+        return ((AbstractStudioAppComponentApplet<?>) getValueStore().getValueObject()).appletCtx().isReadOnly();
     }
     
     private boolean checkFrozen(Entity inst) throws UnifyException {

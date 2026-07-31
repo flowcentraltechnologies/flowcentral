@@ -56,7 +56,7 @@ public class EntityEditorWriter extends AbstractFlowCentralControlWriter {
                     "<div style=\"display:table;table-layout: fixed;width:100%;height:100%;\"><div style=\"display:table-row;\">");
             writer.write("<div style=\"display:table-cell;vertical-align:top;position:relative;\">");
             
-            // Design
+            // NotifTemplateEditor
             writer.write("<div class=\"design\">");
             writer.write("<div id=\"").write(entityEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");
             writer.write("<canvas id=\"").write(entityEditorWidget.getDesignCanvasId())
