@@ -522,7 +522,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 
 /* Form bread crumbs */
-.fc-formbreadcrumbs .base {font-size:8pt;color:#404040;}
+.fc-formbreadcrumbs .base {list-style: none;font-size:8pt;color:#404040;}
 
 /* Form errors */
 .fc-formmessages {}
@@ -978,7 +978,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-content-tabbed {}
 
 /*** COMMON ***/
-.hdbar {background-color: #e3e7ea;}
+.hdbar {background-color: #e3e7ea;min-height:34px;}
 .hdtitle {display: block;font-weight:bold;}
 .hdsubtitle {display: block;font-size:8pt;}
 

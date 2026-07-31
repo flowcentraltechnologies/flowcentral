@@ -33,7 +33,7 @@
 	components:$f{moreActionButtons}
 	
 // Form panel
-!ui-panel:formBodyPanel layout:$d{!ui-vertical style:$s{width:100%;}}
+!ui-panel:formBodyPanel styleClass:$e{fc-designdetails} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{formAnnotation formErrors}
 	components:$f{mainForm}
 	components:$f{moreMemoryComponents}

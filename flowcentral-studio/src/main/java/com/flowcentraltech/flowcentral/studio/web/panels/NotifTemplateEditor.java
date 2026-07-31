@@ -15,7 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.tcdng.unify.core.UnifyException;
@@ -26,13 +28,15 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class NotifTemplateEditor {
-    
+public class NotifTemplateEditor extends AbstractStudioEditorPage {
+
     private MiniForm templateForm;
-    
+
     private HeaderWithTabsForm form;
 
-    public NotifTemplateEditor(MiniForm templateForm, HeaderWithTabsForm form) {
+    public NotifTemplateEditor(MiniForm templateForm, HeaderWithTabsForm form, AppletUtilities au,
+            BreadCrumbs breadCrumbs) {
+        super(au, breadCrumbs);
         this.templateForm = templateForm;
         this.form = form;
     }
@@ -42,8 +46,8 @@ public class NotifTemplateEditor {
     }
 
     public String getTemplateEntity() throws UnifyException {
-        final NotificationTemplate tempate = form != null? (NotificationTemplate) form.getFormBean() : null;
-        return tempate != null ? tempate.getEntity(): null;
+        final NotificationTemplate tempate = form != null ? (NotificationTemplate) form.getFormBean() : null;
+        return tempate != null ? tempate.getEntity() : null;
     }
-    
+
 }

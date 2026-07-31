@@ -10,7 +10,7 @@
  	--color-deep: #24303f !important;
  	--color-menu: #3c4e63 !important;
  	--color-menuhov:#394452 !important;
- 	--color-formsec: #6e819d !important;
+ 	--color-formsec: #58677E !important;
  	--color-icon: #525e6d !important;
  	--color-tablesel: #bfd6ff !important;
 	--color-tablehov: #d5e7fb !important;
@@ -31,7 +31,7 @@ body, td, th, button, input, select, textarea {
 
 .fc-table .table td {padding: 4px 6px;}
 .fc-miniform .mfpre {width: 78px;}
-.fc-formbreadcrumbs .base {color: var(--color-formsec);}
+.fc-formbreadcrumbs .base {margin-left:4px;list-style: none;color: var(--color-formsec);}
 
 /* CRUD dialog */
 .fc-cruddialog {}
@@ -84,10 +84,10 @@ body, td, th, button, input, select, textarea {
 
 .fc-studiodesign {background-color:#000;padding:4px;box-sizing:border-box;
 	min-height:var(--design-maxheight);max-height:var(--design-maxheight);overflow:auto;}
-.fc-studioheaderwithtabsformpanel .cldetails {padding-left:4px;box-sizing:border-box;
+.fc-designdetails {padding-left:4px;box-sizing:border-box;
 	min-height:var(--design-maxheight);max-height:var(--design-maxheight);overflow-y:auto;overflow-x:clip;}
 
-.fc-studiotemplate {background-color:#fff;}
+.fc-studiotemplate {margin-top: 4px;padding-top: 6px;background-color:#fff;}
 
 /** Editor */
 .fc-designtitle {color:#fff;font-weight:bold;background-color:var(--color-formsec);padding: 4px 6px; box-sizing: border-box;}
@@ -100,9 +100,6 @@ body, td, th, button, input, select, textarea {
 
 /** Entity editor page panel */
 .fc-entityeditorpagepanel {height:100%;}
-.fc-entityeditorpagepanel .hdbar {background-color: #e3e7ea;}
-.fc-entityeditorpagepanel .hdtitle {display: block;font-weight:bold;}
-.fc-entityeditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
 .fc-entityeditorpagepanel .editcollabel {width: 100px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}				
 
 /** Table Editor */
@@ -140,20 +137,13 @@ body, td, th, button, input, select, textarea {
 
 /** Table preview panel */
 .fc-tablepreviewpanel {}
-.fc-tablepreviewpanel .hdbar {background-color: #e3e7ea;}
 
 /** Applet editor page panel */
 .fc-appleteditorpagepanel {height:100%;}
-.fc-appleteditorpagepanel .hdbar {background-color: #e3e7ea;}
-.fc-appleteditorpagepanel .hdtitle {display: block;font-weight:bold;}
-.fc-appleteditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
 
 
 /** Table editor page panel */
 .fc-tableeditorpagepanel {height:100%;}
-.fc-tableeditorpagepanel .hdbar {background-color: #e3e7ea;}
-.fc-tableeditorpagepanel .hdtitle {display: block;font-weight:bold;}
-.fc-tableeditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
 .fc-tableeditorpagepanel .editcollabel {width: 100px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}				
 
 /** Form field editor panel */
@@ -217,14 +207,10 @@ body, td, th, button, input, select, textarea {
 
 /** Form preview panel */
 .fc-formpreviewpanel {}
-.fc-formpreviewpanel .hdbar {background-color: #e3e7ea;}
 .fc-formpreviewpanel .cltabsection {width:100%;margin-top:10px; padding:10px; box-sizing: border-box;}
 
 /** Form editor page panel */
 .fc-formeditorpagepanel {height:100%;}
-.fc-formeditorpagepanel .hdbar {background-color: #e3e7ea;}
-.fc-formeditorpagepanel .hdtitle {display: block;font-weight:bold;}
-.fc-formeditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
 .fc-formeditorpagepanel .editlabel {width: 120px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;}	
 
 .fc-formtabeditorpanel {}
@@ -287,14 +273,10 @@ body, td, th, button, input, select, textarea {
 
 /** Dashboard preview panel */
 .fc-dashboardpreviewpanel {}
-.fc-dashboardpreviewpanel .hdbar {background-color: #e3e7ea;}
 .fc-dashboardpreviewpanel .cltabsection {width:100%;margin-top:10px; padding:10px; box-sizing: border-box;}
 
 /** Dashboard editor page panel */
 .fc-dashboardeditorpagepanel {height:100%;}
-.fc-dashboardeditorpagepanel .hdbar {background-color: #e3e7ea;}
-.fc-dashboardeditorpagepanel .hdtitle {display: block;font-weight:bold;}
-.fc-dashboardeditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
 .fc-dashboardeditorpagepanel .editlabel {width: 120px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;}	
 
 .fc-dashboardsectioneditorpanel {}			
@@ -333,13 +315,9 @@ body, td, th, button, input, select, textarea {
 
 /** Report preview panel */
 .rc-reportpreviewpanel {}
-.rc-reportpreviewpanel .hdbar {background-color: #e3e7ea;}
 
 /** Report editor page panel */
 .fc-reporteditorpagepanel {height:100%;}
-.fc-reporteditorpagepanel .hdbar {background-color: #e3e7ea;}
-.fc-reporteditorpagepanel .hdtitle {display: block;font-weight:bold;}
-.fc-reporteditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
 .fc-reporteditorpagepanel .editcollabel {width: 100px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}				
 
 /** Workflow Editor */
@@ -359,9 +337,6 @@ body, td, th, button, input, select, textarea {
 
 /** Form editor page panel */
 .fc-workfloweditorpagepanel {height:100%;}
-.fc-workfloweditorpagepanel .hdbar {background-color: #e3e7ea;}
-.fc-workfloweditorpagepanel .hdtitle {display: block;font-weight:bold;}
-.fc-workfloweditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
 .fc-workfloweditorpagepanel .editlabel {width: 120px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;vertical-align: middle;}	
 
 .fc-wfstepeditpanel {}

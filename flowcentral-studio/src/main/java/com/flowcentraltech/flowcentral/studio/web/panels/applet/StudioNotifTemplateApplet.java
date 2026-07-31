@@ -30,9 +30,11 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.NotifTemplateEditor;
 import com.tcdng.unify.core.UnifyException;
@@ -52,8 +54,27 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet<
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        setDesign(
-                new NotifTemplateEditor(new MiniForm(MiniFormScope.MAIN_FORM, form.getCtx(), getFormTabDef(au)), form));
+        createDesign();
+    }
+
+    private void createDesign() throws UnifyException {
+        final NotificationTemplate template = (NotificationTemplate) form.getFormBean();
+        final Long templateId = template.getId();
+        if (templateId != null) {
+            String subTitle = template.getDescription();
+            NotifTemplateEditor notifTemplateEditor = constructNewNotifTemplateEditor(templateId, subTitle);
+            setDesign(notifTemplateEditor);
+        } else {
+            setDesign(null);
+        }
+    }
+
+    private NotifTemplateEditor constructNewNotifTemplateEditor(Object id, String subTitle) throws UnifyException {
+        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{notiftemplateeditor.notiftemplatedesigner}"));
+        breadCrumbs.setLastCrumbSubTitle(subTitle);
+        return new NotifTemplateEditor(new MiniForm(MiniFormScope.MAIN_FORM, form.getCtx(), getFormTabDef(au())), form,
+                au(), breadCrumbs);
     }
 
     private static FormTabDef getFormTabDef(AppletUtilities au) throws UnifyException {
