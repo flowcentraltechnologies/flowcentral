@@ -21,7 +21,6 @@
 	moreActionButtons:$c{saveAsBtn saveBtn saveNextBtn}
 	moreActionButtons:$c{updateBtn deleteBtn cancelBtn}
 	moreMemoryComponents:$c{focusMemory tabMemory}
-	designPanel:$f{designPanel}
 	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{switchOnChangeAct}}
 !ui-hidden:focusMemory binding:focusWidgetId	
 !ui-hidden:tabMemory binding:tabWidgetId	

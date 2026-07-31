@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet {
+public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet<WorkflowEditorPage> {
 
     private final WorkflowModuleService workflowModuleService;
 
@@ -49,27 +49,9 @@ public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet {
         createDesign();
     }
 
-    public WorkflowEditorPage getWorkflowEditorPage() {
-        return form.getDesign() != null ? ((Design) form.getDesign()).getWorkflowEditorPage() : null;
-    }
-
-    public static class Design {
-
-        private  WorkflowEditorPage workflowEditorPage;
-
-        public Design( WorkflowEditorPage workflowEditorPage) {
-            this.workflowEditorPage = workflowEditorPage;
-        }
-
-        public WorkflowEditorPage getWorkflowEditorPage() {
-            return workflowEditorPage;
-        }
-
-    }
-    
     public void commitDesign() throws UnifyException {
-        if (form.getDesign() != null) {
-            ((Design) form.getDesign()).getWorkflowEditorPage().commitDesign();
+        if (getDesign() != null) {
+            getDesign().commitDesign();
         }
     }
 
@@ -78,11 +60,12 @@ public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet {
         Long workflowId = workflow.getId();
         if (workflowId != null) {
             String subTitle = workflow.getDescription();
-            WorkflowEditorPage workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId, subTitle);
+            WorkflowEditorPage workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId,
+                    subTitle);
             workflowEditorPage.newEditor();
-            form.setDesign(new Design(workflowEditorPage));
+            setDesign(workflowEditorPage);
         } else {
-            form.setDesign(null);
+            setDesign(null);
         }
     }
 

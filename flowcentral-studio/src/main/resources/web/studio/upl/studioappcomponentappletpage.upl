@@ -14,10 +14,18 @@
 // the License.
 
 !ui-page captionBinding:$s{instTitle} subCaptionBinding:$s{typeTitle}
-	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;}}
+	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{none 324px}}
+	components:$c{designBasePanel}
 	components:$c{appletPanel}
 	
 // Applet panel
 !fc-studioappcomponentappletpanel:appletPanel style:$s{height:100%;} styleClass:$e{studiodetail}
 	binding:applet
+
+// Design panel
+!ui-panel:designBasePanel styleClass:$e{fc-studiodesign} style:$s{width:100%;height:100%;padding-right:4px;box-sizing:border-box;}
+	layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
+	binding:applet
+	components:$c{designPanel}
+!ui-panel:designPanel style:$s{width:100%;height:100%;}
 	

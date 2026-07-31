@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFormApplet {
+public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntityFormApplet {
 
     private final StudioModuleService sms;
 
@@ -50,6 +50,8 @@ public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFor
     private final String typeTitle;
 
     private final String applicationName;
+
+    private T design;
 
     public AbstractStudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
@@ -90,6 +92,14 @@ public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFor
 
     public String getTypeTitle() {
         return typeTitle;
+    }
+
+    public T getDesign() {
+        return design;
+    }
+
+    public void setDesign(T design) {
+        this.design = design;
     }
 
     public void ensureClearOnNew() throws UnifyException {

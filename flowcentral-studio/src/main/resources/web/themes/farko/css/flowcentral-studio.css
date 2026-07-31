@@ -83,7 +83,7 @@ body, td, th, button, input, select, textarea {
 
 
 .fc-studioheaderwithtabsformpanel {}
-.fc-studioheaderwithtabsformpanel .cldesign {background-color:#000;padding:4px;box-sizing:border-box;
+.fc-studiodesign {background-color:#000;padding:4px;box-sizing:border-box;
 	min-height:var(--design-maxheight);max-height:var(--design-maxheight);overflow:auto;}
 .fc-studioheaderwithtabsformpanel .cldetails {padding-left:4px;box-sizing:border-box;
 	min-height:var(--design-maxheight);max-height:var(--design-maxheight);overflow-y:auto;overflow-x:clip;}
