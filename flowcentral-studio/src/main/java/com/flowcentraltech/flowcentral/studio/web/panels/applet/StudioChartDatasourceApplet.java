@@ -37,7 +37,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApplet {
+public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApplet<ChartDatasourceView> {
 
     private final ChartModuleService cms;
 
@@ -53,23 +53,9 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
         entityFieldSequence.setUseTimeSeries(true);
     }
     
-    public static class Design {
-
-        private ChartDatasourceView chartDatasourceView;
-
-        public Design(ChartDatasourceView chartDatasourceView) {
-            this.chartDatasourceView = chartDatasourceView;
-        }
-
-        public ChartDatasourceView getChartDatasourceView() {
-            return chartDatasourceView;
-        }
-        
-    }
-    
     public void reloadContent() throws UnifyException {
-        if (form.getDesign() != null) {
-            ((Design) form.getDesign()).getChartDatasourceView().reloadContent();
+        if (getDesign() != null) {
+            getDesign().reloadContent();
         }
     }
 
@@ -82,9 +68,9 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
                     ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
                     chartDataSourceId, subTitle);
             chartDatasourceView.reloadContent();
-            form.setDesign(new Design(chartDatasourceView));
+            setDesign(chartDatasourceView);
         } else {
-            form.setDesign(null);
+            setDesign(null);
         }
     }
 

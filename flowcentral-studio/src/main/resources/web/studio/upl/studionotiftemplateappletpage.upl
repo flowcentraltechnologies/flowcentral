@@ -22,6 +22,6 @@
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}
 	components:$c{templateForm templateOptions}
-!fc-miniform:templateForm styleClass:$e{cltemplate} binding:templateForm
+!fc-miniform:templateForm styleClass:$e{fc-studiotemplate} binding:templateForm
 !ui-textoptions:templateOptions alias:$s{entitytemplateoptionslist}
 	list:$s{studioentitytemplateoptionslist} listParams:$l{templateEntity}

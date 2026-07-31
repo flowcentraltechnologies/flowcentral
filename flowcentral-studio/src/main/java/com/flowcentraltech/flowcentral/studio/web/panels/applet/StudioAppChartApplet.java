@@ -38,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
+public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<ChartView> {
 
     private final ChartModuleService cms;
 
@@ -50,20 +50,6 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
         createDesign();
     }
 
-    public static class Design {
-
-        private ChartView chartView;
-
-        public Design(ChartView chartView) {
-            this.chartView = chartView;
-        }
-
-        public ChartView getChartView() {
-            return chartView;
-        }
-
-    }
-
     public void createDesign() throws UnifyException {
         final Chart chart = (Chart) form.getFormBean();
         final Long chartId = chart.getId();
@@ -72,7 +58,7 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
                 ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()), chartId,
                 subTitle);
         chartView.reloadContent();
-        form.setDesign(new Design(chartView));
+        setDesign(chartView);
     }
 
     @Override
@@ -86,7 +72,7 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet {
                 .width(DataUtils.convert(int.class, chart.getWidth()))
                 .height(DataUtils.convert(int.class, chart.getHeight())).stacked(chart.isStacked())
                 .smooth(chart.isSmooth());
-        ((Design) form.getDesign()).getChartView().getConfiguration().setPreviewChartDef(cdb.build());
+        getDesign().getConfiguration().setPreviewChartDef(cdb.build());
     }
     
     private ChartView constructNewChartView(String chartName, Object id, String subTitle) throws UnifyException {

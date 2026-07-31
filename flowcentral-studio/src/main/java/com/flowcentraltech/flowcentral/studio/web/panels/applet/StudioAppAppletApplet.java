@@ -36,27 +36,13 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet {
+public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet<AppletEditorPage> {
 
     public StudioAppAppletApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         createDesign();
-    }
-
-    public static class Design {
-
-        private AppletEditorPage appletEditorPage;
-
-        public Design(AppletEditorPage appletEditorPage) {
-            this.appletEditorPage = appletEditorPage;
-        }
-
-        public AppletEditorPage getAppletEditorPage() {
-            return appletEditorPage;
-        }
-
     }
 
     public void createDesign() throws UnifyException {
@@ -67,12 +53,12 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet {
                 String subTitle = appApplet.getDescription();
                 AppletEditorPage appletEditorPage = constructNewAppletEditorPage(appApplet.getEntity(), appletId, subTitle);
                 appletEditorPage.newEditor();
-                form.setDesign(new Design(appletEditorPage));
+                setDesign(appletEditorPage);
                 return;
             }
         }
         
-        form.setDesign(null);
+        setDesign(null);
     }
 
     private AppletEditorPage constructNewAppletEditorPage(String entityName, Object id, String subTitle)

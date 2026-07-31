@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppFormApplet extends AbstractStudioAppComponentApplet {
+public class StudioAppFormApplet extends AbstractStudioAppComponentApplet<FormEditorPage> {
 
     public StudioAppFormApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
@@ -45,23 +45,9 @@ public class StudioAppFormApplet extends AbstractStudioAppComponentApplet {
         createDesign();
     }
     
-    public static class Design {
-
-        private FormEditorPage formEditorPage;
-
-        public Design(FormEditorPage formEditorPage) {
-            this.formEditorPage = formEditorPage;
-        }
-
-        public FormEditorPage getFormEditorPage() {
-            return formEditorPage;
-        }
-        
-    }
-    
     public void commitDesign() throws UnifyException {
-        if (form.getDesign() != null) {
-            ((Design) form.getDesign()).getFormEditorPage().commitDesign();
+        if (getDesign() != null) {
+            getDesign().commitDesign();
         }
     }
 
@@ -74,9 +60,9 @@ public class StudioAppFormApplet extends AbstractStudioAppComponentApplet {
                     ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()), formId,
                     subTitle);
             formEditorPage.newEditor();
-            form.setDesign(new Design(formEditorPage));
+            setDesign(formEditorPage);
         } else {
-            form.setDesign(null);
+            setDesign(null);
         }
     }
 

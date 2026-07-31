@@ -31,8 +31,10 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
+@SuppressWarnings("rawtypes")
 public class StandardStudioAppComponentApplet extends AbstractStudioAppComponentApplet {
 
+    @SuppressWarnings("unchecked")
     public StandardStudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {

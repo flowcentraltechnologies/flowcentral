@@ -88,8 +88,7 @@ body, td, th, button, input, select, textarea {
 .fc-studioheaderwithtabsformpanel .cldetails {padding-left:4px;box-sizing:border-box;
 	min-height:var(--design-maxheight);max-height:var(--design-maxheight);overflow-y:auto;overflow-x:clip;}
 
-.fc-studionotiftemplateappletpanel {}
-.fc-studionotiftemplateappletpanel .cltemplate{background-color:#fff;margin:4px;}
+.fc-studiotemplate {background-color:#fff;}
 
 /** Editor */
 .fc-designtitle {color:#fff;font-weight:bold;background-color:var(--color-formsec);padding: 4px 6px; box-sizing: border-box;}

@@ -38,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioDashboardApplet extends AbstractStudioAppComponentApplet {
+public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<DashboardEditorPage> {
 
     private final ChartModuleService cms;
 
@@ -54,23 +54,9 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet {
         createDesign();
     }
     
-    public static class Design {
-
-        private DashboardEditorPage dashboardEditorPage;
-
-        public Design(DashboardEditorPage dashboardEditorPage) {
-            this.dashboardEditorPage = dashboardEditorPage;
-        }
-
-        public DashboardEditorPage getDashboardEditorPage() {
-            return dashboardEditorPage;
-        }
-        
-    }
-    
     public void commitDesign() throws UnifyException {
-        if (form.getDesign() != null) {
-            ((Design) form.getDesign()).getDashboardEditorPage().commitDesign();
+        if (getDesign() != null) {
+            getDesign().commitDesign();
         }
     }
 
@@ -83,9 +69,9 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet {
                     ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), dashboard.getName()),
                     dashboardId, subTitle);
             dashboardEditorPage.newEditor();
-            form.setDesign(new Design(dashboardEditorPage));
+            setDesign(dashboardEditorPage);
         } else {
-            form.setDesign(null);
+            setDesign(null);
         }
     }
 

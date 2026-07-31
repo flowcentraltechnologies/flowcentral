@@ -32,7 +32,7 @@ public abstract class AbstractStudioAppComponentAppletPanel extends AbstractEnti
     public void switchState() throws UnifyException {
         super.switchState();
 
-        final AbstractStudioAppComponentApplet applet = getValue(AbstractStudioAppComponentApplet.class);
+        final AbstractStudioAppComponentApplet<?> applet = getValue(AbstractStudioAppComponentApplet.class);
         final boolean isRootForm = applet.isRootForm();
         if (isRootForm) {
             setVisible("cancelBtn", false);
