@@ -3401,6 +3401,7 @@ fuxstudio.init = function() {
 	ux.registerExtension("fuxstudio", fuxstudio);
 	ux.addDirectHdl(document, "keydown",
 			fuxstudio.wfdesign._cKeyDown, {});
+	ux.setDebounce(false);
 	// Perform
 	ux.setfn(fuxstudio.rigFormEditor, "fuxstudio01");  
 	ux.setfn(fuxstudio.rigStudioMenu, "fuxstudio02");  
