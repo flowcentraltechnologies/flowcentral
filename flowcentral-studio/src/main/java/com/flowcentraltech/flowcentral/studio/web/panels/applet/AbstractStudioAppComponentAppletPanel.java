@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormAppletPanel;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
 
@@ -29,17 +30,14 @@ import com.tcdng.unify.core.annotation.UplBinding;
 public abstract class AbstractStudioAppComponentAppletPanel extends AbstractEntityFormAppletPanel {
 
     @Override
-    public void switchState() throws UnifyException {
-        super.switchState();
-
-        final AbstractStudioAppComponentApplet<?> applet = getValue(AbstractStudioAppComponentApplet.class);
-        final boolean isRootForm = applet.isRootForm();
-        if (isRootForm) {
-            setVisible("cancelBtn", false);
-        }
-        
-        //setVisible("formPanel.headerLeftPanel", false);
+    public void onPageConstruct() throws UnifyException {
+        super.onPageConstruct();
         setVisible("formPanel.headerCenterPanel", false);
+    }
+
+    protected final boolean isRestrictedStudioMode() throws UnifyException {
+        return getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
     }
 
 }

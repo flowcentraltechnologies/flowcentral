@@ -45,17 +45,24 @@ public class FormBreadCrumbsWriter extends AbstractFlowCentralControlWriter {
         final boolean restrictedMode = isRestrictedStudioMode();
         BreadCrumbs frmBreadCrumbs = frmBreadCrumbsWidget.getBreadCrumbs();
         if (frmBreadCrumbs != null) {
-            writer.write("<ul class=\"base\">");
-            if (!restrictedMode) {
-                // History
-                for (BreadCrumb breadCrumb : frmBreadCrumbs.getHistCrumbList()) {
-                    writeCrumb(writer, breadCrumb, true);
+            if (frmBreadCrumbsWidget.isDots()) {
+                final int depth = frmBreadCrumbs.getDepth() + 1;
+                for (int i = 0; i < depth; i++) {
+                    writeFontIcon(writer, "base", "stop");
                 }
-            }
+            } else {
+                writer.write("<ul class=\"base\">");
+                if (!restrictedMode) {
+                    // History
+                    for (BreadCrumb breadCrumb : frmBreadCrumbs.getHistCrumbList()) {
+                        writeCrumb(writer, breadCrumb, true);
+                    }
+                }
 
-            // Current
-            writeCrumb(writer, frmBreadCrumbs.getLastBreadCrumb(), false);
-            writer.write("</ul>");
+                // Current
+                writeCrumb(writer, frmBreadCrumbs.getLastBreadCrumb(), false);
+                writer.write("</ul>");
+            }
         }
 
         writer.write("</div>");

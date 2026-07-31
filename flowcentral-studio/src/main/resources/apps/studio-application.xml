@@ -4268,8 +4268,8 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="title" column="0" />
-						<field name="subTitle" column="0" />
+						<field name="title" column="0" switchOnChange="true"/>
+						<field name="subTitle" column="0" switchOnChange="true"/>
 						<field name="type" column="0" required="true"
 							switchOnChange="true" />
 						<field name="paletteType" column="0" required="true"

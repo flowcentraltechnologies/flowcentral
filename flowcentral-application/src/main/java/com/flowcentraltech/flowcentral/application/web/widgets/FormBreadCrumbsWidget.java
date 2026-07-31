@@ -19,6 +19,8 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplAttribute;
+import com.tcdng.unify.core.annotation.UplAttributes;
 
 /**
  * Form bread crumbs widget.
@@ -27,9 +29,15 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("fc-formbreadcrumbs")
+@UplAttributes({
+    @UplAttribute(name = "dots", type = boolean.class)})
 public class FormBreadCrumbsWidget extends AbstractFlowCentralControl {
 
     public BreadCrumbs getBreadCrumbs() throws UnifyException {
         return getValue(BreadCrumbs.class);
+    }
+    
+    public boolean isDots() throws UnifyException {
+        return getUplAttribute(boolean.class, "dots");
     }
 }
