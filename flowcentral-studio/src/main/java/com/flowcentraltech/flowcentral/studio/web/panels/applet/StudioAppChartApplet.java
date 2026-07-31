@@ -53,28 +53,36 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
     public void createDesign() throws UnifyException {
         final Chart chart = (Chart) form.getFormBean();
         final Long chartId = chart.getId();
-        String subTitle = chart.getDescription();
-        ChartView chartView = constructNewChartView(
-                ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()), chartId,
-                subTitle);
-        chartView.reloadContent();
-        setDesign(chartView);
+        if (chartId != null) {
+            String subTitle = chart.getDescription();
+            ChartView chartView = constructNewChartView(
+                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()), chartId,
+                    subTitle);
+            chartView.reloadContent();
+            setDesign(chartView);
+        } else {
+            setDesign(null);
+        }
     }
 
     @Override
     public void formSwitchOnChange() throws UnifyException {
         super.formSwitchOnChange();
         final Chart chart = (Chart) form.getFormBean();
-        ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(), chart.getRule(),
-                "charts.preview", chart.getDescription(), chart.getId(), chart.getVersionNo());
-        cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
-                .series(chart.getSeries()).color(chart.getColor())
-                .width(DataUtils.convert(int.class, chart.getWidth()))
-                .height(DataUtils.convert(int.class, chart.getHeight())).stacked(chart.isStacked())
-                .smooth(chart.isSmooth());
-        getDesign().getConfiguration().setPreviewChartDef(cdb.build());
+        if (chart.getId() != null) {
+            ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(), chart.getRule(),
+                    "charts.preview", chart.getDescription(), chart.getId(), chart.getVersionNo());
+            cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
+                    .series(chart.getSeries()).color(chart.getColor())
+                    .width(DataUtils.convert(int.class, chart.getWidth()))
+                    .height(DataUtils.convert(int.class, chart.getHeight())).stacked(chart.isStacked())
+                    .smooth(chart.isSmooth());
+            getDesign().getConfiguration().setPreviewChartDef(cdb.build());
+        } else {
+            getDesign().getConfiguration().setPreviewChartDef(null);
+        }
     }
-    
+
     private ChartView constructNewChartView(String chartName, Object id, String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{charteditor.chartdesigner}"));

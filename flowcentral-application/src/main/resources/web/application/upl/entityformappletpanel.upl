@@ -159,9 +159,12 @@
 	confirm:$m{entityformappletpanel.confirm.submit}
 !ui-postcommand:updateAct command:update components:$c{formPanel}
 	components:$f{moreCommitComponents}
+	refresh:$c{formPanel}
 	refresh:$f{refreshOnUpdate}
 !ui-postcommand:updateCloseAct command:updateAndClose components:$c{formPanel}
 	components:$f{moreCommitComponents}
+	refresh:$c{formPanel}
+	refresh:$f{refreshOnUpdate}
 !ui-postcommand:deleteAct command:delete confirm:$m{entityformappletpanel.confirm.delete}
 !ui-postcommand:overviewAct command:overview components:$c{formPanel}
 !ui-postcommand:prevAct command:previous
