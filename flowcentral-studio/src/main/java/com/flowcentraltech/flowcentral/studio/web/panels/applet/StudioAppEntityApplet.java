@@ -42,33 +42,19 @@ public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet<Enti
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
-    }
-
-    public void commitDesign() throws UnifyException {
-        if (getDesign() != null) {
-            getDesign().commitDesign();
-        }
-    }
-
-    public void createDesign() throws UnifyException {
-        AppEntity appEntity = (AppEntity) getForm().getFormBean();
-        Long entityId = appEntity.getId();
-        if (entityId != null) {
-            String subTitle = appEntity.getDescription();
-            EntityEditorPage entityEditorPage = constructNewEntityEditorPage(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appEntity.getName()),
-                    entityId, subTitle);
-            entityEditorPage.newEditor();
-            setDesign(entityEditorPage);
-        } else {
-            setDesign(null);
-        }
     }
 
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        AppEntity appEntity = (AppEntity) inst;
+        Long entityId = appEntity != null ? appEntity.getId() : null;
+        EntityEditorPage entityEditorPage = entityId != null
+                ? constructNewEntityEditorPage(
+                        ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appEntity.getName()),
+                        entityId, appEntity.getDescription())
+                : constructNewEntityEditorPage(null, null, au().resolveSessionMessage("$m{entityeditor.newentity}"));
+        entityEditorPage.newEditor();
+        setDesign(entityEditorPage);
     }
 
     private EntityEditorPage constructNewEntityEditorPage(String entityName, Object id, String subTitle)

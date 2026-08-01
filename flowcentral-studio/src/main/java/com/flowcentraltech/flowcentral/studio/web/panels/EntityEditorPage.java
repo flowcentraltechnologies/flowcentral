@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.web.widgets.EntityEditor;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity editor page.
@@ -51,12 +52,18 @@ public class EntityEditorPage extends AbstractStudioEditorPage {
     }
 
     public void commitDesign() throws UnifyException {
-        // TODO
+
     }
 
     public void newEditor() throws UnifyException {
-        final EntityDef entityDef = au().getEntityDef(entityName);
-        EntityEditor.Builder eeb = EntityEditor.newBuilder(au(), entityDef);
-        entityEditor = eeb.build();
+        if (!StringUtils.isBlank(entityName)) {
+            final EntityDef entityDef = au().getEntityDef(entityName);
+            EntityEditor.Builder eeb = EntityEditor.newBuilder(au(), entityDef);
+            entityEditor = eeb.build();
+        }
+    }
+    
+    public boolean isPresent() {
+        return entityEditor != null;
     }
 }

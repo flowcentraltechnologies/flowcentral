@@ -15,10 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
-import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Studio application entity applet panel.
@@ -29,18 +27,5 @@ import com.tcdng.unify.web.annotation.Action;
 @Component("fc-studioappentityappletpanel")
 @UplBinding("web/studio/upl/studioappentityappletpanel.upl")
 public class StudioAppEntityAppletPanel extends AbstractStudioAppComponentAppletPanel {
-
-    @Action
-    @Override
-    public void update() throws UnifyException {
-        super.update();
-
-        final StudioAppEntityApplet sapplet = getValue(StudioAppEntityApplet.class);
-        if (sapplet.isRootHwtForm()) {
-            sapplet.commitDesign();
-            sapplet.reload();
-            sapplet.createDesign();
-        }
-    }
 
 }

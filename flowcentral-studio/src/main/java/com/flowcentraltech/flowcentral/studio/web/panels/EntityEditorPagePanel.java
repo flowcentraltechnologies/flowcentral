@@ -34,7 +34,7 @@ public class EntityEditorPagePanel extends AbstractStudioEditorPagePanel {
     @Override
     public void switchState() throws UnifyException {
         EntityEditorPage entityEditorPage = getEntityEditorPage();
-        if (entityEditorPage != null) {
+        if (entityEditorPage != null && entityEditorPage.isPresent()) {
             final boolean readOnly = isAppletContextReadOnly();
             EntityEditor entityEditor = entityEditorPage.getEntityEditor();
             entityEditor.setReadOnly(readOnly);
@@ -59,7 +59,6 @@ public class EntityEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        // TODO
         return false;
     }
 
