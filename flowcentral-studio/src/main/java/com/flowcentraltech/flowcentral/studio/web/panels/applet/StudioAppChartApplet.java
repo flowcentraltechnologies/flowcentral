@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ChartView;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.Page;
@@ -51,7 +52,7 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
     }
 
     public void createDesign() throws UnifyException {
-        final Chart chart = (Chart) form.getFormBean();
+        final Chart chart = (Chart) getForm().getFormBean();
         final Long chartId = chart.getId();
         String subTitle = chart.getDescription();
         ChartView chartView = constructNewChartView(
@@ -64,7 +65,7 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
     @Override
     public void formSwitchOnChange() throws UnifyException {
         super.formSwitchOnChange();
-        final Chart chart = (Chart) form.getFormBean();
+        final Chart chart = (Chart) getForm().getFormBean();
         ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(), chart.getRule(),
                 "charts.preview", chart.getDescription(), chart.getId(), chart.getVersionNo());
         cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
@@ -74,9 +75,14 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
                 .smooth(chart.isSmooth());
         getDesign().getConfiguration().setPreviewChartDef(cdb.build());
     }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
+    }
     
     private ChartView constructNewChartView(String chartName, Object id, String subTitle) throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{charteditor.chartdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         return new ChartView(au(), cms, chartName, id, breadCrumbs);

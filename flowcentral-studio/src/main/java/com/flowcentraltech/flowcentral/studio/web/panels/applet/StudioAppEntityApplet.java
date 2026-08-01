@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.EntityEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -51,7 +52,7 @@ public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet<Enti
     }
 
     public void createDesign() throws UnifyException {
-        AppEntity appEntity = (AppEntity) form.getFormBean();
+        AppEntity appEntity = (AppEntity) getForm().getFormBean();
         Long entityId = appEntity.getId();
         if (entityId != null) {
             String subTitle = appEntity.getDescription();
@@ -65,9 +66,14 @@ public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet<Enti
         }
     }
 
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
+    }
+
     private EntityEditorPage constructNewEntityEditorPage(String entityName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{entityeditor.entitydesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         return new EntityEditorPage(au(), entityName, id, breadCrumbs);

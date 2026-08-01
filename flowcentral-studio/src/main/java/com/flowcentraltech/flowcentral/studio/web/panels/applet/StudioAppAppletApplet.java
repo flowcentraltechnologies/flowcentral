@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.AppletEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -45,8 +46,13 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet<Appl
         createDesign();
     }
 
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
+    }
+
     public void createDesign() throws UnifyException {
-        AppApplet appApplet = (AppApplet) form.getFormBean();
+        AppApplet appApplet = (AppApplet) getForm().getFormBean();
         Long appletId = appApplet.getId();
         if (appletId != null) {
             if (appApplet.getType().isEntityList()) {
@@ -63,7 +69,7 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet<Appl
 
     private AppletEditorPage constructNewAppletEditorPage(String entityName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         final AppletDef appletDef = au().getAppletDef((Long) id);
         final String tableName = appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
         final String formName = appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);

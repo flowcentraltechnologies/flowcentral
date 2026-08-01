@@ -72,7 +72,7 @@ public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntity
             constructNewForm();
         } else {
             Entity _inst = au.environment().listLean(type.componentType(), instId);
-            form = constructForm(_inst, FormMode.ENTITY_MAINTAIN, null, false);
+            setHwtForm(constructForm(_inst, FormMode.ENTITY_MAINTAIN, null, false));
             viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
         }
     }
@@ -104,7 +104,7 @@ public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntity
 
     public void ensureClearOnNew() throws UnifyException {
         // Apply only to root Fixes general exception  17/03/25
-        if (isRootForm()) {
+        if (isRootHwtForm()) {
             Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
             if (instId == null || instId.longValue() == 0L) {
                 constructNewForm();
@@ -132,8 +132,8 @@ public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntity
     }
     
     private void constructNewForm() throws UnifyException {
-        form = constructNewForm(FormMode.ENTITY_CREATE, null, false);
-        ((BaseApplicationEntity) form.getCtx().getInst()).setApplicationId(
+        setHwtForm(constructNewForm(FormMode.ENTITY_CREATE, null, false));
+        ((BaseApplicationEntity) getForm().getCtx().getInst()).setApplicationId(
                 au().getDocumentAttribute(Long.class, AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID));
         viewMode = ViewMode.NEW_PRIMARY_FORM;
     }

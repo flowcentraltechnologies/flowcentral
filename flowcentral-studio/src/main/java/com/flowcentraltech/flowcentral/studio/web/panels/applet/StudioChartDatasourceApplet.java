@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ChartDatasourceView;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -48,8 +49,8 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
         this.cms = cms;
         createDesign();
 
-        final EntityFieldSequence entityFieldSequence = (EntityFieldSequence) form.getTabSheet().getTabSheetItem(3)
-                .getValObject();
+        final EntityFieldSequence entityFieldSequence = (EntityFieldSequence) getHwtForm().getTabSheet()
+                .getTabSheetItem(3).getValObject();
         entityFieldSequence.setUseTimeSeries(true);
     }
     
@@ -60,7 +61,7 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
     }
 
     private void createDesign() throws UnifyException {
-        final ChartDataSource chartDataSource = (ChartDataSource) form.getFormBean();
+        final ChartDataSource chartDataSource = (ChartDataSource) getForm().getFormBean();
         final Long chartDataSourceId = chartDataSource.getId();
         if (chartDataSourceId != null) {
             String subTitle = chartDataSource.getDescription();
@@ -74,9 +75,14 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
         }
     }
 
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
+    }
+
     private ChartDatasourceView constructNewChartDatasourceView(String chartDatasourceName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{chartdatasourceeditor.chartdatasourcedesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         return new ChartDatasourceView(au(), cms, chartDatasourceName, id, breadCrumbs);

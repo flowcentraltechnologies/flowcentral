@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.tcdng.unify.common.constants.WfItemVersionType;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -103,6 +104,11 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
     public boolean navBackToPrevious() throws UnifyException {
         setAltSubCaption(entitySearch.getEntityDef().getDescription());
         return super.navBackToPrevious();
+    }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
     }
 
     @Override

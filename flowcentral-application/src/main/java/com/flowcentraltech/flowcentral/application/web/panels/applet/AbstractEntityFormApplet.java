@@ -220,7 +220,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected EntitySaveAs entitySaveAs;
 
-    protected HeaderWithTabsForm form;
+    private HeaderWithTabsForm form;
 
     protected ListingForm listingForm;
 
@@ -338,7 +338,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public boolean navBackToSearch() throws UnifyException {
         appletCtx().setInWorkflow(false);
-        form = null;
+        setHwtForm(null);
         listingForm = null;
         viewMode = ViewMode.SEARCH;
         currParentEntityDef = null;
@@ -355,7 +355,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void navBackToHeadless() throws UnifyException {
         appletCtx().setInWorkflow(false);
-        form = null;
+        setHwtForm(null);
         listingForm = null;
         viewMode = ViewMode.HEADLESS_TAB;
         currParentEntityDef = null;
@@ -430,7 +430,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             return openInTab(AppletType.CREATE_ENTITY);
         }
 
-        form = constructNewForm(FormMode.CREATE, null, false);
+        setHwtForm(constructNewForm(FormMode.CREATE, null, false));
         viewMode = ViewMode.NEW_FORM;
         return new TableActionResult(null);
     }
@@ -583,7 +583,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             currFormTabDef = _currFormTabDef;
             setCurrFormAppletDef(_childAppletDef);
             String childFkFieldName = au().getChildFkFieldName(currParentEntityDef, _currFormTabDef.getReference());
-            form = constructNewForm(FormMode.CREATE, childFkFieldName, true);
+            setHwtForm(constructNewForm(FormMode.CREATE, childFkFieldName, true));
             viewMode = childList ? ViewMode.NEW_CHILDLIST_FORM : ViewMode.NEW_CHILD_FORM;
         }
     }
@@ -671,7 +671,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         currFormRelatedListDef = _currFormRelatedListDef;
         setCurrFormAppletDef(_relAppletDef);
         String reference = au().getChildFkFieldName(currParentEntityDef.getLongName(), _relAppletDef.getEntity());
-        form = constructNewForm(FormMode.CREATE, reference, false);
+        setHwtForm(constructNewForm(FormMode.CREATE, reference, false));
         viewMode = ViewMode.NEW_RELATEDLIST_FORM;
     }
 
@@ -679,7 +679,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         AppletDef _hdlAppletDef = getAppletDef(headlessListName);
         saveCurrentForm(null);
         setCurrFormAppletDef(_hdlAppletDef);
-        form = constructNewForm(FormMode.CREATE, null, false);
+        setHwtForm(constructNewForm(FormMode.CREATE, null, false));
         viewMode = ViewMode.NEW_HEADLESSLIST_FORM;
     }
 
@@ -747,12 +747,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
         _inst = reloadEntity(_inst, true);
         if (form == null) {
-            form = constructForm(_inst, FormMode.MAINTAIN, null, false);
+            setHwtForm(constructForm(_inst, FormMode.MAINTAIN, null, false));
         } else {
             updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
         }
 
-        if (isRootForm()) {
+        if (isRootHwtForm()) {
             appletCtx().setRootFormUpdateDraft(form.isUpdateDraft());
         }
 
@@ -812,7 +812,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         setCurrFormAppletDef(childAppletDef);
         String childFkFieldName = au().getChildFkFieldName(currParentEntityDef, _currFormTabDef.getReference());
         _inst = reloadEntity(_inst, true);
-        form = constructForm(_inst, FormMode.MAINTAIN, childFkFieldName, true);
+        setHwtForm(constructForm(_inst, FormMode.MAINTAIN, childFkFieldName, true));
         viewMode = ViewMode.MAINTAIN_CHILDLIST_FORM_NO_SCROLL;
     }
 
@@ -832,7 +832,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             String childFkFieldName = au().getChildFkFieldName(currParentEntityDef.getLongName(),
                     relAppletDef.getEntity());
             _inst = reloadEntity(_inst, true);
-            form = constructForm(_inst, FormMode.MAINTAIN, childFkFieldName, false);
+            setHwtForm(constructForm(_inst, FormMode.MAINTAIN, childFkFieldName, false));
             viewMode = ViewMode.MAINTAIN_RELATEDLIST_FORM_NO_SCROLL;
             takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
         }
@@ -846,7 +846,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         saveCurrentForm(null);
         setCurrFormAppletDef(hdlAppletDef);
         _inst = reloadEntity(_inst, true);
-        form = constructForm(_inst, FormMode.MAINTAIN, null, false);
+        setHwtForm(constructForm(_inst, FormMode.MAINTAIN, null, false));
         viewMode = ViewMode.MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL;
         takeAuditSnapshot(form.isUpdateDraft() ? AuditEventType.VIEW_DRAFT : AuditEventType.VIEW);
     }
@@ -1095,16 +1095,36 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return getFormAppletDef().isProp(name);
     }
 
-    public AbstractForm getForm() {
-        return form;
-    }
-
-    public ListingForm getListingForm() {
+    public final ListingForm getListingForm() {
         return listingForm;
     }
 
     public AbstractForm getResolvedForm() {
         return ViewMode.LISTING_FORM.equals(viewMode) ? listingForm : form;
+    }
+
+    public final boolean isListingView() {
+        return ViewMode.LISTING_FORM.equals(viewMode);
+    }
+
+    public AbstractForm getForm() {
+        return form;
+    }
+
+    public final HeaderWithTabsForm getRootHwtForm() {
+        return formStack != null && !formStack.isEmpty() ? formStack.get(0).getForm() : form;
+    }
+
+    public final boolean isRootHwtForm() {
+        return form != null && (formStack == null || formStack.isEmpty());
+    }
+
+    public final boolean isNoHwtForm() {
+        return form == null;
+    }
+
+    public final boolean isWithHwtForm() {
+        return form != null;
     }
 
     public String getFormTitle() {
@@ -1175,20 +1195,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return viewMode;
     }
 
-    public boolean isListingView() {
-        return ViewMode.LISTING_FORM.equals(viewMode);
-    }
-
-    public boolean isRootForm() {
-        return form != null && (formStack == null || formStack.isEmpty());
-    }
-
-    public boolean isNoForm() {
-        return form == null;
-    }
-
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
-        return isRootForm() && isWorkflowCopy() && !appletCtx().isInWorkflowPromptViewMode()
+        return isRootHwtForm() && isWorkflowCopy() && !appletCtx().isInWorkflowPromptViewMode()
                 && WfItemVersionType.ORIGINAL.equals(((WorkEntity) form.getFormBean()).getWfItemVersionType())
                 && !((WorkEntity) form.getFormBean()).isInWorkflow();
     }
@@ -1200,7 +1208,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public boolean matchFormBeanToAppletPropertyConditionWhenPresent(String conditionPropName) throws UnifyException {
         return au().formBeanMatchAppletPropertyConditionWhenPresent(getFormAppletDef(), form, conditionPropName);
     }
-
     
     public void ensureCurrentAppletStruct() throws UnifyException {
         AppletDef _currFormAppletDef = getFormAppletDef();
@@ -1221,11 +1228,11 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             FormDef _nFormDef = au().getFormDef(_fFormDef.getLongName());
             if (_fFormDef.getVersion() != _nFormDef.getVersion()) {
                 if (form.getFormMode().isCreate()) {
-                    form = constructNewForm(form.getFormMode(), null, false);
+                    setHwtForm(constructNewForm(form.getFormMode(), null, false));
                 } else {
                     Entity _inst = (Entity) form.getFormBean();
                     _inst = reloadEntity(_inst, false);
-                    form = constructForm(_inst, form.getFormMode(), null, false);
+                    setHwtForm(constructForm(_inst, form.getFormMode(), null, false));
                 }
             }
         }
@@ -1247,6 +1254,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected abstract AppletDef getAlternateFormAppletDef() throws UnifyException;
 
+    protected final HeaderWithTabsForm getHwtForm() {
+        return form;
+    }
+
+    protected final void setHwtForm(HeaderWithTabsForm form) throws UnifyException {
+        this.form = form;
+    }
+    
     protected AssignmentPage constructNewAssignmentPage(AppletDef _appletDef, AssignmentPageDef assignPageDef,
             String entryTable, String assnEditPolicy, FilterGroupDef filterGroupDef, boolean fixedAssignment, Object id,
             String subTitle) throws UnifyException {
@@ -1340,7 +1355,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currentFormAppletDef = getFormAppletDef();
         final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
         final Object inst = ReflectUtils.newInstance(entityClassDef.getEntityClass());
-        if (isWorkflowCopy() && (isNoForm() || isRootForm())) {
+        if (isWorkflowCopy() && (isNoHwtForm() || isRootHwtForm())) {
             ((BaseWorkEntity) inst).setWfItemVersionType(WfItemVersionType.DRAFT);
         }
 
@@ -1451,8 +1466,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             final AppletDef _currentFormAppletDef = getFormAppletDef();
             loadFormAppendables(_currentFormAppletDef, form, inst);
         }
+        
+        if (getRootHwtForm() == form) {
+            onRootHwtFormUpdated(inst);
+        }
     }
 
+    protected abstract void onRootHwtFormUpdated(Entity inst) throws UnifyException;
+    
     private void loadFormAppendables(AppletDef formAppletDef, HeaderWithTabsForm form, Entity inst)
             throws UnifyException {
         if (!appletCtx().isReview()
@@ -1507,7 +1528,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     appletCtx().decTabReadOnlyCounter();
                 }
 
-                if (isRootForm()) {
+                if (isRootHwtForm()) {
                     appletCtx().setInWorkflowPromptViewMode(false);
                 }
 
@@ -1845,7 +1866,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     private void setClosePage(EntityActionResult entityActionResult) throws UnifyException {
-        if (isRootForm() && getRootAppletDef().getType().isFormInitial()) {
+        if (isRootHwtForm() && getRootAppletDef().getType().isFormInitial()) {
             entityActionResult.setClosePage(true);
         } else {
             entityActionResult.setCloseView(true);
@@ -1892,14 +1913,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
         if (viewMode == ViewMode.NEW_FORM || viewMode == ViewMode.NEW_HEADLESSLIST_FORM
                 || viewMode == ViewMode.NEW_PRIMARY_FORM) {
-            form = constructNewForm(FormMode.CREATE, null, false);
+            setHwtForm(constructNewForm(FormMode.CREATE, null, false));
         } else if (viewMode == ViewMode.NEW_CHILD_FORM || viewMode == ViewMode.NEW_CHILDLIST_FORM) {
             String childFkFieldName = au().getChildFkFieldName(currParentEntityDef, currFormTabDef.getReference());
-            form = constructNewForm(FormMode.CREATE, childFkFieldName, true);
+            setHwtForm(constructNewForm(FormMode.CREATE, childFkFieldName, true));
         } else if (viewMode == ViewMode.NEW_RELATEDLIST_FORM) {
             String reference = au().getChildFkFieldName(currParentEntityDef.getLongName(),
                     form.getFormDef().getEntityDef().getLongName());
-            form = constructNewForm(FormMode.CREATE, reference, false);
+            setHwtForm(constructNewForm(FormMode.CREATE, reference, false));
         }
     }
 
@@ -1908,13 +1929,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             switch (viewMode) {
                 case NEW_FORM: {
                     Entity inst = loadEntity(entityInstId);
-                    form = constructForm(inst, FormMode.MAINTAIN, null, false);
+                    setHwtForm(constructForm(inst, FormMode.MAINTAIN, null, false));
                     viewMode = ViewMode.MAINTAIN_FORM;
                 }
                     break;
                 case NEW_PRIMARY_FORM: {
                     Entity inst = loadEntity(entityInstId);
-                    form = constructForm(inst, FormMode.MAINTAIN, null, false);
+                    setHwtForm(constructForm(inst, FormMode.MAINTAIN, null, false));
                     viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
                 }
                     break;
@@ -1923,7 +1944,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     String childFkFieldName = au().getChildFkFieldName(currParentEntityDef,
                             currFormTabDef.getReference());
                     Entity inst = loadEntity(entityInstId);
-                    form = constructForm(inst, FormMode.MAINTAIN, childFkFieldName, true);
+                    setHwtForm(constructForm(inst, FormMode.MAINTAIN, childFkFieldName, true));
                     viewMode = ViewMode.MAINTAIN_CHILDLIST_FORM;
                 }
                     break;
@@ -1931,13 +1952,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     String childFkFieldName = au().getChildFkFieldName(currParentEntityDef.getLongName(),
                             form.getFormDef().getEntityDef().getLongName());
                     Entity inst = loadEntity(entityInstId);
-                    form = constructForm(inst, FormMode.MAINTAIN, childFkFieldName, false);
+                    setHwtForm(constructForm(inst, FormMode.MAINTAIN, childFkFieldName, false));
                     viewMode = ViewMode.MAINTAIN_RELATEDLIST_FORM;
                 }
                     break;
                 case NEW_HEADLESSLIST_FORM: {
                     Entity inst = loadEntity(entityInstId);
-                    form = constructForm(inst, FormMode.MAINTAIN, null, false);
+                    setHwtForm(constructForm(inst, FormMode.MAINTAIN, null, false));
                     viewMode = ViewMode.MAINTAIN_HEADLESSLIST_FORM;
                 }
                     break;

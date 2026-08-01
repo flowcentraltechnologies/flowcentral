@@ -1149,7 +1149,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final Date now = getNow();
         form.setBeanTitle(beanTitle);
         form.setFormMode(formMode);
-        if (applet != null && applet.isCollaboration() && applet.isNoForm()) {
+        if (applet != null && applet.isCollaboration() && applet.isNoHwtForm()) {
             setCollaborationContext(form);
         }
 
@@ -1556,7 +1556,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         populateListOnlyFields(entityDef, inst);
 
         form.setFormBean(inst);
-        if (applet.isCollaboration() && applet.isRootForm()) {
+        if (applet.isCollaboration() && applet.isRootHwtForm()) {
             setCollaborationContext(form);
         }
 

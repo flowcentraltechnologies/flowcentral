@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ReportEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -51,7 +52,7 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
     }
 
     public void createDesign() throws UnifyException {
-        ReportConfiguration reportConfiguration = (ReportConfiguration) form.getFormBean();
+        ReportConfiguration reportConfiguration = (ReportConfiguration) getForm().getFormBean();
         Long reportConfigurationId = reportConfiguration.getId();
         if (reportConfigurationId != null) {
             String subTitle = reportConfiguration.getDescription();
@@ -64,9 +65,14 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
         }
     }
 
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
+    }
+
     private ReportEditorPage constructNewReportEditorPage(String entityName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         EntityDef entityDef = getEntityDef(entityName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{reporteditor.reportdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);

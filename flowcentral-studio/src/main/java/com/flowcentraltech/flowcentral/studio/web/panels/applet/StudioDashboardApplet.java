@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.DashboardEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -61,7 +62,7 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<Dash
     }
 
     public void createDesign() throws UnifyException {
-        Dashboard dashboard = (Dashboard) form.getFormBean();
+        Dashboard dashboard = (Dashboard) getForm().getFormBean();
         Long dashboardId = dashboard.getId();
         if (dashboardId != null) {
             String subTitle = dashboard.getDescription();
@@ -75,9 +76,14 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<Dash
         }
     }
 
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
+    }
+
     private DashboardEditorPage constructNewDashboardEditorPage(String dashboardName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         DashboardDef dashboardDef = dms.getDashboardDef(dashboardName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{dashboardeditor.dashboarddesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);

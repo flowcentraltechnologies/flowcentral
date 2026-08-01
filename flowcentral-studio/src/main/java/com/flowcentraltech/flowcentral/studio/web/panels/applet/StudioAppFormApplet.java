@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.FormEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -52,7 +53,7 @@ public class StudioAppFormApplet extends AbstractStudioAppComponentApplet<FormEd
     }
 
     public void createDesign() throws UnifyException {
-        AppForm appForm = (AppForm) form.getFormBean();
+        AppForm appForm = (AppForm) getForm().getFormBean();
         Long formId = appForm.getId();
         if (formId != null) {
             String subTitle = appForm.getDescription();
@@ -66,9 +67,14 @@ public class StudioAppFormApplet extends AbstractStudioAppComponentApplet<FormEd
         }
     }
 
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
+    }
+
     private FormEditorPage constructNewFormEditorPage(String formName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         FormDef formDef = getFormDef(formName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{formeditor.formdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);

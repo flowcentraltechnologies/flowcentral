@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractLoadingApplet;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -39,6 +40,11 @@ public class MyWorkItemApplet extends AbstractLoadingApplet {
             throws UnifyException {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers,
                 WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER);
+    }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
     }
 
     @Override

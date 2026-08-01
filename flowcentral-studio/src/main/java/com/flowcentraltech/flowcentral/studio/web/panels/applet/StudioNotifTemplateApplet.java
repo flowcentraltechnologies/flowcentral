@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.NotifTemplateEditor;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -58,7 +59,7 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet<
     }
 
     private void createDesign() throws UnifyException {
-        final NotificationTemplate template = (NotificationTemplate) form.getFormBean();
+        final NotificationTemplate template = (NotificationTemplate) getForm().getFormBean();
         final Long templateId = template.getId();
         if (templateId != null) {
             String subTitle = template.getDescription();
@@ -69,12 +70,17 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet<
         }
     }
 
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
+    }
+
     private NotifTemplateEditor constructNewNotifTemplateEditor(Object id, String subTitle) throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{notiftemplateeditor.notiftemplatedesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new NotifTemplateEditor(new MiniForm(MiniFormScope.MAIN_FORM, form.getCtx(), getFormTabDef(au())), form,
-                au(), breadCrumbs);
+        return new NotifTemplateEditor(new MiniForm(MiniFormScope.MAIN_FORM, getForm().getCtx(), getFormTabDef(au())),
+                getHwtForm(), au(), breadCrumbs);
     }
 
     private static FormTabDef getFormTabDef(AppletUtilities au) throws UnifyException {

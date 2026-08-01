@@ -37,7 +37,7 @@ public class StudioWorkflowAppletPanel extends AbstractStudioAppComponentAppletP
 
         final StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
         final WorkflowEditorPage workflowEditorPage = (WorkflowEditorPage) applet.getDesign();
-        setWidgetVisible("publishBtn", !isRestrictedStudioMode() && applet.isRootForm() && workflowEditorPage != null
+        setWidgetVisible("publishBtn", !isRestrictedStudioMode() && applet.isRootHwtForm() && workflowEditorPage != null
                 && !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
     }
 
@@ -47,7 +47,7 @@ public class StudioWorkflowAppletPanel extends AbstractStudioAppComponentAppletP
         super.update();
 
         final StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
-        if (applet.isRootForm()) {
+        if (applet.isRootHwtForm()) {
             applet.commitDesign();
             applet.reload();
         }

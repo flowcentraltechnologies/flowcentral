@@ -119,7 +119,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         final String roleCode = getUserToken().getRoleCode();
         final AbstractForm form = applet.getResolvedForm();
         final Entity inst = form != null ? (Entity) form.getFormBean() : null;
-        final boolean isRootForm = applet.isRootForm();
+        final boolean isRootForm = applet.isRootHwtForm();
         final boolean isWorkflowCopyForm = isRootForm && formAppletDef != null
                 && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY);
         final boolean isInWorkflow = form != null && form.isInWorkflow();

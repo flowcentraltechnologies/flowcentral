@@ -36,7 +36,7 @@ public class StudioAppTableAppletPanel extends AbstractStudioAppComponentAppletP
         super.update();
 
         final StudioAppTableApplet applet = getValue(StudioAppTableApplet.class);
-        if (applet.isRootForm()) {
+        if (applet.isRootHwtForm()) {
             applet.commitDesign();
             applet.reload();
         }
