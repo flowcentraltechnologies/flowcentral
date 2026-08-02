@@ -176,57 +176,64 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
     }
 
     public void newEditor() throws UnifyException {
-        FormEditor.Builder feb = FormEditor.newBuilder(au(), formDef);
-        for (AppFormElement appFormElement : au().environment()
-                .findAll(Query.of(AppFormElement.class).addEquals("appFormId", baseId).addOrder("id"))) {
-            switch (appFormElement.getType()) {
-                case FIELD:
-                    if (formDef.getEntityDef().isWithFieldDef(appFormElement.getElementName())) {
-                        EntityFieldDef entityFieldDef = formDef.getEntityDef()
-                                .getFieldDef(appFormElement.getElementName());
-                        feb.addField(formDef.getEntityDef().getLongName(), entityFieldDef.getDataType(),
-                                appFormElement.getElementName(), appFormElement.getLabel(),
-                                appFormElement.getInputWidget(), appFormElement.getInputReference(),
-                                appFormElement.getPreviewForm(), appFormElement.getColor(),
-                                appFormElement.getFieldColumn(), appFormElement.isSwitchOnChange(),
-                                appFormElement.isSaveAs(), appFormElement.isRequired(), appFormElement.isVisible(),
+        if (formDef != null) {
+            FormEditor.Builder feb = FormEditor.newBuilder(au(), formDef);
+            for (AppFormElement appFormElement : au().environment()
+                    .findAll(Query.of(AppFormElement.class).addEquals("appFormId", baseId).addOrder("id"))) {
+                switch (appFormElement.getType()) {
+                    case FIELD:
+                        if (formDef.getEntityDef().isWithFieldDef(appFormElement.getElementName())) {
+                            EntityFieldDef entityFieldDef = formDef.getEntityDef()
+                                    .getFieldDef(appFormElement.getElementName());
+                            feb.addField(formDef.getEntityDef().getLongName(), entityFieldDef.getDataType(),
+                                    appFormElement.getElementName(), appFormElement.getLabel(),
+                                    appFormElement.getInputWidget(), appFormElement.getInputReference(),
+                                    appFormElement.getPreviewForm(), appFormElement.getColor(),
+                                    appFormElement.getFieldColumn(), appFormElement.isSwitchOnChange(),
+                                    appFormElement.isSaveAs(), appFormElement.isRequired(), appFormElement.isVisible(),
+                                    appFormElement.isEditable(), appFormElement.isDisabled());
+                        }
+                        break;
+                    case SECTION:
+                        feb.addSection(appFormElement.getElementName(), appFormElement.getLabel(),
+                                appFormElement.getSectionColumns(), appFormElement.getPanel(), appFormElement.getIcon(),
+                                appFormElement.isVisible(), appFormElement.isEditable(), appFormElement.isDisabled());
+                        break;
+                    case TAB:
+                        feb.addTab(appFormElement.getTabContentType().name(), appFormElement.getElementName(),
+                                appFormElement.getLabel(), appFormElement.getTabApplet(),
+                                appFormElement.getTabReference(), appFormElement.getFilter(),
+                                appFormElement.getMappedFieldName(), appFormElement.getTabMappedForm(),
+                                appFormElement.getEditAction(), appFormElement.getEditFormless(),
+                                appFormElement.getEditAllowAddition(), appFormElement.getEditFixedRows(),
+                                appFormElement.isIgnoreParentCondition(), appFormElement.isIncludeSysParam(),
+                                appFormElement.isIncludeProcessVariable(), appFormElement.isShowSearch(),
+                                appFormElement.isQuickEdit(), appFormElement.isQuickOrder(), appFormElement.isVisible(),
                                 appFormElement.isEditable(), appFormElement.isDisabled());
-                    }
-                    break;
-                case SECTION:
-                    feb.addSection(appFormElement.getElementName(), appFormElement.getLabel(),
-                            appFormElement.getSectionColumns(), appFormElement.getPanel(), appFormElement.getIcon(),
-                            appFormElement.isVisible(), appFormElement.isEditable(), appFormElement.isDisabled());
-                    break;
-                case TAB:
-                    feb.addTab(appFormElement.getTabContentType().name(), appFormElement.getElementName(),
-                            appFormElement.getLabel(), appFormElement.getTabApplet(), appFormElement.getTabReference(),
-                            appFormElement.getFilter(), appFormElement.getMappedFieldName(),
-                            appFormElement.getTabMappedForm(), appFormElement.getEditAction(),
-                            appFormElement.getEditFormless(), appFormElement.getEditAllowAddition(),
-                            appFormElement.getEditFixedRows(), appFormElement.isIgnoreParentCondition(),
-                            appFormElement.isIncludeSysParam(), appFormElement.isIncludeProcessVariable(), appFormElement.isShowSearch(),
-                            appFormElement.isQuickEdit(), appFormElement.isQuickOrder(), appFormElement.isVisible(),
-                            appFormElement.isEditable(), appFormElement.isDisabled());
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
 
+                }
             }
+
+            formEditor = feb.build();
+
+            TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
+            tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.appform.form.design}"), "!fc-formeditor",
+                    RendererType.SIMPLE_WIDGET);
+            tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.appform.form.preview}"),
+                    "fc-formpreviewpanel", RendererType.STANDALONE_PANEL);
+            formPreview = new FormPreview(au(), formEditor);
+            final String appletName = null;
+            tabSheet = new TabSheet(tsdb.build(),
+                    Arrays.asList(new TabSheetItem("formEditor", appletName, formEditor, DESIGN_INDEX, true),
+                            new TabSheetItem("formPreview", appletName, formPreview, PREVIEW_INDEX, true)));
+            tabSheet.setEventHandler(this);
         }
+    }
 
-        formEditor = feb.build();
-
-        TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.appform.form.design}"), "!fc-formeditor",
-                RendererType.SIMPLE_WIDGET);
-        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.appform.form.preview}"),
-                "fc-formpreviewpanel", RendererType.STANDALONE_PANEL);
-        formPreview = new FormPreview(au(), formEditor);
-        final String appletName = null;
-        tabSheet = new TabSheet(tsdb.build(),
-                Arrays.asList(new TabSheetItem("formEditor", appletName, formEditor, DESIGN_INDEX, true),
-                        new TabSheetItem("formPreview", appletName, formPreview, PREVIEW_INDEX, true)));
-        tabSheet.setEventHandler(this);
+    public boolean isPresent() {
+        return formEditor != null && formPreview != null;
     }
 }

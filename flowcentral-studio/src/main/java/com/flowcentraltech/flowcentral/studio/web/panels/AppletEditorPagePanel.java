@@ -44,7 +44,6 @@ public class AppletEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        // TODO
         return false;
     }
 

@@ -42,15 +42,16 @@ public final class ApplicationQueryUtils {
 
     }
 
-    public static void addWidgetTypeCriteria(Query<AppWidgetType> query, String applicationName, EntityFieldDataType entityFieldDataType) {
+    public static void addWidgetTypeCriteria(Query<AppWidgetType> query, String applicationName,
+            EntityFieldDataType entityFieldDataType) {
         if (entityFieldDataType == null) {
             query.addRestriction(new IsNull("dataType"));
             if (!StringUtils.isBlank(applicationName)) {
-                query.addEquals("applicationName", applicationName);
+                query.addAmongst("applicationName", Arrays.asList("application", applicationName));
             }
         } else {
             if (entityFieldDataType.isArray()) {
-                query.addRestriction(new And().add( new Equals("applicationName", "application"))
+                query.addRestriction(new And().add(new Equals("applicationName", "application"))
                         .add(new Amongst("name", Arrays.asList("textarea", "textareamedium", "textarealarge",
                                 "textareaxlarge", "textareaxxlarge"))));
             } else if (entityFieldDataType.isEntityRef()) {
@@ -67,9 +68,10 @@ public final class ApplicationQueryUtils {
                                 "fileuploadexcel", "fileuploadpdf", "fileuploadtext", "picture"))));
             } else if (EntityFieldDataType.CLOB.equals(entityFieldDataType)) {
                 query.addRestriction(new And().add(new Equals("applicationName", "application"))
-                        .add(new Amongst("name", Arrays.asList("richtexteditor", "richtexteditormedium", "richtexteditorlarge",
-                                "richtexteditorxlarge", "richtexteditorxxlarge","textarea", "textareamedium", "textarealarge",
-                                "textareaxlarge", "textareaxxlarge"))));
+                        .add(new Amongst("name",
+                                Arrays.asList("richtexteditor", "richtexteditormedium", "richtexteditorlarge",
+                                        "richtexteditorxlarge", "richtexteditorxxlarge", "textarea", "textareamedium",
+                                        "textarealarge", "textareaxlarge", "textareaxxlarge"))));
             } else if (entityFieldDataType.isEnumDataType()) {
                 query.addRestriction(new Or()
                         .add(new And().add(new Equals("applicationName", "application")).add(
@@ -81,7 +83,7 @@ public final class ApplicationQueryUtils {
             } else if (entityFieldDataType.isMapped()) {
                 query.addRestriction(new Equals("inputType", InputType.MAPPED));
                 if (!StringUtils.isBlank(applicationName)) {
-                    query.addEquals("applicationName", applicationName);
+                    query.addAmongst("applicationName", Arrays.asList("application", applicationName));
                 }
             } else {
                 DataType dataType = entityFieldDataType.dataType();
@@ -93,7 +95,7 @@ public final class ApplicationQueryUtils {
                 }
 
                 if (!StringUtils.isBlank(applicationName)) {
-                    query.addEquals("applicationName", applicationName);
+                    query.addAmongst("applicationName", Arrays.asList("application", applicationName));
                 }
             }
         }

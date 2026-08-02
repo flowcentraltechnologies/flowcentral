@@ -43,41 +43,33 @@ public class StudioAppFormApplet extends AbstractStudioAppComponentApplet<FormEd
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
     }
-    
+
     public void commitDesign() throws UnifyException {
         if (getDesign() != null) {
             getDesign().commitDesign();
         }
     }
 
-    public void createDesign() throws UnifyException {
-        AppForm appForm = (AppForm) getForm().getFormBean();
-        Long formId = appForm.getId();
-        if (formId != null) {
-            String subTitle = appForm.getDescription();
-            FormEditorPage formEditorPage = constructNewFormEditorPage(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()), formId,
-                    subTitle);
-            formEditorPage.newEditor();
-            setDesign(formEditorPage);
-        } else {
-            setDesign(null);
-        }
-    }
-
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        AppForm appForm = (AppForm) inst;
+        Long formId = appForm != null ? appForm.getId() : null;
+        FormEditorPage formEditorPage = formId != null
+                ? constructNewFormEditorPage(
+                        ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()),
+                        formId, appForm.getDescription())
+                : constructNewFormEditorPage(null, null, au().resolveSessionMessage("$m{formeditor.newform}"));
+        formEditorPage.newEditor();
+        setDesign(formEditorPage);
     }
 
     private FormEditorPage constructNewFormEditorPage(String formName, Object id, String subTitle)
             throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
-        FormDef formDef = getFormDef(formName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{formeditor.formdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        FormDef formDef = formName != null ? getFormDef(formName) : null;
         return new FormEditorPage(au(), formDef, id, breadCrumbs);
     }
 

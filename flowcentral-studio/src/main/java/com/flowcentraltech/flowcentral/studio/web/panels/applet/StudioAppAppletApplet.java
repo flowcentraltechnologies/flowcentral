@@ -43,38 +43,31 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet<Appl
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
     }
 
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        AppApplet appApplet = (AppApplet) inst;
+        Long appletId = appApplet != null ? appApplet.getId() : null;
+        AppletEditorPage appletEditorPage = appletId != null && appApplet.getType().isEntityList()
+                ? constructNewAppletEditorPage(appletId, appApplet.getDescription())
+                : constructNewAppletEditorPage(null, au().resolveSessionMessage("$m{appleteditor.newapplet}"));
+        appletEditorPage.newEditor();
+        setDesign(appletEditorPage);
     }
 
-    public void createDesign() throws UnifyException {
-        AppApplet appApplet = (AppApplet) getForm().getFormBean();
-        Long appletId = appApplet.getId();
-        if (appletId != null) {
-            if (appApplet.getType().isEntityList()) {
-                String subTitle = appApplet.getDescription();
-                AppletEditorPage appletEditorPage = constructNewAppletEditorPage(appApplet.getEntity(), appletId, subTitle);
-                appletEditorPage.newEditor();
-                setDesign(appletEditorPage);
-                return;
-            }
-        }
-        
-        setDesign(null);
-    }
-
-    private AppletEditorPage constructNewAppletEditorPage(String entityName, Object id, String subTitle)
-            throws UnifyException {
+    private AppletEditorPage constructNewAppletEditorPage(Object id, String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
-        final AppletDef appletDef = au().getAppletDef((Long) id);
-        final String tableName = appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
-        final String formName = appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{appleteditor.appletdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        String tableName = null;
+        String formName = null;
+        if (id != null) {
+            AppletDef appletDef = au().getAppletDef((Long) id);
+            tableName = appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
+            formName = appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
+        }
+
         return new AppletEditorPage(au(), tableName, formName, id, breadCrumbs);
     }
 
