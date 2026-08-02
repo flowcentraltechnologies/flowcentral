@@ -17,7 +17,7 @@
 	
 // Applet panel
 !fc-studiochartdatasourceappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
-	moreCommitComponents:$c{chartDatasourceViewPanel} binding:applet 
+	refreshSwitchOnChange:$c{chartDatasourceViewPanel} binding:applet 
 
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}

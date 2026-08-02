@@ -48,18 +48,6 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         this.cms = cms;
-        createDesign();
-    }
-
-    public void createDesign() throws UnifyException {
-        final Chart chart = (Chart) getForm().getFormBean();
-        final Long chartId = chart.getId();
-        String subTitle = chart.getDescription();
-        ChartView chartView = constructNewChartView(
-                ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()), chartId,
-                subTitle);
-        chartView.reloadContent();
-        setDesign(chartView);
     }
 
     @Override
@@ -69,8 +57,7 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
         ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(), chart.getRule(),
                 "charts.preview", chart.getDescription(), chart.getId(), chart.getVersionNo());
         cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
-                .series(chart.getSeries()).color(chart.getColor())
-                .width(DataUtils.convert(int.class, chart.getWidth()))
+                .series(chart.getSeries()).color(chart.getColor()).width(DataUtils.convert(int.class, chart.getWidth()))
                 .height(DataUtils.convert(int.class, chart.getHeight())).stacked(chart.isStacked())
                 .smooth(chart.isSmooth());
         getDesign().getConfiguration().setPreviewChartDef(cdb.build());
@@ -78,9 +65,16 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
 
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        final Chart chart = (Chart) inst;
+        final Long chartId = chart != null ? chart.getId() : null;
+        ChartView chartView = chartId != null
+                ? constructNewChartView(
+                        ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()),
+                        chartId, chart.getDescription())
+                : constructNewChartView("charts.new", null, au().resolveSessionMessage("$m{charteditor.newchart}"));
+        setDesign(chartView);
     }
-    
+
     private ChartView constructNewChartView(String chartName, Object id, String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{charteditor.chartdesigner}"));

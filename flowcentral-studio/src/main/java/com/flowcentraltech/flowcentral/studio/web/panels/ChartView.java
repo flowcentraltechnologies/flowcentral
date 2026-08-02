@@ -22,7 +22,6 @@ import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.SimpleChartConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
-import com.tcdng.unify.core.UnifyException;
 
 /**
  * Chart view.
@@ -54,7 +53,7 @@ public class ChartView extends AbstractStudioEditorPage {
         return baseId;
     }
 
-    public void reloadContent() throws UnifyException {
-
+    public boolean isPresent() {
+        return configuration != null;
     }
 }

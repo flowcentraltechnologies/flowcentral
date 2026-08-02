@@ -17,8 +17,7 @@
 	
 // Applet panel
 !fc-studioappchartappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
-	moreCommitComponents:$c{chartViewPanel} binding:applet
-	refreshSwitchOnChange:$c{chartViewPanel} 
+	refreshSwitchOnChange:$c{chartViewPanel} binding:applet 
 
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}

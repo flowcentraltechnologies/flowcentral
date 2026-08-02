@@ -47,7 +47,6 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         this.cms = cms;
-        createDesign();
 
         final EntityFieldSequence entityFieldSequence = (EntityFieldSequence) getHwtForm().getTabSheet()
                 .getTabSheetItem(3).getValObject();
@@ -60,24 +59,24 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
         }
     }
 
-    private void createDesign() throws UnifyException {
-        final ChartDataSource chartDataSource = (ChartDataSource) getForm().getFormBean();
-        final Long chartDataSourceId = chartDataSource.getId();
-        if (chartDataSourceId != null) {
-            String subTitle = chartDataSource.getDescription();
-            ChartDatasourceView chartDatasourceView = constructNewChartDatasourceView(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
-                    chartDataSourceId, subTitle);
-            chartDatasourceView.reloadContent();
-            setDesign(chartDatasourceView);
-        } else {
-            setDesign(null);
-        }
+    @Override
+    public void formSwitchOnChange() throws UnifyException {
+        super.formSwitchOnChange();
+        reloadContent();
     }
 
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        final ChartDataSource chartDataSource = (ChartDataSource) inst;
+        final Long chartDataSourceId = chartDataSource != null ? chartDataSource.getId() : null;
+        ChartDatasourceView chartDatasourceView = chartDataSourceId != null? constructNewChartDatasourceView(
+                ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
+                chartDataSourceId, chartDataSource.getDescription())
+                : constructNewChartDatasourceView(
+                        null,
+                        null, au().resolveSessionMessage("$m{chartdatasourceeditor.newchartdatasource}"));
+        chartDatasourceView.reloadContent();
+        setDesign(chartDatasourceView);
     }
 
     private ChartDatasourceView constructNewChartDatasourceView(String chartDatasourceName, Object id, String subTitle)
