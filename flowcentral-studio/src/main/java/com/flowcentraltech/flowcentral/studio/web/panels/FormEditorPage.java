@@ -105,74 +105,76 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
     }
 
     public void commitDesign() throws UnifyException {
-        AppForm appForm = au().environment().find(AppForm.class, baseId);
-        List<AppFormElement> elementList = Collections.emptyList();
-        if (formEditor.getDesign() != null && formEditor.getDesign().getTabs() != null) {
-            elementList = new ArrayList<AppFormElement>();
-            for (FormTab formTab : formEditor.getDesign().getTabs()) {
-                AppFormElement appFormElement = new AppFormElement();
-                appFormElement.setType(FormElementType.TAB);
-                appFormElement.setTabContentType(TabContentType.fromName(formTab.getContentType()));
-                appFormElement.setElementName(formTab.getName());
-                appFormElement.setLabel(formTab.getLabel());
-                appFormElement.setTabApplet(formTab.getApplet());
-                appFormElement.setTabReference(formTab.getReference());
-                appFormElement.setFilter(formTab.getFilter());
-                appFormElement.setMappedFieldName(formTab.getMappedFieldName());
-                appFormElement.setTabMappedForm(formTab.getMappedForm());
-                appFormElement.setEditAction(formTab.getEditAction());
-                appFormElement.setEditFormless(formTab.getEditViewOnly());
-                appFormElement.setEditAllowAddition(formTab.getEditAllowAddition());
-                appFormElement.setEditFixedRows(formTab.getEditFixedRows());
-                appFormElement.setIgnoreParentCondition(formTab.isIgnoreParentCondition());
-                appFormElement.setIncludeSysParam(false);
-                appFormElement.setShowSearch(formTab.isShowSearch());
-                appFormElement.setQuickEdit(formTab.isQuickEdit());
-                appFormElement.setQuickOrder(formTab.isQuickOrder());
-                appFormElement.setVisible(formTab.isVisible());
-                appFormElement.setEditable(formTab.isEditable());
-                appFormElement.setDisabled(formTab.isDisabled());
-                elementList.add(appFormElement);
-
-                for (FormSection formSection : formTab.getSections()) {
-                    appFormElement = new AppFormElement();
-                    appFormElement.setType(FormElementType.SECTION);
-                    appFormElement.setSectionColumns(FormColumnsType.fromCode(formSection.getColumns()));
-                    appFormElement.setElementName(formSection.getName());
-                    appFormElement.setLabel(formSection.getLabel());
-                    appFormElement.setIcon(formSection.getIcon());
-                    appFormElement.setPanel(formSection.getPanel());
-                    appFormElement.setVisible(formSection.isVisible());
-                    appFormElement.setEditable(formSection.isEditable());
-                    appFormElement.setDisabled(formSection.isDisabled());
+        if (isPresent()) {
+            AppForm appForm = au().environment().find(AppForm.class, baseId);
+            List<AppFormElement> elementList = Collections.emptyList();
+            if (formEditor.getDesign() != null && formEditor.getDesign().getTabs() != null) {
+                elementList = new ArrayList<AppFormElement>();
+                for (FormTab formTab : formEditor.getDesign().getTabs()) {
+                    AppFormElement appFormElement = new AppFormElement();
+                    appFormElement.setType(FormElementType.TAB);
+                    appFormElement.setTabContentType(TabContentType.fromName(formTab.getContentType()));
+                    appFormElement.setElementName(formTab.getName());
+                    appFormElement.setLabel(formTab.getLabel());
+                    appFormElement.setTabApplet(formTab.getApplet());
+                    appFormElement.setTabReference(formTab.getReference());
+                    appFormElement.setFilter(formTab.getFilter());
+                    appFormElement.setMappedFieldName(formTab.getMappedFieldName());
+                    appFormElement.setTabMappedForm(formTab.getMappedForm());
+                    appFormElement.setEditAction(formTab.getEditAction());
+                    appFormElement.setEditFormless(formTab.getEditViewOnly());
+                    appFormElement.setEditAllowAddition(formTab.getEditAllowAddition());
+                    appFormElement.setEditFixedRows(formTab.getEditFixedRows());
+                    appFormElement.setIgnoreParentCondition(formTab.isIgnoreParentCondition());
+                    appFormElement.setIncludeSysParam(false);
+                    appFormElement.setShowSearch(formTab.isShowSearch());
+                    appFormElement.setQuickEdit(formTab.isQuickEdit());
+                    appFormElement.setQuickOrder(formTab.isQuickOrder());
+                    appFormElement.setVisible(formTab.isVisible());
+                    appFormElement.setEditable(formTab.isEditable());
+                    appFormElement.setDisabled(formTab.isDisabled());
                     elementList.add(appFormElement);
 
-                    for (FormField formField : formSection.getFields()) {
+                    for (FormSection formSection : formTab.getSections()) {
                         appFormElement = new AppFormElement();
-                        appFormElement.setType(FormElementType.FIELD);
-                        appFormElement.setElementName(formField.getName());
-                        appFormElement.setLabel(formField.getLabel());
-                        appFormElement.setInputWidget(formField.getInputWidget());
-                        appFormElement.setInputReference(formField.getReference());
-                        appFormElement.setPreviewForm(formField.getPreviewForm());
-                        WidgetColor color = !StringUtils.isBlank(formField.getColor())
-                                ? WidgetColor.fromCode(formField.getColor())
-                                : null;
-                        appFormElement.setColor(color);
-                        appFormElement.setFieldColumn(formField.getColumn());
-                        appFormElement.setSwitchOnChange(formField.isSwitchOnChange());
-                        appFormElement.setRequired(formField.isRequired());
-                        appFormElement.setVisible(formField.isVisible());
-                        appFormElement.setEditable(formField.isEditable());
-                        appFormElement.setDisabled(formField.isDisabled());
+                        appFormElement.setType(FormElementType.SECTION);
+                        appFormElement.setSectionColumns(FormColumnsType.fromCode(formSection.getColumns()));
+                        appFormElement.setElementName(formSection.getName());
+                        appFormElement.setLabel(formSection.getLabel());
+                        appFormElement.setIcon(formSection.getIcon());
+                        appFormElement.setPanel(formSection.getPanel());
+                        appFormElement.setVisible(formSection.isVisible());
+                        appFormElement.setEditable(formSection.isEditable());
+                        appFormElement.setDisabled(formSection.isDisabled());
                         elementList.add(appFormElement);
+
+                        for (FormField formField : formSection.getFields()) {
+                            appFormElement = new AppFormElement();
+                            appFormElement.setType(FormElementType.FIELD);
+                            appFormElement.setElementName(formField.getName());
+                            appFormElement.setLabel(formField.getLabel());
+                            appFormElement.setInputWidget(formField.getInputWidget());
+                            appFormElement.setInputReference(formField.getReference());
+                            appFormElement.setPreviewForm(formField.getPreviewForm());
+                            WidgetColor color = !StringUtils.isBlank(formField.getColor())
+                                    ? WidgetColor.fromCode(formField.getColor())
+                                    : null;
+                            appFormElement.setColor(color);
+                            appFormElement.setFieldColumn(formField.getColumn());
+                            appFormElement.setSwitchOnChange(formField.isSwitchOnChange());
+                            appFormElement.setRequired(formField.isRequired());
+                            appFormElement.setVisible(formField.isVisible());
+                            appFormElement.setEditable(formField.isEditable());
+                            appFormElement.setDisabled(formField.isDisabled());
+                            elementList.add(appFormElement);
+                        }
                     }
                 }
             }
-        }
 
-        appForm.setElementList(elementList);
-        au().environment().updateByIdVersion(appForm);
+            appForm.setElementList(elementList);
+            au().environment().updateByIdVersion(appForm);
+        }
     }
 
     public void newEditor() throws UnifyException {

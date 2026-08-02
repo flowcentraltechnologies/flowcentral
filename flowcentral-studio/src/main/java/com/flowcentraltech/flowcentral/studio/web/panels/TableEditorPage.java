@@ -97,56 +97,64 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
     }
 
     public void commitDesign() throws UnifyException {
-        AppTable appTable = au().environment().find(AppTable.class, baseId);
-        List<AppTableColumn> columnList = Collections.emptyList();
-        if (tableEditor.getDesign() != null && tableEditor.getDesign().getColumns() != null) {
-            columnList = new ArrayList<AppTableColumn>();
-            for (TableColumn tableColumn : tableEditor.getDesign().getColumns()) {
-                AppTableColumn appTableColumn = new AppTableColumn();
-                appTableColumn.setField(tableColumn.getFldNm());
-                appTableColumn.setRenderWidget(tableColumn.getWidget());
-                appTableColumn.setLabel(tableColumn.getLabel());
-                appTableColumn.setLinkAct(tableColumn.getLink());
-                appTableColumn.setSymbol(tableColumn.getSymbol());
-                appTableColumn.setOrder(tableColumn.getOrder());
-                appTableColumn.setWidthRatio(tableColumn.getWidth());
-                appTableColumn.setSwitchOnChange(tableColumn.isSwitchOnChange());
-                appTableColumn.setEditable(tableColumn.isEditable());
-                appTableColumn.setHiddenOnNull(tableColumn.isHiddenOnNull());
-                appTableColumn.setHidden(tableColumn.isHidden());
-                appTableColumn.setDisabled(tableColumn.isDisabled());
-                appTableColumn.setSortable(tableColumn.isSort());
-                appTableColumn.setSummary(tableColumn.isSummary());
-                columnList.add(appTableColumn);
+        if (isPresent()) {
+            AppTable appTable = au().environment().find(AppTable.class, baseId);
+            List<AppTableColumn> columnList = Collections.emptyList();
+            if (tableEditor.getDesign() != null && tableEditor.getDesign().getColumns() != null) {
+                columnList = new ArrayList<AppTableColumn>();
+                for (TableColumn tableColumn : tableEditor.getDesign().getColumns()) {
+                    AppTableColumn appTableColumn = new AppTableColumn();
+                    appTableColumn.setField(tableColumn.getFldNm());
+                    appTableColumn.setRenderWidget(tableColumn.getWidget());
+                    appTableColumn.setLabel(tableColumn.getLabel());
+                    appTableColumn.setLinkAct(tableColumn.getLink());
+                    appTableColumn.setSymbol(tableColumn.getSymbol());
+                    appTableColumn.setOrder(tableColumn.getOrder());
+                    appTableColumn.setWidthRatio(tableColumn.getWidth());
+                    appTableColumn.setSwitchOnChange(tableColumn.isSwitchOnChange());
+                    appTableColumn.setEditable(tableColumn.isEditable());
+                    appTableColumn.setHiddenOnNull(tableColumn.isHiddenOnNull());
+                    appTableColumn.setHidden(tableColumn.isHidden());
+                    appTableColumn.setDisabled(tableColumn.isDisabled());
+                    appTableColumn.setSortable(tableColumn.isSort());
+                    appTableColumn.setSummary(tableColumn.isSummary());
+                    columnList.add(appTableColumn);
+                }
             }
-        }
 
-        appTable.setColumnList(columnList);
-        au().environment().updateByIdVersion(appTable);
+            appTable.setColumnList(columnList);
+            au().environment().updateByIdVersion(appTable);
+        }
     }
 
     public void newEditor() throws UnifyException {
-        TableEditor.Builder teb = TableEditor.newBuilder(au(), entityDef);
-        for (AppTableColumn appTableColumn : au().environment()
-                .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
-            teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
-                    appTableColumn.getLinkAct(), appTableColumn.getSymbol(), appTableColumn.getOrder(),
-                    appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(), appTableColumn.isHiddenOnNull(),
-                    appTableColumn.isHidden(), appTableColumn.isDisabled(), appTableColumn.isEditable(),
-                    appTableColumn.isSortable(), appTableColumn.isSummary());
-        }
+        if (entityDef != null) {
+            TableEditor.Builder teb = TableEditor.newBuilder(au(), entityDef);
+            for (AppTableColumn appTableColumn : au().environment()
+                    .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
+                teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
+                        appTableColumn.getLinkAct(), appTableColumn.getSymbol(), appTableColumn.getOrder(),
+                        appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(),
+                        appTableColumn.isHiddenOnNull(), appTableColumn.isHidden(), appTableColumn.isDisabled(),
+                        appTableColumn.isEditable(), appTableColumn.isSortable(), appTableColumn.isSummary());
+            }
 
-        TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.apptable.form.design}"), "!fc-tableeditor",
-                RendererType.SIMPLE_WIDGET);
-        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.apptable.form.preview}"),
-                "fc-tablepreviewpanel", RendererType.STANDALONE_PANEL);
-        tableEditor = teb.build();
-        tablePreview = new TablePreview(au(), tableEditor);
-        final String appletName = null;
-        tabSheet = new TabSheet(tsdb.build(),
-                Arrays.asList(new TabSheetItem("tableEditor", appletName, tableEditor, DESIGN_INDEX, true),
-                        new TabSheetItem("tablePreview", appletName, tablePreview, PREVIEW_INDEX, true)));
-        tabSheet.setEventHandler(this);
+            TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
+            tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.apptable.form.design}"), "!fc-tableeditor",
+                    RendererType.SIMPLE_WIDGET);
+            tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.apptable.form.preview}"),
+                    "fc-tablepreviewpanel", RendererType.STANDALONE_PANEL);
+            tableEditor = teb.build();
+            tablePreview = new TablePreview(au(), tableEditor);
+            final String appletName = null;
+            tabSheet = new TabSheet(tsdb.build(),
+                    Arrays.asList(new TabSheetItem("tableEditor", appletName, tableEditor, DESIGN_INDEX, true),
+                            new TabSheetItem("tablePreview", appletName, tablePreview, PREVIEW_INDEX, true)));
+            tabSheet.setEventHandler(this);
+        }
+    }
+
+    public boolean isPresent() {
+        return tableEditor != null && tablePreview != null;
     }
 }

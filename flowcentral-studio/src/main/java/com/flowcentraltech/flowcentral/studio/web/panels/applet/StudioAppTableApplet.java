@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.TableEditorPage;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
@@ -42,39 +43,31 @@ public class StudioAppTableApplet extends AbstractStudioAppComponentApplet<Table
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
     }
-    
+
     public void commitDesign() throws UnifyException {
         if (getDesign() != null) {
             getDesign().commitDesign();
         }
     }
 
-    public void createDesign() throws UnifyException {
-        AppTable appTable = (AppTable) getForm().getFormBean();
-        Long tableId = appTable.getId();
-        if (tableId != null) {
-            String subTitle = appTable.getDescription();
-            TableEditorPage tableEditorPage = constructNewTableEditorPage(appTable.getEntity(), tableId, subTitle);
-            tableEditorPage.newEditor();
-            setDesign(tableEditorPage);
-        } else {
-            setDesign(null);
-        }
-    }
-
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        AppTable appTable = (AppTable) inst;
+        Long tableId = appTable != null ? appTable.getId() : null;
+        TableEditorPage tableEditorPage = tableId != null
+                ? constructNewTableEditorPage(appTable.getEntity(), tableId, appTable.getDescription())
+                : constructNewTableEditorPage(null, null, au().resolveSessionMessage("$m{tableeditor.newtable}"));
+        tableEditorPage.newEditor();
+        setDesign(tableEditorPage);
     }
 
     private TableEditorPage constructNewTableEditorPage(String entityName, Object id, String subTitle)
             throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
-        EntityDef entityDef = getEntityDef(entityName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{tableeditor.tabledesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        EntityDef entityDef = !StringUtils.isBlank(entityName) ? getEntityDef(entityName) : null;
         return new TableEditorPage(au(), entityDef, id, breadCrumbs);
     }
 

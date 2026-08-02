@@ -34,7 +34,7 @@ public class TableEditorPagePanel extends AbstractStudioEditorPagePanel {
     @Override
     public void switchState() throws UnifyException {
         final TableEditorPage tableEditorPage = getTableEditorPage();
-        if (tableEditorPage != null) {
+        if (tableEditorPage != null && tableEditorPage.isPresent()) {
             final boolean readOnly = isAppletContextReadOnly();
             TableEditor tableEditor = tableEditorPage.getTableEditor();
             tableEditor.setReadOnly(readOnly);
@@ -61,7 +61,6 @@ public class TableEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        // TODO
         return false;
     }
 

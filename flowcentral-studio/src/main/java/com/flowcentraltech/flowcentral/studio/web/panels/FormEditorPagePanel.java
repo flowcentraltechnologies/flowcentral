@@ -34,7 +34,7 @@ public class FormEditorPagePanel extends AbstractStudioEditorPagePanel {
     @Override
     public void switchState() throws UnifyException {
         FormEditorPage formEditorPage = getFormEditorPage();
-        if (formEditorPage != null) {
+        if (formEditorPage != null && formEditorPage.isPresent()) {
             final boolean readOnly = isAppletContextReadOnly();
             FormEditor formEditor = formEditorPage.getFormEditor();
             formEditor.setReadOnly(readOnly);
@@ -62,7 +62,6 @@ public class FormEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        // TODO
         return false;
     }
 
