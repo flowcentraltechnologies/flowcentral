@@ -39,6 +39,8 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
+import com.flowcentraltech.flowcentral.application.entities.AppTableColumnQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
@@ -333,6 +335,17 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         return appletDefList != null ? appletDefList : Collections.emptyList();
+    }
+
+    @Override
+    public void updateTableColumns(Long appTableId, List<AppTableColumn> columnList) throws UnifyException {
+        environment().deleteAll(new AppTableColumnQuery().appTableId(appTableId));
+        if (!DataUtils.isBlank(columnList)) {
+            for (AppTableColumn column : columnList) {
+                column.setAppTableId(appTableId);
+                environment().create(column);
+            }
+        }
     }
 
     @Taskable(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_CREATE_SYNCHRONIZATION_TASK_NAME,

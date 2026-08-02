@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor.DesignWfStep;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor.DesignWfStepRouting;
@@ -45,16 +46,16 @@ import com.tcdng.unify.core.database.Query;
 public class WorkflowEditorPage extends AbstractStudioEditorPage {
 
     private final EntityDef entityDef;
-    
+
     private final Long workflowId;
 
     private WorkflowEditor workflowEditor;
 
     private WorkflowModuleService workflowModuleService;
-    
-    public WorkflowEditorPage(WorkflowModuleService workflowModuleService, AppletUtilities au, EntityDef entityDef,
-            Long workflowId, BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+
+    public WorkflowEditorPage(WorkflowModuleService workflowModuleService, StudioModuleService sms, AppletUtilities au,
+            EntityDef entityDef, Long workflowId, BreadCrumbs breadCrumbs) {
+        super(sms, au, breadCrumbs);
         this.workflowModuleService = workflowModuleService;
         this.entityDef = entityDef;
         this.workflowId = workflowId;
@@ -79,7 +80,7 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
     public boolean isRunnable() throws UnifyException {
         return au().environment().value(boolean.class, "runnable", new WorkflowQuery().id(workflowId));
     }
-    
+
     public void publish() throws UnifyException {
         Workflow workflow = au().environment().listLean(Workflow.class, workflowId);
         final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(),

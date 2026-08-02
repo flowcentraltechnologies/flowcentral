@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.SimpleChartConfiguration;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -37,9 +38,9 @@ public class ChartView extends AbstractStudioEditorPage {
 
     private final Object baseId;
 
-    public ChartView(AppletUtilities au, ChartModuleService cms, String chartName, Object baseId,
+    public ChartView(StudioModuleService sms, AppletUtilities au, ChartModuleService cms, String chartName, Object baseId,
             BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+        super(sms, au, breadCrumbs);
         this.cms = cms;
         this.configuration = new SimpleChartConfiguration(chartName);
         this.baseId = baseId;

@@ -33,12 +33,12 @@ public class StudioAppTableAppletPanel extends AbstractStudioAppComponentAppletP
     @Action
     @Override
     public void update() throws UnifyException {
-        super.update();
-
         final StudioAppTableApplet applet = getValue(StudioAppTableApplet.class);
         if (applet.isRootHwtForm()) {
             applet.commitDesign();
-         }
+        }
+
+        super.update();
     }
 
 }

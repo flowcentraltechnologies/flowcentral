@@ -70,7 +70,7 @@ public class StudioAppFormApplet extends AbstractStudioAppComponentApplet<FormEd
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{formeditor.formdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         FormDef formDef = formName != null ? getFormDef(formName) : null;
-        return new FormEditorPage(au(), formDef, id, breadCrumbs);
+        return new FormEditorPage(studio(), au(), formDef, id, breadCrumbs);
     }
 
 }

@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheet
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.ReportEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.ReportEditor.ReportColumn;
 import com.tcdng.unify.core.UnifyException;
@@ -60,8 +61,9 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
 
     private ReportPreview reportPreview;
 
-    public ReportEditorPage(AppletUtilities au, EntityDef entityDef, Object baseId, BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+    public ReportEditorPage(StudioModuleService sms, AppletUtilities au, EntityDef entityDef, Object baseId,
+            BreadCrumbs breadCrumbs) {
+        super(sms, au, breadCrumbs);
         this.entityDef = entityDef;
         this.baseId = baseId;
     }
@@ -104,8 +106,7 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
         if (reportEditor.getDesign() != null && reportEditor.getDesign().getColumns() != null) {
             columnList = new ArrayList<com.flowcentraltech.flowcentral.report.entities.ReportColumn>();
             for (ReportColumn editReportColumn : reportEditor.getDesign().getColumns()) {
-                com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn =
-                        new com.flowcentraltech.flowcentral.report.entities.ReportColumn();
+                com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn = new com.flowcentraltech.flowcentral.report.entities.ReportColumn();
                 reportColumn.setFieldName(editReportColumn.getFldNm());
                 reportColumn.setRenderWidget(editReportColumn.getWidget());
                 reportColumn.setColumnOrder(OrderType.fromCode(editReportColumn.getOrder()));
@@ -135,14 +136,14 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
                     reportColumn.getColumnOrder() != null ? reportColumn.getColumnOrder().code() : null,
                     reportColumn.getHorizAlignType() != null ? reportColumn.getHorizAlignType().code() : null,
                     reportColumn.getVertAlignType() != null ? reportColumn.getVertAlignType().code() : null,
-                    reportColumn.getDescription(), reportColumn.getFormatter(),
-                    reportColumn.getWidth(), reportColumn.isBold(), reportColumn.isGroup(),
-                    reportColumn.isGroupOnNewPage(), reportColumn.isSum());
+                    reportColumn.getDescription(), reportColumn.getFormatter(), reportColumn.getWidth(),
+                    reportColumn.isBold(), reportColumn.isGroup(), reportColumn.isGroupOnNewPage(),
+                    reportColumn.isSum());
         }
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.reportconfiguration.form.design}"), "!fc-reporteditor",
-                RendererType.SIMPLE_WIDGET);
+        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.reportconfiguration.form.design}"),
+                "!fc-reporteditor", RendererType.SIMPLE_WIDGET);
         tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.reportconfiguration.form.preview}"),
                 "fc-reportpreviewpanel", RendererType.STANDALONE_PANEL);
         reportEditor = teb.build();

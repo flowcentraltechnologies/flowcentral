@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
+import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
@@ -105,4 +106,17 @@ public interface StudioModuleService extends FlowCentralService {
      */
     List<AppletDef> findAppletDefs(String applicationName, StudioAppComponentType type, String filter)
             throws UnifyException;
+
+    /**
+     * Updates table column.
+     * 
+     * @param appTableId
+     *                   the table ID
+     * @param columnList
+     *                   the list of table columns
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateTableColumns(Long baseId, List<AppTableColumn> columnList) throws UnifyException;
+
 }

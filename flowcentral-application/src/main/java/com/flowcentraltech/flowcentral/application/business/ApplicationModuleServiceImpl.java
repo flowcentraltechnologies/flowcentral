@@ -2633,7 +2633,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException {
-        return widgetDefFactoryMap.get(widgetName);
+        return widgetName != null ? widgetDefFactoryMap.get(widgetName) : null;
     }
 
     @Override

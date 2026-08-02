@@ -36,6 +36,7 @@ import com.flowcentraltech.flowcentral.chart.data.ChartViewOption;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.MapValueStore;
 import com.tcdng.unify.core.data.ValueStore;
@@ -56,9 +57,9 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
 
     private BeanListTable snapshotTable;
 
-    public ChartDatasourceView(AppletUtilities au, ChartModuleService cms, String chartDatasourceName, Object baseId,
+    public ChartDatasourceView(StudioModuleService sms, AppletUtilities au, ChartModuleService cms, String chartDatasourceName, Object baseId,
             BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+        super(sms, au, breadCrumbs);
         this.cms = cms;
         this.chartDatasourceName = chartDatasourceName;
         this.baseId = baseId;

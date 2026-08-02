@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -52,9 +53,9 @@ public class AppletEditorPage extends AbstractStudioEditorPage implements TabShe
 
     private FormPreview formPreview;
 
-    public AppletEditorPage(AppletUtilities au, String tableName, String formName, Object baseId,
+    public AppletEditorPage(StudioModuleService sms, AppletUtilities au, String tableName, String formName, Object baseId,
             BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+        super(sms, au, breadCrumbs);
         this.tableName = tableName;
         this.formName = formName;
         this.baseId = baseId;

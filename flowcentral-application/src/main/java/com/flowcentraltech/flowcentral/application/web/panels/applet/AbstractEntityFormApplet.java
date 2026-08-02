@@ -1261,7 +1261,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     protected final void setHwtForm(HeaderWithTabsForm form) throws UnifyException {
         this.form = form;
         if (getRootHwtForm() == form) {
-            System.out.println("@prime: "+ getClass().getName()  + ".setHwtForm()");
             onRootHwtFormUpdated(form != null ? (Entity) form.getFormBean() : null);
         }
     }
@@ -1472,7 +1471,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
         
         if (getRootHwtForm() == form) {
-            System.out.println("@prime: "+ getClass().getName()  + ".updateForm()");
             onRootHwtFormUpdated(inst);
         }
     }

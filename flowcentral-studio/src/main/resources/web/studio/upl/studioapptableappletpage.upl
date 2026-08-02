@@ -20,7 +20,6 @@
 	moreCommitComponents:$c{tableEditorPagePanel} binding:applet 
 
 // Design panel
-!ui-panel:designPanel style:$s{width:100%;height:100%;}
-	components:$c{tableEditorPagePanel}
+!ui-panel:designPanel style:$s{width:100%;height:100%;} components:$c{tableEditorPagePanel}
 !fc-tableeditorpagepanel:tableEditorPagePanel
 

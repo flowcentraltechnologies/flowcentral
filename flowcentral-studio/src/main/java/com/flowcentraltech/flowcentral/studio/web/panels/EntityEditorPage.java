@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.studio.web.panels;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.EntityEditor;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.StringUtils;
@@ -37,8 +38,9 @@ public class EntityEditorPage extends AbstractStudioEditorPage {
 
     private EntityEditor entityEditor;
 
-    public EntityEditorPage(AppletUtilities au, String entityName, Object baseId, BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+    public EntityEditorPage(StudioModuleService sms, AppletUtilities au, String entityName, Object baseId,
+            BreadCrumbs breadCrumbs) {
+        super(sms, au, breadCrumbs);
         this.entityName = entityName;
         this.baseId = baseId;
     }
@@ -62,7 +64,7 @@ public class EntityEditorPage extends AbstractStudioEditorPage {
             entityEditor = eeb.build();
         }
     }
-    
+
     public boolean isPresent() {
         return entityEditor != null;
     }

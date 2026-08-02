@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
 import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor.DDashboardSection;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor.DDashboardTile;
@@ -51,7 +52,7 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
     private static final int DESIGN_INDEX = 0;
 
     private static final int PREVIEW_INDEX = 1;
-    
+
     private final ChartModuleService cms;
 
     private final DashboardDef dashboardDef;
@@ -64,8 +65,9 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
 
     private DashboardPreview dashboardPreview;
 
-    public DashboardEditorPage(AppletUtilities au, ChartModuleService cms, DashboardDef dashboardDef, Object baseId, BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+    public DashboardEditorPage(StudioModuleService sms, AppletUtilities au, ChartModuleService cms,
+            DashboardDef dashboardDef, Object baseId, BreadCrumbs breadCrumbs) {
+        super(sms, au, breadCrumbs);
         this.cms = cms;
         this.dashboardDef = dashboardDef;
         this.baseId = baseId;
@@ -153,8 +155,8 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
         dashboardEditor = deb.build(au());
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.dashboard.form.design}"),
-                "!fc-dashboardeditor", RendererType.SIMPLE_WIDGET);
+        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.dashboard.form.design}"), "!fc-dashboardeditor",
+                RendererType.SIMPLE_WIDGET);
         tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.dashboard.form.preview}"),
                 "fc-dashboardpreviewpanel", RendererType.STANDALONE_PANEL);
         dashboardPreview = new DashboardPreview(dashboardEditor);

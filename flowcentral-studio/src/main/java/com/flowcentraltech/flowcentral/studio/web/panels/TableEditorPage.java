@@ -24,13 +24,13 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
-import com.flowcentraltech.flowcentral.application.entities.AppTable;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.TableEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.TableEditor.TableColumn;
 import com.tcdng.unify.core.UnifyException;
@@ -58,8 +58,9 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
 
     private TablePreview tablePreview;
 
-    public TableEditorPage(AppletUtilities au, EntityDef entityDef, Object baseId, BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+    public TableEditorPage(StudioModuleService sms, AppletUtilities au, EntityDef entityDef, Object baseId,
+            BreadCrumbs breadCrumbs) {
+        super(sms, au, breadCrumbs);
         this.entityDef = entityDef;
         this.baseId = baseId;
     }
@@ -98,7 +99,6 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
 
     public void commitDesign() throws UnifyException {
         if (isPresent()) {
-            AppTable appTable = au().environment().find(AppTable.class, baseId);
             List<AppTableColumn> columnList = Collections.emptyList();
             if (tableEditor.getDesign() != null && tableEditor.getDesign().getColumns() != null) {
                 columnList = new ArrayList<AppTableColumn>();
@@ -122,8 +122,7 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
                 }
             }
 
-            appTable.setColumnList(columnList);
-            au().environment().updateByIdVersion(appTable);
+            studio().updateTableColumns((Long) baseId, columnList);
         }
     }
 

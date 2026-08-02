@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -34,9 +35,9 @@ public class NotifTemplateEditor extends AbstractStudioEditorPage {
 
     private HeaderWithTabsForm form;
 
-    public NotifTemplateEditor(MiniForm templateForm, HeaderWithTabsForm form, AppletUtilities au,
-            BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+    public NotifTemplateEditor(MiniForm templateForm, HeaderWithTabsForm form, StudioModuleService sms,
+            AppletUtilities au, BreadCrumbs breadCrumbs) {
+        super(sms, au, breadCrumbs);
         this.templateForm = templateForm;
         this.form = form;
     }

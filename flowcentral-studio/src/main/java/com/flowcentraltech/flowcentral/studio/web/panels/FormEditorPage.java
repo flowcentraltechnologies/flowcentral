@@ -36,6 +36,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor.FormField;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor.FormSection;
@@ -66,8 +67,9 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
 
     private FormPreview formPreview;
 
-    public FormEditorPage(AppletUtilities au, FormDef formDef, Object baseId, BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+    public FormEditorPage(StudioModuleService sms, AppletUtilities au, FormDef formDef, Object baseId,
+            BreadCrumbs breadCrumbs) {
+        super(sms, au, breadCrumbs);
         this.formDef = formDef;
         this.baseId = baseId;
     }

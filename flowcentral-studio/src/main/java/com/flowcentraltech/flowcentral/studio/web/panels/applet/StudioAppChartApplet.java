@@ -85,7 +85,7 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{charteditor.chartdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new ChartView(au(), cms, chartName, id, breadCrumbs);
+        return new ChartView(studio(), au(), cms, chartName, id, breadCrumbs);
     }
 
 }

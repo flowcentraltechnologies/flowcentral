@@ -68,7 +68,7 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet<Appl
             formName = appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
         }
 
-        return new AppletEditorPage(au(), tableName, formName, id, breadCrumbs);
+        return new AppletEditorPage(studio(), au(), tableName, formName, id, breadCrumbs);
     }
 
 }

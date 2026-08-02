@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 
 /**
  * Convenient abstract base class for studio editor pages.
@@ -27,15 +28,18 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
  */
 public abstract class AbstractStudioEditorPage {
 
-    private final AppletUtilities au;
+    private final StudioModuleService sms;
 
+    private final AppletUtilities au;
+    
     private final BreadCrumbs breadCrumbs;
 
     private String displayItemCounter;
 
     private String displayItemCounterClass;
 
-    public AbstractStudioEditorPage(AppletUtilities au, BreadCrumbs breadCrumbs) {
+    public AbstractStudioEditorPage(StudioModuleService sms, AppletUtilities au, BreadCrumbs breadCrumbs) {
+        this.sms = sms;
         this.au = au;
         this.breadCrumbs = breadCrumbs;
     }
@@ -50,6 +54,10 @@ public abstract class AbstractStudioEditorPage {
 
     public final BreadCrumbs getBreadCrumbs() {
         return breadCrumbs;
+    }
+
+    public final StudioModuleService studio() {
+        return sms;
     }
 
     public final AppletUtilities au() {

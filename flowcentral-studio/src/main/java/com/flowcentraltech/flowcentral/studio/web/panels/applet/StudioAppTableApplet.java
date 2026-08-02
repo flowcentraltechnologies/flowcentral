@@ -68,7 +68,7 @@ public class StudioAppTableApplet extends AbstractStudioAppComponentApplet<Table
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{tableeditor.tabledesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         EntityDef entityDef = !StringUtils.isBlank(entityName) ? getEntityDef(entityName) : null;
-        return new TableEditorPage(au(), entityDef, id, breadCrumbs);
+        return new TableEditorPage(studio(), au(), entityDef, id, breadCrumbs);
     }
 
 }

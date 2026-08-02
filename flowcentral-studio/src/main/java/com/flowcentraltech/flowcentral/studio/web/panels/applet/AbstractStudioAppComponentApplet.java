@@ -123,7 +123,7 @@ public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntity
         return true; // Do this so applet does not revert to search mode at terminal form
     }
 
-    protected StudioModuleService getSms() {
+    protected StudioModuleService studio() {
         return sms;
     }
 
