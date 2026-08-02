@@ -88,6 +88,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
+import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
+import com.flowcentraltech.flowcentral.report.entities.ReportColumnQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.data.DelegateSynchronizationItem;
 import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
@@ -357,6 +359,17 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             for (AppFormElement element : elementList) {
                 element.setAppFormId(appFormId);
                 environment().create(element);
+            }
+        }
+    }
+
+    @Override
+    public void updateReportColumns(Long reportConfigurationId, List<ReportColumn> columnList) throws UnifyException {
+        environment().deleteAll(new ReportColumnQuery().reportConfigurationId(reportConfigurationId));
+        if (!DataUtils.isBlank(columnList)) {
+            for (ReportColumn reportColumn : columnList) {
+                reportColumn.setReportConfigurationId(reportConfigurationId);
+                environment().create(reportColumn);
             }
         }
     }

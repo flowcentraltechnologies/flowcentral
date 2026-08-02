@@ -51,4 +51,8 @@ public class NotifTemplateEditor extends AbstractStudioEditorPage {
         return tempate != null ? tempate.getEntity() : null;
     }
 
+    public boolean isPresent() {
+        return templateForm != null;
+    }
+
 }

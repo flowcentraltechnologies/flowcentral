@@ -34,7 +34,7 @@ public class ReportEditorPagePanel extends AbstractStudioEditorPagePanel {
     @Override
     public void switchState() throws UnifyException {
         final ReportEditorPage reportEditorPage = getReportEditorPage();
-        if (reportEditorPage != null) {
+        if (reportEditorPage != null && reportEditorPage.isPresent()) {
             final boolean readOnly = isAppletContextReadOnly();
             ReportEditor reportEditor = reportEditorPage.getReportEditor();
             reportEditor.setReadOnly(readOnly);

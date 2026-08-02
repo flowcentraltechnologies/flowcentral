@@ -255,6 +255,10 @@ public class MiniFormWidget extends AbstractFlowCentralMultiControl implements F
         return getMiniForm().getScope().isMainForm();
     }
 
+    public boolean isPresent() throws UnifyException {
+        return getMiniForm() != null;
+    }
+    
     public Collection<FormSection> getFormSectionList() throws UnifyException {
         getMiniForm();
         return formSections.values();

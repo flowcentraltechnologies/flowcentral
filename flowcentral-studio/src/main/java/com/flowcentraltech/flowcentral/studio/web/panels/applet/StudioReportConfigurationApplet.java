@@ -42,7 +42,6 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
     }
 
     public void commitDesign() throws UnifyException {
@@ -51,31 +50,24 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
         }
     }
 
-    public void createDesign() throws UnifyException {
-        ReportConfiguration reportConfiguration = (ReportConfiguration) getForm().getFormBean();
-        Long reportConfigurationId = reportConfiguration.getId();
-        if (reportConfigurationId != null) {
-            String subTitle = reportConfiguration.getDescription();
-            ReportEditorPage reportEditorPage = constructNewReportEditorPage(reportConfiguration.getReportable(),
-                    reportConfigurationId, subTitle);
-            reportEditorPage.newEditor();
-            setDesign(reportEditorPage);
-        } else {
-            setDesign(null);
-        }
-    }
-
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        ReportConfiguration reportConfiguration = (ReportConfiguration) inst;
+        Long reportConfigurationId = reportConfiguration != null ? reportConfiguration.getId() : null;
+        ReportEditorPage reportEditorPage = reportConfigurationId != null
+                ? constructNewReportEditorPage(reportConfiguration.getReportable(), reportConfigurationId,
+                        reportConfiguration.getDescription())
+                : constructNewReportEditorPage(null, null, au().resolveSessionMessage("$m{reporteditor.newreport}"));
+        reportEditorPage.newEditor();
+        setDesign(reportEditorPage);
     }
 
     private ReportEditorPage constructNewReportEditorPage(String entityName, Object id, String subTitle)
             throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
-        EntityDef entityDef = getEntityDef(entityName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{reporteditor.reportdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        EntityDef entityDef = entityName != null ? getEntityDef(entityName) : null;
         return new ReportEditorPage(studio(), au(), entityDef, id, breadCrumbs);
     }
 

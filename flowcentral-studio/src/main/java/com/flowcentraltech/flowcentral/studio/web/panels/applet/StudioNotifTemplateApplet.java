@@ -55,31 +55,25 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet<
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
-    }
-
-    private void createDesign() throws UnifyException {
-        final NotificationTemplate template = (NotificationTemplate) getForm().getFormBean();
-        final Long templateId = template.getId();
-        if (templateId != null) {
-            String subTitle = template.getDescription();
-            NotifTemplateEditor notifTemplateEditor = constructNewNotifTemplateEditor(templateId, subTitle);
-            setDesign(notifTemplateEditor);
-        } else {
-            setDesign(null);
-        }
     }
 
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        final NotificationTemplate template = (NotificationTemplate) getForm().getFormBean();
+        final Long templateId = template != null ? template.getId() : null;
+        NotifTemplateEditor notifTemplateEditor = templateId != null
+                ? constructNewNotifTemplateEditor(templateId, template.getDescription())
+                : constructNewNotifTemplateEditor(null,
+                        au().resolveSessionMessage("$m{notiftemplateeditor.newnotiftemplate}"));
+        setDesign(notifTemplateEditor);
     }
 
     private NotifTemplateEditor constructNewNotifTemplateEditor(Object id, String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{notiftemplateeditor.notiftemplatedesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new NotifTemplateEditor(new MiniForm(MiniFormScope.MAIN_FORM, getForm().getCtx(), getFormTabDef(au())),
+        return new NotifTemplateEditor(
+                id != null ? new MiniForm(MiniFormScope.MAIN_FORM, getForm().getCtx(), getFormTabDef(au())) : null,
                 getHwtForm(), studio(), au(), breadCrumbs);
     }
 

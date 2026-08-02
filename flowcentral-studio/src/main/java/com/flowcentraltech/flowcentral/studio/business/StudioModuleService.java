@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
@@ -131,5 +132,17 @@ public interface StudioModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     void updateFormElements(Long appFormId, List<AppFormElement> elementList) throws UnifyException;
+
+    /**
+     * Updates report columns.
+     * 
+     * @param reportConfigurationId
+     *                   the configuration ID
+     * @param columnList
+     *                   the list of report columns
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateReportColumns(Long reportConfigurationId, List<ReportColumn> columnList) throws UnifyException;
 
 }

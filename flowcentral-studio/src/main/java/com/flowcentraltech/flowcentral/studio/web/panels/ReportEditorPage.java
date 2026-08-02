@@ -29,7 +29,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
-import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.ReportEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.ReportEditor.ReportColumn;
@@ -101,57 +100,63 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
     }
 
     public void commitDesign() throws UnifyException {
-        ReportConfiguration reportConfiguration = au().environment().find(ReportConfiguration.class, baseId);
-        List<com.flowcentraltech.flowcentral.report.entities.ReportColumn> columnList = Collections.emptyList();
-        if (reportEditor.getDesign() != null && reportEditor.getDesign().getColumns() != null) {
-            columnList = new ArrayList<com.flowcentraltech.flowcentral.report.entities.ReportColumn>();
-            for (ReportColumn editReportColumn : reportEditor.getDesign().getColumns()) {
-                com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn = new com.flowcentraltech.flowcentral.report.entities.ReportColumn();
-                reportColumn.setFieldName(editReportColumn.getFldNm());
-                reportColumn.setRenderWidget(editReportColumn.getWidget());
-                reportColumn.setColumnOrder(OrderType.fromCode(editReportColumn.getOrder()));
-                reportColumn.setHorizAlignType(HAlignType.fromCode(editReportColumn.getHorizAlign()));
-                reportColumn.setVertAlignType(VAlignType.fromCode(editReportColumn.getVertAlign()));
-                reportColumn.setDescription(editReportColumn.getDescription());
-                reportColumn.setFormatter(editReportColumn.getFormatter());
-                reportColumn.setWidth(editReportColumn.getWidth());
-                reportColumn.setBold(editReportColumn.isBold());
-                reportColumn.setGroup(editReportColumn.isGroup());
-                reportColumn.setGroupOnNewPage(editReportColumn.isGroupOnNewPage());
-                reportColumn.setSum(editReportColumn.isSum());
-                columnList.add(reportColumn);
+        if (isPresent()) {
+            List<com.flowcentraltech.flowcentral.report.entities.ReportColumn> columnList = Collections.emptyList();
+            if (reportEditor.getDesign() != null && reportEditor.getDesign().getColumns() != null) {
+                columnList = new ArrayList<com.flowcentraltech.flowcentral.report.entities.ReportColumn>();
+                for (ReportColumn editReportColumn : reportEditor.getDesign().getColumns()) {
+                    com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn = new com.flowcentraltech.flowcentral.report.entities.ReportColumn();
+                    reportColumn.setFieldName(editReportColumn.getFldNm());
+                    reportColumn.setRenderWidget(editReportColumn.getWidget());
+                    reportColumn.setColumnOrder(OrderType.fromCode(editReportColumn.getOrder()));
+                    reportColumn.setHorizAlignType(HAlignType.fromCode(editReportColumn.getHorizAlign()));
+                    reportColumn.setVertAlignType(VAlignType.fromCode(editReportColumn.getVertAlign()));
+                    reportColumn.setDescription(editReportColumn.getDescription());
+                    reportColumn.setFormatter(editReportColumn.getFormatter());
+                    reportColumn.setWidth(editReportColumn.getWidth());
+                    reportColumn.setBold(editReportColumn.isBold());
+                    reportColumn.setGroup(editReportColumn.isGroup());
+                    reportColumn.setGroupOnNewPage(editReportColumn.isGroupOnNewPage());
+                    reportColumn.setSum(editReportColumn.isSum());
+                    columnList.add(reportColumn);
+                }
             }
-        }
 
-        reportConfiguration.setColumnList(columnList);
-        au().environment().updateByIdVersion(reportConfiguration);
+            studio().updateReportColumns((Long) baseId, columnList);
+        }
     }
 
     public void newEditor() throws UnifyException {
-        ReportEditor.Builder teb = ReportEditor.newBuilder(entityDef);
-        for (com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn : au().environment()
-                .findAll(Query.of(com.flowcentraltech.flowcentral.report.entities.ReportColumn.class)
-                        .addEquals("reportConfigurationId", baseId).addOrder("id"))) {
-            teb.addColumn(reportColumn.getFieldName(), reportColumn.getRenderWidget(),
-                    reportColumn.getColumnOrder() != null ? reportColumn.getColumnOrder().code() : null,
-                    reportColumn.getHorizAlignType() != null ? reportColumn.getHorizAlignType().code() : null,
-                    reportColumn.getVertAlignType() != null ? reportColumn.getVertAlignType().code() : null,
-                    reportColumn.getDescription(), reportColumn.getFormatter(), reportColumn.getWidth(),
-                    reportColumn.isBold(), reportColumn.isGroup(), reportColumn.isGroupOnNewPage(),
-                    reportColumn.isSum());
-        }
+        if (entityDef != null) {
+            ReportEditor.Builder teb = ReportEditor.newBuilder(entityDef);
+            for (com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn : au().environment()
+                    .findAll(Query.of(com.flowcentraltech.flowcentral.report.entities.ReportColumn.class)
+                            .addEquals("reportConfigurationId", baseId).addOrder("id"))) {
+                teb.addColumn(reportColumn.getFieldName(), reportColumn.getRenderWidget(),
+                        reportColumn.getColumnOrder() != null ? reportColumn.getColumnOrder().code() : null,
+                        reportColumn.getHorizAlignType() != null ? reportColumn.getHorizAlignType().code() : null,
+                        reportColumn.getVertAlignType() != null ? reportColumn.getVertAlignType().code() : null,
+                        reportColumn.getDescription(), reportColumn.getFormatter(), reportColumn.getWidth(),
+                        reportColumn.isBold(), reportColumn.isGroup(), reportColumn.isGroupOnNewPage(),
+                        reportColumn.isSum());
+            }
 
-        TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.reportconfiguration.form.design}"),
-                "!fc-reporteditor", RendererType.SIMPLE_WIDGET);
-        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.reportconfiguration.form.preview}"),
-                "fc-reportpreviewpanel", RendererType.STANDALONE_PANEL);
-        reportEditor = teb.build();
-        reportPreview = new ReportPreview(au(), reportEditor);
-        final String appletName = null;
-        tabSheet = new TabSheet(tsdb.build(),
-                Arrays.asList(new TabSheetItem("reportEditor", appletName, reportEditor, DESIGN_INDEX, true),
-                        new TabSheetItem("reportPreview", appletName, reportPreview, PREVIEW_INDEX, true)));
-        tabSheet.setEventHandler(this);
+            TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
+            tsdb.addTabDef("editor", au().resolveSessionMessage("$m{studio.reportconfiguration.form.design}"),
+                    "!fc-reporteditor", RendererType.SIMPLE_WIDGET);
+            tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.reportconfiguration.form.preview}"),
+                    "fc-reportpreviewpanel", RendererType.STANDALONE_PANEL);
+            reportEditor = teb.build();
+            reportPreview = new ReportPreview(au(), reportEditor);
+            final String appletName = null;
+            tabSheet = new TabSheet(tsdb.build(),
+                    Arrays.asList(new TabSheetItem("reportEditor", appletName, reportEditor, DESIGN_INDEX, true),
+                            new TabSheetItem("reportPreview", appletName, reportPreview, PREVIEW_INDEX, true)));
+            tabSheet.setEventHandler(this);
+        }
+    }
+
+    public boolean isPresent() {
+        return reportEditor != null && reportPreview != null;
     }
 }
