@@ -39,6 +39,8 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
+import com.flowcentraltech.flowcentral.application.entities.AppFormElementQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumnQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
@@ -344,6 +346,17 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             for (AppTableColumn column : columnList) {
                 column.setAppTableId(appTableId);
                 environment().create(column);
+            }
+        }
+    }
+
+    @Override
+    public void updateFormElements(Long appFormId, List<AppFormElement> elementList) throws UnifyException {
+        environment().deleteAll(new AppFormElementQuery().appFormId(appFormId));
+        if (!DataUtils.isBlank(elementList)) {
+            for (AppFormElement element : elementList) {
+                element.setAppFormId(appFormId);
+                environment().create(element);
             }
         }
     }

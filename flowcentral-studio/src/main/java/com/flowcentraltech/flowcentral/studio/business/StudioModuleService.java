@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
+import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
@@ -117,6 +118,18 @@ public interface StudioModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void updateTableColumns(Long baseId, List<AppTableColumn> columnList) throws UnifyException;
+    void updateTableColumns(Long appTableId, List<AppTableColumn> columnList) throws UnifyException;
+
+    /**
+     * Updates form elements.
+     * 
+     * @param appFormId
+     *                   the form ID
+     * @param elementList
+     *                   the list of form elements
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateFormElements(Long appFormId, List<AppFormElement> elementList) throws UnifyException;
 
 }

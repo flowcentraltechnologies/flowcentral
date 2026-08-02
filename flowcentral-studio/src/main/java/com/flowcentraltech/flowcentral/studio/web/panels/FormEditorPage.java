@@ -25,7 +25,6 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
-import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
@@ -108,7 +107,6 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
 
     public void commitDesign() throws UnifyException {
         if (isPresent()) {
-            AppForm appForm = au().environment().find(AppForm.class, baseId);
             List<AppFormElement> elementList = Collections.emptyList();
             if (formEditor.getDesign() != null && formEditor.getDesign().getTabs() != null) {
                 elementList = new ArrayList<AppFormElement>();
@@ -174,8 +172,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                 }
             }
 
-            appForm.setElementList(elementList);
-            au().environment().updateByIdVersion(appForm);
+            studio().updateFormElements((Long) baseId, elementList);
         }
     }
 
