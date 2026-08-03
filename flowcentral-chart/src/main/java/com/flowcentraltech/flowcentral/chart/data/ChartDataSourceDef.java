@@ -106,6 +106,10 @@ public class ChartDataSourceDef implements VersionedEntityDef {
         return cacheRefreshRate;
     }
 
+    public boolean isWithCacheRefreshRate() {
+        return cacheRefreshRate != null;
+    }
+    
     @Override
     public Long getId() {
         return id;

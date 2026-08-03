@@ -24,7 +24,7 @@
 
 // Design panel
 !ui-panel:designBasePanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{headerBar designBodyPanel}
-	binding:applet.design
+	binding:applet
 !ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
 	components:$c{titleBlock}
 !fc-formbreadcrumbs:titleBlock binding:breadCrumbs

@@ -1470,7 +1470,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             loadFormAppendables(_currentFormAppletDef, form, inst);
         }
         
-        if (getRootHwtForm() == form) {
+        if (!updateType.isSwitchOnChange() && getRootHwtForm() == form) {
             onRootHwtFormUpdated(inst);
         }
     }

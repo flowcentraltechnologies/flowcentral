@@ -197,6 +197,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
     @Override
     public ChartDetails getChartDetails(ChartConfiguration chartConfiguration) throws UnifyException {
+        System.out.println("@prime: getChartDetails() chartConfiguration = " + chartConfiguration);
+        System.out.println("@prime: getChartDetails() isWithPreviewChartDef() = " + chartConfiguration.isWithPreviewChartDef());
         final ChartDef chartDef = chartConfiguration.isWithPreviewChartDef() ? chartConfiguration.getPreviewChartDef()
                 : getChartDef(chartConfiguration.getChart());
         final String viewOption = chartConfiguration.getViewOptionName();
@@ -353,7 +355,9 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
                     final Date takenOn = getNow();
                     final Date expiresOn = CalendarUtils.getDateWithFrequencyOffset(takenOn, FrequencyUnit.SECOND,
-                            chartDataSourceDef.getCacheRefreshRate().seconds());
+                            chartDataSourceDef.isWithCacheRefreshRate()
+                                    ? chartDataSourceDef.getCacheRefreshRate().seconds()
+                                    : 0L);
                     cdSnapshot.setTakenOn(takenOn);
                     cdSnapshot.setExpiresOn(expiresOn);
 

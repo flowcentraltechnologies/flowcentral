@@ -20,12 +20,10 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
-import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppChartApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -40,9 +38,6 @@ import com.tcdng.unify.web.ui.widget.Page;
 public class StudioAppChartAppletController extends
         AbstractStudioAppComponentAppletController<StudioAppChartApplet, StudioAppChartAppletPageBean> {
 
-    @Configurable
-    private ChartModuleService chartModuleService;
-
     public StudioAppChartAppletController() {
         super(StudioAppChartAppletPageBean.class);
     }
@@ -51,7 +46,7 @@ public class StudioAppChartAppletController extends
     protected StudioAppChartApplet createApplet(Page page, StudioModuleService studio, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        return new StudioAppChartApplet(page, studio, chartModuleService, au, pathVariables, applicationName,
+        return new StudioAppChartApplet(page, studio, au, pathVariables, applicationName,
                 appletWidgetReferences, formEventHandlers);
     }
 

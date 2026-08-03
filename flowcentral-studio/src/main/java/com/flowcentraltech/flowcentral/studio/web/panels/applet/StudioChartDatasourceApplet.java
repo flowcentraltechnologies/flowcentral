@@ -40,19 +40,16 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApplet<ChartDatasourceView> {
 
-    private final ChartModuleService cms;
-
-    public StudioChartDatasourceApplet(Page page, StudioModuleService sms, ChartModuleService cms, AppletUtilities au,
+    public StudioChartDatasourceApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        this.cms = cms;
 
         final EntityFieldSequence entityFieldSequence = (EntityFieldSequence) getHwtForm().getTabSheet()
                 .getTabSheetItem(3).getValObject();
         entityFieldSequence.setUseTimeSeries(true);
     }
-    
+
     public void reloadContent() throws UnifyException {
         if (getDesign() != null) {
             getDesign().reloadContent();
@@ -69,12 +66,12 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
         final ChartDataSource chartDataSource = (ChartDataSource) inst;
         final Long chartDataSourceId = chartDataSource != null ? chartDataSource.getId() : null;
-        ChartDatasourceView chartDatasourceView = chartDataSourceId != null? constructNewChartDatasourceView(
-                ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
-                chartDataSourceId, chartDataSource.getDescription())
-                : constructNewChartDatasourceView(
-                        null,
-                        null, au().resolveSessionMessage("$m{chartdatasourceeditor.newchartdatasource}"));
+        ChartDatasourceView chartDatasourceView = chartDataSourceId != null
+                ? constructNewChartDatasourceView(ApplicationNameUtils
+                        .getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
+                        chartDataSourceId, chartDataSource.getDescription())
+                : constructNewChartDatasourceView(null, null,
+                        au().resolveSessionMessage("$m{chartdatasourceeditor.newchartdatasource}"));
         chartDatasourceView.reloadContent();
         setDesign(chartDatasourceView);
     }
@@ -84,7 +81,8 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{chartdatasourceeditor.chartdatasourcedesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new ChartDatasourceView(studio(), au(), cms, chartDatasourceName, id, breadCrumbs);
+        return new ChartDatasourceView(studio(), au(), au().getComponent(ChartModuleService.class), chartDatasourceName,
+                id, breadCrumbs);
     }
 
 }

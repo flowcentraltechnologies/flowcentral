@@ -23,7 +23,7 @@
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}
 	components:$c{workflowEditorPagePanel}
-!fc-workfloweditorpagepanel:workflowEditorPagePanel
+!fc-workfloweditorpagepanel:workflowEditorPagePanel binding:design
 
 // Actions
 !ui-post:publishAct path:$n{/publish}

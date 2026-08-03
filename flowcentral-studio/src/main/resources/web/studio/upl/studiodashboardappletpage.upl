@@ -22,5 +22,5 @@
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}
 	components:$c{dashboardEditorPagePanel}
-!fc-dashboardeditorpagepanel:dashboardEditorPagePanel
+!fc-dashboardeditorpagepanel:dashboardEditorPagePanel binding:design
 

@@ -42,7 +42,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  */
 @Component("fc-entitytextselect") 
 @UplAttributes({
-        @UplAttribute(name = "limit", type = int.class, defaultVal = "20"),
+        @UplAttribute(name = "limit", type = int.class, defaultVal = "100"),
         @UplAttribute(name = "ref", type = String.class, mandatory = true),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "table-list"),

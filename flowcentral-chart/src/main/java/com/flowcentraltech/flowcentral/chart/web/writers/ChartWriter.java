@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.chart.web.writers;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.business.ChartOptionsProvider;
+import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
 import com.flowcentraltech.flowcentral.chart.data.ChartDetails;
 import com.flowcentraltech.flowcentral.chart.data.ChartSeries;
@@ -29,7 +30,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
@@ -60,9 +60,9 @@ public class ChartWriter extends AbstractWidgetWriter {
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         ChartWidget chartWidget = (ChartWidget) widget;
-        final String chartLongName = chartWidget.getValue(String.class);
-        if (!StringUtils.isBlank(chartLongName)) {
-            final ChartDetails chartDetails = chartModuleService.getChartDetails(chartWidget.getChartConfiguration());
+        final ChartConfiguration chartConfiguration = chartWidget.getChartConfiguration();
+        if (chartConfiguration != null && chartConfiguration.getChart() != null) {
+            final ChartDetails chartDetails = chartModuleService.getChartDetails(chartConfiguration);
             if (chartDetails.isPresent()) {
                 final ChartDef chartDef = chartDetails.getChartDef();
                 writer.write("<div ");

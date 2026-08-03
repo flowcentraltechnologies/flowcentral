@@ -4421,7 +4421,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" />
-						<field name="cacheRefreshRate" column="0" required="true" />
+						<field name="cacheRefreshRate" column="0" />
 					</section>
 				</tab>
 				<tab name="series"
