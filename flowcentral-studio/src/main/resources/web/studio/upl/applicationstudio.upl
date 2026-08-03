@@ -58,10 +58,10 @@
 	blankOption:$m{studio.application.utilities}
     eventHandler:$d{!ui-event event:onchange action:$c{currentAppChangeAct}}
 !ui-button:publishAppBtn caption:$m{button.publishapplication} styleClass:$e{fc-orangebutton} debounce:false
-	style:$s{margin-right:8px;}
+	style:$s{margin-right:4px;}
     eventHandler:$d{!ui-event event:onclick action:$c{publishAppAct}}
 !ui-button:newAppBtn caption:$m{button.newapplication} styleClass:$e{fc-actbutton} debounce:false
-	style:$s{margin-right:10px;}
+	style:$s{margin-right:6px;}
     eventHandler:$d{!ui-event event:onclick action:$c{newAppAct}}
     
 !ui-panel:navigationBand styleClass:$e{fc-topnavcontrol} components:$c{logoutLabel}
