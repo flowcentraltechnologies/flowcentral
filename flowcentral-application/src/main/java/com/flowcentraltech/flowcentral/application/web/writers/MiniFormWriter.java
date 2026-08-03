@@ -63,10 +63,10 @@ public class MiniFormWriter extends AbstractFlowCentralControlWriter {
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         MiniFormWidget miniFormWidget = (MiniFormWidget) widget;
-        writer.write("<div");
-        writeTagAttributes(writer, miniFormWidget);
-        writer.write(">");
         if (miniFormWidget.isPresent()) {
+            writer.write("<div");
+            writeTagAttributes(writer, miniFormWidget);
+            writer.write(">");
             if (miniFormWidget.isMainForm()) {
                 String errMsg = (String) getRequestAttribute(AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG);
                 if (!StringUtils.isBlank(errMsg)) {
@@ -141,9 +141,9 @@ public class MiniFormWriter extends AbstractFlowCentralControlWriter {
                 }
             }
 
-        }
+            writer.write("</div>");
 
-        writer.write("</div>");
+        }
     }
 
     @Override

@@ -81,8 +81,9 @@ public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApple
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{chartdatasourceeditor.chartdatasourcedesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        setBreadCrumbs(breadCrumbs);
         return new ChartDatasourceView(studio(), au(), au().getComponent(ChartModuleService.class), chartDatasourceName,
-                id, breadCrumbs);
+                id);
     }
 
 }

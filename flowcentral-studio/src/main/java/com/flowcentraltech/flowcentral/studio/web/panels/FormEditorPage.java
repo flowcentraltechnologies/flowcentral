@@ -26,7 +26,6 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
@@ -66,9 +65,8 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
 
     private FormPreview formPreview;
 
-    public FormEditorPage(StudioModuleService sms, AppletUtilities au, FormDef formDef, Object baseId,
-            BreadCrumbs breadCrumbs) {
-        super(sms, au, breadCrumbs);
+    public FormEditorPage(StudioModuleService sms, AppletUtilities au, FormDef formDef, Object baseId) {
+        super(sms, au);
         this.formDef = formDef;
         this.baseId = baseId;
     }

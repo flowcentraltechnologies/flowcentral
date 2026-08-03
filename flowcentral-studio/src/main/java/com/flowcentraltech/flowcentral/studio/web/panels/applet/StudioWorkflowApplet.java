@@ -81,7 +81,9 @@ public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet<Workf
         EntityDef entityDef = getEntityDef(entityName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{workfloweditor.workflowdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new WorkflowEditorPage(workflowModuleService, studio(), au(), entityDef, workflowId, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        
+        return new WorkflowEditorPage(workflowModuleService, studio(), au(), entityDef, workflowId);
     }
 
 }

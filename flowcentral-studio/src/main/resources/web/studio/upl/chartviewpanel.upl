@@ -20,6 +20,3 @@
 !ui-panel:chartPanel
 	layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{chartPreview}
 !fc-chart:chartPreview binding:configuration
-
-// Action
-!ui-postcommand:saveDesignAct command:saveDesign components:$c{chartPanel}

@@ -24,7 +24,6 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor;
@@ -54,8 +53,8 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
     private WorkflowModuleService workflowModuleService;
 
     public WorkflowEditorPage(WorkflowModuleService workflowModuleService, StudioModuleService sms, AppletUtilities au,
-            EntityDef entityDef, Long workflowId, BreadCrumbs breadCrumbs) {
-        super(sms, au, breadCrumbs);
+            EntityDef entityDef, Long workflowId) {
+        super(sms, au);
         this.workflowModuleService = workflowModuleService;
         this.entityDef = entityDef;
         this.workflowId = workflowId;

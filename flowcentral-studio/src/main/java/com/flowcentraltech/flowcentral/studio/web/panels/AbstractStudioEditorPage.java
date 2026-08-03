@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 
 /**
@@ -31,29 +30,14 @@ public abstract class AbstractStudioEditorPage {
     private final StudioModuleService sms;
 
     private final AppletUtilities au;
-    
-    private final BreadCrumbs breadCrumbs;
 
     private String displayItemCounter;
 
     private String displayItemCounterClass;
 
-    public AbstractStudioEditorPage(StudioModuleService sms, AppletUtilities au, BreadCrumbs breadCrumbs) {
+    public AbstractStudioEditorPage(StudioModuleService sms, AppletUtilities au) {
         this.sms = sms;
         this.au = au;
-        this.breadCrumbs = breadCrumbs;
-    }
-
-    public final String getMainTitle() {
-        return breadCrumbs.getLastBreadCrumb().getTitle();
-    }
-
-    public final String getSubTitle() {
-        return breadCrumbs.getLastBreadCrumb().getSubTitle();
-    }
-
-    public final BreadCrumbs getBreadCrumbs() {
-        return breadCrumbs;
     }
 
     public final StudioModuleService studio() {

@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
@@ -51,6 +52,8 @@ public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntity
 
     private final String applicationName;
 
+    private BreadCrumbs breadCrumbs;
+    
     private T design;
 
     public AbstractStudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au,
@@ -94,6 +97,10 @@ public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntity
         return typeTitle;
     }
 
+    public BreadCrumbs getBreadCrumbs() {
+        return breadCrumbs;
+    }
+
     public T getDesign() {
         return design;
     }
@@ -129,6 +136,10 @@ public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntity
 
     protected String getApplicationName() {
         return applicationName;
+    }
+
+    protected void setBreadCrumbs(BreadCrumbs breadCrumbs) {
+        this.breadCrumbs = breadCrumbs;
     }
     
     private void constructNewForm() throws UnifyException {

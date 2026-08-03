@@ -52,13 +52,6 @@ public class TableEditorPagePanel extends AbstractStudioEditorPagePanel {
         getTableEditorPage().getTablePreview().reload();
     }
 
-    @Action
-    public void saveDesign() throws UnifyException {
-        TableEditorPage tableEditorPage = getTableEditorPage();
-        tableEditorPage.commitDesign();
-        hintUser("$m{studioapptableapplet.tableeditor.success.hint}", tableEditorPage.getSubTitle());
-    }
-
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
         return false;

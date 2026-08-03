@@ -52,13 +52,6 @@ public class ReportEditorPagePanel extends AbstractStudioEditorPagePanel {
         getReportEditorPage().getReportPreview().reload();
     }
 
-    @Action
-    public void saveDesign() throws UnifyException {
-        ReportEditorPage reportEditorPage = getReportEditorPage();
-        reportEditorPage.commitDesign();
-        hintUser("$m{studioreportconfigurationapplet.reporteditor.success.hint}", reportEditorPage.getSubTitle());
-    }
-
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
         return false;

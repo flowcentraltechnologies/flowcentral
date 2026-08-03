@@ -49,13 +49,6 @@ public class EntityEditorPagePanel extends AbstractStudioEditorPagePanel {
         EntityEditorPage entityEditorPage = getEntityEditorPage();
         entityEditorPage.newEditor();
     }
-    
-    @Action
-    public void saveDesign() throws UnifyException {
-        EntityEditorPage entityEditorPage = getEntityEditorPage();
-        entityEditorPage.commitDesign();
-        hintUser("$m{studioappentityapplet.entityeditor.success.hint}", entityEditorPage.getSubTitle());
-    }
 
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {

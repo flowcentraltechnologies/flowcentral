@@ -19,7 +19,6 @@ import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Dashboard editor page panel.
@@ -49,13 +48,6 @@ public class DashboardEditorPagePanel extends AbstractStudioEditorPagePanel {
             setWidgetEditable("editSectionPanel", isEditable);
             setWidgetEditable("editTilePanel", isEditable);
         }
-    }
-
-    @Action
-    public void saveDesign() throws UnifyException {
-        DashboardEditorPage dashboardEditorPage = getDashboardEditorPage();
-        dashboardEditorPage.commitDesign();
-        hintUser("$m{studiodashboardapplet.dashboardeditor.success.hint}", dashboardEditorPage.getSubTitle());
     }
 
     protected boolean isAppletContextReadOnly() throws UnifyException {

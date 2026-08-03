@@ -67,8 +67,10 @@ public class StudioReportConfigurationApplet extends AbstractStudioAppComponentA
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{reporteditor.reportdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        setBreadCrumbs(breadCrumbs);
+        
         EntityDef entityDef = entityName != null ? getEntityDef(entityName) : null;
-        return new ReportEditorPage(studio(), au(), entityDef, id, breadCrumbs);
+        return new ReportEditorPage(studio(), au(), entityDef, id);
     }
 
 }

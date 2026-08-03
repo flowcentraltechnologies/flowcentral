@@ -23,7 +23,6 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
@@ -66,8 +65,8 @@ public class DashboardEditorPage extends AbstractStudioEditorPage implements Tab
     private DashboardPreview dashboardPreview;
 
     public DashboardEditorPage(StudioModuleService sms, AppletUtilities au, ChartModuleService cms,
-            DashboardDef dashboardDef, Object baseId, BreadCrumbs breadCrumbs) {
-        super(sms, au, breadCrumbs);
+            DashboardDef dashboardDef, Object baseId) {
+        super(sms, au);
         this.cms = cms;
         this.dashboardDef = dashboardDef;
         this.baseId = baseId;

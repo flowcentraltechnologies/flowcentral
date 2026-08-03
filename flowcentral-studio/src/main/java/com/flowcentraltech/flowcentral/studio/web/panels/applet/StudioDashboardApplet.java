@@ -87,7 +87,9 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<Dash
         DashboardDef dashboardDef = dms.getDashboardDef(dashboardName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{dashboardeditor.dashboarddesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new DashboardEditorPage(studio(), au(), cms, dashboardDef, id, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        
+        return new DashboardEditorPage(studio(), au(), cms, dashboardDef, id);
     }
 
 }

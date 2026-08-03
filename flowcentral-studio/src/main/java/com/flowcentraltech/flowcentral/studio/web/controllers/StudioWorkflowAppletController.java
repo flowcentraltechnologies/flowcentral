@@ -55,7 +55,7 @@ public class StudioWorkflowAppletController
         StudioWorkflowApplet applet = pageBean.getApplet();
         WorkflowEditorPage workflowEditorPage = applet.getDesign();
         workflowEditorPage.publish();
-        hintUser("$m{studioworkflowapplet.workfloweditor.publish.hint}", workflowEditorPage.getSubTitle());
+        hintUser("$m{studioworkflowapplet.workfloweditor.publish.hint}");
         return noResult();
     }
 

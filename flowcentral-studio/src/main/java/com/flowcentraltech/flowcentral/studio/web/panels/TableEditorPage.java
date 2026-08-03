@@ -25,7 +25,6 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
@@ -58,9 +57,8 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
 
     private TablePreview tablePreview;
 
-    public TableEditorPage(StudioModuleService sms, AppletUtilities au, EntityDef entityDef, Object baseId,
-            BreadCrumbs breadCrumbs) {
-        super(sms, au, breadCrumbs);
+    public TableEditorPage(StudioModuleService sms, AppletUtilities au, EntityDef entityDef, Object baseId) {
+        super(sms, au);
         this.entityDef = entityDef;
         this.baseId = baseId;
     }

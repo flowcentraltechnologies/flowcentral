@@ -19,7 +19,6 @@ import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Form editor page panel.
@@ -51,13 +50,6 @@ public class FormEditorPagePanel extends AbstractStudioEditorPagePanel {
             setWidgetEditable("editSectionPanel", isEditable);
             setWidgetEditable("editFieldPanel", isEditable);
         }
-    }
-
-    @Action
-    public void saveDesign() throws UnifyException {
-        FormEditorPage formEditorPage = getFormEditorPage();
-        formEditorPage.commitDesign();
-        hintUser("$m{studioappformapplet.formeditor.success.hint}", formEditorPage.getSubTitle());
     }
 
     @Override

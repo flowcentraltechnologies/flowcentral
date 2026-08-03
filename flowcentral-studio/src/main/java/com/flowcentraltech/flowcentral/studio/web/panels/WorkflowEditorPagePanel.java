@@ -73,13 +73,6 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
     }
 
     @Action
-    public void saveDesign() throws UnifyException {
-        WorkflowEditorPage workflowEditorPage = getWorkflowEditorPage();
-        workflowEditorPage.commitDesign();
-        hintUser("$m{studioworkflowapplet.workfloweditor.success.hint}", workflowEditorPage.getSubTitle());
-    }
-
-    @Action
     public void applySetValues() throws UnifyException {
         getWorkflowEditorPage().getWorkflowEditor().applySetValues();
         commandHidePopup();

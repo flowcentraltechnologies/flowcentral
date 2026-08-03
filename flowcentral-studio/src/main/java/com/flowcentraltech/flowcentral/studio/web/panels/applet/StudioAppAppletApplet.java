@@ -60,6 +60,8 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet<Appl
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{appleteditor.appletdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        setBreadCrumbs(breadCrumbs);
+        
         String tableName = null;
         String formName = null;
         if (id != null) {
@@ -68,7 +70,7 @@ public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet<Appl
             formName = appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
         }
 
-        return new AppletEditorPage(studio(), au(), tableName, formName, id, breadCrumbs);
+        return new AppletEditorPage(studio(), au(), tableName, formName, id);
     }
 
 }

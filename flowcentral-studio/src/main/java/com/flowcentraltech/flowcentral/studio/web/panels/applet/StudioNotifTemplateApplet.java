@@ -72,9 +72,11 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet<
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{notiftemplateeditor.notiftemplatedesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        setBreadCrumbs(breadCrumbs);
+        
         return new NotifTemplateEditor(
                 id != null ? new MiniForm(MiniFormScope.MAIN_FORM, getForm().getCtx(), getFormTabDef(au())) : null,
-                getHwtForm(), studio(), au(), breadCrumbs);
+                getHwtForm(), studio(), au());
     }
 
     private static FormTabDef getFormTabDef(AppletUtilities au) throws UnifyException {

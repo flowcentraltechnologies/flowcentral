@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
@@ -53,9 +52,8 @@ public class AppletEditorPage extends AbstractStudioEditorPage implements TabShe
 
     private FormPreview formPreview;
 
-    public AppletEditorPage(StudioModuleService sms, AppletUtilities au, String tableName, String formName, Object baseId,
-            BreadCrumbs breadCrumbs) {
-        super(sms, au, breadCrumbs);
+    public AppletEditorPage(StudioModuleService sms, AppletUtilities au, String tableName, String formName, Object baseId) {
+        super(sms, au);
         this.tableName = tableName;
         this.formName = formName;
         this.baseId = baseId;

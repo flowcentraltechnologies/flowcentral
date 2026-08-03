@@ -18,7 +18,7 @@
 // Applet panel
 !fc-studiochartdatasourceappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
 	refreshSwitchOnChange:$c{chartDatasourceViewPanel} binding:applet 
-	refreshOnUpdate:$c{chartViewPanel}
+	refreshOnUpdate:$c{chartDatasourceViewPanel}
 
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}

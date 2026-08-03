@@ -62,7 +62,8 @@ public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet<Enti
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{entityeditor.entitydesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new EntityEditorPage(studio(), au(), entityName, id, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        return new EntityEditorPage(studio(), au(), entityName, id);
     }
 
 }

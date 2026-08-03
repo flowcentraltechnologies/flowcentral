@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshot;
 import com.flowcentraltech.flowcentral.chart.data.CDSnapshotCategory;
@@ -58,8 +57,8 @@ public class ChartDatasourceView extends AbstractStudioEditorPage {
     private BeanListTable snapshotTable;
 
     public ChartDatasourceView(StudioModuleService sms, AppletUtilities au, ChartModuleService cms,
-            String chartDatasourceName, Object baseId, BreadCrumbs breadCrumbs) {
-        super(sms, au, breadCrumbs);
+            String chartDatasourceName, Object baseId) {
+        super(sms, au);
         this.cms = cms;
         this.chartDatasourceName = chartDatasourceName;
         this.baseId = baseId;

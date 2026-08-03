@@ -31,7 +31,6 @@ import com.flowcentraltech.flowcentral.studio.web.panels.ChartView;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
@@ -52,7 +51,6 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
     public void formSwitchOnChange() throws UnifyException {
         super.formSwitchOnChange();
         final Chart chart = (Chart) getForm().getFormBean();
-        System.out.println("@prime: formSwitchOnChange() chart = " + StringUtils.toXmlString(chart));
         ChartDef.Builder cdb = ChartDef.newBuilder(chart.getType(), chart.getPaletteType(), chart.getRule(),
                 "charts.preview", chart.getDescription(), chart.getId(), chart.getVersionNo());
         cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).category(chart.getCategory())
@@ -60,30 +58,26 @@ public class StudioAppChartApplet extends AbstractStudioAppComponentApplet<Chart
                 .height(DataUtils.convert(int.class, chart.getHeight())).stacked(chart.isStacked())
                 .smooth(chart.isSmooth());
         getDesign().getConfiguration().setPreviewChartDef(cdb.build());
-        System.out.println("@prime: design = " + getDesign());
-        System.out.println("@prime: getDesign().getConfiguration() = " + getDesign().getConfiguration());
     }
 
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
         final Chart chart = (Chart) inst;
         final Long chartId = chart != null ? chart.getId() : null;
-        System.out.println("@prime: onRootHwtFormUpdated() chartId = " + chartId);
         ChartView chartView = chartId != null
                 ? constructNewChartView(
                         ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chart.getName()),
                         chartId, chart.getDescription())
                 : constructNewChartView(null, null, au().resolveSessionMessage("$m{charteditor.newchart}"));
         setDesign(chartView);
-        System.out.println("@prime: design = " + getDesign());
-        System.out.println("@prime: getDesign().getConfiguration() = " + getDesign().getConfiguration());
     }
 
     private ChartView constructNewChartView(String chartName, Object id, String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{charteditor.chartdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new ChartView(studio(), au(), au().getComponent(ChartModuleService.class), chartName, id, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        return new ChartView(studio(), au(), au().getComponent(ChartModuleService.class), chartName, id);
     }
 
 }
