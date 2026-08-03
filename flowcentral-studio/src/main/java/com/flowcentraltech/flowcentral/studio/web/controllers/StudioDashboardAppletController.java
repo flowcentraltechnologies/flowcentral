@@ -20,7 +20,6 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
-import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.dashboard.business.DashboardModuleService;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioDashboardApplet;
@@ -44,9 +43,6 @@ public class StudioDashboardAppletController
     @Configurable
     private DashboardModuleService dashboardModuleService;
 
-    @Configurable
-    private ChartModuleService chartModuleService;
-
     public StudioDashboardAppletController() {
         super(StudioDashboardAppletPageBean.class);
     }
@@ -55,7 +51,7 @@ public class StudioDashboardAppletController
     protected StudioDashboardApplet createApplet(Page page, StudioModuleService studio, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        return new StudioDashboardApplet(page, studio, chartModuleService, dashboardModuleService, au, pathVariables,
+        return new StudioDashboardApplet(page, studio, dashboardModuleService, au, pathVariables,
                 applicationName, appletWidgetReferences, formEventHandlers);
     }
 

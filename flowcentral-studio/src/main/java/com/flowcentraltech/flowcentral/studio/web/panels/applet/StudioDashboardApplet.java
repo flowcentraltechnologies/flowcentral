@@ -41,18 +41,14 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<DashboardEditorPage> {
 
-    private final ChartModuleService cms;
-
     private final DashboardModuleService dms;
 
-    public StudioDashboardApplet(Page page, StudioModuleService sms, ChartModuleService cms, DashboardModuleService dms,
+    public StudioDashboardApplet(Page page, StudioModuleService sms,  DashboardModuleService dms,
             AppletUtilities au, List<String> pathVariables, String applicationName,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        this.cms = cms;
         this.dms = dms;
-        createDesign();
     }
     
     public void commitDesign() throws UnifyException {
@@ -61,24 +57,18 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<Dash
         }
     }
 
-    public void createDesign() throws UnifyException {
-        Dashboard dashboard = (Dashboard) getForm().getFormBean();
-        Long dashboardId = dashboard.getId();
-        if (dashboardId != null) {
-            String subTitle = dashboard.getDescription();
-            DashboardEditorPage dashboardEditorPage = constructNewDashboardEditorPage(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), dashboard.getName()),
-                    dashboardId, subTitle);
-            dashboardEditorPage.newEditor();
-            setDesign(dashboardEditorPage);
-        } else {
-            setDesign(null);
-        }
-    }
-
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        Dashboard dashboard = (Dashboard) inst;
+        Long dashboardId = dashboard != null ? dashboard.getId() : null;
+        DashboardEditorPage dashboardEditorPage = dashboardId != null
+                ? constructNewDashboardEditorPage(
+                        ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), dashboard.getName()),
+                        dashboardId, dashboard.getDescription())
+                : constructNewDashboardEditorPage(null, null,
+                        au().resolveSessionMessage("$m{dashboardeditor.newdashboard}"));
+        dashboardEditorPage.newEditor();
+        setDesign(dashboardEditorPage);
     }
 
     private DashboardEditorPage constructNewDashboardEditorPage(String dashboardName, Object id, String subTitle)
@@ -88,8 +78,8 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<Dash
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{dashboardeditor.dashboarddesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         setBreadCrumbs(breadCrumbs);
-        
-        return new DashboardEditorPage(studio(), au(), cms, dashboardDef, id);
+
+        return new DashboardEditorPage(studio(), au(), au().getComponent(ChartModuleService.class), dashboardDef, id);
     }
 
 }

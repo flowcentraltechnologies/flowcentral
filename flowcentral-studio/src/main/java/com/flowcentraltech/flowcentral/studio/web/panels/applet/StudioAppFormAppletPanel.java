@@ -33,9 +33,9 @@ public class StudioAppFormAppletPanel extends AbstractStudioAppComponentAppletPa
     @Action
     @Override
     public void update() throws UnifyException {
-        final StudioAppFormApplet sapplet = getValue(StudioAppFormApplet.class);
-        if (sapplet.isRootHwtForm()) {
-            sapplet.commitDesign();
+        final StudioAppFormApplet applet = getValue(StudioAppFormApplet.class);
+        if (applet.isRootHwtForm()) {
+            applet.commitDesign();
         }
 
         super.update();

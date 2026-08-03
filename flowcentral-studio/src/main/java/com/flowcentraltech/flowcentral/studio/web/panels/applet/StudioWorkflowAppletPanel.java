@@ -44,13 +44,12 @@ public class StudioWorkflowAppletPanel extends AbstractStudioAppComponentAppletP
     @Action
     @Override
     public void update() throws UnifyException {
-        super.update();
-
         final StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
         if (applet.isRootHwtForm()) {
             applet.commitDesign();
-            applet.reload();
         }
+
+        super.update();
     }
 
 }

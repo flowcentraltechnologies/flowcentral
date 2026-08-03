@@ -87,6 +87,10 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSectionQuery;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTileQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.report.entities.ReportColumnQuery;
@@ -109,6 +113,8 @@ import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils.StudioAppletNameParts;
 import com.flowcentraltech.flowcentral.studio.web.util.StudioWidgetWriterUtils;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -370,6 +376,37 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             for (ReportColumn reportColumn : columnList) {
                 reportColumn.setReportConfigurationId(reportConfigurationId);
                 environment().create(reportColumn);
+            }
+        }
+    }
+
+    @Override
+    public void updateDashboardElements(Long dashboardId, List<DashboardSection> sectionList,
+            List<DashboardTile> tileList) throws UnifyException {
+        environment().deleteAll(new DashboardSectionQuery().dashboardId(dashboardId));
+        environment().deleteAll(new DashboardTileQuery().dashboardId(dashboardId));
+        if (!DataUtils.isBlank(sectionList)) {
+            for (DashboardSection dashboardSection : sectionList) {
+                dashboardSection.setDashboardId(dashboardId);
+                environment().create(dashboardSection);
+            }
+        }
+        
+        if (!DataUtils.isBlank(tileList)) {
+            for (DashboardTile dashboardTile : tileList) {
+                dashboardTile.setDashboardId(dashboardId);
+                environment().create(dashboardTile);
+            }
+        }
+    }
+
+    @Override
+    public void updateWorkflowSteps(Long workflowId, List<WfStep> stepList) throws UnifyException {
+        environment().deleteAll(new WfStepQuery().workflowId(workflowId));
+        if (!DataUtils.isBlank(stepList)) {
+            for (WfStep step : stepList) {
+                step.setWorkflowId(workflowId);
+                environment().create(step);
             }
         }
     }

@@ -88,25 +88,31 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
     }
 
     public void commitDesign() throws UnifyException {
-        Workflow workflow = au().environment().find(Workflow.class, workflowId);
-        workflow.setStepList(new ArrayList<WfStep>(workflowEditor.getWorkflowSteps().values()));
-        au().environment().updateByIdVersion(workflow);
+        if (isPresent()) {
+            studio().updateWorkflowSteps(workflowId, new ArrayList<WfStep>(workflowEditor.getWorkflowSteps().values()));
+        }
     }
 
     public void newEditor() throws UnifyException {
-        WorkflowEditor.Builder web = WorkflowEditor.newBuilder(au(), entityDef, workflowId);
-        boolean isOldDesign = false;
-        for (WfStep step : au().environment()
-                .listAllWithChildren(Query.of(WfStep.class).addEquals("workflowId", workflowId).addOrder("id"))) {
-            web.addStep(step);
-            isOldDesign |= step.getDesignX() != 0;
-            isOldDesign |= step.getDesignY() != 0;
-        }
+        if (entityDef != null) {
+            WorkflowEditor.Builder web = WorkflowEditor.newBuilder(au(), entityDef, workflowId);
+            boolean isOldDesign = false;
+            for (WfStep step : au().environment()
+                    .listAllWithChildren(Query.of(WfStep.class).addEquals("workflowId", workflowId).addOrder("id"))) {
+                web.addStep(step);
+                isOldDesign |= step.getDesignX() != 0;
+                isOldDesign |= step.getDesignY() != 0;
+            }
 
-        workflowEditor = web.build();
-        if (!isOldDesign) {
-            new WorkflowLayout(workflowEditor.getDesign().getSteps()).apply();
+            workflowEditor = web.build();
+            if (!isOldDesign) {
+                new WorkflowLayout(workflowEditor.getDesign().getSteps()).apply();
+            }
         }
+    }
+
+    public boolean isPresent() {
+        return workflowEditor != null;
     }
 
     private static final int X_GAP = 220;

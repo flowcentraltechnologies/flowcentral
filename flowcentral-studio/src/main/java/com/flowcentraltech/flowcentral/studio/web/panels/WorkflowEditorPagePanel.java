@@ -34,7 +34,7 @@ public class WorkflowEditorPagePanel extends AbstractStudioEditorPagePanel {
     @Override
     public void switchState() throws UnifyException {
         final WorkflowEditorPage workflowEditorPage = getWorkflowEditorPage();
-        if (workflowEditorPage != null) {
+        if (workflowEditorPage != null && workflowEditorPage.isPresent()) {
             final WorkflowEditor workflowEditor = workflowEditorPage.getWorkflowEditor();
             final boolean readOnly = isAppletContextReadOnly();
             workflowEditor.setReadOnly(readOnly);

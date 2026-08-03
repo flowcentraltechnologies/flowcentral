@@ -47,7 +47,6 @@ public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet<Workf
             throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
         this.workflowModuleService = workflowModuleService;
-        createDesign();
     }
 
     public void commitDesign() throws UnifyException {
@@ -56,33 +55,26 @@ public class StudioWorkflowApplet extends AbstractStudioAppComponentApplet<Workf
         }
     }
 
-    public void createDesign() throws UnifyException {
-        Workflow workflow = (Workflow) getForm().getFormBean();
-        Long workflowId = workflow.getId();
-        if (workflowId != null) {
-            String subTitle = workflow.getDescription();
-            WorkflowEditorPage workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId,
-                    subTitle);
-            workflowEditorPage.newEditor();
-            setDesign(workflowEditorPage);
-        } else {
-            setDesign(null);
-        }
-    }
-
     @Override
     protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
-
+        Workflow workflow = (Workflow) inst;
+        Long workflowId = workflow != null ? workflow.getId() : null;
+        WorkflowEditorPage workflowEditorPage = workflowId != null
+                ? constructNewWorkflowEditorPage(workflow.getEntity(), workflowId, workflow.getDescription())
+                : constructNewWorkflowEditorPage(null, null,
+                        au().resolveSessionMessage("$m{workfloweditor.newworkflow}"));
+        workflowEditorPage.newEditor();
+        setDesign(workflowEditorPage);
     }
 
     private WorkflowEditorPage constructNewWorkflowEditorPage(String entityName, Long workflowId, String subTitle)
             throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
-        EntityDef entityDef = getEntityDef(entityName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{workfloweditor.workflowdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         setBreadCrumbs(breadCrumbs);
-        
+
+        EntityDef entityDef = entityName != null ? getEntityDef(entityName) : null;
         return new WorkflowEditorPage(workflowModuleService, studio(), au(), entityDef, workflowId);
     }
 

@@ -33,7 +33,7 @@ public class DashboardEditorPagePanel extends AbstractStudioEditorPagePanel {
     @Override
     public void switchState() throws UnifyException {
         final DashboardEditorPage dashboardEditorPage = getDashboardEditorPage();
-        if (dashboardEditorPage != null) {
+        if (dashboardEditorPage != null && dashboardEditorPage.isPresent()) {
             final boolean readOnly = isAppletContextReadOnly();
             DashboardEditor dashboardEditor = dashboardEditorPage.getDashboardEditor();
             dashboardEditor.setReadOnly(readOnly);

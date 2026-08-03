@@ -33,13 +33,12 @@ public class StudioDashboardAppletPanel extends AbstractStudioAppComponentApplet
     @Action
     @Override
     public void update() throws UnifyException {
-        super.update();
-
         final StudioDashboardApplet applet = getValue(StudioDashboardApplet.class);
         if (applet.isRootHwtForm()) {
             applet.commitDesign();
-            applet.reload();
         }
+
+        super.update();
     }
 
 }

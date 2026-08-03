@@ -23,10 +23,13 @@ import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
 import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.task.TaskMonitor;
 
@@ -144,5 +147,32 @@ public interface StudioModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     void updateReportColumns(Long reportConfigurationId, List<ReportColumn> columnList) throws UnifyException;
+
+    /**
+     * Updates dashboard elements
+     * 
+     * @param dashboardId
+     *                    the dashboard ID
+     * @param sectionList
+     *                    the section list
+     * @param tileList
+     *                    the tile list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateDashboardElements(Long dashboardId, List<DashboardSection> sectionList, List<DashboardTile> tileList)
+            throws UnifyException;
+
+    /**
+     * Updates workflow steps.
+     * 
+     * @param workflowId
+     *                   the workflow ID
+     * @param stepList
+     *                   the list of workflow steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateWorkflowSteps(Long workflowId, List<WfStep> stepList) throws UnifyException;
 
 }
