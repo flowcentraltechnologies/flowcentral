@@ -197,8 +197,6 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
     @Override
     public ChartDetails getChartDetails(ChartConfiguration chartConfiguration) throws UnifyException {
-        System.out.println("@prime: getChartDetails() chartConfiguration = " + chartConfiguration);
-        System.out.println("@prime: getChartDetails() isWithPreviewChartDef() = " + chartConfiguration.isWithPreviewChartDef());
         final ChartDef chartDef = chartConfiguration.isWithPreviewChartDef() ? chartConfiguration.getPreviewChartDef()
                 : getChartDef(chartConfiguration.getChart());
         final String viewOption = chartConfiguration.getViewOptionName();

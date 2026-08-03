@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.dashboard.web.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.chart.data.ChartConfiguration;
 import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.flowcentraltech.flowcentral.configuration.constants.DashboardColumnsType;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
@@ -68,19 +69,19 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
                             String renderer = null;
                             switch (dashboardTileDef.getType()) {
                                 case SPARKLINE:
-                                    renderer = "!fc-chart sparkLine:true binding:chart preferredHeight:"
+                                    renderer = "!fc-chart sparkLine:true binding:configuration preferredHeight:"
                                             + preferredHeight;
                                     break;
                                 case SIMPLE:
                                 default:
-                                    renderer = "!fc-chart sparkLine:false binding:chart preferredHeight:"
+                                    renderer = "!fc-chart sparkLine:false binding:configuration preferredHeight:"
                                             + preferredHeight;
                                     break;
                             }
 
                             widget = addExternalChildWidget(renderer);
                             widget.setValueStore(
-                                    createValueStore(new DashboardSlotDef(dashboardTileDef, optionDef)));
+                                    createValueStore(new SlotConfiguration(new DashboardSlotDef(dashboardTileDef, optionDef))));
                         }
 
                         slotList.add(new DashboardSlot(type.dimension().get(tileIndex), widget));
@@ -116,6 +117,19 @@ public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
     @Override
     protected void doOnPageConstruct() throws UnifyException {
 
+    }
+    
+    public static class SlotConfiguration {
+        
+        private final ChartConfiguration configuration;
+
+        public SlotConfiguration(ChartConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        public ChartConfiguration getConfiguration() {
+            return configuration;
+        }
     }
 
     public static class DashboardSlot {

@@ -41,14 +41,11 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<DashboardEditorPage> {
 
-    private final DashboardModuleService dms;
-
-    public StudioDashboardApplet(Page page, StudioModuleService sms,  DashboardModuleService dms,
+    public StudioDashboardApplet(Page page, StudioModuleService sms,
             AppletUtilities au, List<String> pathVariables, String applicationName,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        this.dms = dms;
     }
     
     public void commitDesign() throws UnifyException {
@@ -74,11 +71,13 @@ public class StudioDashboardApplet extends AbstractStudioAppComponentApplet<Dash
     private DashboardEditorPage constructNewDashboardEditorPage(String dashboardName, Object id, String subTitle)
             throws UnifyException {
         BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
-        DashboardDef dashboardDef = dms.getDashboardDef(dashboardName);
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{dashboardeditor.dashboarddesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         setBreadCrumbs(breadCrumbs);
 
+        DashboardDef dashboardDef = dashboardName != null
+                ? au().getComponent(DashboardModuleService.class).getDashboardDef(dashboardName)
+                : null;
         return new DashboardEditorPage(studio(), au(), au().getComponent(ChartModuleService.class), dashboardDef, id);
     }
 
