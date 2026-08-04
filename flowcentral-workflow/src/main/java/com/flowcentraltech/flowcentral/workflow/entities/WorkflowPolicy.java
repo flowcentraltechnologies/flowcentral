@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.Update;
 
 /**
  * Workflow entity policy.
@@ -36,15 +37,21 @@ public class WorkflowPolicy extends BaseApplicationEntityPolicy<Workflow> {
     private SystemModuleService systemModuleService;
 
     @Override
-    public Object preCreate(Workflow record, Date now) throws UnifyException {
-        record.setPublished(false);
-        return super.preCreate(record, now);
+    public Object preCreate(Workflow workflow, Date now) throws UnifyException {
+        workflow.setPublished(false);
+        return super.preCreate(workflow, now);
     }
 
     @Override
-    public void preUpdate(Workflow record, Date now) throws UnifyException {
-        record.setPublished(false);
-        super.preUpdate(record, now);
+    public void preUpdate(Workflow workflow, Date now) throws UnifyException {
+        workflow.setPublished(false);
+        super.preUpdate(workflow, now);
+    }
+
+    @Override
+    public void preUpdate(Update update, Date now) throws UnifyException {
+        update.add("published", false);
+        super.preUpdate(update, now);
     }
 
 }
