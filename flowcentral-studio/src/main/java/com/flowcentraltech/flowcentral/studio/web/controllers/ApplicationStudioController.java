@@ -206,7 +206,9 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         pageBean.setClientPushSync(clientUpdateSync);
         setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
 
-        setPageWidgetVisible("publishAppBtn", isRestrictedStudioMode());
+        final boolean restricted = isRestrictedStudioMode();
+        setPageWidgetVisible("publishAppBtn", restricted);
+        setPageWidgetVisible("logoutLabel", !restricted);
     }
 
     @Override
