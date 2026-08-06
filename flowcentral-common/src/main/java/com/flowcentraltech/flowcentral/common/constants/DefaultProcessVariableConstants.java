@@ -30,7 +30,7 @@ public interface DefaultProcessVariableConstants {
     
     String APP_URL = "appUrl";
     
-    String APP_HTML_LINK = "appHtmlLink";
+    String APP_HTML_LINK = "appHiddenLink";
     
     String ENTITY_NAME = "entityName";
     
@@ -50,7 +50,7 @@ public interface DefaultProcessVariableConstants {
 
     String WFITEM_LINK_VARIABLE = "wfItemLink";
 
-    String WFITEM_HTMLLINK_VARIABLE = "wfItemHtmlLink";
+    String WFITEM_HTMLLINK_VARIABLE = "wfItemHiddenLink";
 
     String PLAIN_PASSWORD = "plainPassword";
 }

@@ -326,6 +326,12 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
+    public SecuredLinkInfo getWorkItemSecuredLink(String appletName, Long itemEventId, String itemDesc, String heldBy)
+            throws UnifyException {
+        return securedLinkManager.getWorkItemSecuredLink(appletName, itemEventId, itemDesc, heldBy);
+    }
+
+    @Override
     public Long createDownloadLog(DownloadLog downloadLog) throws UnifyException {
         return (Long) environment().create(downloadLog);
     }

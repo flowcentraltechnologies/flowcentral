@@ -30,7 +30,9 @@ import java.util.TimeZone;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormatOverrideConstants;
+import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
+import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
@@ -45,6 +47,7 @@ import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
+import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.constants.SysDateFormatType;
@@ -379,6 +382,17 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return SecuredLinkContentInfo.NOT_PRESENT;
+    }
+
+    @Override
+    public SecuredLinkInfo getWorkItemSecuredLink(String appletName, Long itemEventId, String itemDesc, String heldBy)
+            throws UnifyException {
+        final int expirationInMinutes = systemModuleService.getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM,
+                appletName, itemEventId);
+        return getNewSecuredLink(SecuredLinkType.WORKFLOW_DECISION, itemDesc, parts.getOpenPath(), heldBy,
+                expirationInMinutes);
     }
 
     @Override

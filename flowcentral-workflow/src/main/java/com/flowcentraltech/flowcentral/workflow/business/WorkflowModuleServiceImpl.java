@@ -61,7 +61,6 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
-import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameParts;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.validation.Validator;
@@ -79,7 +78,6 @@ import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.DefaultProcessVariableConstants;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
-import com.flowcentraltech.flowcentral.common.constants.SecuredLinkType;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
@@ -1380,10 +1378,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
-        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM,
-                appletName, wfItem.getWfItemEventId());
-        return appletUtil.system().getNewSecuredLink(SecuredLinkType.WORKFLOW_DECISION, wfItem.getWfItemDesc(),
-                parts.getOpenPath(), wfItem.getHeldBy());
+        return appletUtil.system().getWorkItemSecuredLink(appletName, wfItem.getWfItemEventId(), wfItem.getWfItemDesc(),
+                wfItem.getHeldBy());
     }
 
     @SuppressWarnings("unchecked")
