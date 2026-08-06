@@ -386,10 +386,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepAlert.isIndividual());
                         }
 
-                        for (String roleCode : workflowRoleProvider.getParticipatingRoles(longName, wfStep.getName())) {
-                            wsdb.addParticipatingRole(roleCode);
-                        }
-
                         wdb.addWfStepDef(wsdb.build());
                     }
 
@@ -2161,10 +2157,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
 
             if (wfAlertDef.isAlertWorkflowRoles()) {
-                List<Recipient> roleRecipientList = notifRecipientProvider.getRecipientsByRole(tenantId,
-                        sender.getNotifType(), wfStepDef.getRoleSet());
-                if (!DataUtils.isBlank(roleRecipientList)) {
-                    recipientList.addAll(roleRecipientList);
+                List<String> roles = workflowRoleProvider.getParticipatingRoles(getServiceId(),
+                        transitionItem.getWfDef().getLongName(), wfStepDef.getName());
+                if (!DataUtils.isBlank(roles)) {
+                    List<Recipient> roleRecipientList = notifRecipientProvider.getRecipientsByRole(tenantId,
+                            sender.getNotifType(), roles);
+                    if (!DataUtils.isBlank(roleRecipientList)) {
+                        recipientList.addAll(roleRecipientList);
+                    }
                 }
             }
 

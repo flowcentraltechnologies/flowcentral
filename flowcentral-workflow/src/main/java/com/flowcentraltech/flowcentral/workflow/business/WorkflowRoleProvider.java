@@ -34,15 +34,17 @@ public interface WorkflowRoleProvider extends FlowCentralComponent {
     /**
      * Gets participating role.
      * 
+     * @param serviceId
+     *                  the service ID
      * @param workflow
-     *                 the workflow long name
+     *                  the workflow long name
      * @param step
-     *                 the workflow step name
+     *                  the workflow step name
      * @return list of participating role codes
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<String> getParticipatingRoles(String workflow, String step) throws UnifyException;
+    List<String> getParticipatingRoles(String serviceId, String workflow, String step) throws UnifyException;
     
     /**
      * Keeps already assigned role.

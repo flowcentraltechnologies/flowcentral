@@ -40,4 +40,9 @@ public abstract class AbstractStudioAppComponentAppletPanel extends AbstractEnti
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
     }
 
+    protected final String getServiceId() throws UnifyException {
+        return getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+    }
+
 }

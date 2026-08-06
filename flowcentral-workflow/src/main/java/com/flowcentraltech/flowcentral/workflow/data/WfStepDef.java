@@ -18,11 +18,9 @@ package com.flowcentraltech.flowcentral.workflow.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -124,8 +122,6 @@ public class WfStepDef {
 
     private List<FormActionDef> formActionDefList;
 
-    private Set<String> roleSet;
-
     private WfStepDef(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
             WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
             String nextStepName, String altNextStepName, String binaryConditionName, String readOnlyConditionName,
@@ -135,7 +131,7 @@ public class WfStepDef {
             int expiryMinutes, int delayMinutes, boolean audit, boolean branchOnly, boolean departmentOnly,
             boolean includeForwarder, boolean forwarderPreferred, String emails, String comments,
             WfStepSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList,
-            List<WfAlertDef> alertList, Set<String> roleSet) {
+            List<WfAlertDef> alertList) {
         this.appletDef = appletDef;
         this.type = type;
         this.priority = priority;
@@ -188,7 +184,6 @@ public class WfStepDef {
         this.routingList = routingList;
         this.wfSetValuesDef = wfSetValuesDef;
         this.alertList = alertList;
-        this.roleSet = roleSet;
     }
 
     public AppletDef getAppletDef() {
@@ -479,10 +474,6 @@ public class WfStepDef {
         return expirationAlertList;
     }
 
-    public Set<String> getRoleSet() {
-        return roleSet;
-    }
-
     public boolean isAutoFlow() {
         return type.isAutomatic() || type.isStart();
     }
@@ -513,10 +504,6 @@ public class WfStepDef {
 
     public boolean isEnd() {
         return type.isEnd();
-    }
-
-    public boolean isWithParticipatingRoles() {
-        return !roleSet.isEmpty();
     }
 
     public boolean isUserAction(String action) {
@@ -612,8 +599,6 @@ public class WfStepDef {
         private Map<String, WfRoutingDef> routingList;
 
         private Map<String, WfAlertDef> alertList;
-
-        private Set<String> roleSet;
 
         public Builder(AppletDef appletDef, AppletDef stepAppletDef, WorkflowStepType type,
                 WorkflowStepPriority priority, RecordActionType recordActionType, String stepAppletName,
@@ -726,15 +711,6 @@ public class WfStepDef {
             return this;
         }
 
-        public Builder addParticipatingRole(String roleCode) {
-            if (roleSet == null) {
-                roleSet = new HashSet<String>();
-            }
-
-            roleSet.add(roleCode);
-            return this;
-        }
-
         public WfStepDef build() {
             return new WfStepDef(appletDef, stepAppletDef, type, priority, recordActionType, stepAppletName,
                     nextStepName, altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
@@ -742,8 +718,7 @@ public class WfStepDef {
                     appletSetValuesName, policy, rule, name, description, label, reminderMinutes, criticalMinutes,
                     expiryMinutes, delayMinutes, audit, branchOnly, departmentOnly, includeForwarder,
                     forwarderPreferred, emails, comments, wfSetValuesDef, DataUtils.unmodifiableMap(userActionList),
-                    DataUtils.unmodifiableValuesList(routingList), DataUtils.unmodifiableValuesList(alertList),
-                    DataUtils.unmodifiableSet(roleSet));
+                    DataUtils.unmodifiableValuesList(routingList), DataUtils.unmodifiableValuesList(alertList));
         }
     }
 

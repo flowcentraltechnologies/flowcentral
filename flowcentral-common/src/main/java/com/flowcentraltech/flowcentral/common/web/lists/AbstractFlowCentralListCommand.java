@@ -51,6 +51,11 @@ public abstract class AbstractFlowCentralListCommand<T extends ListParam> extend
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
     }
 
+    protected final String getServiceId() throws UnifyException {
+        return getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+    }
+
     protected final EnvironmentService environment() {
         return environmentService;
     }
