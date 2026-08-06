@@ -85,9 +85,9 @@ public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralSe
     }
 
     @Override
-    public List<String> getParticipatingRoles(String serviceId, String workflow, String step) throws UnifyException {
+    public Set<String> getParticipatingRoles(String serviceId, String workflow, String step) throws UnifyException {
         ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(workflow);
-        return environment().valueList(String.class, "roleCode", new WfStepRoleQuery().workflowRunnable(true)
+        return environment().valueSet(String.class, "roleCode", new WfStepRoleQuery().workflowRunnable(true)
                 .applicationName(parts.getApplicationName()).workflowName(parts.getEntityName()).wfStepName(step));
     }
 

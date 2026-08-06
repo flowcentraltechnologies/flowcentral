@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.workflow.business;
 
 import java.util.List;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.workflow.data.WorkflowDesignation;
@@ -44,7 +45,7 @@ public interface WorkflowRoleProvider extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<String> getParticipatingRoles(String serviceId, String workflow, String step) throws UnifyException;
+    Set<String> getParticipatingRoles(String serviceId, String workflow, String step) throws UnifyException;
     
     /**
      * Keeps already assigned role.

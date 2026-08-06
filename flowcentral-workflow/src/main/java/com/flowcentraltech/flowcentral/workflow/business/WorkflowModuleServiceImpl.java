@@ -2157,7 +2157,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
 
             if (wfAlertDef.isAlertWorkflowRoles()) {
-                List<String> roles = workflowRoleProvider.getParticipatingRoles(getServiceId(),
+                Set<String> roles = workflowRoleProvider.getParticipatingRoles(getServiceId(),
                         transitionItem.getWfDef().getLongName(), wfStepDef.getName());
                 if (!DataUtils.isBlank(roles)) {
                     List<Recipient> roleRecipientList = notifRecipientProvider.getRecipientsByRole(tenantId,
