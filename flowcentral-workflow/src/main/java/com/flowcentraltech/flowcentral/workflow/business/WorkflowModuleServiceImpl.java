@@ -1262,7 +1262,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             } else {
                 // Workflow for wizard applets
-                List<String> wfWizardPrivList = appletUtil.applicationPrivilegeManager().findRolePrivileges(
+                Set<String> wfWizardPrivList = appletUtil.applicationPrivilegeManager().findRolePrivileges(
                         ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE, roleCode);
                 if (!DataUtils.isBlank(wfWizardPrivList)) {
                     for (String wfWizardPrivName : wfWizardPrivList) {

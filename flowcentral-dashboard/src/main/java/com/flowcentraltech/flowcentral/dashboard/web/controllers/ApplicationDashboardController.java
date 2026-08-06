@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.dashboard.web.controllers;
 
-import java.util.List;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameParts;
@@ -111,7 +111,7 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         if (pageBean.getDashboardSlate() == null || (!StringUtils.isBlank(pageBean.getSelDashboard())
                 && !dashboardModuleService.getDashboardDef(pageBean.getSelDashboard()).isActive())) {
             UserToken userToken = getUserToken();
-            List<String> roleDashboardList = applicationPrivilegeManager.findRolePrivileges(
+            Set<String> roleDashboardList = applicationPrivilegeManager.findRolePrivileges(
                     ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE, userToken.getRoleCode());
             if (!roleDashboardList.isEmpty()) {
                 for (String privilege : roleDashboardList) {

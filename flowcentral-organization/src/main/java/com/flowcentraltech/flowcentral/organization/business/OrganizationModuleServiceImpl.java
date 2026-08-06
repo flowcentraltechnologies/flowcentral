@@ -319,15 +319,26 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
+    public Set<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
         if (getUserToken().isReservedUser()) {
-            return environment().valueList(String.class, "code",
+            return environment().valueSet(String.class, "code",
                     new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode));
         }
 
-        return environment().valueList(String.class, "privilegeCode",
+        return environment().valueSet(String.class, "privilegeCode",
                 new RolePrivilegeQuery().roleWfItemVersionType(WfItemVersionType.ORIGINAL)
                         .privilegeCatCode(privilegeCategoryCode).roleCode(roleCode));
+    }
+
+    @Override
+    public Set<String> findPrivilegeRoles(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
+        if (getUserToken().isReservedUser()) {
+            return Collections.emptySet();
+        }
+
+        return environment().valueSet(String.class, "roleCode",
+                new RolePrivilegeQuery().roleWfItemVersionType(WfItemVersionType.ORIGINAL)
+                        .privilegeCatCode(privilegeCategoryCode).privilegeCode(privilegeCode));
     }
 
     @Override

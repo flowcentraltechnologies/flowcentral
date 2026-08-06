@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
 /**
- * Test Appliaction Privilege Manager.
+ * Test application privilege manager.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
@@ -72,8 +72,13 @@ public class TestApplicationPrivilegeManagerImpl extends AbstractFlowCentralComp
     }
 
     @Override
-    public List<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
-        return Collections.emptyList();
+    public Set<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public Set<String> findPrivilegeRoles(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
+        return Collections.emptySet();
     }
 
     @Override

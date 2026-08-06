@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
-import java.util.List;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -117,7 +117,20 @@ public interface ApplicationPrivilegeManager extends FlowCentralComponent, RoleP
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException;
+    Set<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException;
+    
+    /**
+     * Finds privilege roles.
+     * 
+     * @param privilegeCategoryCode
+     *                              the privilege category code
+     * @param privilegeCode
+     *                              the privilege code
+     * @return list of role codes
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Set<String> findPrivilegeRoles(String privilegeCategoryCode, String privilegeCode) throws UnifyException;
 
     /**
      * Assigns privilege to a role.

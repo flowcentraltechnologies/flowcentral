@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.PortalReportProvider;
@@ -591,7 +592,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<ReportListing> getRoleReportListing(String roleCode) throws UnifyException {
-        List<String> privList = appletUtilities.applicationPrivilegeManager()
+        Set<String> privList = appletUtilities.applicationPrivilegeManager()
                 .findRolePrivileges(ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE, roleCode);
         if (!DataUtils.isBlank(privList)) {
             List<ReportListing> resultList = new ArrayList<ReportListing>();

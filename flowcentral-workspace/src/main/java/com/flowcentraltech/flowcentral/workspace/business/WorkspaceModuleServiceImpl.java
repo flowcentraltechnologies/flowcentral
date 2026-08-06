@@ -91,7 +91,7 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<String> findRoleWorkspaceCodes(String roleCode) throws UnifyException {
-        List<String> privilegeCodes = appPrivilegeManager
+        Set<String> privilegeCodes = appPrivilegeManager
                 .findRolePrivileges(ApplicationPrivilegeConstants.APPLICATION_WORKSPACE_CATEGORY_CODE, roleCode);
         if (!DataUtils.isBlank(privilegeCodes)) {
             List<String> workspaceCodes = new ArrayList<String>();
