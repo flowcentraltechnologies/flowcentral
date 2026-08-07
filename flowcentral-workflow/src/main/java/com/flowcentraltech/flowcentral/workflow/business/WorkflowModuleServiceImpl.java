@@ -114,6 +114,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntitySingleFormItem;
+import com.flowcentraltech.flowcentral.workflow.data.WorkItemEvent;
 import com.flowcentraltech.flowcentral.workflow.data.WorkflowDesignation;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
@@ -1012,6 +1013,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return WfReviewMode.SINGLEFORM.equals(wfReviewMode)
                 ? new WorkEntitySingleFormItem(workEntity, emails, comments, attachments, errors)
                 : new WorkEntityItem(workEntity, emails, comments, attachments, errors);
+    }
+
+    @Override
+    public WorkItemEvent getWfItemEvent(Long wfItemEventId) throws UnifyException {
+        WfItemEvent wfItemEvent = environment().list(WfItemEvent.class, wfItemEventId);
+        return new WorkItemEvent(wfItemEvent.getWfStepName(), wfItemEvent.getApplicationName(),
+                wfItemEvent.getWorkflowName(), wfItemEvent.getEntity(), wfItemEvent.getOriginWorkRecId());
     }
 
     @Override
