@@ -1992,10 +1992,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private WfItemAccessible createWfItemAccessible(WfItem wfItem, WorkEntity wfEntityInst) {
-        return new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getBranchCode(), wfItem.getDepartmentCode(),
-                wfItem.getWfItemDesc(), wfItem.getWorkflowName(), wfEntityInst.getPreferredWorkflowName(),
-                wfItem.getWfStepName(), wfItem.getEntity(), wfItem.getInitiatedBy(), wfItem.getCreateDt(),
-                wfItem.getStepDt(), wfItem.getReminderDt(), wfItem.getExpectedDt(), wfItem.getCriticalDt());
+        return new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getWfItemEventId(), wfItem.getBranchCode(),
+                wfItem.getDepartmentCode(), wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
+                wfEntityInst.getPreferredWorkflowName(), wfItem.getWfStepName(), wfItem.getEntity(),
+                wfItem.getInitiatedBy(), wfItem.getCreateDt(), wfItem.getStepDt(), wfItem.getReminderDt(),
+                wfItem.getExpectedDt(), wfItem.getCriticalDt());
     }
 
     @SuppressWarnings("unchecked")
