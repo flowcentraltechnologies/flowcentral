@@ -63,8 +63,8 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
     @Configurable
     private CodeGenerationProvider codeGenerationProvider;
 
-    private static final List<String> applicationAppletList = Collections.unmodifiableList(
-            Arrays.asList("studio.manageApplication", "system.manageDataSourceConnection"));
+    private static final List<String> applicationAppletList = Collections
+            .unmodifiableList(Arrays.asList("studio.manageApplication", "system.manageDataSourceConnection"));
 
     private static final List<String> synchronizationAppletList = Collections
             .unmodifiableList(Arrays.asList("studio.applicationSynchronization", "studio.delegateCreateSynchronization",
@@ -80,6 +80,10 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
     private static final List<StudioAppComponentType> utilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.APPLICATION, StudioAppComponentType.SNAPSHOT,
                     StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.CODEGENERATION));
+
+    private static final List<StudioAppComponentType> utilMenuCategoryRestrictedList = Collections
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.APPLICATION, StudioAppComponentType.SNAPSHOT,
+                    StudioAppComponentType.CODEGENERATION));
 
     private static final List<StudioAppComponentType> collabUtilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.APPLICATION, StudioAppComponentType.SNAPSHOT,
@@ -130,7 +134,8 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
         final boolean restrictedStudio = isRestrictedStudioMode();
         final List<StudioAppComponentType> selMenuCategoryList = application
                 ? (restrictedStudio ? restrictedMenuCategoryList : menuCategoryList)
-                : (isCollaborationEnabled ? collabUtilMenuCategoryList : utilMenuCategoryList);
+                : (isCollaborationEnabled ? collabUtilMenuCategoryList
+                        : (restrictedStudio ? utilMenuCategoryRestrictedList : utilMenuCategoryList));
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
         if (currCategory == null) {
             currCategory = getSessionAttribute(StudioAppComponentType.class,
@@ -146,9 +151,10 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
 
         writer.write("<div style=\"display:table;width:100%;height:100%;\">");
         if (searchable) {
-            writer.write("<div style=\"display:table-row;\"><div class=\"mtop\" style=\"display:table-cell;\"></div></div>");
+            writer.write(
+                    "<div style=\"display:table-row;\"><div class=\"mtop\" style=\"display:table-cell;\"></div></div>");
         }
-        
+
         writer.write("<div style=\"display:table-row;\">");
         // Category
         writer.write("<div class=\"menucatbar\" style=\"display:table-cell;vertical-align:top;\">");
@@ -215,8 +221,9 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
             throws UnifyException {
         final StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
         if (studioMenuWidget.getMenuSectionId().equals(sectionId)) {
-            final String applicationName =  getDocumentAttribute(String.class,
-                    AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);;
+            final String applicationName = getDocumentAttribute(String.class,
+                    AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
+            ;
             writer.write("<ul>");
             JsonWriter mjw = new JsonWriter();
             mjw.beginArray();
@@ -242,8 +249,8 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
                             : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
                                     : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
                                             : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
-                                                    : studioModuleService.findAppletDefs(applicationName,
-                                                                    currCategory, searchInput)))));
+                                                    : studioModuleService.findAppletDefs(applicationName, currCategory,
+                                                            searchInput)))));
 
             for (AppletDef appletDef : appletDefList) {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot
