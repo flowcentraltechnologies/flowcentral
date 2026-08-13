@@ -615,6 +615,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     private void installStudioFeatures(final ModuleInstall moduleInstall) throws UnifyException {
         if (StudioModuleNameConstants.STUDIO_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
+            if (appletUtilities.applicationPrivilegeManager() != null) {
             final Long applicationId = appletUtilities.application().getApplicationId("studio");
             appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
@@ -624,6 +625,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
                     PrivilegeNameUtils.getFeaturePrivilegeName(StudioFeatureConstants.DOWNLOAD_SNAPSHOT),
                     resolveApplicationMessage("$m{studio.privilege.downloadsnapshot}"));
+            }
         }
     }
 

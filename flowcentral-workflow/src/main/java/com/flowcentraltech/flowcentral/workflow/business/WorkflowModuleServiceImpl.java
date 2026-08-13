@@ -710,7 +710,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void keepAlreadyAssignedRoles(String applicationName, String workflowName, List<WfStep> stepList)
             throws UnifyException {
+        if (workflowRoleProvider != null) {
         workflowRoleProvider.keepAlreadyAssignedRoles(applicationName, workflowName, stepList);
+        }
     }
 
     @Override

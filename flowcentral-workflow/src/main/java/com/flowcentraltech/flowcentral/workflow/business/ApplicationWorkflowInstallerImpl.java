@@ -266,11 +266,13 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         environment().updateByIdVersion(oldAppFormWizard);
                     }
 
+                    if (applicationPrivilegeManager != null) {
                     applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                             ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE,
                             PrivilegeNameUtils.getWfWizardPrivilegeName(ApplicationNameUtils
                                     .getApplicationEntityLongName(applicationName, wfWizardConfig.getName())),
                             description);
+                    }
                 }
 
                 logDebug(taskMonitor, "Installed [{0}] application workflow wizards...",

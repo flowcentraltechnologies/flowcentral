@@ -273,6 +273,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
 
                 final String privilegeCode = PrivilegeNameUtils.getReportablePrivilegeName(
                         ApplicationNameUtils.ensureLongNameReference(np.getApplicationName(), appEntity.getName()));
+                if (au.applicationPrivilegeManager() != null) {
                 if (!au.applicationPrivilegeManager().isRegisteredPrivilege(
                         ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE, privilegeCode)) {
                     au.applicationPrivilegeManager().registerPrivilege(ConfigType.CUSTOM, applicationId,
@@ -284,6 +285,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 if (userToken != null && !userToken.isReservedUser() && au.system().getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
                     au.applicationPrivilegeManager().assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
+                }
                 }
             }
         }
