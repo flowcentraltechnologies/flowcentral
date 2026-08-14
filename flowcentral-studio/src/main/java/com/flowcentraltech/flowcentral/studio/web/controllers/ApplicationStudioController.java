@@ -155,7 +155,8 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         }
 
         Application application = new Application();
-        application.setModuleId(createAppForm.getModuleId());
+        application.setModuleId(
+                isRestrictedStudioMode() ? system().findModule("defaultmod").getId() : createAppForm.getModuleId());
         application.setName(createAppForm.getApplicationName());
         application.setDescription(createAppForm.getApplicationDesc());
         application.setLabel(createAppForm.getApplicationLabel());

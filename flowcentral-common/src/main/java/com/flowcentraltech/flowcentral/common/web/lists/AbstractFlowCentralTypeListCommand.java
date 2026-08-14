@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
@@ -73,6 +75,21 @@ public abstract class AbstractFlowCentralTypeListCommand<T extends UnifyComponen
 
     protected MessageResolver getMessageResolver() {
         return messageResolver;
+    }
+
+    protected final boolean isEnterprise() throws UnifyException {
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(
+                getContainerSetting(String.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
+    }
+
+    protected final boolean isRestrictedStudioMode() throws UnifyException {
+        return getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+    }
+
+    protected final String getServiceId() throws UnifyException {
+        return getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
     }
 
     private List<UnifyComponentConfig> getConfigList() throws UnifyException {

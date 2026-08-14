@@ -335,13 +335,14 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             if (appletDefList == null) {
                 appletDefList = new ArrayList<AppletDef>();
             }
-
-            appletDefList.add(0, appletDefMap.get(StudioNameUtils.getStudioAppletName(applicationName, type, 0L)));
+            
             if (type.isEntityType()) {
                 appletDefList.add(0, appletUtilities.getAppletDef("studio.createTableEntity"));
-                appletDefList.add(0, appletUtilities.getAppletDef("studio.createCsvEntity"));
-                appletDefList.add(0, appletUtilities.getAppletDef("studio.createJsonEntity"));
+//                appletDefList.add(0, appletUtilities.getAppletDef("studio.createCsvEntity"));
+//                appletDefList.add(0, appletUtilities.getAppletDef("studio.createJsonEntity"));
             }            
+
+            appletDefList.add(0, appletDefMap.get(StudioNameUtils.getStudioAppletName(applicationName, type, 0L)));
         }
 
         return appletDefList != null ? appletDefList : Collections.emptyList();

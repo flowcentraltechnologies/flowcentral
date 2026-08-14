@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  */
 @Component("fc-reportrunnerpanel")
 @UplBinding("web/common/upl/reportrunnerpanel.upl")
-public class ReportRunnerPanel extends BaseDialogPanel {
+public class ReportRunnerPanel extends AbstractFlowCentralDialogPanel {
 
     @Action
     @Override

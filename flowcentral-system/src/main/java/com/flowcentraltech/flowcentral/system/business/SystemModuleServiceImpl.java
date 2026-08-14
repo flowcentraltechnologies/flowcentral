@@ -504,23 +504,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
     public List<Long> getPrimaryMappedTenantIds() throws UnifyException {
         // TODO Mapped
         return Arrays.asList(Entity.PRIMARY_TENANT_ID);
-//        List<Long> tenantIds = environment().valueList(Long.class, "id",
-//                new MappedTenantQuery().ignoreEmptyCriteria(true));
-//        Long actualPrimaryTenantId = getSysParameterValue(Long.class,
-//                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
-//        if (actualPrimaryTenantId != null) {
-//            final int len = tenantIds.size();
-//            for (int i = 0; i < len; i++) {
-//                if (tenantIds.get(i).equals(actualPrimaryTenantId)) {
-//                    tenantIds.set(i, Entity.PRIMARY_TENANT_ID);
-//                    break;
-//                }
-//            }
-//        } else {
-//            return Arrays.asList(Entity.PRIMARY_TENANT_ID);
-//        }
-//
-//        return tenantIds;
     }
 
     @Override
@@ -790,6 +773,17 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
             throws UnifyException {
+        if (isRestrictedStudioMode()) {
+            if (!environment().exists(new ModuleQuery().name("defaultmod"))) {
+                Module module = new Module();
+                module.setName("defaultmod");
+                module.setDescription("Default Module");
+                module.setLabel("Default Module");
+                module.setShortCode("DFL");
+                environment().create(module);
+            }
+        }
+
         installModuleAndSystemParameters(moduleInstall);
     }
 
