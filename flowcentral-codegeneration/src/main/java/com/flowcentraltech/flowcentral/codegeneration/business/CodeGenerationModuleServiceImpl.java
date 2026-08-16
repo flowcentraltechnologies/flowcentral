@@ -15,7 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.codegeneration.business;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +28,16 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.DefaultInvoker;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.InvocationResult;
+import org.apache.maven.shared.invoker.Invoker;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
@@ -127,21 +140,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections.unmodifiableList(
-            Arrays.asList(
-                    "charts-xml-generator",
-                    "dashboards-xml-generator",
-                    "notification-templates-xml-generator",
-                    "notification-largetexts-xml-generator",
-                    "reports-xml-generator",
-                    "workflows-xml-generator",
-                    "help-sheets-xml-generator",
-                    "application-xml-generator"));
+            Arrays.asList("charts-xml-generator", "dashboards-xml-generator", "notification-templates-xml-generator",
+                    "notification-largetexts-xml-generator", "reports-xml-generator", "workflows-xml-generator",
+                    "help-sheets-xml-generator", "application-xml-generator"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME,
             description = "Generate Extension Module Files Task",
             parameters = { @Parameter(name = CodeGenerationTaskConstants.CODEGENERATION_ITEM,
                     description = "Code Generation Item", type = CodeGenerationItem.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
     public int generateExtensionModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
         Date now = environment().getNow();
@@ -158,8 +165,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
-                        moduleName, messageReplacements, false);
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(
+                        taskMonitor, mainCtx, moduleName, messageReplacements, false);
 
                 // Generate applications
                 List<Application> applicationList = environment()
@@ -260,8 +267,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
-                        moduleName, messageReplacements, true);
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(
+                        taskMonitor, mainCtx, moduleName, messageReplacements, true);
 
                 // Generate applications
                 List<Application> applicationList = environment()
@@ -308,15 +315,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private static final List<String> EXCLUDED_UTILITIES_MODULES = Collections
-            .unmodifiableList(Arrays.asList("application", "codegeneration", "collaboration", "dashboard",
-                    "integration", "notification", "report", "studio", "workflow", "workspace"));
+    private static final List<String> EXCLUDED_UTILITIES_MODULES = Collections.unmodifiableList(Arrays.asList(
+            "application", "codegeneration", "collaboration", "chart", "dashboard", "organization", "security",
+            "osmessaging", "integration", "notification", "report", "system", "studio", "workflow", "workspace"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_UTILITIES_MODULE_FILES_TASK_NAME,
             description = "Generate Utilities Module Files Task",
             parameters = { @Parameter(name = CodeGenerationTaskConstants.CODEGENERATION_ITEM,
                     description = "Code Generation Item", type = CodeGenerationItem.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
     public int generateUtilitiesModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
         Date now = environment().getNow();
@@ -329,8 +336,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             moduleList.removeAll(EXCLUDED_UTILITIES_MODULES);
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for utilities module [{0}]", moduleName);
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
-                        moduleName, Collections.emptyMap(), false);
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(
+                        taskMonitor, mainCtx, moduleName, Collections.emptyMap(), false);
 
                 // Generate applications
                 List<Application> applicationList = environment()
@@ -402,13 +409,108 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             String zipFilename = String.format("%s_utilities_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
-            codeGenerationItem.setFilename(zipFilename);
-            codeGenerationItem.setData(baos.toByteArray());
+//            codeGenerationItem.setFilename(zipFilename);
+//            codeGenerationItem.setData(baos.toByteArray());
+            codeGenerationItem.setFilename("mook.jar");
+            codeGenerationItem.setData(compileAndPackageTask(taskMonitor, baos.toByteArray()));
         } finally {
             IOUtils.close(zos);
         }
 
         return 0;
+    }
+
+    private byte[] compileAndPackageTask(TaskMonitor taskMonitor, byte[] srcZip) throws UnifyException {
+        try {
+            // Extract to compilation temporary directory
+            final File compileDir = Files.createTempDirectory("flowcentral-compile-utilities").toFile();
+            try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(srcZip))) {
+                ZipEntry entry;
+                while ((entry = zis.getNextEntry()) != null) {
+                    File target = new File(compileDir, entry.getName());
+                    if (!target.toPath().normalize().startsWith(compileDir.toPath().normalize())) {
+                        throw new SecurityException("Bad zip entry: " + entry.getName());
+                    }
+
+                    if (entry.isDirectory()) {
+                        target.mkdirs();
+                    } else {
+                        target.getParentFile().mkdirs();
+                        Files.copy(zis, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    zis.closeEntry();
+                }
+            }
+
+            final File pomFile = new File(compileDir, "pom.xml");
+            // Create POM
+            final String pomXml = "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n"
+                    + "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n"
+                    + "    xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n"
+                    + "    <modelVersion>4.0.0</modelVersion>\r\n"
+                    + "  <groupId>com.flowcentraltech.enterprise</groupId>\r\n"
+                    + "  <artifactId>flowcentral-generated</artifactId>\r\n"
+                    + "  <version>5.1.0-SNAPSHOT</version>\r\n"
+                    + "  <packaging>jar</packaging>\r\n"
+                    + "    <name>flowcentral-generated</name>\r\n"
+                    + "    <description>Flowcentral Generated</description>\r\n"
+                    + "  <properties>\r\n"
+                    + "            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n"
+                    + "            <maven.compiler.source>1.8</maven.compiler.source>\r\n"
+                    + "            <maven.compiler.target>1.8</maven.compiler.target>\r\n"
+                    + "  </properties>\r\n"
+                    + "  <build>\r\n"
+                    + "    <plugins>\r\n"
+                    + "      <plugin>\r\n"
+                    + "        <groupId>org.apache.maven.plugins</groupId>\r\n"
+                    + "        <artifactId>maven-compiler-plugin</artifactId>\r\n"
+                    + "        <version>3.13.0</version>\r\n"
+                    + "                <configuration>\r\n"
+                    + "                        <compilerArguments>\r\n"
+                    + "                                <classpath>${external.classpath}</classpath>\r\n"
+                    + "                        </compilerArguments>\r\n"
+                    + "                </configuration>\r\n"
+                    + "      </plugin>\r\n"
+                    + "      <plugin>\r\n"
+                    + "        <groupId>org.apache.maven.plugins</groupId>\r\n"
+                    + "        <artifactId>maven-jar-plugin</artifactId>\r\n"
+                    + "        <version>3.3.0</version>\r\n"
+                    + "      </plugin>\r\n"
+                    + "    </plugins>\r\n"
+                    + "  </build>\r\n"
+                    + "</project>";
+            IOUtils.writeToFile(pomFile, pomXml);
+            
+            InvocationRequest request = new DefaultInvocationRequest();
+            request.setPomFile(pomFile);
+            request.setOffline(true);
+            request.addArgs(Arrays.asList("clean", "package"));
+            
+            String classPath = System.getProperty("java.class.path");
+            Properties properties = new Properties();
+            properties.setProperty("external.classpath", classPath);
+            request.setProperties(properties);
+            
+            Invoker invoker = new DefaultInvoker();
+            invoker.setMavenHome(new File("C:\\apps\\apache-maven-3.9.16"));
+            InvocationResult result = invoker.execute(request);
+            if (result.getExitCode() != 0) {
+                addTaskMessage(taskMonitor, "Build failed with exit code: " + result.getExitCode());
+                if (result.getExecutionException() != null) {
+                    result.getExecutionException().printStackTrace();
+                }
+            } else {
+                addTaskMessage(taskMonitor, "Build succeeded! JAR created in target/ directory.");
+                File targetDir = new File(compileDir, "target");
+                File jarFile = new File(targetDir, "flowcentral-molo-extension" + "-" + "5.1.0-SNAPSHOT" + ".jar");
+                return IOUtils.readAll(jarFile);
+            }
+        } catch (Exception e) {
+            throwOperationErrorException(e);
+        }
+        
+        return null;
     }
 
     @Override
