@@ -237,7 +237,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             if (codeGenerationPlugin != null) {
                 codeGenerationItem.setFilename(codeGenerationPlugin.getExtensionJarFileName());
-                codeGenerationItem.setData(compileAndPackageTask(taskMonitor, baos.toByteArray(), false));
+                codeGenerationItem.setData(compileAndPackageAsJAR(taskMonitor, baos.toByteArray(), true));
             } else {
                 codeGenerationItem.setFilename(zipFilename);
                 codeGenerationItem.setData(baos.toByteArray());
@@ -436,7 +436,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             if (codeGenerationPlugin != null) {
                 codeGenerationItem.setFilename(codeGenerationPlugin.getUtilitiesJarFileName());
-                codeGenerationItem.setData(compileAndPackageTask(taskMonitor, baos.toByteArray(), false));
+                codeGenerationItem.setData(compileAndPackageAsJAR(taskMonitor, baos.toByteArray(), false));
             } else {
                 codeGenerationItem.setFilename(zipFilename);
                 codeGenerationItem.setData(baos.toByteArray());
@@ -546,7 +546,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private byte[] compileAndPackageTask(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
+    private byte[] compileAndPackageAsJAR(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
             throws UnifyException {
         Path deleteWorkPath = null;
         try {
