@@ -57,11 +57,11 @@
             <version>${project.version}</version>
         </dependency>
         <!-- Compiler -->
-		<dependency>
+		<!--dependency>
 		    <groupId>org.apache.maven.shared</groupId>
 		    <artifactId>maven-invoker</artifactId>
 		    <version>3.3.0</version>
-		</dependency>
+		</dependency-->
 		<!-- Test dependencies -->
 		<dependency>
             <groupId>com.flowcentraltech.flowcentral</groupId>

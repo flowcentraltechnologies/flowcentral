@@ -74,7 +74,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
                  .call();
             } else {
                 logDebug(taskMonitor, "Cloning git repository...");
-                IOUtils.deleteDirectory(localPath);
+                IOUtils.deleteDirectoryAndContents(localPath);
                 git = Git.cloneRepository()
                         .setURI(repositoryUrl)
                         .setDirectory(new File(localPath))
@@ -148,7 +148,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
                  .call();
             } else {
                 logDebug(taskMonitor, "Cloning git repository...");
-                IOUtils.deleteDirectory(localPath);
+                IOUtils.deleteDirectoryAndContents(localPath);
                 git = Git.cloneRepository()
                         .setURI(repositoryUrl)
                         .setDirectory(new File(localPath))
@@ -163,7 +163,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
             final String targetPath = IOUtils.buildFilename(localPath, target);
             logDebug(taskMonitor, "Deleting target directory [{0}]...", targetPath);
-            IOUtils.deleteDirectory(targetPath);
+            IOUtils.deleteDirectoryAndContents(targetPath);
 
             logDebug(taskMonitor, "Writing new files to target directory...");
             final String parentPath = IOUtils.getParentDirectory(targetPath);

@@ -18,26 +18,34 @@ package com.flowcentraltech.flowcentral.codegeneration.business;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.CodeSource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.DefaultInvoker;
-import org.apache.maven.shared.invoker.InvocationRequest;
-import org.apache.maven.shared.invoker.InvocationResult;
-import org.apache.maven.shared.invoker.Invoker;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
+import javax.tools.ToolProvider;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
@@ -420,103 +428,13 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         return 0;
     }
 
-    private byte[] compileAndPackageTask(TaskMonitor taskMonitor, byte[] srcZip) throws UnifyException {
-        try {
-            // Extract to compilation temporary directory
-            final File compileDir = Files.createTempDirectory("flowcentral-compile-utilities").toFile();
-            try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(srcZip))) {
-                ZipEntry entry;
-                while ((entry = zis.getNextEntry()) != null) {
-                    File target = new File(compileDir, entry.getName());
-                    if (!target.toPath().normalize().startsWith(compileDir.toPath().normalize())) {
-                        throw new SecurityException("Bad zip entry: " + entry.getName());
-                    }
-
-                    if (entry.isDirectory()) {
-                        target.mkdirs();
-                    } else {
-                        target.getParentFile().mkdirs();
-                        Files.copy(zis, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    }
-
-                    zis.closeEntry();
-                }
-            }
-
-            final File pomFile = new File(compileDir, "pom.xml");
-            // Create POM
-            final String pomXml = "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n"
-                    + "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n"
-                    + "    xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n"
-                    + "    <modelVersion>4.0.0</modelVersion>\r\n"
-                    + "  <groupId>com.flowcentraltech.enterprise</groupId>\r\n"
-                    + "  <artifactId>flowcentral-generated</artifactId>\r\n"
-                    + "  <version>5.1.0-SNAPSHOT</version>\r\n"
-                    + "  <packaging>jar</packaging>\r\n"
-                    + "    <name>flowcentral-generated</name>\r\n"
-                    + "    <description>Flowcentral Generated</description>\r\n"
-                    + "  <properties>\r\n"
-                    + "            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n"
-                    + "            <maven.compiler.source>1.8</maven.compiler.source>\r\n"
-                    + "            <maven.compiler.target>1.8</maven.compiler.target>\r\n"
-                    + "  </properties>\r\n"
-                    + "  <build>\r\n"
-                    + "    <plugins>\r\n"
-                    + "      <plugin>\r\n"
-                    + "        <groupId>org.apache.maven.plugins</groupId>\r\n"
-                    + "        <artifactId>maven-compiler-plugin</artifactId>\r\n"
-                    + "        <version>3.13.0</version>\r\n"
-                    + "                <configuration>\r\n"
-                    + "                        <compilerArguments>\r\n"
-                    + "                                <classpath>${external.classpath}</classpath>\r\n"
-                    + "                        </compilerArguments>\r\n"
-                    + "                </configuration>\r\n"
-                    + "      </plugin>\r\n"
-                    + "      <plugin>\r\n"
-                    + "        <groupId>org.apache.maven.plugins</groupId>\r\n"
-                    + "        <artifactId>maven-jar-plugin</artifactId>\r\n"
-                    + "        <version>3.3.0</version>\r\n"
-                    + "      </plugin>\r\n"
-                    + "    </plugins>\r\n"
-                    + "  </build>\r\n"
-                    + "</project>";
-            IOUtils.writeToFile(pomFile, pomXml);
-            
-            InvocationRequest request = new DefaultInvocationRequest();
-            request.setPomFile(pomFile);
-            request.setOffline(true);
-            request.addArgs(Arrays.asList("clean", "package"));
-            
-            String classPath = System.getProperty("java.class.path");
-            Properties properties = new Properties();
-            properties.setProperty("external.classpath", classPath);
-            request.setProperties(properties);
-            
-            Invoker invoker = new DefaultInvoker();
-            invoker.setMavenHome(new File("C:\\apps\\apache-maven-3.9.16"));
-            InvocationResult result = invoker.execute(request);
-            if (result.getExitCode() != 0) {
-                addTaskMessage(taskMonitor, "Build failed with exit code: " + result.getExitCode());
-                if (result.getExecutionException() != null) {
-                    result.getExecutionException().printStackTrace();
-                }
-            } else {
-                addTaskMessage(taskMonitor, "Build succeeded! JAR created in target/ directory.");
-                File targetDir = new File(compileDir, "target");
-                File jarFile = new File(targetDir, "flowcentral-molo-extension" + "-" + "5.1.0-SNAPSHOT" + ".jar");
-                return IOUtils.readAll(jarFile);
-            }
-        } catch (Exception e) {
-            throwOperationErrorException(e);
-        }
-        
-        return null;
-    }
-
     @Override
     protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
             throws UnifyException {
-
+        if (CodeGenerationModuleNameConstants.CODEGENERATION_MODULE_NAME
+                .equals(moduleInstall.getModuleConfig().getName())) {
+            installWorkDependencies();
+        }
     }
 
     private DynamicModuleInfo getDynamicModuleInfo(String moduleName) throws UnifyException {
@@ -544,6 +462,200 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return new DynamicModuleInfo(moduleName, applications);
+    }
+
+    private void installWorkDependencies() throws UnifyException {
+        logDebug("Installing code generation work dependencies...");
+        try {
+            final String workPath = IOUtils.buildFilename(getWorkingPath(), "work");
+            final Path workRoot = Path.of(workPath);
+
+            // Extract libraries to work library folder
+            logDebug("Extract libraries to work library folder...");
+            final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
+            CodeSource cs = CodeGenerationModuleServiceImpl.class.getProtectionDomain().getCodeSource();
+            if (cs == null) {
+                throw new IllegalStateException("No CodeSource - not running from a jar?");
+            }
+
+            String jarurl = cs.getLocation().toURI().toString();
+            while (jarurl.startsWith("jar:")) {
+                jarurl = jarurl.substring(4);
+            }
+            int index = jarurl.indexOf("!/");
+            if (index >= 0) {
+                jarurl = jarurl.substring(0, index);
+            }
+
+            if (jarurl.startsWith("file:")) {
+                jarurl = jarurl.substring(5);
+            }
+
+            if (jarurl.matches("^/[A-Za-z]:/.*")) {
+                jarurl = jarurl.substring(1);
+            }
+
+            final List<String> classpathParts = new ArrayList<>();
+            final Path fatJar = Path.of(jarurl);
+            try (JarFile jf = new JarFile(fatJar.toFile())) {
+                Enumeration<JarEntry> entries = jf.entries();
+                while (entries.hasMoreElements()) {
+                    JarEntry entry = entries.nextElement();
+                    if (entry.getName().startsWith("BOOT-INF/lib/") && entry.getName().endsWith(".jar")) {
+                        Path dest = libPath.resolve(Path.of(entry.getName()).getFileName().toString());
+                        try (InputStream in = jf.getInputStream(entry)) {
+                            Files.copy(in, dest, StandardCopyOption.REPLACE_EXISTING);
+                        }
+
+                        classpathParts.add(dest.toString());
+                    }
+                }
+            }
+
+            // Save class path information
+            logDebug("Saving class path information...");
+            final String classPath = String.join(File.pathSeparator, classpathParts);
+            final File classPathFile = libPath.resolve("classpath.txt").toFile();
+            IOUtils.writeToFile(classPathFile, classPath);
+        } catch (UnifyException e) {
+            throw e;
+        } catch (Exception e) {
+            throwOperationErrorException(e);
+        }
+    }
+
+    private byte[] compileAndPackageTask(TaskMonitor taskMonitor, byte[] srcZip) throws UnifyException {
+        Path deleteWorkPath = null;
+        try {
+            final Path workRoot = Path.of(IOUtils.buildFilename(getWorkingPath(), "work"));
+            final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + ProcessHandle.current().pid());
+            deleteWorkPath = actWorkPath;
+
+            final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
+            final String classPath = IOUtils.readAllAsString(libPath.resolve("classpath.txt").toFile());
+
+            // Extract source directory to working directory
+            Files.createDirectories(actWorkPath);
+            final Path sourcePath = actWorkPath.resolve("src/main/java");
+            try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(srcZip))) {
+                ZipEntry entry;
+                while ((entry = zis.getNextEntry()) != null) {
+                    File target = actWorkPath.resolve(entry.getName()).toFile();
+                    if (!target.toPath().normalize().startsWith(actWorkPath.normalize())) {
+                        throw new SecurityException("Bad zip entry: " + entry.getName());
+                    }
+
+                    if (entry.isDirectory()) {
+                        target.mkdirs();
+                    } else {
+                        target.getParentFile().mkdirs();
+                        Files.copy(zis, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    zis.closeEntry();
+                }
+            }
+
+            final Path classesPath = Files.createDirectories(actWorkPath.resolve("classes"));
+            List<Path> sourceFiles;
+            try (Stream<Path> walk = Files.walk(sourcePath)) {
+                sourceFiles = walk.filter(p -> p.toString().endsWith(".java")).toList();
+            }
+            if (!sourceFiles.isEmpty()) {
+                // Do compilation
+                JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+                if (compiler == null) {
+                    throw new IllegalStateException("No system Java compiler available - run on a JDK, not a JRE");
+                }
+
+                addTaskMessage(taskMonitor, "Performing compilation...");
+                DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+                try (StandardJavaFileManager fm = compiler.getStandardFileManager(diagnostics, null, null)) {
+                    fm.setLocation(StandardLocation.CLASS_OUTPUT, List.of(classesPath.toFile()));
+                    Iterable<? extends JavaFileObject> units = fm
+                            .getJavaFileObjectsFromFiles(sourceFiles.stream().map(Path::toFile).toList());
+                    List<String> options = List.of("-classpath", classPath, "-d", classesPath.toString(), "--release",
+                            "8");
+                    boolean ok = compiler.getTask(null, fm, diagnostics, options, null, units).call();
+                    for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
+                        addTaskMessage(taskMonitor, d.toString());
+                    }
+                    
+                    if (!ok) {
+                        throw new RuntimeException("Compilation failed");
+                    }
+                }
+            }
+
+            // Create POM
+            final File pomFile = classesPath.resolve("pom.xml").toFile();
+            final String pomXml = "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n"
+                    + "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n"
+                    + "    xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n"
+                    + "    <modelVersion>4.0.0</modelVersion>\r\n"
+                    + "  <groupId>com.flowcentraltech.enterprise</groupId>\r\n"
+                    + "  <artifactId>flowcentral-generated-utilities</artifactId>\r\n"
+                    + "  <version>5.1.0-SNAPSHOT</version>\r\n"
+                    + "  <packaging>jar</packaging>\r\n"
+                    + "    <name>flowcentral-generated-utilities</name>\r\n"
+                    + "    <description>Flowcentral Generated Utilities</description>\r\n"
+                    + "  <properties>\r\n"
+                    + "            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n"
+                    + "            <maven.compiler.source>1.8</maven.compiler.source>\r\n"
+                    + "            <maven.compiler.target>1.8</maven.compiler.target>\r\n"
+                    + "  </properties>\r\n"
+                    + "    <dependencies>\r\n" 
+                    + "        <dependency>\r\n"
+                    + "            <groupId>com.flowcentraltech.enterprise</groupId>\r\n"
+                    + "            <artifactId>flowcentral-convergence-lite</artifactId>\r\n"
+                    + "            <version>${project.version}</version>\r\n" 
+                    + "        </dependency>\r\n"
+                    + "    </dependencies>\r\n" 
+                    + "</project>";
+            IOUtils.writeToFile(pomFile, pomXml);
+
+            // Copy resources
+            final Path resourcesPath = actWorkPath.resolve("src/main/resources");
+            if (Files.isDirectory(resourcesPath)) {
+                try (Stream<Path> walk = Files.walk(resourcesPath)) {
+                    for (Path path : (Iterable<Path>) walk::iterator) {
+                        Path rel = resourcesPath.relativize(path);
+                        Path target = classesPath.resolve(rel);
+                        if (Files.isDirectory(path)) {
+                            Files.createDirectories(target);
+                        } else {
+                            Files.createDirectories(target.getParent());
+                            Files.copy(path, target, StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    }
+                }
+            }
+
+            // Package JAR
+            final Path targetPath = Files.createDirectories(actWorkPath.resolve("target"));
+            Path outputJar = targetPath.resolve("flowcentral-generated-utilities.jar");
+            java.util.spi.ToolProvider jarTool = java.util.spi.ToolProvider.findFirst("jar")
+                    .orElseThrow(() -> new IllegalStateException("jar tool not found"));
+            int code = jarTool.run(System.out, System.err, "--create", "--file", outputJar.toString(), "-C",
+                    classesPath.toString(), ".");
+            if (code != 0) {
+                throw new RuntimeException("jar packaging failed, exit code=" + code);
+            }
+
+            addTaskMessage(taskMonitor, "Built: " + outputJar.toAbsolutePath());
+            return IOUtils.readAll(outputJar.toFile());
+        } catch (UnifyException e) {
+            throw e;
+        } catch (Exception e) {
+            throwOperationErrorException(e);
+        } finally {
+            if (deleteWorkPath != null) {
+                addTaskMessage(taskMonitor, "Performing cleanup...");
+                IOUtils.deleteDirectoryAndContents(deleteWorkPath);
+            }
+        }
+
+        return null;
     }
 
 }

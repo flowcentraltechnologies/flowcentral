@@ -630,7 +630,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
                     SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
                     new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
             BufferedReader reader = new BufferedReader(new StringReader(new String(licenseFile, "UTF-8")));
-            String license = cryptograph.decrypt(IOUtils.readAll(reader));
+            String license = cryptograph.decrypt(IOUtils.readAllAsString(reader));
             reader = new BufferedReader(new StringReader(license));
             final String type = reader.readLine();
             final String clientTitle = reader.readLine();
