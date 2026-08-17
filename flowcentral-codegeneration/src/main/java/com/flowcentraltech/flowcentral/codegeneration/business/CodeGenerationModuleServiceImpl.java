@@ -137,6 +137,9 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
+    @Configurable
+    private CodeGenerationPlugin codeGenerationPlugin;
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
 
@@ -231,8 +234,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             String zipFilename = String.format("extension_%s_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
-            codeGenerationItem.setFilename(zipFilename);
-            codeGenerationItem.setData(baos.toByteArray());
+
+            if (codeGenerationPlugin != null) {
+                codeGenerationItem.setFilename(codeGenerationPlugin.getExtensionJarFileName());
+                codeGenerationItem.setData(compileAndPackageTask(taskMonitor, baos.toByteArray(), false));
+            } else {
+                codeGenerationItem.setFilename(zipFilename);
+                codeGenerationItem.setData(baos.toByteArray());
+            }
         } finally {
             IOUtils.close(zos);
         }
@@ -342,6 +351,13 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     codeGenerationItem.getBasePackage(), false);
             List<String> moduleList = systemModuleService.getAllModuleNames();
             moduleList.removeAll(EXCLUDED_UTILITIES_MODULES);
+            if (codeGenerationPlugin != null) {
+                List<String> additional = codeGenerationPlugin.getAdditionalUtilitiesExclusionModules();
+                if (!DataUtils.isBlank(additional)) {
+                    moduleList.removeAll(additional);
+                }
+            }
+
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for utilities module [{0}]", moduleName);
                 ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(
@@ -417,10 +433,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             String zipFilename = String.format("%s_utilities_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
-//            codeGenerationItem.setFilename(zipFilename);
-//            codeGenerationItem.setData(baos.toByteArray());
-            codeGenerationItem.setFilename("mook.jar");
-            codeGenerationItem.setData(compileAndPackageTask(taskMonitor, baos.toByteArray()));
+
+            if (codeGenerationPlugin != null) {
+                codeGenerationItem.setFilename(codeGenerationPlugin.getUtilitiesJarFileName());
+                codeGenerationItem.setData(compileAndPackageTask(taskMonitor, baos.toByteArray(), false));
+            } else {
+                codeGenerationItem.setFilename(zipFilename);
+                codeGenerationItem.setData(baos.toByteArray());
+            }
         } finally {
             IOUtils.close(zos);
         }
@@ -433,7 +453,9 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             throws UnifyException {
         if (CodeGenerationModuleNameConstants.CODEGENERATION_MODULE_NAME
                 .equals(moduleInstall.getModuleConfig().getName())) {
-            installWorkDependencies();
+            if (codeGenerationPlugin != null) {
+                installWorkDependencies();
+            }
         }
     }
 
@@ -524,7 +546,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private byte[] compileAndPackageTask(TaskMonitor taskMonitor, byte[] srcZip) throws UnifyException {
+    private byte[] compileAndPackageTask(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
+            throws UnifyException {
         Path deleteWorkPath = null;
         try {
             final Path workRoot = Path.of(IOUtils.buildFilename(getWorkingPath(), "work"));
@@ -575,12 +598,12 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     Iterable<? extends JavaFileObject> units = fm
                             .getJavaFileObjectsFromFiles(sourceFiles.stream().map(Path::toFile).toList());
                     List<String> options = List.of("-classpath", classPath, "-d", classesPath.toString(), "--release",
-                            "8");
+                            codeGenerationPlugin.getReleaseJavaVersion());
                     boolean ok = compiler.getTask(null, fm, diagnostics, options, null, units).call();
                     for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
                         addTaskMessage(taskMonitor, d.toString());
                     }
-                    
+
                     if (!ok) {
                         throw new RuntimeException("Compilation failed");
                     }
@@ -589,30 +612,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             // Create POM
             final File pomFile = classesPath.resolve("pom.xml").toFile();
-            final String pomXml = "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n"
-                    + "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n"
-                    + "    xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\r\n"
-                    + "    <modelVersion>4.0.0</modelVersion>\r\n"
-                    + "  <groupId>com.flowcentraltech.enterprise</groupId>\r\n"
-                    + "  <artifactId>flowcentral-generated-utilities</artifactId>\r\n"
-                    + "  <version>5.1.0-SNAPSHOT</version>\r\n"
-                    + "  <packaging>jar</packaging>\r\n"
-                    + "    <name>flowcentral-generated-utilities</name>\r\n"
-                    + "    <description>Flowcentral Generated Utilities</description>\r\n"
-                    + "  <properties>\r\n"
-                    + "            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n"
-                    + "            <maven.compiler.source>1.8</maven.compiler.source>\r\n"
-                    + "            <maven.compiler.target>1.8</maven.compiler.target>\r\n"
-                    + "  </properties>\r\n"
-                    + "    <dependencies>\r\n" 
-                    + "        <dependency>\r\n"
-                    + "            <groupId>com.flowcentraltech.enterprise</groupId>\r\n"
-                    + "            <artifactId>flowcentral-convergence-lite</artifactId>\r\n"
-                    + "            <version>${project.version}</version>\r\n" 
-                    + "        </dependency>\r\n"
-                    + "    </dependencies>\r\n" 
-                    + "</project>";
-            IOUtils.writeToFile(pomFile, pomXml);
+            IOUtils.writeToFile(pomFile,
+                    extension ? codeGenerationPlugin.getExtensionJarPOM() : codeGenerationPlugin.getUtilitiesJarPOM());
 
             // Copy resources
             final Path resourcesPath = actWorkPath.resolve("src/main/resources");
@@ -633,7 +634,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             // Package JAR
             final Path targetPath = Files.createDirectories(actWorkPath.resolve("target"));
-            Path outputJar = targetPath.resolve("flowcentral-generated-utilities.jar");
+            Path outputJar = targetPath.resolve(extension ? codeGenerationPlugin.getExtensionJarFileName()
+                    : codeGenerationPlugin.getUtilitiesJarFileName());
             java.util.spi.ToolProvider jarTool = java.util.spi.ToolProvider.findFirst("jar")
                     .orElseThrow(() -> new IllegalStateException("jar tool not found"));
             int code = jarTool.run(System.out, System.err, "--create", "--file", outputJar.toString(), "-C",
