@@ -34,16 +34,22 @@ public class PortalWorkflowStep {
     private String applet;
 
     private String type;
+
+    private String readOnlyOption;
+
+    private boolean excludeMaker;
     
     private List<PortalWorkflowUserAction> userActions;
 
-    public PortalWorkflowStep(String name, String description, String label, String applet,
-            String type, List<PortalWorkflowUserAction> userActions) {
+    public PortalWorkflowStep(String name, String description, String label, String applet, String type,
+            String readOnlyOption, boolean excludeMaker, List<PortalWorkflowUserAction> userActions) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.applet = applet;
         this.type = type;
+        this.readOnlyOption = readOnlyOption;
+        this.excludeMaker = excludeMaker;
         this.userActions = userActions;
     }
 
@@ -65,6 +71,14 @@ public class PortalWorkflowStep {
 
     public String getType() {
         return type;
+    }
+
+    public String getReadOnlyOption() {
+        return readOnlyOption;
+    }
+
+    public boolean isExcludeMaker() {
+        return excludeMaker;
     }
 
     public List<PortalWorkflowUserAction> getUserActions() {

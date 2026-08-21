@@ -196,6 +196,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         wfStepConfig.setAudit(wfStep.isAudit());
                         wfStepConfig.setBranchOnly(wfStep.isBranchOnly());
                         wfStepConfig.setDepartmentOnly(wfStep.isDepartmentOnly());
+                        wfStepConfig.setExcludeMaker(wfStep.isExcludeMaker());
                         wfStepConfig.setIncludeForwarder(wfStep.isIncludeForwarder());
                         wfStepConfig.setForwarderPreffered(wfStep.isForwarderPreffered());
                         wfStepConfig.setEmails(wfStep.getEmails());

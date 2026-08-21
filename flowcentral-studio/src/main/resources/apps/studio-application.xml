@@ -6187,6 +6187,8 @@
 							column="0" />
 						<field name="branchOnly" inputWidget="application.checkbox"
 							column="0" />
+						<field name="excludeMaker"
+							inputWidget="application.checkbox" column="0" />
 						<field name="includeForwarder"
 							inputWidget="application.checkbox" column="0" />
 					</section>

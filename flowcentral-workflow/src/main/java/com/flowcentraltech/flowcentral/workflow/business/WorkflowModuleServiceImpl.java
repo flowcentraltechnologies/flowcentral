@@ -49,6 +49,7 @@ import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflow;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowOption;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowStep;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalWorkflowUserAction;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
@@ -330,8 +331,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()),
                                 DataUtils.convert(int.class, wfStep.getDelayMinutes()), wfStep.isAudit(),
-                                wfStep.isBranchOnly(), wfStep.isDepartmentOnly(), wfStep.isIncludeForwarder(),
-                                wfStep.isForwarderPreffered(), wfStep.getEmails(), wfStep.getComments());
+                                wfStep.isBranchOnly(), wfStep.isDepartmentOnly(), wfStep.isExcludeMaker(),
+                                wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(), wfStep.getEmails(),
+                                wfStep.getComments());
 
                         if (wfStep.getSetValues() != null || !StringUtils.isBlank(wfStep.getValueGenerator())) {
                             wsdb.addWfSetValuesDef(new WfStepSetValuesDef(InputWidgetUtils.getSetValuesDef(
@@ -496,7 +498,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                     steps.add(new PortalWorkflowStep(step.getName(), resolveApplicationMessage(step.getDescription()),
                             resolveApplicationMessage(step.getLabel()), step.getAppletName(), step.getType().toString(),
+                            step.getReadOnlyConditionName(), step.isExcludeMaker(),
                             DataUtils.unmodifiableList(userActions)));
+                }
+
+                List<PortalWorkflowOption> options = Collections.emptyList();
+                final List<WorkflowFilter> filters = environment()
+                        .findAll(new WorkflowFilterQuery().workflowId(workflowId).addSelect("name", "description"));
+                if (!DataUtils.isBlank(filters)) {
+                    options = new ArrayList<PortalWorkflowOption>();
+                    for (WorkflowFilter filter : filters) {
+                        options.add(new PortalWorkflowOption(filter.getName(), filter.getDescription()));
+                    }
                 }
 
                 final Workflow workflow = environment().findLean(new WorkflowQuery().id(workflowId));
@@ -505,7 +518,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflows.add(new PortalWorkflow(workflowName, resolveApplicationMessage(workflow.getDescription()),
                         resolveApplicationMessage(workflow.getLabel()), workflow.getEntity(), workflow.getCasePrefix(),
                         workflow.getCaseApplet(), workflow.getDescFormat(), workflow.isSupportManualSubmission(),
-                        DataUtils.unmodifiableList(steps)));
+                        DataUtils.unmodifiableList(steps), DataUtils.unmodifiableList(options)));
             }
 
             return workflows;
@@ -711,7 +724,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private void keepAlreadyAssignedRoles(String applicationName, String workflowName, List<WfStep> stepList)
             throws UnifyException {
         if (workflowRoleProvider != null) {
-        workflowRoleProvider.keepAlreadyAssignedRoles(applicationName, workflowName, stepList);
+            workflowRoleProvider.keepAlreadyAssignedRoles(applicationName, workflowName, stepList);
         }
     }
 
@@ -2029,7 +2042,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private void updateTransitionVariables(TransitionItem transitionItem) throws UnifyException {
         final WfItem wfItem = transitionItem.getWfItem();
         transitionItem.setProcessVariable(DefaultProcessVariableConstants.FORWARDED_BY, wfItem.getForwardedBy());
-        transitionItem.setProcessVariable(DefaultProcessVariableConstants.FORWARDED_BY_NAME, wfItem.getForwardedByName());
+        transitionItem.setProcessVariable(DefaultProcessVariableConstants.FORWARDED_BY_NAME,
+                wfItem.getForwardedByName());
         transitionItem.setProcessVariable(DefaultProcessVariableConstants.FORWARD_TO, wfItem.getForwardTo());
         transitionItem.setProcessVariable(DefaultProcessVariableConstants.HELD_BY, wfItem.getHeldBy());
     }

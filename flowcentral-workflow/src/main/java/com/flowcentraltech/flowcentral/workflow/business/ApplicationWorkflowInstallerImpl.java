@@ -568,10 +568,11 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setAudit(stepConfig.isAudit());
                 wfStep.setBranchOnly(stepConfig.isBranchOnly());
                 wfStep.setDepartmentOnly(stepConfig.isDepartmentOnly());
+                wfStep.setExcludeMaker(stepConfig.isExcludeMaker());
                 wfStep.setIncludeForwarder(stepConfig.isIncludeForwarder());
                 wfStep.setForwarderPreffered(stepConfig.isForwarderPreffered());
-                wfStep.setEmails(stepConfig.isEmails());
-                wfStep.setComments(stepConfig.isComments());
+                wfStep.setEmails(stepConfig.getEmails());
+                wfStep.setComments(stepConfig.getComments());
                 wfStep.setNextStepName(stepConfig.getNextStepName());
                 wfStep.setAltNextStepName(stepConfig.getAltNextStepName());
                 wfStep.setBinaryConditionName(stepConfig.getBinaryCondition());

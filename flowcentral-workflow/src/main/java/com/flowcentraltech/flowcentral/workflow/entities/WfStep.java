@@ -125,6 +125,9 @@ public class WfStep extends BaseConfigNamedEntity {
     private boolean departmentOnly;
 
     @Column
+    private boolean excludeMaker;
+
+    @Column
     private boolean includeForwarder;
 
     @Column
@@ -418,6 +421,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setDepartmentOnly(boolean departmentOnly) {
         this.departmentOnly = departmentOnly;
+    }
+
+    public boolean isExcludeMaker() {
+        return excludeMaker;
+    }
+
+    public void setExcludeMaker(boolean excludeMaker) {
+        this.excludeMaker = excludeMaker;
     }
 
     public boolean isIncludeForwarder() {

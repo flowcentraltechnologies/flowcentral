@@ -319,6 +319,8 @@
 					type="BOOLEAN" />
 				<field name="branchOnly" label="$m{workflow.step.branchonly}"
 					type="BOOLEAN" />
+				<field name="excludeMaker"
+					label="$m{workflow.step.excludemaker}" type="BOOLEAN" />
 				<field name="includeForwarder"
 					label="$m{workflow.step.includeforwarder}" type="BOOLEAN" />
 				<field name="forwarderPreffered"
@@ -950,6 +952,8 @@
 							column="1" />
 						<field name="branchOnly" inputWidget="application.checkbox"
 							column="1" />
+						<field name="excludeMaker"
+							inputWidget="application.checkbox" column="1" />
 						<field name="includeForwarder"
 							inputWidget="application.checkbox" column="1" />
 					</section>
