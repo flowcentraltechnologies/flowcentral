@@ -69,7 +69,7 @@ public class WorkflowEditorWriter extends AbstractFlowCentralControlWriter {
             // Body
             writer.write(
                     "<div style=\"display:table;table-layout: fixed;width:100%;height:100%;\"><div style=\"display:table-row;\">");
-            writer.write("<div style=\"display:table-cell;vertical-align:top;position:relative;\">");
+            writer.write("<div class=\"toolcol\" style=\"display:table-cell;vertical-align:top;\">");
 
             // Tools
             writer.write("<div class=\"tools\">");
@@ -98,6 +98,10 @@ public class WorkflowEditorWriter extends AbstractFlowCentralControlWriter {
             writer.write("</div>");
             writer.write("</div>");
             // End tools
+
+            
+            writer.write("</div>");
+            writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
 
             // NotifTemplateEditor
             writer.write("<div class=\"design\">");
