@@ -42,7 +42,7 @@ public class WfStepEditPanel extends AbstractDialogPanel {
         setDisabled("frmAltNextStepName", true);
         setDisabled("frmType", true);
     }
-
+    
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
@@ -66,6 +66,7 @@ public class WfStepEditPanel extends AbstractDialogPanel {
         setVisible("frmAudit", isUserAct);
         setVisible("frmBranchOnly", isUserAct);
         setVisible("frmDepartmentOnly", isUserAct);
+        setVisible("frmExcludeMaker", isUserAct);
         setVisible("frmIncludeForwarder", isUserAct);
         setVisible("frmReadOnlyConditionName", isUserAct);
         setVisible("frmAutoLoadingCondition", isStart);
