@@ -108,13 +108,11 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         final Long applicationId = pageBean.getCurrentApplicationId();
         if (applicationId == null) {
             // Utilities
-            clearApplicationSessionAttributes();
-            clearCategorySelect();
+            clearApplicationDocumentAttributes();
         } else {
             // Actual Application
             Application application = application().findApplication(applicationId);
-            setApplicationSessionAttributes(application);
-            setCategorySelect();
+            setApplicationDocumentAttributes(application);
         }
 
         closeAllPages();
@@ -166,7 +164,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         final Long applicationId = application().createApplication(application, module);
 
         pageBean.setCurrentApplicationId(applicationId);
-        setApplicationSessionAttributes(application);
+        setApplicationDocumentAttributes(application);
         return "reloadapplicationstudio";
     }
 
@@ -216,14 +214,11 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     protected void onIndexPage() throws UnifyException {
         super.onIndexPage();
         ApplicationStudioPageBean pageBean = getPageBean();
-
         final Long applicationId = getDocumentAttribute(Long.class,
                 AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         pageBean.setCurrentApplicationId(applicationId);
 
-        if (/*
-             * !QueryUtils.isValidLongCriteria(applicationId) ||
-             */Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
+        if (Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
             contentPanel.clearPages();
         }
@@ -233,35 +228,26 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         pageBean.setClientPushSync(clientUpdateSync);
     }
 
-    private void setApplicationSessionAttributes(Application application) throws UnifyException {
-//        setSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_ID, application.getId());
-//        setSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_NAME, application.getName());
-//        setSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
+    private void setApplicationDocumentAttributes(Application application) throws UnifyException {
         setSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES, Boolean.TRUE);
 
         setDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID, application.getId());
         setDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME, application.getName());
         setDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
-    }
-
-    private void clearApplicationSessionAttributes() throws UnifyException {
-//        removeSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_ID);
-//        removeSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_NAME);
-//        removeSessionAttribute(AppletPageAttributeConstants.CURRENT_APPLICATION_DESC);
-        removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
-
-        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
-        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
-        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_DESC);
-    }
-
-    private void setCategorySelect() throws UnifyException {
+        
         final StudioAppComponentType currCategory = getSessionAttribute(StudioAppComponentType.class,
                 StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY);
         getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(currCategory);
     }
 
-    private void clearCategorySelect() throws UnifyException {
+    private void clearApplicationDocumentAttributes() throws UnifyException {
+        removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
+
+        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
+        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
+        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_DESC);
+        
         getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(null);
-    }
+   }
+
 }
