@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.studio.business.data;
 
 /**
- * CDSnapshot result details.
+ * Snapshot result details.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1

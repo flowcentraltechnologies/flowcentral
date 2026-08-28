@@ -14,17 +14,14 @@
 // the License.
 
 !ui-page
-
-// Design panel
-!ui-panel:designPanel style:$s{width:100%;height:100%;}
-	components:$c{chartViewPanel}
 	
 // Applet panel
 !fc-studioappchartappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
-	binding:applet
+	refreshSwitchOnChange:$c{chartViewPanel} binding:applet 
 	refreshOnUpdate:$c{chartViewPanel}
+	
+// Design panel
+!ui-panel:designPanel style:$s{width:100%;height:100%;}
+	components:$c{chartViewPanel}
+!fc-chartviewpanel:chartViewPanel binding:design
 
-// Chart view
-!fc-chartviewpanel:chartViewPanel binding:applet.chartView
-
-// Actions

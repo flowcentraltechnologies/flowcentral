@@ -73,7 +73,7 @@ public class UniqueEntityWfBinaryPolicy extends AbstractWfBinaryPolicy {
                     }
                 }
 
-                if (!query.isEmptyCriteria() && environmentService.countAll(query) > 0) {
+                if (!query.isEmptyCriteria() && environmentService.exists(query)) {
                     return true;
                 }
             }

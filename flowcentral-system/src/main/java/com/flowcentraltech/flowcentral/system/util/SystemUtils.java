@@ -54,28 +54,28 @@ public final class SystemUtils {
                 dataSourceConnection.getId(), dataSourceConnection.getVersionNo());
     }
     
-    public static String encodeProcessVariableCode(String code) {
+    public static String getProcessVariableCode(String code) {
         return PRC_PREFIX + code;
     }
 
-    public static String encodeProcessVariableLabel(String name) {
+    public static String getProcessVariableLabel(String name) {
         return PRC_PREFIX_UPPERCASE + " " + name;
     }
 
-    public static String encodeSysParamCode(SysParamType type, String code) {
+    public static String getSysParamCode(SysParamType type, String code) {
         return SYS_PREFIX + code + ":" + type.code();
     }
 
-    public static String encodeSysParamLabel(String name) {
+    public static String getSysParamLabel(String name) {
         return SYS_PREFIX_UPPERCASE + " " + name;
     }
     
-    public static boolean isProcessVariable(String encoded) {
-        return encoded.startsWith(PRC_PREFIX);
+    public static boolean isProcessVariableCode(String code) {
+        return code.startsWith(PRC_PREFIX);
     }
     
-    public static boolean isSysParam(String encoded) {
-        return encoded.startsWith(SYS_PREFIX);
+    public static boolean isSysParamCode(String code) {
+        return code.startsWith(SYS_PREFIX);
     }
     
     public static String getSysParamCode(String encoded) {

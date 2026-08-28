@@ -112,6 +112,24 @@ public interface SecuredLinkManager extends FlowCentralComponent {
      *                        if an error occurs
      */
     SecuredLinkContentInfo getSecuredLink(String linkAccessKey) throws UnifyException;
+    
+    /**
+     * Gets work item secured link.
+     * 
+     * @param appletName
+     *                    the applet name
+     * @param itemEventId
+     *                    the item event ID
+     * @param itemDesc
+     *                    the item description
+     * @param heldBy
+     *                    the item heldby
+     * @return the secured link information object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SecuredLinkInfo getWorkItemSecuredLink(String appletName, Long itemEventId, String itemDesc, String heldBy)
+            throws UnifyException;
 
     /**
      * Invalidates secured link by type and access key.

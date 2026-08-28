@@ -88,8 +88,10 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
 
     protected void registerPrivilege(ConfigType configType, Long applicationId, String privilegeCategoryCode,
             String privilegeCode, String privilegeDesc) throws UnifyException {
+        if (applicationPrivilegeManager != null) {
         applicationPrivilegeManager.registerPrivilege(configType, applicationId, privilegeCategoryCode, privilegeCode,
                 privilegeDesc);
+        }
     }
 
     protected ConfigurationLoader getConfigurationLoader() {
@@ -100,7 +102,7 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowC
         return environmentService;
     }
 
-    protected class DeletionParams {
+    public static class DeletionParams {
         private final String name;
 
         private final BaseApplicationEntityQuery<?> query;

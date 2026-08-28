@@ -24,8 +24,8 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor.DesignWfStep;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor.DesignWfStepRouting;
@@ -45,16 +45,16 @@ import com.tcdng.unify.core.database.Query;
 public class WorkflowEditorPage extends AbstractStudioEditorPage {
 
     private final EntityDef entityDef;
-    
+
     private final Long workflowId;
 
     private WorkflowEditor workflowEditor;
 
     private WorkflowModuleService workflowModuleService;
-    
-    public WorkflowEditorPage(WorkflowModuleService workflowModuleService, AppletUtilities au, EntityDef entityDef,
-            Long workflowId, BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+
+    public WorkflowEditorPage(WorkflowModuleService workflowModuleService, StudioModuleService sms, AppletUtilities au,
+            EntityDef entityDef, Long workflowId) {
+        super(sms, au);
         this.workflowModuleService = workflowModuleService;
         this.entityDef = entityDef;
         this.workflowId = workflowId;
@@ -79,7 +79,7 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
     public boolean isRunnable() throws UnifyException {
         return au().environment().value(boolean.class, "runnable", new WorkflowQuery().id(workflowId));
     }
-    
+
     public void publish() throws UnifyException {
         Workflow workflow = au().environment().listLean(Workflow.class, workflowId);
         final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(workflow.getApplicationName(),
@@ -88,25 +88,31 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
     }
 
     public void commitDesign() throws UnifyException {
-        Workflow workflow = au().environment().find(Workflow.class, workflowId);
-        workflow.setStepList(new ArrayList<WfStep>(workflowEditor.getWorkflowSteps().values()));
-        au().environment().updateByIdVersion(workflow);
+        if (isPresent()) {
+            studio().updateWorkflowSteps(workflowId, new ArrayList<WfStep>(workflowEditor.getWorkflowSteps().values()));
+        }
     }
 
     public void newEditor() throws UnifyException {
-        WorkflowEditor.Builder web = WorkflowEditor.newBuilder(au(), entityDef, workflowId);
-        boolean isOldDesign = false;
-        for (WfStep step : au().environment()
-                .listAllWithChildren(Query.of(WfStep.class).addEquals("workflowId", workflowId).addOrder("id"))) {
-            web.addStep(step);
-            isOldDesign |= step.getDesignX() != 0;
-            isOldDesign |= step.getDesignY() != 0;
-        }
+        if (entityDef != null) {
+            WorkflowEditor.Builder web = WorkflowEditor.newBuilder(au(), entityDef, workflowId);
+            boolean isOldDesign = false;
+            for (WfStep step : au().environment()
+                    .listAllWithChildren(Query.of(WfStep.class).addEquals("workflowId", workflowId).addOrder("id"))) {
+                web.addStep(step);
+                isOldDesign |= step.getDesignX() != 0;
+                isOldDesign |= step.getDesignY() != 0;
+            }
 
-        workflowEditor = web.build();
-        if (!isOldDesign) {
-            new WorkflowLayout(workflowEditor.getDesign().getSteps()).apply();
+            workflowEditor = web.build();
+            if (!isOldDesign) {
+                new WorkflowLayout(workflowEditor.getDesign().getSteps()).apply();
+            }
         }
+    }
+
+    public boolean isPresent() {
+        return workflowEditor != null;
     }
 
     private static final int X_GAP = 220;

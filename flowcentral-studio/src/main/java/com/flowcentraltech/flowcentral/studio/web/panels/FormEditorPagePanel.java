@@ -19,7 +19,6 @@ import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditor;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Form editor page panel.
@@ -34,7 +33,7 @@ public class FormEditorPagePanel extends AbstractStudioEditorPagePanel {
     @Override
     public void switchState() throws UnifyException {
         FormEditorPage formEditorPage = getFormEditorPage();
-        if (formEditorPage != null) {
+        if (formEditorPage != null && formEditorPage.isPresent()) {
             final boolean readOnly = isAppletContextReadOnly();
             FormEditor formEditor = formEditorPage.getFormEditor();
             formEditor.setReadOnly(readOnly);
@@ -53,16 +52,8 @@ public class FormEditorPagePanel extends AbstractStudioEditorPagePanel {
         }
     }
 
-    @Action
-    public void saveDesign() throws UnifyException {
-        FormEditorPage formEditorPage = getFormEditorPage();
-        formEditorPage.commitDesign();
-        hintUser("$m{studioappformapplet.formeditor.success.hint}", formEditorPage.getSubTitle());
-    }
-
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        // TODO
         return false;
     }
 

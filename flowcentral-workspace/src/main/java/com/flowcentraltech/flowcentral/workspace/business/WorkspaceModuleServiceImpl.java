@@ -91,7 +91,7 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<String> findRoleWorkspaceCodes(String roleCode) throws UnifyException {
-        List<String> privilegeCodes = appPrivilegeManager
+        Set<String> privilegeCodes = appPrivilegeManager
                 .findRolePrivileges(ApplicationPrivilegeConstants.APPLICATION_WORKSPACE_CATEGORY_CODE, roleCode);
         if (!DataUtils.isBlank(privilegeCodes)) {
             List<String> workspaceCodes = new ArrayList<String>();
@@ -146,8 +146,8 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
     private void installDefaultWorkspaces(final ModuleInstall moduleInstall) throws UnifyException {
         if (WorkspaceModuleNameConstants.WORKSPACE_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
             logInfo("Installing default workspaces ...");
-            if (environment()
-                    .countAll(new WorkspaceQuery().id(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID)) == 0) {
+            if (!environment()
+                    .exists(new WorkspaceQuery().id(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID))) {
                 Workspace workspace = new Workspace(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID,
                         DefaultApplicationConstants.ROOT_WORKSPACE_CODE,
                         DefaultApplicationConstants.ROOT_WORKSPACE_NAME,

@@ -32,6 +32,3 @@
 	dialogCaptionBinding:dialogTitle dialogFormBinding:editField
 	refreshOnApply:$c{formEditorBodyPanel}
 
-// Actions
-!ui-postcommand:saveDesignAct command:saveDesign components:$c{formEditorBodyPanel}
-

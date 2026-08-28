@@ -76,8 +76,8 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
 		int result = 0;
 		CollaborationFreeze collaborationFreeze = new CollaborationFreeze();
 		for (FreezeUnfreeze freeze : freezeUnfreezeList) {
-			if (environment().countAll(new CollaborationFreezeQuery().type(freeze.getType())
-					.applicationName(freeze.getApplicationName()).resourceName(freeze.getResourceName())) == 0) {
+			if (!environment().exists(new CollaborationFreezeQuery().type(freeze.getType())
+					.applicationName(freeze.getApplicationName()).resourceName(freeze.getResourceName()))) {
 				collaborationFreeze.setType(freeze.getType());
 				collaborationFreeze.setApplicationName(freeze.getApplicationName());
 				collaborationFreeze.setResourceName(freeze.getResourceName());
@@ -126,7 +126,7 @@ public class CollaborationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
 	public boolean isFrozen(CollaborationType type, String resourceName) throws UnifyException {
-        return environment().countAll(new CollaborationFreezeQuery().type(type).resourceName(resourceName)) > 0;
+        return environment().exists(new CollaborationFreezeQuery().type(type).resourceName(resourceName));
 	}
 
 	@Override

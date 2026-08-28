@@ -14,17 +14,12 @@
 // the License.
 
 !ui-page
-
-// Design panel
-!ui-panel:designPanel style:$s{width:100%;height:100%;}
-	components:$c{tableEditorPagePanel}
 	
 // Applet panel
 !fc-studioapptableappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
-	binding:applet
-	additionalUpdateComponents:$c{tableEditorPagePanel}
+	moreCommitComponents:$c{tableEditorPagePanel} binding:applet 
 
-// Table Editor Page
-!fc-tableeditorpagepanel:tableEditorPagePanel binding:applet.tableEditorPage
+// Design panel
+!ui-panel:designPanel style:$s{width:100%;height:100%;} components:$c{tableEditorPagePanel}
+!fc-tableeditorpagepanel:tableEditorPagePanel binding:design
 
-// Actions

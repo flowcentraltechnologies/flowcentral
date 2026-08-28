@@ -29,6 +29,3 @@
 	dialogCaptionBinding:dialogTitle dialogFormBinding:editTile
 	refreshOnApply:$c{dashboardEditorBodyPanel}
 
-// Actions
-!ui-postcommand:saveDesignAct command:saveDesign components:$c{dashboardEditorBodyPanel}
-

@@ -40,6 +40,9 @@ public class AppConfig extends BaseRootAppConfig {
     private Boolean developable;
 
     @JacksonXmlProperty(isAttribute = true)
+    private Boolean installable;
+
+    @JacksonXmlProperty(isAttribute = true)
     private Boolean menuAccess;
 
     @JacksonXmlProperty(isAttribute = true)
@@ -118,6 +121,7 @@ public class AppConfig extends BaseRootAppConfig {
         super("flowcentral-application-4.0.0.xsd");
         this.menuAccess = Boolean.TRUE;
         this.developable = Boolean.FALSE;
+        this.installable = Boolean.FALSE;
         this.custom = Boolean.FALSE;
         this.allowSecondaryTenants = Boolean.FALSE;
    }
@@ -144,6 +148,14 @@ public class AppConfig extends BaseRootAppConfig {
 
     public void setDevelopable(Boolean developable) {
         this.developable = developable;
+    }
+
+    public Boolean getInstallable() {
+        return installable;
+    }
+
+    public void setInstallable(Boolean installable) {
+        this.installable = installable;
     }
 
     public Boolean getCustom() {

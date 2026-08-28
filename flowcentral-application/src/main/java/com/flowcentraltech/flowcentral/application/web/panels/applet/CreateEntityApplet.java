@@ -37,22 +37,28 @@ import com.tcdng.unify.web.ui.widget.Page;
  */
 public class CreateEntityApplet extends AbstractEntityFormApplet {
 
-    public CreateEntityApplet(Page page, AppletUtilities au, List<String> pathVariables, AppletWidgetReferences appletWidgetReferences,
-            EntityFormEventHandlers formEventHandlers) throws UnifyException {
+    public CreateEntityApplet(Page page, AppletUtilities au, List<String> pathVariables,
+            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
+            throws UnifyException {
         super(page, au, pathVariables, appletWidgetReferences, formEventHandlers);
         setCurrFormAppletDef(getRootAppletDef());
         final AppletNameParts parts = ApplicationNameUtils.getAppletNameParts(pathVariables.get(APPLET_NAME_INDEX));
         if (parts.isWithVestigial()) {
             final Long entityInstId = Long.valueOf(parts.getVestigial());
             Entity inst = loadEntity(entityInstId);
-            form = constructForm(inst, FormMode.MAINTAIN, null, false);
+            setHwtForm(constructForm(inst, FormMode.MAINTAIN, null, false));
             viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
         } else {
-            form = constructNewForm(FormMode.CREATE, null, false);
+            setHwtForm(constructNewForm(FormMode.CREATE, null, false));
             viewMode = ViewMode.NEW_PRIMARY_FORM;
         }
 
-        setAltSubCaption(form.getFormTitle());
+        setAltSubCaption(getForm().getFormTitle());
+    }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
     }
 
     protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {

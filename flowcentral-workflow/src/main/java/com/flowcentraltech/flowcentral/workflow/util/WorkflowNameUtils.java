@@ -93,6 +93,28 @@ public final class WorkflowNameUtils {
         return workflowName;
     }
 
+    public static String getWorkflowNameFromRunnable(String runnable) {
+        if (runnable != null) {
+            int index = runnable.indexOf(RESERVED_WORKFLOW_NAME_PUBLISHED_SUFFIX);
+            if (index > 0) {
+                return runnable.substring(0, index);
+            }
+        }
+
+        return null;
+    }
+
+    public static String getWorkflowDescriptionFromRunnable(String runnableDesc) {
+        if (runnableDesc != null) {
+            int index = runnableDesc.indexOf(RESERVED_WORKFLOW_DESCRIPTION_PUBLISHED_SUFFIX);
+            if (index > 0) {
+                return runnableDesc.substring(0, index);
+            }
+        }
+
+        return null;
+    }
+
     public static String getWorkflowRunnableDescription(String workflowDesc) {
         return workflowDesc + RESERVED_WORKFLOW_DESCRIPTION_PUBLISHED_SUFFIX;
     }

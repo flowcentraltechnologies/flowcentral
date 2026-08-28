@@ -16,13 +16,13 @@
 
 package com.flowcentraltech.flowcentral.system.web.writers;
 
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.system.web.widgets.FileAttachmentImageWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * File attachment image writer.
@@ -32,7 +32,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(FileAttachmentImageWidget.class)
 @Component("fileattachmentimage-writer")
-public class FileAttachmentImageWriter extends AbstractControlWriter {
+public class FileAttachmentImageWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

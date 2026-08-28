@@ -46,7 +46,7 @@ public class EntityRefSearchWidget extends EntitySearchWidget {
 
     @Override
     protected List<? extends Listable> doSearch(String input, int limit) throws UnifyException {
-        return getResultByRef(input, limit);
+        return getResultByRef(null, input, limit);
     }
 
     @SuppressWarnings("unchecked")

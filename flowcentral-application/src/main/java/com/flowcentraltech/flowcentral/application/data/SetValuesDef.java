@@ -122,7 +122,7 @@ public class SetValuesDef {
         }
 
         for (SetValueDef setValueDef : setValueList) {
-            final EntityFieldDef entityFieldDef = SystemUtils.isProcessVariable(setValueDef.getFieldName())
+            final EntityFieldDef entityFieldDef = SystemUtils.isProcessVariableCode(setValueDef.getFieldName())
                     ? InputWidgetUtils.getProcessVariableEntityFieldDef()
                     : entityDef.getFieldDef(setValueDef.getFieldName());
             if (entityFieldDef.isSupportSetValue()) {

@@ -57,7 +57,7 @@ import com.tcdng.unify.web.constant.ExtensionType;
 @LongName("application.entitytextsearch")
 @UplAttributes({ @UplAttribute(name = "ref", type = String.class, mandatory = true),
         @UplAttribute(name = "searchField", type = String.class),
-        @UplAttribute(name = "limit", type = int.class, defaultVal = "20"),
+        @UplAttribute(name = "limit", type = int.class, defaultVal = "100"),
         @UplAttribute(name = "queryLabel", type = String.class, defaultVal = "$m{search.filter}"),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "ellipsis-h"),

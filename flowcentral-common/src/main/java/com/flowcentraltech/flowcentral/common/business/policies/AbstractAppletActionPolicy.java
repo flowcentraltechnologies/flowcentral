@@ -16,6 +16,9 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Document;
+
 /**
  * Convenient abstract base class for applet action policies.
  * 
@@ -23,5 +26,15 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  * @since 4.1
  */
 public abstract class AbstractAppletActionPolicy extends AbstractEntityActionPolicy implements AppletActionPolicy {
+    
+    @SuppressWarnings("unchecked")
+    protected <U> U getDocumentAttribute(Class<U> clazz, String name) throws UnifyException {
+        Document document = getRequestContextUtil().getRequestDocument();
+        if (document != null) {
+            return (U) document.getAttribute(name);
+        }
+        
+        return null;
+    }
 
 }

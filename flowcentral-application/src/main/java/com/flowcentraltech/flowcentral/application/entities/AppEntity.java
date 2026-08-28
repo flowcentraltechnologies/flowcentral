@@ -86,6 +86,9 @@ public class AppEntity extends BaseApplicationEntity {
     private List<AppEntityField> fieldList;
 
     @ChildList
+    private List<AppEntityProcessVariable> processVariableList;
+
+    @ChildList
     private List<AppEntityAttachment> attachmentList;
 
     @ChildList
@@ -243,6 +246,14 @@ public class AppEntity extends BaseApplicationEntity {
 
     public void setFieldList(List<AppEntityField> fieldList) {
         this.fieldList = fieldList;
+    }
+
+    public List<AppEntityProcessVariable> getProcessVariableList() {
+        return processVariableList;
+    }
+
+    public void setProcessVariableList(List<AppEntityProcessVariable> processVariableList) {
+        this.processVariableList = processVariableList;
     }
 
     public List<AppEntityAttachment> getAttachmentList() {

@@ -204,6 +204,13 @@ public class UnifyInterconnectServiceImpl extends AbstractBusinessService
                                 result = new Object[] { count };
                             }
                                 break;
+                            case EXISTS: {
+                                Query<? extends Entity> query = createQuery(
+                                        (Class<? extends Entity>) entityInfo.getImplClass(), req);
+                                boolean exists = db().exists(query);
+                                result = new Object[] { exists };
+                            }
+                                break;
                             case VALIDATE: {
                                 Object reqBean = interconnect.getBeanFromJsonPayload(req);
                                 if (unifyEntityActionPolicy != null) {

@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormM
 import com.flowcentraltech.flowcentral.application.web.widgets.FormActionButtons;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.FormActionPolicy;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -37,7 +38,6 @@ import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Form action button writer.
@@ -47,7 +47,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(FormActionButtons.class)
 @Component("formactionbuttons-writer")
-public class FormActionButtonsWriter extends AbstractControlWriter {
+public class FormActionButtonsWriter extends AbstractFlowCentralControlWriter {
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;

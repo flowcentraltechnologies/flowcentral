@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditorWidget;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor;
@@ -30,7 +31,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Workflow editor widget writer.
@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(WorkflowEditorWidget.class)
 @Component("fc-workfloweditor-writer")
-public class WorkflowEditorWriter extends AbstractControlWriter {
+public class WorkflowEditorWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -69,7 +69,7 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
             // Body
             writer.write(
                     "<div style=\"display:table;table-layout: fixed;width:100%;height:100%;\"><div style=\"display:table-row;\">");
-            writer.write("<div style=\"display:table-cell;vertical-align:top;position:relative;\">");
+            writer.write("<div class=\"toolcol\" style=\"display:table-cell;vertical-align:top;\">");
 
             // Tools
             writer.write("<div class=\"tools\">");
@@ -99,7 +99,11 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
             writer.write("</div>");
             // End tools
 
-            // Design
+            
+            writer.write("</div>");
+            writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
+
+            // NotifTemplateEditor
             writer.write("<div class=\"design\">");
 
             writer.write("<div id=\"").write(workflowEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");

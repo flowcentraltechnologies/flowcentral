@@ -33,13 +33,12 @@ public class StudioReportConfigurationAppletPanel extends AbstractStudioAppCompo
     @Action
     @Override
     public void update() throws UnifyException {
-        super.update();
-
         final StudioReportConfigurationApplet applet = getValue(StudioReportConfigurationApplet.class);
-        if (applet.isRootForm()) {
-            applet.getReportEditorPage().commitDesign();
-            applet.reload();
+        if (applet.isRootHwtForm()) {
+            applet.commitDesign();
         }
+
+        super.update();
     }
 
 }

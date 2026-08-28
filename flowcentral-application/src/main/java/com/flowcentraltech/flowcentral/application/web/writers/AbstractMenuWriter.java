@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidge
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanelWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -36,7 +37,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
 
 /**
  * Convenient abstract base class for menu writers.
@@ -44,7 +44,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractMenuWriter extends AbstractPanelWriter {
+public abstract class AbstractMenuWriter extends AbstractFlowCentralPanelWriter {
 
     @Configurable
     protected AppletUtilities au;

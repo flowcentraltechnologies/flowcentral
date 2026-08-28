@@ -43,7 +43,7 @@ public class ChartDataSource extends BaseApplicationEntity {
     @Column(length = 64)
     private String entity;
 
-    @Column
+    @Column(nullable = true)
     private CacheRefreshRate cacheRefreshRate;
     
     @ListOnly(key = "type", property = "description")

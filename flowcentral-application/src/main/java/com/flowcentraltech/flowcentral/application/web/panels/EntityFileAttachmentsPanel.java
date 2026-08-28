@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
-import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralDialogPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  */
 @Component("fc-entityfileattachmentspanel")
 @UplBinding("web/application/upl/entityfileattachmentspanel.upl")
-public class EntityFileAttachmentsPanel extends BaseDialogPanel {
+public class EntityFileAttachmentsPanel extends AbstractFlowCentralDialogPanel {
 	
 	@Override
 	public void switchState() throws UnifyException {

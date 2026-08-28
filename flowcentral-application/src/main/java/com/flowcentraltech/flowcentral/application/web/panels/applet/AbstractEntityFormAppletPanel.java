@@ -17,7 +17,9 @@
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
@@ -58,7 +60,6 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FileAttachmentCategoryType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage.FieldTarget;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.common.database.Entity;
@@ -118,7 +119,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         final String roleCode = getUserToken().getRoleCode();
         final AbstractForm form = applet.getResolvedForm();
         final Entity inst = form != null ? (Entity) form.getFormBean() : null;
-        final boolean isRootForm = applet.isRootForm();
+        final boolean isRootForm = applet.isRootHwtForm();
         final boolean isWorkflowCopyForm = isRootForm && formAppletDef != null
                 && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY);
         final boolean isInWorkflow = form != null && form.isInWorkflow();
@@ -661,9 +662,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = applet.saveEntityAs(saveAsPolicy);
             entityActionResult.setSuccessHint("$m{entityformapplet.saveas.success.hint}");
 
-            Long sessionApplicationId = (Long) getSessionAttribute(
-                    FlowCentralSessionAttributeConstants.CURRENT_APPLICATION_ID);
-            if (!DataUtils.equals(saveApplicatIonId, sessionApplicationId)) {
+            final Long docApplicationId = getDocumentAttribute(Long.class,
+                    AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
+            if (!DataUtils.equals(saveApplicatIonId, docApplicationId)) {
                 entityActionResult.setHidePopupOnly(true);
             }
 
@@ -684,13 +685,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void performFormAction() throws UnifyException {
         String actionName = getRequestTarget(String.class);
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
-        FormContext ctx = evaluateCurrentFormContext(
-                new FormValidationContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()), actionName));
-        if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(),
-                    formActionDef.getRule(), actionName);
-            handleEntityActionResult(entityActionResult);
+        Optional<FormActionDef> optional = applet.getCurrentFormDef().getFormActionDef(actionName);
+        if (optional.isPresent()) {
+            FormActionDef formActionDef = optional.get();
+            FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(
+                    EvaluationMode.getRequiredMode(formActionDef.isValidateForm()), actionName));
+            if (!ctx.isWithFormErrors()) {
+                EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(),
+                        formActionDef.getRule(), actionName);
+                handleEntityActionResult(entityActionResult);
+            }
         }
     }
 

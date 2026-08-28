@@ -20,6 +20,3 @@
 !ui-panel:snapshotBodyPanel
 	layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{snapshotTbl}
 !fc-beanlisttable:snapshotTbl binding:snapshotTable
-
-// Action
-!ui-postcommand:saveDesignAct command:saveDesign components:$c{snapshotBodyPanel}

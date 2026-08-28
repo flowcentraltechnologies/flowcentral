@@ -133,7 +133,7 @@ public class SetValueEntry {
                 paramField = null;
                 paramInput = null;
             } else {
-                EntityFieldDef entityFieldDef = SystemUtils.isProcessVariable(fieldName)
+                EntityFieldDef entityFieldDef = SystemUtils.isProcessVariableCode(fieldName)
                         ? InputWidgetUtils.getProcessVariableEntityFieldDef()
                         : entityDef.getFieldDef(fieldName);
                 paramInput = evalInput(entityFieldDef, paramInput);

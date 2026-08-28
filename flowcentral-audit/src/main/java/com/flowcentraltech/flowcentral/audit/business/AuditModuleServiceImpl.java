@@ -109,8 +109,8 @@ public class AuditModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public boolean supportsAuditLog(AuditSourceType sourceType, String entity) {
         try {
-            return environment().countAll(
-                    new EntityAuditConfigQuery().sourceType(sourceType).entity(entity).status(RecordStatus.ACTIVE)) > 0;
+            return environment().exists(
+                    new EntityAuditConfigQuery().sourceType(sourceType).entity(entity).status(RecordStatus.ACTIVE));
         } catch (UnifyException e) {
             logSevere(e);
         }

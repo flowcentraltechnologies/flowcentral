@@ -22,7 +22,6 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntityPolic
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -35,47 +34,45 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @since 4.1
  */
 @Component("userpolicy")
-public class UserPolicy extends BaseStatusWorkEntityPolicy {
+public class UserPolicy extends BaseStatusWorkEntityPolicy<User> {
 
     @Configurable
     private SystemModuleService systemModuleService;
 
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        User user = (User) record;
-        if (user.getOriginalCopyId() == null) {
-            user.setChangePassword(Boolean.TRUE);
+    public Object preCreate(User record, Date now) throws UnifyException {
+        if (record.getOriginalCopyId() == null) {
+            record.setChangePassword(Boolean.TRUE);
 
-            if (user.getPasswordExpires() == null) {
-                user.setPasswordExpires(Boolean.TRUE);
+            if (record.getPasswordExpires() == null) {
+                record.setPasswordExpires(Boolean.TRUE);
             }
 
-            if (user.getLoginLocked() == null) {
-                user.setLoginLocked(Boolean.FALSE);
+            if (record.getLoginLocked() == null) {
+                record.setLoginLocked(Boolean.FALSE);
             }
 
-            if (user.getAllowMultipleLogin() == null) {
-                user.setAllowMultipleLogin(Boolean.FALSE);
+            if (record.getAllowMultipleLogin() == null) {
+                record.setAllowMultipleLogin(Boolean.FALSE);
             }
 
-            if (user.getWorkflowStatus() == null) {
-                user.setWorkflowStatus(UserWorkflowStatus.NEW);
+            if (record.getWorkflowStatus() == null) {
+                record.setWorkflowStatus(UserWorkflowStatus.NEW);
             }
 
-            calcPasswordExpiryDate(user, now);
+            calcPasswordExpiryDate(record, now);
 
-            user.setLoginAttempts(Integer.valueOf(0));
-            user.setLastLoginDt(null);
+            record.setLoginAttempts(Integer.valueOf(0));
+            record.setLastLoginDt(null);
         }
 
         return super.preCreate(record, now);
     }
 
     @Override
-    public void preUpdate(Entity record, Date now) throws UnifyException {
-        User user = (User) record;
-        if (user.getOriginalCopyId() == null) {
-            calcPasswordExpiryDate(user, now);
+    public void preUpdate(User record, Date now) throws UnifyException {
+        if (record.getOriginalCopyId() == null) {
+            calcPasswordExpiryDate(record, now);
         }
 
         super.preUpdate(record, now);

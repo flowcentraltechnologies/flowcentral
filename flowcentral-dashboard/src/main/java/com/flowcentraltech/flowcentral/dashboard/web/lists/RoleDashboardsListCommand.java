@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
@@ -60,7 +61,7 @@ public class RoleDashboardsListCommand extends AbstractDashboardListCommand<Zero
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
         final String workspaceCode = (String) getSessionAttribute(FlowCentralSessionAttributeConstants.WORKSPACE_CODE);
-        List<String> roleDashboardList = appPrivilegeManager.findRolePrivileges(
+        Set<String> roleDashboardList = appPrivilegeManager.findRolePrivileges(
                 ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE, getUserToken().getRoleCode());
         if (!DataUtils.isBlank(roleDashboardList)) {
             List<Listable> resultList = new ArrayList<Listable>();

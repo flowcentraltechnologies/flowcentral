@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.system.web.panels;
 
-import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralDialogPanel;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 
@@ -27,6 +27,6 @@ import com.tcdng.unify.core.annotation.UplBinding;
  */
 @Component("fc-generatelicenserequestpanel")
 @UplBinding("web/system/upl/generatelicenserequestpanel.upl")
-public class GenerateLicenseRequestPanel extends BaseDialogPanel {
+public class GenerateLicenseRequestPanel extends AbstractFlowCentralDialogPanel {
 
 }

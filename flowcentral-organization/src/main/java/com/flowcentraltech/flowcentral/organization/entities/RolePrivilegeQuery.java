@@ -66,6 +66,10 @@ public class RolePrivilegeQuery extends BaseAuditEntityQuery<RolePrivilege> {
         return (RolePrivilegeQuery) addEquals("privilegeCatCode", privilegeCatCode);
     }
 
+    public RolePrivilegeQuery privilegeCode(String privilegeCode) {
+        return (RolePrivilegeQuery) addEquals("privilegeCode", privilegeCode);
+    }
+
     public RolePrivilegeQuery privilegeId(Long privilegeId) {
         return (RolePrivilegeQuery) addEquals("privilegeId", privilegeId);
     }

@@ -16,11 +16,13 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralTypeListCommand;
 import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
+import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -34,7 +36,8 @@ import com.tcdng.unify.core.list.ZeroParams;
  * @since 4.1
  */
 @Component("studioenvironmentdelegatelist")
-public class StudioEnvironmentDelegateListCommand extends AbstractFlowCentralTypeListCommand<EnvironmentDelegate, ZeroParams> {
+public class StudioEnvironmentDelegateListCommand
+        extends AbstractFlowCentralTypeListCommand<EnvironmentDelegate, ZeroParams> {
 
     public StudioEnvironmentDelegateListCommand() {
         super(EnvironmentDelegate.class, ZeroParams.class);
@@ -43,7 +46,9 @@ public class StudioEnvironmentDelegateListCommand extends AbstractFlowCentralTyp
     @Override
     protected List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, ZeroParams params)
             throws UnifyException {
-        return EntityConfigurationUtils.getConfigListable(baseConfigList, getMessageResolver());
+        return EntityConfigurationUtils.getConfigListable(isRestrictedStudioMode()
+                ? Arrays.asList(getComponentConfig(SystemModuleNameConstants.DIRECT_ENVIRONMENT_DELEGATE))
+                : baseConfigList, getMessageResolver());
     }
 
 }

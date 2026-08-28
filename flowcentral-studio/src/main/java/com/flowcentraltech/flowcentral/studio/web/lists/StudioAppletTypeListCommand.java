@@ -24,7 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
@@ -66,8 +65,7 @@ public class StudioAppletTypeListCommand extends AbstractApplicationListCommand<
                 protected List<Listable> create(Locale locale, Object... arg1) throws Exception {
                     List<Listable> list = new ArrayList<Listable>();
                     Map<String, Listable> map = listManager.getListMap(locale, "applettypelist");
-                    final boolean restrictedStudio = getContainerSetting(boolean.class,
-                            FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+                    final boolean restrictedStudio = isRestrictedStudioMode();
                     for (AppletType type : restrictedStudio ? RESTRICTED_CREATABLE_APPLETTYPE_LIST : CREATABLE_APPLETTYPE_LIST) {
                         list.add(map.get(type.code()));
                     }

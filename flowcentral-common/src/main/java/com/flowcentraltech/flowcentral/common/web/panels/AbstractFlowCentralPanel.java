@@ -32,4 +32,14 @@ public abstract class AbstractFlowCentralPanel extends AbstractPanel {
         return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
+
+    protected final boolean isRestrictedStudioMode() throws UnifyException {
+        return getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+    }
+
+    protected final String getServiceId() throws UnifyException {
+        return getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
+    }
 }

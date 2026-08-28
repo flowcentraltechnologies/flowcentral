@@ -64,6 +64,9 @@ public enum DataSourceOperation {
     COUNT_ALL(
             false,
             false),
+    EXISTS(
+            false,
+            false),
     VALUE(
             false,
             false),

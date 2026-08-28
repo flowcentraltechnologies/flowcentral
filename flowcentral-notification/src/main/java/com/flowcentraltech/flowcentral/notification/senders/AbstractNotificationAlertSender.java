@@ -22,6 +22,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
@@ -87,6 +88,11 @@ public abstract class AbstractNotificationAlertSender extends AbstractFlowCentra
     protected final <T extends NotifLargeTextWrapper> T getLargeTextWrapper(Class<T> wrapperType,
             Map<String, Object> parameters) throws UnifyException {
         return notification().wrapperOfNotifLargeText(wrapperType, parameters);
+    }
+    
+    protected final <T> T getProcessVariable(Class<T> type, ValueStoreReader reader, String name)
+            throws UnifyException {
+        return (T) reader.read(type, ApplicationEntityUtils.getDefaultProcessVariableDefKey(name));
     }
     
     /**

@@ -39,6 +39,10 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
+import com.flowcentraltech.flowcentral.application.entities.AppFormElementQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
+import com.flowcentraltech.flowcentral.application.entities.AppTableColumnQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
@@ -50,12 +54,10 @@ import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationMo
 import com.flowcentraltech.flowcentral.codegeneration.data.Snapshot;
 import com.flowcentraltech.flowcentral.codegeneration.data.SnapshotMeta;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.business.SynchronizableEnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.SystemRestoreService;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationRestore;
 import com.flowcentraltech.flowcentral.configuration.data.HelpSheetRestore;
 import com.flowcentraltech.flowcentral.configuration.data.Messages;
@@ -85,7 +87,13 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSectionQuery;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTileQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
+import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
+import com.flowcentraltech.flowcentral.report.entities.ReportColumnQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.data.DelegateSynchronizationItem;
 import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
@@ -105,6 +113,8 @@ import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils.StudioAppletNameParts;
 import com.flowcentraltech.flowcentral.studio.web.util.StudioWidgetWriterUtils;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -130,7 +140,7 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(StudioModuleNameConstants.STUDIO_MODULE_SERVICE)
-public class StudioModuleServiceImpl extends AbstractFlowCentralService implements StudioModuleService, StudioProvider {
+public class StudioModuleServiceImpl extends AbstractFlowCentralService implements StudioModuleService {
 
     static {
         ApplicationCollaborationUtils.registerCollaborationType(Chart.class, CollaborationType.CHART);
@@ -274,12 +284,6 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
-    public boolean isInstallDefaultDeveloperRoles() throws UnifyException {
-        return getContainerSetting(boolean.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALL_DEVELOPER_ROLES, true);
-    }
-
-    @Override
     public List<SnapshotDetails> findSnapshotDetails(Date fromDate, Date toDate) throws UnifyException {
         final int limit = appletUtilities.system().getSysParameterValue(int.class,
                 StudioModuleSysParamConstants.SNAPSHOT_DETAILS_LIMIT);
@@ -331,16 +335,81 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             if (appletDefList == null) {
                 appletDefList = new ArrayList<AppletDef>();
             }
-
-            appletDefList.add(0, appletDefMap.get(StudioNameUtils.getStudioAppletName(applicationName, type, 0L)));
+            
             if (type.isEntityType()) {
                 appletDefList.add(0, appletUtilities.getAppletDef("studio.createTableEntity"));
-                appletDefList.add(0, appletUtilities.getAppletDef("studio.createCsvEntity"));
-                appletDefList.add(0, appletUtilities.getAppletDef("studio.createJsonEntity"));
+//                appletDefList.add(0, appletUtilities.getAppletDef("studio.createCsvEntity"));
+//                appletDefList.add(0, appletUtilities.getAppletDef("studio.createJsonEntity"));
             }            
+
+            appletDefList.add(0, appletDefMap.get(StudioNameUtils.getStudioAppletName(applicationName, type, 0L)));
         }
 
         return appletDefList != null ? appletDefList : Collections.emptyList();
+    }
+
+    @Override
+    public void updateTableColumns(Long appTableId, List<AppTableColumn> columnList) throws UnifyException {
+        environment().deleteAll(new AppTableColumnQuery().appTableId(appTableId));
+        if (!DataUtils.isBlank(columnList)) {
+            for (AppTableColumn column : columnList) {
+                column.setAppTableId(appTableId);
+                environment().create(column);
+            }
+        }
+    }
+
+    @Override
+    public void updateFormElements(Long appFormId, List<AppFormElement> elementList) throws UnifyException {
+        environment().deleteAll(new AppFormElementQuery().appFormId(appFormId));
+        if (!DataUtils.isBlank(elementList)) {
+            for (AppFormElement element : elementList) {
+                element.setAppFormId(appFormId);
+                environment().create(element);
+            }
+        }
+    }
+
+    @Override
+    public void updateReportColumns(Long reportConfigurationId, List<ReportColumn> columnList) throws UnifyException {
+        environment().deleteAll(new ReportColumnQuery().reportConfigurationId(reportConfigurationId));
+        if (!DataUtils.isBlank(columnList)) {
+            for (ReportColumn reportColumn : columnList) {
+                reportColumn.setReportConfigurationId(reportConfigurationId);
+                environment().create(reportColumn);
+            }
+        }
+    }
+
+    @Override
+    public void updateDashboardElements(Long dashboardId, List<DashboardSection> sectionList,
+            List<DashboardTile> tileList) throws UnifyException {
+        environment().deleteAll(new DashboardSectionQuery().dashboardId(dashboardId));
+        environment().deleteAll(new DashboardTileQuery().dashboardId(dashboardId));
+        if (!DataUtils.isBlank(sectionList)) {
+            for (DashboardSection dashboardSection : sectionList) {
+                dashboardSection.setDashboardId(dashboardId);
+                environment().create(dashboardSection);
+            }
+        }
+        
+        if (!DataUtils.isBlank(tileList)) {
+            for (DashboardTile dashboardTile : tileList) {
+                dashboardTile.setDashboardId(dashboardId);
+                environment().create(dashboardTile);
+            }
+        }
+    }
+
+    @Override
+    public void updateWorkflowSteps(Long workflowId, List<WfStep> stepList) throws UnifyException {
+        environment().deleteAll(new WfStepQuery().workflowId(workflowId));
+        if (!DataUtils.isBlank(stepList)) {
+            for (WfStep step : stepList) {
+                step.setWorkflowId(workflowId);
+                environment().create(step);
+            }
+        }
     }
 
     @Taskable(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_CREATE_SYNCHRONIZATION_TASK_NAME,
@@ -547,6 +616,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     private void installStudioFeatures(final ModuleInstall moduleInstall) throws UnifyException {
         if (StudioModuleNameConstants.STUDIO_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
+            if (appletUtilities.applicationPrivilegeManager() != null) {
             final Long applicationId = appletUtilities.application().getApplicationId("studio");
             appletUtilities.applicationPrivilegeManager().registerPrivilege(ConfigType.STATIC, applicationId,
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
@@ -556,6 +626,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                     ApplicationPrivilegeConstants.APPLICATION_FEATURE_CATEGORY_CODE,
                     PrivilegeNameUtils.getFeaturePrivilegeName(StudioFeatureConstants.DOWNLOAD_SNAPSHOT),
                     resolveApplicationMessage("$m{studio.privilege.downloadsnapshot}"));
+            }
         }
     }
 

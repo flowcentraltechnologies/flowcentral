@@ -49,7 +49,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @since 4.1
  */
 @Component("fc-entityselect")
-@UplAttributes({ @UplAttribute(name = "limit", type = int.class, defaultVal = "20"),
+@UplAttributes({ @UplAttribute(name = "limit", type = int.class, defaultVal = "100"),
         @UplAttribute(name = "ref", type = String.class, mandatory = true),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "search"),
@@ -150,7 +150,6 @@ public class EntitySelectWidget extends AbstractFlowCentralPopupTextField {
 
     @SuppressWarnings("unchecked")
     private Listable doCurrentSelect(Object keyVal) throws UnifyException {
-        logDebug("Decoding reference value [{0}]...", keyVal);
         RefDef refDef = getRefDef();
         final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
         Query<? extends Entity> query = null;

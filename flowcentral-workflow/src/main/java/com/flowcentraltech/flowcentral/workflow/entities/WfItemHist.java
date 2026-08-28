@@ -30,10 +30,10 @@ import com.tcdng.unify.core.annotation.Column;
  * @version 1.0
  */
 @Table(name = "FC_WORKITEMHISTORY",
-        indexes = {
-                @Index("applicationName"), 
+        indexes = { 
+                @Index("applicationName"),
                 @Index("workflowName"),
-                @Index("entity"), 
+                @Index("entity"),
                 @Index("branchCode") })
 public class WfItemHist extends BaseAuditEntity {
 

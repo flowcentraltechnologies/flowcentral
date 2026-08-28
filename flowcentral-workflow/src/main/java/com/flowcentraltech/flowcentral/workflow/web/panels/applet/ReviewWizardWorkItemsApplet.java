@@ -118,9 +118,9 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     @Override
     public EntityActionResult submitInst() throws UnifyException {
         WorkEntity inst = au().environment().find(priEntityInst.getClass(), priEntityInst.getId());
-        FormContext ctx = form.getCtx();
+        FormContext ctx = getForm().getCtx();
         EntityActionResult entityActionResult = au().workItemUtilities().submitToWorkflowChannel(
-                form.getFormDef().getEntityDef(),
+                getForm().getFormDef().getEntityDef(),
                 ctx.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
                 (WorkEntity) inst, ctx.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY));
         navBackToPrevious();
@@ -153,7 +153,7 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     }
 
     public void nextStep() throws UnifyException {
-        breadCrumbStack.push(form.getBreadCrumbs().getLastBreadCrumb());
+        breadCrumbStack.push(getForm().getBreadCrumbs().getLastBreadCrumb());
         try {
             loadWizardStep(wfWizardStepIndex + 1);
         } catch (UnifyException e) {
@@ -173,6 +173,11 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     @Override
     protected List<BreadCrumb> getBaseFormBreadCrumbs() {
         return breadCrumbStack;
+    }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
     }
 
     @Override
@@ -212,14 +217,13 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
             viewMode = ViewMode.NEW_FORM;
         }
 
-//        form = constructForm(wfWizardStepFormDef, currEntityInst, formMode, null, false);
-        form = constructForm(currEntityInst, formMode, null, false);
-        currEntityInst = (Entity) form.getFormBean();
-        form.setFormTitle(_wfWizardStepDef.getLabel());
-        form.setFormStepIndex(index + 1);
+        setHwtForm(constructForm(currEntityInst, formMode, null, false));
+        currEntityInst = (Entity) getForm().getFormBean();
+        getForm().setFormTitle(_wfWizardStepDef.getLabel());
+        getForm().setFormStepIndex(index + 1);
         wfWizardStepIndex = index;
 
-        FormContext ctx = form.getCtx();
+        FormContext ctx = getForm().getCtx();
         ctx.setAttribute(AppletPropertyConstants.CREATE_FORM_NEW_POLICY,
                 WorkflowModuleNameConstants.REVIEW_WIZARD_CREATE_ACTION_POLICY);
         ctx.setAttribute(AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY,

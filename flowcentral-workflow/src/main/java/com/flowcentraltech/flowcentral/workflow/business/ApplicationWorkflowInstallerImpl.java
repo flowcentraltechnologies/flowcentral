@@ -58,8 +58,6 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
-import com.flowcentraltech.flowcentral.workflow.entities.WfStepRole;
-import com.flowcentraltech.flowcentral.workflow.entities.WfStepRoleQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
@@ -72,6 +70,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -128,8 +127,10 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         workflow.setDescFormat(wfConfig.getDescFormat());
                         workflow.setLabel(label);
                         workflow.setCasePrefix(wfConfig.getCasePrefix());
+                        workflow.setCaseApplet(wfConfig.getCaseApplet());
                         workflow.setLoadingTable(wfConfig.getLoadingTable());
                         workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
+                        workflow.setSupportManualSubmission(wfConfig.getSupportManualSubmission());
                         workflow.setPublished(wfConfig.getPublished());
                         workflow.setRunnable(wfConfig.getRunnable());
                         workflow.setClassified(wfConfig.getClassified());
@@ -144,8 +145,10 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         oldWorkflow.setDescFormat(wfConfig.getDescFormat());
                         oldWorkflow.setLabel(label);
                         oldWorkflow.setCasePrefix(wfConfig.getCasePrefix());
+                        oldWorkflow.setCaseApplet(wfConfig.getCaseApplet());
                         oldWorkflow.setLoadingTable(wfConfig.getLoadingTable());
                         oldWorkflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
+                        oldWorkflow.setSupportManualSubmission(wfConfig.getSupportManualSubmission());
                         oldWorkflow.setPublished(wfConfig.getPublished());
                         oldWorkflow.setRunnable(wfConfig.getRunnable());
                         oldWorkflow.setClassified(wfConfig.getClassified());
@@ -263,11 +266,13 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         environment().updateByIdVersion(oldAppFormWizard);
                     }
 
+                    if (applicationPrivilegeManager != null) {
                     applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                             ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE,
                             PrivilegeNameUtils.getWfWizardPrivilegeName(ApplicationNameUtils
                                     .getApplicationEntityLongName(applicationName, wfWizardConfig.getName())),
                             description);
+                    }
                 }
 
                 logDebug(taskMonitor, "Installed [{0}] application workflow wizards...",
@@ -291,6 +296,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 String label = resolveApplicationMessage(wfConfig.getLabel());
                 logDebug(taskMonitor, "Restoring configured workflow [{0}]...", description);
 
+                // Restore runnable from snapshot
                 Workflow workflow = new Workflow();
                 workflow.setApplicationId(applicationId);
                 workflow.setName(wfConfig.getName());
@@ -298,6 +304,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 workflow.setDescFormat(wfConfig.getDescFormat());
                 workflow.setLabel(label);
                 workflow.setCasePrefix(wfConfig.getCasePrefix());
+                workflow.setCaseApplet(wfConfig.getCaseApplet());
                 workflow.setLoadingTable(wfConfig.getLoadingTable());
                 workflow.setSupportMultiItemAction(wfConfig.getSupportMultiItemAction());
                 workflow.setPublished(wfConfig.getPublished());
@@ -307,6 +314,13 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 workflow.setDeprecated(false);
                 workflow.setConfigType(ConfigType.CUSTOM);
                 populateChildList(wfConfig, workflow, applicationName, true);
+                environment().create(workflow);
+                
+                // Restore original
+                workflow.setName(WorkflowNameUtils.getWorkflowNameFromRunnable(wfConfig.getName()));
+                workflow.setDescription(WorkflowNameUtils.getWorkflowDescriptionFromRunnable(description));
+                workflow.setPublished(true);
+                workflow.setRunnable(false);
                 environment().create(workflow);
             }
         }
@@ -554,10 +568,11 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setAudit(stepConfig.isAudit());
                 wfStep.setBranchOnly(stepConfig.isBranchOnly());
                 wfStep.setDepartmentOnly(stepConfig.isDepartmentOnly());
+                wfStep.setExcludeMaker(stepConfig.isExcludeMaker());
                 wfStep.setIncludeForwarder(stepConfig.isIncludeForwarder());
                 wfStep.setForwarderPreffered(stepConfig.isForwarderPreffered());
-                wfStep.setEmails(stepConfig.isEmails());
-                wfStep.setComments(stepConfig.isComments());
+                wfStep.setEmails(stepConfig.getEmails());
+                wfStep.setComments(stepConfig.getComments());
                 wfStep.setNextStepName(stepConfig.getNextStepName());
                 wfStep.setAltNextStepName(stepConfig.getAltNextStepName());
                 wfStep.setBinaryConditionName(stepConfig.getBinaryCondition());
@@ -573,10 +588,6 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setRule(stepConfig.getRule());
                 wfStep.setConfigType(restore ? ConfigType.CUSTOM : ConfigType.STATIC);
                 populateChildList(stepConfig, applicationName, wfStep);
-                List<WfStepRole> participatingRoleList = environment()
-                        .findAll(new WfStepRoleQuery().applicationName(applicationName).workflowName(workflow.getName())
-                                .wfStepName(stepConfig.getName()));
-                wfStep.setRoleList(participatingRoleList);
                 stepList.add(wfStep);
             }
         }
@@ -664,6 +675,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStepAlert.setSendDelayInMinutes(wfAlertConfig.getSendDelayInMinutes());
                 wfStepAlert.setAlertHeldBy(wfAlertConfig.isAlertHeldBy());
                 wfStepAlert.setAlertWorkflowRoles(wfAlertConfig.isAlertWorkflowRoles());
+                wfStepAlert.setIndividual(wfAlertConfig.isIndividual());
                 wfStepAlert.setFireOnPrevStepName(wfAlertConfig.getFireOnPrevStepName());
                 wfStepAlert.setFireOnActionName(wfAlertConfig.getFireOnActionName());
                 wfStepAlert.setFireOnConditionName(wfAlertConfig.getFireOnCondition());

@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo.Column;
 import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleInfo.Row;
 import com.flowcentraltech.flowcentral.application.web.widgets.CollapsibleTableWidget;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
@@ -30,7 +31,6 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Collapsible table widget writer.
@@ -40,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(CollapsibleTableWidget.class)
 @Component("fc-collapsibletable-writer")
-public class CollapsibleTableWidgetWriter extends AbstractControlWriter {
+public class CollapsibleTableWidgetWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

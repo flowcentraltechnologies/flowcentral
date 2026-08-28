@@ -21,6 +21,9 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.PageRequestContextUtil;
+import com.tcdng.unify.web.ui.WebUIApplicationComponents;
+import com.tcdng.unify.web.ui.widget.Document;
 
 /**
  * Convenient abstract base class for form wizard navigation policies.
@@ -44,6 +47,17 @@ public abstract class AbstractFormWizardNavigationPolicy extends AbstractFlowCen
     @Override
     public List<String> pageAttributeNames() {
         return pageAttributesNames;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <U> U getDocumentAttribute(Class<U> clazz, String name) throws UnifyException {
+        Document document = getComponent(PageRequestContextUtil.class,
+                WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL).getRequestDocument();
+        if (document != null) {
+            return (U) document.getAttribute(name);
+        }
+        
+        return null;
     }
 
     @Override

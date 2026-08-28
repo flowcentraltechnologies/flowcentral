@@ -30,7 +30,9 @@ import java.util.TimeZone;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModulePathConstants;
 import com.flowcentraltech.flowcentral.application.constants.FormatOverrideConstants;
+import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
+import com.flowcentraltech.flowcentral.application.util.OpenPagePathParts;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
@@ -45,6 +47,7 @@ import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkContentInfo;
 import com.flowcentraltech.flowcentral.common.data.SecuredLinkInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
+import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.constants.SysDateFormatType;
@@ -382,6 +385,17 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public SecuredLinkInfo getWorkItemSecuredLink(String appletName, Long itemEventId, String itemDesc, String heldBy)
+            throws UnifyException {
+        final int expirationInMinutes = systemModuleService.getSysParameterValue(int.class,
+                SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
+        final OpenPagePathParts parts = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.MY_WORKITEM,
+                appletName, itemEventId);
+        return getNewSecuredLink(SecuredLinkType.WORKFLOW_DECISION, itemDesc, parts.getOpenPath(), heldBy,
+                expirationInMinutes);
+    }
+
+    @Override
     public int invalidateSecuredLinkByAccessKey(SecuredLinkType type, String accessKey) throws UnifyException {
         return environment().updateAll(new SecuredLinkQuery().type(type).accessKey(accessKey),
                 new Update().add("invalidated", Boolean.TRUE));
@@ -599,7 +613,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (systemModuleService.getSysParameterValue(boolean.class,
                 SecurityModuleSysParamConstants.ENABLE_PASSWORD_HISTORY)) {
             PasswordHistoryQuery query = new PasswordHistoryQuery().userId(userId).password(newPassword);
-            if (environment().countAll(query) > 0) {
+            if (environment().exists(query)) {
                 throw new UnifyException(SecurityModuleErrorConstants.NEW_PASSWORD_IS_STALE);
             }
 
@@ -790,7 +804,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             logDebug("Installing default users ...");
             String email = systemModuleService.getSysParameterValue(String.class,
                     SystemModuleSysParamConstants.SYSTEM_EMAIL);
-            if (environment().countAll(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID)) == 0) {
+            if (!environment().exists(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID))) {
                 User user = new User(DefaultApplicationConstants.SYSTEM_ENTITY_ID,
                         resolveSessionMessage(DefaultApplicationConstants.SYSTEM_FULLNAME),
                         DefaultApplicationConstants.SYSTEM_LOGINID, email, Boolean.FALSE);
@@ -803,7 +817,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                         new Update().add("email", email));
             }
 
-            if (environment().countAll(new PasswordComplexityQuery().ignoreEmptyCriteria(true)) == 0) {
+            if (!environment().exists(new PasswordComplexityQuery().ignoreEmptyCriteria(true))) {
                 PasswordComplexity passwordComplexity = new PasswordComplexity();
                 passwordComplexity.setMinimumPasswordLen(1);
                 passwordComplexity.setMinimumAlphabets(null);

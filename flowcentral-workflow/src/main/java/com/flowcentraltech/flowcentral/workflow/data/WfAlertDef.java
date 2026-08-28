@@ -54,11 +54,13 @@ public class WfAlertDef {
     private boolean alertHeldBy;
 
     private boolean alertWorkflowRoles;
+    
+    private boolean individualAlert;
 
     public WfAlertDef(WorkflowAlertType type, String name, String description, String recipientPolicy,
             String recipientNameRule, String recipientContactRule, String generator, String template,
             String fireOnPrevStepName, String fireOnAction, String fireOnCondition, int sendDelayInMinutes,
-            boolean alertHeldBy, boolean alertWorkflowRoles) {
+            boolean alertHeldBy, boolean alertWorkflowRoles, boolean individualAlert) {
         this.type = type;
         this.name = name;
         this.description = description;
@@ -72,6 +74,7 @@ public class WfAlertDef {
         this.sendDelayInMinutes = sendDelayInMinutes;
         this.alertHeldBy = alertHeldBy;
         this.alertWorkflowRoles = alertWorkflowRoles;
+        this.individualAlert = individualAlert;
     }
 
     public WorkflowAlertType getType() {
@@ -120,6 +123,10 @@ public class WfAlertDef {
 
     public boolean isAlertWorkflowRoles() {
         return alertWorkflowRoles;
+    }
+
+    public boolean isIndividualAlert() {
+        return individualAlert;
     }
 
     public String getFireOnPrevStepName() {

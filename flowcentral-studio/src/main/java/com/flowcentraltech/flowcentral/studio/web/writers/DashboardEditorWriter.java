@@ -15,9 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartDef;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.DashboardEditorWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -29,7 +30,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Dashboard editor widget writer.
@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(DashboardEditorWidget.class)
 @Component("fc-dashboardeditor-writer")
-public class DashboardEditorWriter extends AbstractControlWriter {
+public class DashboardEditorWriter extends AbstractFlowCentralControlWriter {
 
     private static final String[] SECTION_PROPERTY_KEYS = { "dashboardeditor.section.caption.prefix",
             "dashboardeditor.section.columns" };
@@ -81,8 +81,8 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         writer.write("<div class=\"hdr\">").write(getSessionMessage("dashboardeditor.availablecharts")).write("</div>");
         jsonWriter.beginArray("charts");
         int i = 0;
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+        final String applicationName = getDocumentAttribute(String.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
         for (ChartDef chartDef : chartModuleService.findChartDefs(applicationName)) {
             writer.write("<div class=\"tle\" id=\"").write(dashboardEditorWidget.getChoiceId()).write(i)
                     .write("\"><span>");
@@ -100,7 +100,7 @@ public class DashboardEditorWriter extends AbstractControlWriter {
         writer.write("</div></div>");
         // End charts
 
-        // Design
+        // NotifTemplateEditor
         writer.write("<div class=\"design\" style=\"display:table-cell;vertical-align:top;\">");
         writer.write("<div id=\"").write(dashboardEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");
         writer.write("</div></div>");

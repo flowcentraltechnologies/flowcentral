@@ -31,6 +31,8 @@ public class WfItemAccessible {
 
     private Long workRecId;
 
+    private Long externalEventId;
+
     private String branchCode;
 
     private String departmentCode;
@@ -57,10 +59,11 @@ public class WfItemAccessible {
 
     private Date criticalOn;
 
-    public WfItemAccessible(Long workRecId, String branchCode, String departmentCode, String wfItemDesc,
+    public WfItemAccessible(Long workRecId, Long externalEventId, String branchCode, String departmentCode, String wfItemDesc,
             String workflowName, String preferredWorkflowName, String stepName, String entityName, String requestedBy,
             Date requestedOn, Date stepOn, Date reminderOn, Date expectedOn, Date criticalOn) {
         this.workRecId = workRecId;
+        this.externalEventId = externalEventId;
         this.branchCode = branchCode;
         this.departmentCode = departmentCode;
         this.wfItemDesc = wfItemDesc;
@@ -94,6 +97,14 @@ public class WfItemAccessible {
 
     public void setWorkRecId(Long workRecId) {
         this.workRecId = workRecId;
+    }
+
+    public Long getExternalEventId() {
+        return externalEventId;
+    }
+
+    public void setExternalEventId(Long externalEventId) {
+        this.externalEventId = externalEventId;
     }
 
     public String getBranchCode() {

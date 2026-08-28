@@ -71,9 +71,10 @@ public class ReportPreview {
                     tdb.addColumnDef(reportColumn.getFldLabel(), reportColumn.getFldNm(), renderer, null, order,
                             reportColumn.getWidth(), false, false, false, false, false, false, false);
                 }
+                
+                entityTable = new EntityTable(au, tdb.build(au), null);
             }
 
-            entityTable = new EntityTable(au, tdb.build(au), null);
             Restriction searchRestriction = null;
             entityTable.setSourceObjectClearSelected(searchRestriction);
             oldDesign = design;

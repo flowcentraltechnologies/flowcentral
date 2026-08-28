@@ -41,11 +41,15 @@ public interface ModuleInstallLevelConstants {
 
     int REPORT_MODULE_LEVEL = 16;
 
+    int REPORT_MODULE_EXT_LEVEL = 18;
+
     int CHART_MODULE_LEVEL = 16;
 
     int DASHBOARD_MODULE_LEVEL = 20;
 
     int WORKFLOW_MODULE_LEVEL = 24;
+
+    int WORKFLOW_MODULE_EXT_LEVEL = 26;
 
     int INTEGRATION_MODULE_LEVEL = 28;
 

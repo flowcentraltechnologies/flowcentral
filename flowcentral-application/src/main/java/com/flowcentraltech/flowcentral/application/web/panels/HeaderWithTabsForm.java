@@ -41,6 +41,10 @@ public class HeaderWithTabsForm extends AbstractForm {
         public boolean isMaintain() {
             return MAINTAIN_INST.equals(this);
         }
+
+        public boolean isSwitchOnChange() {
+            return SWITCH_ON_CHANGE.equals(this);
+        }
     }
 
     private MiniForm headerForm;

@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ChartDatasourceView;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -37,46 +38,52 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApplet {
+public class StudioChartDatasourceApplet extends AbstractStudioAppComponentApplet<ChartDatasourceView> {
 
-    private ChartDatasourceView chartDatasourceView;
-
-    private final ChartModuleService cms;
-
-    public StudioChartDatasourceApplet(Page page, StudioModuleService sms, ChartModuleService cms, AppletUtilities au,
+    public StudioChartDatasourceApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        this.cms = cms;
-        createDesign();
 
-        final EntityFieldSequence entityFieldSequence = (EntityFieldSequence) form.getTabSheet().getTabSheetItem(3)
-                .getValObject();
+        final EntityFieldSequence entityFieldSequence = (EntityFieldSequence) getHwtForm().getTabSheet()
+                .getTabSheetItem(3).getValObject();
         entityFieldSequence.setUseTimeSeries(true);
     }
 
-    public ChartDatasourceView getChartDatasourceView() {
-        return chartDatasourceView;
+    public void reloadContent() throws UnifyException {
+        if (getDesign() != null) {
+            getDesign().reloadContent();
+        }
     }
 
-    public void createDesign() throws UnifyException {
-        final ChartDataSource chartDataSource = (ChartDataSource) form.getFormBean();
-        final Long chartDataSourceId = chartDataSource.getId();
-        if (chartDataSourceId != null) {
-            String subTitle = chartDataSource.getDescription();
-            chartDatasourceView = constructNewChartDatasourceView(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
-                    chartDataSourceId, subTitle);
-            chartDatasourceView.reloadContent();
-        }
+    @Override
+    public void formSwitchOnChange() throws UnifyException {
+        super.formSwitchOnChange();
+        reloadContent();
+    }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+        final ChartDataSource chartDataSource = (ChartDataSource) inst;
+        final Long chartDataSourceId = chartDataSource != null ? chartDataSource.getId() : null;
+        ChartDatasourceView chartDatasourceView = chartDataSourceId != null
+                ? constructNewChartDatasourceView(ApplicationNameUtils
+                        .getApplicationEntityLongName(getApplicationName(), chartDataSource.getName()),
+                        chartDataSourceId, chartDataSource.getDescription())
+                : constructNewChartDatasourceView(null, null,
+                        au().resolveSessionMessage("$m{chartdatasourceeditor.newchartdatasource}"));
+        chartDatasourceView.reloadContent();
+        setDesign(chartDatasourceView);
     }
 
     private ChartDatasourceView constructNewChartDatasourceView(String chartDatasourceName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{chartdatasourceeditor.chartdatasourcedesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new ChartDatasourceView(au(), cms, chartDatasourceName, id, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        return new ChartDatasourceView(studio(), au(), au().getComponent(ChartModuleService.class), chartDatasourceName,
+                id);
     }
 
 }

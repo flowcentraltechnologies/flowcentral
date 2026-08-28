@@ -36,21 +36,20 @@ public class StudioWorkflowAppletPanel extends AbstractStudioAppComponentAppletP
         super.switchState();
 
         final StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
-        final WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
-        setWidgetVisible("publishBtn", applet.isRootForm() && workflowEditorPage != null
+        final WorkflowEditorPage workflowEditorPage = (WorkflowEditorPage) applet.getDesign();
+        setWidgetVisible("publishBtn", !isRestrictedStudioMode() && applet.isRootHwtForm() && workflowEditorPage != null
                 && !workflowEditorPage.isPublished() && !workflowEditorPage.isRunnable());
     }
 
     @Action
     @Override
     public void update() throws UnifyException {
-        super.update();
-
         final StudioWorkflowApplet applet = getValue(StudioWorkflowApplet.class);
-        if (applet.isRootForm()) {
-            applet.getWorkflowEditorPage().commitDesign();
-            applet.reload();
+        if (applet.isRootHwtForm()) {
+            applet.commitDesign();
         }
+
+        super.update();
     }
 
 }

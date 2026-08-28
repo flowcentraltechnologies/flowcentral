@@ -64,6 +64,9 @@ public class WfStepAlert extends BaseNamedEntity {
     @Column
     private boolean alertWorkflowRoles;
 
+    @Column
+    private boolean individual;
+
     @Column(name = "FIRE_ON_PREV_STEP_NM", length = 64, nullable = true)
     private String fireOnPrevStepName;
 
@@ -150,6 +153,14 @@ public class WfStepAlert extends BaseNamedEntity {
 
     public void setAlertWorkflowRoles(boolean alertWorkflowRoles) {
         this.alertWorkflowRoles = alertWorkflowRoles;
+    }
+
+    public boolean isIndividual() {
+        return individual;
+    }
+
+    public void setIndividual(boolean individual) {
+        this.individual = individual;
     }
 
     public String getGenerator() {

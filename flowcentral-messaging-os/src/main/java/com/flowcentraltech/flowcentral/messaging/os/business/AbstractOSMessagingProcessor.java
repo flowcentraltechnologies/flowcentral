@@ -21,7 +21,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingReq;
 import com.flowcentraltech.flowcentral.messaging.os.data.BaseOSMessagingResp;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingResponseConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingResponseConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;

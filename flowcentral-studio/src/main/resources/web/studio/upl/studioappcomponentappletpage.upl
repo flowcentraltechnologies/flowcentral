@@ -17,15 +17,18 @@
 	layout:$d{!ui-horizontal cellPadding:false style:$s{width:100%;height:100%;} widths:$l{none 324px}}
 	components:$c{designBasePanel}
 	components:$c{appletPanel}
-
-// Design panel
-!ui-panel:designBasePanel style:$s{width:100%;height:100%;padding-right:4px;box-sizing:border-box;}
-	layout:$d{!ui-vertical style:$s{width:100%;height:100%;}}
-	components:$c{designPanel}
-!ui-panel:designPanel style:$s{width:100%;height:100%;}
 	
 // Applet panel
 !fc-studioappcomponentappletpanel:appletPanel style:$s{height:100%;} styleClass:$e{studiodetail}
 	binding:applet
 
-// Actions
+// Design panel
+!ui-panel:designBasePanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{headerBar designBodyPanel}
+	binding:applet
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
+	components:$c{titleBlock}
+!fc-formbreadcrumbs:titleBlock binding:breadCrumbs
+!ui-panel:designBodyPanel styleClass:$e{fc-studiodesign} style:$s{width:100%;height:100%;padding-right:4px;box-sizing:border-box;}
+	components:$c{designPanel}
+!ui-panel:designPanel style:$s{width:100%;height:100%;}
+	

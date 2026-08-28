@@ -51,21 +51,25 @@ public interface WorkItemExternalAccessibilityProvider extends FlowCentralCompon
      * Submits work record ID from external system.
      * 
      * @param workRecId
-     *                     the work record ID
+     *                       the work record ID
      * @param workflowName
-     *                     the workflow name
+     *                       the workflow name
      * @param entityName
-     *                     the entity name
+     *                       the entity name
      * @param requestedBy
-     *                     the requester
+     *                       the requester
      * @param requestedOn
-     *                     requested on
+     *                       requested on
+     * @param branchCode
+     *                       the branch code
+     * @param departmentCode
+     *                       the department code
      * @return true if successfully submitted
      * @throws UnifyException
      *                        if an error occurs
      */
     boolean submitFromExternal(Long workRecId, String workflowName, String entityName, String requestedBy,
-            Date requestedOn) throws UnifyException;
+            Date requestedOn, String branchCode, String departmentCode) throws UnifyException;
 
     /**
      * Fetches error work record from external system.

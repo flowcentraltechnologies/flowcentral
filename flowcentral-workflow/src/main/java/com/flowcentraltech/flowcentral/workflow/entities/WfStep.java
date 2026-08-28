@@ -125,6 +125,9 @@ public class WfStep extends BaseConfigNamedEntity {
     private boolean departmentOnly;
 
     @Column
+    private boolean excludeMaker;
+
+    @Column
     private boolean includeForwarder;
 
     @Column
@@ -153,6 +156,9 @@ public class WfStep extends BaseConfigNamedEntity {
 
     @ListOnly(key = "workflowId", property = "casePrefix")
     private String workflowCasePrefix;
+
+    @ListOnly(key = "workflowId", property = "caseApplet")
+    private String workflowCaseApplet;
 
     @ListOnly(key = "workflowId", property = "description")
     private String workflowDesc;
@@ -192,9 +198,6 @@ public class WfStep extends BaseConfigNamedEntity {
 
     @ChildList
     private List<WfStepAlert> alertList;
-
-    @ChildList
-    private List<WfStepRole> roleList;
 
     public Long getWorkflowId() {
         return workflowId;
@@ -420,6 +423,14 @@ public class WfStep extends BaseConfigNamedEntity {
         this.departmentOnly = departmentOnly;
     }
 
+    public boolean isExcludeMaker() {
+        return excludeMaker;
+    }
+
+    public void setExcludeMaker(boolean excludeMaker) {
+        this.excludeMaker = excludeMaker;
+    }
+
     public boolean isIncludeForwarder() {
         return includeForwarder;
     }
@@ -498,6 +509,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setWorkflowCasePrefix(String workflowCasePrefix) {
         this.workflowCasePrefix = workflowCasePrefix;
+    }
+
+    public String getWorkflowCaseApplet() {
+        return workflowCaseApplet;
+    }
+
+    public void setWorkflowCaseApplet(String workflowCaseApplet) {
+        this.workflowCaseApplet = workflowCaseApplet;
     }
 
     public String getWorkflowDesc() {
@@ -602,14 +621,6 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setApplicationDesc(String applicationDesc) {
         this.applicationDesc = applicationDesc;
-    }
-
-    public List<WfStepRole> getRoleList() {
-        return roleList;
-    }
-
-    public void setRoleList(List<WfStepRole> roleList) {
-        this.roleList = roleList;
     }
 
 }

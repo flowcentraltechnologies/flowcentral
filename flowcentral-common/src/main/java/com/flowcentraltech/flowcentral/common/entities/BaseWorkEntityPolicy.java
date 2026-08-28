@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.common.entities;
 import java.util.Date;
 
 import com.tcdng.unify.common.constants.WfItemVersionType;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -30,12 +29,12 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("basework-entitypolicy")
-public class BaseWorkEntityPolicy extends BaseAuditEntityPolicy {
+public class BaseWorkEntityPolicy<T extends BaseWorkEntity> extends BaseAuditEntityPolicy<T> {
     
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        if (((BaseWorkEntity) record).getWfItemVersionType() == null) { 
-            ((BaseWorkEntity) record).setWfItemVersionType(WfItemVersionType.ORIGINAL);
+    public Object preCreate(T record, Date now) throws UnifyException {
+        if (record.getWfItemVersionType() == null) { 
+            record.setWfItemVersionType(WfItemVersionType.ORIGINAL);
         }
         
         return super.preCreate(record, now);

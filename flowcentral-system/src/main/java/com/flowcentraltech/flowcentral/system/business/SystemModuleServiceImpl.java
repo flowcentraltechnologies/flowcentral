@@ -277,7 +277,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public boolean exists(String datasourceName) throws UnifyException {
-        return environment().countAll(new DataSourceConnectionQuery().name(datasourceName)) > 0;
+        return environment().exists(new DataSourceConnectionQuery().name(datasourceName));
     }
 
     @Override
@@ -323,6 +323,12 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
                 SystemModuleSysParamConstants.SECURED_LINK_EXPIRATION_MINUTES);
         return securedLinkManager.getNewSecuredLink(type, title, contentPath, assignedLoginId, assignedRole,
                 expirationInMinutes);
+    }
+
+    @Override
+    public SecuredLinkInfo getWorkItemSecuredLink(String appletName, Long itemEventId, String itemDesc, String heldBy)
+            throws UnifyException {
+        return securedLinkManager.getWorkItemSecuredLink(appletName, itemEventId, itemDesc, heldBy);
     }
 
     @Override
@@ -418,8 +424,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
             result = new ArrayList<ListData>();
             for (SystemParameter systemParameter : params) {
                 final SysParamType type = systemParameter.getType();
-                result.add(new ListData(SystemUtils.encodeSysParamCode(type, systemParameter.getCode()),
-                        SystemUtils.encodeSysParamLabel(systemParameter.getFilterName())));
+                result.add(new ListData(SystemUtils.getSysParamCode(type, systemParameter.getCode()),
+                        SystemUtils.getSysParamLabel(systemParameter.getFilterName())));
             }
         }
 
@@ -496,23 +502,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public List<Long> getPrimaryMappedTenantIds() throws UnifyException {
-        List<Long> tenantIds = environment().valueList(Long.class, "id",
-                new MappedTenantQuery().ignoreEmptyCriteria(true));
-        Long actualPrimaryTenantId = getSysParameterValue(Long.class,
-                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
-        if (actualPrimaryTenantId != null) {
-            final int len = tenantIds.size();
-            for (int i = 0; i < len; i++) {
-                if (tenantIds.get(i).equals(actualPrimaryTenantId)) {
-                    tenantIds.set(i, Entity.PRIMARY_TENANT_ID);
-                    break;
-                }
-            }
-        } else {
-            return Arrays.asList(Entity.PRIMARY_TENANT_ID);
-        }
-
-        return tenantIds;
+        // TODO Mapped
+        return Arrays.asList(Entity.PRIMARY_TENANT_ID);
     }
 
     @Override
@@ -639,7 +630,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
                     SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH,
                     new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
             BufferedReader reader = new BufferedReader(new StringReader(new String(licenseFile, "UTF-8")));
-            String license = cryptograph.decrypt(IOUtils.readAll(reader));
+            String license = cryptograph.decrypt(IOUtils.readAllAsString(reader));
             reader = new BufferedReader(new StringReader(license));
             final String type = reader.readLine();
             final String clientTitle = reader.readLine();
@@ -782,6 +773,17 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
             throws UnifyException {
+        if (isRestrictedStudioMode()) {
+            if (!environment().exists(new ModuleQuery().name("defaultmod"))) {
+                Module module = new Module();
+                module.setName("defaultmod");
+                module.setDescription("Default Module");
+                module.setLabel("Default Module");
+                module.setShortCode("DFL");
+                environment().create(module);
+            }
+        }
+
         installModuleAndSystemParameters(moduleInstall);
     }
 

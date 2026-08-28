@@ -29,12 +29,9 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivileg
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.RolePrivilegeBackupAgent;
-import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.data.BranchInfo;
-import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
-import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.organization.constants.BranchViewType;
 import com.flowcentraltech.flowcentral.organization.constants.OrganizationModuleNameConstants;
 import com.flowcentraltech.flowcentral.organization.entities.Branch;
@@ -66,7 +63,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Broadcast;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
@@ -89,20 +85,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     private static final String ASSIGN_PRIVILEGE_LOCK = "org::assignprivtorole";
 
-    private static final String DEVOPS_DEPARTMENT_CODE = "DEVOPS";
-
-    private static final String DEVOPS_DEVELOPER_CODE = "DEVELOPER";
-
-    private static final String DEVOPS_JUNIOR_DEVELOPER_CODE = "JDEVELOPER";
-
     private final FactoryMap<Long, TenantRolePrivileges> tenantRolePrivileges;
 
     private final Map<String, Set<String>> privilegeBackup;
 
     private List<RolePrivilegeBackupAgent> roleBackupAgentList;
-
-    @Configurable
-    private StudioProvider studioProvider;
 
     public OrganizationModuleServiceImpl() {
         this.tenantRolePrivileges = new FactoryMap<Long, TenantRolePrivileges>()
@@ -163,6 +150,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException {
         return environment().listAll(query);
+    }
+
+    @Override
+    public MappedBranch findMappedBranch(Long branchId) throws UnifyException {
+        return environment().find(MappedBranch.class, branchId);
     }
 
     @Override
@@ -273,7 +265,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
         return environment()
-                .countAll(new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode).code(privilegeCode)) > 0;
+                .exists(new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode).code(privilegeCode));
     }
 
     @Override
@@ -306,8 +298,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                 Optional<Long> privilegeId = environment().valueOptional(Long.class, "id",
                         new PrivilegeQuery().code(privilegeCode));
                 if (privilegeId.isPresent()) {
-                    if (environment()
-                            .countAll(new RolePrivilegeQuery().privilegeId(privilegeId.get()).roleId(roleId)) == 0) {
+                    if (!environment()
+                            .exists(new RolePrivilegeQuery().privilegeId(privilegeId.get()).roleId(roleId))) {
                         rolePrivilege.setId(null);
                         rolePrivilege.setRoleId(roleId);
                         rolePrivilege.setPrivilegeId(privilegeId.get());
@@ -327,15 +319,26 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
+    public Set<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
         if (getUserToken().isReservedUser()) {
-            return environment().valueList(String.class, "code",
+            return environment().valueSet(String.class, "code",
                     new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode));
         }
 
-        return environment().valueList(String.class, "privilegeCode",
+        return environment().valueSet(String.class, "privilegeCode",
                 new RolePrivilegeQuery().roleWfItemVersionType(WfItemVersionType.ORIGINAL)
                         .privilegeCatCode(privilegeCategoryCode).roleCode(roleCode));
+    }
+
+    @Override
+    public Set<String> findPrivilegeRoles(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
+        if (getUserToken().isReservedUser()) {
+            return Collections.emptySet();
+        }
+
+        return environment().valueSet(String.class, "roleCode",
+                new RolePrivilegeQuery().roleWfItemVersionType(WfItemVersionType.ORIGINAL)
+                        .privilegeCatCode(privilegeCategoryCode).privilegeCode(privilegeCode));
     }
 
     @Override
@@ -454,71 +457,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
-        if (studioProvider != null && studioProvider.isInstallDefaultDeveloperRoles()) {
-            // Ensure DevOps department
-            Department department = environment().find(new DepartmentQuery().code(DEVOPS_DEPARTMENT_CODE));
-            if (department == null) {
-                department = new Department();
-                department.setId(DefaultApplicationConstants.DEVOPS_DEPARTMENT_ID);
-                department.setCode(DEVOPS_DEPARTMENT_CODE);
-                department.setDescription(resolveApplicationMessage("$m{organization.default.department.devops.desc}"));
-                environment().create(department);
-            }
-
-            // Ensure developer role
-            Role role = environment().findLean(new RoleQuery().code(DEVOPS_DEVELOPER_CODE));
-            if (role == null) {
-                role = new Role();
-                role.setDepartmentId(department.getId());
-                role.setCode(DEVOPS_DEVELOPER_CODE);
-                role.setDescription(resolveApplicationMessage("$m{organization.default.department.developer.desc}"));
-                Long roleId = (Long) environment().create(role);
-
-                List<String> privilegeCodeList = ConfigurationUtils.readStringList(
-                        "data/organization-privileges-developer.dat", getUnifyComponentContext().getWorkingPath());
-                RolePrivilege rolePrivilege = new RolePrivilege();
-                rolePrivilege.setRoleId(roleId);
-                for (Long privilegeId : environment().valueList(Long.class, "id",
-                        new PrivilegeQuery().codeIn(privilegeCodeList))) {
-                    rolePrivilege.setPrivilegeId(privilegeId);
-                    environment().create(rolePrivilege);
-                }
-            } else { // TODO Remove
-                if (environment().countAll(new RolePrivilegeQuery().roleId(role.getId())) == 0) {
-                    List<String> privilegeCodeList = ConfigurationUtils.readStringList(
-                            "data/organization-privileges-developer.dat", getUnifyComponentContext().getWorkingPath());
-                    RolePrivilege rolePrivilege = new RolePrivilege();
-                    rolePrivilege.setRoleId(role.getId());
-                    for (Long privilegeId : environment().valueList(Long.class, "id",
-                            new PrivilegeQuery().codeIn(privilegeCodeList))) {
-                        rolePrivilege.setPrivilegeId(privilegeId);
-                        environment().create(rolePrivilege);
-                    }
-                }
-            }
-
-            // Ensure junior developer role
-            role = environment().findLean(new RoleQuery().code(DEVOPS_JUNIOR_DEVELOPER_CODE));
-            if (role == null) {
-                role = new Role();
-                role.setDepartmentId(department.getId());
-                role.setCode(DEVOPS_JUNIOR_DEVELOPER_CODE);
-                role.setDescription(
-                        resolveApplicationMessage("$m{organization.default.department.juniordeveloper.desc}"));
-                Long roleId = (Long) environment().create(role);
-
-                List<String> privilegeCodeList = ConfigurationUtils.readStringList(
-                        "data/organization-privileges-juniordeveloper.dat",
-                        getUnifyComponentContext().getWorkingPath());
-                RolePrivilege rolePrivilege = new RolePrivilege();
-                rolePrivilege.setRoleId(roleId);
-                for (Long privilegeId : environment().valueList(Long.class, "id",
-                        new PrivilegeQuery().codeIn(privilegeCodeList))) {
-                    rolePrivilege.setPrivilegeId(privilegeId);
-                    environment().create(rolePrivilege);
-                }
-            }
-        }
+        
     }
 
     @Override

@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralDialogPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  */
 @Component("fc-userdetailspanel")
 @UplBinding("web/application/upl/userdetailspanel.upl")
-public class UserDetailsPanel extends BaseDialogPanel {
+public class UserDetailsPanel extends AbstractFlowCentralDialogPanel {
 
     @Override
     public void onPageConstruct() throws UnifyException {

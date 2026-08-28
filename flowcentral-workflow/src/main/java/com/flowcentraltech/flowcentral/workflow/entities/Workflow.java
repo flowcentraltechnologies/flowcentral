@@ -43,6 +43,9 @@ public class Workflow extends BaseApplicationEntity {
     @Column(length = 4, nullable = true)
     private String casePrefix;
     
+    @Column(length = 64, nullable = true)
+    private String caseApplet;
+    
     @Column(length = 128, nullable = true)
     private String loadingTable;
 
@@ -54,6 +57,9 @@ public class Workflow extends BaseApplicationEntity {
     
     @Column
     private boolean supportMultiItemAction;
+    
+    @Column
+    private boolean supportManualSubmission;
     
     @Column
     private boolean published;
@@ -92,6 +98,14 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setCasePrefix(String casePrefix) {
         this.casePrefix = casePrefix;
+    }
+
+    public String getCaseApplet() {
+        return caseApplet;
+    }
+
+    public void setCaseApplet(String caseApplet) {
+        this.caseApplet = caseApplet;
     }
 
     public String getLoadingTable() {
@@ -140,6 +154,14 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setSupportMultiItemAction(boolean supportMultiItemAction) {
         this.supportMultiItemAction = supportMultiItemAction;
+    }
+
+    public boolean isSupportManualSubmission() {
+        return supportManualSubmission;
+    }
+
+    public void setSupportManualSubmission(boolean supportManualSubmission) {
+        this.supportManualSubmission = supportManualSubmission;
     }
 
     public List<WorkflowFilter> getFilterList() {

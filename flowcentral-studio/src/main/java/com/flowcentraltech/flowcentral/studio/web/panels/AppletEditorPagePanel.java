@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.studio.web.panels;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Applet editor page panel.
@@ -35,20 +34,9 @@ public class AppletEditorPagePanel extends AbstractStudioEditorPagePanel {
 
     }
 
-    @Action
-    public void saveDesign() throws UnifyException {
-        AppletEditorPage appletEditorPage = getAppletEditorPage();
-        appletEditorPage.commitDesign();
-        hintUser("$m{studioappappletapplet.appleteditor.success.hint}", appletEditorPage.getSubTitle());
-    }
-
     @Override
     protected boolean isAppletContextReadOnly() throws UnifyException {
-        // TODO
         return false;
     }
 
-    private AppletEditorPage getAppletEditorPage() throws UnifyException {
-        return getValue(AppletEditorPage.class);
-    }
 }

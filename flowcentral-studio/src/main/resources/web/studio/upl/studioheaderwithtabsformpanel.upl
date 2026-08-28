@@ -20,11 +20,11 @@
 	components:$c{headerMiniForm formTabSheetPanel} 
  
 // Header
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{25% none}}
+	components:$c{headerLeftPanel headerRightPanel}
+!fc-formbreadcrumbs:titleBlock dots:true binding:breadCrumbs
 !fc-miniform:headerMiniForm binding:headerForm
 
 // Tab sheet
 !ui-panel:formTabSheetPanel styleClass:$s{cltabsection} components:$c{formTabSheet}
 !fc-tabsheet:formTabSheet binding:tabSheet
-	
-// Actions
-

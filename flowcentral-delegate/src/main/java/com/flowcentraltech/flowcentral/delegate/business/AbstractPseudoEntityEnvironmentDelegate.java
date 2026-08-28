@@ -65,6 +65,11 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
                 payload = new Object[] { count };
             }
                 break;
+            case EXISTS: {
+                boolean exists = exists(req);
+                payload = new Object[] { exists };
+            }
+                break;
             case CREATE:
                 break;
             case DELETE:
@@ -114,6 +119,8 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
     }
 
     protected abstract long countAll(DataSourceRequest req) throws UnifyException;
+
+    protected abstract boolean exists(DataSourceRequest req) throws UnifyException;
 
     protected abstract List<T> findAll(DataSourceRequest req) throws UnifyException;
 

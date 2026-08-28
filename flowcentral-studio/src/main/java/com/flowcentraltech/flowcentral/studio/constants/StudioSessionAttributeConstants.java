@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.constants;
 
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletSessionAttributeConstants;
 
 /**
  * Studio session attribute constants.
@@ -26,13 +26,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttrib
  */
 public interface StudioSessionAttributeConstants {
 
-    String CURRENT_APPLICATION_ID = FlowCentralSessionAttributeConstants.CURRENT_APPLICATION_ID;
-
-    String CURRENT_APPLICATION_NAME = "fc.CURRENT_APPLICATION_NAME";
-
-    String CURRENT_APPLICATION_DESC = "fc.CURRENT_APPLICATION_DESC";
-
-    String CURRENT_MENU_CATEGORY = "fc.CURRENT_MENU_CATEGORY";
+    String CURRENT_MENU_CATEGORY = AppletSessionAttributeConstants.CURRENT_MENU_CATEGORY;
 
     String CLEAR_PAGES = "fc.CLEAR_PAGES";
 }

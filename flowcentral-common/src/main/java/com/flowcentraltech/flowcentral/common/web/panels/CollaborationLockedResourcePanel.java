@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  */
 @Component("fc-collaborationlockedresourcepanel")
 @UplBinding("web/common/upl/collaborationlockedresourcepanel.upl")
-public class CollaborationLockedResourcePanel extends BaseDialogPanel {
+public class CollaborationLockedResourcePanel extends AbstractFlowCentralDialogPanel {
 
     @Override
     public void switchState() throws UnifyException {

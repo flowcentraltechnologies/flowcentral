@@ -112,11 +112,13 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     environment().updateByIdVersion(oldDashboard);
                 }
 
+                if (applicationPrivilegeManager != null) {
                 applicationPrivilegeManager.registerPrivilege(ConfigType.STATIC, applicationId,
                         ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE,
                         PrivilegeNameUtils.getDashboardPrivilegeName(ApplicationNameUtils
                                 .getApplicationEntityLongName(applicationName, dashboardConfig.getName())),
                         description);
+                }
             }
         }
     }

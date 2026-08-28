@@ -20,10 +20,16 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.SnapshotDetails;
+import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
+import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardSection;
+import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
+import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.studio.business.data.SnapshotResultDetails;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.task.TaskMonitor;
 
@@ -105,4 +111,68 @@ public interface StudioModuleService extends FlowCentralService {
      */
     List<AppletDef> findAppletDefs(String applicationName, StudioAppComponentType type, String filter)
             throws UnifyException;
+
+    /**
+     * Updates table column.
+     * 
+     * @param appTableId
+     *                   the table ID
+     * @param columnList
+     *                   the list of table columns
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateTableColumns(Long appTableId, List<AppTableColumn> columnList) throws UnifyException;
+
+    /**
+     * Updates form elements.
+     * 
+     * @param appFormId
+     *                   the form ID
+     * @param elementList
+     *                   the list of form elements
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateFormElements(Long appFormId, List<AppFormElement> elementList) throws UnifyException;
+
+    /**
+     * Updates report columns.
+     * 
+     * @param reportConfigurationId
+     *                   the configuration ID
+     * @param columnList
+     *                   the list of report columns
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateReportColumns(Long reportConfigurationId, List<ReportColumn> columnList) throws UnifyException;
+
+    /**
+     * Updates dashboard elements
+     * 
+     * @param dashboardId
+     *                    the dashboard ID
+     * @param sectionList
+     *                    the section list
+     * @param tileList
+     *                    the tile list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateDashboardElements(Long dashboardId, List<DashboardSection> sectionList, List<DashboardTile> tileList)
+            throws UnifyException;
+
+    /**
+     * Updates workflow steps.
+     * 
+     * @param workflowId
+     *                   the workflow ID
+     * @param stepList
+     *                   the list of workflow steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void updateWorkflowSteps(Long workflowId, List<WfStep> stepList) throws UnifyException;
+
 }

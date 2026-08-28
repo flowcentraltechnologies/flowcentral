@@ -39,6 +39,9 @@ public class WfConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private String casePrefix;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private String caseApplet;
 
     @JacksonXmlProperty(isAttribute = true)
     private String loadingTable;
@@ -49,6 +52,9 @@ public class WfConfig extends BaseRootAppConfig {
     @JacksonXmlProperty(isAttribute = true)
     private Boolean supportMultiItemAction;
     
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean supportManualSubmission;
+   
     @JacksonXmlProperty(isAttribute = true)
     private Boolean published;
     
@@ -64,6 +70,7 @@ public class WfConfig extends BaseRootAppConfig {
     public WfConfig() {
         super("flowcentral-workflow-4.0.0.xsd");
         this.supportMultiItemAction = Boolean.FALSE;
+        this.supportManualSubmission = Boolean.FALSE;
         this.published = Boolean.FALSE;
         this.runnable = Boolean.FALSE;
     }
@@ -92,6 +99,14 @@ public class WfConfig extends BaseRootAppConfig {
         this.casePrefix = casePrefix;
     }
 
+    public String getCaseApplet() {
+        return caseApplet;
+    }
+
+    public void setCaseApplet(String caseApplet) {
+        this.caseApplet = caseApplet;
+    }
+
     public String getLoadingTable() {
         return loadingTable;
     }
@@ -114,6 +129,14 @@ public class WfConfig extends BaseRootAppConfig {
 
     public void setSupportMultiItemAction(Boolean supportMultiItemAction) {
         this.supportMultiItemAction = supportMultiItemAction;
+    }
+
+    public Boolean getSupportManualSubmission() {
+        return supportManualSubmission;
+    }
+
+    public void setSupportManualSubmission(Boolean supportManualSubmission) {
+        this.supportManualSubmission = supportManualSubmission;
     }
 
     public Boolean getPublished() {

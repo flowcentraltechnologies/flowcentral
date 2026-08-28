@@ -30,7 +30,7 @@
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.ROLEDESCRIPTION}
 !ui-labeledtext:branchLabel styleClass:$e{fc-userdtltext} caption:$m{application.login.branch}
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.BRANCHDESC}
-!ui-labeledtext:businessUnitLabel styleClass:$e{fc-userdtltext} caption:$m{security.application.businessunit}
+!ui-labeledtext:businessUnitLabel styleClass:$e{fc-userdtltext} caption:$m{application.application.businessunit}
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.BUSINESSUNITDESC}
    
 !ui-button:cancelBtn caption:$m{button.cancel}

@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
+import com.flowcentraltech.flowcentral.workflow.data.WorkItemEvent;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
@@ -115,13 +116,17 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                     the requested by
      * @param requestedOn
      *                     the requested on
+     * @param branchCode
+     *                       the branch code
+     * @param departmentCode
+     *                       the department code
      * @throws UnifyException
      *                        if workflow channel is unknown. If instance type does
      *                        not match workflow entity definition. If an error
      *                        occurs
      */
-    void submitToWorkflowByName(String workflowName, String entity, Long id, String requestedBy, Date requestedOn)
-            throws UnifyException;
+    void submitToWorkflowByName(String workflowName, String entity, Long id, String requestedBy, Date requestedOn,
+            String branchCode, String departmentCode) throws UnifyException;
     
     /**
      * Submit entity instance to workflow by workflow name.
@@ -383,6 +388,17 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      */
     WorkEntityItem getWfItemWorkEntityFromWorkItemId(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException;
 
+    /**
+     * Gets work item event.
+     * 
+     * @param wfItemEventId
+     *                      the event ID
+     * @return the work item event object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    WorkItemEvent getWfItemEvent(Long wfItemEventId) throws UnifyException;
+    
     /**
      * Applies user action on workflow item.
      * 

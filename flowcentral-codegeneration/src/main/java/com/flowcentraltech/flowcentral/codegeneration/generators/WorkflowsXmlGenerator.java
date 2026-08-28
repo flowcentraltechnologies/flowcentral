@@ -118,8 +118,10 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 workflowConfig.setDescription(ctx.isSnapshotMode() ? workflow.getDescription() : "$m{" + descKey + "}");
                 workflowConfig.setLabel(ctx.isSnapshotMode() ? workflow.getLabel() : "$m{" + labelKey + "}");
                 workflowConfig.setCasePrefix(workflow.getCasePrefix());
+                workflowConfig.setCaseApplet(workflow.getCaseApplet());
                 workflowConfig.setLoadingTable(workflow.getLoadingTable());
                 workflowConfig.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
+                workflowConfig.setSupportManualSubmission(workflow.isSupportManualSubmission());
                 workflowConfig.setPublished(workflow.isPublished());
                 workflowConfig.setRunnable(workflow.isRunnable());
                 workflowConfig.setClassified(workflow.isClassified());
@@ -194,6 +196,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                         wfStepConfig.setAudit(wfStep.isAudit());
                         wfStepConfig.setBranchOnly(wfStep.isBranchOnly());
                         wfStepConfig.setDepartmentOnly(wfStep.isDepartmentOnly());
+                        wfStepConfig.setExcludeMaker(wfStep.isExcludeMaker());
                         wfStepConfig.setIncludeForwarder(wfStep.isIncludeForwarder());
                         wfStepConfig.setForwarderPreffered(wfStep.isForwarderPreffered());
                         wfStepConfig.setEmails(wfStep.getEmails());
@@ -299,6 +302,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
                                 wfAlertConfig.setSendDelayInMinutes(wfStepAlert.getSendDelayInMinutes());
                                 wfAlertConfig.setAlertHeldBy(wfStepAlert.isAlertHeldBy());
                                 wfAlertConfig.setAlertWorkflowRoles(wfStepAlert.isAlertWorkflowRoles());
+                                wfAlertConfig.setIndividual(wfStepAlert.isIndividual());
                                 wfAlertConfig.setFireOnPrevStepName(wfStepAlert.getFireOnPrevStepName());
                                 wfAlertConfig.setFireOnActionName(wfStepAlert.getFireOnActionName());
                                 wfAlertConfig.setFireOnCondition(wfStepAlert.getFireOnConditionName());

@@ -15,18 +15,13 @@
 
 !ui-page
 
-// Design panel
-!ui-panel:designPanel style:$s{width:100%;height:100%;}
-	components:$c{templateForm templateOptions}
-
 // Applet panel
 !fc-studionotiftemplateappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
-	binding:applet
-	additionalUpdateComponents:$c{templateForm}
+	moreCommitComponents:$c{templateForm} binding:applet 
 
-// Template form
-!fc-miniform:templateForm binding:applet.templateForm
+// Design panel
+!ui-panel:designPanel style:$s{width:100%;height:100%;} binding:design
+	components:$c{templateForm templateOptions}
+!fc-miniform:templateForm styleClass:$e{fc-studiotemplate} binding:templateForm
 !ui-textoptions:templateOptions alias:$s{entitytemplateoptionslist}
 	list:$s{studioentitytemplateoptionslist} listParams:$l{templateEntity}
-
-// Actions

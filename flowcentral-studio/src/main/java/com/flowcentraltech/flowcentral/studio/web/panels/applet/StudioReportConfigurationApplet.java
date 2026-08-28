@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ReportEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -35,39 +36,41 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioReportConfigurationApplet extends AbstractStudioAppComponentApplet {
-
-    private ReportEditorPage reportEditorPage;
+public class StudioReportConfigurationApplet extends AbstractStudioAppComponentApplet<ReportEditorPage> {
 
     public StudioReportConfigurationApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
     }
 
-    public ReportEditorPage getReportEditorPage() {
-        return reportEditorPage;
-    }
-
-    public void createDesign() throws UnifyException {
-        ReportConfiguration reportConfiguration = (ReportConfiguration) form.getFormBean();
-        Long reportConfigurationId = reportConfiguration.getId();
-        if (reportConfigurationId != null) {
-            String subTitle = reportConfiguration.getDescription();
-            reportEditorPage = constructNewReportEditorPage(reportConfiguration.getReportable(), reportConfigurationId,
-                    subTitle);
-            reportEditorPage.newEditor();
+    public void commitDesign() throws UnifyException {
+        if (getDesign() != null) {
+            getDesign().commitDesign();
         }
+    }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+        ReportConfiguration reportConfiguration = (ReportConfiguration) inst;
+        Long reportConfigurationId = reportConfiguration != null ? reportConfiguration.getId() : null;
+        ReportEditorPage reportEditorPage = reportConfigurationId != null
+                ? constructNewReportEditorPage(reportConfiguration.getReportable(), reportConfigurationId,
+                        reportConfiguration.getDescription())
+                : constructNewReportEditorPage(null, null, au().resolveSessionMessage("$m{reporteditor.newreport}"));
+        reportEditorPage.newEditor();
+        setDesign(reportEditorPage);
     }
 
     private ReportEditorPage constructNewReportEditorPage(String entityName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
-        EntityDef entityDef = getEntityDef(entityName);
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{reporteditor.reportdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new ReportEditorPage(au(), entityDef, id, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        
+        EntityDef entityDef = entityName != null ? getEntityDef(entityName) : null;
+        return new ReportEditorPage(studio(), au(), entityDef, id);
     }
 
 }

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingFunction;
+
 /**
  * Abstract base class for OS messaging requests.
  * 
@@ -25,9 +27,9 @@ public abstract class BaseOSMessagingReq {
     
     private final String processor;
 
-    private String userId;
+    private OSMessagingFunction function;
 
-    private String function;
+    private String userId;
 
     private String service;
 
@@ -55,11 +57,11 @@ public abstract class BaseOSMessagingReq {
         this.userId = userId;
     }
 
-    public final String getFunction() {
+    public final OSMessagingFunction getFunction() {
         return function;
     }
 
-    public final void setFunction(String function) {
+    public final void setFunction(OSMessagingFunction function) {
         this.function = function;
     }
 

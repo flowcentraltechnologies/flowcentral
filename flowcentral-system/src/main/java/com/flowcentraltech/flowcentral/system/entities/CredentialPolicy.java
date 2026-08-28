@@ -19,7 +19,6 @@ import java.util.Base64;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -30,21 +29,19 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("credential-policy")
-public class CredentialPolicy extends BaseStatusEntityPolicy {
+public class CredentialPolicy extends BaseStatusEntityPolicy<Credential> {
 
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        Credential credential = (Credential) record;
-        final String base64Encoded = calcBase64Encoded(credential);
-        credential.setBase64Encoded(base64Encoded);
+    public Object preCreate(Credential record, Date now) throws UnifyException {
+        final String base64Encoded = calcBase64Encoded(record);
+        record.setBase64Encoded(base64Encoded);
         return super.preCreate(record, now);
     }
 
     @Override
-    public void preUpdate(Entity record, Date now) throws UnifyException {
-        Credential credential = (Credential) record;
-        final String base64Encoded = calcBase64Encoded(credential);
-        credential.setBase64Encoded(base64Encoded);
+    public void preUpdate(Credential record, Date now) throws UnifyException {
+        final String base64Encoded = calcBase64Encoded(record);
+        record.setBase64Encoded(base64Encoded);
         super.preUpdate(record, now);
     }
 

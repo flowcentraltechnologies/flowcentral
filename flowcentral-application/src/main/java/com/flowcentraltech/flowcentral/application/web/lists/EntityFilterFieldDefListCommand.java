@@ -22,10 +22,12 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ListData;
 
 /**
  * Entity filter field definition list command.
@@ -34,11 +36,12 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @since 4.1
  */
 @Component("entityfilterfielddeflist")
-public class EntityFilterFieldDefListCommand extends AbstractFlowCentralListCommand<EntityLabelSuggestionDefListParams> {
+public class EntityFilterFieldDefListCommand
+        extends AbstractFlowCentralListCommand<EntityLabelSuggestionDefListParams> {
 
     @Configurable
     private AppletUtilities au;
-    
+
     public EntityFilterFieldDefListCommand() {
         super(EntityLabelSuggestionDefListParams.class);
     }
@@ -49,12 +52,13 @@ public class EntityFilterFieldDefListCommand extends AbstractFlowCentralListComm
         List<Listable> list = new ArrayList<>();
         if (params.isPresent()) {
             list.addAll(params.getEntityDef().getFilterFieldListables(params.getLabelSuggestionDef()));
-        }
 
-        if (params.isIncludeProcessVariable()) {
-            for (ProcessVariableDef def : au.getProcessVariables(params.getEntityDef().getLongName())) {
-                if (def.isSupportFilter()) {
-                    list.add(def);
+            if (params.isIncludeProcessVariable()) {
+                for (ProcessVariableDef def : params.getEntityDef().getVariableDefList()) {
+                    if (def.isSupportFilter()) {
+                        list.add(new ListData(def.getKey(),
+                                SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+                    }
                 }
             }
         }

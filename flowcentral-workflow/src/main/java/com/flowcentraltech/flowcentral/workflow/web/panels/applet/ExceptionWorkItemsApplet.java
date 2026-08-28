@@ -50,7 +50,7 @@ public class ExceptionWorkItemsApplet extends AbstractWorkItemsApplet {
         List<TableLoadingDef> altTableLoadingDefs = new ArrayList<TableLoadingDef>();
         UserToken userToken = au.getSessionUserToken();
         List<WorkflowStepInfo> workflowStepList = loadingTableName != null
-                ? workflowModuleService.findWorkflowLoadingExceptionStepInfoByRole(loadingTableName, roleCode,
+                ? au.workItemRoleUtilities().findWorkflowLoadingExceptionStepInfoByRole(loadingTableName, roleCode,
                         userToken.getBranchCode(), userToken.getDepartmentCode())
                 : Collections.emptyList();
         int orderIndex = 0;

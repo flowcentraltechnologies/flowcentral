@@ -21,11 +21,12 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
 import com.flowcentraltech.flowcentral.common.business.CodeGenerationProvider;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanelWriter;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
@@ -40,7 +41,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
 
 /**
  * Studio menu writer.
@@ -50,7 +50,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
  */
 @Writes(StudioMenuWidget.class)
 @Component("fc-studiomenu-writer")
-public class StudioMenuWriter extends AbstractPanelWriter {
+public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
 
     private static final String ORIGINAL_MENU_PATHID = "originalStudio.menu.pathID";
 
@@ -63,8 +63,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     @Configurable
     private CodeGenerationProvider codeGenerationProvider;
 
-    private static final List<String> applicationAppletList = Collections.unmodifiableList(
-            Arrays.asList("studio.manageApplication", "studio.stuManageModule", "system.manageDataSourceConnection"));
+    private static final List<String> applicationAppletList = Collections
+            .unmodifiableList(Arrays.asList("studio.manageApplication", "system.manageDataSourceConnection"));
 
     private static final List<String> synchronizationAppletList = Collections
             .unmodifiableList(Arrays.asList("studio.applicationSynchronization", "studio.delegateCreateSynchronization",
@@ -75,11 +75,15 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                     "studio.uploadSnapshot", "studio.snapshots"));
 
     private static final List<String> entityToolsAppletList = Collections.unmodifiableList(
-            Arrays.asList("studio.createJsonEntity", "studio.createCsvEntity", "studio.createTableEntity"));
+            Arrays.asList(/*"studio.createJsonEntity", "studio.createCsvEntity", */"studio.createTableEntity"));
 
     private static final List<StudioAppComponentType> utilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.APPLICATION, StudioAppComponentType.SNAPSHOT,
                     StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.CODEGENERATION));
+
+    private static final List<StudioAppComponentType> utilMenuCategoryRestrictedList = Collections
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.APPLICATION, StudioAppComponentType.SNAPSHOT,
+                    StudioAppComponentType.CODEGENERATION));
 
     private static final List<StudioAppComponentType> collabUtilMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.APPLICATION, StudioAppComponentType.SNAPSHOT,
@@ -106,8 +110,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         final StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
         final boolean searchable = studioMenuWidget.isSearchable();
 
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+        final String applicationName = getDocumentAttribute(String.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
         final boolean application = !StringUtils.isBlank(applicationName);
 
         writer.write("<div");
@@ -127,11 +131,11 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         }
 
         final boolean isCollaborationEnabled = appletUtilities.collaborationProvider() != null;
-        final boolean restrictedStudio = getContainerSetting(boolean.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+        final boolean restrictedStudio = isRestrictedStudioMode();
         final List<StudioAppComponentType> selMenuCategoryList = application
                 ? (restrictedStudio ? restrictedMenuCategoryList : menuCategoryList)
-                : (isCollaborationEnabled ? collabUtilMenuCategoryList : utilMenuCategoryList);
+                : (isCollaborationEnabled ? collabUtilMenuCategoryList
+                        : (restrictedStudio ? utilMenuCategoryRestrictedList : utilMenuCategoryList));
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
         if (currCategory == null) {
             currCategory = getSessionAttribute(StudioAppComponentType.class,
@@ -147,9 +151,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
         writer.write("<div style=\"display:table;width:100%;height:100%;\">");
         if (searchable) {
-            writer.write("<div style=\"display:table-row;\"><div class=\"mtop\" style=\"display:table-cell;\"></div></div>");
+            writer.write(
+                    "<div style=\"display:table-row;\"><div class=\"mtop\" style=\"display:table-cell;\"></div></div>");
         }
-        
+
         writer.write("<div style=\"display:table-row;\">");
         // Category
         writer.write("<div class=\"menucatbar\" style=\"display:table-cell;vertical-align:top;\">");
@@ -216,8 +221,9 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             throws UnifyException {
         final StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
         if (studioMenuWidget.getMenuSectionId().equals(sectionId)) {
-            final String applicationName = (String) getSessionAttribute(
-                    StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+            final String applicationName = getDocumentAttribute(String.class,
+                    AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
+            ;
             writer.write("<ul>");
             JsonWriter mjw = new JsonWriter();
             mjw.beginArray();
@@ -243,8 +249,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
                             : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName, searchInput)
                                     : (isSynchronization ? getSychronizationAppletDefs(applicationName, searchInput)
                                             : (isSnapshot ? getSnapshotAppletDefs(applicationName, searchInput)
-                                                    : studioModuleService.findAppletDefs(applicationName,
-                                                                    currCategory, searchInput)))));
+                                                    : studioModuleService.findAppletDefs(applicationName, currCategory,
+                                                            searchInput)))));
 
             for (AppletDef appletDef : appletDefList) {
                 if (isApplications || isCollaboration || isCodeGeneration || isSynchronization || isSnapshot

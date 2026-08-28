@@ -19,9 +19,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
+import com.flowcentraltech.flowcentral.common.constants.DefaultProcessVariableConstants;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.flowcentraltech.flowcentral.notification.constants.NotificationTransitionVariableConstants;
 import com.flowcentraltech.flowcentral.notification.senders.AbstractNotificationTemplateAlertSender;
 import com.flowcentraltech.flowcentral.security.templatewrappers.UserWelcomeTemplateWrapper;
 import com.tcdng.unify.core.UnifyException;
@@ -36,7 +36,8 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 @EntityReferences({ "security.user" })
 @Component("userwelcome-alertsender")
-public class UserWelcomeTemplateAlertSender extends AbstractNotificationTemplateAlertSender<UserWelcomeTemplateWrapper> {
+public class UserWelcomeTemplateAlertSender
+        extends AbstractNotificationTemplateAlertSender<UserWelcomeTemplateWrapper> {
 
     public UserWelcomeTemplateAlertSender() {
         super(UserWelcomeTemplateWrapper.class);
@@ -47,7 +48,8 @@ public class UserWelcomeTemplateAlertSender extends AbstractNotificationTemplate
             throws UnifyException {
         notifWrapper.setFullName(reader.read(String.class, "fullName"));
         notifWrapper.setLoginId(reader.read(String.class, "loginId"));
-        notifWrapper.setPlainPassword(reader.read(String.class, NotificationTransitionVariableConstants.PLAIN_PASSWORD));
+        notifWrapper.setPlainPassword(
+                getProcessVariable(String.class, reader, DefaultProcessVariableConstants.PLAIN_PASSWORD));
     }
 
     @Override

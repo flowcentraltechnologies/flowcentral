@@ -15,15 +15,20 @@
  */
 package com.flowcentraltech.flowcentral.application.web.lists;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
+import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ListData;
 
 /**
  * Set value process variable list command.
@@ -43,7 +48,19 @@ public class SetValueProcessVariableListCommand extends AbstractFlowCentralListC
 
     @Override
     public List<? extends Listable> execute(Locale locale, EntityDefListParams params) throws UnifyException {
-        return params.isPresent() ? au.getProcessVariables(params.getEntityDef().getLongName()) : au.getProcessVariables(null);
+        if (params.isPresent()) {
+            List<ListData> list = new ArrayList<ListData>();
+            for (ProcessVariableDef def : params.getEntityDef().getVariableDefList()) {
+                if (def.isSupportValues()) {
+                    list.add(new ListData(def.getKey(),
+                            SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+                }
+            }
+            
+            return list;
+        }
+
+        return Collections.emptyList();
     }
 
 }

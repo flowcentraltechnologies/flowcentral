@@ -39,6 +39,11 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioenvironmentdelegatelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="studioentityappletlist"
+			description="$m{studio.widgettype.studioentityappletlist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:studioentityappletlist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="delegatedatasourcelist"
 			description="$m{studio.widgettype.delegatedatasourcelist}"
 			dataType="STRING" inputType="STRING"
@@ -133,6 +138,11 @@
 			description="$m{studio.widgettype.entitysearch}" dataType="STRING"
 			inputType="STRING"
 			editor="!fc-entitysearch ref:$s{application.appEntityLoadingRef} listKey:$s{longName}"
+			renderer="!ui-label" />
+		<widgetType name="workentitysearch"
+			description="$m{studio.widgettype.workentitysearch}" dataType="STRING"
+			inputType="STRING"
+			editor="!fc-workentitysearch ref:$s{application.appEntityLoadingRef} listKey:$s{longName}"
 			renderer="!ui-label" />
 		<widgetType name="entityfieldwidgetlist"
 			description="$m{studio.widgettype.entityfieldwidgetlist}"
@@ -748,6 +758,7 @@
 					value="appEditable" />
 				<property name="maintainForm.delete.policy"
 					value="studioondeleteapplication-policy" />
+				<property name="baseRestriction" value="appEditable" />
 			</properties>
 			<filters>
 				<filter name="appEditable"
@@ -819,6 +830,7 @@
 				<property name="quickEdit.policy"
 					value="studioappentityfield-tablepolicy" />
 				<property name="quickEdit.width" value="1124" />
+				<property name="baseRestriction" value="customFieldFilter" />
 			</properties>
 			<filters>
 				<filter name="appEntityFieldEditable"
@@ -891,6 +903,25 @@
 					</restriction>
 				</filter>
 			</filters>
+		</applet>
+		<applet name="manageAppEntityProcessVariable"
+			description="$m{studio.appentityprocessvariable.manage}"
+			label="$m{studio.appentityprocessvariable.manage.label}"
+			type="MANAGE_ENTITYLIST" entity="application.appEntityProcessVariable"
+			menuAccess="false">
+			<properties>
+				<property name="searchTable" value="appEntityProcessVariableTable" />
+				<property name="searchTable.new" value="true" />
+				<property name="searchTable.report" value="false" />
+				<property name="searchTable.quickFilter" value="false" />
+				<property name="createForm" value="appEntityProcessVariableForm" />
+				<property name="createForm.save" value="true" />
+				<property name="createForm.save.next" value="true" />
+				<property name="createForm.save.close" value="true" />
+				<property name="maintainForm" value="appEntityProcessVariableForm" />
+				<property name="maintainForm.update" value="true" />
+				<property name="maintainForm.delete" value="true" />
+			</properties>
 		</applet>
 		<applet name="manageAppEntitySeries"
 			description="$m{studio.appentityseries.manage}"
@@ -1938,6 +1969,21 @@
 					label="$m{application.appentityfield.datatype}" widthRatio="1" />
 			</columns>
 		</table>
+		<table itemsPerPage="10" name="appEntityProcessVariableTable"
+			description="$m{studio.appentityprocessvariable.table}"
+			label="$m{studio.appentityprocessvariable.table.label}"
+			entity="application.appEntityProcessVariable" serialNo="true">
+			<columns>
+				<column field="name" renderWidget="application.name"
+					widthRatio="1" linkAct="maintainAct" />
+				<column field="label" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="supportFilter" renderWidget="application.text"
+					widthRatio="1" />
+				<column field="supportValues" renderWidget="application.text"
+					widthRatio="1" />
+			</columns>
+		</table>
 		<table itemsPerPage="-1" name="appEntityFieldQuickEditTable"
 			description="$m{studio.appentityfield.table.quickedit}"
 			label="$m{studio.appentityfield.table.quickedit.label}"
@@ -2826,6 +2872,8 @@
 							column="0" required="true" switchOnChange="true" visible="false" />
 						<field name="titleFormat"
 							inputWidget="application.texttemplate" column="0" />
+						<field name="portalAccess"
+							inputWidget="application.checkbox" column="0" />
 						<field name="baseField"
 							inputWidget="studio.entityreffieldlist" column="0"
 							required="true" visible="false" />
@@ -2941,10 +2989,21 @@
 					</setStates>
 				</formStatePolicy>
 				<formStatePolicy type="ON_SWITCH"
+					name="dataImportPolicy"
+					description="$m{studio.appapplet.form.formstatepolicy.dataimport}">
+					<onCondition>
+						<restriction type="EQUALS" field="type"
+							paramA="DIM" />
+					</onCondition>
+					<setStates>
+						<setState type="TAB" target="routeToApplets,filters,setValues,alerts" visible="FALSE" />
+					</setStates>
+				</formStatePolicy>
+				<formStatePolicy type="ON_SWITCH"
 					name="portalAccessPolicy"
 					description="$m{studio.appapplet.form.formstatepolicy.portalaccess}">
 					<onCondition>
-						<restriction type="AMONGST" field="type" paramA="MEL" />
+						<restriction type="EQUALS" field="type" paramA="MEL" />
 					</onCondition>
 					<setStates>
 						<setState type="FIELD" target="portalAccess"
@@ -3192,6 +3251,10 @@
 					label="$m{studio.appentity.form.expressions}"
 					contentType="CHILD_LIST" applet="manageAppEntityExpression"
 					reference="expressionList" />
+				<tab name="processVariables"
+					label="$m{studio.appentity.form.processvariables}"
+					contentType="CHILD_LIST" applet="manageAppEntityProcessVariable"
+					reference="processVariableList" />
 				<tab name="attachments"
 					label="$m{studio.appentity.form.attachments}"
 					contentType="CHILD_LIST" applet="manageAppEntityAttachment"
@@ -3609,6 +3672,32 @@
 					</errorCondition>
 				</formValidationPolicy>
 			</formValidationPolicies>
+		</form>
+		<form name="appEntityProcessVariableForm"
+			description="$m{studio.appentityprocessvariable.form}"
+			entity="application.appEntityProcessVariable">
+			<tabs>
+				<tab name="basicDetails"
+					label="$m{studio.appentityprocessvariable.form.basicdetails}"
+					contentType="MINIFORM" editable="true">
+					<section name="entityFieldDetails" columns="TYPE_1">
+						<field name="appEntityId"
+							inputWidget="application.entitysearch"
+							label="$m{application.appentityprocessvariable.appentity}" column="0"
+							required="true" />
+						<field name="name" inputWidget="application.name"
+							column="0" required="true" />
+						<field name="label" inputWidget="application.text"
+							column="0" required="true" />
+						<field name="supportFilter"
+							inputWidget="application.checkbox" column="0"  />
+						<field name="supportValues" inputWidget="application.checkbox"
+							column="0" />
+					</section>
+				</tab>
+				<tab name="changeLog" label="$m{application.form.audit}"
+					contentType="MINIFORM_CHANGELOG" />
+			</tabs>
 		</form>
 		<form name="appEntitySeriesForm"
 			description="$m{studio.appentityseries.form}"
@@ -4179,22 +4268,22 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="title" column="0" />
-						<field name="subTitle" column="0" />
+						<field name="title" column="0" switchOnChange="true"/>
+						<field name="subTitle" column="0" switchOnChange="true"/>
 						<field name="type" column="0" required="true"
 							switchOnChange="true" />
 						<field name="paletteType" column="0" required="true"
 							switchOnChange="true" />
 						<field name="color" inputWidget="studio.chartcolorlist"
-							column="0" required="true" />
+							column="0" required="true" switchOnChange="true"/>
 						<field name="rule" column="0" switchOnChange="true" />
-						<field name="category" column="0" />
-						<field name="series" column="0" required="true" />
-						<field name="height" column="0" required="true" />
+						<field name="category" column="0" switchOnChange="true"/>
+						<field name="series" column="0" required="true" switchOnChange="true"/>
+						<field name="height" column="0" required="true" switchOnChange="true"/>
 					</section>
 					<section name="chartFlags" columns="TYPE_2">
-						<field name="stacked" column="0" />
-						<field name="smooth" column="1" />
+						<field name="stacked" column="0" switchOnChange="true"/>
+						<field name="smooth" column="1" switchOnChange="true"/>
 					</section>
 				</tab>
 				<tab name="changeLog" label="$m{application.form.audit}"
@@ -4330,9 +4419,9 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" />
-						<field name="cacheRefreshRate" column="0" required="true" />
+						<field name="cacheRefreshRate" column="0" />
 					</section>
 				</tab>
 				<tab name="series"
@@ -4521,7 +4610,7 @@
 					<section name="basicDetails" columns="TYPE_1">
 						<field name="dashboardOptionId"
 							inputWidget="application.entitysearch" column="0" required="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" switchOnChange="true" required="true" />
 						<field name="chartDataSource" column="0" required="true"
 							switchOnChange="true" />
@@ -4580,8 +4669,8 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
-							column="0" />
+						<field name="entity" inputWidget="studio.entitysearch"
+							column="0" switchOnChange="true"/>
 						<field name="notificationType"
 							inputWidget="application.enumlist" column="0" required="true"
 							switchOnChange="true" />
@@ -4704,7 +4793,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="description" inputWidget="application.text"
 							column="0" required="true" saveAs="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" />
 						<field name="fontFamily" column="0" />
 						<field name="fontSizeInPixels"
@@ -5042,7 +5131,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" switchOnChange="true" />
 						<field name="itemsPerPage" inputWidget="application.integer"
 							column="0" />
@@ -5229,7 +5318,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" switchOnChange="true" />
 						<field name="titleFormat"
 							inputWidget="application.texttemplate" column="0" />
@@ -5746,7 +5835,7 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="entity" inputWidget="studio.entitybynamelist"
+						<field name="entity" inputWidget="studio.entitysearch"
 							column="0" required="true" switchOnChange="true" />
 						<field name="helpOverview"
 							inputWidget="application.richtexteditormedium" column="0" />
@@ -5927,10 +6016,8 @@
 							column="0" required="true" saveAs="true" />
 						<field name="label" inputWidget="application.text"
 							column="0" required="true" />
-						<field name="casePrefix" inputWidget="application.wordwithupper"
-							column="0"/>
 						<field name="entity"
-							inputWidget="studio.workentitybynamelist" column="0"
+							inputWidget="studio.workentitysearch" column="0"
 							required="true" saveAs="true" switchOnChange="true" />
 						<field name="loadingTable"
 							inputWidget="studio.workflowtablelist" column="0" />
@@ -5939,7 +6026,11 @@
 						<field name="filterGenerator"
 							inputWidget="studio.workflowfiltergeneratorlist"
 							switchOnChange="true" column="0" />
-						<field name="supportMultiItemAction"
+						<field name="caseApplet" inputWidget="studioentityappletlist"
+							column="0"/>
+						<field name="casePrefix" inputWidget="application.wordwithupper"
+							column="0"/>
+						<field name="supportManualSubmission"
 							inputWidget="application.checkbox" column="0" />
 					</section>
 				</tab>
@@ -6096,6 +6187,8 @@
 							column="0" />
 						<field name="branchOnly" inputWidget="application.checkbox"
 							column="0" />
+						<field name="excludeMaker"
+							inputWidget="application.checkbox" column="0" />
 						<field name="includeForwarder"
 							inputWidget="application.checkbox" column="0" />
 					</section>

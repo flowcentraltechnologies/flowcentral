@@ -2333,6 +2333,7 @@ const WD_ARROW_GAP = 8;
 const WD_ARROW_GAP_HALF = Math.floor(WD_ARROW_GAP/2);
 const WD_ARROW_OFFSET = -2;
 const WD_NORMAL_COLOR = "#444";
+const WD_MANUAL_COLOR = "#3498db";
 const WD_SELECT_COLOR = "#3498db";
 const WD_ROUTE_FILL_COLOR = "#eee";
 const WD_ROUTE_CONN_COLOR1 = "#dd0";
@@ -2396,7 +2397,7 @@ fuxstudio.wfdesign = {
 		});
 		
 		this.manualConnect = new fabric.LineArrow([0,0,0,0], {
-			stroke: '#000',
+			stroke: WD_MANUAL_COLOR,
 			strokeWidth: 1,
 			hasBorders: false
 		});
@@ -3400,6 +3401,7 @@ fuxstudio.init = function() {
 	ux.registerExtension("fuxstudio", fuxstudio);
 	ux.addDirectHdl(document, "keydown",
 			fuxstudio.wfdesign._cKeyDown, {});
+	ux.setDebounce(false);
 	// Perform
 	ux.setfn(fuxstudio.rigFormEditor, "fuxstudio01");  
 	ux.setfn(fuxstudio.rigStudioMenu, "fuxstudio02");  

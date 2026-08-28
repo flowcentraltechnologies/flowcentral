@@ -142,9 +142,7 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
 
     @SuppressWarnings("unchecked")
     protected Listable doCurrentSelectByRef(Object keyVal) throws UnifyException {
-        logDebug("Decoding reference value [{0}]...", keyVal);
         RefDecodedValue decodedKey = RefEncodingUtils.decodeRefValue(keyVal);
-        logDebug("Decoded reference value [{0}]...", decodedKey);
         String entityName = getRef(decodedKey.getIndex());
         if (StringUtils.isBlank(entityName)) {
             return null;
@@ -155,7 +153,6 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
         if (!isDirect()) {
             refDef = getRefDef(decodedKey.getIndex());
             entityName = refDef.getEntity();
-            logDebug("Using listing reference value [{0}]...", refDef.getLongName());
             if (refDef.isWithFilterGenerator()) {
                 br = refDef.getFilter().getRestriction(null, getValueStore().getReader(), null);
             }

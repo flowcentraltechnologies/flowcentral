@@ -36,4 +36,16 @@ public abstract class BaseStatusEntityQuery<T extends BaseStatusEntity> extends 
     public final BaseStatusEntityQuery<T> status(RecordStatus status) {
         return (BaseStatusEntityQuery<T>) addEquals("status", status);
     }
+
+    public final BaseStatusEntityQuery<T> isActive() {
+        return (BaseStatusEntityQuery<T>) addEquals("status", RecordStatus.ACTIVE);
+    }
+
+    public final BaseStatusEntityQuery<T> isInactive() {
+        return (BaseStatusEntityQuery<T>) addEquals("status", RecordStatus.INACTIVE);
+    }
+
+    public final BaseStatusEntityQuery<T> isDormant() {
+        return (BaseStatusEntityQuery<T>) addEquals("status", RecordStatus.DORMANT);
+    }
 }

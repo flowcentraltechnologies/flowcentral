@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.EntityEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -35,39 +36,34 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet {
-
-    private EntityEditorPage entityEditorPage;
+public class StudioAppEntityApplet extends AbstractStudioAppComponentApplet<EntityEditorPage> {
 
     public StudioAppEntityApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
     }
 
-    public EntityEditorPage getEntityEditorPage() {
-        return entityEditorPage;
-    }
-
-    public void createDesign() throws UnifyException {
-        AppEntity appEntity = (AppEntity) form.getFormBean();
-        Long entityId = appEntity.getId();
-        if (entityId != null) {
-            String subTitle = appEntity.getDescription();
-            entityEditorPage = constructNewEntityEditorPage(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appEntity.getName()), entityId,
-                    subTitle);
-            entityEditorPage.newEditor();
-        }
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+        AppEntity appEntity = (AppEntity) inst;
+        Long entityId = appEntity != null ? appEntity.getId() : null;
+        EntityEditorPage entityEditorPage = entityId != null
+                ? constructNewEntityEditorPage(
+                        ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appEntity.getName()),
+                        entityId, appEntity.getDescription())
+                : constructNewEntityEditorPage(null, null, au().resolveSessionMessage("$m{entityeditor.newentity}"));
+        entityEditorPage.newEditor();
+        setDesign(entityEditorPage);
     }
 
     private EntityEditorPage constructNewEntityEditorPage(String entityName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{entityeditor.entitydesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new EntityEditorPage(au(), entityName, id, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        return new EntityEditorPage(studio(), au(), entityName, id);
     }
 
 }

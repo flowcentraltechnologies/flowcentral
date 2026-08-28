@@ -33,13 +33,11 @@ public class StudioAppFormAppletPanel extends AbstractStudioAppComponentAppletPa
     @Action
     @Override
     public void update() throws UnifyException {
-        super.update();
-
-        final StudioAppFormApplet sapplet = getValue(StudioAppFormApplet.class);
-        if (sapplet.isRootForm()) {
-            sapplet.getFormEditorPage().commitDesign();
-            sapplet.reload();
+        final StudioAppFormApplet applet = getValue(StudioAppFormApplet.class);
+        if (applet.isRootHwtForm()) {
+            applet.commitDesign();
         }
-    }
 
+        super.update();
+    }
 }

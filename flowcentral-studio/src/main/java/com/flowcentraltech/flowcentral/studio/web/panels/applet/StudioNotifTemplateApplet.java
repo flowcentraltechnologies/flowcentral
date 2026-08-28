@@ -30,11 +30,14 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
+import com.flowcentraltech.flowcentral.studio.web.panels.NotifTemplateEditor;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -44,28 +47,38 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet {
+public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet<NotifTemplateEditor> {
 
     private static FormTabDef formTabDef;
-    
-    private MiniForm templateForm;
 
     public StudioNotifTemplateApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        templateForm = new MiniForm(MiniFormScope.MAIN_FORM, form.getCtx(), getFormTabDef(au));
     }
 
-    public MiniForm getTemplateForm() {
-        return templateForm;
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+        final NotificationTemplate template = (NotificationTemplate) getForm().getFormBean();
+        final Long templateId = template != null ? template.getId() : null;
+        NotifTemplateEditor notifTemplateEditor = templateId != null
+                ? constructNewNotifTemplateEditor(templateId, template.getDescription())
+                : constructNewNotifTemplateEditor(null,
+                        au().resolveSessionMessage("$m{notiftemplateeditor.newnotiftemplate}"));
+        setDesign(notifTemplateEditor);
     }
 
-    public String getTemplateEntity() throws UnifyException {
-        final NotificationTemplate tempate = form != null? (NotificationTemplate) form.getFormBean() : null;
-        return tempate != null ? tempate.getEntity(): null;
+    private NotifTemplateEditor constructNewNotifTemplateEditor(Object id, String subTitle) throws UnifyException {
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
+        breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{notiftemplateeditor.notiftemplatedesigner}"));
+        breadCrumbs.setLastCrumbSubTitle(subTitle);
+        setBreadCrumbs(breadCrumbs);
+        
+        return new NotifTemplateEditor(
+                id != null ? new MiniForm(MiniFormScope.MAIN_FORM, getForm().getCtx(), getFormTabDef(au())) : null,
+                getHwtForm(), studio(), au());
     }
-    
+
     private static FormTabDef getFormTabDef(AppletUtilities au) throws UnifyException {
         if (formTabDef == null) {
             synchronized (StudioNotifTemplateApplet.class) {
@@ -74,22 +87,19 @@ public class StudioNotifTemplateApplet extends AbstractStudioAppComponentApplet 
                     final List<FormFieldDef> fieldDefs = new ArrayList<FormFieldDef>();
                     EntityFieldDef entityFieldDef = entityDef.getFieldDef("subject");
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef("studio.entitytemplatetext");
-                    String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
-                            entityFieldDef, null, null);
-                    fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null,
-                            null, entityFieldDef.getFieldLabel(), renderer, 0, false, false,
-                            true, true, true, false));
+                    String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef, entityFieldDef, null,
+                            null);
+                    fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null, null,
+                            entityFieldDef.getFieldLabel(), renderer, 0, false, false, true, true, true, false));
                     entityFieldDef = entityDef.getFieldDef("template");
                     widgetTypeDef = au.getWidgetTypeDef("studio.entitytemplaterichtexteditor");
-                    renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
-                            entityFieldDef, null, null);
-                    fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null,
-                            null, entityFieldDef.getFieldLabel(), renderer, 0, false, false,
-                            true, true, true, false));
-                    
+                    renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef, entityFieldDef, null, null);
+                    fieldDefs.add(new FormFieldDef(entityFieldDef, widgetTypeDef, null, null,
+                            entityFieldDef.getFieldLabel(), renderer, 0, false, false, true, true, true, false));
+
                     formTabDef = new FormTabDef("template", "Template", "email",
-                            Arrays.asList(new FormSectionDef(fieldDefs, "details", null,
-                                    FormColumnsType.TYPE_1, null, null, true, true, false)));
+                            Arrays.asList(new FormSectionDef(fieldDefs, "details", null, FormColumnsType.TYPE_1, null,
+                                    null, true, true, false)));
                 }
             }
         }

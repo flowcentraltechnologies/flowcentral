@@ -16,12 +16,12 @@
 
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAction;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -48,7 +48,8 @@ public class StudioOnDeleteFormActionPolicy extends AbstractStudioAppletActionPo
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         final AppFormAction appFormAction = (AppFormAction) ctx.getInst();
-        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        final Long applicationId = getDocumentAttribute(Long.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         String privilegeCode = PrivilegeNameUtils.getFormActionPrivilegeName(appFormAction.getName());
         unregisterPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
                 privilegeCode);

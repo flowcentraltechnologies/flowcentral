@@ -29,8 +29,9 @@ import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingError;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorConstants;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingErrorResponse;
 import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingHeader;
-import com.flowcentraltech.flowcentral.messaging.os.data.OSMessagingRequestHeaderConstants;
-import com.flowcentraltech.flowcentral.messaging.os.local.OSDownloadLocalController;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingFunction;
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingRequestHeaderConstants;
+import com.flowcentraltech.flowcentral.messaging.os.data.local.OSDownloadLocalController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -70,7 +71,12 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
     @Override
     public UploadedFile handleLocalDownload(Map<String, String> headers) throws UnifyException {
         final UploadedFile uploadedFile = UploadedFile.create("file");
-        handleLocalDownload(headers, uploadedFile.getOut());
+        try {
+            handleLocalDownload(headers, uploadedFile.getOut());
+        } finally {
+            uploadedFile.closeOut();
+        }
+        
         return uploadedFile;
     }
 
@@ -145,7 +151,7 @@ public class OSDownloadController extends AbstractHttpDownloadController impleme
                                 final String fileSignature = headers
                                         .getHeader(OSMessagingRequestHeaderConstants.FILE_SIGNATURE);
                                 final Optional<String> optional = osMessagingModuleService
-                                        .sendDownloadMessageToDelegate(header, function, correlationId, userloginId,
+                                        .sendDownloadMessageToDelegate(header, OSMessagingFunction.fromCode(function), correlationId, userloginId,
                                                 fileSignature, out);
                                 if (optional.isPresent()) {
                                     if (debugging) {

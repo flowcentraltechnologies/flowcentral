@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.FormEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -36,40 +37,42 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppFormApplet extends AbstractStudioAppComponentApplet {
-
-    private FormEditorPage formEditorPage;
+public class StudioAppFormApplet extends AbstractStudioAppComponentApplet<FormEditorPage> {
 
     public StudioAppFormApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
     }
 
-    public FormEditorPage getFormEditorPage() {
-        return formEditorPage;
-    }
-
-    public void createDesign() throws UnifyException {
-        AppForm appForm = (AppForm) form.getFormBean();
-        Long formId = appForm.getId();
-        if (formId != null) {
-            String subTitle = appForm.getDescription();
-            formEditorPage = constructNewFormEditorPage(
-                    ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()), formId,
-                    subTitle);
-            formEditorPage.newEditor();
+    public void commitDesign() throws UnifyException {
+        if (getDesign() != null) {
+            getDesign().commitDesign();
         }
+    }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+        AppForm appForm = (AppForm) inst;
+        Long formId = appForm != null ? appForm.getId() : null;
+        FormEditorPage formEditorPage = formId != null
+                ? constructNewFormEditorPage(
+                        ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()),
+                        formId, appForm.getDescription())
+                : constructNewFormEditorPage(null, null, au().resolveSessionMessage("$m{formeditor.newform}"));
+        formEditorPage.newEditor();
+        setDesign(formEditorPage);
     }
 
     private FormEditorPage constructNewFormEditorPage(String formName, Object id, String subTitle)
             throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
-        FormDef formDef = getFormDef(formName);
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{formeditor.formdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new FormEditorPage(au(), formDef, id, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        
+        FormDef formDef = formName != null ? getFormDef(formName) : null;
+        return new FormEditorPage(studio(), au(), formDef, id);
     }
 
 }

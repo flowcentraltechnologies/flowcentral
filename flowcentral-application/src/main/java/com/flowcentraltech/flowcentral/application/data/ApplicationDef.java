@@ -38,6 +38,8 @@ public class ApplicationDef implements VersionedEntityDef {
 
     private boolean developable;
 
+    private boolean installable;
+
     private boolean menuAccess;
 
     private String moduleName;
@@ -53,14 +55,15 @@ public class ApplicationDef implements VersionedEntityDef {
     private String sectorColor;
 
     public ApplicationDef(String name, String description, String label, Long id, long version, boolean developable,
-            boolean menuAccess, String moduleName, String moduleDesc, String moduleLabel, String moduleShortCode,
-            String sectorShortCode, String sectorColor) {
+            boolean installable, boolean menuAccess, String moduleName, String moduleDesc, String moduleLabel,
+            String moduleShortCode, String sectorShortCode, String sectorColor) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.id = id;
         this.version = version;
         this.developable = developable;
+        this.installable = installable;
         this.menuAccess = menuAccess;
         this.moduleName = moduleName;
         this.moduleDesc = moduleDesc;
@@ -94,6 +97,10 @@ public class ApplicationDef implements VersionedEntityDef {
 
     public boolean isDevelopable() {
         return developable;
+    }
+
+    public boolean isInstallable() {
+        return installable;
     }
 
     public boolean isMenuAccess() {

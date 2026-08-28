@@ -14,19 +14,16 @@
 // the License.
 
 !ui-page
+	
+// Applet panel
+!fc-studioworkflowappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
+	moreCommitComponents:$c{workflowEditorPagePanel} binding:applet 
+	publishEventHandler:$d{!ui-event event:onclick action:$c{publishAct}}
 
 // Design panel
 !ui-panel:designPanel style:$s{width:100%;height:100%;}
 	components:$c{workflowEditorPagePanel}
-	
-// Applet panel
-!fc-studioworkflowappletpanel:appletPanel style:$s{width:100%;height:100%;} styleClass:$e{studiodetail}
-	binding:applet 
-	publishEventHandler:$d{!ui-event event:onclick action:$c{publishAct}}
-	additionalUpdateComponents:$c{workflowEditorPagePanel}
-
-// Workflow Editor Page
-!fc-workfloweditorpagepanel:workflowEditorPagePanel binding:applet.workflowEditorPage
+!fc-workfloweditorpagepanel:workflowEditorPagePanel binding:design
 
 // Actions
 !ui-post:publishAct path:$n{/publish}

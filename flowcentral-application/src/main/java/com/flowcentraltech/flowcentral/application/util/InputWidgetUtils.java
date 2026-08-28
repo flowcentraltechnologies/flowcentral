@@ -1892,7 +1892,7 @@ public final class InputWidgetUtils {
         }
 
         final String fieldName = fo.getFieldName();
-        final boolean isSysParam = SystemUtils.isSysParam(fieldName);
+        final boolean isSysParam = SystemUtils.isSysParamCode(fieldName);
         final SysParamType sysParamType = isSysParam ? SysParamType.fromEncoded(fieldName) : null;
         if (isSysParam && reader != null) {
             reader.setTempValue(fieldName,
@@ -1901,7 +1901,7 @@ public final class InputWidgetUtils {
 
         if (!type.isFieldVal() && !type.isParameterVal()) {
             EntityFieldDef _entityFieldDef = isSysParam ? getEntityFieldDef(sysParamType)
-                    : (SystemUtils.isProcessVariable(fieldName) ? getProcessVariableEntityFieldDef()
+                    : (SystemUtils.isProcessVariableCode(fieldName) ? getProcessVariableEntityFieldDef()
                             : entityDef.getFieldDef(fieldName));
             if (_entityFieldDef.isWithResolvedTypeFieldDef()) {
                 _entityFieldDef = _entityFieldDef.getResolvedTypeFieldDef();
@@ -1942,11 +1942,11 @@ public final class InputWidgetUtils {
         Object param = specialParamProvider.resolveSpecialParameter(inparam);
         if (param instanceof String) {
             final String sparam = (String) param;
-            if (SystemUtils.isSysParam(sparam)) {
+            if (SystemUtils.isSysParamCode(sparam)) {
                 return au.system().getSysParameterValue(String.class, SystemUtils.getSysParamCode(sparam));
             }
 
-            if (SystemUtils.isProcessVariable(sparam)) {
+            if (SystemUtils.isProcessVariableCode(sparam)) {
                 return reader.getTempValue(sparam);
             }
         }

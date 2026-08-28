@@ -72,7 +72,7 @@ public class EntitySetValueOptionListCommand extends AbstractFlowCentralListComm
     public List<? extends Listable> execute(Locale locale, EntityDefFieldListParams params) throws UnifyException {
         if (params.isPresent()) {
             OptionsInfo optionsInfo = map.get(locale);
-            if (SystemUtils.isProcessVariable(params.getFieldName())) {
+            if (SystemUtils.isProcessVariableCode(params.getFieldName())) {
                 return optionsInfo.getLingualList();
             }
             

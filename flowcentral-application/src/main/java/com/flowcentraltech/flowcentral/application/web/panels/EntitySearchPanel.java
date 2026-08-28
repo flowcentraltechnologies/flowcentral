@@ -23,7 +23,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTableWidget;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -59,8 +58,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         EntitySearch entitySearch = getEntitySearch();
         if (entitySearch != null) {
             final boolean showHeaderParts = !entitySearch.isExpandedMode();
-            final boolean restrictedMode = getContainerSetting(boolean.class,
-                    FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+            final boolean restrictedMode = isRestrictedStudioMode();
             setVisible("sectorIcon", showHeaderParts && entitySearch.isWithSectorIcon());
             setVisible("titleBlock", showHeaderParts && !restrictedMode);
             setVisible("headerRightPanel", showHeaderParts);

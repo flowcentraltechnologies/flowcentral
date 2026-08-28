@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.system.data;
 
 import com.flowcentraltech.flowcentral.system.util.SystemUtils;
-import com.tcdng.unify.common.data.Listable;
 
 /**
  * Process variable definition.
@@ -24,49 +23,39 @@ import com.tcdng.unify.common.data.Listable;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class ProcessVariableDef implements Listable {
+public class ProcessVariableDef {
 
     private String name;
+
+    private String key;
 
     private String parameter;
 
     private String label;
 
-    private String caption;
-
     private boolean supportFilter;
 
     private boolean supportValues;
 
-    private boolean transitional;
-
     public ProcessVariableDef(String name, String label) {
-        this(name, label, false, false, false);
+        this(name, label, false, false);
     }
 
-    public ProcessVariableDef(String name, String label, boolean supportFilter, boolean supportValues,
-            boolean transitional) {
+    public ProcessVariableDef(String name, String label, boolean supportFilter, boolean supportValues) {
         this.name = name;
         this.label = label;
-        this.parameter = "{{" + name + "}}";
-        this.caption = SystemUtils.encodeProcessVariableLabel(label);
+        this.key = SystemUtils.getProcessVariableCode(name);
+        this.parameter = "{{" + this.key + "}}";
         this.supportFilter = supportFilter;
         this.supportValues = supportValues;
-        this.transitional = transitional;
-    }
-
-    @Override
-    public String getListKey() {
-        return name;
-    }
-
-    @Override
-    public String getListDescription() {
-        return caption;
-    }
+     }
 
     public String getName() {
         return name;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public String getParameter() {
@@ -77,20 +66,12 @@ public class ProcessVariableDef implements Listable {
         return label;
     }
 
-    public String getCaption() {
-        return caption;
-    }
-
     public boolean isSupportValues() {
         return supportValues;
     }
 
     public boolean isSupportFilter() {
         return supportFilter;
-    }
-
-    public boolean isTransitional() {
-        return transitional;
     }
 
 }

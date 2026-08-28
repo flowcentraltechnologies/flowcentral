@@ -18,16 +18,17 @@ package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.StringUtils;
@@ -39,7 +40,7 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFormApplet {
+public abstract class AbstractStudioAppComponentApplet<T> extends AbstractEntityFormApplet {
 
     private final StudioModuleService sms;
 
@@ -50,6 +51,10 @@ public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFor
     private final String typeTitle;
 
     private final String applicationName;
+
+    private BreadCrumbs breadCrumbs;
+    
+    private T design;
 
     public AbstractStudioAppComponentApplet(Page page, StudioModuleService sms, AppletUtilities au,
             List<String> pathVariables, String applicationName, AppletWidgetReferences appletWidgetReferences,
@@ -70,7 +75,7 @@ public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFor
             constructNewForm();
         } else {
             Entity _inst = au.environment().listLean(type.componentType(), instId);
-            form = constructForm(_inst, FormMode.ENTITY_MAINTAIN, null, false);
+            setHwtForm(constructForm(_inst, FormMode.ENTITY_MAINTAIN, null, false));
             viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
         }
     }
@@ -92,9 +97,21 @@ public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFor
         return typeTitle;
     }
 
+    public BreadCrumbs getBreadCrumbs() {
+        return breadCrumbs;
+    }
+
+    public T getDesign() {
+        return design;
+    }
+
+    public void setDesign(T design) {
+        this.design = design;
+    }
+
     public void ensureClearOnNew() throws UnifyException {
         // Apply only to root Fixes general exception  17/03/25
-        if (isRootForm()) {
+        if (isRootHwtForm()) {
             Long instId = getCurrFormAppletDef().getPropValue(Long.class, StudioAppletPropertyConstants.ENTITY_INST_ID);
             if (instId == null || instId.longValue() == 0L) {
                 constructNewForm();
@@ -113,18 +130,22 @@ public abstract class AbstractStudioAppComponentApplet extends AbstractEntityFor
         return true; // Do this so applet does not revert to search mode at terminal form
     }
 
-    protected StudioModuleService getSms() {
+    protected StudioModuleService studio() {
         return sms;
     }
 
     protected String getApplicationName() {
         return applicationName;
     }
+
+    protected void setBreadCrumbs(BreadCrumbs breadCrumbs) {
+        this.breadCrumbs = breadCrumbs;
+    }
     
     private void constructNewForm() throws UnifyException {
-        form = constructNewForm(FormMode.ENTITY_CREATE, null, false);
-        ((BaseApplicationEntity) form.getCtx().getInst()).setApplicationId(
-                au().getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
+        setHwtForm(constructNewForm(FormMode.ENTITY_CREATE, null, false));
+        ((BaseApplicationEntity) getForm().getCtx().getInst()).setApplicationId(
+                au().getDocumentAttribute(Long.class, AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID));
         viewMode = ViewMode.NEW_PRIMARY_FORM;
     }
 }

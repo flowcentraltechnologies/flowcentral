@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.FileAttachmentType;
@@ -167,4 +168,7 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
         return nmb.isWithRecipients();
     }
 
+    protected String getProcessVariableKey(String name) throws UnifyException {
+        return SystemUtils.getProcessVariableCode(name);
+    }
 }

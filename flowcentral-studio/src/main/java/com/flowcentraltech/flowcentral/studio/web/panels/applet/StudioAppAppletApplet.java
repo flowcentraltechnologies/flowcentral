@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetR
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.AppletEditorPage;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -36,42 +37,40 @@ import com.tcdng.unify.web.ui.widget.Page;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet {
-
-    private AppletEditorPage appletEditorPage;
+public class StudioAppAppletApplet extends AbstractStudioAppComponentApplet<AppletEditorPage> {
 
     public StudioAppAppletApplet(Page page, StudioModuleService sms, AppletUtilities au, List<String> pathVariables,
             String applicationName, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(page, sms, au, pathVariables, applicationName, appletWidgetReferences, formEventHandlers);
-        createDesign();
     }
 
-    public AppletEditorPage getAppletEditorPage() {
-        return appletEditorPage;
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+        AppApplet appApplet = (AppApplet) inst;
+        Long appletId = appApplet != null ? appApplet.getId() : null;
+        AppletEditorPage appletEditorPage = appletId != null && appApplet.getType().isEntityList()
+                ? constructNewAppletEditorPage(appletId, appApplet.getDescription())
+                : constructNewAppletEditorPage(null, au().resolveSessionMessage("$m{appleteditor.newapplet}"));
+        appletEditorPage.newEditor();
+        setDesign(appletEditorPage);
     }
 
-    public void createDesign() throws UnifyException {
-        AppApplet appApplet = (AppApplet) form.getFormBean();
-        Long appletId = appApplet.getId();
-        if (appletId != null) {
-            if (appApplet.getType().isEntityList()) {
-                String subTitle = appApplet.getDescription();
-                appletEditorPage = constructNewAppletEditorPage(appApplet.getEntity(), appletId, subTitle);
-                appletEditorPage.newEditor();
-            }
-        }
-    }
-
-    private AppletEditorPage constructNewAppletEditorPage(String entityName, Object id, String subTitle)
-            throws UnifyException {
-        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
-        final AppletDef appletDef = au().getAppletDef((Long) id);
-        final String tableName = appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
-        final String formName = appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
+    private AppletEditorPage constructNewAppletEditorPage(Object id, String subTitle) throws UnifyException {
+        BreadCrumbs breadCrumbs = getForm().getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(au().resolveSessionMessage("$m{appleteditor.appletdesigner}"));
         breadCrumbs.setLastCrumbSubTitle(subTitle);
-        return new AppletEditorPage(au(), tableName, formName, id, breadCrumbs);
+        setBreadCrumbs(breadCrumbs);
+        
+        String tableName = null;
+        String formName = null;
+        if (id != null) {
+            AppletDef appletDef = au().getAppletDef((Long) id);
+            tableName = appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
+            formName = appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
+        }
+
+        return new AppletEditorPage(studio(), au(), tableName, formName, id);
     }
 
 }

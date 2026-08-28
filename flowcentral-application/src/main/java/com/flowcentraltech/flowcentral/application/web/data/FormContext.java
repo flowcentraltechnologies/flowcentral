@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -756,7 +757,10 @@ public class FormContext extends AbstractContext implements ValidationErrors {
         if (!visibleAnnotations.isEmpty()) {
             List<FormAnnotationDef> list = new ArrayList<FormAnnotationDef>();
             for (String annotation : visibleAnnotations) {
-                list.add(formDef.getFormAnnotationDef(annotation));
+                Optional<FormAnnotationDef> optional = formDef.getFormAnnotationDef(annotation);
+                if (optional.isPresent()) {
+                    list.add(optional.get());
+                }
             }
 
             return list;

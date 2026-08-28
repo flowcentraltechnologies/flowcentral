@@ -180,6 +180,7 @@ public abstract class AbstractCreateEntityFormWizardTaskProcessor extends Abstra
                 appApplet.setEntity(_entity);
                 appApplet.setLabel(StringUtils.capitalizeFirstLetter(parts.getEntityName()));
                 appApplet.setMenuAccess(i == 0);
+                appApplet.setPortalAccess(true);
                 appApplet.setType(AppletType.MANAGE_ENTITYLIST);
 
                 entitySchemaManager.createDefaultAppletComponents(applicationName, appApplet, i > 0);

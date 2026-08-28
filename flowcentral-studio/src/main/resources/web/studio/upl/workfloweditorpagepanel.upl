@@ -40,7 +40,6 @@
 // Actions
 !ui-postcommand:updateStepAct command:updateStepDesign
 	components:$c{workflowEditorBodyPanel} refresh:$c{workflowEditorBodyPanel}
-!ui-postcommand:saveDesignAct command:saveDesign components:$c{workflowEditorBodyPanel}
 !ui-postcommand:applySetValuesAct command:applySetValues
 	components:$c{stepSetValuesPanel} refresh:$c{workflowEditorBodyPanel}
 !ui-postcommand:cancelSetValuesAct command:cancelSetValues refresh:$c{workflowEditorBodyPanel}

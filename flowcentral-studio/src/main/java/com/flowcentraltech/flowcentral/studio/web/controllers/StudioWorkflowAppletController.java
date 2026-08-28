@@ -53,9 +53,9 @@ public class StudioWorkflowAppletController
     public String publish() throws UnifyException {
         StudioWorkflowAppletPageBean pageBean = getPageBean();
         StudioWorkflowApplet applet = pageBean.getApplet();
-        WorkflowEditorPage workflowEditorPage = applet.getWorkflowEditorPage();
+        WorkflowEditorPage workflowEditorPage = applet.getDesign();
         workflowEditorPage.publish();
-        hintUser("$m{studioworkflowapplet.workfloweditor.publish.hint}", workflowEditorPage.getSubTitle());
+        hintUser("$m{studioworkflowapplet.workfloweditor.publish.hint}");
         return noResult();
     }
 

@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralDialogPanel;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 
@@ -28,6 +28,6 @@ import com.tcdng.unify.core.annotation.UplBinding;
  */
 @Component("fc-selectrolepanel")
 @UplBinding("web/application/upl/selectrolepanel.upl")
-public class SelectRolePanel extends BaseDialogPanel {
+public class SelectRolePanel extends AbstractFlowCentralDialogPanel {
 
 }

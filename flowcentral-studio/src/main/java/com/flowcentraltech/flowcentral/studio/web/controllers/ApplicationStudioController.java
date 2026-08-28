@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationSynchronizationProvider;
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
@@ -40,6 +42,7 @@ import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.widget.ContentPanel;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Application studio controller.
@@ -52,7 +55,8 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
 @ResultMappings({
         @ResultMapping(name = "showuserdetails", response = { "!showpopupresponse popup:$s{userDetailsPopup}" }),
         @ResultMapping(name = "reloadapplicationstudio", response = { "!forwardresponse path:$s{/applicationstudio}" }),
-        @ResultMapping(name = "showcreateapplication", response = {"!showpopupresponse popup:$s{createApplicationPopup}" }),
+        @ResultMapping(name = "showcreateapplication",
+                response = { "!showpopupresponse popup:$s{createApplicationPopup}" }),
         @ResultMapping(name = "cancelnewapplication", response = { "!hidepopupresponse" }),
         @ResultMapping(name = "forwardtohome", response = { "!forwardresponse path:$x{application.web.home}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
@@ -66,7 +70,7 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_PREVIEW_FORM,
                 response = { "!showpopupresponse popup:$s{previewFormPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_HELP_FORM,
-            response = { "!showpopupresponse popup:$s{helpFormPopup}" }),
+                response = { "!showpopupresponse popup:$s{helpFormPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
                 response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_ALL, response = { "!hidepopupresponse",
@@ -78,6 +82,9 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
 
     @Configurable
     private UserLoginActivityProvider userLoginActivityProvider;
+
+    @Configurable
+    private ApplicationSynchronizationProvider provider;
 
     public ApplicationStudioController() {
         super(ApplicationStudioPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
@@ -101,20 +108,28 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         final Long applicationId = pageBean.getCurrentApplicationId();
         if (applicationId == null) {
             // Utilities
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC);
-            removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
-            clearCategorySelect();
+            clearApplicationDocumentAttributes();
         } else {
             // Actual Application
             Application application = application().findApplication(applicationId);
-            setApplicationSessionAttributes(application);
-            setCategorySelect();
+            setApplicationDocumentAttributes(application);
         }
 
         closeAllPages();
+
         return ApplicationResultMappingConstants.REFRESH_ALL;
+    }
+
+    @Action
+    public String publishApplications() throws UnifyException {
+        if (provider != null) {
+            provider.synchronizeApplication();
+            hintUser("$m{studio.applicationsynchronization.success.hint}");
+        } else {
+            hintUser(MODE.WARNING, "$m{studio.applicationsynchronization.nocomponent.hint}");
+        }
+
+        return noResult();
     }
 
     @Action
@@ -128,7 +143,6 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     public String createApplication() throws UnifyException {
         ApplicationStudioPageBean pageBean = getPageBean();
         CreateAppForm createAppForm = pageBean.getCreateAppForm();
-
         Module module = null;
         if (createAppForm.isCreateModule()) {
             module = new Module();
@@ -139,16 +153,18 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         }
 
         Application application = new Application();
-        application.setModuleId(createAppForm.getModuleId());
+        application.setModuleId(
+                isRestrictedStudioMode() ? system().findModule("defaultmod").getId() : createAppForm.getModuleId());
         application.setName(createAppForm.getApplicationName());
         application.setDescription(createAppForm.getApplicationDesc());
         application.setLabel(createAppForm.getApplicationLabel());
         application.setDevelopable(true);
+        application.setInstallable(true);
         application.setMenuAccess(true);
         final Long applicationId = application().createApplication(application, module);
 
         pageBean.setCurrentApplicationId(applicationId);
-        setApplicationSessionAttributes(application);
+        setApplicationDocumentAttributes(application);
         return "reloadapplicationstudio";
     }
 
@@ -156,7 +172,7 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
     public String cancelCreateApplication() throws UnifyException {
         return "cancelnewapplication";
     }
-    
+
     @Action
     public String logOut() throws UnifyException {
         logUserEvent(ApplicationModuleAuditConstants.LOGOUT);
@@ -166,8 +182,9 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
 
     @Action
     public String onDeleteApplication() throws UnifyException {
-        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
-        if (environment().countAll(new ApplicationQuery().id(applicationId)) == 0) {
+        final Long applicationId = getDocumentAttribute(Long.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
+        if (!environment().exists(new ApplicationQuery().id(applicationId))) {
             ApplicationStudioPageBean pageBean = getPageBean();
             pageBean.setCurrentApplicationId(null);
             return switchApplication();
@@ -185,20 +202,23 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         final boolean clientUpdateSync = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.GLOBAL_CLIENT_UPDATE_SYNCHRONIZATION);
 
-        pageBean.setClientPushSync(clientUpdateSync);       
+        pageBean.setClientPushSync(clientUpdateSync);
         setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
+
+        final boolean restricted = isRestrictedStudioMode();
+        setPageWidgetVisible("publishAppBtn", restricted);
+        setPageWidgetVisible("logoutLabel", !restricted);
     }
 
     @Override
     protected void onIndexPage() throws UnifyException {
         super.onIndexPage();
         ApplicationStudioPageBean pageBean = getPageBean();
-
-        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        final Long applicationId = getDocumentAttribute(Long.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         pageBean.setCurrentApplicationId(applicationId);
 
-        if (/*!QueryUtils.isValidLongCriteria(applicationId)
-                || */Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
+        if (Boolean.TRUE.equals(removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES))) {
             ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
             contentPanel.clearPages();
         }
@@ -208,20 +228,26 @@ public class ApplicationStudioController extends AbstractApplicationForwarderCon
         pageBean.setClientPushSync(clientUpdateSync);
     }
 
-    private void setApplicationSessionAttributes(Application application) throws UnifyException {
-        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID, application.getId());
-        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME, application.getName());
-        setSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
+    private void setApplicationDocumentAttributes(Application application) throws UnifyException {
         setSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES, Boolean.TRUE);
-    }
 
-    private void setCategorySelect() throws UnifyException {
+        setDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID, application.getId());
+        setDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME, application.getName());
+        setDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_DESC, application.getDescription());
+        
         final StudioAppComponentType currCategory = getSessionAttribute(StudioAppComponentType.class,
                 StudioSessionAttributeConstants.CURRENT_MENU_CATEGORY);
         getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(currCategory);
     }
 
-    private void clearCategorySelect() throws UnifyException {
+    private void clearApplicationDocumentAttributes() throws UnifyException {
+        removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
+
+        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
+        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
+        clearDocumentAttribute(AppletDocumentAttributeConstants.CURRENT_APPLICATION_DESC);
+        
         getPageWidgetByShortName(StudioMenuWidget.class, "studioMenuPanel").setCurrentSel(null);
-    }
+   }
+
 }

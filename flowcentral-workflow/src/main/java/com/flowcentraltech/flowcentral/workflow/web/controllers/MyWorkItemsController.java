@@ -124,7 +124,7 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
 
         if (StringUtils.isBlank(pageBean.getSelLoadingTableName())) {
             UserToken userToken = getUserToken();
-            List<WorkflowLoadingTableInfo> loadingTableInfoList = workflowModuleService
+            List<WorkflowLoadingTableInfo> loadingTableInfoList = au().workItemRoleUtilities()
                     .findWorkflowLoadingTableInfoByRole(userToken.getRoleCode());
             pageBean.setSelLoadingTableName(
                     !loadingTableInfoList.isEmpty() ? loadingTableInfoList.get(0).getLongName() : null);

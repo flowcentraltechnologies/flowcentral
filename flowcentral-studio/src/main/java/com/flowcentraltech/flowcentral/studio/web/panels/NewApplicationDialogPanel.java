@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
-import com.flowcentraltech.flowcentral.common.web.panels.BaseDialogPanel;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralDialogPanel;
 import com.flowcentraltech.flowcentral.studio.web.data.CreateAppForm;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.UplBinding;
  */
 @Component("fc-newapplicationdialogpanel")
 @UplBinding("web/studio/upl/newapplicationdialogpanel.upl")
-public class NewApplicationDialogPanel extends BaseDialogPanel {
+public class NewApplicationDialogPanel extends AbstractFlowCentralDialogPanel {
 
     @Override
     public void switchState() throws UnifyException {
@@ -37,20 +37,35 @@ public class NewApplicationDialogPanel extends BaseDialogPanel {
         setModuleState();
     }
 
-    private void setModuleState() throws UnifyException {
-        CreateAppForm createAppForm = getValue(CreateAppForm.class, "createAppForm");
-        if (createAppForm == null || !createAppForm.isCreateModule()) {
-            setWidgetVisible("frmModuleId", true);
+    @Override
+    public void onPageConstruct() throws UnifyException {
+        super.onPageConstruct();
+        if(isRestrictedStudioMode()) {
+            setWidgetVisible("frmCreateModule", false);
+            setWidgetVisible("frmModuleId", false);
             setWidgetVisible("frmModuleName", false);
             setWidgetVisible("frmModuleDesc", false);
             setWidgetVisible("frmModuleLabel", false);
             setWidgetVisible("frmModuleShortCode", false);
-        } else {
-            setWidgetVisible("frmModuleId", false);
-            setWidgetVisible("frmModuleName", true);
-            setWidgetVisible("frmModuleDesc", true);
-            setWidgetVisible("frmModuleLabel", true);
-            setWidgetVisible("frmModuleShortCode", true);
+        }
+    }
+
+    private void setModuleState() throws UnifyException {
+        if (!isRestrictedStudioMode()) {
+            CreateAppForm createAppForm = getValue(CreateAppForm.class, "createAppForm");
+            if (createAppForm == null || !createAppForm.isCreateModule()) {
+                setWidgetVisible("frmModuleId", true);
+                setWidgetVisible("frmModuleName", false);
+                setWidgetVisible("frmModuleDesc", false);
+                setWidgetVisible("frmModuleLabel", false);
+                setWidgetVisible("frmModuleShortCode", false);
+            } else {
+                setWidgetVisible("frmModuleId", false);
+                setWidgetVisible("frmModuleName", true);
+                setWidgetVisible("frmModuleDesc", true);
+                setWidgetVisible("frmModuleLabel", true);
+                setWidgetVisible("frmModuleShortCode", true);
+            }
         }
     }
 }

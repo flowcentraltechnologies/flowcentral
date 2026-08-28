@@ -16,13 +16,13 @@
 
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttributeConstants;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -50,12 +50,15 @@ public class StudioOnCreateComponentPolicy extends AbstractStudioAppletActionPol
     @SuppressWarnings("unchecked")
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
-        String applicationName = (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        final String applicationName = getDocumentAttribute(String.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
+        final Long applicationId = getDocumentAttribute(Long.class,
+                AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         StudioAppComponentType type = StudioAppComponentType
                 .fromEntityClass((Class<? extends BaseApplicationEntity>) ctx.getInst().getClass());
         // Register instance as privilege based on type
-        registerPrivilege(ConfigType.CUSTOM, applicationName, applicationId, type, (BaseApplicationEntity) ctx.getInst());
+        registerPrivilege(ConfigType.CUSTOM, applicationName, applicationId, type,
+                (BaseApplicationEntity) ctx.getInst());
 
         // Set result path
         String appletName = StudioNameUtils.getStudioAppletName(applicationName, type, (Long) ctx.getInst().getId());

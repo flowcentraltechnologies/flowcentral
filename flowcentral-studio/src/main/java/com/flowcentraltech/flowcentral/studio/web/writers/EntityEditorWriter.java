@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.flowcentraltech.flowcentral.studio.web.widgets.EntityEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.EntityEditorWidget;
 import com.flowcentraltech.flowcentral.studio.web.widgets.FormEditorWidget;
@@ -26,7 +27,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Entity editor widget writer.
@@ -36,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(EntityEditorWidget.class)
 @Component("fc-entityeditor-writer")
-public class EntityEditorWriter extends AbstractControlWriter {
+public class EntityEditorWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -56,7 +56,7 @@ public class EntityEditorWriter extends AbstractControlWriter {
                     "<div style=\"display:table;table-layout: fixed;width:100%;height:100%;\"><div style=\"display:table-row;\">");
             writer.write("<div style=\"display:table-cell;vertical-align:top;position:relative;\">");
             
-            // Design
+            // NotifTemplateEditor
             writer.write("<div class=\"design\">");
             writer.write("<div id=\"").write(entityEditorWidget.getDesignBaseId()).write("\" class=\"designbase\">");
             writer.write("<canvas id=\"").write(entityEditorWidget.getDesignCanvasId())

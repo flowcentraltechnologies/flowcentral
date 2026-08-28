@@ -22,6 +22,9 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.ListParam;
+import com.tcdng.unify.web.ui.PageRequestContextUtil;
+import com.tcdng.unify.web.ui.WebUIApplicationComponents;
+import com.tcdng.unify.web.ui.widget.Document;
 
 /**
  * Convenient abstract base class for flowcentral list command.
@@ -33,18 +36,39 @@ public abstract class AbstractFlowCentralListCommand<T extends ListParam> extend
 
     @Configurable
     private EnvironmentService environmentService;
-    
+
     public AbstractFlowCentralListCommand(Class<T> paramType) {
         super(paramType);
     }
 
     protected final boolean isEnterprise() throws UnifyException {
-        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(
+                getContainerSetting(String.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
+    }
+
+    protected final boolean isRestrictedStudioMode() throws UnifyException {
+        return getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_RESTRICTED_STUDIO_MODE);
+    }
+
+    protected final String getServiceId() throws UnifyException {
+        return getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
     }
 
     protected final EnvironmentService environment() {
         return environmentService;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <U> U getDocumentAttribute(Class<U> clazz, String name) throws UnifyException {
+        Document document = getComponent(PageRequestContextUtil.class,
+                WebUIApplicationComponents.APPLICATION_PAGEREQUESTCONTEXTUTIL).getRequestDocument();
+        if (document != null) {
+            return (U) document.getAttribute(name);
+        }
+        
+        return null;
     }
 
 }

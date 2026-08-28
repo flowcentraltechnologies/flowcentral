@@ -26,6 +26,7 @@ import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
+import com.tcdng.unify.core.security.SecurityComponents;
 
 /**
  * Workflow item entity.
@@ -62,6 +63,10 @@ public class WfItem extends BaseAuditEntity {
 
     @Column
     private boolean expirationAlertSent;
+
+    @Column(type = ColumnType.CLOB, name = "PROCESS_VARIABLES", nullable = true,
+            transformer = SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH)
+    private String processVariables;
 
     @ListOnly(key = "wfItemEventId", property = "wfItemHistId")
     private Long wfItemHistId;
@@ -260,6 +265,14 @@ public class WfItem extends BaseAuditEntity {
 
     public void setCriticalDt(Date criticalDt) {
         this.criticalDt = criticalDt;
+    }
+
+    public String getProcessVariables() {
+        return processVariables;
+    }
+
+    public void setProcessVariables(String processVariables) {
+        this.processVariables = processVariables;
     }
 
     public String getApplicationName() {

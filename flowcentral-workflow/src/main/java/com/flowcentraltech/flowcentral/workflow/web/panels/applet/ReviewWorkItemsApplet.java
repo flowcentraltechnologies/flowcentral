@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.RequirementType;
@@ -107,16 +108,16 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
         appletCtx().setRecovery(wfStepDef.isError());
         appletCtx().setComments(comments);
         if (formDef.isInputForm()) {
-            if (form == null) {
-                form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
-                currEntityInst = (WorkEntity) form.getFormBean();
-                form.setFormTitle(getRootAppletDef().getLabel());
-                form.setFormActionDefList(wfStepDef.getFormActionDefList());
+            if (isNoHwtForm()) {
+                setHwtForm(constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false));
+                currEntityInst = (WorkEntity) getForm().getFormBean();
+                getForm().setFormTitle(getRootAppletDef().getLabel());
+                getForm().setFormActionDefList(wfStepDef.getFormActionDefList());
             } else {
-                updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
+                updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, getHwtForm(), currEntityInst);
             }
 
-            form.setAppendables(entityItem);
+            getForm().setAppendables(entityItem);
 
             // Check if enter read-only mode
             appletCtx().setReadOnly(!userActionRight || wfStepDef.isError());
@@ -126,7 +127,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
                 appletCtx().setReadOnly(readOnly);
             }
 
-            setDisplayModeMessage(form);
+            setDisplayModeMessage(getForm());
             viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
         } else { // Listing
             listingForm = constructListingForm(formDef, currEntityInst);
@@ -147,8 +148,8 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
     @Override
     public boolean navBackToPrevious() throws UnifyException {
         boolean success = super.navBackToPrevious();
-        if (isRootForm()) {
-            currEntityInst = (WorkEntity) form.getFormBean();
+        if (isRootHwtForm()) {
+            currEntityInst = (WorkEntity) getForm().getFormBean();
         }
 
         return success;
@@ -157,8 +158,8 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
     @Override
     public EntityActionResult updateInstAndClose() throws UnifyException {
         EntityActionResult entityActionResult = super.updateInstAndClose();
-        if (isRootForm()) {
-            currEntityInst = (WorkEntity) form.getFormBean();
+        if (isRootHwtForm()) {
+            currEntityInst = (WorkEntity) getForm().getFormBean();
         }
 
         return entityActionResult;
@@ -173,9 +174,22 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
         navBackToSearch();
     }
 
+    public boolean isFormReview(String actionName) throws UnifyException {
+        return wfStepDef.getUserActionDef(actionName).isFormReview();
+    }
+
+    public boolean isNewCommentRequired(String actionName) throws UnifyException { 
+        RequirementType commentRequirementType = wfStepDef.getUserActionDef(actionName).getCommentRequirement();
+        return RequirementType.MANDATORY.equals(commentRequirementType);
+    }
+
+    public boolean isUserActionRight() {
+        return userActionRight;
+    }
+
     @Override
     protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
-        if (isNoForm()) {
+        if (isNoHwtForm()) {
             currWfItem = (WfItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
             WorkEntityItem _workEntityItem = wms.getWfItemWorkEntityFromWorkItemId(currWfItem.getId(), WfReviewMode.NORMAL);
             currEntityInst = _workEntityItem.getWorkEntity();
@@ -193,17 +207,9 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
         return super.getEntitySearchItem(entitySearch, index);
     }
 
-    public boolean isFormReview(String actionName) throws UnifyException {
-        return wfStepDef.getUserActionDef(actionName).isFormReview();
-    }
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
 
-    public boolean isNewCommentRequired(String actionName) throws UnifyException { 
-        RequirementType commentRequirementType = wfStepDef.getUserActionDef(actionName).getCommentRequirement();
-        return RequirementType.MANDATORY.equals(commentRequirementType);
-    }
-
-    public boolean isUserActionRight() {
-        return userActionRight;
     }
 
     @Override
@@ -212,7 +218,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
     }
 
     private String getNewComment() throws UnifyException {
-        Comments comments = viewMode == ViewMode.LISTING_FORM ? listingForm.getComments() : form.getComments();
+        Comments comments = viewMode == ViewMode.LISTING_FORM ? listingForm.getComments() : getForm().getComments();
         return comments != null ? comments.getNewComment() : null;
     }
 

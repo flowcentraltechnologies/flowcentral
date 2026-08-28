@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.messaging.os.data;
 
+import com.flowcentraltech.flowcentral.messaging.os.data.constants.OSMessagingResponseConstants;
+
 /**
  * OS response.
  *

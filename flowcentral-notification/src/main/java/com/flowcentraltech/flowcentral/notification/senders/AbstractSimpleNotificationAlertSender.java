@@ -18,13 +18,12 @@ package com.flowcentraltech.flowcentral.notification.senders;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.constants.DefaultProcessVariableConstants;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
-import com.flowcentraltech.flowcentral.notification.constants.NotificationTransitionVariableConstants;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
-import com.flowcentraltech.flowcentral.system.constants.SystemProcessVariableConstants;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -53,7 +52,8 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
     @Override
     public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList, int sendDelayInMinutes)
             throws UnifyException {
-        final String template = reader.read(String.class, NotificationTransitionVariableConstants.TEMPLATE_VARIABLE);
+        final String template = getProcessVariable(String.class, reader,
+                DefaultProcessVariableConstants.TEMPLATE_VARIABLE);
         if (StringUtils.isBlank(template)) {
             throwOperationErrorException(new IllegalArgumentException("Could not retreive template variable."));
         }
@@ -69,7 +69,7 @@ public abstract class AbstractSimpleNotificationAlertSender extends AbstractNoti
         if (!DataUtils.isBlank(recipientList)) {
             NotifMessage.Builder nb = NotifMessage.newBuilder(notifTemplateDef.getSubjectTokenList(),
                     notifTemplateDef.getTemplateTokenList());
-            nb.from(reader.read(String.class, SystemProcessVariableConstants.APP_CORRESPONDER));
+            nb.from(getProcessVariable(String.class, reader, DefaultProcessVariableConstants.APP_CORRESPONDER));
 
             // Set recipients
             for (Recipient recipient : recipientList) {

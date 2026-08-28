@@ -116,6 +116,9 @@ public class WfStepConfig extends BaseNameConfig {
     private boolean departmentOnly;
 
     @JacksonXmlProperty(isAttribute = true)
+    private boolean excludeMaker;
+
+    @JacksonXmlProperty(isAttribute = true)
     private boolean includeForwarder;
 
     @JacksonXmlProperty(isAttribute = true)
@@ -341,6 +344,22 @@ public class WfStepConfig extends BaseNameConfig {
         this.departmentOnly = departmentOnly;
     }
 
+    public boolean isExcludeMaker() {
+        return excludeMaker;
+    }
+
+    public void setExcludeMaker(boolean excludeMaker) {
+        this.excludeMaker = excludeMaker;
+    }
+
+    public String getEmails() {
+        return emails;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
     public boolean isIncludeForwarder() {
         return includeForwarder;
     }
@@ -373,16 +392,8 @@ public class WfStepConfig extends BaseNameConfig {
         this.designY = designY;
     }
 
-    public String isEmails() {
-        return emails;
-    }
-
     public void setEmails(String emails) {
         this.emails = emails;
-    }
-
-    public String isComments() {
-        return comments;
     }
 
     public void setComments(String comments) {

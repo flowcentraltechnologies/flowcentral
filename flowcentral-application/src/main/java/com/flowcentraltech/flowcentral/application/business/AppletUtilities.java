@@ -135,15 +135,15 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 public interface AppletUtilities extends FlowCentralComponent {
 
     /**
-     * Gets process variable definitions.
+     * Gets entity process variable definitions.
      * 
      * @param entity
-     *               optional entity long name
-     * @return the list of process variable definitions
+     *               the entity name
+     * @return the process variable definitions
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<ProcessVariableDef> getProcessVariables(String entity) throws UnifyException;
+    List<ProcessVariableDef> getProcessVariableDefs(String entity) throws UnifyException;
     
     /**
      * Gets initial process variables.
@@ -500,6 +500,19 @@ public interface AppletUtilities extends FlowCentralComponent {
     void setSessionAttribute(String name, Object val) throws UnifyException;
 
     /**
+     * Gets document attribute.
+     * 
+     * @param type
+     *                      the attribute type
+     * @param attributeName
+     *                      the attribute name
+     * @return the attribute if found otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T> T getDocumentAttribute(Class<T> type, String attributeName) throws UnifyException;
+
+    /**
      * Gets current system timestamp.
      * 
      * @return the current timestamp
@@ -624,6 +637,13 @@ public interface AppletUtilities extends FlowCentralComponent {
      * @return the application work item utilities
      */
     ApplicationWorkItemUtilities workItemUtilities();
+
+    /**
+     * Gets the application work item utilities.
+     * 
+     * @return the application work item utilities
+     */
+    ApplicationWorkItemRoleUtilities workItemRoleUtilities();
 
     /**
      * Gets the environment delegate utilities.
@@ -2716,4 +2736,12 @@ public interface AppletUtilities extends FlowCentralComponent {
      */
     void generateLetterListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
             String letterGenerator) throws UnifyException;
+
+    /**
+     * Logs an exception.
+     * 
+     * @param e
+     *          the exception to log
+     */
+    void logError(Exception e);
 }

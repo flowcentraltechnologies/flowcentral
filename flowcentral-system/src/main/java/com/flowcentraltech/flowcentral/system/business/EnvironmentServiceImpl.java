@@ -586,6 +586,11 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
+    public <T extends Entity> boolean exists(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).exists(query);
+    }
+
+    @Override
     public <T extends Entity> T findConstraint(T record) throws UnifyException {
         return db(record.getClass()).findConstraint(record);
     }

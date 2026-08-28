@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntry;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchWidget;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
+import com.flowcentraltech.flowcentral.common.web.writers.AbstractFlowCentralControlWriter;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
@@ -31,7 +32,6 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
-import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
  * Search widget writer.
@@ -41,7 +41,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
  */
 @Writes(SearchWidget.class)
 @Component("fc-search-writer")
-public class SearchWriter extends AbstractControlWriter {
+public class SearchWriter extends AbstractFlowCentralControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

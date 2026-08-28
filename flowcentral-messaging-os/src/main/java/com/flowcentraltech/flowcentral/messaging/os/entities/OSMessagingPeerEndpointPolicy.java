@@ -19,7 +19,6 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityPolicy;
 import com.flowcentraltech.flowcentral.messaging.os.business.OSMessagingPeerEndpointObserver;
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -31,21 +30,21 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @since 4.1
  */
 @Component("osmessagingpeerendpointpolicy")
-public class OSMessagingPeerEndpointPolicy extends BaseStatusEntityPolicy {
+public class OSMessagingPeerEndpointPolicy extends BaseStatusEntityPolicy<OSMessagingPeerEndpoint> {
 
     @Configurable
     private OSMessagingPeerEndpointObserver observer;
 
     @Override
-    public void postCreate(Entity record, Date now) throws UnifyException {
+    public void postCreate(OSMessagingPeerEndpoint record, Date now) throws UnifyException {
         super.postCreate(record, now);
-        observe((OSMessagingPeerEndpoint) record);
+        observe(record);
     }
 
     @Override
-    public void postUpdate(Entity record, Date now) throws UnifyException {
+    public void postUpdate(OSMessagingPeerEndpoint record, Date now) throws UnifyException {
         super.postUpdate(record, now);
-        observe((OSMessagingPeerEndpoint) record);
+        observe(record);
     }
 
     private void observe(OSMessagingPeerEndpoint peerEndpoint) throws UnifyException {

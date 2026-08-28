@@ -78,13 +78,13 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                     appletCtx().setReview(false);
                     Entity _inst = item.getEntity();
                     _inst = reloadEntity(_inst, true);
-                    if (form == null) {
-                        form = constructForm(_inst, FormMode.MAINTAIN, null, false);
+                    if (isNoHwtForm()) {
+                        setHwtForm(constructForm(_inst, FormMode.MAINTAIN, null, false));
                     } else {
-                        updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
+                        updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, getHwtForm(), _inst);
                     }
 
-                    setAltSubCaption(form.getFormTitle());
+                    setAltSubCaption(getForm().getFormTitle());
                     viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
                     takeAuditSnapshot(AuditEventType.VIEW);
                 } else if (item.isWorkItem()) {
@@ -102,20 +102,20 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                     appletCtx().setAttachments(loadingWorkItemInfo.isAttachments());
                     appletCtx().setReview(true);
                     if (formDef.isInputForm()) {
-                        if (form == null) {
-                            form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
-                            currEntityInst = (WorkEntity) form.getFormBean();
-                            form.setFormTitle(getRootAppletDef().getLabel());
-                            form.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
+                        if (isNoHwtForm()) {
+                            setHwtForm(constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false));
+                            currEntityInst = (WorkEntity) getForm().getFormBean();
+                            getForm().setFormTitle(getRootAppletDef().getLabel());
+                            getForm().setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
                         } else {
-                            updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
+                            updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, getHwtForm(), currEntityInst);
                         }
 
-                        form.setDisplayItemCounter(display);
-                        form.setAppendables(item);
+                        getForm().setDisplayItemCounter(display);
+                        getForm().setAppendables(item);
 
                         appletCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
-                        setAltSubCaption(form.getFormTitle());
+                        setAltSubCaption(getForm().getFormTitle());
                         viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
                         takeAuditSnapshot(AuditEventType.VIEW);
                     } else { // Listing
@@ -154,12 +154,12 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
                 }
             }
         } else {
-            form = constructNewForm(FormMode.CREATE, null, false);
+            setHwtForm(constructNewForm(FormMode.CREATE, null, false));
             viewMode = ViewMode.NEW_PRIMARY_FORM;
         }
 
-        if (form != null) {
-            setAltSubCaption(form.getFormTitle());
+        if (isWithHwtForm()) {
+            setAltSubCaption(getForm().getFormTitle());
         }
     }
 

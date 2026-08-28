@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Page;
 
@@ -41,6 +42,11 @@ public class HeadlessTabsFormApplet extends AbstractEntityFormApplet {
                 getCurrFormAppletDef());
         setAltSubCaption(getRootAppletDef().getDescription());
         navBackToHeadless();
+    }
+
+    @Override
+    protected void onRootHwtFormUpdated(Entity inst) throws UnifyException {
+
     }
 
     @Override

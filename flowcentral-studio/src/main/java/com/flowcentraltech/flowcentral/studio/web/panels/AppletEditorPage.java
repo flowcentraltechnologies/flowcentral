@@ -20,12 +20,13 @@ import java.util.Arrays;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetEventHandler;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
+import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Applet editor page.
@@ -51,9 +52,8 @@ public class AppletEditorPage extends AbstractStudioEditorPage implements TabShe
 
     private FormPreview formPreview;
 
-    public AppletEditorPage(AppletUtilities au, String tableName, String formName, Object baseId,
-            BreadCrumbs breadCrumbs) {
-        super(au, breadCrumbs);
+    public AppletEditorPage(StudioModuleService sms, AppletUtilities au, String tableName, String formName, Object baseId) {
+        super(sms, au);
         this.tableName = tableName;
         this.formName = formName;
         this.baseId = baseId;
@@ -93,19 +93,25 @@ public class AppletEditorPage extends AbstractStudioEditorPage implements TabShe
     }
 
     public void newEditor() throws UnifyException {
-        TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
-        tsdb.addTabDef("tablePreview", au().resolveSessionMessage("$m{studio.appapplet.table.tablepreview}"),
-                "fc-tablepreviewpanel", RendererType.STANDALONE_PANEL);
-        tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.appapplet.form.formpreview}"),
-                "fc-formpreviewpanel", RendererType.STANDALONE_PANEL);
-        tablePreview = new TablePreview(au(), tableName);
-        formPreview = new FormPreview(au(), formName);
-        final String appletName = null;
-        tabSheet = new TabSheet(tsdb.build(),
-                Arrays.asList(new TabSheetItem("tablePreview", appletName, tablePreview, TABLE_PREVIEW_INDEX, true),
-                        new TabSheetItem("formPreview", appletName, formPreview, FORM_PREVIEW_INDEX, true)));
-        tabSheet.setEventHandler(this);
+        if (!StringUtils.isBlank(tableName) && !StringUtils.isBlank(formName)) {
+            TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
+            tsdb.addTabDef("tablePreview", au().resolveSessionMessage("$m{studio.appapplet.table.tablepreview}"),
+                    "fc-tablepreviewpanel", RendererType.STANDALONE_PANEL);
+            tsdb.addTabDef("preview", au().resolveSessionMessage("$m{studio.appapplet.form.formpreview}"),
+                    "fc-formpreviewpanel", RendererType.STANDALONE_PANEL);
+            tablePreview = new TablePreview(au(), tableName);
+            formPreview = new FormPreview(au(), formName);
+            final String appletName = null;
+            tabSheet = new TabSheet(tsdb.build(),
+                    Arrays.asList(new TabSheetItem("tablePreview", appletName, tablePreview, TABLE_PREVIEW_INDEX, true),
+                            new TabSheetItem("formPreview", appletName, formPreview, FORM_PREVIEW_INDEX, true)));
+            tabSheet.setEventHandler(this);
 
-        tablePreview.reload();
+            tablePreview.reload();
+        }
+    }
+    
+    public boolean isPresent() {
+        return tablePreview != null && formPreview != null;
     }
 }

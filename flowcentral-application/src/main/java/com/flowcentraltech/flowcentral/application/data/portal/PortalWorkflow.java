@@ -34,20 +34,30 @@ public class PortalWorkflow {
     private String entity;
 
     private String prefix;
+
+    private String applet;
     
     private String descFormat;
 
+    private boolean manualSubmission;
+
     private List<PortalWorkflowStep> steps;
 
+    private List<PortalWorkflowOption> options;
+
     public PortalWorkflow(String name, String description, String label, String entity, String prefix,
-            String descFormat, List<PortalWorkflowStep> steps) {
+            String applet, String descFormat, boolean manualSubmission, List<PortalWorkflowStep> steps,
+            List<PortalWorkflowOption> options) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.entity = entity;
         this.prefix = prefix;
+        this.applet = applet;
         this.descFormat = descFormat;
+        this.manualSubmission = manualSubmission;
         this.steps = steps;
+        this.options = options;
     }
 
     public String getName() {
@@ -70,11 +80,23 @@ public class PortalWorkflow {
         return prefix;
     }
 
+    public String getApplet() {
+        return applet;
+    }
+
     public String getDescFormat() {
         return descFormat;
     }
 
+    public boolean isManualSubmission() {
+        return manualSubmission;
+    }
+
     public List<PortalWorkflowStep> getSteps() {
         return steps;
+    }
+
+    public List<PortalWorkflowOption> getOptions() {
+        return options;
     }
 }

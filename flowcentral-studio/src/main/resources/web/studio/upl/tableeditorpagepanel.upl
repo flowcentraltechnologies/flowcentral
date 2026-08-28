@@ -23,7 +23,4 @@
 
 // Detached panels
 !fc-tablecolumneditorpanel:editColumnPanel orientation:bottom_left
-	
-// Actions
-!ui-postcommand:saveDesignAct command:saveDesign components:$c{tableEditorBodyPanel}
 

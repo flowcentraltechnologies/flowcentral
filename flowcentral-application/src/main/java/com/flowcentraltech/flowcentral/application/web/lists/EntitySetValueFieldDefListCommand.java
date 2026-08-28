@@ -22,10 +22,12 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.flowcentraltech.flowcentral.system.data.ProcessVariableDef;
+import com.flowcentraltech.flowcentral.system.util.SystemUtils;
 import com.tcdng.unify.common.data.Listable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ListData;
 
 /**
  * Entity set value field definition list command.
@@ -48,12 +50,13 @@ public class EntitySetValueFieldDefListCommand extends AbstractFlowCentralListCo
         List<Listable> list = new ArrayList<>();
         if (params.isPresent()) {
             list.addAll(params.getEntityDef().getSetValueFieldDefList());
-        }
 
-        if (params.isIncludeProcessVariable()) {
-            for (ProcessVariableDef def : au.getProcessVariables(params.getEntityDef().getLongName())) {
-                if (def.isSupportValues()) {
-                    list.add(def);
+            if (params.isIncludeProcessVariable()) {
+                for (ProcessVariableDef def : params.getEntityDef().getVariableDefList()) {
+                    if (def.isSupportValues()) {
+                        list.add(new ListData(def.getKey(),
+                                SystemUtils.getProcessVariableLabel(resolveSessionMessage(def.getLabel()))));
+                    }
                 }
             }
         }

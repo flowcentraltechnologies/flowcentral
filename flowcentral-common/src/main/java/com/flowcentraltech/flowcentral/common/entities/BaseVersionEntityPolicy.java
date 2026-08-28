@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.common.entities;
 
 import java.util.Date;
 
-import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
@@ -28,26 +27,23 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 4.1
  */
 @Component("baseversion-entitypolicy")
-public class BaseVersionEntityPolicy extends BaseEntityPolicy {
+public class BaseVersionEntityPolicy<T extends BaseVersionEntity> extends BaseEntityPolicy<T> {
 
     @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        BaseVersionEntity baseVersionEntity = ((BaseVersionEntity) record);
-        baseVersionEntity.setVersionNo(1L);
+    public Object preCreate(T record, Date now) throws UnifyException {
+        record.setVersionNo(1L);
         return super.preCreate(record, now);
     }
 
     @Override
-    public void preUpdate(Entity record, Date now) throws UnifyException {
+    public void preUpdate(T record, Date now) throws UnifyException {
         super.preUpdate(record, now);
-        final BaseVersionEntity baseVersionEntity = ((BaseVersionEntity) record);
-        baseVersionEntity.setVersionNo(baseVersionEntity.getVersionNo() + 1L);
+        record.setVersionNo(record.getVersionNo() + 1L);
     }
 
     @Override
-    public void onUpdateError(final Entity record) {
-        final BaseVersionEntity baseVersionEntity = (BaseVersionEntity) record;
-        baseVersionEntity.setVersionNo(baseVersionEntity.getVersionNo() - 1L);
+    public void onUpdateError(final T record) {
+        record.setVersionNo(record.getVersionNo() - 1L);
     }
 
 }

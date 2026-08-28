@@ -16,11 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.business;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
-import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.tcdng.unify.common.database.WorkEntity;
@@ -81,80 +77,6 @@ public interface ApplicationWorkItemUtilities extends FlowCentralComponent {
      */
     EntityActionResult submitToWorkflow(EntityDef entityDef, String workflowName, WorkEntity inst, String policyName)
             throws UnifyException;
-
-    /**
-     * Counts workflow loading tables by role.
-     * 
-     * @param roleCode
-     *                 the role code
-     * @return number of
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    int countWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException;
-
-    /**
-     * Finds workflow loading tables by role.
-     * 
-     * @param roleCode
-     *                 the role code
-     * @return list of workflows
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<WorkflowLoadingTableInfo> findWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException;
-
-    /**
-     * Gets loading workflow step by work item event ID.
-     * 
-     * @param workItemEventId
-     *                        the work item event ID
-     * @param branchCode
-     *                        optional branch code
-     * @param departmentCode
-     *                        optional department code
-     * @return list of workflow steps
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    WorkflowStepInfo getWorkflowLoadingStepInfoByWorkItemEventId(Long workItemEventId, String branchCode,
-            String departmentCode) throws UnifyException;
-
-    /**
-     * Finds loading workflow steps by role.
-     * 
-     * @param loadingTableName
-     *                         the loading table name
-     * @param roleCode
-     *                         the role code
-     * @param branchCode
-     *                         optional branch code
-     * @param departmentCode
-     *                         optional department code
-     * @return list of workflow steps
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(String loadingTableName, String roleCode,
-            String branchCode, String departmentCode) throws UnifyException;
-
-    /**
-     * Finds loading workflow exception steps by role.
-     * 
-     * @param loadingTableName
-     *                         the loading table name
-     * @param roleCode
-     *                         the role code
-     * @param branchCode
-     *                         optional branch code
-     * @param departmentCode
-     *                         optional department code
-     * @return list of workflow steps
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<WorkflowStepInfo> findWorkflowLoadingExceptionStepInfoByRole(String loadingTableName, String roleCode,
-            String branchCode, String departmentCode) throws UnifyException;
 
     /**
      * Ensures workflows are defined for applet if applet has its workflow copy flag

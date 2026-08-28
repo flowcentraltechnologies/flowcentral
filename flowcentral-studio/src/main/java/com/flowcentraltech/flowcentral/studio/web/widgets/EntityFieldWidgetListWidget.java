@@ -44,13 +44,15 @@ public class EntityFieldWidgetListWidget extends EntityListWidget {
     @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
         super.addMoreResultRestriction(query);
+        final String applicationName = getValue(String.class, "applicationName");
+        
         EntityFieldDataType type = getValue(EntityFieldDataType.class, getUplAttribute(String.class, "typeField"));
         if (EntityFieldDataType.LIST_ONLY.equals(type)) {
             AppEntityField appEntityField = (AppEntityField) getValueStore().getValueObject();
             type = application().resolveListOnlyEntityDataType(appEntityField);
         }
 
-        ApplicationQueryUtils.addWidgetTypeCriteria((Query<AppWidgetType>) query, type);
+        ApplicationQueryUtils.addWidgetTypeCriteria((Query<AppWidgetType>) query, applicationName, type);
     }
 
 }

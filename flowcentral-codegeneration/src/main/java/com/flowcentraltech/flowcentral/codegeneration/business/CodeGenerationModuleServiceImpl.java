@@ -15,16 +15,37 @@
  */
 package com.flowcentraltech.flowcentral.codegeneration.business;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.security.CodeSource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
+import javax.tools.ToolProvider;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
@@ -116,6 +137,9 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
+    @Configurable
+    private CodeGenerationPlugin codeGenerationPlugin;
+
     @Override
     public void clearDefinitionsCache() throws UnifyException {
 
@@ -127,21 +151,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections.unmodifiableList(
-            Arrays.asList(
-                    "charts-xml-generator",
-                    "dashboards-xml-generator",
-                    "notification-templates-xml-generator",
-                    "notification-largetexts-xml-generator",
-                    "reports-xml-generator",
-                    "workflows-xml-generator",
-                    "help-sheets-xml-generator",
-                    "application-xml-generator"));
+            Arrays.asList("charts-xml-generator", "dashboards-xml-generator", "notification-templates-xml-generator",
+                    "notification-largetexts-xml-generator", "reports-xml-generator", "workflows-xml-generator",
+                    "help-sheets-xml-generator", "application-xml-generator"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME,
             description = "Generate Extension Module Files Task",
             parameters = { @Parameter(name = CodeGenerationTaskConstants.CODEGENERATION_ITEM,
                     description = "Code Generation Item", type = CodeGenerationItem.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
     public int generateExtensionModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
         Date now = environment().getNow();
@@ -158,8 +176,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
-                        moduleName, messageReplacements, false);
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(
+                        taskMonitor, mainCtx, moduleName, messageReplacements, false);
 
                 // Generate applications
                 List<Application> applicationList = environment()
@@ -216,8 +234,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             String zipFilename = String.format("extension_%s_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
-            codeGenerationItem.setFilename(zipFilename);
-            codeGenerationItem.setData(baos.toByteArray());
+
+            if (codeGenerationPlugin != null) {
+                codeGenerationItem.setFilename(codeGenerationPlugin.getExtensionJarFileName());
+                codeGenerationItem.setData(compileAndPackageAsJAR(taskMonitor, baos.toByteArray(), true));
+            } else {
+                codeGenerationItem.setFilename(zipFilename);
+                codeGenerationItem.setData(baos.toByteArray());
+            }
         } finally {
             IOUtils.close(zos);
         }
@@ -260,8 +284,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
 
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
-                        moduleName, messageReplacements, true);
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(
+                        taskMonitor, mainCtx, moduleName, messageReplacements, true);
 
                 // Generate applications
                 List<Application> applicationList = environment()
@@ -308,15 +332,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private static final List<String> EXCLUDED_UTILITIES_MODULES = Collections
-            .unmodifiableList(Arrays.asList("application", "codegeneration", "collaboration", "dashboard",
-                    "integration", "notification", "report", "studio", "workflow", "workspace"));
+    private static final List<String> EXCLUDED_UTILITIES_MODULES = Collections.unmodifiableList(Arrays.asList(
+            "application", "codegeneration", "collaboration", "chart", "dashboard", "organization", "security",
+            "osmessaging", "integration", "notification", "report", "system", "studio", "workflow", "workspace"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_UTILITIES_MODULE_FILES_TASK_NAME,
             description = "Generate Utilities Module Files Task",
             parameters = { @Parameter(name = CodeGenerationTaskConstants.CODEGENERATION_ITEM,
                     description = "Code Generation Item", type = CodeGenerationItem.class, mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
     public int generateUtilitiesModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
         Date now = environment().getNow();
@@ -327,10 +351,17 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     codeGenerationItem.getBasePackage(), false);
             List<String> moduleList = systemModuleService.getAllModuleNames();
             moduleList.removeAll(EXCLUDED_UTILITIES_MODULES);
+            if (codeGenerationPlugin != null) {
+                List<String> additional = codeGenerationPlugin.getAdditionalUtilitiesExclusionModules();
+                if (!DataUtils.isBlank(additional)) {
+                    moduleList.removeAll(additional);
+                }
+            }
+
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for utilities module [{0}]", moduleName);
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(taskMonitor, mainCtx,
-                        moduleName, Collections.emptyMap(), false);
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(
+                        taskMonitor, mainCtx, moduleName, Collections.emptyMap(), false);
 
                 // Generate applications
                 List<Application> applicationList = environment()
@@ -402,8 +433,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             String zipFilename = String.format("%s_utilities_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
-            codeGenerationItem.setFilename(zipFilename);
-            codeGenerationItem.setData(baos.toByteArray());
+
+            if (codeGenerationPlugin != null) {
+                codeGenerationItem.setFilename(codeGenerationPlugin.getUtilitiesJarFileName());
+                codeGenerationItem.setData(compileAndPackageAsJAR(taskMonitor, baos.toByteArray(), false));
+            } else {
+                codeGenerationItem.setFilename(zipFilename);
+                codeGenerationItem.setData(baos.toByteArray());
+            }
         } finally {
             IOUtils.close(zos);
         }
@@ -414,7 +451,12 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
             throws UnifyException {
-
+        if (CodeGenerationModuleNameConstants.CODEGENERATION_MODULE_NAME
+                .equals(moduleInstall.getModuleConfig().getName())) {
+            if (codeGenerationPlugin != null) {
+                installWorkDependencies();
+            }
+        }
     }
 
     private DynamicModuleInfo getDynamicModuleInfo(String moduleName) throws UnifyException {
@@ -442,6 +484,180 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return new DynamicModuleInfo(moduleName, applications);
+    }
+
+    private void installWorkDependencies() throws UnifyException {
+        logDebug("Installing code generation work dependencies...");
+        try {
+            final String workPath = IOUtils.buildFilename(getWorkingPath(), "work");
+            final Path workRoot = Path.of(workPath);
+
+            // Extract libraries to work library folder
+            logDebug("Extract libraries to work library folder...");
+            final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
+            CodeSource cs = CodeGenerationModuleServiceImpl.class.getProtectionDomain().getCodeSource();
+            if (cs == null) {
+                throw new IllegalStateException("No CodeSource - not running from a jar?");
+            }
+
+            String jarurl = cs.getLocation().toURI().toString();
+            while (jarurl.startsWith("jar:")) {
+                jarurl = jarurl.substring(4);
+            }
+            int index = jarurl.indexOf("!/");
+            if (index >= 0) {
+                jarurl = jarurl.substring(0, index);
+            }
+
+            if (jarurl.startsWith("file:")) {
+                jarurl = jarurl.substring(5);
+            }
+
+            if (jarurl.matches("^/[A-Za-z]:/.*")) {
+                jarurl = jarurl.substring(1);
+            }
+
+            final List<String> classpathParts = new ArrayList<>();
+            final Path fatJar = Path.of(jarurl);
+            try (JarFile jf = new JarFile(fatJar.toFile())) {
+                Enumeration<JarEntry> entries = jf.entries();
+                while (entries.hasMoreElements()) {
+                    JarEntry entry = entries.nextElement();
+                    if (entry.getName().startsWith("BOOT-INF/lib/") && entry.getName().endsWith(".jar")) {
+                        Path dest = libPath.resolve(Path.of(entry.getName()).getFileName().toString());
+                        try (InputStream in = jf.getInputStream(entry)) {
+                            Files.copy(in, dest, StandardCopyOption.REPLACE_EXISTING);
+                        }
+
+                        classpathParts.add(dest.toString());
+                    }
+                }
+            }
+
+            // Save class path information
+            logDebug("Saving class path information...");
+            final String classPath = String.join(File.pathSeparator, classpathParts);
+            final File classPathFile = libPath.resolve("classpath.txt").toFile();
+            IOUtils.writeToFile(classPathFile, classPath);
+        } catch (UnifyException e) {
+            throw e;
+        } catch (Exception e) {
+            throwOperationErrorException(e);
+        }
+    }
+
+    private byte[] compileAndPackageAsJAR(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
+            throws UnifyException {
+        Path deleteWorkPath = null;
+        try {
+            final Path workRoot = Path.of(IOUtils.buildFilename(getWorkingPath(), "work"));
+            final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + ProcessHandle.current().pid());
+            deleteWorkPath = actWorkPath;
+
+            final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
+            final String classPath = IOUtils.readAllAsString(libPath.resolve("classpath.txt").toFile());
+
+            // Extract source directory to working directory
+            Files.createDirectories(actWorkPath);
+            final Path sourcePath = actWorkPath.resolve("src/main/java");
+            try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(srcZip))) {
+                ZipEntry entry;
+                while ((entry = zis.getNextEntry()) != null) {
+                    File target = actWorkPath.resolve(entry.getName()).toFile();
+                    if (!target.toPath().normalize().startsWith(actWorkPath.normalize())) {
+                        throw new SecurityException("Bad zip entry: " + entry.getName());
+                    }
+
+                    if (entry.isDirectory()) {
+                        target.mkdirs();
+                    } else {
+                        target.getParentFile().mkdirs();
+                        Files.copy(zis, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    zis.closeEntry();
+                }
+            }
+
+            final Path classesPath = Files.createDirectories(actWorkPath.resolve("classes"));
+            List<Path> sourceFiles;
+            try (Stream<Path> walk = Files.walk(sourcePath)) {
+                sourceFiles = walk.filter(p -> p.toString().endsWith(".java")).toList();
+            }
+            if (!sourceFiles.isEmpty()) {
+                // Do compilation
+                JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+                if (compiler == null) {
+                    throw new IllegalStateException("No system Java compiler available - run on a JDK, not a JRE");
+                }
+
+                addTaskMessage(taskMonitor, "Performing compilation...");
+                DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
+                try (StandardJavaFileManager fm = compiler.getStandardFileManager(diagnostics, null, null)) {
+                    fm.setLocation(StandardLocation.CLASS_OUTPUT, List.of(classesPath.toFile()));
+                    Iterable<? extends JavaFileObject> units = fm
+                            .getJavaFileObjectsFromFiles(sourceFiles.stream().map(Path::toFile).toList());
+                    List<String> options = List.of("-classpath", classPath, "-d", classesPath.toString(), "--release",
+                            codeGenerationPlugin.getReleaseJavaVersion());
+                    boolean ok = compiler.getTask(null, fm, diagnostics, options, null, units).call();
+                    for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
+                        addTaskMessage(taskMonitor, d.toString());
+                    }
+
+                    if (!ok) {
+                        throw new RuntimeException("Compilation failed");
+                    }
+                }
+            }
+
+            // Create POM
+            final File pomFile = classesPath.resolve("pom.xml").toFile();
+            IOUtils.writeToFile(pomFile,
+                    extension ? codeGenerationPlugin.getExtensionJarPOM() : codeGenerationPlugin.getUtilitiesJarPOM());
+
+            // Copy resources
+            final Path resourcesPath = actWorkPath.resolve("src/main/resources");
+            if (Files.isDirectory(resourcesPath)) {
+                try (Stream<Path> walk = Files.walk(resourcesPath)) {
+                    for (Path path : (Iterable<Path>) walk::iterator) {
+                        Path rel = resourcesPath.relativize(path);
+                        Path target = classesPath.resolve(rel);
+                        if (Files.isDirectory(path)) {
+                            Files.createDirectories(target);
+                        } else {
+                            Files.createDirectories(target.getParent());
+                            Files.copy(path, target, StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    }
+                }
+            }
+
+            // Package JAR
+            final Path targetPath = Files.createDirectories(actWorkPath.resolve("target"));
+            Path outputJar = targetPath.resolve(extension ? codeGenerationPlugin.getExtensionJarFileName()
+                    : codeGenerationPlugin.getUtilitiesJarFileName());
+            java.util.spi.ToolProvider jarTool = java.util.spi.ToolProvider.findFirst("jar")
+                    .orElseThrow(() -> new IllegalStateException("jar tool not found"));
+            int code = jarTool.run(System.out, System.err, "--create", "--file", outputJar.toString(), "-C",
+                    classesPath.toString(), ".");
+            if (code != 0) {
+                throw new RuntimeException("jar packaging failed, exit code=" + code);
+            }
+
+            addTaskMessage(taskMonitor, "Built: " + outputJar.toAbsolutePath());
+            return IOUtils.readAll(outputJar.toFile());
+        } catch (UnifyException e) {
+            throw e;
+        } catch (Exception e) {
+            throwOperationErrorException(e);
+        } finally {
+            if (deleteWorkPath != null) {
+                addTaskMessage(taskMonitor, "Performing cleanup...");
+                IOUtils.deleteDirectoryAndContents(deleteWorkPath);
+            }
+        }
+
+        return null;
     }
 
 }

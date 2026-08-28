@@ -903,6 +903,17 @@ public interface EnvironmentService extends BusinessService {
     <T extends Entity> int countAll(Query<T> query) throws UnifyException;
 
     /**
+     * Checks if any record by query exists.
+     * 
+     * @param query
+     *              the search query
+     * @return true if any record by criteria exists
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Entity> boolean exists(Query<T> query) throws UnifyException;
+
+    /**
      * Finds constraining record that may prevent supplied record from being
      * successfully created.
      * 

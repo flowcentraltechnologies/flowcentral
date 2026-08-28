@@ -25,7 +25,6 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.AbstractBootService;
 import com.tcdng.unify.core.application.BootInstallationInfo;
@@ -41,20 +40,14 @@ import com.tcdng.unify.core.application.StartupShutdownHook;
 @Transactional
 @Component(CommonModuleNameConstants.APPLICATION_BOOTSERVICE)
 public class BootServiceImpl extends AbstractBootService<ModuleInstall> {
-
-    @Configurable
-    private ConfigurationLoader configurationLoader;
-
-    @Configurable
-    private PreInstallationSetup preInstallationSetup;
-    
+    // No injection here to avoid exceptions caused by uninitialized data sources
     @Override
     protected BootInstallationInfo<ModuleInstall> prepareBootInstallation() throws UnifyException {
-       if (preInstallationSetup != null) {
-           preInstallationSetup.performPreInstallationSetup();
-       }
+        if (isComponent(PreInstallationSetup.class)) {
+            getComponent(PreInstallationSetup.class).performPreInstallationSetup();
+        }
 
-        FlowCentralInstall flowCentralInstall = configurationLoader.loadMasterModuleInstallation();
+        FlowCentralInstall flowCentralInstall = getComponent(ConfigurationLoader.class).loadMasterModuleInstallation();
         return new BootInstallationInfo<ModuleInstall>(flowCentralInstall.getInstallerList(),
                 flowCentralInstall.getModuleInstallList());
     }

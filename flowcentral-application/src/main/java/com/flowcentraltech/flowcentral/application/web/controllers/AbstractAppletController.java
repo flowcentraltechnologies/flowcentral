@@ -155,19 +155,19 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
             SecuredLinkContentInfo securedLinkContentInfo = slm.getSecuredLink(forward);
             if (type.equals(securedLinkContentInfo.getType())) {
                 getSessionContext().removeExternalForward();
-                getPage().setAttribute(AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY,
+                setPageAttribute(AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY,
                         securedLinkContentInfo.getAccessKey());
             }
         }
     }
 
     protected final void invalidateSecuredLink(SecuredLinkType type) throws UnifyException {
-        final String accessKey = getPage().getAttribute(String.class,
+        final String accessKey = getPageAttribute(String.class,
                 AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
         if (!StringUtils.isBlank(accessKey)) {
             SecuredLinkManager slm = appletUtilities.getComponent(SecuredLinkManager.class);
             slm.invalidateSecuredLinkByAccessKey(type, accessKey);
-            getPage().removeAttribute(String.class, AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
+            clearPageAttribute(AppletPageAttributeConstants.SECURED_LINK_ACCESSKEY);
         }
     }
 }
