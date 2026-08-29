@@ -18,10 +18,15 @@ package com.flowcentraltech.flowcentral.codegeneration.business;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.security.CodeSource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -490,7 +495,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         logDebug("Installing code generation work dependencies...");
         try {
             final String workPath = IOUtils.buildFilename(getWorkingPath(), "work");
-            final Path workRoot = Path.of(workPath);
+            final Path workRoot = Paths.get(workPath);
 
             // Extract libraries to work library folder
             logDebug("Extract libraries to work library folder...");
@@ -518,13 +523,13 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             }
 
             final List<String> classpathParts = new ArrayList<>();
-            final Path fatJar = Path.of(jarurl);
+            final Path fatJar = Paths.get(jarurl);
             try (JarFile jf = new JarFile(fatJar.toFile())) {
                 Enumeration<JarEntry> entries = jf.entries();
                 while (entries.hasMoreElements()) {
                     JarEntry entry = entries.nextElement();
                     if (entry.getName().startsWith("BOOT-INF/lib/") && entry.getName().endsWith(".jar")) {
-                        Path dest = libPath.resolve(Path.of(entry.getName()).getFileName().toString());
+                        Path dest = libPath.resolve(Paths.get(entry.getName()).getFileName().toString());
                         try (InputStream in = jf.getInputStream(entry)) {
                             Files.copy(in, dest, StandardCopyOption.REPLACE_EXISTING);
                         }
@@ -550,7 +555,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             throws UnifyException {
         Path deleteWorkPath = null;
         try {
-            final Path workRoot = Path.of(IOUtils.buildFilename(getWorkingPath(), "work"));
+            final Path workRoot = Paths.get(IOUtils.buildFilename(getWorkingPath(), "work"));
             final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + ProcessHandle.current().pid());
             deleteWorkPath = actWorkPath;
 
@@ -580,10 +585,21 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             }
 
             final Path classesPath = Files.createDirectories(actWorkPath.resolve("classes"));
-            List<Path> sourceFiles;
-            try (Stream<Path> walk = Files.walk(sourcePath)) {
-                sourceFiles = walk.filter(p -> p.toString().endsWith(".java")).toList();
-            }
+            List<Path> sourceFiles = new ArrayList<Path>();
+            Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>()
+                {
+
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+
+                        if (file.toString().endsWith(".java")) {
+                            sourceFiles.add(file);
+                        }
+
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+
             if (!sourceFiles.isEmpty()) {
                 // Do compilation
                 JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -636,10 +652,25 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             final Path targetPath = Files.createDirectories(actWorkPath.resolve("target"));
             Path outputJar = targetPath.resolve(extension ? codeGenerationPlugin.getExtensionJarFileName()
                     : codeGenerationPlugin.getUtilitiesJarFileName());
-            java.util.spi.ToolProvider jarTool = java.util.spi.ToolProvider.findFirst("jar")
-                    .orElseThrow(() -> new IllegalStateException("jar tool not found"));
-            int code = jarTool.run(System.out, System.err, "--create", "--file", outputJar.toString(), "-C",
-                    classesPath.toString(), ".");
+            String javaHome = System.getProperty("java.home");
+            Path jarExecutable = Paths.get(javaHome, "bin", "jar");
+
+            if (!Files.exists(jarExecutable)) {
+                // In case java.home points to a JRE inside a JDK
+                jarExecutable = Paths.get(javaHome, "..", "bin", "jar").toAbsolutePath().normalize();
+            }
+
+            if (!Files.exists(jarExecutable)) {
+                throw new IllegalStateException("jar tool not found");
+            }
+
+            ProcessBuilder processBuilder = new ProcessBuilder(jarExecutable.toString(), "cf", outputJar.toString(),
+                    "-C", classesPath.toString(), ".");
+
+            processBuilder.inheritIO();
+
+            Process process = processBuilder.start();
+            int code = process.waitFor();
             if (code != 0) {
                 throw new RuntimeException("jar packaging failed, exit code=" + code);
             }
