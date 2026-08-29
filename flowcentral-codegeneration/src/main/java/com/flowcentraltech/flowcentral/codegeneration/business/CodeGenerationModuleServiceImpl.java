@@ -611,8 +611,13 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
                 try (StandardJavaFileManager fm = compiler.getStandardFileManager(diagnostics, null, null)) {
                     fm.setLocation(StandardLocation.CLASS_OUTPUT, List.of(classesPath.toFile()));
-                    Iterable<? extends JavaFileObject> units = fm
-                            .getJavaFileObjectsFromFiles(sourceFiles.stream().map(Path::toFile).toList());
+                    List<File> sourceFilesAsFiles = new ArrayList<File>();
+
+                    for (Path sourceFile : sourceFiles) {
+                        sourceFilesAsFiles.add(sourceFile.toFile());
+                    }
+
+                    Iterable<? extends JavaFileObject> units = fm.getJavaFileObjectsFromFiles(sourceFilesAsFiles);
                     List<String> options = List.of("-classpath", classPath, "-d", classesPath.toString(), "--release",
                             codeGenerationPlugin.getReleaseJavaVersion());
                     boolean ok = compiler.getTask(null, fm, diagnostics, options, null, units).call();
