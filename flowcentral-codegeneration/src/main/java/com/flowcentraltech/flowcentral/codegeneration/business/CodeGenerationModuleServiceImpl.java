@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -556,7 +557,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         Path deleteWorkPath = null;
         try {
             final Path workRoot = Paths.get(IOUtils.buildFilename(getWorkingPath(), "work"));
-            final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + ProcessHandle.current().pid());
+            String runtimeName = ManagementFactory.getRuntimeMXBean().getName();
+            String processId = runtimeName;
+            int aindex = runtimeName.indexOf('@');
+            if (aindex > 0) {
+                processId = runtimeName.substring(0, aindex);
+            }
+            
+            final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + processId);
             deleteWorkPath = actWorkPath;
 
             final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
@@ -610,7 +618,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 addTaskMessage(taskMonitor, "Performing compilation...");
                 DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
                 try (StandardJavaFileManager fm = compiler.getStandardFileManager(diagnostics, null, null)) {
-                    fm.setLocation(StandardLocation.CLASS_OUTPUT, List.of(classesPath.toFile()));
+                    fm.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(classesPath.toFile()));
                     List<File> sourceFilesAsFiles = new ArrayList<File>();
 
                     for (Path sourceFile : sourceFiles) {
@@ -618,7 +626,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     Iterable<? extends JavaFileObject> units = fm.getJavaFileObjectsFromFiles(sourceFilesAsFiles);
-                    List<String> options = List.of("-classpath", classPath, "-d", classesPath.toString(), "--release",
+                    List<String> options = Arrays.asList("-classpath", classPath, "-d", classesPath.toString(), "--release",
                             codeGenerationPlugin.getReleaseJavaVersion());
                     boolean ok = compiler.getTask(null, fm, diagnostics, options, null, units).call();
                     for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
