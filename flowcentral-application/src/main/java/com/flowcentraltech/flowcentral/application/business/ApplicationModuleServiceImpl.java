@@ -1287,11 +1287,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 if (widgetRuleEntryDef.isPresent()) {
                                     final String fieldName = widgetRuleEntryDef.getFieldName();
                                     FieldRenderInfo fieldRenderInfo = fieldRenderInfos.get(fieldName);
-                                    WidgetTypeDef widgetTypeDef = getWidgetTypeDef(widgetRuleEntryDef.getWidget());
-                                    EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-                                    String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
-                                            entityFieldDef, fieldRenderInfo.getReference(), fieldRenderInfo.getColor());
-                                    ruleEditors.put(fieldName, renderer);
+                                    if (fieldRenderInfo != null) {
+                                        WidgetTypeDef widgetTypeDef = getWidgetTypeDef(widgetRuleEntryDef.getWidget());
+                                        EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                                        String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
+                                                entityFieldDef, fieldRenderInfo.getReference(),
+                                                fieldRenderInfo.getColor());
+                                        ruleEditors.put(fieldName, renderer);
+                                    }
                                 }
                             }
 
