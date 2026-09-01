@@ -695,22 +695,17 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     
     private Path findJarTool() {
         String javaHome = System.getProperty("java.home");
-
         Path candidate = Paths.get(javaHome, "bin", "jar");
-
         if (Files.isRegularFile(candidate)) {
             return candidate;
         }
 
         candidate = Paths.get(javaHome, "bin", "jar.exe");
-
         if (Files.isRegularFile(candidate)) {
             return candidate;
         }
 
-        // java.home may be .../jdk/.../jre
         Path parent = Paths.get(javaHome).getParent();
-
         if (parent != null) {
             candidate = parent.resolve("bin").resolve("jar");
 
