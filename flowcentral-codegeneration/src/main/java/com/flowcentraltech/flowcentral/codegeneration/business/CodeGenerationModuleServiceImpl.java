@@ -687,18 +687,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
     private void packageJar(Path classesPath, Path outputJar) throws IOException {
         OutputStream outputStream = Files.newOutputStream(outputJar);
-        JarOutputStream jarOutputStream = new JarOutputStream(outputStream);
-        try {
+        try (JarOutputStream jarOutputStream = new JarOutputStream(outputStream);) {
             addDirectoryToJar(classesPath, classesPath, jarOutputStream);
-        } finally {
-            jarOutputStream.close();
         }
     }
 
-    private static void addDirectoryToJar(Path rootDirectory, Path currentDirectory, JarOutputStream jarOutputStream)
+    private void addDirectoryToJar(Path rootDirectory, Path currentDirectory, JarOutputStream jarOutputStream)
             throws IOException {
-        java.nio.file.DirectoryStream<Path> directoryStream = Files.newDirectoryStream(currentDirectory);
-        try {
+        try (java.nio.file.DirectoryStream<Path> directoryStream = Files.newDirectoryStream(currentDirectory);) {
             for (Path path : directoryStream) {
                 if (Files.isDirectory(path)) {
                     addDirectoryToJar(rootDirectory, path, jarOutputStream);
@@ -713,22 +709,17 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 JarEntry entry = new JarEntry(entryName);
                 jarOutputStream.putNextEntry(entry);
 
-                InputStream inputStream = Files.newInputStream(path);
-                try {
+                try (InputStream inputStream = Files.newInputStream(path);) {
                     byte[] buffer = new byte[8192];
                     int count;
 
                     while ((count = inputStream.read(buffer)) != -1) {
                         jarOutputStream.write(buffer, 0, count);
                     }
-                } finally {
-                    inputStream.close();
                 }
 
                 jarOutputStream.closeEntry();
             }
-        } finally {
-            directoryStream.close();
         }
     }
 }
