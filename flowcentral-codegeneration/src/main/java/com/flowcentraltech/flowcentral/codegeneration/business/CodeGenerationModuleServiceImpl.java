@@ -665,18 +665,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             final Path targetPath = Files.createDirectories(actWorkPath.resolve("target"));
             Path outputJar = targetPath.resolve(extension ? codeGenerationPlugin.getExtensionJarFileName()
                     : codeGenerationPlugin.getUtilitiesJarFileName());
-            String javaHome = System.getProperty("java.home");
-            Path jarExecutable = Paths.get(javaHome, "bin", "jar");
-
-            if (!Files.exists(jarExecutable)) {
-                // In case java.home points to a JRE inside a JDK
-                jarExecutable = Paths.get(javaHome, "..", "bin", "jar").toAbsolutePath().normalize();
-            }
-
-            if (!Files.exists(jarExecutable)) {
-                throw new IllegalStateException("jar tool not found");
-            }
-
+            final Path jarExecutable = findJarTool();
             ProcessBuilder processBuilder = new ProcessBuilder(jarExecutable.toString(), "cf", outputJar.toString(),
                     "-C", classesPath.toString(), ".");
 
@@ -703,5 +692,40 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
         return null;
     }
+    
+    private Path findJarTool() {
+        String javaHome = System.getProperty("java.home");
 
+        Path candidate = Paths.get(javaHome, "bin", "jar");
+
+        if (Files.isRegularFile(candidate)) {
+            return candidate;
+        }
+
+        candidate = Paths.get(javaHome, "bin", "jar.exe");
+
+        if (Files.isRegularFile(candidate)) {
+            return candidate;
+        }
+
+        // java.home may be .../jdk/.../jre
+        Path parent = Paths.get(javaHome).getParent();
+
+        if (parent != null) {
+            candidate = parent.resolve("bin").resolve("jar");
+
+            if (Files.isRegularFile(candidate)) {
+                return candidate;
+            }
+
+            candidate = parent.resolve("bin").resolve("jar.exe");
+
+            if (Files.isRegularFile(candidate)) {
+                return candidate;
+            }
+        }
+
+        throw new IllegalStateException(
+                "JDK jar tool not found. java.home=" + javaHome);
+    }
 }
