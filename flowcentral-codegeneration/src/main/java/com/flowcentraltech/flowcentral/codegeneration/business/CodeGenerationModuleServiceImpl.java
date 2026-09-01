@@ -694,8 +694,10 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
     private void addDirectoryToJar(Path rootDirectory, Path currentDirectory, JarOutputStream jarOutputStream)
             throws IOException {
+        System.out.println("@prime: currentDirectory = " + currentDirectory);
         try (java.nio.file.DirectoryStream<Path> directoryStream = Files.newDirectoryStream(currentDirectory);) {
             for (Path path : directoryStream) {
+                System.out.println("@prime: path = " + path);
                 if (Files.isDirectory(path)) {
                     addDirectoryToJar(rootDirectory, path, jarOutputStream);
                     continue;
