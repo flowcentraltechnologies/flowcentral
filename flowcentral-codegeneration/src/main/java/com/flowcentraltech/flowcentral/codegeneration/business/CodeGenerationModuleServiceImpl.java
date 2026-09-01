@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -563,7 +565,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             if (aindex > 0) {
                 processId = runtimeName.substring(0, aindex);
             }
-            
+
             final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + processId);
             deleteWorkPath = actWorkPath;
 
@@ -626,8 +628,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     Iterable<? extends JavaFileObject> units = fm.getJavaFileObjectsFromFiles(sourceFilesAsFiles);
-                    List<String> options = Arrays.asList("-classpath", classPath, "-d", classesPath.toString(), "--release",
-                            codeGenerationPlugin.getReleaseJavaVersion());
+                    List<String> options = Arrays.asList("-classpath", classPath, "-d", classesPath.toString(),
+                            "--release", codeGenerationPlugin.getReleaseJavaVersion());
                     boolean ok = compiler.getTask(null, fm, diagnostics, options, null, units).call();
                     for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
                         addTaskMessage(taskMonitor, d.toString());
@@ -665,17 +667,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             final Path targetPath = Files.createDirectories(actWorkPath.resolve("target"));
             Path outputJar = targetPath.resolve(extension ? codeGenerationPlugin.getExtensionJarFileName()
                     : codeGenerationPlugin.getUtilitiesJarFileName());
-            final Path jarExecutable = findJarTool();
-            ProcessBuilder processBuilder = new ProcessBuilder(jarExecutable.toString(), "cf", outputJar.toString(),
-                    "-C", classesPath.toString(), ".");
-
-            processBuilder.inheritIO();
-
-            Process process = processBuilder.start();
-            int code = process.waitFor();
-            if (code != 0) {
-                throw new RuntimeException("jar packaging failed, exit code=" + code);
-            }
+            packageJar(targetPath, outputJar);
 
             addTaskMessage(taskMonitor, "Built: " + outputJar.toAbsolutePath());
             return IOUtils.readAll(outputJar.toFile());
@@ -692,35 +684,51 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
         return null;
     }
-    
-    private Path findJarTool() {
-        String javaHome = System.getProperty("java.home");
-        Path candidate = Paths.get(javaHome, "bin", "jar");
-        if (Files.isRegularFile(candidate)) {
-            return candidate;
+
+    private void packageJar(Path classesPath, Path outputJar) throws IOException {
+        OutputStream outputStream = Files.newOutputStream(outputJar);
+        JarOutputStream jarOutputStream = new JarOutputStream(outputStream);
+        try {
+            addDirectoryToJar(classesPath, classesPath, jarOutputStream);
+        } finally {
+            jarOutputStream.close();
         }
+    }
 
-        candidate = Paths.get(javaHome, "bin", "jar.exe");
-        if (Files.isRegularFile(candidate)) {
-            return candidate;
-        }
+    private static void addDirectoryToJar(Path rootDirectory, Path currentDirectory, JarOutputStream jarOutputStream)
+            throws IOException {
+        java.nio.file.DirectoryStream<Path> directoryStream = Files.newDirectoryStream(currentDirectory);
+        try {
+            for (Path path : directoryStream) {
+                if (Files.isDirectory(path)) {
+                    addDirectoryToJar(rootDirectory, path, jarOutputStream);
+                    continue;
+                }
 
-        Path parent = Paths.get(javaHome).getParent();
-        if (parent != null) {
-            candidate = parent.resolve("bin").resolve("jar");
+                if (!Files.isRegularFile(path)) {
+                    continue;
+                }
 
-            if (Files.isRegularFile(candidate)) {
-                return candidate;
+                String entryName = rootDirectory.relativize(path).toString().replace('\\', '/');
+                JarEntry entry = new JarEntry(entryName);
+                jarOutputStream.putNextEntry(entry);
+
+                InputStream inputStream = Files.newInputStream(path);
+                try {
+                    byte[] buffer = new byte[8192];
+                    int count;
+
+                    while ((count = inputStream.read(buffer)) != -1) {
+                        jarOutputStream.write(buffer, 0, count);
+                    }
+                } finally {
+                    inputStream.close();
+                }
+
+                jarOutputStream.closeEntry();
             }
-
-            candidate = parent.resolve("bin").resolve("jar.exe");
-
-            if (Files.isRegularFile(candidate)) {
-                return candidate;
-            }
+        } finally {
+            directoryStream.close();
         }
-
-        throw new IllegalStateException(
-                "JDK jar tool not found. java.home=" + javaHome);
     }
 }
