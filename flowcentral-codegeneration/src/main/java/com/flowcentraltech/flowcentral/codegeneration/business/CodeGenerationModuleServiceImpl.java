@@ -596,12 +596,9 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             final Path classesPath = Files.createDirectories(actWorkPath.resolve("classes"));
             List<Path> sourceFiles = new ArrayList<Path>();
-            Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>()
-                {
-
+            Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-
                         if (file.toString().endsWith(".java")) {
                             sourceFiles.add(file);
                         }
@@ -667,7 +664,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             final Path targetPath = Files.createDirectories(actWorkPath.resolve("target"));
             Path outputJar = targetPath.resolve(extension ? codeGenerationPlugin.getExtensionJarFileName()
                     : codeGenerationPlugin.getUtilitiesJarFileName());
-            packageJar(targetPath, outputJar);
+            packageJar(classesPath, outputJar);
 
             addTaskMessage(taskMonitor, "Built: " + outputJar.toAbsolutePath());
             return IOUtils.readAll(outputJar.toFile());
@@ -694,10 +691,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
     private void addDirectoryToJar(Path rootDirectory, Path currentDirectory, JarOutputStream jarOutputStream)
             throws IOException {
-        System.out.println("@prime: currentDirectory = " + currentDirectory);
         try (java.nio.file.DirectoryStream<Path> directoryStream = Files.newDirectoryStream(currentDirectory);) {
             for (Path path : directoryStream) {
-                System.out.println("@prime: path = " + path);
                 if (Files.isDirectory(path)) {
                     addDirectoryToJar(rootDirectory, path, jarOutputStream);
                     continue;
