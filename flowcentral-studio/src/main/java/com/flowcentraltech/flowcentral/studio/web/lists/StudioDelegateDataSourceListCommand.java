@@ -23,12 +23,13 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
-import com.flowcentraltech.flowcentral.system.entities.DataSourceConnection;
-import com.flowcentraltech.flowcentral.system.entities.DataSourceConnectionQuery;
 import com.tcdng.unify.common.data.Listable;
+import com.tcdng.unify.core.ApplicationComponents;
+import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
+import com.tcdng.unify.core.database.sql.SqlDataSource;
 import com.tcdng.unify.core.list.StringParam;
 
 /**
@@ -40,6 +41,8 @@ import com.tcdng.unify.core.list.StringParam;
 @Component("studiodelegatedatasourcelist")
 public class StudioDelegateDataSourceListCommand extends AbstractApplicationListCommand<StringParam> {
 
+    private List<ListData> directDatasourceList;
+
     public StudioDelegateDataSourceListCommand() {
         super(StringParam.class);
     }
@@ -48,14 +51,22 @@ public class StudioDelegateDataSourceListCommand extends AbstractApplicationList
     public List<? extends Listable> execute(Locale locale, StringParam params) throws UnifyException {
         if (params.isPresent()) {
             if (SystemModuleNameConstants.DIRECT_ENVIRONMENT_DELEGATE.equals(params.getValue())) {
-                List<ListData> list = new ArrayList<ListData>();
-                for (DataSourceConnection conn : au().system()
-                        .findDataSourceConnections((DataSourceConnectionQuery) new DataSourceConnectionQuery()
-                                .addSelect("name", "description").addOrder("description").ignoreEmptyCriteria(true))) {
-                    list.add(new ListData(conn.getName(), conn.getDescription()));
+                if (directDatasourceList == null) {
+                    synchronized (this) {
+                        if (directDatasourceList == null) {
+                            List<ListData> list = new ArrayList<ListData>();
+                            for (UnifyComponentConfig config : getComponentConfigs(SqlDataSource.class)) {
+                                if (!ApplicationComponents.APPLICATION_DATASOURCE.equals(config.getName())) {
+                                    list.add(new ListData(config.getName(), config.getDescription()));
+                                }
+                            }
+
+                            directDatasourceList = Collections.unmodifiableList(list);
+                        }
+                    }
                 }
 
-                return list;
+                return directDatasourceList;
             }
         }
 

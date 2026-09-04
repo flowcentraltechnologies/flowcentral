@@ -211,17 +211,17 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         if (testMode) {
             String emails = system().getSysParameterValue(String.class,
                     NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_TO_EMAILS);
-            List<String> toEmails = !StringUtils.isBlank(emails) ? StringUtils.charToListSplit(emails, ';')
+            List<String> toEmails = !StringUtils.isBlank(emails) ? StringUtils.charSplitToList(emails, ';')
                     : Collections.emptyList();
 
             emails = system().getSysParameterValue(String.class,
                     NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_CC_EMAILS);
-            List<String> ccEmails = !StringUtils.isBlank(emails) ? StringUtils.charToListSplit(emails, ';')
+            List<String> ccEmails = !StringUtils.isBlank(emails) ? StringUtils.charSplitToList(emails, ';')
                     : Collections.emptyList();
 
             emails = system().getSysParameterValue(String.class,
                     NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_BCC_EMAILS);
-            List<String> bccEmails = !StringUtils.isBlank(emails) ? StringUtils.charToListSplit(emails, ';')
+            List<String> bccEmails = !StringUtils.isBlank(emails) ? StringUtils.charSplitToList(emails, ';')
                     : Collections.emptyList();
             ctx = new EmailContext(toEmails, ccEmails, bccEmails);
         }

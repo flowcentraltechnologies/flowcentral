@@ -64,7 +64,7 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
     private CodeGenerationProvider codeGenerationProvider;
 
     private static final List<String> applicationAppletList = Collections
-            .unmodifiableList(Arrays.asList("studio.manageApplication", "system.manageDataSourceConnection"));
+            .unmodifiableList(Arrays.asList("studio.manageApplication"/*, "system.manageDataSourceConnection"*/));
 
     private static final List<String> synchronizationAppletList = Collections
             .unmodifiableList(Arrays.asList("studio.applicationSynchronization", "studio.delegateCreateSynchronization",
