@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.messaging.os.data.UserAction;
 import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Convenient abstract base class for work-item external accessibility
@@ -60,10 +61,14 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
     @Override
     public boolean releaseFromExternalWithUserAction(Long workRecId, String workflowName, String stepName,
             List<? extends UserAction> actions) throws UnifyException {
-        // For now just do single action
-        final UserAction action = actions.get(0);
-        return workflowModuleService.applyUserAction(workRecId, workflowName, stepName, action.getActionName(),
-                action.getActionDate(), action.getActionBy());
+        if (!DataUtils.isBlank(actions)) {
+            // For now just do single action
+            final UserAction action = actions.get(0);
+            return workflowModuleService.applyUserAction(workRecId, workflowName, stepName, action.getActionName(),
+                    action.getActionDate(), action.getActionBy());
+        }
+
+        return false;
     }
 
     @Override
