@@ -56,7 +56,9 @@ public class StudioDelegateDataSourceListCommand extends AbstractApplicationList
                         if (directDatasourceList == null) {
                             List<ListData> list = new ArrayList<ListData>();
                             for (UnifyComponentConfig config : getComponentConfigs(SqlDataSource.class)) {
-                                if (!ApplicationComponents.APPLICATION_DATASOURCE.equals(config.getName())) {
+                                if (!ApplicationComponents.APPLICATION_DATASOURCE.equals(config.getName())
+                                        && !ApplicationComponents.APPLICATION_DYNAMICSQLDATASOURCE
+                                                .equals(config.getName())) {
                                     list.add(new ListData(config.getName(), config.getDescription()));
                                 }
                             }
