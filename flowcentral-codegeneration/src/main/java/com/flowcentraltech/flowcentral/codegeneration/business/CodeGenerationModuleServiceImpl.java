@@ -459,12 +459,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
             throws UnifyException {
-        if (CodeGenerationModuleNameConstants.CODEGENERATION_MODULE_NAME
-                .equals(moduleInstall.getModuleConfig().getName())) {
-            if (codeGenerationPlugin != null) {
-                installWorkDependencies();
-            }
-        }
+
     }
 
     private DynamicModuleInfo getDynamicModuleInfo(String moduleName) throws UnifyException {
@@ -494,15 +489,25 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         return new DynamicModuleInfo(moduleName, applications);
     }
 
-    private void installWorkDependencies() throws UnifyException {
-        logDebug("Installing code generation work dependencies...");
+    private byte[] compileAndPackageAsJAR(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
+            throws UnifyException {
+        Path deleteWorkPath = null;
         try {
-            final String workPath = IOUtils.buildFilename(getWorkingPath(), "work");
-            final Path workRoot = Paths.get(workPath);
+            final Path workRoot = Paths.get(IOUtils.buildFilename(getWorkingPath(), "work"));
+            String runtimeName = ManagementFactory.getRuntimeMXBean().getName();
+            String processId = runtimeName;
+            int aindex = runtimeName.indexOf('@');
+            if (aindex > 0) {
+                processId = runtimeName.substring(0, aindex);
+            }
 
+            final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + processId);
+            deleteWorkPath = actWorkPath;
+
+            // Extract dependencies
             // Extract libraries to work library folder
             logDebug("Extract libraries to work library folder...");
-            final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
+            final Path libPath = Files.createDirectories(actWorkPath.resolve("lib"));
             CodeSource cs = CodeGenerationModuleServiceImpl.class.getProtectionDomain().getCodeSource();
             if (cs == null) {
                 throw new IllegalStateException("No CodeSource - not running from a jar?");
@@ -542,36 +547,11 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            // Save class path information
-            logDebug("Saving class path information...");
+            // Resolve class path information
+            logDebug("Resolving class path information...");
             final String classPath = String.join(File.pathSeparator, classpathParts);
-            final File classPathFile = libPath.resolve("classpath.txt").toFile();
-            IOUtils.writeToFile(classPathFile, classPath);
-        } catch (UnifyException e) {
-            throw e;
-        } catch (Exception e) {
-            throwOperationErrorException(e);
-        }
-    }
 
-    private byte[] compileAndPackageAsJAR(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
-            throws UnifyException {
-        Path deleteWorkPath = null;
-        try {
-            final Path workRoot = Paths.get(IOUtils.buildFilename(getWorkingPath(), "work"));
-            String runtimeName = ManagementFactory.getRuntimeMXBean().getName();
-            String processId = runtimeName;
-            int aindex = runtimeName.indexOf('@');
-            if (aindex > 0) {
-                processId = runtimeName.substring(0, aindex);
-            }
-
-            final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + processId);
-            deleteWorkPath = actWorkPath;
-
-            final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
-            final String classPath = IOUtils.readAllAsString(libPath.resolve("classpath.txt").toFile());
-
+            
             // Extract source directory to working directory
             Files.createDirectories(actWorkPath);
             final Path sourcePath = actWorkPath.resolve("src/main/java");
