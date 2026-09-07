@@ -504,7 +504,6 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + processId);
             deleteWorkPath = actWorkPath;
 
-            // Extract dependencies
             // Extract libraries to work library folder
             logDebug("Extract libraries to work library folder...");
             final Path libPath = Files.createDirectories(actWorkPath.resolve("lib"));
@@ -537,12 +536,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 while (entries.hasMoreElements()) {
                     JarEntry entry = entries.nextElement();
                     if (entry.getName().startsWith("BOOT-INF/lib/") && entry.getName().endsWith(".jar")) {
-                        Path dest = libPath.resolve(Paths.get(entry.getName()).getFileName().toString());
-                        try (InputStream in = jf.getInputStream(entry)) {
-                            Files.copy(in, dest, StandardCopyOption.REPLACE_EXISTING);
-                        }
+                        if (!entry.getName().startsWith("log4j")) {
+                            Path dest = libPath.resolve(Paths.get(entry.getName()).getFileName().toString());
+                            try (InputStream in = jf.getInputStream(entry)) {
+                                Files.copy(in, dest, StandardCopyOption.REPLACE_EXISTING);
+                            }
 
-                        classpathParts.add(dest.toString());
+                            classpathParts.add(dest.toString());
+                        }
                     }
                 }
             }
@@ -551,7 +552,6 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             logDebug("Resolving class path information...");
             final String classPath = String.join(File.pathSeparator, classpathParts);
 
-            
             // Extract source directory to working directory
             Files.createDirectories(actWorkPath);
             final Path sourcePath = actWorkPath.resolve("src/main/java");
@@ -576,7 +576,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
             final Path classesPath = Files.createDirectories(actWorkPath.resolve("classes"));
             List<Path> sourceFiles = new ArrayList<Path>();
-            Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>()
+                {
                     @Override
                     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                         if (file.toString().endsWith(".java")) {
