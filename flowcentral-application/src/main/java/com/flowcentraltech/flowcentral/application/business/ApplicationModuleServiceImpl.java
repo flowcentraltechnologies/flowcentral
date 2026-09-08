@@ -4047,7 +4047,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 .type(AppletType.DATA_IMPORT).portalAccess(true).applicationName(applicationName))) {
             final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
             AppletDef appletDef = getAppletDef(applet);
-            dataImports.put(applet, new PortalDataImport(applet, appletDef.getDescription(), appletDef.getLabel()));
+            dataImports.put(applet, new PortalDataImport(applet, resolveApplicationMessage(appletDef.getDescription()),
+                    resolveApplicationMessage(appletDef.getLabel())));
         }
 
         for (PortalWorkflow workflow : workflows) {
@@ -4068,8 +4069,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             final String enumName = ApplicationNameUtils.ensureLongNameReference(applicationName,
                     appEnumeration.getName());
-            enums.add(
-                    new PortalEnum(enumName, appEnumeration.getDescription(), appEnumeration.getLabel(), true, items));
+            enums.add(new PortalEnum(enumName, resolveApplicationMessage(appEnumeration.getDescription()),
+                    resolveApplicationMessage(appEnumeration.getLabel()), true, items));
         }
 
         return Optional.of(new PortalApplication(applicationDef.getName(), applicationDef.getDescription(),
@@ -4119,7 +4120,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 List<PortalEntityAttachment> attachments = new ArrayList<PortalEntityAttachment>();
                 for (EntityAttachmentDef attachmentDef : entityDef.getAttachmentList()) {
                     attachments.add(new PortalEntityAttachment(attachmentDef.getType().toString(),
-                            attachmentDef.getName(), attachmentDef.getLabel()));
+                            attachmentDef.getName(), resolveApplicationMessage(attachmentDef.getLabel())));
                 }
 
                 entities.put(entity, new PortalEntity(entityDef.getLongName(), entityDef.getDescription(),
@@ -4169,7 +4170,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 tables.put(table,
-                        new PortalTable(tableDef.getLongName(), tableDef.getDescription(),
+                        new PortalTable(tableDef.getLongName(), resolveApplicationMessage(tableDef.getDescription()),
                                 resolveApplicationMessage(tableDef.getLabel()), entity,
                                 DataUtils.unmodifiableList(columns), legends));
             }
@@ -4234,7 +4235,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             if (!DataUtils.isBlank(quickFilters)) {
                 options = new ArrayList<PortalAppletOption>();
                 for (AppAppletFilter filter : quickFilters) {
-                    options.add(new PortalAppletOption(filter.getName(), filter.getDescription()));
+                    options.add(new PortalAppletOption(filter.getName(),
+                            resolveApplicationMessage(filter.getDescription())));
                 }
             }
 

@@ -145,12 +145,14 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
             final Dashboard dashboard = environment().list(new DashboardQuery().id(dashboardId));
             final List<PortalDashboardOption> options = new ArrayList<PortalDashboardOption>();
             for (DashboardOption dashboardOption : dashboard.getOptionsList()) {
-                options.add(new PortalDashboardOption(dashboardOption.getName(), dashboardOption.getLabel()));
+                options.add(new PortalDashboardOption(dashboardOption.getName(),
+                        resolveApplicationMessage(dashboardOption.getLabel())));
             }
 
             final String dashboardName = ApplicationNameUtils.ensureLongNameReference(applicationName,
                     dashboard.getName());
-            dashboards.add(new PortalDashboard(dashboardName, dashboard.getDescription(), options));
+            dashboards.add(
+                    new PortalDashboard(dashboardName, resolveApplicationMessage(dashboard.getDescription()), options));
         }
 
         return dashboards;
