@@ -36,4 +36,9 @@ public class DashboardSlateController extends AbstractPageController<DashboardSl
         super(DashboardSlatePageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
+    @Override
+    public boolean isMultiplePagesPerSession() {
+        return true;
+    }
+
 }
