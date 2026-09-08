@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.management.ManagementFactory;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -457,12 +459,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     protected void doInstallModuleFeatures(final InstallationContext ctx, final ModuleInstall moduleInstall)
             throws UnifyException {
-        if (CodeGenerationModuleNameConstants.CODEGENERATION_MODULE_NAME
-                .equals(moduleInstall.getModuleConfig().getName())) {
-            if (codeGenerationPlugin != null) {
-                installWorkDependencies();
-            }
-        }
+
     }
 
     private DynamicModuleInfo getDynamicModuleInfo(String moduleName) throws UnifyException {
@@ -492,15 +489,24 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         return new DynamicModuleInfo(moduleName, applications);
     }
 
-    private void installWorkDependencies() throws UnifyException {
-        logDebug("Installing code generation work dependencies...");
+    private byte[] compileAndPackageAsJAR(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
+            throws UnifyException {
+        Path deleteWorkPath = null;
         try {
-            final String workPath = IOUtils.buildFilename(getWorkingPath(), "work");
-            final Path workRoot = Paths.get(workPath);
+            final Path workRoot = Paths.get(IOUtils.buildFilename(getWorkingPath(), "work"));
+            String runtimeName = ManagementFactory.getRuntimeMXBean().getName();
+            String processId = runtimeName;
+            int aindex = runtimeName.indexOf('@');
+            if (aindex > 0) {
+                processId = runtimeName.substring(0, aindex);
+            }
+
+            final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + processId);
+            deleteWorkPath = actWorkPath;
 
             // Extract libraries to work library folder
             logDebug("Extract libraries to work library folder...");
-            final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
+            final Path libPath = Files.createDirectories(actWorkPath.resolve("lib"));
             CodeSource cs = CodeGenerationModuleServiceImpl.class.getProtectionDomain().getCodeSource();
             if (cs == null) {
                 throw new IllegalStateException("No CodeSource - not running from a jar?");
@@ -530,45 +536,21 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 while (entries.hasMoreElements()) {
                     JarEntry entry = entries.nextElement();
                     if (entry.getName().startsWith("BOOT-INF/lib/") && entry.getName().endsWith(".jar")) {
-                        Path dest = libPath.resolve(Paths.get(entry.getName()).getFileName().toString());
-                        try (InputStream in = jf.getInputStream(entry)) {
-                            Files.copy(in, dest, StandardCopyOption.REPLACE_EXISTING);
-                        }
+                        if (!entry.getName().startsWith("log4j")) {
+                            Path dest = libPath.resolve(Paths.get(entry.getName()).getFileName().toString());
+                            try (InputStream in = jf.getInputStream(entry)) {
+                                Files.copy(in, dest, StandardCopyOption.REPLACE_EXISTING);
+                            }
 
-                        classpathParts.add(dest.toString());
+                            classpathParts.add(dest.toString());
+                        }
                     }
                 }
             }
 
-            // Save class path information
-            logDebug("Saving class path information...");
+            // Resolve class path information
+            logDebug("Resolving class path information...");
             final String classPath = String.join(File.pathSeparator, classpathParts);
-            final File classPathFile = libPath.resolve("classpath.txt").toFile();
-            IOUtils.writeToFile(classPathFile, classPath);
-        } catch (UnifyException e) {
-            throw e;
-        } catch (Exception e) {
-            throwOperationErrorException(e);
-        }
-    }
-
-    private byte[] compileAndPackageAsJAR(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
-            throws UnifyException {
-        Path deleteWorkPath = null;
-        try {
-            final Path workRoot = Paths.get(IOUtils.buildFilename(getWorkingPath(), "work"));
-            String runtimeName = ManagementFactory.getRuntimeMXBean().getName();
-            String processId = runtimeName;
-            int aindex = runtimeName.indexOf('@');
-            if (aindex > 0) {
-                processId = runtimeName.substring(0, aindex);
-            }
-            
-            final Path actWorkPath = workRoot.resolve(System.currentTimeMillis() + "-" + processId);
-            deleteWorkPath = actWorkPath;
-
-            final Path libPath = Files.createDirectories(workRoot.resolve("lib"));
-            final String classPath = IOUtils.readAllAsString(libPath.resolve("classpath.txt").toFile());
 
             // Extract source directory to working directory
             Files.createDirectories(actWorkPath);
@@ -596,10 +578,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             List<Path> sourceFiles = new ArrayList<Path>();
             Files.walkFileTree(sourcePath, new SimpleFileVisitor<Path>()
                 {
-
                     @Override
                     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-
                         if (file.toString().endsWith(".java")) {
                             sourceFiles.add(file);
                         }
@@ -626,8 +606,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     Iterable<? extends JavaFileObject> units = fm.getJavaFileObjectsFromFiles(sourceFilesAsFiles);
-                    List<String> options = Arrays.asList("-classpath", classPath, "-d", classesPath.toString(), "--release",
-                            codeGenerationPlugin.getReleaseJavaVersion());
+                    List<String> options = Arrays.asList("-classpath", classPath, "-d", classesPath.toString(),
+                            "--release", codeGenerationPlugin.getReleaseJavaVersion());
                     boolean ok = compiler.getTask(null, fm, diagnostics, options, null, units).call();
                     for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
                         addTaskMessage(taskMonitor, d.toString());
@@ -665,28 +645,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             final Path targetPath = Files.createDirectories(actWorkPath.resolve("target"));
             Path outputJar = targetPath.resolve(extension ? codeGenerationPlugin.getExtensionJarFileName()
                     : codeGenerationPlugin.getUtilitiesJarFileName());
-            String javaHome = System.getProperty("java.home");
-            Path jarExecutable = Paths.get(javaHome, "bin", "jar");
-
-            if (!Files.exists(jarExecutable)) {
-                // In case java.home points to a JRE inside a JDK
-                jarExecutable = Paths.get(javaHome, "..", "bin", "jar").toAbsolutePath().normalize();
-            }
-
-            if (!Files.exists(jarExecutable)) {
-                throw new IllegalStateException("jar tool not found");
-            }
-
-            ProcessBuilder processBuilder = new ProcessBuilder(jarExecutable.toString(), "cf", outputJar.toString(),
-                    "-C", classesPath.toString(), ".");
-
-            processBuilder.inheritIO();
-
-            Process process = processBuilder.start();
-            int code = process.waitFor();
-            if (code != 0) {
-                throw new RuntimeException("jar packaging failed, exit code=" + code);
-            }
+            packageJar(classesPath, outputJar);
 
             addTaskMessage(taskMonitor, "Built: " + outputJar.toAbsolutePath());
             return IOUtils.readAll(outputJar.toFile());
@@ -704,4 +663,41 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         return null;
     }
 
+    private void packageJar(Path classesPath, Path outputJar) throws IOException {
+        OutputStream outputStream = Files.newOutputStream(outputJar);
+        try (JarOutputStream jarOutputStream = new JarOutputStream(outputStream);) {
+            addDirectoryToJar(classesPath, classesPath, jarOutputStream);
+        }
+    }
+
+    private void addDirectoryToJar(Path rootDirectory, Path currentDirectory, JarOutputStream jarOutputStream)
+            throws IOException {
+        try (java.nio.file.DirectoryStream<Path> directoryStream = Files.newDirectoryStream(currentDirectory);) {
+            for (Path path : directoryStream) {
+                if (Files.isDirectory(path)) {
+                    addDirectoryToJar(rootDirectory, path, jarOutputStream);
+                    continue;
+                }
+
+                if (!Files.isRegularFile(path)) {
+                    continue;
+                }
+
+                String entryName = rootDirectory.relativize(path).toString().replace('\\', '/');
+                JarEntry entry = new JarEntry(entryName);
+                jarOutputStream.putNextEntry(entry);
+
+                try (InputStream inputStream = Files.newInputStream(path);) {
+                    byte[] buffer = new byte[8192];
+                    int count;
+
+                    while ((count = inputStream.read(buffer)) != -1) {
+                        jarOutputStream.write(buffer, 0, count);
+                    }
+                }
+
+                jarOutputStream.closeEntry();
+            }
+        }
+    }
 }

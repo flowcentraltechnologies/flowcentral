@@ -155,14 +155,15 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
             final List<PortalReportParam> params = new ArrayList<PortalReportParam>();
             for (ReportParameter reportParameter : reportConfiguration.getParameterList()) {
                 params.add(new PortalReportParam(reportParameter.getType().name(), reportParameter.getName(),
-                        reportParameter.getDescription(), reportParameter.getLabel(), reportParameter.getDefaultVal(),
+                        resolveApplicationMessage(reportParameter.getDescription()),
+                        resolveApplicationMessage(reportParameter.getLabel()), reportParameter.getDefaultVal(),
                         reportParameter.getEditor(), reportParameter.getMandatory()));
             }
 
             final String reportName = ApplicationNameUtils.ensureLongNameReference(applicationName,
                     reportConfiguration.getName());
-            reports.add(new PortalReport(reportName, reportConfiguration.getDescription(),
-                    reportConfiguration.getTitle(), params));
+            reports.add(new PortalReport(reportName, resolveApplicationMessage(reportConfiguration.getDescription()),
+                    resolveApplicationMessage(reportConfiguration.getTitle()), params));
         }
 
         return reports;
