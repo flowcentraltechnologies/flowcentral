@@ -421,6 +421,10 @@
 					label="$m{workflow.stepuseraction.highlighttype}" type="ENUM_REF"
 					references="highlighttypelist" inputWidget="application.enumlist"
 					nullable="true" />
+				<field name="decisionResolution"
+					label="$m{workflow.stepuseraction.decisionresolution}" type="ENUM_REF"
+					references="wfdecisionrestypelist" inputWidget="application.enumlist"
+					nullable="true" />
 				<field name="label" label="$m{workflow.stepuseraction.label}"
 					type="STRING" maxLen="96" />
 				<field name="nextStepName"

@@ -259,6 +259,7 @@ public class WorkflowsXmlGenerator extends AbstractResourcesArtifactGenerator {
 
                                 wfUserActionConfig.setCommentRequirement(wfStepUserAction.getCommentRequirement());
                                 wfUserActionConfig.setHighlightType(wfStepUserAction.getHighlightType());
+                                wfUserActionConfig.setDecisionResolution(wfStepUserAction.getDecisionResolution());
                                 wfUserActionConfig.setName(wfStepUserAction.getName());
                                 wfUserActionConfig
                                         .setDescription(ctx.isSnapshotMode() ? wfStepUserAction.getDescription()

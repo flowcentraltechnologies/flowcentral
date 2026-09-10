@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.W
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
+import com.flowcentraltech.flowcentral.configuration.constants.WfDecisionResolutionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
@@ -306,6 +307,7 @@ public final class WorkflowDesignUtils {
                 approveUserAction.setDescription("Approve Draft");
                 approveUserAction.setLabel("Approve");
                 approveUserAction.setCommentRequirement(RequirementType.OPTIONAL);
+                approveUserAction.setDecisionResolution(WfDecisionResolutionType.ALL);
                 approveUserAction.setHighlightType(HighlightType.GREEN);
                 if (last) {
                     if (!approveEventInfo.isWithAlert()) {

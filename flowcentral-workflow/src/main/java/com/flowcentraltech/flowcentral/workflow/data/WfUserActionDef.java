@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.workflow.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
+import com.flowcentraltech.flowcentral.configuration.constants.WfDecisionResolutionType;
 import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -32,6 +33,8 @@ public class WfUserActionDef {
 
     private HighlightType highlightType;
 
+    private WfDecisionResolutionType decisionResolution;
+    
     private String name;
 
     private String description;
@@ -58,12 +61,14 @@ public class WfUserActionDef {
 
     private boolean forwarderPreferred;
 
-    public WfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
+    public WfUserActionDef(RequirementType commentRequirement, HighlightType highlightType,
+            WfDecisionResolutionType decisionResolution, String name,
             String description, String label, String symbol, String styleClass, String nextStepName,
             String setValuesName, String appletSetValuesName, String showOnCondition, int orderIndex,
             boolean formReview, boolean validatePage, boolean forwarderPreferred) {
         this.commentRequirement = commentRequirement;
         this.highlightType = highlightType;
+        this.decisionResolution = decisionResolution;
         this.name = name;
         this.description = description;
         this.label = label;
@@ -85,6 +90,10 @@ public class WfUserActionDef {
 
     public HighlightType getHighlightType() {
         return highlightType;
+    }
+
+    public WfDecisionResolutionType getDecisionResolution() {
+        return decisionResolution;
     }
 
     public String getName() {

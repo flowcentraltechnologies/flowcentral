@@ -357,13 +357,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                         for (WfStepUserAction wfStepUserAction : wfStep.getUserActionList()) {
                             wsdb.addWfUserActionDef(wfStepUserAction.getCommentRequirement(),
-                                    wfStepUserAction.getHighlightType(), wfStepUserAction.getName(),
-                                    wfStepUserAction.getDescription(), wfStepUserAction.getLabel(),
-                                    wfStepUserAction.getSymbol(), wfStepUserAction.getStyleClass(),
-                                    wfStepUserAction.getNextStepName(), wfStepUserAction.getSetValuesName(),
-                                    wfStepUserAction.getAppletSetValuesName(), wfStepUserAction.getShowOnCondition(),
-                                    wfStepUserAction.getOrderIndex(), wfStepUserAction.isFormReview(),
-                                    wfStepUserAction.isValidatePage(), wfStepUserAction.isForwarderPreferred());
+                                    wfStepUserAction.getHighlightType(), wfStepUserAction.getDecisionResolution(),
+                                    wfStepUserAction.getName(), wfStepUserAction.getDescription(),
+                                    wfStepUserAction.getLabel(), wfStepUserAction.getSymbol(),
+                                    wfStepUserAction.getStyleClass(), wfStepUserAction.getNextStepName(),
+                                    wfStepUserAction.getSetValuesName(), wfStepUserAction.getAppletSetValuesName(),
+                                    wfStepUserAction.getShowOnCondition(), wfStepUserAction.getOrderIndex(),
+                                    wfStepUserAction.isFormReview(), wfStepUserAction.isValidatePage(),
+                                    wfStepUserAction.isForwarderPreferred());
                         }
 
                         for (WfStepAlert wfStepAlert : wfStep.getAlertList()) {
@@ -491,8 +492,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     for (WfStepUserAction userAction : environment()
                             .findAll(new WfStepUserActionQuery().wfStepId(step.getId()))) {
                         userActions.add(new PortalWorkflowUserAction(userAction.getName(),
-                                resolveApplicationMessage(userAction.getLabel()),
-                                userAction.getHighlightType() != null ? userAction.getHighlightType().toString()
+                                resolveApplicationMessage(userAction.getLabel()), userAction.getShowOnCondition(),
+                                userAction.getHighlightType() != null ? userAction.getHighlightType().toString() : null,
+                                userAction.getDecisionResolution() != null
+                                        ? userAction.getDecisionResolution().toString()
                                         : null));
                     }
 

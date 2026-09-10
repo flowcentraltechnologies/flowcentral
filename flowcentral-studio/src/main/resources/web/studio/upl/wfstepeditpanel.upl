@@ -22,9 +22,9 @@
 !ui-formpanel:formPanel 
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
-	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmAppletSetValuesName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmNewCommentCaption
+	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmAppletSetValuesName frmValueGenerator frmBinaryConditionName frmReadOnlyConditionName frmEmails frmComments frmNewCommentCaption
 		frmAutoLoadingCondition frmWorkItemLoadingRestriction frmAttachmentProviderName frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmReminderMinutes frmCriticalMinutes frmExpiryMinutes
-		frmDelayMinutes frmEjectionRestriction frmExcludeMaker frmIncludeForwarder frmForwarderPreferred frmBranchOnly frmDepartmentOnly frmAudit}}
+		frmDelayMinutes frmEjectionRestriction frmExcludeMaker frmIncludeForwarder frmBranchOnly frmDepartmentOnly frmAudit}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
 !ui-text:frmDesc styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.description} size:32 binding:description required:true focus:true

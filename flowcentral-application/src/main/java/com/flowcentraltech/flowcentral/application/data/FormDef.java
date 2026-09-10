@@ -337,6 +337,10 @@ public class FormDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
+    public List<FormFilterDef> getFilterDefList() {
+        return new ArrayList<FormFilterDef>(filterDefMap.values());
+    }
+    
     public List<FormAnnotationDef> getFormAnnotationDefList() {
         if (formAnnotationDefList == null) {
             synchronized (this) {
@@ -562,7 +566,7 @@ public class FormDef extends BaseApplicationEntityDef {
             this.consolidatedFormValidation = consolidatedFormValidation;
             this.consolidatedFormReview = consolidatedFormReview;
             this.consolidatedFormState = consolidatedFormState;
-            this.filterDefMap = new HashMap<String, FormFilterDef>();
+            this.filterDefMap = new LinkedHashMap<String, FormFilterDef>();
             this.listingGenerator = listingGenerator;
             this.longName = longName;
             this.description = description;

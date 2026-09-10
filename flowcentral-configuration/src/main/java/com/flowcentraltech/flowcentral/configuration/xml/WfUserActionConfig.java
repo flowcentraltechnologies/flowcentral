@@ -22,7 +22,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
+import com.flowcentraltech.flowcentral.configuration.constants.WfDecisionResolutionType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.HighlightTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.WfDecisionResolutionTypeXmlAdapter;
 import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.util.xml.adapter.RequirementTypeXmlAdapter;
 
@@ -56,6 +58,11 @@ public class WfUserActionConfig extends BaseNameConfig {
     @JsonDeserialize(using = HighlightTypeXmlAdapter.Deserializer.class)
     @JacksonXmlProperty(isAttribute = true, localName = "highlight")
     private HighlightType highlightType;
+    
+    @JsonSerialize(using = WfDecisionResolutionTypeXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = WfDecisionResolutionTypeXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty(isAttribute = true, localName = "decisionResolution")
+    private WfDecisionResolutionType decisionResolution;
 
     @JacksonXmlProperty(isAttribute = true)
     private int orderIndex;
@@ -119,6 +126,14 @@ public class WfUserActionConfig extends BaseNameConfig {
 
     public void setHighlightType(HighlightType highlightType) {
         this.highlightType = highlightType;
+    }
+
+    public WfDecisionResolutionType getDecisionResolution() {
+        return decisionResolution;
+    }
+
+    public void setDecisionResolution(WfDecisionResolutionType decisionResolution) {
+        this.decisionResolution = decisionResolution;
     }
 
     public int getOrderIndex() {

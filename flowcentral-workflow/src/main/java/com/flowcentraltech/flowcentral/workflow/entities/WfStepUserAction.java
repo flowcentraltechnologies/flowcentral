@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseNamedEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
+import com.flowcentraltech.flowcentral.configuration.constants.WfDecisionResolutionType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Column;
@@ -41,6 +42,9 @@ public class WfStepUserAction extends BaseNamedEntity {
     @ForeignKey
     private RequirementType commentRequirement;
 
+    @ForeignKey
+    private WfDecisionResolutionType decisionResolution;
+    
     @ForeignKey(nullable = true)
     private HighlightType highlightType;
     
@@ -82,6 +86,9 @@ public class WfStepUserAction extends BaseNamedEntity {
 
     @ListOnly(key = "commentRequirement", property = "description")
     private String commentRequirementDesc;
+
+    @ListOnly(key = "decisionResolution", property = "description")
+    private String decisionResolutionDesc;
 
     @ListOnly(key = "highlightType", property = "description")
     private String highlightTypeDesc;
@@ -220,6 +227,22 @@ public class WfStepUserAction extends BaseNamedEntity {
 
     public void setHighlightTypeDesc(String highlightTypeDesc) {
         this.highlightTypeDesc = highlightTypeDesc;
+    }
+
+    public WfDecisionResolutionType getDecisionResolution() {
+        return decisionResolution;
+    }
+
+    public void setDecisionResolution(WfDecisionResolutionType decisionResolution) {
+        this.decisionResolution = decisionResolution;
+    }
+
+    public String getDecisionResolutionDesc() {
+        return decisionResolutionDesc;
+    }
+
+    public void setDecisionResolutionDesc(String decisionResolutionDesc) {
+        this.decisionResolutionDesc = decisionResolutionDesc;
     }
 
 }

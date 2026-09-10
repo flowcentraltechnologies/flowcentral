@@ -74,6 +74,7 @@ import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
+import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormFilterDef;
@@ -115,7 +116,9 @@ import com.flowcentraltech.flowcentral.application.data.portal.PortalEntityField
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEnum;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalEnumItem;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalForm;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalFormAction;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalFormElement;
+import com.flowcentraltech.flowcentral.application.data.portal.PortalFormOption;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalReference;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalReport;
 import com.flowcentraltech.flowcentral.application.data.portal.PortalTable;
@@ -4222,10 +4225,26 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
+                    final List<PortalFormOption> options = new ArrayList<PortalFormOption>();
+                    for (FormFilterDef formFilterDef : formDef.getFilterDefList()) {
+                        options.add(new PortalFormOption(formFilterDef.getName(),
+                                resolveApplicationMessage(formFilterDef.getListDescription())));
+                    }
+
+                    final List<PortalFormAction> actions = new ArrayList<PortalFormAction>();
+                    for (FormActionDef formActionDef : formDef.getFormActionDefList()) {
+                        actions.add(new PortalFormAction(formActionDef.getName(),
+                                resolveApplicationMessage(formActionDef.getLabel()),
+                                formActionDef.getOnCondition() != null ? formActionDef.getOnCondition().getName()
+                                        : null,
+                                formActionDef.getHighlightType() != null ? formActionDef.getHighlightType().name()
+                                        : null));
+                    }
+
                     final boolean remoteValidation = formDef.isWithFieldValidationPolicy()
                             || formDef.isWithConsolidatedFormValidation() || formDef.isWithFormValidationPolicy();
                     forms.put(form, new PortalForm(formDef.getLongName(), formDef.getDescription(), entity,
-                            DataUtils.unmodifiableList(elements), remoteValidation));
+                            DataUtils.unmodifiableList(elements), options, actions, remoteValidation));
                 }
             }
 

@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
+import com.flowcentraltech.flowcentral.configuration.constants.WfDecisionResolutionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
@@ -593,7 +594,7 @@ public class WfStepDef {
         private boolean departmentOnly;
 
         private boolean excludeMaker;
-        
+
         private boolean includeForwarder;
 
         private boolean forwarderPreferred;
@@ -617,7 +618,8 @@ public class WfStepDef {
                 String attachmentProviderName, String newCommentCaption, String appletSetValuesName, String policy,
                 String rule, String name, String description, String label, int reminderMinutes, int criticalMinutes,
                 int expiryMinutes, int delayMinutes, boolean audit, boolean branchOnly, boolean departmentOnly,
-                boolean excludeMaker, boolean includeForwarder, boolean forwarderPreferred, String emails, String comments) {
+                boolean excludeMaker, boolean includeForwarder, boolean forwarderPreferred, String emails,
+                String comments) {
             this.appletDef = appletDef;
             this.stepAppletDef = stepAppletDef;
             this.type = type;
@@ -654,10 +656,11 @@ public class WfStepDef {
             this.comments = comments;
         }
 
-        public Builder addWfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
-                String description, String label, String symbol, String styleClass, String nextStepName,
-                String setValuesName, String appletSetValuesName, String showOnCondition, int orderIndex,
-                boolean formReview, boolean validatePage, boolean forwarderPreferred) {
+        public Builder addWfUserActionDef(RequirementType commentRequirement, HighlightType highlightType,
+                WfDecisionResolutionType decisionResolution, String name, String description, String label,
+                String symbol, String styleClass, String nextStepName, String setValuesName, String appletSetValuesName,
+                String showOnCondition, int orderIndex, boolean formReview, boolean validatePage,
+                boolean forwarderPreferred) {
             if (userActionList == null) {
                 userActionList = new LinkedHashMap<String, WfUserActionDef>();
             }
@@ -671,9 +674,9 @@ public class WfStepDef {
             }
 
             userActionList.put(name,
-                    new WfUserActionDef(commentRequirement, highlightType, name, description, label, symbol, styleClass,
-                            nextStepName, setValuesName, appletSetValuesName, showOnCondition, orderIndex, formReview,
-                            validatePage, forwarderPreferred));
+                    new WfUserActionDef(commentRequirement, highlightType, decisionResolution, name, description, label,
+                            symbol, styleClass, nextStepName, setValuesName, appletSetValuesName, showOnCondition,
+                            orderIndex, formReview, validatePage, forwarderPreferred));
             return this;
         }
 

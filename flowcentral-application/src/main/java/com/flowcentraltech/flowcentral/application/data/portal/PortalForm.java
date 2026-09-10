@@ -30,17 +30,23 @@ public class PortalForm {
     private String description;
 
     private String entity;
-    
+
     private List<PortalFormElement> elements;
+
+    private List<PortalFormOption> options;
+
+    private List<PortalFormAction> actions;
 
     private boolean remoteValidation;
 
     public PortalForm(String name, String description, String entity, List<PortalFormElement> elements,
-            boolean remoteValidation) {
+            List<PortalFormOption> options, List<PortalFormAction> actions, boolean remoteValidation) {
         this.name = name;
         this.description = description;
         this.entity = entity;
         this.elements = elements;
+        this.options = options;
+        this.actions = actions;
         this.remoteValidation = remoteValidation;
     }
 
@@ -58,6 +64,14 @@ public class PortalForm {
 
     public List<PortalFormElement> getElements() {
         return elements;
+    }
+
+    public List<PortalFormOption> getOptions() {
+        return options;
+    }
+
+    public List<PortalFormAction> getActions() {
+        return actions;
     }
 
     public boolean isRemoteValidation() {

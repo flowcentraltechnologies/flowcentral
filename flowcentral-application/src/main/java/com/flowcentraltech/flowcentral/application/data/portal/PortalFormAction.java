@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.application.data.portal;
 
 /**
- * Portal workflow user action object.
+ * Portal form action object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class PortalWorkflowUserAction {
+public class PortalFormAction {
 
     private String name;
 
@@ -31,15 +31,11 @@ public class PortalWorkflowUserAction {
 
     private String highlight;
 
-    private String decisionResolution;
-
-    public PortalWorkflowUserAction(String name, String label, String showOnCondition, String highlight,
-            String decisionResolution) {
+    public PortalFormAction(String name, String label, String showOnCondition, String highlight) {
         this.name = name;
         this.label = label;
         this.showOnCondition = showOnCondition;
         this.highlight = highlight;
-        this.decisionResolution = decisionResolution;
     }
 
     public String getName() {
@@ -56,10 +52,6 @@ public class PortalWorkflowUserAction {
 
     public String getHighlight() {
         return highlight;
-    }
-
-    public String getDecisionResolution() {
-        return decisionResolution;
     }
 
 }

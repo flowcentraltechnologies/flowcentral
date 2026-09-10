@@ -6308,6 +6308,8 @@
 							inputWidget="application.enumlist" column="0" required="true" />
 						<field name="highlightType"
 							inputWidget="application.enumlist" column="0" />
+						<field name="decisionResolution"
+							inputWidget="application.enumlist" column="0" />
 						<field name="nextStepName"
 							inputWidget="studio.wfsteproutetolist" column="0" required="true" />
 						<field name="orderIndex" inputWidget="application.integer"
