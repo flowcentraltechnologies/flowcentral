@@ -42,7 +42,7 @@ public class WfStepUserAction extends BaseNamedEntity {
     @ForeignKey
     private RequirementType commentRequirement;
 
-    @ForeignKey
+    @ForeignKey(nullable = true)
     private WfDecisionResolutionType decisionResolution;
     
     @ForeignKey(nullable = true)
