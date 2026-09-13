@@ -4262,7 +4262,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             applets.put(applet,
                     new PortalApplet(appletDef.getType().name(), appletDef.getLongName(), appletDef.getDescription(),
                             resolveApplicationMessage(appletDef.getLabel()), entity, appletDef.getIcon(),
-                            formList.get(0), formList.get(1), table, appletDef.isPortalAccess(), options));
+                            formList.get(0), formList.get(1), table, appletDef.isMenuAccess(), options));
 
             for (String capplet : childApplets) {
                 extractPortalDependencies(capplet, applets, tables, forms, entities, references);

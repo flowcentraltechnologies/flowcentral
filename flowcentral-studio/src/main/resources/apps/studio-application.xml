@@ -2872,8 +2872,8 @@
 							column="0" required="true" switchOnChange="true" visible="false" />
 						<field name="titleFormat"
 							inputWidget="application.texttemplate" column="0" />
-						<field name="portalAccess"
-							inputWidget="application.checkbox" column="0" />
+						<field name="menuAccess"
+							inputWidget="application.checkbox" column="0" visible="false"/>
 						<field name="baseField"
 							inputWidget="studio.entityreffieldlist" column="0"
 							required="true" visible="false" />
@@ -3006,7 +3006,7 @@
 						<restriction type="EQUALS" field="type" paramA="MEL" />
 					</onCondition>
 					<setStates>
-						<setState type="FIELD" target="portalAccess"
+						<setState type="FIELD" target="menuAccess"
 							visible="TRUE" />
 					</setStates>
 				</formStatePolicy>
