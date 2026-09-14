@@ -71,7 +71,9 @@ public class StudioSnapshotsPageController extends AbstractStudioPageController<
         TaskSetup taskSetup = TaskSetup.newBuilder(StudioSnapshotTaskConstants.STUDIO_RESTORE_SNAPSHOT_TASK_NAME)
                 .setParam(StudioSnapshotTaskConstants.STUDIO_SNAPSHOT_DETAILS_ID,
                         snapshotDetails.getSnapshotDetailsId())
-                .logMessages().build();
+                .logMessages()
+                .reloadWindow()
+                .build();       
         return launchTaskWithMonitorBox(taskSetup, "Studio Restore from Snapshot");
     }
 
