@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSource;
 import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceQuery;
+import com.flowcentraltech.flowcentral.chart.entities.ChartDataSourceSnapshotQuery;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
@@ -263,6 +264,18 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
             environment().create(srcChart);
             logDebug(taskMonitor, "Chart [{0}] -> [{1}]...", oldDescription, srcChart.getDescription());
         }
+    }
+
+    @Override
+    public int deleteApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
+        environment().deleteAll(new ChartDataSourceSnapshotQuery().ignoreEmptyCriteria(true));
+        return super.deleteApplicationArtifacts(taskMonitor, applicationId);
+    }
+
+    @Override
+    public int deleteCustomApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
+        environment().deleteAll(new ChartDataSourceSnapshotQuery().ignoreEmptyCriteria(true));
+        return super.deleteCustomApplicationArtifacts(taskMonitor, applicationId);
     }
 
     @Override
