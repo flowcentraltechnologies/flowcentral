@@ -138,6 +138,8 @@
 					label="$m{report.reportconfiguration.underlinerows}" type="BOOLEAN" />
 				<field name="shadeOddRows"
 					label="$m{report.reportconfiguration.shadeoddrows}" type="BOOLEAN" />
+				<field name="approvalRequired"
+					label="$m{report.reportconfiguration.approvalrequired}" type="BOOLEAN" />
 				<field name="typeDesc"
 					label="$m{report.reportconfiguration.typedesc}" type="LIST_ONLY"
 					key="type" property="description" />

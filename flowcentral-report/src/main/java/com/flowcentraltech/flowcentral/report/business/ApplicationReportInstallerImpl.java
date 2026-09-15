@@ -199,6 +199,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
                     reportConfiguration.setLandscape(reportConfig.getLandscape());
                     reportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
+                    reportConfiguration.setApprovalRequired(reportConfig.getApprovalRequired());
                     reportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
                     reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                     reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
@@ -227,6 +228,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
                     oldReportConfiguration.setLandscape(reportConfig.getLandscape());
                     oldReportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
+                    oldReportConfiguration.setApprovalRequired(reportConfig.getApprovalRequired());
                     oldReportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
                     oldReportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                     oldReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
@@ -325,6 +327,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
                 reportConfiguration.setLandscape(reportConfig.getLandscape());
                 reportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
+                reportConfiguration.setApprovalRequired(reportConfig.getApprovalRequired());
                 reportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
                 reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                 reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));

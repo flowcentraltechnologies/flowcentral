@@ -4906,12 +4906,16 @@
 							required="true" switchOnChange="true" />
 						<field name="type" inputWidget="reportconfigtypelist"
 							column="0" required="true" switchOnChange="true" />
+					</section>
+					<section name="configOptions" columns="TYPE_2">
 						<field name="landscape" inputWidget="application.checkbox"
 							column="0" />
 						<field name="underlineRows"
 							inputWidget="application.checkbox" column="0" />
 						<field name="shadeOddRows"
-							inputWidget="application.checkbox" column="0" />
+							inputWidget="application.checkbox" column="1" />
+						<field name="approvalRequired"
+							inputWidget="application.checkbox" column="1" />
 					</section>
 				</tab>
 				<tab name="parameters"
@@ -6420,6 +6424,9 @@
 				<property name="importdata.routeTo.appletName"
 					description="$m{studio.appappletprop.importdata.property.routetoapplet}"
 					inputWidget="studio.propertyroutetoappletlist" required="false" />
+				<property name="importdata.approvalRequired"
+					description="$m{studio.appappletprop.importdata.property.approvalrequired}"
+					inputWidget="application.checkbox" required="false" />
 			</propertySet>
 		</propertyList>
 	</propertyLists>

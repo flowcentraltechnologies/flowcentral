@@ -108,6 +108,9 @@ public class ReportConfig extends BaseRootAppConfig {
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean shadeOddRows;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private Boolean approvalRequired;
 
     @JacksonXmlProperty(isAttribute = true)
     private Boolean allowSecondaryTenants;
@@ -121,6 +124,7 @@ public class ReportConfig extends BaseRootAppConfig {
         this.landscape = Boolean.FALSE;
         this.underlineRows = Boolean.FALSE;
         this.shadeOddRows = Boolean.FALSE;
+        this.approvalRequired = Boolean.FALSE;
         this.allowSecondaryTenants = Boolean.FALSE;
     }
 
@@ -306,6 +310,14 @@ public class ReportConfig extends BaseRootAppConfig {
 
     public void setShadeOddRows(Boolean shadeOddRows) {
         this.shadeOddRows = shadeOddRows;
+    }
+
+    public Boolean getApprovalRequired() {
+        return approvalRequired;
+    }
+
+    public void setApprovalRequired(Boolean approvalRequired) {
+        this.approvalRequired = approvalRequired;
     }
 
     public Boolean getAllowSecondaryTenants() {

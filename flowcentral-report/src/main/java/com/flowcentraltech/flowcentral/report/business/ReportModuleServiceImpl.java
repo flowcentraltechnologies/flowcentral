@@ -163,7 +163,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
             final String reportName = ApplicationNameUtils.ensureLongNameReference(applicationName,
                     reportConfiguration.getName());
             reports.add(new PortalReport(reportName, resolveApplicationMessage(reportConfiguration.getDescription()),
-                    resolveApplicationMessage(reportConfiguration.getTitle()), params));
+                    resolveApplicationMessage(reportConfiguration.getTitle()), reportConfiguration.isApprovalRequired(),
+                    params));
         }
 
         return reports;

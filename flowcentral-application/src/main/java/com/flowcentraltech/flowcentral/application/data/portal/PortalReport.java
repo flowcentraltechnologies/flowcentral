@@ -31,12 +31,16 @@ public class PortalReport {
 
     private String title;
 
+    private boolean approvalRequired;
+
     private List<PortalReportParam> params;
 
-    public PortalReport(String name, String description, String title, List<PortalReportParam> params) {
+    public PortalReport(String name, String description, String title, boolean approvalRequired,
+            List<PortalReportParam> params) {
         this.name = name;
         this.description = description;
         this.title = title;
+        this.approvalRequired = approvalRequired;
         this.params = params;
     }
 
@@ -50,6 +54,10 @@ public class PortalReport {
 
     public String getTitle() {
         return title;
+    }
+
+    public boolean isApprovalRequired() {
+        return approvalRequired;
     }
 
     public List<PortalReportParam> getParams() {

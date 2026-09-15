@@ -196,6 +196,8 @@ public interface AppletPropertyConstants {
 
     String TASKEXECUTION_TASKNAME = "taskexecution.taskName";
 
+    String IMPORTDATA_APPROVAL_REQUIRED = "importdata.approvalRequired";
+    
     String IMPORTDATA_CONFIGNAME = "importdata.configName";
 
     String IMPORTDATA_ROUTETO_APPLETNAME = "importdata.routeTo.appletName";

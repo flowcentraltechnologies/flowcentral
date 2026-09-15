@@ -29,10 +29,13 @@ public class PortalDataImport {
 
     private String label;
 
-    public PortalDataImport(String name, String description, String label) {
+    private boolean approvalRequired;
+
+    public PortalDataImport(String name, String description, String label, boolean approvalRequired) {
         this.name = name;
         this.description = description;
         this.label = label;
+        this.approvalRequired = approvalRequired;
     }
 
     public String getName() {
@@ -45,6 +48,10 @@ public class PortalDataImport {
 
     public String getLabel() {
         return label;
+    }
+
+    public boolean isApprovalRequired() {
+        return approvalRequired;
     }
 
 }

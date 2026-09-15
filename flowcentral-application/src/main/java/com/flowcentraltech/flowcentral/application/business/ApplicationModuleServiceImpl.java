@@ -4049,9 +4049,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         for (String appletName : environment().valueList(String.class, "name", new AppAppletQuery()
                 .type(AppletType.DATA_IMPORT).portalAccess(true).applicationName(applicationName))) {
             final String applet = ApplicationNameUtils.getApplicationEntityLongName(applicationName, appletName);
-            AppletDef appletDef = getAppletDef(applet);
+            final AppletDef appletDef = getAppletDef(applet);
+            final boolean approvalRequired = appletDef.getPropValue(boolean.class,
+                    AppletPropertyConstants.IMPORTDATA_APPROVAL_REQUIRED, false);
             dataImports.put(applet, new PortalDataImport(applet, resolveApplicationMessage(appletDef.getDescription()),
-                    resolveApplicationMessage(appletDef.getLabel())));
+                    resolveApplicationMessage(appletDef.getLabel()), approvalRequired));
         }
 
         for (PortalWorkflow workflow : workflows) {

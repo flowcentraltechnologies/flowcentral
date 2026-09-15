@@ -95,6 +95,9 @@ public class ReportConfiguration extends BaseApplicationEntity {
     private boolean shadeOddRows;
 
     @Column
+    private boolean approvalRequired;
+
+    @Column
     private boolean allowSecondaryTenants;
 
     @ListOnly(key = "type", property = "description")
@@ -217,6 +220,14 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     public void setShadeOddRows(boolean shadeOddRows) {
         this.shadeOddRows = shadeOddRows;
+    }
+
+    public boolean isApprovalRequired() {
+        return approvalRequired;
+    }
+
+    public void setApprovalRequired(boolean approvalRequired) {
+        this.approvalRequired = approvalRequired;
     }
 
     public boolean isAllowSecondaryTenants() {

@@ -104,6 +104,7 @@ public class ReportsXmlGenerator extends AbstractResourcesArtifactGenerator {
                 reportConfig.setInvertGroupColors(reportConfiguration.isInvertGroupColors());
                 reportConfig.setLandscape(reportConfiguration.isLandscape());
                 reportConfig.setShadeOddRows(reportConfiguration.isShadeOddRows());
+                reportConfig.setApprovalRequired(reportConfiguration.isApprovalRequired());
                 reportConfig.setUnderlineRows(reportConfiguration.isUnderlineRows());
                 reportConfig.setAllowSecondaryTenants(reportConfiguration.isAllowSecondaryTenants());
                 FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), reportConfiguration.getFilter());
