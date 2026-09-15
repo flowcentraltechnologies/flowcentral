@@ -110,7 +110,9 @@ public final class ApplicationQueryUtils {
         }
 
         if (!StringUtils.isBlank(applicationName)) {
-            query.addEquals("applicationName", applicationName);
+            query.addAmongst("applicationName", Arrays.asList("application", applicationName));
+        } else {
+            query.addEquals("applicationName", "application");
         }
    }
 }

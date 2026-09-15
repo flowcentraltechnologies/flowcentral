@@ -5096,7 +5096,8 @@
 							inputWidget="application.simpledatatypelist" column="0"
 							required="true" switchOnChange="true" />
 						<field name="editor"
-							inputWidget="application.datatypeeditorlist" column="0" />
+							inputWidget="application.datatypeeditorlist" column="0"
+							required="true" />
 						<field name="mandatory" inputWidget="application.checkbox"
 							column="0" />
 						<field name="defaultVal" inputWidget="application.text"
