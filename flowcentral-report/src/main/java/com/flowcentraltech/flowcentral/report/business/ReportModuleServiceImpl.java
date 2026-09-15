@@ -151,7 +151,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
         for (Long reportConfigId : environment().valueList(Long.class, "id",
                 new ReportConfigurationQuery().applicationName(applicationName))) {
             final ReportConfiguration reportConfiguration = environment().find(new ReportConfigurationQuery()
-                    .id(reportConfigId).addSelect("name", "description", "title", "parameterList"));
+                    .id(reportConfigId));
             final List<PortalReportParam> params = new ArrayList<PortalReportParam>();
             for (ReportParameter reportParameter : reportConfiguration.getParameterList()) {
                 params.add(new PortalReportParam(reportParameter.getType().name(), reportParameter.getName(),
