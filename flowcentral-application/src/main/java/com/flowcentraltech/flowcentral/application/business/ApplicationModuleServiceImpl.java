@@ -4153,12 +4153,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     final EntityFieldDef resolvedEntityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
                             ? entityFieldDef.getResolvedTypeFieldDef()
                             : entityFieldDef;
-                    final WidgetTypeDef widgetTypeDef = resolvedEntityFieldDef.getInputWidget() != null
-                            ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
-                            : getWidgetTypeDef(
-                                    InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String renderer = InputWidgetUtils.constructPortalRenderer(widgetTypeDef,
-                            resolvedEntityFieldDef, serviceId);
+//                    final WidgetTypeDef widgetTypeDef = resolvedEntityFieldDef.getInputWidget() != null
+//                            ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
+//                            : getWidgetTypeDef(
+//                                    InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
+                    final String renderer = InputWidgetUtils.constructPortalRenderer(
+                            getWidgetTypeDef(tableColumnDef.getRenderer()), resolvedEntityFieldDef, serviceId);
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
                             resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()
