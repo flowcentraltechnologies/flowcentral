@@ -1078,11 +1078,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
+                    final String serviceId = getContainerSetting(String.class,
+                            FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_OS_APPID);
                     for (AppTableColumn appTableColumn : appTable.getColumnList()) {
                         if (entityDef.isWithFieldDef(appTableColumn.getField())) {
                             final EntityFieldDef entityFieldDef = entityDef.getFieldDef(appTableColumn.getField());
-                            String renderer = InputWidgetUtils.constructRenderer(
-                                    getWidgetTypeDef(appTableColumn.getRenderWidget()), entityFieldDef);
+                            String renderer = InputWidgetUtils.constructPortalRenderer(
+                                    getWidgetTypeDef(appTableColumn.getRenderWidget()), entityFieldDef, serviceId);
                             String editor = !entityFieldDef.isListOnly() ? InputWidgetUtils.constructEditor(
                                     getWidgetTypeDef(appTableColumn.getRenderWidget()), entityFieldDef) : null;
                             OrderType order = OrderType.fromCode(appTableColumn.getOrder());
@@ -4149,16 +4151,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final TableDef tableDef = getTableDef(table);
                 final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
                 for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
-                    final EntityFieldDef entityFieldDef = entityDef.getFieldDef(tableColumnDef.getFieldName());
-                    final EntityFieldDef resolvedEntityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
-                            ? entityFieldDef.getResolvedTypeFieldDef()
-                            : entityFieldDef;
+//                    final EntityFieldDef entityFieldDef = entityDef.getFieldDef(tableColumnDef.getFieldName());
+//                    final EntityFieldDef resolvedEntityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
+//                            ? entityFieldDef.getResolvedTypeFieldDef()
+//                            : entityFieldDef;
 //                    final WidgetTypeDef widgetTypeDef = resolvedEntityFieldDef.getInputWidget() != null
 //                            ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
 //                            : getWidgetTypeDef(
 //                                    InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-                    final String renderer = InputWidgetUtils.constructPortalRenderer(
-                            getWidgetTypeDef(tableColumnDef.getRenderer()), resolvedEntityFieldDef, serviceId);
+//                    final String renderer = InputWidgetUtils.constructPortalRenderer(
+//                            getWidgetTypeDef(tableColumnDef.getRenderer()), resolvedEntityFieldDef, serviceId);
+                    final String renderer = tableColumnDef.getRenderer();
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
                             resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
                                     ? entityDef.getFieldDef(tableColumnDef.getFieldName()).getFieldLabel()

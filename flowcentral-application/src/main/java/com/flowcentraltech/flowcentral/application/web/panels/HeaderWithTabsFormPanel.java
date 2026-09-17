@@ -36,24 +36,27 @@ public class HeaderWithTabsFormPanel extends AbstractFormPanel {
     public void switchState() throws UnifyException {
         super.switchState();
         final HeaderWithTabsForm headerWithTabsForm = getValue(HeaderWithTabsForm.class);
-        final FormContext formContext = headerWithTabsForm.getCtx();
-        boolean evaluate = true;
-        
-        // Do a form update on reload on switch. Usually triggered by select popups.
-        if (clearReloadOnSwitch()) {
-            formContext.au().updateHeaderWithTabsForm(headerWithTabsForm, (Entity) headerWithTabsForm.getFormBean());
-            evaluate = false;
-        }
+        if (headerWithTabsForm != null) {
+            final FormContext formContext = headerWithTabsForm.getCtx();
+            boolean evaluate = true;
 
-        if (evaluate) {
-            MiniFormWidget widget = getWidgetByShortName(MiniFormWidget.class, "headerMiniForm");
-            formContext.setTriggerEvaluator(widget);
-            formContext.evaluateTabStates();
-        }
+            // Do a form update on reload on switch. Usually triggered by select popups.
+            if (clearReloadOnSwitch()) {
+                formContext.au().updateHeaderWithTabsForm(headerWithTabsForm,
+                        (Entity) headerWithTabsForm.getFormBean());
+                evaluate = false;
+            }
 
-        setWidgetVisible("formAnnotation", headerWithTabsForm.isWithVisibleAnnotations());
-        setVisible("formTabSheetPanel", headerWithTabsForm.isTabSheetInStateForDisplay());
-        setVisible("relatedListPanel", headerWithTabsForm.isRelatedListTabSheetInStateForDisplay());
+            if (evaluate) {
+                MiniFormWidget widget = getWidgetByShortName(MiniFormWidget.class, "headerMiniForm");
+                formContext.setTriggerEvaluator(widget);
+                formContext.evaluateTabStates();
+            }
+
+            setWidgetVisible("formAnnotation", headerWithTabsForm.isWithVisibleAnnotations());
+            setVisible("formTabSheetPanel", headerWithTabsForm.isTabSheetInStateForDisplay());
+            setVisible("relatedListPanel", headerWithTabsForm.isRelatedListTabSheetInStateForDisplay());
+        }
     }
 
 }
