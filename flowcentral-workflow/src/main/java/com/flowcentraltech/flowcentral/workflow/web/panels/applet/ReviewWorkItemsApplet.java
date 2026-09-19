@@ -165,12 +165,13 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
     }
 
     @Override
-    public void applyUserAction(String actionName) throws UnifyException {
+    public boolean applyUserAction(String actionName) throws UnifyException {
         String comment = getNewComment();
         AbstractForm _form = getResolvedForm();
-        wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
+        final boolean result = wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
                 _form.getEmails(), WfReviewMode.NORMAL, _form.isListing());
         navBackToSearch();
+        return result;
     }
 
     @Override

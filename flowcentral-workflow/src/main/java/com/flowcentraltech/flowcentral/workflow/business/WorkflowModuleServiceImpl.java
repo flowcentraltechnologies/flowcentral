@@ -1235,6 +1235,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
         logInfo("Applying user action [{0}] in step [{1}] and review mode [{2}]...", userAction, stepName,
                 wfReviewMode);
         try {
+            final String userLoginId = !StringUtils.isBlank(actionBy) ? actionBy : getUserLoginId();
             final WfItem wfItem = environment().list(WfItem.class, wfItemId);
             if (!wfItem.getWfStepName().equals(stepName)) {
                 logInfo("Belaying user action [{0}] because step name disparity was detected between action step [{1}] and work item step [{2}].",
@@ -1242,8 +1243,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
                 return false;
             }
 
+            // 2026-09-20 Zambia (maker- checker)
+			if ("approve".equalsIgnoreCase(userAction) && !StringUtils.isBlank(userLoginId)
+					&& userLoginId.equals(wfItem.getInitiatedBy())) {
+				logInfo("Belaying user action [{0}] because user is work item initiator.", userAction);
+				return false;
+			}
+            
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-            final String userLoginId = !StringUtils.isBlank(actionBy) ? actionBy : getUserLoginId();
             final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
             if (!currentWfStepDef.isUserAction(userAction) && !currentWfStepDef.isError()) {
                 logInfo("Belaying user action [{0}] because action step [{1}] doesn't support such action.", userAction,

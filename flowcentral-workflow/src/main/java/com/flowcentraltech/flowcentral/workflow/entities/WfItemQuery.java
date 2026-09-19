@@ -123,4 +123,8 @@ public class WfItemQuery extends BaseAuditEntityQuery<WfItem> {
         return (WfItemQuery) addRestriction(
                 new Or().add(new NotEquals("forwardedBy", userLoginId)).add(new IsNull("forwardedBy")));
     }
+
+    public WfItemQuery notInitiatedBy(String userLoginId) {
+        return (WfItemQuery) addNotEquals("initiatedBy", userLoginId);
+    }
 }
