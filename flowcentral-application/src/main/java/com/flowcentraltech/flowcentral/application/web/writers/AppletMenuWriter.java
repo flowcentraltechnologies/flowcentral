@@ -159,7 +159,6 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 	private static final Set<String> STANDARD_EXCLUSION = Collections
 			.unmodifiableSet(new HashSet<String>(Arrays.asList("manageLicensing")));
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void doWriteSectionStructureAndContent(ResponseWriter writer, Widget widget, String sectionId)
 			throws UnifyException {
@@ -355,12 +354,6 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
 			if (isGetRolePaths) {
 				allpaths.setRolePaths(roleCode, rolePaths);
-				System.out.println("@prime: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-				System.out.println("@prime: roleCode = " + roleCode);
-				for (String path: rolePaths) {
-					System.out.println("@prime: path = " + path);
-				}
-				System.out.println("@prime: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 			}
 			
 			if (horizontal) {

@@ -38,6 +38,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationDeletionTaskConstants;
@@ -58,6 +59,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.EventType;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo.WorkflowCopyType;
+import com.flowcentraltech.flowcentral.application.data.ApplicationAllPaths;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -296,6 +298,7 @@ import com.tcdng.unify.core.util.ArgumentTypeInfo;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.PageAccessChecker;
 
 /**
  * Default implementation of application module service.
@@ -307,7 +310,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         implements ApplicationModuleService, SystemRestoreService, FileAttachmentProvider, SuggestionProvider,
-        PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar {
+        PreInstallationSetup, PostBootSetup, EnvironmentDelegateRegistrar, PageAccessChecker {
 
     private static final String PRE_INSTALLATION_SETUP_LOCK = "app::preinstallationsetup";
 
@@ -1450,7 +1453,20 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             };
     }
 
-    @Override
+	@Override
+	public boolean isPageAccessible(String roleCode, String pagePath) throws UnifyException {
+		if (!StringUtils.isBlank(roleCode) && pagePath.endsWith("/openPage") && !pagePath.startsWith("/application")) {
+			final ApplicationAllPaths allpaths = (ApplicationAllPaths) getApplicationAttribute(
+					AppletApplicationAttributeConstants.APPLICATION_PATHS_ALL);
+			if (allpaths != null && allpaths.isApplicationPath(pagePath)) {
+				return allpaths.isRolePath(roleCode, pagePath);
+			}
+		}
+
+		return true;
+	}
+
+	@Override
     public Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException {
         return listManager.getStaticListEnumType(listName);
     }

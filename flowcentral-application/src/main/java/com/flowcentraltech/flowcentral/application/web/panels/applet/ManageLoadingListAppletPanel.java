@@ -24,6 +24,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Manage loading list applet panel.
@@ -51,7 +52,7 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
 					if (applet.applyUserAction(actionName)) {
 						hintUser("$m{reviewsingleformworkitemsapplet.apply.success.hint}");
 					} else {
-						hintUser("$m{reviewworkitemsapplet.apply.failed.hint}");
+						hintUser(MODE.ERROR, "$m{reviewworkitemsapplet.apply.failed.hint}");
 					}
 				} else {
 					if (ctx.getFormDef().isInputForm()) {
@@ -68,7 +69,7 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
 					if (applet.applyUserAction(actionName)) {
 						hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
 					} else {
-						hintUser("$m{reviewworkitemsapplet.apply.failed.hint}");
+						hintUser(MODE.ERROR, "$m{reviewworkitemsapplet.apply.failed.hint}");
 					}
 				}
 			}
