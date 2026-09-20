@@ -584,7 +584,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         // Logout
         userSessionManager.logout(complete);
-        getRequestContext().invalidateSession();
     }
 
     @Override
