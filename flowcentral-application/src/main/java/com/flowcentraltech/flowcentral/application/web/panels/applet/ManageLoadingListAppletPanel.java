@@ -24,6 +24,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Manage loading list applet panel.
@@ -35,81 +36,87 @@ import com.tcdng.unify.web.annotation.Action;
 @UplBinding("web/application/upl/manageloadinglistappletpanel.upl")
 public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel {
 
-    @Override
-    @Action
-    public void performFormAction() throws UnifyException {
-        final ManageLoadingListApplet applet = getManageLoadingListApplet();
-        if (applet.appletCtx().isReview()) {
-            final String actionName = getRequestTarget(String.class);
-            final LoadingWorkItemInfo loadingWorkItemInfo = applet.getCurrentLoadingWorkItemInfo();
-            final FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(
-                    EvaluationMode.getUpdateMode(loadingWorkItemInfo.isValidateFormOnAction(actionName)), actionName),
-                    applet.isNewCommentRequired(actionName));
-            if (!ctx.isWithFormErrors()) {
-                if (ctx.getFormDef() == null) {
-                    applet.updateSingleFormInst();
-                    applet.applyUserAction(actionName);
-                    hintUser("$m{reviewsingleformworkitemsapplet.apply.success.hint}");
-                } else {
-                    if (ctx.getFormDef().isInputForm()) {
-                        EntityActionResult entityActionResult = applet.updateInstAndClose(actionName);
-                        if (ctx.isWithReviewErrors()) {
-                            entityActionResult.setApplyUserAction(true);
-                            entityActionResult.setUserAction(actionName);
-                            entityActionResult.setCloseView(true);
-                            onReviewErrors(entityActionResult);
-                            return;
-                        }
-                    }
+	@Override
+	@Action
+	public void performFormAction() throws UnifyException {
+		final ManageLoadingListApplet applet = getManageLoadingListApplet();
+		if (applet.appletCtx().isReview()) {
+			final String actionName = getRequestTarget(String.class);
+			final LoadingWorkItemInfo loadingWorkItemInfo = applet.getCurrentLoadingWorkItemInfo();
+			final FormContext ctx = evaluateCurrentFormContext(new FormValidationContext(
+					EvaluationMode.getUpdateMode(loadingWorkItemInfo.isValidateFormOnAction(actionName)), actionName),
+					applet.isNewCommentRequired(actionName));
+			if (!ctx.isWithFormErrors()) {
+				if (ctx.getFormDef() == null) {
+					applet.updateSingleFormInst();
+					if (applet.applyUserAction(actionName)) {
+						hintUser("$m{reviewsingleformworkitemsapplet.apply.success.hint}");
+					} else {
+						hintUser(MODE.ERROR, "$m{reviewworkitemsapplet.apply.failed.hint}");
+					}
+				} else {
+					if (ctx.getFormDef().isInputForm()) {
+						EntityActionResult entityActionResult = applet.updateInstAndClose(actionName);
+						if (ctx.isWithReviewErrors()) {
+							entityActionResult.setApplyUserAction(true);
+							entityActionResult.setUserAction(actionName);
+							entityActionResult.setCloseView(true);
+							onReviewErrors(entityActionResult);
+							return;
+						}
+					}
 
-                    applet.applyUserAction(actionName);
-                    hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
-                }
-            }
+					if (applet.applyUserAction(actionName)) {
+						hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
+					} else {
+						hintUser(MODE.ERROR, "$m{reviewworkitemsapplet.apply.failed.hint}");
+					}
+				}
+			}
 
-            return;
-        }
+			return;
+		}
 
-        super.performFormAction();
-    }
+		super.performFormAction();
+	}
 
-    @Override
-    public void switchState() throws UnifyException {
-        super.switchState();
-        final ManageLoadingListApplet applet = getManageLoadingListApplet();
-        final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
-        switch (viewMode) {
-            case ENTITY_CRUD_PAGE:
-            case ENTRY_TABLE_PAGE:
-            case ASSIGNMENT_PAGE:
-            case PROPERTYLIST_PAGE:
-            case SINGLE_FORM:
-            case LISTING_FORM:
-            case MAINTAIN_FORM_SCROLL:
-            case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
-            case MAINTAIN_CHILDLIST_FORM_NO_SCROLL:
-            case MAINTAIN_RELATEDLIST_FORM_NO_SCROLL:
-            case MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL:
-            case MAINTAIN_FORM:
-            case MAINTAIN_CHILDLIST_FORM:
-            case MAINTAIN_RELATEDLIST_FORM:
-            case MAINTAIN_HEADLESSLIST_FORM:
-            case NEW_FORM:
-            case NEW_PRIMARY_FORM:
-            case NEW_CHILD_FORM:
-            case NEW_CHILDLIST_FORM:
-            case NEW_RELATEDLIST_FORM:
-            case NEW_HEADLESSLIST_FORM:
-            case HEADLESS_TAB:
-                break;
-            case SEARCH:
-                switchContent("loadingSearchPanel");
-            default:
-                break;
-        }
-    }
+	@Override
+	public void switchState() throws UnifyException {
+		super.switchState();
+		final ManageLoadingListApplet applet = getManageLoadingListApplet();
+		final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
+		switch (viewMode) {
+		case ENTITY_CRUD_PAGE:
+		case ENTRY_TABLE_PAGE:
+		case ASSIGNMENT_PAGE:
+		case PROPERTYLIST_PAGE:
+		case SINGLE_FORM:
+		case LISTING_FORM:
+		case MAINTAIN_FORM_SCROLL:
+		case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
+		case MAINTAIN_CHILDLIST_FORM_NO_SCROLL:
+		case MAINTAIN_RELATEDLIST_FORM_NO_SCROLL:
+		case MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL:
+		case MAINTAIN_FORM:
+		case MAINTAIN_CHILDLIST_FORM:
+		case MAINTAIN_RELATEDLIST_FORM:
+		case MAINTAIN_HEADLESSLIST_FORM:
+		case NEW_FORM:
+		case NEW_PRIMARY_FORM:
+		case NEW_CHILD_FORM:
+		case NEW_CHILDLIST_FORM:
+		case NEW_RELATEDLIST_FORM:
+		case NEW_HEADLESSLIST_FORM:
+		case HEADLESS_TAB:
+			break;
+		case SEARCH:
+			switchContent("loadingSearchPanel");
+		default:
+			break;
+		}
+	}
 
-    private ManageLoadingListApplet getManageLoadingListApplet() throws UnifyException {
-        return getValue(ManageLoadingListApplet.class);
-    }
+	private ManageLoadingListApplet getManageLoadingListApplet() throws UnifyException {
+		return getValue(ManageLoadingListApplet.class);
+	}
 }

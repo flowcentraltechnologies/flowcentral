@@ -241,14 +241,15 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         return result;
     }
 
-    @Override
-    public void applyUserAction(String actionName) throws UnifyException {
-        final AbstractForm _form = getResolvedForm();
-        WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
-        loadingSearch.applyUserAction(currEntityInst, actionName, _form.getNewComment(), _form.getEmails(), mIndex,
-                _form.isListing());
-        navBackToSearch();
-    }
+	@Override
+	public boolean applyUserAction(String actionName) throws UnifyException {
+		final AbstractForm _form = getResolvedForm();
+		WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
+		final boolean result = loadingSearch.applyUserAction(currEntityInst, actionName, _form.getNewComment(),
+				_form.getEmails(), mIndex, _form.isListing());
+		navBackToSearch();
+		return result;
+	}
 
     public LoadingWorkItemInfo getCurrentLoadingWorkItemInfo() throws UnifyException {
         final AbstractForm _form = getResolvedForm();

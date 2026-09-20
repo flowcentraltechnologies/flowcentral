@@ -209,12 +209,13 @@ public abstract class AbstractLoadingApplet extends AbstractEntityFormApplet {
     }
 
     @Override
-    public void applyUserAction(String actionName) throws UnifyException {
+    public boolean applyUserAction(String actionName) throws UnifyException {
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
-        loadingTableProvider.applyUserActionByWorkItemId(currEntityInst, workItemId, actionName, _form.getNewComment(),
+        final boolean result = loadingTableProvider.applyUserActionByWorkItemId(currEntityInst, workItemId, actionName, _form.getNewComment(),
                 _form.getEmails(), _form.isListing());
         invalidateSecuredLink(SecuredLinkType.WORKFLOW_DECISION);
+        return result;
     }
 
     protected abstract WorkflowStepInfo getWorkflowStepInfo(AppletUtilities au, Long sourceItemId)

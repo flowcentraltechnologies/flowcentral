@@ -896,8 +896,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return assignmentPage;
     }
 
-    public void applyUserAction(String actionName) throws UnifyException {
-
+    public boolean applyUserAction(String actionName) throws UnifyException {
+    	return false;
     }
 
     public EntityActionResult submitInst() throws UnifyException {
