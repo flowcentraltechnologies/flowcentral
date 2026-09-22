@@ -52,7 +52,7 @@ public class WfStep extends BaseConfigNamedEntity {
     @ForeignKey(nullable = true)
     private RecordActionType recordActionType;
 
-    @Column(name = "WFSTEP_LABEL", length = 64)
+    @Column(name = "WFSTEP_LABEL", length = 128)
     private String label;
 
     @Column(name = "APPLET_NM", length = 128, nullable = true)
