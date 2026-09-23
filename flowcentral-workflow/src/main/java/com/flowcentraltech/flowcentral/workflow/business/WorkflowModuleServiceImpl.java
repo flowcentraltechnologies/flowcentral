@@ -1245,7 +1245,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService implem
 
             // 2026-09-20 Zambia (maker- checker)
 			if ("approve".equalsIgnoreCase(userAction) && !StringUtils.isBlank(userLoginId)
-					&& userLoginId.equals(wfItem.getInitiatedBy())) {
+					&& !"SYSTEM".equals(userLoginId) && userLoginId.equals(wfItem.getInitiatedBy())) {
 				logInfo("Belaying user action [{0}] because user is work item initiator.", userAction);
 				return false;
 			}
