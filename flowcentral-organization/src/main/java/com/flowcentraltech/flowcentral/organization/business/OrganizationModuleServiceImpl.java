@@ -67,6 +67,7 @@ import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.PageAccessChecker;
 
 /**
  * Implementation of organization module service.
@@ -96,6 +97,9 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private StudioProvider studioProvider;
 
+    @Configurable
+    private PageAccessChecker pageAccessChecker;
+    
     public OrganizationModuleServiceImpl() {
         this.tenantRolePrivileges = new FactoryMap<Long, TenantRolePrivileges>()
             {
@@ -421,6 +425,12 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     public synchronized void invalidateRolePrivilegesCache(String... roleCodes) throws UnifyException {
         for (TenantRolePrivileges tenantRolePrivileges : tenantRolePrivileges.values()) {
             tenantRolePrivileges.invalidate(roleCodes);
+        }
+        
+        for (String roleCode: roleCodes) {
+        	if (pageAccessChecker != null) {
+        		pageAccessChecker.invalidateRole(roleCode);
+        	}
         }
     }
 
