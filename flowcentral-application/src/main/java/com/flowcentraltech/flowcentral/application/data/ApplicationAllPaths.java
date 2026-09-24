@@ -28,7 +28,7 @@ import java.util.Set;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public class ApplicationAllPaths {
+public class ApplicationAllPaths { 
 
 	private Set<String> paths;
 
@@ -58,5 +58,9 @@ public class ApplicationAllPaths {
 
 	public synchronized boolean isWithRolePaths(String role) {
 		return rolePaths.containsKey(role);
+	}
+
+	public synchronized void invalidateRole(String roleCode) {
+		rolePaths.remove(roleCode);
 	}
 }

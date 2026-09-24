@@ -1467,6 +1467,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 	}
 
 	@Override
+	public void invalidateRole(String roleCode) throws UnifyException {
+		final ApplicationAllPaths allpaths = (ApplicationAllPaths) getApplicationAttribute(
+				AppletApplicationAttributeConstants.APPLICATION_PATHS_ALL);
+		if (allpaths != null) {
+			allpaths.invalidateRole(roleCode);
+		}
+	}
+
+	@Override
     public Class<? extends EnumConst> getStaticListEnumType(String listName) throws UnifyException {
         return listManager.getStaticListEnumType(listName);
     }
