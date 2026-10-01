@@ -882,6 +882,35 @@ public interface EnvironmentService extends BusinessService {
             List<GroupingFunction> groupingFunction) throws UnifyException;
 
     /**
+     * Executes a list of aggregate functions that match specified corresponding
+     * queries.
+     * 
+     * @param aggregateFunction the aggregate function
+     * @param queries           the queries to use
+     * @return the aggregation
+     * @throws UnifyException If aggregate function field is unknown for entity. If
+     *                        aggregate function field is not numeric. If an error
+     *                        occurs
+     */
+    List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, List<Query<? extends Entity>> queries)
+            throws UnifyException;
+
+    /**
+     * Executes a list of aggregate functions that match specified corresponding
+     * queries with separate common query.
+     * 
+     * @param aggregateFunction the aggregate function
+     * @param queries           the queries to use
+     * @param commonQuery       the common query
+     * @return the aggregation
+     * @throws UnifyException If aggregate function field is unknown for entity. If
+     *                        aggregate function field is not numeric. If an error
+     *                        occurs
+     */
+    List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, List<Query<? extends Entity>> queries,
+            Query<? extends Entity> commonQuery) throws UnifyException;
+
+    /**
      * Populates list-only properties of a record
      * 
      * @param record

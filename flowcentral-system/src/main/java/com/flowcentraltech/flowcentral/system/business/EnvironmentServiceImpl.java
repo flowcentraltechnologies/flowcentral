@@ -576,6 +576,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
+    public List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, List<Query<? extends Entity>> queries)
+            throws UnifyException {
+        return db_direct(queries.get(0).getEntityClass()).aggregate(aggregateFunction, queries);
+    }
+
+    @Override
+    public List<Aggregation> aggregate(List<AggregateFunction> aggregateFunction, List<Query<? extends Entity>> queries,
+            Query<? extends Entity> commonQuery) throws UnifyException {
+        return db_direct(queries.get(0).getEntityClass()).aggregate(aggregateFunction, queries, commonQuery);
+    }
+
+    @Override
     public void populateListOnly(Entity record) throws UnifyException {
         db(record.getClass()).populateListOnly(record);
     }

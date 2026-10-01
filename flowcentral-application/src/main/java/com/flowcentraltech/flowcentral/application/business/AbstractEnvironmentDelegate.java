@@ -648,6 +648,20 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
+    public List<Aggregation> aggregate(List<AggregateFunction> arg0, List<Query<? extends Entity>> arg1,
+            Query<? extends Entity> arg2) throws UnifyException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Aggregation> aggregate(List<AggregateFunction> arg0, List<Query<? extends Entity>> arg1)
+            throws UnifyException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public Entity getExtendedInstance(Class<? extends Entity> entityClass) throws UnifyException {
         return null;
     }
