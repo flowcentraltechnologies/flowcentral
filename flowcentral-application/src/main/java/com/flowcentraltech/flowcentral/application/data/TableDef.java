@@ -245,6 +245,10 @@ public class TableDef extends BaseApplicationEntityDef {
         return colorLegendInfo;
     }
 
+    public boolean isFilter(String name) {
+        return filterDefMap.containsKey(name);
+    }
+
     public TableFilterDef getFilterDef(String name) {
         TableFilterDef filterDef = filterDefMap.get(name);
         if (filterDef == null) {
