@@ -41,9 +41,15 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
     @Override
     public boolean submitFromExternal(Long workRecId, String workflowName, String entityName, String requestedBy,
             Date requestedOn, String branchCode, String departmentCode) throws UnifyException {
-        workflowModuleService.submitToWorkflowByName(workflowName, entityName, workRecId, requestedBy, requestedOn,
-                branchCode, departmentCode);
-        return true;
+        try {
+            workflowModuleService.submitToWorkflowByName(workflowName, entityName, workRecId, requestedBy, requestedOn,
+                    branchCode, departmentCode);
+            return true;
+        } catch (UnifyException e) {
+            logError(e);
+        }
+        
+        return false;
     }
 
     @Override
@@ -54,18 +60,28 @@ public abstract class AbstractWorkItemExternalAccessibilityProvider extends Abst
     @Override
     public boolean recoverErrorFromExternal(Long workRecId, String workflowName, String requestedBy, Date requestedOn)
             throws UnifyException {
-        return workflowModuleService.applyUserAction(workRecId, workflowName, "error", "recover", requestedOn,
-                requestedBy);
+        try {
+            return workflowModuleService.applyUserAction(workRecId, workflowName, "error", "recover", requestedOn,
+                    requestedBy);
+        } catch (UnifyException e) {
+            logError(e);
+        }
+        
+        return false;
     }
 
     @Override
     public boolean releaseFromExternalWithUserAction(Long workRecId, String workflowName, String stepName,
             List<? extends UserAction> actions) throws UnifyException {
         if (!DataUtils.isBlank(actions)) {
-            // For now just do single action
-            final UserAction action = actions.get(0);
-            return workflowModuleService.applyUserAction(workRecId, workflowName, stepName, action.getActionName(),
-                    action.getActionDate(), action.getActionBy());
+            try {
+                // For now just do single action
+                final UserAction action = actions.get(0);
+                return workflowModuleService.applyUserAction(workRecId, workflowName, stepName, action.getActionName(),
+                        action.getActionDate(), action.getActionBy());
+            } catch (UnifyException e) {
+                logError(e);
+            }
         }
 
         return false;
