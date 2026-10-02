@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletDocumentAttri
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
+import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CodeGenerationProvider;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanelWriter;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
@@ -351,11 +352,12 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
             filter = filter.toLowerCase();
         }
 
+        final ApplicationPrivilegeManager apm = appletUtilities.applicationPrivilegeManager();
         List<AppletDef> appletDefList = new ArrayList<AppletDef>();
         for (String appletName : applets) {
             AppletDef _appletDef = appletUtilities.application()
                     .getAppletDef(ApplicationNameUtils.addVestigialNamePart(appletName, applicationName));
-            if (appletUtilities.applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
+            if (apm == null || apm.isRoleWithPrivilege(roleCode,
                     _appletDef.getPrivilege())) {
                 if (filter == null || _appletDef.getLowerCaseLabel().contains(filter)) {
                     appletDefList.add(_appletDef);
