@@ -39,9 +39,13 @@ public class ApplicationAllPaths {
 		this.rolePaths = new HashMap<String, Set<String>>();
 	}
 
-	public Set<String> getPaths() {
-		return paths;
-	}
+    public Set<String> getPaths() {
+        return paths;
+    }
+
+    public Set<String> getRolePaths(String roleCode) {
+        return rolePaths.get(roleCode);
+    }
 
 	public boolean isApplicationPath(String path) {
 		return paths.contains(path);

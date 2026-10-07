@@ -312,13 +312,13 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 									writeSubMenuAppletDef(writer, misb, appletDef, wparam);
 									isWithSubMenus = true;
 									wparam.setAppendISym(true);
-								}
 
-								if (isGetRolePaths) {
-									rolePaths.add(appletDef.getOpenPath());
-									if (appletDef.isWithOpenDraftPath()) {
-										rolePaths.add(appletDef.getOpenDraftPath());
-									}
+	                                if (isGetRolePaths) {
+	                                    rolePaths.add(appletDef.getOpenPath());
+	                                    if (appletDef.isWithOpenDraftPath()) {
+	                                        rolePaths.add(appletDef.getOpenDraftPath());
+	                                    }
+	                                }
 								}
 							}
 
