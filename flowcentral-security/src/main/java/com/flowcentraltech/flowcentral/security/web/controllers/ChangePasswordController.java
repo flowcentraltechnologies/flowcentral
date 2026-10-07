@@ -45,7 +45,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 @Component("/security/changepassword")
 @UplBinding("web/security/upl/changepassword.upl")
 @ResultMappings({
-        @ResultMapping(name = "refresh", response = { "!refreshpanelresponse panels:$l{changePasswordPanel}" }) })
+        @ResultMapping(name = "refresh", response = {"!refreshpanelresponse panels:$l{changePasswordPanel}", "!hintuserresponse" }) })
 public class ChangePasswordController extends AbstractSecurityPageController<ChangePasswordPageBean> {
 
     @Configurable
