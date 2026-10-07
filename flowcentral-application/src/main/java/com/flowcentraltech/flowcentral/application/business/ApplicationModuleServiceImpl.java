@@ -1453,19 +1453,37 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             };
     }
 
-	@Override
-	public boolean isPageAccessible(String roleCode, String pagePath) throws UnifyException {
-		if (!StringUtils.isBlank(roleCode) && pagePath.endsWith("/openPage") && !pagePath.startsWith("/application")) {
-			final ApplicationAllPaths allpaths = (ApplicationAllPaths) getApplicationAttribute(
-					AppletApplicationAttributeConstants.APPLICATION_PATHS_ALL);
-			if (allpaths != null && allpaths.isApplicationPath(pagePath)) {
-				return allpaths.isRolePath(roleCode, pagePath);
-			}
-		}
+    @Override
+    public boolean isPageAccessible(String roleCode, String pagePath) throws UnifyException {
+        if (!StringUtils.isBlank(roleCode) && !pagePath.startsWith("/application")) {
+            final String cpath = resolveCheckPath(pagePath);
+            if (cpath != null) {
+                final ApplicationAllPaths allpaths = (ApplicationAllPaths) getApplicationAttribute(
+                        AppletApplicationAttributeConstants.APPLICATION_PATHS_ALL);
+                if (allpaths != null && allpaths.isApplicationPath(cpath)) {
+                    return allpaths.isRolePath(roleCode, cpath);
+                }
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
+    private String resolveCheckPath(String path) {
+        if (path.endsWith("/openPage")) {
+            return path;
+        }
+
+        path = path.replace("/closePage", "/openPage").replace("/savePage", "/openPage").replace("/reloadPage",
+                "/openPage");
+
+        if (path.endsWith("/openPage")) {
+            return path;
+        }
+
+        return null;
+    }
+	
 	@Override
 	public void invalidateRole(String roleCode) throws UnifyException {
 		final ApplicationAllPaths allpaths = (ApplicationAllPaths) getApplicationAttribute(
