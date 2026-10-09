@@ -1100,7 +1100,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 wfEntityInst = (WorkEntity) environment().listLean(
                         appletUtil.application().queryOf(wfDef.getEntity()).addEquals("id", wfItem.getWorkRecId()));
                 if (wfEntityInst == null) {
-                    logInfo("Belaying user action [{0}] because wo step [{1}] because entity with ID [{2}] could not be found.",
+                    logInfo("Belaying user action [{0}] because work step [{1}] because entity with ID [{2}] could not be found.",
                             userAction, stepName, wfItem.getWorkRecId());
                     return false;
                 }
