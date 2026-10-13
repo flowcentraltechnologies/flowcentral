@@ -272,7 +272,7 @@ public class ReportConfig extends BaseRootAppConfig {
         this.template = template;
     }
 
-    public boolean getShowGrandFooter() {
+    public Boolean getShowGrandFooter() {
         return showGrandFooter;
     }
 
@@ -296,7 +296,7 @@ public class ReportConfig extends BaseRootAppConfig {
         this.landscape = landscape;
     }
 
-    public boolean getUnderlineRows() {
+    public Boolean getUnderlineRows() {
         return underlineRows;
     }
 
