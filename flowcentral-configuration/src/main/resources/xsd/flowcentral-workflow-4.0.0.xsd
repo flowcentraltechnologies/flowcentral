@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   	targetNamespace="http://flowcentraltech.com/schema-common"
+   	xmlns="http://flowcentraltech.com/schema-common"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:include schemaLocation="flowcentral-types.xsd"/>
+  <!-- Workflow -->
+  <xs:element name="workflow">
+    <xs:complexType>
+      <xs:all>
+      	<!-- Steps -->
+        <xs:element name="steps" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="step" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:all>
+                    <xs:element type="setvalues" name="setValues" minOccurs="0"/>
+                    <xs:element name="alerts" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="alert" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+			                  <xs:attribute name="type" use="required">
+						        <xs:simpleType>
+						          <xs:restriction base="xs:string">
+						            <xs:enumeration value="PASS_THROUGH"/>
+						            <xs:enumeration value="USER_INTERACT"/>
+						            <xs:enumeration value="REMINDER_NOTIFICATION"/>
+						            <xs:enumeration value="CRITICAL_NOTIFICATION"/>
+						            <xs:enumeration value="EXPIRATION_NOTIFICATION"/>
+						          </xs:restriction>
+						        </xs:simpleType>
+						      </xs:attribute>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="generator" use="optional"/>
+                              <xs:attribute type="xs:string" name="template" use="optional"/>
+                              <xs:attribute type="xs:string" name="recipientPolicy" use="optional"/>
+                              <xs:attribute type="xs:string" name="recipientNameRule" use="optional"/>
+                              <xs:attribute type="xs:string" name="recipientContactRule" use="optional"/>
+                              <xs:attribute type="xs:string" name="fireOnPrevStepName" use="optional"/>
+                              <xs:attribute type="xs:string" name="fireOnActionName" use="optional"/>
+                              <xs:attribute type="xs:string" name="fireOnCondition" use="optional"/>
+                              <xs:attribute type="xs:integer" name="sendDelayInMinutes" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="alertHeldBy" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="alertWorkflowRoles" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="userActions" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="userAction" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+			                  <xs:attribute name="commentRequirement" use="optional">
+						        <xs:simpleType>
+						          <xs:restriction base="xs:string">
+						            <xs:enumeration value="MANDATORY"/>
+						            <xs:enumeration value="OPTIONAL"/>
+						            <xs:enumeration value="NONE"/>
+						          </xs:restriction>
+						        </xs:simpleType>
+						      </xs:attribute>
+			                  <xs:attribute name="highlight" use="optional">
+						        <xs:simpleType>
+						          <xs:restriction base="xs:string">
+						            <xs:enumeration value="BLUE"/>
+						            <xs:enumeration value="GREEN"/>
+						            <xs:enumeration value="ORANGE"/>
+						            <xs:enumeration value="RED"/>
+						            <xs:enumeration value="GRAY"/>
+						          </xs:restriction>
+						        </xs:simpleType>
+						      </xs:attribute>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="nextStep" use="required"/>
+                              <xs:attribute type="xs:string" name="setValues" use="optional"/>
+                              <xs:attribute type="xs:string" name="appletSetValues" use="optional"/>
+                              <xs:attribute type="xs:string" name="showOnCondition" use="optional"/>
+                              <xs:attribute type="xs:integer" name="orderIndex" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="formReview" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="validatePage" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="forwarderPreferred" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="routings" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="routing" maxOccurs="unbounded" minOccurs="0">
+                            <xs:complexType>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="description" use="required"/>
+                              <xs:attribute type="xs:string" name="label" use="optional"/>
+                              <xs:attribute type="xs:string" name="nextStep" use="required"/>
+                              <xs:attribute type="xs:string" name="condition" use="optional"/>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:all>
+                  <xs:attribute name="type" use="required">
+			        <xs:simpleType>
+			          <xs:restriction base="xs:string">
+			            <xs:enumeration value="START"/>
+			            <xs:enumeration value="ENRICHMENT"/>
+			            <xs:enumeration value="PROCEDURE"/>
+			            <xs:enumeration value="RECORD_ACTION"/>
+			            <xs:enumeration value="BINARY_ROUTING"/>
+			            <xs:enumeration value="POLICY_ROUTING"/>
+			            <xs:enumeration value="MULTI_ROUTING"/>
+			            <xs:enumeration value="USER_ACTION"/>
+			            <xs:enumeration value="SET_VALUES"/>
+			            <xs:enumeration value="NOTIFICATION"/>
+			            <xs:enumeration value="DELAY"/>
+			            <xs:enumeration value="ERROR"/>
+			            <xs:enumeration value="END"/>
+			          </xs:restriction>
+			        </xs:simpleType>
+			      </xs:attribute>
+                  <xs:attribute name="priority" use="optional">
+			        <xs:simpleType>
+			          <xs:restriction base="xs:string">
+			            <xs:enumeration value="CRITICAL"/>
+			            <xs:enumeration value="HIGH"/>
+			            <xs:enumeration value="NORMAL"/>
+			            <xs:enumeration value="LOW"/>
+			          </xs:restriction>
+			        </xs:simpleType>
+			      </xs:attribute>
+                  <xs:attribute name="actionType" use="optional">
+			        <xs:simpleType>
+			          <xs:restriction base="xs:string">
+			            <xs:enumeration value="CREATE"/>
+			            <xs:enumeration value="UPDATE"/>
+			            <xs:enumeration value="UPDATE_ORIGINAL"/>
+			            <xs:enumeration value="DELETE"/>
+			          </xs:restriction>
+			        </xs:simpleType>
+			      </xs:attribute>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
+                  <xs:attribute type="xs:string" name="description" use="required"/>
+                  <xs:attribute type="xs:string" name="label" use="optional"/>
+                  <xs:attribute type="xs:string" name="nextStep" use="optional"/>
+                  <xs:attribute type="xs:string" name="altNextStep" use="optional"/>
+                  <xs:attribute type="xs:string" name="applet" use="optional"/>
+                  <xs:attribute type="xs:string" name="binaryCondition" use="optional"/>
+                  <xs:attribute type="xs:string" name="readOnlyCondition" use="optional"/>
+                  <xs:attribute type="xs:string" name="autoLoadCondition" use="optional"/>
+                  <xs:attribute type="xs:string" name="workItemLoadingRestriction" use="optional"/>
+                  <xs:attribute type="xs:string" name="ejectionRestriction" use="optional"/>
+                  <xs:attribute type="xs:string" name="attachmentProvider" use="optional"/>
+                  <xs:attribute type="xs:string" name="newCommentCaption" use="optional"/>
+                  <xs:attribute type="xs:string" name="policy" use="optional"/>
+                  <xs:attribute type="xs:string" name="rule" use="optional"/>
+                  <xs:attribute type="xs:string" name="valueGenerator" use="optional"/>
+                  <xs:attribute type="xs:string" name="appletSetValues" use="optional"/>
+                  <xs:attribute type="xs:integer" name="reminderMinutes" use="optional"/>
+                  <xs:attribute type="xs:integer" name="criticalMinutes" use="optional"/>
+                  <xs:attribute type="xs:integer" name="expiryMinutes" use="optional"/>
+                  <xs:attribute type="xs:integer" name="delayMinutes" use="optional"/>
+                  <xs:attribute type="xs:integer" name="designX" use="optional"/>
+                  <xs:attribute type="xs:integer" name="designY" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="audit" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="branchOnly" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="departmentOnly" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="includeForwarder" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="forwarderPreffered" use="optional"/>
+                  <xs:attribute type="xs:string" name="emails" use="optional"/>
+                  <xs:attribute type="xs:string" name="comments" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      	<!-- Filters -->
+        <xs:element name="filters" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="filter" name="filter" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      	<!-- Set values -->
+        <xs:element name="valuesset" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="setValues" maxOccurs="unbounded" minOccurs="0">
+		          <xs:complexType>
+		            <xs:all>
+		              <xs:element type="filter" name="onCondition" minOccurs="0"/>
+		              <xs:element type="setvalues" name="setValues" minOccurs="0"/>
+		            </xs:all>
+	                  <xs:attribute name="type" use="required">
+				        <xs:simpleType>
+				          <xs:restriction base="xs:string">
+				            <xs:enumeration value="ON_ENTRY"/>
+				            <xs:enumeration value="USER_ACTION"/>
+				          </xs:restriction>
+				        </xs:simpleType>
+				      </xs:attribute>
+				      <xs:attribute type="xs:string" name="name" use="optional"/>
+				      <xs:attribute type="xs:string" name="description" use="optional"/>
+				      <xs:attribute type="xs:string" name="label" use="optional"/>
+				      <xs:attribute type="xs:string" name="valueGenerator" use="optional"/>
+		          </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:all>
+      <xs:attribute type="xs:string" name="name" use="required"/>
+      <xs:attribute type="xs:string" name="description" use="required"/>
+      <xs:attribute type="xs:string" name="label" use="required"/>
+      <xs:attribute type="xs:string" name="entity" use="required"/>
+      <xs:attribute type="xs:string" name="loadingTable" use="optional"/>
+      <xs:attribute type="xs:string" name="descFormat" use="optional"/>
+      <xs:attribute type="xs:boolean" name="supportMultiItemAction" use="optional"/>
+      <xs:attribute type="xs:boolean" name="published" use="optional"/>
+      <xs:attribute type="xs:boolean" name="runnable" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   	targetNamespace="http://flowcentraltech.com/schema-common"
+   	xmlns="http://flowcentraltech.com/schema-common"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:include schemaLocation="flowcentral-types.xsd"/>
+  <!-- Notification Template-->
+  <xs:element name="notifTemplate">
+    <xs:complexType>
+      <xs:all minOccurs="0" maxOccurs="1">
+		<xs:element type="xs:string" name="subject" minOccurs="0"/>
+		<xs:element type="xs:string" name="body" minOccurs="0"/>
+      </xs:all>
+      <xs:attribute name="type" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="SYSTEM"/>
+            <xs:enumeration value="EMAIL"/>
+            <xs:enumeration value="SMS"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format" use="optional">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="PLAIN_TEXT"/>
+            <xs:enumeration value="HTML"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute type="xs:string" name="name" use="required"/>
+      <xs:attribute type="xs:string" name="description" use="required"/>
+      <xs:attribute type="xs:string" name="label" use="optional"/>
+      <xs:attribute type="xs:string" name="entity" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+

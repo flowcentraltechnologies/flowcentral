@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   	targetNamespace="http://flowcentraltech.com/schema-common"
+   	xmlns="http://flowcentraltech.com/schema-common"
+	attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:include schemaLocation="flowcentral-types.xsd"/>
+  <!-- Help Sheet -->
+  <xs:element name="helpSheet">
+    <xs:complexType>
+      <xs:all minOccurs="0" maxOccurs="1">
+        <!-- Entries -->
+        <xs:element name="entries" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="entry" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+		          <xs:sequence>
+	                  <xs:element type="xs:string" name="content"/>
+		          </xs:sequence>
+                  <xs:attribute type="xs:string" name="field" use="required"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <!-- Overview -->
+		<xs:element type="xs:string" name="helpOverview" minOccurs="0"/>
+      </xs:all>
+      <xs:attribute type="xs:string" name="name" use="required"/>
+      <xs:attribute type="xs:string" name="description" use="required"/>
+      <xs:attribute type="xs:string" name="label" use="optional"/>
+      <xs:attribute type="xs:string" name="entity" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+
