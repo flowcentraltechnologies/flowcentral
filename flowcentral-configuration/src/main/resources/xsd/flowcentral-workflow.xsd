@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   	targetNamespace="http://flowcentraltech.com/schema-common"
-   	xmlns="http://flowcentraltech.com/schema-common"
-	attributeFormDefault="unqualified" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:include schemaLocation="flowcentral-types.xsd"/>
   <!-- Workflow -->
   <xs:element name="workflow">
@@ -76,10 +73,21 @@
 						          </xs:restriction>
 						        </xs:simpleType>
 						      </xs:attribute>
+			                  <xs:attribute name="decisionResolution" use="optional">
+						        <xs:simpleType>
+						          <xs:restriction base="xs:string">
+						            <xs:enumeration value="ALL"/>
+						            <xs:enumeration value="AT_LEAST_ONE"/>
+						            <xs:enumeration value="AT_LEAST_TWO"/>
+						            <xs:enumeration value="AT_LEAST_THREE"/>
+						            <xs:enumeration value="MAJORITY"/>
+						          </xs:restriction>
+						        </xs:simpleType>
+						      </xs:attribute>
                               <xs:attribute type="xs:string" name="name" use="required"/>
                               <xs:attribute type="xs:string" name="description" use="required"/>
                               <xs:attribute type="xs:string" name="label" use="optional"/>
-                              <xs:attribute type="xs:string" name="nextStep" use="required"/>
+                              <xs:attribute type="xs:string" name="nextStep" use="optional"/>
                               <xs:attribute type="xs:string" name="setValues" use="optional"/>
                               <xs:attribute type="xs:string" name="appletSetValues" use="optional"/>
                               <xs:attribute type="xs:string" name="showOnCondition" use="optional"/>
@@ -175,6 +183,7 @@
                   <xs:attribute type="xs:boolean" name="departmentOnly" use="optional"/>
                   <xs:attribute type="xs:boolean" name="includeForwarder" use="optional"/>
                   <xs:attribute type="xs:boolean" name="forwarderPreffered" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="excludeMaker" use="optional"/>
                   <xs:attribute type="xs:string" name="emails" use="optional"/>
                   <xs:attribute type="xs:string" name="comments" use="optional"/>
                 </xs:complexType>
@@ -223,10 +232,14 @@
       <xs:attribute type="xs:string" name="label" use="required"/>
       <xs:attribute type="xs:string" name="entity" use="required"/>
       <xs:attribute type="xs:string" name="loadingTable" use="optional"/>
+      <xs:attribute type="xs:string" name="casePrefix" use="optional"/>
+      <xs:attribute type="xs:string" name="caseApplet" use="optional"/>
       <xs:attribute type="xs:string" name="descFormat" use="optional"/>
       <xs:attribute type="xs:boolean" name="supportMultiItemAction" use="optional"/>
+      <xs:attribute type="xs:boolean" name="supportManualSubmission" use="optional"/>
       <xs:attribute type="xs:boolean" name="published" use="optional"/>
       <xs:attribute type="xs:boolean" name="runnable" use="optional"/>
+      <xs:attribute type="xs:boolean" name="classified" use="optional"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

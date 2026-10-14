@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   	targetNamespace="http://flowcentraltech.com/schema-common"
-   	xmlns="http://flowcentraltech.com/schema-common"
-	attributeFormDefault="unqualified" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <!-- Unify -->
   <xs:element name="unify">
     <xs:complexType>
       <xs:sequence>
+		<!-- Properties -->
         <xs:element name="properties">
           <xs:complexType>
             <xs:sequence>
@@ -22,6 +20,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <!-- Components -->
         <xs:element name="components">
           <xs:complexType>
             <xs:sequence>
@@ -33,31 +32,26 @@
                         <xs:sequence>
                           <xs:element name="property" maxOccurs="unbounded" minOccurs="0">
                             <xs:complexType>
-                              <xs:simpleContent>
-                                <xs:extension base="xs:string">
-                                  <xs:attribute type="xs:string" name="name" use="required"/>
-                                  <xs:attribute type="xs:string" name="value" use="optional"/>
-                                </xs:extension>
-                              </xs:simpleContent>
+                              <xs:attribute type="xs:string" name="name" use="required"/>
+                              <xs:attribute type="xs:string" name="value" use="optional"/>
                             </xs:complexType>
-                          </xs:element>
+                          </xs:element>							       
                         </xs:sequence>
                       </xs:complexType>
                     </xs:element>
                   </xs:sequence>
-                  <xs:attribute type="xs:string" name="name" use="required"/>
                   <xs:attribute type="xs:string" name="class" use="required"/>
+                  <xs:attribute type="xs:string" name="name" use="required"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
       </xs:sequence>
+      <xs:attribute type="xs:boolean" name="cluster" use="optional"/>
+      <xs:attribute type="xs:string" name="nodeId" use="optional"/>
+      <xs:attribute type="xs:boolean" name="production" use="optional"/>
       <xs:attribute type="xs:string" name="version" use="required"/>
-      <xs:attribute type="xs:string" name="nodeId" use="required"/>
-      <xs:attribute type="xs:boolean" name="cluster" use="required"/>
-      <xs:attribute type="xs:boolean" name="production" use="required"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>
-

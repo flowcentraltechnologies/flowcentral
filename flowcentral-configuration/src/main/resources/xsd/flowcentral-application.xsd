@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   	targetNamespace="http://flowcentraltech.com/schema-common"
-   	xmlns="http://flowcentraltech.com/schema-common"
-	attributeFormDefault="unqualified" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:include schemaLocation="flowcentral-types.xsd"/>
   <!-- Application -->
   <xs:element name="application">
@@ -151,13 +148,16 @@
                   <xs:attribute type="xs:string" name="titleFormat" use="optional"/>
                   <xs:attribute type="xs:integer" name="displayIndex" use="optional"/>
                   <xs:attribute type="xs:boolean" name="menuAccess" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="portalAccess" use="optional"/>
                   <xs:attribute type="xs:boolean" name="supportOpenInNewWindow" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="supportRemoteAccess" use="optional"/>
                   <xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
                   <xs:attribute type="xs:string" name="routeToApplet" use="optional"/>
                   <xs:attribute type="xs:string" name="baseField" use="optional"/>
                   <xs:attribute type="xs:string" name="assignField" use="optional"/>
                   <xs:attribute type="xs:string" name="assignDescField" use="optional"/>
                   <xs:attribute type="xs:string" name="pseudoDeleteField" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -178,6 +178,7 @@
                   <xs:attribute type="xs:boolean" name="stretch" use="optional"/>
                   <xs:attribute type="xs:boolean" name="listOption" use="optional"/>
                   <xs:attribute type="xs:boolean" name="enumOption" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -202,6 +203,7 @@
                   <xs:attribute type="xs:string" name="listFormat" use="optional"/>
                   <xs:attribute type="xs:string" name="filterGenerator" use="optional"/>
                   <xs:attribute type="xs:string" name="filterGeneratorRule" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -451,6 +453,7 @@
                   <xs:attribute type="xs:boolean" name="reportable" use="optional"/>
                   <xs:attribute type="xs:boolean" name="actionPolicy" use="optional"/>
                   <xs:attribute type="xs:boolean" name="changeEvents" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -558,6 +561,7 @@
                   <xs:attribute type="xs:boolean" name="nonConforming" use="optional"/>
                   <xs:attribute type="xs:boolean" name="fixedRows" use="optional"/>
                   <xs:attribute type="xs:boolean" name="limitSelectToColumns" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -575,6 +579,7 @@
                   <xs:attribute type="xs:string" name="entity" use="required"/>
                   <xs:attribute type="xs:string" name="destination" use="required"/>
                   <xs:attribute type="xs:string" name="rule" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                   <xs:attribute name="direction" use="required">
                     <xs:simpleType>
                       <xs:restriction base="xs:string">
@@ -679,7 +684,7 @@
                           <xs:element name="tab" maxOccurs="unbounded" minOccurs="1">
                             <xs:complexType mixed="true">
                               <xs:sequence>
-                                <xs:element name="section" maxOccurs="unbounded" minOccurs="1">
+                                <xs:element name="section" maxOccurs="unbounded" minOccurs="0">
                                   <xs:complexType>
                                     <xs:sequence>
                                       <xs:element name="field" maxOccurs="unbounded" minOccurs="1">
@@ -774,6 +779,7 @@
                               <xs:attribute type="xs:string" name="editAllowAddition" use="optional"/>
                               <xs:attribute type="xs:boolean" name="ignoreParentCondition" use="optional"/>
                               <xs:attribute type="xs:boolean" name="includeSysParam" use="optional"/>
+                              <xs:attribute type="xs:boolean" name="includeProcessVariable" use="optional"/>
                               <xs:attribute type="xs:boolean" name="showSearch" use="optional"/>
                               <xs:attribute type="xs:boolean" name="quickEdit" use="optional"/>
                               <xs:attribute type="xs:boolean" name="quickOrder" use="optional"/>
@@ -985,6 +991,7 @@
                   <xs:attribute type="xs:string" name="consolidatedValidation" use="optional"/>
                   <xs:attribute type="xs:string" name="consolidatedReview" use="optional"/>
                   <xs:attribute type="xs:string" name="consolidatedState" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -1047,6 +1054,7 @@
                   <xs:attribute type="xs:string" name="series" use="optional"/>
                   <xs:attribute type="xs:string" name="color" use="optional"/>
                   <xs:attribute type="xs:string" name="rule" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -1099,6 +1107,7 @@
                   <xs:attribute type="xs:string" name="label" use="optional"/>
                   <xs:attribute type="xs:integer" name="limit" use="optional"/>
                   <xs:attribute type="xs:string" name="preferred-category-field" use="optional"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -1200,6 +1209,7 @@
                   <xs:attribute type="xs:string" name="label" use="optional"/>
                   <xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
                   <xs:attribute type="xs:integer" name="sections" use="required"/>
+                  <xs:attribute type="xs:boolean" name="classified" use="optional"/>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -1225,6 +1235,7 @@
 													<xs:attribute type="xs:boolean" name="required" use="optional"/>
 													<xs:attribute type="xs:boolean" name="mask" use="optional"/>
 													<xs:attribute type="xs:boolean" name="encrypt" use="optional"/>
+													<xs:attribute type="xs:boolean" name="disabled" use="optional"/>
 												</xs:complexType>
 											</xs:element>
 										</xs:sequence>
@@ -1234,6 +1245,7 @@
 							</xs:sequence>
 							<xs:attribute type="xs:string" name="name" use="required"/>
 							<xs:attribute type="xs:string" name="description" use="required"/>
+                            <xs:attribute type="xs:boolean" name="classified" use="optional"/>
 						</xs:complexType>
 					</xs:element>
 				</xs:sequence>
@@ -1261,6 +1273,7 @@
 							<xs:attribute type="xs:string" name="propNameField" use="required"/>
 							<xs:attribute type="xs:string" name="propValField" use="required"/>
 							<xs:attribute type="xs:boolean" name="ignoreCase" use="optional"/>
+                            <xs:attribute type="xs:boolean" name="classified" use="optional"/>
 						</xs:complexType>
 					</xs:element>
 				</xs:sequence>
@@ -1288,6 +1301,7 @@
 							<xs:attribute type="xs:string" name="filterList1" use="optional"/>
 							<xs:attribute type="xs:string" name="filterList2" use="optional"/>
 							<xs:attribute type="xs:string" name="ruleDescField" use="optional"/>
+                            <xs:attribute type="xs:boolean" name="classified" use="optional"/>
 						</xs:complexType>
 					</xs:element>
 				</xs:sequence>
@@ -1315,6 +1329,7 @@
 							<xs:attribute type="xs:boolean" name="supportRead" use="optional"/>
 							<xs:attribute type="xs:boolean" name="supportUpdate" use="optional"/>
 							<xs:attribute type="xs:boolean" name="supportDelete" use="optional"/>
+                            <xs:attribute type="xs:boolean" name="classified" use="optional"/>
 						</xs:complexType>
 					</xs:element>
 				</xs:sequence>
@@ -1332,12 +1347,25 @@
 										<xs:attribute type="xs:string" name="code" use="required"/>
 										<xs:attribute type="xs:string" name="label" use="required"/>
 										<xs:attribute type="xs:integer" name="displayIndex" use="optional"/>
-									</xs:complexType>
+                                        <xs:attribute name="color" use="optional">
+                                            <xs:simpleType>
+                                              <xs:restriction base="xs:string">
+                                                <xs:enumeration value="RED"/>
+                                                <xs:enumeration value="BLUE"/>
+                                                <xs:enumeration value="GREEN"/>
+                                                <xs:enumeration value="YELLOW"/>
+                                                <xs:enumeration value="ORANGE"/>
+                                                <xs:enumeration value="GRAY"/>
+                                              </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:attribute>
+    								</xs:complexType>
 								</xs:element>
 							</xs:sequence>
 							<xs:attribute type="xs:string" name="name" use="required"/>
 							<xs:attribute type="xs:string" name="description" use="required"/>
 							<xs:attribute type="xs:string" name="label" use="optional"/>
+                            <xs:attribute type="xs:boolean" name="classified" use="optional"/>
 						</xs:complexType>
 					</xs:element>
 				</xs:sequence>
@@ -1353,6 +1381,7 @@
 							<xs:attribute type="xs:string" name="description" use="required"/>
 							<xs:attribute type="xs:string" name="label" use="optional"/>
 							<xs:attribute type="xs:string" name="parent" use="optional"/>
+                            <xs:attribute type="xs:boolean" name="classified" use="optional"/>
 						</xs:complexType>
 					</xs:element>
 				</xs:sequence>
@@ -1365,9 +1394,11 @@
       <xs:attribute type="xs:string" name="module" use="required"/>
       <xs:attribute type="xs:integer" name="displayIndex" use="optional"/>
       <xs:attribute type="xs:boolean" name="developable" use="optional"/>
+      <xs:attribute type="xs:boolean" name="installable" use="optional"/>
       <xs:attribute type="xs:boolean" name="menuAccess" use="optional"/>
       <xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
       <xs:attribute type="xs:boolean" name="custom" use="optional"/>
+      <xs:attribute type="xs:boolean" name="classified" use="optional"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

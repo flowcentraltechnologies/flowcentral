@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   	targetNamespace="http://flowcentraltech.com/schema-common"
-   	xmlns="http://flowcentraltech.com/schema-common"
-	attributeFormDefault="unqualified" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:include schemaLocation="flowcentral-types.xsd"/>
   <!-- Report -->
   <xs:element name="report">
@@ -154,6 +151,7 @@
       <xs:attribute type="xs:boolean" name="underlineRows" use="optional"/>
       <xs:attribute type="xs:boolean" name="allowSecondaryTenants" use="optional"/>
       <xs:attribute type="xs:boolean" name="custom" use="optional"/>
+      <xs:attribute type="xs:boolean" name="classified" use="optional"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>
