@@ -27,18 +27,18 @@ public abstract class BaseRootAppConfig extends BaseXmlConfig {
 
     @JacksonXmlProperty(isAttribute = true, namespace = "http://www.w3.org/2001/XMLSchema-instance",
             localName = "noNamespaceSchemaLocation")
-    private final String schemaLocation;
+    private final String noNamespaceSchemaLocation;
 
     protected BaseRootAppConfig(String xsd) {
-        this.schemaLocation = "https://schema.flowcentralplatform.com/xsd/4.2.0/" + xsd;
+        this.noNamespaceSchemaLocation = "https://schema.flowcentralplatform.com/xsd/4.2.0/" + xsd;
     }
 
     protected BaseRootAppConfig() {
-        this.schemaLocation = null;
+        this.noNamespaceSchemaLocation = null;
     }
 
-    public String getSchemaLocation() {
-        return schemaLocation;
+    public String getNoNamespaceSchemaLocation() {
+        return noNamespaceSchemaLocation;
     }
 
     @Override

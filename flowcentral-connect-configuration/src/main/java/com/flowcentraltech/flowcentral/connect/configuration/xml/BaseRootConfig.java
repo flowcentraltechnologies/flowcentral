@@ -27,13 +27,14 @@ public abstract class BaseRootConfig {
 
     @JacksonXmlProperty(isAttribute = true, namespace = "http://www.w3.org/2001/XMLSchema-instance",
             localName = "noNamespaceSchemaLocation")
-    private final String schemaLocation;
+    private final String noNamespaceSchemaLocation;
 
     protected BaseRootConfig(String xsd) {
-        this.schemaLocation = "https://schema.flowcentralplatform.com/xsd/4.2.0/" + xsd;
+        this.noNamespaceSchemaLocation = "https://schema.flowcentralplatform.com/xsd/4.2.0/" + xsd;
     }
-    public String getSchemaLocation() {
-        return schemaLocation;
+
+    public String getNoNamespaceSchemaLocation() {
+        return noNamespaceSchemaLocation;
     }
 
 }
