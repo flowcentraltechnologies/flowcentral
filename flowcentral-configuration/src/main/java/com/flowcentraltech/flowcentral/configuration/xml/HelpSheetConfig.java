@@ -46,7 +46,7 @@ public class HelpSheetConfig extends BaseRootAppConfig {
     private HelpEntriesConfig entries;
 
     public HelpSheetConfig() {
-        super("flowcentral-helpsheet-4.0.0.xsd");
+        super("flowcentral-helpsheet.xsd");
     }
     
     public String getEntity() {

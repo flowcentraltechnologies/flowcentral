@@ -43,7 +43,7 @@ public class ModuleConfig extends BaseRootAppConfig {
     private SysParamsConfig sysParamsConfig;
 
     public ModuleConfig() {
-        super("flowcentral-module-4.0.0.xsd");
+        super("flowcentral-module.xsd");
         this.principal = true;
     }
     

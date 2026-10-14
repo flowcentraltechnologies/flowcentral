@@ -116,7 +116,7 @@ public class ReportConfig extends BaseRootAppConfig {
     private Boolean allowSecondaryTenants;
 
     public ReportConfig() {
-        super("flowcentral-report-4.0.0.xsd");
+        super("flowcentral-report.xsd");
         this.type = ReportConfigType.TABULAR;
         this.sizeType = PageSizeType.A4;
         this.showGrandFooter = Boolean.FALSE;

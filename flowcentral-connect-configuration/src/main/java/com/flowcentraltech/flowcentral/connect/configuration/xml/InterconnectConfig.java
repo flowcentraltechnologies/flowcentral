@@ -49,7 +49,7 @@ public class InterconnectConfig extends BaseRootConfig {
     private InterconnectAppConfigs interconnectAppConfigs;
 
     public InterconnectConfig() {
-        super("flowcentral-interconnect-4.0.0.xsd");
+        super("flowcentral-interconnect.xsd");
     }
 
     public String getName() {

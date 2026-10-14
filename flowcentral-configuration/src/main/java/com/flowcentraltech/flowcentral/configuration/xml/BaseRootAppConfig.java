@@ -25,47 +25,20 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 public abstract class BaseRootAppConfig extends BaseXmlConfig {
 
-    @JacksonXmlProperty(isAttribute = true)
-    private final String xmlns;
-
-    @JacksonXmlProperty(isAttribute = true, localName = "xmlns:xsi")
-    private final String xmlnsXsi;
-
-    @JacksonXmlProperty(isAttribute = true, localName = "xsi:schemaLocation")
-    private final String xsiSchemaLocation;
-
-    private String schemaLocation;
+    @JacksonXmlProperty(isAttribute = true, namespace = "http://www.w3.org/2001/XMLSchema-instance",
+            localName = "noNamespaceSchemaLocation")
+    private final String schemaLocation;
 
     protected BaseRootAppConfig(String xsd) {
-        this.xmlns = "http://flowcentraltech.com/schema-common";
-        this.xmlnsXsi = "http://www.w3.org/2001/XMLSchema-instance";
-        this.xsiSchemaLocation = this.xmlns + " https://schema.flowcentralplatform.com/xsd/" + xsd;
+        this.schemaLocation = "https://schema.flowcentralplatform.com/xsd/4.2.0/" + xsd;
     }
 
     protected BaseRootAppConfig() {
-        this.xmlns = null;
-        this.xmlnsXsi = null;
-        this.xsiSchemaLocation = null;
-    }
-
-    public final String getXmlns() {
-        return xmlns;
-    }
-
-    public final String getXmlnsXsi() {
-        return xmlnsXsi;
-    }
-
-    public final String getXsiSchemaLocation() {
-        return xsiSchemaLocation;
+        this.schemaLocation = null;
     }
 
     public String getSchemaLocation() {
         return schemaLocation;
-    }
-
-    public void setSchemaLocation(String schemaLocation) {
-        this.schemaLocation = schemaLocation;
     }
 
     @Override

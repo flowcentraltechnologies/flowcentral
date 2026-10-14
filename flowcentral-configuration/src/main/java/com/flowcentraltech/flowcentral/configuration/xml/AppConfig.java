@@ -118,7 +118,7 @@ public class AppConfig extends BaseRootAppConfig {
     private Boolean custom;
     
     public AppConfig() {
-        super("flowcentral-application-4.0.0.xsd");
+        super("flowcentral-application.xsd");
         this.menuAccess = Boolean.TRUE;
         this.developable = Boolean.FALSE;
         this.installable = Boolean.FALSE;

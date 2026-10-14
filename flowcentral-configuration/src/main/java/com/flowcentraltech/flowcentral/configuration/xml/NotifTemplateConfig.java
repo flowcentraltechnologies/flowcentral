@@ -69,7 +69,7 @@ public class NotifTemplateConfig extends BaseRootAppConfig {
     private List<NotifTemplateParamConfig> paramList;
     
     public NotifTemplateConfig() {
-        super("flowcentral-notificationtemplate-4.0.0.xsd");
+        super("flowcentral-notificationtemplate.xsd");
         messageFormat = NotifMessageFormat.PLAIN_TEXT;
     }
 

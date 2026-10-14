@@ -68,7 +68,7 @@ public class WfConfig extends BaseRootAppConfig {
     private WfValuesSetConfig values;
     
     public WfConfig() {
-        super("flowcentral-workflow-4.0.0.xsd");
+        super("flowcentral-workflow.xsd");
         this.supportMultiItemAction = Boolean.FALSE;
         this.supportManualSubmission = Boolean.FALSE;
         this.published = Boolean.FALSE;

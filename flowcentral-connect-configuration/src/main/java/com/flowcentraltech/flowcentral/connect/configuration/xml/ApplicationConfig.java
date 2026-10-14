@@ -46,7 +46,7 @@ public class ApplicationConfig extends BaseRootConfig {
     private EntitiesConfig entitiesConfig;
 
     public ApplicationConfig() {
-        super("flowcentral-interconnect-application-4.0.0.xsd");
+        super("flowcentral-interconnect-application.xsd");
     }
 
     public String getName() {
