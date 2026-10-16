@@ -23,6 +23,8 @@ package com.flowcentraltech.flowcentral.application.data.portal;
  */
 public class PortalDataImport {
 
+    private String fileType;
+
     private String name;
 
     private String description;
@@ -31,11 +33,16 @@ public class PortalDataImport {
 
     private boolean approvalRequired;
 
-    public PortalDataImport(String name, String description, String label, boolean approvalRequired) {
+    public PortalDataImport(String fileType, String name, String description, String label, boolean approvalRequired) {
+        this.fileType = fileType;
         this.name = name;
         this.description = description;
         this.label = label;
         this.approvalRequired = approvalRequired;
+    }
+
+    public String getFileType() {
+        return fileType;
     }
 
     public String getName() {

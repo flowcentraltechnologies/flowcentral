@@ -266,6 +266,7 @@ import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.application.PostBootSetup;
+import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
@@ -4054,8 +4055,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final AppletDef appletDef = getAppletDef(applet);
             final boolean approvalRequired = appletDef.getPropValue(boolean.class,
                     AppletPropertyConstants.IMPORTDATA_APPROVAL_REQUIRED, false);
-            dataImports.put(applet, new PortalDataImport(applet, resolveApplicationMessage(appletDef.getDescription()),
-                    resolveApplicationMessage(appletDef.getLabel()), approvalRequired));
+            FileAttachmentType fileType = appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.IMPORTDATA_CONFIGNAME) == null ? FileAttachmentType.JSON
+                            : FileAttachmentType.CSV;
+            dataImports.put(applet,
+                    new PortalDataImport(fileType.code(), applet, resolveApplicationMessage(appletDef.getDescription()),
+                            resolveApplicationMessage(appletDef.getLabel()), approvalRequired));
         }
 
         for (PortalWorkflow workflow : workflows) {
