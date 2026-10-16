@@ -4400,7 +4400,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     description = "$m{dataimportappletpanel.dataimport.entity}", type = String.class, mandatory = true),
                     @Parameter(name = ApplicationImportDataTaskConstants.IMPORTDATA_UPLOADCONFIG,
                             description = "$m{dataimportappletpanel.dataimport.uploadconfig}", type = String.class,
-                            mandatory = true),
+                            mandatory = false),
                     @Parameter(name = ApplicationImportDataTaskConstants.IMPORTDATA_UPLOAD_FILE,
                             description = "$m{dataimportappletpanel.dataimport.selectfile}", type = UploadedFile.class,
                             mandatory = true),
@@ -4423,151 +4423,161 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public int executeImportDataTask(TaskMonitor taskMonitor, String entity, String uploadConfig, Reader uploadFile,
             boolean withHeaderFlag) throws UnifyException {
-        logDebug(taskMonitor, "Importing data to entity [{0}] table...", entity);
-        int totalRecords = 0;
-        int updatedRecords = 0;
-        int skippedRecords = 0;
-        CSVParser csvFileParser = null;
-        try {
+        if (StringUtils.isBlank(uploadConfig)) { // Default JSON
+            logDebug(taskMonitor, "Importing data from JSON to entity [{0}] table...", entity);
             final EntityClassDef entityClassDef = getEntityClassDef(entity);
-            final EntityDef entityDef = entityClassDef.getEntityDef();
-            final EntityUploadDef entityUploadDef = entityClassDef.getEntityDef().getUploadDef(uploadConfig);
-            final List<EntityFieldUploadDef> entityFieldUploadDefList = entityUploadDef
-                    .getFieldUploadDefList(appletUtilities, entityDef);
-            final Entity inst = entityClassDef.newInst();
-            Reader reader = new BufferedReader(uploadFile);
-            CSVFormat csvFormat = CSVFormat.RFC4180.builder()
-                    .setHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
-                    .setIgnoreHeaderCase(true).setIgnoreEmptyLines(true).setSkipHeaderRecord(withHeaderFlag)
-                    .setTrim(true).setIgnoreSurroundingSpaces(true).setNullString("").build();
-
-            csvFileParser = new CSVParser(reader, csvFormat);
-            Map<String, RecLoadInfo> recMap = new LinkedHashMap<String, RecLoadInfo>();
-            for (CSVRecord csvRecord : csvFileParser) {
-                recMap.clear();
-                for (EntityFieldUploadDef entityFieldUploadDef : entityFieldUploadDefList) {
-                    final String fieldName = entityFieldUploadDef.getFieldName();
-                    Object val = null;
-                    Formatter<?> formatter = null;
-                    if (entityFieldUploadDef.isResolveKeyValue()) {
-                        if (entityFieldUploadDef.isEnumTypeValue()) {
-                            val = val != null
-                                    ? getListItemByDescription(LocaleType.APPLICATION,
-                                            entityFieldUploadDef.getKeyEntityLongName(), (String) val).getListKey()
-                                    : null;
-                        } else {
-                            final EntityClassDef refEntityClassDef = getEntityClassDef(
-                                    entityFieldUploadDef.getKeyEntityLongName());
-                            Query<?> query = Query.of((Class<? extends Entity>) refEntityClassDef.getEntityClass());
-                            for (ListProp listProp : entityFieldUploadDef.getListProps()) {
-                                final EntityFieldDataType listOnlyDataType = resolveListOnlyFieldDataType(
-                                        refEntityClassDef.getEntityDef(), listProp.getProperty());
-                                final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef
-                                        .getFieldSequenceDef().getFieldSequenceEntryDef(listProp.getFieldName());
-                                formatter = fieldSequenceEntryDef.isWithParam()
-                                        ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
-                                        : null;
-                                if (formatter == null) {
-                                    EntityDef refEntityDef = refEntityClassDef.getEntityDef();
-                                    formatter = resolveFormatter(refEntityDef,
-                                            refEntityDef.getFieldDef(listProp.getProperty()));
-                                }
-
-                                Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
-                                        csvRecord.get(listProp.getFieldName()), formatter);
-                                query.addEquals(listProp.getProperty(), cval);
-                            }
-
-                            val = environment().value(Long.class, "id", query);
-                        }
-                    } else {
-                        final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef.getFieldSequenceDef()
-                                .getFieldSequenceEntryDef(fieldName);
-                        formatter = fieldSequenceEntryDef.isWithParam()
-                                ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
-                                : null;
-                        if (formatter == null) {
-                            formatter = resolveFormatter(entityDef, entityDef.getFieldDef(fieldName));
-                        }
-
-                        val = csvRecord.get(fieldName);
-                    }
-
-                    recMap.put(fieldName, new RecLoadInfo(fieldName, val, formatter));
-                }
-
-                UniqueConstraintDef uniqueConstriantDef = null;
-                Entity _inst = null;
-                boolean createRecord = true;
-                if (entityDef.isWithUniqueConstraints()) {
-                    for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
-                        if (recMap.keySet().containsAll(constDef.getFieldList())) {
-                            Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
-                            for (String fieldName : constDef.getFieldList()) {
-                                query.addEquals(fieldName, recMap.get(fieldName).getVal());
-                            }
-
-                            if (constDef.isWithConditionList()) {
-                                for (UniqueConditionDef ucd : constDef.getConditionList()) {
-                                    query.addRestriction(ucd.getRestriction());
-                                }
-                            }
-
-                            _inst = environment().findLean(query);
-                            if (_inst != null) {
-                                uniqueConstriantDef = constDef;
-                                createRecord = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (createRecord) {
-                    for (RecLoadInfo recLoadInfo : recMap.values()) {
-                        DataUtils.setBeanProperty(inst, recLoadInfo.getFieldName(), recLoadInfo.getVal(),
-                                recLoadInfo.getFormatter());
-                    }
-
-                    appletUtilities.populateAutoFormatFields(entityDef, inst);
-                    environment().create(inst);
-                } else {
-                    switch (entityUploadDef.getConstraintAction()) {
-                        case SKIP: {
-                            skippedRecords++;
-                        }
-                            break;
-                        case UPDATE: {
-                            for (RecLoadInfo recLoadInfo : recMap.values()) {
-                                DataUtils.setBeanProperty(_inst, recLoadInfo.getFieldName(), recLoadInfo.getVal(),
-                                        recLoadInfo.getFormatter());
-                            }
-
-                            environment().updateLeanByIdVersion(_inst);
-                            updatedRecords++;
-                        }
-                            break;
-                        case FAIL:
-                        default:
-                            throw new UnifyException(
-                                    ApplicationModuleErrorConstants.UNABLE_LOAD_DATA_WITH_EXISTING_UNIQUE_RECORD,
-                                    entityUploadDef.getDescription(), uniqueConstriantDef.getDescription());
-                    }
-                }
-
-                totalRecords++;
+            final List<? extends Entity> items = DataUtils.listFromJsonReader(entityClassDef.getJsonComposition(appletUtilities),
+                    (Class<? extends Entity>) entityClassDef.getEntityClass(), uploadFile);
+            for (Entity inst : items) {
+                environment().create(inst);
             }
+        } else {
+            logDebug(taskMonitor, "Importing data from CSV to entity [{0}] table...", entity);
+            int totalRecords = 0;
+            int updatedRecords = 0;
+            int skippedRecords = 0;
+            CSVParser csvFileParser = null;
+            try {
+                final EntityClassDef entityClassDef = getEntityClassDef(entity);
+                final EntityDef entityDef = entityClassDef.getEntityDef();
+                final EntityUploadDef entityUploadDef = entityClassDef.getEntityDef().getUploadDef(uploadConfig);
+                final List<EntityFieldUploadDef> entityFieldUploadDefList = entityUploadDef
+                        .getFieldUploadDefList(appletUtilities, entityDef);
+                final Entity inst = entityClassDef.newInst();
+                Reader reader = new BufferedReader(uploadFile);
+                CSVFormat csvFormat = CSVFormat.RFC4180.builder()
+                        .setHeader(DataUtils.toArray(String.class, entityUploadDef.getFieldNameList()))
+                        .setIgnoreHeaderCase(true).setIgnoreEmptyLines(true).setSkipHeaderRecord(withHeaderFlag)
+                        .setTrim(true).setIgnoreSurroundingSpaces(true).setNullString("").build();
 
-            logDebug(taskMonitor, "Loading data to entity [{0}] table successful.", entity);
-            logDebug(taskMonitor, "Total records = {0}, skipped records = {1}, updated records = {2}.", totalRecords,
-                    skippedRecords, updatedRecords);
-        } catch (IOException e) {
-            this.throwOperationErrorException(e);
-        } finally {
-            if (csvFileParser != null) {
-                try {
-                    csvFileParser.close();
-                } catch (IOException e) {
+                csvFileParser = new CSVParser(reader, csvFormat);
+                Map<String, RecLoadInfo> recMap = new LinkedHashMap<String, RecLoadInfo>();
+                for (CSVRecord csvRecord : csvFileParser) {
+                    recMap.clear();
+                    for (EntityFieldUploadDef entityFieldUploadDef : entityFieldUploadDefList) {
+                        final String fieldName = entityFieldUploadDef.getFieldName();
+                        Object val = null;
+                        Formatter<?> formatter = null;
+                        if (entityFieldUploadDef.isResolveKeyValue()) {
+                            if (entityFieldUploadDef.isEnumTypeValue()) {
+                                val = val != null
+                                        ? getListItemByDescription(LocaleType.APPLICATION,
+                                                entityFieldUploadDef.getKeyEntityLongName(), (String) val).getListKey()
+                                        : null;
+                            } else {
+                                final EntityClassDef refEntityClassDef = getEntityClassDef(
+                                        entityFieldUploadDef.getKeyEntityLongName());
+                                Query<?> query = Query.of((Class<? extends Entity>) refEntityClassDef.getEntityClass());
+                                for (ListProp listProp : entityFieldUploadDef.getListProps()) {
+                                    final EntityFieldDataType listOnlyDataType = resolveListOnlyFieldDataType(
+                                            refEntityClassDef.getEntityDef(), listProp.getProperty());
+                                    final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef
+                                            .getFieldSequenceDef().getFieldSequenceEntryDef(listProp.getFieldName());
+                                    formatter = fieldSequenceEntryDef.isWithParam()
+                                            ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
+                                            : null;
+                                    if (formatter == null) {
+                                        EntityDef refEntityDef = refEntityClassDef.getEntityDef();
+                                        formatter = resolveFormatter(refEntityDef,
+                                                refEntityDef.getFieldDef(listProp.getProperty()));
+                                    }
+
+                                    Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
+                                            csvRecord.get(listProp.getFieldName()), formatter);
+                                    query.addEquals(listProp.getProperty(), cval);
+                                }
+
+                                val = environment().value(Long.class, "id", query);
+                            }
+                        } else {
+                            final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef.getFieldSequenceDef()
+                                    .getFieldSequenceEntryDef(fieldName);
+                            formatter = fieldSequenceEntryDef.isWithParam()
+                                    ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
+                                    : null;
+                            if (formatter == null) {
+                                formatter = resolveFormatter(entityDef, entityDef.getFieldDef(fieldName));
+                            }
+
+                            val = csvRecord.get(fieldName);
+                        }
+
+                        recMap.put(fieldName, new RecLoadInfo(fieldName, val, formatter));
+                    }
+
+                    UniqueConstraintDef uniqueConstriantDef = null;
+                    Entity _inst = null;
+                    boolean createRecord = true;
+                    if (entityDef.isWithUniqueConstraints()) {
+                        for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
+                            if (recMap.keySet().containsAll(constDef.getFieldList())) {
+                                Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+                                for (String fieldName : constDef.getFieldList()) {
+                                    query.addEquals(fieldName, recMap.get(fieldName).getVal());
+                                }
+
+                                if (constDef.isWithConditionList()) {
+                                    for (UniqueConditionDef ucd : constDef.getConditionList()) {
+                                        query.addRestriction(ucd.getRestriction());
+                                    }
+                                }
+
+                                _inst = environment().findLean(query);
+                                if (_inst != null) {
+                                    uniqueConstriantDef = constDef;
+                                    createRecord = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (createRecord) {
+                        for (RecLoadInfo recLoadInfo : recMap.values()) {
+                            DataUtils.setBeanProperty(inst, recLoadInfo.getFieldName(), recLoadInfo.getVal(),
+                                    recLoadInfo.getFormatter());
+                        }
+
+                        appletUtilities.populateAutoFormatFields(entityDef, inst);
+                        environment().create(inst);
+                    } else {
+                        switch (entityUploadDef.getConstraintAction()) {
+                            case SKIP: {
+                                skippedRecords++;
+                            }
+                                break;
+                            case UPDATE: {
+                                for (RecLoadInfo recLoadInfo : recMap.values()) {
+                                    DataUtils.setBeanProperty(_inst, recLoadInfo.getFieldName(), recLoadInfo.getVal(),
+                                            recLoadInfo.getFormatter());
+                                }
+
+                                environment().updateLeanByIdVersion(_inst);
+                                updatedRecords++;
+                            }
+                                break;
+                            case FAIL:
+                            default:
+                                throw new UnifyException(
+                                        ApplicationModuleErrorConstants.UNABLE_LOAD_DATA_WITH_EXISTING_UNIQUE_RECORD,
+                                        entityUploadDef.getDescription(), uniqueConstriantDef.getDescription());
+                        }
+                    }
+
+                    totalRecords++;
+                }
+
+                logDebug(taskMonitor, "Loading data to entity [{0}] table successful.", entity);
+                logDebug(taskMonitor, "Total records = {0}, skipped records = {1}, updated records = {2}.", totalRecords,
+                        skippedRecords, updatedRecords);
+            } catch (IOException e) {
+                this.throwOperationErrorException(e);
+            } finally {
+                if (csvFileParser != null) {
+                    try {
+                        csvFileParser.close();
+                    } catch (IOException e) {
+                    }
                 }
             }
         }
