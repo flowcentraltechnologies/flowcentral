@@ -100,11 +100,11 @@ public class StudioMenuWriter extends AbstractFlowCentralPanelWriter {
                     StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD, StudioAppComponentType.WORKFLOW));
 
     private static final List<StudioAppComponentType> restrictedMenuCategoryList = Collections
-            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY, StudioAppComponentType.ENUMERATION,
-                    StudioAppComponentType.APPLET, StudioAppComponentType.TABLE, StudioAppComponentType.FORM,
-                    StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.NOTIFICATION_TEMPLATE,
-                    StudioAppComponentType.CHART_DATASOURCE, StudioAppComponentType.CHART,
-                    StudioAppComponentType.DASHBOARD, StudioAppComponentType.WORKFLOW));
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.ENTITY, StudioAppComponentType.REFERENCE,
+                    StudioAppComponentType.ENUMERATION, StudioAppComponentType.APPLET, StudioAppComponentType.TABLE,
+                    StudioAppComponentType.FORM, StudioAppComponentType.REPORT_CONFIGURATION,
+                    StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.CHART_DATASOURCE,
+                    StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD, StudioAppComponentType.WORKFLOW));
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

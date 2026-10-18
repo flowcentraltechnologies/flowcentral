@@ -4109,6 +4109,8 @@
 							inputWidget="studio.entitysearchfieldlist" column="0" />
 						<field name="searchTable"
 							inputWidget="studio.entitysearchtablelist" column="0" />
+						<field name="applet" inputWidget="studioentityappletlist"
+							column="0"/>
 						<field name="selectHandler"
 							inputWidget="studio.entityselecthandlerlist" column="0" />
 						<field name="orderField"
