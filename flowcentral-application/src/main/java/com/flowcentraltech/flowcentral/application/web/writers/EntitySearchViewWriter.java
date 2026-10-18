@@ -88,7 +88,7 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         writeTagStyleClass(writer, "tpbutton");
         writer.write(">");
 
-        writeFontIcon(writer, "form");
+        writeFontIcon(writer, "file");
         writer.write("</button>");
 
         writer.write("</div>");
