@@ -47,7 +47,7 @@ public final class ApplicationQueryUtils {
         if (entityFieldDataType == null) {
             query.addRestriction(new IsNull("dataType"));
             if (!StringUtils.isBlank(applicationName)) {
-                query.addAmongst("applicationName", Arrays.asList("application", applicationName));
+                query.addEquals("applicationName", applicationName);
             }
         } else {
             if (entityFieldDataType.isArray()) {
@@ -59,8 +59,8 @@ public final class ApplicationQueryUtils {
                     query.addRestriction(new And().add(new Equals("applicationName", "application"))
                             .add(new Equals("name", "fileupload")));
                 } else {
-                    query.addRestriction(new And().add(new Equals("applicationName", "application"))
-                            .add(new Amongst("name", Arrays.asList("entitylist", "entitysearch", "entityselect"))));
+                    query.addRestriction(new And().add(new Equals("applicationName", "application")).add(new Amongst(
+                            "name", Arrays.asList("entitylist", "entitysearch", "entityselect", "entitysearchview"))));
                 }
             } else if (EntityFieldDataType.BLOB.equals(entityFieldDataType)) {
                 query.addRestriction(new And().add(new Equals("applicationName", "application"))

@@ -964,8 +964,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? StringUtils.breakdownParameterizedString(appRef.getListFormat())
                             : null;
                     return new RefDef(appRef.getEntity(), appRef.getOrderField(), appRef.getSearchField(),
-                            appRef.getSearchTable(), appRef.getSelectHandler(), appRef.getListFormat(), filterDef,
-                            listFormat, longName, appRef.getDescription(), appRef.getId(), appRef.getVersionNo());
+                            appRef.getSearchTable(), appRef.getSelectHandler(), appRef.getListFormat(),
+                            appRef.getApplet(), filterDef, listFormat, longName, appRef.getDescription(),
+                            appRef.getId(), appRef.getVersionNo());
                 }
 
             };

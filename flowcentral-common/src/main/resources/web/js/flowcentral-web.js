@@ -419,6 +419,26 @@ fux.rigEntitySearchResult = function(rgp) {
 	}
 }
 
+fux.rigEntitySearchView = function(rgp) {
+	const id = rgp.pId;
+	const applet = rgp.pApl;
+	if (applet) {
+		const payl = applet + ":" + rgp.pItemId;
+
+		const evp1 = ux.newEvPrm(rgp);
+		evp1.uCmd = id + "->entitySearch";
+		evp1.uSendTrg = payl;
+		evp1.uPanels = [ rgp.pContId ];
+		ux.addHdl(_id(rgp.pSchBtnId), "click", ux.post, evp1);
+
+		const evp2 = ux.newEvPrm(rgp);
+		evp2.uCmd = id + "->entityView";
+		evp2.uSendTrg = payl;
+		evp2.uPanels = [ rgp.pContId ];
+		ux.addHdl(_id(rgp.pViwBtnId), "click", ux.post, evp2);		
+	}
+}
+
 fux.esOnShow = function(rgp) {
 	const res = _id(rgp.pRltId);
 	if (res) {
@@ -1285,7 +1305,7 @@ fux.init = function() {
 	// Perform
 	ux.setfn(fux.rigMenu,"fux01");  
 	ux.setfn(fux.rigMenuSearch,"fux02");  
-	ux.setfn(fux.rigMenuSectionResult,"fux03");  
+	ux.setfn(fux.rigMenuSectionResult,"fux03");
 	ux.setfn(fux.rigEntitySearchResult,"fux04");  
 	ux.setfn(fux.esOnShow,"fux05");  
 	ux.setfn(fux.rigEntitySelect,"fux06");  
@@ -1306,6 +1326,7 @@ fux.init = function() {
 	ux.setfn(fux.rigFormAnnotation,"fux15"); 
 	ux.setfn(fux.rigCollapsibleTable,"fux16");  
 	ux.setfn(fux.rigEntityComposition,"fux17");  
+	ux.setfn(fux.rigEntitySearchView,"fux18");  
 }
 
 fux.init();

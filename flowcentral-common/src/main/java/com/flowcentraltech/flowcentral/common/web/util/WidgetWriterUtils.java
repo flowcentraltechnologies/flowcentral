@@ -94,6 +94,7 @@ public final class WidgetWriterUtils {
         WriterUtils.registerJSAlias("fux.rigFormAnnotation","fux15");
         WriterUtils.registerJSAlias("fux.rigCollapsibleTable","fux16");
         WriterUtils.registerJSAlias("fux.rigEntityComposition","fux17");
+        WriterUtils.registerJSAlias("fux.rigEntitySearchView","fux18");
    }
     
     public static String getTabClass(int index, int tabIndex) {

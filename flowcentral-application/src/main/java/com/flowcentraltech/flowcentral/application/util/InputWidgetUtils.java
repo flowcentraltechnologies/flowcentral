@@ -553,6 +553,7 @@ public final class InputWidgetUtils {
             case "application.entitylist":
             case "application.entitysearch":
             case "application.entityselect":
+            case "application.entitysearchview":
             case "application.caseentitysearch":
                 if (entityFieldDef != null) {
                     if (StringUtils.isBlank(reference)) {

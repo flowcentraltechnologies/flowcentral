@@ -519,6 +519,11 @@
 			dataType="STRING" inputType="STRING"
 			editor="!fc-entitysearch ref:$s{%s} listKey:$s{%s}"
 			renderer="!ui-label" />
+		<widgetType name="entitysearchview"
+			description="$m{application.widgettype.entitysearchview}"
+			dataType="STRING" inputType="STRING"
+			editor="!fc-entitysearchview ref:$s{%s} listKey:$s{%s}"
+			renderer="!ui-label" />
 		<widgetType name="caseentitysearch"
 			description="$m{application.widgettype.caseentitysearch}"
 			dataType="STRING" inputType="STRING"
@@ -1734,6 +1739,8 @@
 					type="STRING"
 					nullable="true" />
 				<field name="filter" label="$m{application.appref.filter}"
+					type="STRING" nullable="true" />
+				<field name="applet" label="$m{application.appref.applet}"
 					type="STRING" nullable="true" />
 			</fields>
 			<uniqueConstraints>

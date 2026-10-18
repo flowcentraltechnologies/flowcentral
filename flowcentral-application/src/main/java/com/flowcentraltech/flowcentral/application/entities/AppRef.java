@@ -53,6 +53,9 @@ public class AppRef extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String filterGeneratorRule;
 
+    @Column(length = 128, nullable = true)
+    private String applet;
+
     @Child(category = "ref")
     private AppFilter filter;
 
@@ -126,6 +129,14 @@ public class AppRef extends BaseApplicationEntity {
 
     public void setFilter(AppFilter filter) {
         this.filter = filter;
+    }
+
+    public String getApplet() {
+        return applet;
+    }
+
+    public void setApplet(String applet) {
+        this.applet = applet;
     }
 
 }
