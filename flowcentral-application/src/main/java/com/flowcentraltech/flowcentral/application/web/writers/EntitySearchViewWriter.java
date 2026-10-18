@@ -71,13 +71,16 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
             writer.writeWithHtmlEscape(entitySearchViewInfo.getLabel());
             writer.write("\"");
         }
-        writer.write("/>");
+        
+        writer.write(" title=\"").writeWithHtmlEscape(resolveSessionMessage("$m{button.search}"));
+        writer.write("\" readonly>");
        
         // Search button
         writer.write("<button tabindex=\"-1\"");
         writeTagId(writer, entitySearchViewWidget.getSearchButtonId());
         writeTagStyleClass(writer, "tpmbutton");
-        writer.write(">");
+        writer.write(" title=\"").writeWithHtmlEscape(resolveSessionMessage("$m{button.view}"));
+        writer.write("\"/>");
 
         writeFontIcon(writer, "search");
         writer.write("</button>");
