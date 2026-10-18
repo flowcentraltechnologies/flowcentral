@@ -77,9 +77,6 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         writer.write("<button tabindex=\"-1\"");
         writeTagId(writer, entitySearchViewWidget.getSearchButtonId());
         writeTagStyleClass(writer, "tpmbutton");
-        if (!entitySearchViewWidget.isContainerEditable() || entitySearchViewWidget.isContainerDisabled()) {
-            writer.write(" disabled");
-        }
         writer.write(">");
 
         writeFontIcon(writer, "search");
@@ -91,7 +88,7 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         writeTagStyleClass(writer, "tpbutton");
         writer.write(">");
 
-        writeFontIcon(writer, "eye");
+        writeFontIcon(writer, "form");
         writer.write("</button>");
 
         writer.write("</div>");
@@ -107,7 +104,7 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         super.doWriteBehavior(writer, entitySearchViewWidget, handlers);
         final WriteWork work = entitySearchViewWidget.getWriteWork();
         final EntitySearchViewInfo entitySearchViewInfo = work.get(EntitySearchViewInfo.class, VIEW_INFO);
-        
+
         writer.beginFunction("fux.rigEntitySearchView");
         writer.writeParam("pId", entitySearchViewWidget.getId());
         writer.writeParam("pFld", entitySearchViewWidget.getBinding());
@@ -115,11 +112,14 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         writer.writeParam("pViwBtnId", entitySearchViewWidget.getViewButtonId());
         writer.writeCommandURLParam("pCmdURL");
         writer.writeParam("pContId", entitySearchViewWidget.getContainerId());
+        writer.writeParam("pOn",
+                entitySearchViewWidget.isContainerEditable() && !entitySearchViewWidget.isContainerDisabled());
         if (!StringUtils.isBlank(entitySearchViewInfo.getApplet())) {
             writer.writeParam("pApl", entitySearchViewInfo.getApplet());
         }
-        
-        writer.writeParam("pItemId", entitySearchViewInfo.isWithKey() ? String.valueOf(entitySearchViewInfo.getKey()) : "null");
+
+        writer.writeParam("pItemId",
+                entitySearchViewInfo.isWithKey() ? String.valueOf(entitySearchViewInfo.getKey()) : "null");
         writer.endFunction();
     }
 }

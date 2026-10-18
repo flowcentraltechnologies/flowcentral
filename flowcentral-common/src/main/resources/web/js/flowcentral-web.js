@@ -424,18 +424,19 @@ fux.rigEntitySearchView = function(rgp) {
 	const applet = rgp.pApl;
 	if (applet) {
 		const payl = applet + ":" + rgp.pFld; + ":" + rgp.pItemId;
+		if (rgp.pOn) {
+			const evp = ux.newEvPrm(rgp);
+			evp.uCmd = id + "->entitySearch";
+			evp.uSendTrg = payl;
+			evp.uPanels = [ rgp.pContId ];
+			ux.addHdl(_id(rgp.pSchBtnId), "click", ux.post, evp);
+		}
 
-		const evp1 = ux.newEvPrm(rgp);
-		evp1.uCmd = id + "->entitySearch";
-		evp1.uSendTrg = payl;
-		evp1.uPanels = [ rgp.pContId ];
-		ux.addHdl(_id(rgp.pSchBtnId), "click", ux.post, evp1);
-
-		const evp2 = ux.newEvPrm(rgp);
-		evp2.uCmd = id + "->entityView";
-		evp2.uSendTrg = payl;
-		evp2.uPanels = [ rgp.pContId ];
-		ux.addHdl(_id(rgp.pViwBtnId), "click", ux.post, evp2);		
+		const evp = ux.newEvPrm(rgp);
+		evp.uCmd = id + "->entityView";
+		evp.uSendTrg = payl;
+		evp.uPanels = [ rgp.pContId ];
+		ux.addHdl(_id(rgp.pViwBtnId), "click", ux.post, evp);		
 	}
 }
 

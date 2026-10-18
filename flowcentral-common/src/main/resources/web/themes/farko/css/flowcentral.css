@@ -381,10 +381,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearchview .tread {width: calc(100% - 48px); background: transparent;padding-left: 4px;border-right:none;}
 .fc-entitysearchview .tread:disabled {background: #eaeaea;color:#000000;}
 .fc-entitysearchview .tpbutton {min-width:24px !important;width:24px;height:32px;background-color: #fff !important;font-size:16px;
-		color:var(--color-icon);border:1px solid #C8C8C8;}
+		color:var(--color-icon);border:1px solid #C8C8C8;cursor: pointer;}
 .fc-entitysearchview .tpbutton:disabled {background: #eaeaea !important;}
 .fc-entitysearchview .tpmbutton {min-width:24px !important;width:24px;height:32px;background-color: #fff !important;font-size:16px;
-		color:var(--color-icon);border:1px solid #C8C8C8;}
+		color:var(--color-icon);border:1px solid #C8C8C8;cursor: pointer;}
 .fc-entitysearchview .tpmbutton:disabled {background: #eaeaea !important;}
 
 
