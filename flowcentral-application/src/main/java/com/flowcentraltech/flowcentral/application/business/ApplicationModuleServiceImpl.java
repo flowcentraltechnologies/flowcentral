@@ -4148,7 +4148,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         references.put(reference,
                                 new PortalReference(refDef.getLongName(), refDef.getDescription(), entity,
                                         refDef.getOrderField(), refDef.getSearchField(), refDef.getSearchTable(),
-                                        refDef.getSelectHandler(), refDef.getListDescFormat()));
+                                        refDef.getSelectHandler(), refDef.getListDescFormat(), refDef.getApplet()));
                     }
                 }
             }
