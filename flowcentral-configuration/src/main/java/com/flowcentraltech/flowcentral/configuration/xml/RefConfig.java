@@ -45,6 +45,9 @@ public class RefConfig extends BaseClassifiedConfig {
     
     @JacksonXmlProperty(isAttribute = true)
     private String listFormat;
+    
+    @JacksonXmlProperty(isAttribute = true)
+    private String applet;
 
     @JacksonXmlProperty(isAttribute = true)
     private String filterGenerator;
@@ -101,6 +104,14 @@ public class RefConfig extends BaseClassifiedConfig {
 
     public void setListFormat(String listFormat) {
         this.listFormat = listFormat;
+    }
+
+    public String getApplet() {
+        return applet;
+    }
+
+    public void setApplet(String applet) {
+        this.applet = applet;
     }
 
     public String getFilterGenerator() {

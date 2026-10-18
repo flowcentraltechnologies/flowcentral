@@ -201,6 +201,7 @@
                   <xs:attribute type="xs:string" name="searchTable" use="optional"/>
                   <xs:attribute type="xs:string" name="selectHandler" use="optional"/>
                   <xs:attribute type="xs:string" name="listFormat" use="optional"/>
+                  <xs:attribute type="xs:string" name="applet" use="optional"/>
                   <xs:attribute type="xs:string" name="filterGenerator" use="optional"/>
                   <xs:attribute type="xs:string" name="filterGeneratorRule" use="optional"/>
                   <xs:attribute type="xs:boolean" name="classified" use="optional"/>

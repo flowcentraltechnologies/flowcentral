@@ -73,7 +73,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-debitcredit {padding-left:0px !important;}
 .ui-debitcredit .tread {padding-left: 4px;  border-right:none;}
 .ui-debitcredit .tread:disabled {background: #eaeaea;color:#000000;}
-.ui-debitcredit .tpbutton {width:28px;height:32px; background-color: #fff !important;font-size: 16px; color: var(--color-icon);/*border-radius: 0px 4px 4px 0px;*/border-color: #b0b0b0;}
+.ui-debitcredit .tpbutton {width:28px;height:32px; background-color: #fff !important;font-size: 16px; color: var(--color-icon);border-color: #b0b0b0;}
 .ui-debitcredit .tpbutton:disabled {background: #eaeaea !important;}
 
 /** File attachment */
@@ -376,10 +376,13 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearch .elactbutton:hover:enabled {color:#000000; background-color: #fafafa;}
 .fc-entitysearch .elactbutton:disabled {cursor:default; color: #c0c0c0;}
 
-/**
-.fc-entitysearch .tread {background: transparent;}
-.fc-entitysearch .tpbutton {background-color: transparent !important;}
-*/
+
+/** Entity Search View */
+.fc-entitysearchview .tread {width: calc(100% - 48px); background: transparent;padding-left: 4px; border-right:none;}
+.fc-entitysearchview .tread:disabled {background: #eaeaea;color:#000000;}
+.fc-entitysearchview .tpbutton {height:32px; background-color: #fff !important;font-size: 16px; color: var(--color-icon);border-color: #b0b0b0;}
+.fc-entitysearchview .tpbutton:disabled {background: #eaeaea !important;}
+
 
 /** Entity Text Search */
 .fc-entitytextsearch {width: 160px;}

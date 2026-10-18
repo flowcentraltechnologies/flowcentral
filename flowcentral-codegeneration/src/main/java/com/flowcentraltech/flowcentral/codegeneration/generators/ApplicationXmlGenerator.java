@@ -467,6 +467,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 refConfig.setSearchTable(appRef.getSearchTable());
                 refConfig.setSelectHandler(appRef.getSelectHandler());
                 refConfig.setListFormat(appRef.getListFormat());
+                refConfig.setApplet(appRef.getApplet());
                 refConfig.setFilterGenerator(appRef.getFilterGenerator());
                 refConfig.setFilterGeneratorRule(appRef.getFilterGeneratorRule());
                 refConfig.setFilter(InputWidgetUtils.getFilterConfig(au(), appRef.getFilter()));

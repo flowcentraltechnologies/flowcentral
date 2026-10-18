@@ -63,7 +63,7 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         writer.write("/>");
         
         // Facade
-        writer.write("<input type=\"text\"");
+        writer.write("<input class=\"tread\" type=\"text\"");
         writeTagId(writer, entitySearchViewWidget.getFacadeId());
         writeTagEditAttributes(writer, entitySearchViewWidget);
         if (entitySearchViewInfo.isWithLabel()) {

@@ -3663,6 +3663,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             srcAppRef.setOrderField(ctx.fieldSwap(srcAppRef.getOrderField()));
             srcAppRef.setSearchField(ctx.fieldSwap(srcAppRef.getSearchField()));
             srcAppRef.setSearchTable(ctx.entitySwap(srcAppRef.getSearchTable()));
+            srcAppRef.setApplet(ctx.entitySwap(srcAppRef.getApplet()));
             srcAppRef.setSelectHandler(ctx.componentSwap(srcAppRef.getSelectHandler()));
             srcAppRef.setFilterGenerator(ctx.componentSwap(srcAppRef.getFilterGenerator()));
             srcAppRef.setConfigType(ConfigType.CUSTOM);
@@ -4427,7 +4428,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         if (StringUtils.isBlank(uploadConfig)) { // Default JSON
             logDebug(taskMonitor, "Importing data from JSON to entity [{0}] table...", entity);
             final EntityClassDef entityClassDef = getEntityClassDef(entity);
-            final List<? extends Entity> items = DataUtils.listFromJsonReader(entityClassDef.getJsonComposition(appletUtilities),
+            final List<? extends Entity> items = DataUtils.listFromJsonReader(
+                    entityClassDef.getJsonComposition(appletUtilities),
                     (Class<? extends Entity>) entityClassDef.getEntityClass(), uploadFile);
             for (Entity inst : items) {
                 environment().create(inst);
@@ -4475,7 +4477,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     final FieldSequenceEntryDef fieldSequenceEntryDef = entityUploadDef
                                             .getFieldSequenceDef().getFieldSequenceEntryDef(listProp.getFieldName());
                                     formatter = fieldSequenceEntryDef.isWithParam()
-                                            ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getParam())
+                                            ? appletUtilities.formatHelper()
+                                                    .newFormatter(fieldSequenceEntryDef.getParam())
                                             : null;
                                     if (formatter == null) {
                                         EntityDef refEntityDef = refEntityClassDef.getEntityDef();
@@ -4569,8 +4572,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 logDebug(taskMonitor, "Loading data to entity [{0}] table successful.", entity);
-                logDebug(taskMonitor, "Total records = {0}, skipped records = {1}, updated records = {2}.", totalRecords,
-                        skippedRecords, updatedRecords);
+                logDebug(taskMonitor, "Total records = {0}, skipped records = {1}, updated records = {2}.",
+                        totalRecords, skippedRecords, updatedRecords);
             } catch (IOException e) {
                 this.throwOperationErrorException(e);
             } finally {
@@ -5352,6 +5355,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appRef.setOrderField(refConfig.getOrderField());
                     appRef.setSearchField(refConfig.getSearchField());
                     appRef.setSearchTable(refConfig.getSearchTable());
+                    appRef.setApplet(
+                            ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getApplet()));
                     appRef.setSelectHandler(refConfig.getSelectHandler());
                     appRef.setListFormat(refConfig.getListFormat());
                     appRef.setFilterGenerator(refConfig.getFilterGenerator());
@@ -5369,6 +5374,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppRef.setOrderField(refConfig.getOrderField());
                     oldAppRef.setSearchField(refConfig.getSearchField());
                     oldAppRef.setSearchTable(refConfig.getSearchTable());
+                    oldAppRef.setApplet(
+                            ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getApplet()));
                     oldAppRef.setSelectHandler(refConfig.getSelectHandler());
                     oldAppRef.setListFormat(refConfig.getListFormat());
                     oldAppRef.setFilterGenerator(refConfig.getFilterGenerator());
@@ -6085,6 +6092,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appRef.setOrderField(refConfig.getOrderField());
                 appRef.setSearchField(refConfig.getSearchField());
                 appRef.setSearchTable(refConfig.getSearchTable());
+                appRef.setApplet(ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getApplet()));
                 appRef.setSelectHandler(refConfig.getSelectHandler());
                 appRef.setListFormat(refConfig.getListFormat());
                 appRef.setFilterGenerator(refConfig.getFilterGenerator());
