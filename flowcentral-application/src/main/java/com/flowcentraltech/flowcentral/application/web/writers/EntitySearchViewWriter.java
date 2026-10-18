@@ -76,7 +76,7 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         // Search button
         writer.write("<button tabindex=\"-1\"");
         writeTagId(writer, entitySearchViewWidget.getSearchButtonId());
-        writeTagStyleClass(writer, "tpbutton");
+        writeTagStyleClass(writer, "tpmbutton");
         if (!entitySearchViewWidget.isContainerEditable() || entitySearchViewWidget.isContainerDisabled()) {
             writer.write(" disabled");
         }
@@ -110,6 +110,7 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         
         writer.beginFunction("fux.rigEntitySearchView");
         writer.writeParam("pId", entitySearchViewWidget.getId());
+        writer.writeParam("pFld", entitySearchViewWidget.getBinding());
         writer.writeParam("pSchBtnId", entitySearchViewWidget.getSearchButtonId());
         writer.writeParam("pViwBtnId", entitySearchViewWidget.getViewButtonId());
         writer.writeCommandURLParam("pCmdURL");

@@ -371,17 +371,21 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearch .ellist .norm:hover {background-color: var(--color-tablehov); color: #000;}
 .fc-entitysearch .ellist .sel {background-color: #5970B2; color: #FFF;}
 .fc-entitysearch .elactionrow {height: 24px;}
-.fc-entitysearch .elactbutton {/*border-radius: 6px;*/ width: 64px; padding: 4px 0px; cursor: pointer; font-size: 7pt;
+.fc-entitysearch .elactbutton {width: 64px; padding: 4px 0px; cursor: pointer; font-size: 7pt;
     background-color: #f2f2f2; border: 1px solid #c8c8c8; margin-right:8px;float:left;}
 .fc-entitysearch .elactbutton:hover:enabled {color:#000000; background-color: #fafafa;}
 .fc-entitysearch .elactbutton:disabled {cursor:default; color: #c0c0c0;}
 
 
 /** Entity Search View */
-.fc-entitysearchview .tread {width: calc(100% - 48px); background: transparent;padding-left: 4px; border-right:none;}
+.fc-entitysearchview .tread {width: calc(100% - 48px); background: transparent;padding-left: 4px;border-right:none;}
 .fc-entitysearchview .tread:disabled {background: #eaeaea;color:#000000;}
-.fc-entitysearchview .tpbutton {height:32px; background-color: #fff !important;font-size: 16px; color: var(--color-icon);border-color: #b0b0b0;}
+.fc-entitysearchview .tpbutton {min-width:24px !important;width:24px;height:32px;background-color: #fff !important;font-size:16px;
+		color:var(--color-icon);border:1px solid #C8C8C8;}
 .fc-entitysearchview .tpbutton:disabled {background: #eaeaea !important;}
+.fc-entitysearchview .tpmbutton {min-width:24px !important;width:24px;height:32px;background-color: #fff !important;font-size:16px;
+		color:var(--color-icon);border:1px solid #C8C8C8;}
+.fc-entitysearchview .tpmbutton:disabled {background: #eaeaea !important;}
 
 
 /** Entity Text Search */

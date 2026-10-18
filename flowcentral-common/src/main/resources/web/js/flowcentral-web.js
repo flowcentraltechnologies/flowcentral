@@ -423,7 +423,7 @@ fux.rigEntitySearchView = function(rgp) {
 	const id = rgp.pId;
 	const applet = rgp.pApl;
 	if (applet) {
-		const payl = applet + ":" + rgp.pItemId;
+		const payl = applet + ":" + rgp.pFld; + ":" + rgp.pItemId;
 
 		const evp1 = ux.newEvPrm(rgp);
 		evp1.uCmd = id + "->entitySearch";
