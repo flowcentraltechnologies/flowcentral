@@ -72,14 +72,13 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
             writer.write("\"");
         }
         
-        writer.write(" title=\"").writeWithHtmlEscape(resolveSessionMessage("$m{button.search}"));
-        writer.write("\" readonly>");
+        writer.write(" readonly>");
        
         // Search button
         writer.write("<button tabindex=\"-1\"");
         writeTagId(writer, entitySearchViewWidget.getSearchButtonId());
         writeTagStyleClass(writer, "tpmbutton");
-        writer.write(" title=\"").writeWithHtmlEscape(resolveSessionMessage("$m{button.view}"));
+        writer.write(" title=\"").writeWithHtmlEscape(resolveSessionMessage("$m{button.search}"));
         writer.write("\"/>");
 
         writeFontIcon(writer, "search");
@@ -89,7 +88,8 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         writer.write("<button tabindex=\"-1\"");
         writeTagId(writer, entitySearchViewWidget.getViewButtonId());
         writeTagStyleClass(writer, "tpbutton");
-        writer.write(">");
+        writer.write(" title=\"").writeWithHtmlEscape(resolveSessionMessage("$m{button.view}"));
+        writer.write("\"/>");
 
         writeFontIcon(writer, "file");
         writer.write("</button>");
