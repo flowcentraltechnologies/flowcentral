@@ -43,6 +43,11 @@
 			dataType="STRING" inputType="STRING"
 			editor="!ui-select list:studioentityappletlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="studioentityformlist"
+			description="$m{studio.widgettype.studioentityformlist}"
+			dataType="STRING" inputType="STRING"
+			editor="!ui-select list:studioentityformlist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="delegatedatasourcelist"
 			description="$m{studio.widgettype.delegatedatasourcelist}"
 			dataType="STRING" inputType="STRING"
@@ -4109,7 +4114,7 @@
 							inputWidget="studio.entitysearchfieldlist" column="0" />
 						<field name="searchTable"
 							inputWidget="studio.entitysearchtablelist" column="0" />
-						<field name="applet" inputWidget="studioentityappletlist"
+						<field name="viewForm" inputWidget="studioentityformlist"
 							column="0"/>
 						<field name="selectHandler"
 							inputWidget="studio.entityselecthandlerlist" column="0" />

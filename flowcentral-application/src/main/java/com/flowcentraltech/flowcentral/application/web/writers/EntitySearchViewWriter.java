@@ -117,12 +117,18 @@ public class EntitySearchViewWriter extends AbstractControlWriter {
         writer.writeParam("pContId", entitySearchViewWidget.getContainerId());
         writer.writeParam("pOn",
                 entitySearchViewWidget.isContainerEditable() && !entitySearchViewWidget.isContainerDisabled());
-        if (!StringUtils.isBlank(entitySearchViewInfo.getApplet())) {
-            writer.writeParam("pApl", entitySearchViewInfo.getApplet());
+        if (!StringUtils.isBlank(entitySearchViewInfo.getTable())) {
+            writer.writeParam("pTbl", entitySearchViewInfo.getTable());
         }
 
-        writer.writeParam("pItemId",
-                entitySearchViewInfo.isWithKey() ? String.valueOf(entitySearchViewInfo.getKey()) : "null");
+        if (!StringUtils.isBlank(entitySearchViewInfo.getForm())) {
+            writer.writeParam("pFrm", entitySearchViewInfo.getForm());
+        }
+
+        if (entitySearchViewInfo.isWithKey()) {
+            writer.writeParam("pItemId", String.valueOf(entitySearchViewInfo.getKey()));
+        }
+
         writer.endFunction();
     }
 }

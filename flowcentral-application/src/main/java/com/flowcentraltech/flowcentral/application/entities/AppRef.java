@@ -42,6 +42,9 @@ public class AppRef extends BaseApplicationEntity {
     private String searchTable;
 
     @Column(length = 64, nullable = true)
+    private String viewForm;
+
+    @Column(length = 64, nullable = true)
     private String selectHandler;
 
     @Column(length = 512, nullable = true)
@@ -52,9 +55,6 @@ public class AppRef extends BaseApplicationEntity {
 
     @Column(length = 64, nullable = true)
     private String filterGeneratorRule;
-
-    @Column(length = 128, nullable = true)
-    private String applet;
 
     @Child(category = "ref")
     private AppFilter filter;
@@ -89,6 +89,14 @@ public class AppRef extends BaseApplicationEntity {
 
     public void setSearchTable(String searchTable) {
         this.searchTable = searchTable;
+    }
+
+    public String getViewForm() {
+        return viewForm;
+    }
+
+    public void setViewForm(String viewForm) {
+        this.viewForm = viewForm;
     }
 
     public String getSelectHandler() {
@@ -129,14 +137,6 @@ public class AppRef extends BaseApplicationEntity {
 
     public void setFilter(AppFilter filter) {
         this.filter = filter;
-    }
-
-    public String getApplet() {
-        return applet;
-    }
-
-    public void setApplet(String applet) {
-        this.applet = applet;
     }
 
 }

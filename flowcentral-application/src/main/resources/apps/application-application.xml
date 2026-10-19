@@ -1740,7 +1740,7 @@
 					nullable="true" />
 				<field name="filter" label="$m{application.appref.filter}"
 					type="STRING" nullable="true" />
-				<field name="applet" label="$m{application.appref.applet}"
+				<field name="viewForm" label="$m{application.appref.viewform}"
 					type="STRING" nullable="true" />
 			</fields>
 			<uniqueConstraints>

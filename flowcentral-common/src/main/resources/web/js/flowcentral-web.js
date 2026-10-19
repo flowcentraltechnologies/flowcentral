@@ -420,24 +420,20 @@ fux.rigEntitySearchResult = function(rgp) {
 
 fux.rigEntitySearchView = function(rgp) {
 	const id = rgp.pId;
-	const applet = rgp.pApl;
-	if (applet) {
-		const payl = applet + ":" + rgp.pFld + ":" + rgp.pItemId;
-		if (rgp.pOn) {
-			const evp = ux.newEvPrm(rgp);
-			evp.uCmd = id + "->entitySearch";
-			evp.uSendTrg = payl;
-			evp.uPanels = [ rgp.pContId ];
-			ux.addHdl(_id(rgp.pSchBtnId), "click", ux.post, evp);
-		}
+	if (rgp.pOn && rgp.pTbl) {
+		const evp = ux.newEvPrm(rgp);
+		evp.uCmd = id + "->entitySearch";
+		evp.uSendTrg = rgp.pTbl + ":" + rgp.pFld;
+		evp.uPanels = [ rgp.pContId ];
+		ux.addHdl(_id(rgp.pSchBtnId), "click", ux.post, evp);
+	}
 
-		if (rgp.pItemId) {
-			const evp = ux.newEvPrm(rgp);
-			evp.uCmd = id + "->entityView";
-			evp.uSendTrg = payl;
-			evp.uPanels = [ rgp.pContId ];
-			ux.addHdl(_id(rgp.pViwBtnId), "click", ux.post, evp);		
-		}
+	if (rgp.pItemId && rgp.pFrm) {
+		const evp = ux.newEvPrm(rgp);
+		evp.uCmd = id + "->entityView";
+		evp.uSendTrg = rgp.pFrm + ":" + rgp.pFld + ":" + rgp.pItemId;
+		evp.uPanels = [ rgp.pContId ];
+		ux.addHdl(_id(rgp.pViwBtnId), "click", ux.post, evp);		
 	}
 }
 

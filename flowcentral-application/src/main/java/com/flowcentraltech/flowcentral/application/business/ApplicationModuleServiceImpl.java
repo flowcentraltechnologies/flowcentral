@@ -965,7 +965,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             : null;
                     return new RefDef(appRef.getEntity(), appRef.getOrderField(), appRef.getSearchField(),
                             appRef.getSearchTable(), appRef.getSelectHandler(), appRef.getListFormat(),
-                            appRef.getApplet(), filterDef, listFormat, longName, appRef.getDescription(),
+                            appRef.getViewForm(), filterDef, listFormat, longName, appRef.getDescription(),
                             appRef.getId(), appRef.getVersionNo());
                 }
 
@@ -3663,7 +3663,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             srcAppRef.setOrderField(ctx.fieldSwap(srcAppRef.getOrderField()));
             srcAppRef.setSearchField(ctx.fieldSwap(srcAppRef.getSearchField()));
             srcAppRef.setSearchTable(ctx.entitySwap(srcAppRef.getSearchTable()));
-            srcAppRef.setApplet(ctx.entitySwap(srcAppRef.getApplet()));
+            srcAppRef.setViewForm(ctx.entitySwap(srcAppRef.getViewForm()));
             srcAppRef.setSelectHandler(ctx.componentSwap(srcAppRef.getSelectHandler()));
             srcAppRef.setFilterGenerator(ctx.componentSwap(srcAppRef.getFilterGenerator()));
             srcAppRef.setConfigType(ConfigType.CUSTOM);
@@ -4148,7 +4148,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         references.put(reference,
                                 new PortalReference(refDef.getLongName(), refDef.getDescription(), entity,
                                         refDef.getOrderField(), refDef.getSearchField(), refDef.getSearchTable(),
-                                        refDef.getSelectHandler(), refDef.getListDescFormat(), refDef.getApplet()));
+                                        refDef.getSelectHandler(), refDef.getListDescFormat(), refDef.getViewForm()));
                     }
                 }
             }
@@ -4158,16 +4158,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final TableDef tableDef = getTableDef(table);
                 final List<PortalTableColumn> columns = new ArrayList<PortalTableColumn>();
                 for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
-//                    final EntityFieldDef entityFieldDef = entityDef.getFieldDef(tableColumnDef.getFieldName());
-//                    final EntityFieldDef resolvedEntityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
-//                            ? entityFieldDef.getResolvedTypeFieldDef()
-//                            : entityFieldDef;
-//                    final WidgetTypeDef widgetTypeDef = resolvedEntityFieldDef.getInputWidget() != null
-//                            ? getWidgetTypeDef(resolvedEntityFieldDef.getInputWidget())
-//                            : getWidgetTypeDef(
-//                                    InputWidgetUtils.getDefaultEntityFieldWidget(resolvedEntityFieldDef.getDataType()));
-//                    final String renderer = InputWidgetUtils.constructPortalRenderer(
-//                            getWidgetTypeDef(tableColumnDef.getRenderer()), resolvedEntityFieldDef, serviceId);
                     final String renderer = tableColumnDef.getRenderer();
                     columns.add(new PortalTableColumn(tableColumnDef.getFieldName(),
                             resolveApplicationMessage(StringUtils.isBlank(tableColumnDef.getLabel())
@@ -5355,8 +5345,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appRef.setOrderField(refConfig.getOrderField());
                     appRef.setSearchField(refConfig.getSearchField());
                     appRef.setSearchTable(refConfig.getSearchTable());
-                    appRef.setApplet(
-                            ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getApplet()));
+                    appRef.setViewForm(
+                            ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getViewForm()));
                     appRef.setSelectHandler(refConfig.getSelectHandler());
                     appRef.setListFormat(refConfig.getListFormat());
                     appRef.setFilterGenerator(refConfig.getFilterGenerator());
@@ -5374,8 +5364,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppRef.setOrderField(refConfig.getOrderField());
                     oldAppRef.setSearchField(refConfig.getSearchField());
                     oldAppRef.setSearchTable(refConfig.getSearchTable());
-                    oldAppRef.setApplet(
-                            ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getApplet()));
+                    oldAppRef.setViewForm(
+                            ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getViewForm()));
                     oldAppRef.setSelectHandler(refConfig.getSelectHandler());
                     oldAppRef.setListFormat(refConfig.getListFormat());
                     oldAppRef.setFilterGenerator(refConfig.getFilterGenerator());
@@ -6092,7 +6082,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appRef.setOrderField(refConfig.getOrderField());
                 appRef.setSearchField(refConfig.getSearchField());
                 appRef.setSearchTable(refConfig.getSearchTable());
-                appRef.setApplet(ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getApplet()));
+                appRef.setViewForm(
+                        ApplicationNameUtils.ensureLongNameReference(applicationName, refConfig.getViewForm()));
                 appRef.setSelectHandler(refConfig.getSelectHandler());
                 appRef.setListFormat(refConfig.getListFormat());
                 appRef.setFilterGenerator(refConfig.getFilterGenerator());

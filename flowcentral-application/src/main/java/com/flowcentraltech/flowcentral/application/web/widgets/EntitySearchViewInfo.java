@@ -22,17 +22,20 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
  * @since 4.1
  */
 public class EntitySearchViewInfo {
-    
-    private Object key;
-    
-    private String label;
-    
-    private String applet;
 
-    public EntitySearchViewInfo(Object key, String label, String applet) {
+    private Object key;
+
+    private String label;
+
+    private String table;
+
+    private String form;
+
+    public EntitySearchViewInfo(Object key, String label, String table, String form) {
         this.key = key;
         this.label = label;
-        this.applet = applet;
+        this.table = table;
+        this.form = form;
     }
 
     public Object getKey() {
@@ -43,14 +46,18 @@ public class EntitySearchViewInfo {
         return label;
     }
 
-    public String getApplet() {
-        return applet;
+    public String getTable() {
+        return table;
     }
-    
+
+    public String getForm() {
+        return form;
+    }
+
     public boolean isWithKey() {
         return key != null;
     }
-    
+
     public boolean isWithLabel() {
         return label != null;
     }

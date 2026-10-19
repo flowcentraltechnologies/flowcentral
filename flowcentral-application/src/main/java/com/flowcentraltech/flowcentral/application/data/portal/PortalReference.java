@@ -39,10 +39,10 @@ public class PortalReference {
 
     private String listDescFormat;
 
-    private String applet;
+    private String viewForm;
 
     public PortalReference(String name, String description, String entity, String orderField, String searchField,
-            String searchTable, String selectHandler, String listDescFormat, String applet) {
+            String searchTable, String selectHandler, String listDescFormat, String viewForm) {
         this.name = name;
         this.description = description;
         this.entity = entity;
@@ -51,7 +51,7 @@ public class PortalReference {
         this.searchTable = searchTable;
         this.selectHandler = selectHandler;
         this.listDescFormat = listDescFormat;
-        this.applet = applet;
+        this.viewForm = viewForm;
     }
 
     public String getName() {
@@ -86,8 +86,8 @@ public class PortalReference {
         return listDescFormat;
     }
 
-    public String getApplet() {
-        return applet;
+    public String getViewForm() {
+        return viewForm;
     }
 
 }

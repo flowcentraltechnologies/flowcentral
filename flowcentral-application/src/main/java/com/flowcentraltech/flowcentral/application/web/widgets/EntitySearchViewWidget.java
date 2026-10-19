@@ -79,7 +79,7 @@ public class EntitySearchViewWidget extends AbstractControl {
             }
         }
 
-        return new EntitySearchViewInfo(keyVal, label, refDef.getApplet());
+        return new EntitySearchViewInfo(keyVal, label, refDef.getSearchTable(), refDef.getViewForm());
     }
     
     public String getSearchButtonId() throws UnifyException {

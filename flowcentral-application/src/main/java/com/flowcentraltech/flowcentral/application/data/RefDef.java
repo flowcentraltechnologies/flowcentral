@@ -42,15 +42,15 @@ public class RefDef extends BaseApplicationEntityDef {
 
     private String listDescFormat;
 
-    private String applet;
+    private String viewForm;
 
     private FilterDef filter;
 
     private List<StringToken> listFormat;
 
     public RefDef(String entity, String orderField, String searchField, String searchTable, String selectHandler,
-            String listDescFormat, String applet, FilterDef filter, List<StringToken> listFormat, String longName, String description,
-            Long id, long version) throws UnifyException {
+            String listDescFormat, String viewForm, FilterDef filter, List<StringToken> listFormat, String longName,
+            String description, Long id, long version) throws UnifyException {
         super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         this.entity = entity;
         this.orderField = orderField;
@@ -58,7 +58,7 @@ public class RefDef extends BaseApplicationEntityDef {
         this.searchTable = searchTable;
         this.selectHandler = selectHandler;
         this.listDescFormat = listDescFormat;
-        this.applet = applet;
+        this.viewForm = viewForm;
         this.filter = filter;
         this.listFormat = listFormat;
     }
@@ -87,8 +87,8 @@ public class RefDef extends BaseApplicationEntityDef {
         return listDescFormat;
     }
 
-    public String getApplet() {
-        return applet;
+    public String getViewForm() {
+        return viewForm;
     }
 
     public List<StringToken> getListFormat() {
