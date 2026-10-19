@@ -431,11 +431,13 @@ fux.rigEntitySearchView = function(rgp) {
 			ux.addHdl(_id(rgp.pSchBtnId), "click", ux.post, evp);
 		}
 
-		const evp = ux.newEvPrm(rgp);
-		evp.uCmd = id + "->entityView";
-		evp.uSendTrg = payl;
-		evp.uPanels = [ rgp.pContId ];
-		ux.addHdl(_id(rgp.pViwBtnId), "click", ux.post, evp);		
+		if (rgp.pItemId) {
+			const evp = ux.newEvPrm(rgp);
+			evp.uCmd = id + "->entityView";
+			evp.uSendTrg = payl;
+			evp.uPanels = [ rgp.pContId ];
+			ux.addHdl(_id(rgp.pViwBtnId), "click", ux.post, evp);		
+		}
 	}
 }
 
