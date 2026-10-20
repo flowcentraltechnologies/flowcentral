@@ -4116,17 +4116,17 @@
 							inputWidget="studio.entitysearchtablelist" column="0" />
 						<field name="viewForm" inputWidget="studioentityformlist"
 							column="0"/>
-						<field name="selectHandler"
+						<field name="listFormat"
+							inputWidget="application.texttemplate" column="0" />
+						<!-- field name="selectHandler"
 							inputWidget="studio.entityselecthandlerlist" column="0" />
 						<field name="orderField"
 							inputWidget="studio.entityfieldlist" column="0" />
-						<field name="listFormat"
-							inputWidget="application.texttemplate" column="0" />
 						<field name="filterGenerator"
 							inputWidget="application.reffiltergeneratorsearch"
 							switchOnChange="true" column="0" />
 						<field name="filterGeneratorRule"
-							inputWidget="studio.reffiltergeneratorrulelist" column="0" />
+							inputWidget="studio.reffiltergeneratorrulelist" column="0" /-->
 					</section>
 				</tab>
 				<tab name="filter" label="$m{studio.appref.form.filter}"
