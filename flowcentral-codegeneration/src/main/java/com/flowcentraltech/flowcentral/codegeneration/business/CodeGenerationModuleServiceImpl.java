@@ -171,7 +171,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     public int generateExtensionModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
         Date now = environment().getNow();
-        UploadedFile uploadedFile = UploadedFile.create();
+        UploadedFile uploadedFile = UploadedFile.createUsingTempFile();
         ZipOutputStream zos = new ZipOutputStream(uploadedFile.getOut());
         try {
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
@@ -281,7 +281,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     public Snapshot generateSnapshot(TaskMonitor taskMonitor, SnapshotMeta meta, String basePackage)
             throws UnifyException {
         Date now = environment().getNow();
-        UploadedFile uploadedFile = UploadedFile.create();
+        UploadedFile uploadedFile = UploadedFile.createUsingTempFile();
         ZipOutputStream zos = new ZipOutputStream(uploadedFile.getOut());
         try {
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(meta, basePackage, true);
@@ -353,7 +353,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     public int generateUtilitiesModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
         Date now = environment().getNow();
-        UploadedFile uploadedFile = UploadedFile.create();
+        UploadedFile uploadedFile = UploadedFile.createUsingTempFile();
         ZipOutputStream zos = new ZipOutputStream(uploadedFile.getOut());
         try {
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
