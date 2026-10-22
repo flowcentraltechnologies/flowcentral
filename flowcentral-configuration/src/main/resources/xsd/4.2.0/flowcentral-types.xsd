@@ -61,6 +61,7 @@
       <xs:enumeration value="TIMESTAMP_UTC"/>
       <xs:enumeration value="CLOB"/>
       <xs:enumeration value="BLOB"/>
+      <xs:enumeration value="UPLOAD"/>
     </xs:restriction>
   </xs:simpleType>
   <!-- Input Type -->
@@ -119,6 +120,7 @@
       <xs:enumeration value="TIMESTAMP_ARRAY"/>
       <xs:enumeration value="CLOB"/>
       <xs:enumeration value="BLOB"/>
+      <xs:enumeration value="UPLOAD"/>
       <xs:enumeration value="STRING"/>
       <xs:enumeration value="STRING_ARRAY"/>
       <xs:enumeration value="ENUM"/>

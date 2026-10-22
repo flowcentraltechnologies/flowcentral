@@ -36,6 +36,7 @@ public class DataTypeUtils {
         List<ListData> list = Collections.emptyList();
         switch (fieldType) {
             case BLOB:
+            case UPLOAD:
             case BOOLEAN:
             case CATEGORY_COLUMN:
             case CHAR:

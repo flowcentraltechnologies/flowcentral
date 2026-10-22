@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.tcdng.unify.core.data.UploadedFile;
+
 /**
  * Transfer remote.
  * 
@@ -38,10 +40,10 @@ public class TransferToRemote {
 
     private String workingPath;
 
-    private byte[] file;
+    private UploadedFile file;
 
     public TransferToRemote(TransferType type, String remoteName, String remoteBranch, String workingPath,
-            String fileName, byte[] file) {
+            String fileName, UploadedFile file) {
         this.type = type;
         this.remoteName = remoteName;
         this.remoteBranch = remoteBranch;
@@ -70,7 +72,7 @@ public class TransferToRemote {
         return fileName;
     }
 
-    public byte[] getFile() {
+    public UploadedFile getFile() {
         return file;
     }
 }

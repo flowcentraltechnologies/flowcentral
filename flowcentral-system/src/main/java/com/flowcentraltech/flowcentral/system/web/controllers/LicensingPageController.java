@@ -27,6 +27,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.constant.MimeType;
 import com.tcdng.unify.core.data.DownloadFile;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
@@ -71,8 +72,8 @@ public class LicensingPageController extends AbstractSystemPageController<Licens
         byte[] license = licenseProvider.generateLicenseRequest(pageBean.getFormClientTitle(),
                 pageBean.getFormAccountNo(), requestDt);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        DownloadFile downloadFile = new DownloadFile(MimeType.TEXT,
-                "licenserequest_" + dateFormat.format(requestDt) + ".txt", license);
+        final String fileName = "licenserequest_" + dateFormat.format(requestDt) + ".txt";
+        DownloadFile downloadFile = new DownloadFile(MimeType.TEXT, fileName, UploadedFile.create(fileName, license));
         return fileDownloadResult(downloadFile, true); // Hide popup too
     }
 

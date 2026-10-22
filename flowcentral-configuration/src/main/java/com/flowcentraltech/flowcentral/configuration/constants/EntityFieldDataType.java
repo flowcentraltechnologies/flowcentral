@@ -300,6 +300,17 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             false),
+    UPLOAD(
+            "UP",
+            DataType.UPLOAD,
+            6,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false),
     STRING(
             "ST",
             DataType.STRING,

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.studio.business.data;
 
+import com.tcdng.unify.core.data.UploadedFile;
+
 /**
  * Snapshot result details.
  * 
@@ -27,7 +29,7 @@ public class SnapshotResultDetails {
     
     private String fileName;
     
-    private byte[] snapshot;
+    private UploadedFile snapshot;
 
     public Long getSnapshotId() {
         return snapshotId;
@@ -45,11 +47,11 @@ public class SnapshotResultDetails {
         this.fileName = fileName;
     }
 
-    public byte[] getSnapshot() {
+    public UploadedFile getSnapshot() {
         return snapshot;
     }
 
-    public void setSnapshot(byte[] snapshot) {
+    public void setSnapshot(UploadedFile snapshot) {
         this.snapshot = snapshot;
     }
     

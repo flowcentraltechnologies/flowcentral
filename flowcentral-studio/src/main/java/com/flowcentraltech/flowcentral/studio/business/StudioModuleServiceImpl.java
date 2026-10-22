@@ -302,8 +302,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
-    public byte[] getSnapshot(Long snapshotDetailsId) throws UnifyException {
-        return environment().value(byte[].class, "snapshot",
+    public UploadedFile getSnapshot(Long snapshotDetailsId) throws UnifyException {
+        return environment().value(UploadedFile.class, "snapshot",
                 new StudioSnapshotQuery().snapshotDetailsId(snapshotDetailsId));
     }
 
@@ -483,7 +483,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             logDebug(taskMonitor, "Writing snapshot to file[{0}]...", fullSnapshotName);
 
             IOUtils.ensureDirectoryExists(path);
-            IOUtils.writeToFile(fullSnapshotName, snapshot.getData());
+            IOUtils.writeToFile(fullSnapshotName, snapshot.getData().getIn());
             logDebug(taskMonitor, "CDSnapshot local image successfully written.");
         }
 
@@ -527,7 +527,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
         StudioSnapshot studioSnapshot = new StudioSnapshot();
         studioSnapshot.setSnapshotDetailsId(studioSnapshotDetailsId);
-        studioSnapshot.setSnapshot(snapshotUploadFile.getData());
+        studioSnapshot.setSnapshot(snapshotUploadFile);
         environment().create(studioSnapshot);
         logDebug(taskMonitor, "CDSnapshot file [{0}] upload successfully completed.", snapshotUploadFile.getFilename());
         
@@ -550,10 +550,10 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         FileOutputStream fos = null;
         ZipFile zipFile = null;
         try {
-            byte[] snapshot = getSnapshot(snapshotDetailsId);
+            UploadedFile snapshot = getSnapshot(snapshotDetailsId);
             tempFile = File.createTempFile("flowsnapshot", ".zip");
             fos = new FileOutputStream(tempFile);
-            IOUtils.writeAll(fos, snapshot);
+            snapshot.writeAll(fos);
             IOUtils.close(fos);
 
             zipFile = new ZipFile(tempFile);

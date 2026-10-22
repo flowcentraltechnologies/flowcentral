@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.repository.git.constants.GitRepositoryMod
 import com.flowcentraltech.flowcentral.repository.providers.AbstractRepositoryProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.ZipUtils;
@@ -46,7 +47,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
     @Override
     public void replaceFile(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
-            String password, String localPath, String target, String fileName, byte[] file) throws UnifyException {
+            String password, String localPath, String target, String fileName, UploadedFile file) throws UnifyException {
         logDebug(taskMonitor, "Replacing file[{3}] in remote git repository [{0}] at branch [{1}] in target [{2}]...",
                 repositoryUrl, branch, target, fileName);
 
@@ -90,7 +91,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
             final String targetPath = IOUtils.buildFilename(localPath, target);
             logDebug(taskMonitor, "Writing file [{0}] to target [{1}]...", fileName, targetPath);
             final String targetFileName = IOUtils.buildFilename(targetPath, fileName);
-            IOUtils.writeToFile(targetFileName, file);
+            IOUtils.writeToFile(targetFileName, file.getIn());
 
             logDebug(taskMonitor, "Committing changes...");
             git
@@ -120,7 +121,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
     @Override
     public void replaceDirectory(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
-            String password, String localPath, String target, byte[] zippedFile) throws UnifyException {
+            String password, String localPath, String target, UploadedFile zippedFile) throws UnifyException {
         logDebug(taskMonitor, "Replacing all files in remote git repository [{0}] at branch [{1}] in target [{2}]...",
                 repositoryUrl, branch, target);
 
@@ -167,7 +168,7 @@ public class GitRepositoryProvider extends AbstractRepositoryProvider {
 
             logDebug(taskMonitor, "Writing new files to target directory...");
             final String parentPath = IOUtils.getParentDirectory(targetPath);
-            ZipUtils.extractAll(parentPath, zippedFile);
+            ZipUtils.extractAll(parentPath, zippedFile.getIn());
 
             logDebug(taskMonitor, "Committing changes...");
             git

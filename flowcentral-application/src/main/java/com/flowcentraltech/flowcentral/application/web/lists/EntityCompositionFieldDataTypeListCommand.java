@@ -49,7 +49,8 @@ public class EntityCompositionFieldDataTypeListCommand extends AbstractApplicati
                     EntityFieldDataType.BOOLEAN, EntityFieldDataType.LONG, EntityFieldDataType.INTEGER,
                     EntityFieldDataType.SHORT, EntityFieldDataType.DECIMAL, EntityFieldDataType.DOUBLE,
                     EntityFieldDataType.FLOAT, EntityFieldDataType.DATE, EntityFieldDataType.TIMESTAMP,
-                    EntityFieldDataType.TIMESTAMP_UTC, EntityFieldDataType.CLOB, EntityFieldDataType.BLOB));
+                    EntityFieldDataType.TIMESTAMP_UTC, EntityFieldDataType.CLOB, EntityFieldDataType.BLOB,
+                    EntityFieldDataType.UPLOAD));
 
     private LocaleFactoryMap<List<Listable>> listFactory;
 

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.codegeneration.data;
 
+import com.tcdng.unify.core.data.UploadedFile;
+
 /**
  * CDSnapshot.
  * 
@@ -33,10 +35,10 @@ public class Snapshot {
 
     private String filename;
 
-    private byte[] data;
+    private UploadedFile data;
 
     public Snapshot(String applicationName, String applicationVersion, String applicationAuxVersion, String name,
-            String filename, byte[] data) {
+            String filename, UploadedFile data) {
         this.applicationName = applicationName;
         this.applicationVersion = applicationVersion;
         this.applicationAuxVersion = applicationAuxVersion;
@@ -65,7 +67,7 @@ public class Snapshot {
         return filename;
     }
 
-    public byte[] getData() {
+    public UploadedFile getData() {
         return data;
     }
 

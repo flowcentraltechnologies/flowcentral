@@ -73,6 +73,7 @@ public class FormatterOptions {
         if (dataType != null) {
             switch(dataType) {
                 case BLOB:
+                case UPLOAD:
                     break;
                 case BOOLEAN:
                     break;

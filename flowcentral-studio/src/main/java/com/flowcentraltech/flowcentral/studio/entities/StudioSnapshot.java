@@ -21,6 +21,7 @@ import com.tcdng.unify.common.annotation.ColumnType;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.data.UploadedFile;
 
 /**
  * Studio snapshot entity.
@@ -34,8 +35,8 @@ public class StudioSnapshot extends BaseAuditEntity {
     @ForeignKey(StudioSnapshotDetails.class)
     private Long snapshotDetailsId;
     
-    @Column(name = "SNAPSHOT", type = ColumnType.BLOB)
-    private byte[] snapshot;
+    @Column(name = "SNAPSHOT", type = ColumnType.UPLOAD)
+    private UploadedFile snapshot;
 
     @Override
     public String getDescription() {
@@ -50,11 +51,11 @@ public class StudioSnapshot extends BaseAuditEntity {
         this.snapshotDetailsId = snapshotDetailsId;
     }
 
-    public byte[] getSnapshot() {
+    public UploadedFile getSnapshot() {
         return snapshot;
     }
 
-    public void setSnapshot(byte[] snapshot) {
+    public void setSnapshot(UploadedFile snapshot) {
         this.snapshot = snapshot;
     }
 

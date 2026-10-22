@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.codegeneration.data;
 
+import com.tcdng.unify.core.data.UploadedFile;
+
 /**
  * Code generation item.
  * 
@@ -30,7 +32,7 @@ public class CodeGenerationItem {
 
     private String filename;
 
-    private byte[] data;
+    private UploadedFile data;
 
     public CodeGenerationItem(SnapshotMeta snapshotMeta, String basePackage) {
         this.snapshotMeta = snapshotMeta;
@@ -57,11 +59,11 @@ public class CodeGenerationItem {
         this.filename = filename;
     }
 
-    public byte[] getData() {
+    public UploadedFile getData() {
         return data;
     }
 
-    public void setData(byte[] data) {
+    public void setData(UploadedFile data) {
         this.data = data;
     }
 

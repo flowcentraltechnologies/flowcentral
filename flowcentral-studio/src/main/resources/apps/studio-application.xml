@@ -1809,7 +1809,7 @@
 					inputWidget="application.entitylist"
 					references="studioSnapshotDetailsRef" basicSearch="true" />
 				<field name="snapshot" label="$m{studio.snapshot.snapshot}"
-					type="BLOB" />
+					type="UPLOAD" />
 			</fields>
 		</entity>
 		<entity name="studioRestoreDetails"

@@ -147,7 +147,8 @@ public enum InputType implements EnumConst {
     FILE(
             "FIL",
             false,
-            DataType.BLOB);
+            DataType.BLOB,
+            DataType.UPLOAD);
 
     private final String code;
 
@@ -180,7 +181,7 @@ public enum InputType implements EnumConst {
     }
 
     public boolean isCompatible(DataType dataType) {
-        if (DataType.BLOB.equals(dataType) || DataType.CLOB.equals(dataType)) {
+        if (DataType.BLOB.equals(dataType) || DataType.CLOB.equals(dataType) || DataType.UPLOAD.equals(dataType)) {
             return false;
         }
 

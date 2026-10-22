@@ -3018,6 +3018,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                             refDef.getSearchField()) : "";
                 case LIST_ONLY:
                 case BLOB:
+                case UPLOAD:
                 case BOOLEAN:
                 case CHAR:
                 case CHILD:

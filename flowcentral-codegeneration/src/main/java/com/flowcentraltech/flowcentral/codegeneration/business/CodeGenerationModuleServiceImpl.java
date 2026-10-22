@@ -15,9 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.codegeneration.business;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -99,6 +98,7 @@ import com.tcdng.unify.core.annotation.Parameter;
 import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
@@ -171,8 +171,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     public int generateExtensionModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
         Date now = environment().getNow();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ZipOutputStream zos = new ZipOutputStream(baos);
+        UploadedFile uploadedFile = UploadedFile.create();
+        ZipOutputStream zos = new ZipOutputStream(uploadedFile.getOut());
         try {
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
                     codeGenerationItem.getBasePackage(), false);
@@ -242,13 +242,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             String zipFilename = String.format("extension_%s_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
+            uploadedFile.closeOut();
 
             if (codeGenerationPlugin != null) {
                 codeGenerationItem.setFilename(codeGenerationPlugin.getExtensionJarFileName());
-                codeGenerationItem.setData(compileAndPackageAsJAR(taskMonitor, baos.toByteArray(), true));
+                codeGenerationItem.setData(compileAndPackageAsJAR(taskMonitor, uploadedFile.getIn(), true));
             } else {
                 codeGenerationItem.setFilename(zipFilename);
-                codeGenerationItem.setData(baos.toByteArray());
+                codeGenerationItem.setData(uploadedFile);
             }
         } finally {
             IOUtils.close(zos);
@@ -280,8 +281,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     public Snapshot generateSnapshot(TaskMonitor taskMonitor, SnapshotMeta meta, String basePackage)
             throws UnifyException {
         Date now = environment().getNow();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ZipOutputStream zos = new ZipOutputStream(baos);
+        UploadedFile uploadedFile = UploadedFile.create();
+        ZipOutputStream zos = new ZipOutputStream(uploadedFile.getOut());
         try {
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(meta, basePackage, true);
             List<String> moduleList = systemModuleService.getAllModuleNames();
@@ -334,7 +335,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             final String name = String.format("snapshot_%s_%s", filenamePrefix, smf.format(now));
             IOUtils.close(zos);
             return new Snapshot(getApplicationName(), getDeploymentVersion(), getAuxiliaryVersion(), name,
-                    name + ".zip", baos.toByteArray());
+                    name + ".zip", uploadedFile);
         } finally {
             IOUtils.close(zos);
         }
@@ -352,8 +353,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     public int generateUtilitiesModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
         Date now = environment().getNow();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ZipOutputStream zos = new ZipOutputStream(baos);
+        UploadedFile uploadedFile = UploadedFile.create();
+        ZipOutputStream zos = new ZipOutputStream(uploadedFile.getOut());
         try {
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
                     codeGenerationItem.getBasePackage(), false);
@@ -441,13 +442,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             String zipFilename = String.format("%s_utilities_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
-
+            uploadedFile.closeOut();
+            
             if (codeGenerationPlugin != null) {
                 codeGenerationItem.setFilename(codeGenerationPlugin.getUtilitiesJarFileName());
-                codeGenerationItem.setData(compileAndPackageAsJAR(taskMonitor, baos.toByteArray(), false));
+                codeGenerationItem.setData(compileAndPackageAsJAR(taskMonitor, uploadedFile.getIn(), false));
             } else {
                 codeGenerationItem.setFilename(zipFilename);
-                codeGenerationItem.setData(baos.toByteArray());
+                codeGenerationItem.setData(uploadedFile);
             }
         } finally {
             IOUtils.close(zos);
@@ -489,7 +491,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         return new DynamicModuleInfo(moduleName, applications);
     }
 
-    private byte[] compileAndPackageAsJAR(TaskMonitor taskMonitor, byte[] srcZip, boolean extension)
+    private UploadedFile compileAndPackageAsJAR(TaskMonitor taskMonitor, InputStream srcZip, boolean extension)
             throws UnifyException {
         Path deleteWorkPath = null;
         try {
@@ -555,7 +557,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             // Extract source directory to working directory
             Files.createDirectories(actWorkPath);
             final Path sourcePath = actWorkPath.resolve("src/main/java");
-            try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(srcZip))) {
+            try (ZipInputStream zis = new ZipInputStream(srcZip)) {
                 ZipEntry entry;
                 while ((entry = zis.getNextEntry()) != null) {
                     File target = actWorkPath.resolve(entry.getName()).toFile();
@@ -648,7 +650,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             packageJar(classesPath, outputJar);
 
             addTaskMessage(taskMonitor, "Built: " + outputJar.toAbsolutePath());
-            return IOUtils.readAll(outputJar.toFile());
+            return UploadedFile.createUsingTempFile(new FileInputStream(outputJar.toFile()));
         } catch (UnifyException e) {
             throw e;
         } catch (Exception e) {

@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSnapshotType;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
@@ -83,7 +84,7 @@ public interface StudioModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    byte[] getSnapshot(Long snapshotDetailsId) throws UnifyException;
+    UploadedFile getSnapshot(Long snapshotDetailsId) throws UnifyException;
     
     /**
      * Gets a studio applet definition.

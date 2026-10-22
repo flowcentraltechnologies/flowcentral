@@ -66,6 +66,7 @@ import com.tcdng.unify.common.constants.ConnectEntityBaseType;
 import com.tcdng.unify.common.constants.ConnectFieldDataType;
 import com.tcdng.unify.common.data.EntityFieldInfo;
 import com.tcdng.unify.common.data.EntityInfo;
+import com.tcdng.unify.common.data.Upload;
 import com.tcdng.unify.convert.util.ConverterUtils;
 
 /**
@@ -87,6 +88,7 @@ public abstract class AbstractInterconnect {
         map.put(byte.class, ConnectFieldDataType.INTEGER);
         map.put(Byte.class, ConnectFieldDataType.INTEGER);
         map.put(byte[].class, ConnectFieldDataType.BLOB);
+        map.put(Upload.class, ConnectFieldDataType.UPLOAD);
         map.put(char.class, ConnectFieldDataType.CHAR);
         map.put(Character.class, ConnectFieldDataType.CHAR);
         map.put(short.class, ConnectFieldDataType.SHORT);

@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.repository.providers;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.UploadedFile;
 import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
@@ -52,7 +53,7 @@ public interface RepositoryProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     void replaceFile(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName, String password,
-            String localPath, String targetPath, String fileName, byte[] file) throws UnifyException;
+            String localPath, String targetPath, String fileName, UploadedFile file) throws UnifyException;
 
     /**
      * Replaces directory in remote repository folder with contents of zipped file.
@@ -77,5 +78,5 @@ public interface RepositoryProvider extends FlowCentralComponent {
      *                        if an error occurs
      */
     void replaceDirectory(TaskMonitor taskMonitor, String repositoryUrl, String branch, String userName,
-            String password, String localPath, String targetPath, byte[] zippedFile) throws UnifyException;
+            String password, String localPath, String targetPath, UploadedFile zippedFile) throws UnifyException;
 }
