@@ -55,7 +55,7 @@ public class WfItemHist extends BaseAuditEntity {
     @Column(name = "DEPARTMENT_CD", nullable = true)
     private String departmentCode;
 
-    @Column(length = 196)
+    @Column(length = 256)
     private String itemDesc;
 
     @Column(length = 96)

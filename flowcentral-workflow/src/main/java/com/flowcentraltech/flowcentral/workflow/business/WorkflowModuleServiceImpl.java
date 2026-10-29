@@ -580,6 +580,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             runWorkflow.setDescription(runnableDesc);
             runWorkflow.setCasePrefix(workflow.getCasePrefix());
             runWorkflow.setCaseApplet(workflow.getCaseApplet());
+            runWorkflow.setDescFormat(workflow.getDescFormat());
             runWorkflow.setLoadingTable(workflow.getLoadingTable());
             runWorkflow.setSupportMultiItemAction(workflow.isSupportMultiItemAction());
             runWorkflow.setSupportManualSubmission(workflow.isSupportManualSubmission());
