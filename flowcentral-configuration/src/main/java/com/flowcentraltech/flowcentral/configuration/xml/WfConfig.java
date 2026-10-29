@@ -18,8 +18,11 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
  * Workflow configuration.
@@ -46,7 +49,9 @@ public class WfConfig extends BaseRootAppConfig {
     @JacksonXmlProperty(isAttribute = true)
     private String loadingTable;
     
-    @JacksonXmlProperty(isAttribute = true)
+    @JsonSerialize(using = CDataXmlAdapter.Serializer.class)
+    @JsonDeserialize(using = CDataXmlAdapter.Deserializer.class)
+    @JacksonXmlProperty
     private String descFormat;
     
     @JacksonXmlProperty(isAttribute = true)
