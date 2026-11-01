@@ -601,6 +601,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                             NotificationModuleNameConstants.SMSMESSAGINGCHANNEL);
                     break;
                 case SYSTEM:
+                    channel = (NotificationMessagingChannel) getComponent(
+                            NotificationModuleNameConstants.SYSTEMMESSAGINGCHANNEL);
                 default:
                     break;
             }
@@ -655,6 +657,9 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         return DataUtils.toArray(ChannelMessage.class, messages);
     }
 
+    @Configurable
+    private NotificationExternalAccessibilityProvider externalAccessibilityProvider;
+
     private void dispatchSystemNotification(NotifMessage notifMessage) throws UnifyException {
         final NotifType notifType = notifMessage.isUseTemplate()
                 ? getNotifTemplateDef(notifMessage.getTemplate()).getNotifType()
@@ -665,16 +670,25 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         }
 
         MessageParts messageParts = getMessageParts(notifMessage);
-        NotificationInbox notificationInbox = new NotificationInbox();
-        notificationInbox.setSubject(messageParts.getSubject());
-        notificationInbox.setActionLink(null);
-        notificationInbox.setActionTarget(null);
-        notificationInbox.setStatus(NotificationInboxStatus.NOT_READ);
-        notificationInbox.setMessage(messageParts.getBody());
-        for (Recipient recipient : notifMessage.getRecipients()) {
-            notificationInbox.setUserLoginId(recipient.getName());
-            environment().create(notificationInbox);
+        if (externalAccessibilityProvider != null) {
+            final String subject = messageParts.getSubject();
+            final String msg = messageParts.getBody();
+            for (Recipient recipient : notifMessage.getRecipients()) {
+                externalAccessibilityProvider.routeSystemMessage(recipient.getName(), subject, msg);
+            }
+        } else {
+            NotificationInbox notificationInbox = new NotificationInbox();
+            notificationInbox.setSubject(messageParts.getSubject());
+            notificationInbox.setActionLink(null);
+            notificationInbox.setActionTarget(null);
+            notificationInbox.setStatus(NotificationInboxStatus.NOT_READ);
+            notificationInbox.setMessage(messageParts.getBody());
+            for (Recipient recipient : notifMessage.getRecipients()) {
+                notificationInbox.setUserLoginId(recipient.getName());
+                environment().create(notificationInbox);
+            }
         }
+
     }
 
     private MessageParts getMessageParts(NotifMessage notifMessage) throws UnifyException {
