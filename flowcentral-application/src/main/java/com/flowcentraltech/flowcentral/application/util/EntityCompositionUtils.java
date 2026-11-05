@@ -76,7 +76,7 @@ public final class EntityCompositionUtils {
                 }
 
                 // For now support integer primary keys only
-                if (fieldType.isTableColumn() && (entry.getDataType().isInteger()/* || entry.getDataType().isString()*/)) {
+                if (fieldType.isTableColumn() && (entry.getDataType().isNumber()/* || entry.getDataType().isString()*/)) {
                     list.add(entry.getName());
                 }
 
