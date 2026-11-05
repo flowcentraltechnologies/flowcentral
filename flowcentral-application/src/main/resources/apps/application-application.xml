@@ -626,8 +626,8 @@
 		<widgetType name="fileattachmenttypelist"
 			description="$m{application.widgettype.fileattachmenttypelist}"
 			dataType="STRING" inputType="STRING"
-			editor="!ui-select list:fileattachmenttypelist blankOption:$m{blank.none} exclude:$l{PNG JPG GIF BMP}"
-			renderer="!ui-listlabel list:fileattachmenttypelist" />
+			editor="!ui-select list:filetypeshortlist blankOption:$m{blank.none}"
+			renderer="!ui-listlabel list:filetypeshortlist" />
 		<widgetType name="fileupload"
 			description="$m{application.widgettype.fileupload}"
 			dataType="STRING"
