@@ -697,7 +697,7 @@ public enum EntityFieldDataType implements EnumConst {
         final boolean array = entityTypeFieldInfo.isArray();
         if (dataType != null) {
             if (dataType.isDecimal() && "id".equalsIgnoreCase(entityTypeFieldInfo.getName())) {
-                return EntityFieldDataType.INTEGER;
+                return EntityFieldDataType.LONG;
             }
             
             if (dataType.isString()) {
