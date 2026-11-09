@@ -241,6 +241,19 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
+    public <T, U extends Entity> List<T> tryLockRows(Class<T> idClass, Query<U> query) throws UnifyException {
+        throwUnsupportedOperationException();
+        return null;
+    }
+
+    @Override
+    public <T, U extends Entity> List<T> claimRows(Class<T> idClass, Query<U> query, Update update)
+            throws UnifyException {
+        throwUnsupportedOperationException();
+        return null;
+    }
+
+    @Override
     public <T extends Entity> T list(Class<T> entityClass, Object id) throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.LIST,
                 au.delegateUtilities().encodeDelegateObjectId(id), null);

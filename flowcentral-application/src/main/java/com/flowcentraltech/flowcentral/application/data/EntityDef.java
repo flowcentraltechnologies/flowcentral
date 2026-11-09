@@ -155,6 +155,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private EntityFieldDef categoryColumnDef;
 
+    private EntityFieldDef pkColumnDef;
+
     private Set<String> fieldNames;
 
     private List<String> auditFieldNames;
@@ -273,6 +275,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         this.preferedColumnNames = new HashMap<String, String>();
         for (EntityFieldDef entityFieldDef : this.fieldDefList) {
             final String fieldName = entityFieldDef.getFieldName();
+            if (entityFieldDef.isPrimaryKey()) {
+                this.pkColumnDef = entityFieldDef;
+            }
+            
             final String baseColumnName = ApplicationEntityUtils.getBaseFieldColumnName(fieldName);
             if (baseColumnName != null && entityFieldDef.isWithColumnName()) {
                 this.preferedColumnNames.put(baseColumnName, entityFieldDef.getColumnName());
@@ -1149,6 +1155,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public EntityFieldDef getCategoryColumnDef() {
         return categoryColumnDef;
+    }
+
+    public EntityFieldDef getPkColumnDef() {
+        return pkColumnDef;
     }
 
     public String getOriginClassName() {
