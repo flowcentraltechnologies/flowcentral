@@ -47,8 +47,7 @@ public class Workspace extends BaseStatusEntity {
     @ChildList
     private List<WorkspacePrivilege> privilegeList;
 
-    public Workspace(Long id, String code, String name, String description) {
-        this.setId(id);
+    public Workspace(String code, String name, String description) {
         this.code = code;
         this.name = name;
         this.description = description;

@@ -430,8 +430,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             loginTenantId = Entity.PRIMARY_TENANT_ID;
         }
 
-        User user = isSystem ? environment().list(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID))
-                : environment().list(new UserQuery().loginId(loginId));
+        User user = environment().list(new UserQuery().loginId(loginId));
         if (user == null) {
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
         }
@@ -804,16 +803,15 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             logDebug("Installing default users ...");
             String email = systemModuleService.getSysParameterValue(String.class,
                     SystemModuleSysParamConstants.SYSTEM_EMAIL);
-            if (!environment().exists(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID))) {
-                User user = new User(DefaultApplicationConstants.SYSTEM_ENTITY_ID,
-                        resolveSessionMessage(DefaultApplicationConstants.SYSTEM_FULLNAME),
+            if (!environment().exists(new UserQuery().loginId(DefaultApplicationConstants.SYSTEM_LOGINID))) {
+                User user = new User(resolveSessionMessage(DefaultApplicationConstants.SYSTEM_FULLNAME),
                         DefaultApplicationConstants.SYSTEM_LOGINID, email, Boolean.FALSE);
                 String password = generatePasswordAndSendEmail(user);
                 user.setWorkflowStatus(UserWorkflowStatus.APPROVED);
                 user.setPassword(passwordCryptograph.encrypt(password));
                 environment().create(user);
             } else {
-                environment().updateById(User.class, DefaultApplicationConstants.SYSTEM_ENTITY_ID,
+                environment().updateAll(new UserQuery().loginId(DefaultApplicationConstants.SYSTEM_LOGINID),
                         new Update().add("email", email));
             }
 

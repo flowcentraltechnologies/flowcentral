@@ -15,13 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
-import java.util.Date;
-
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.system.entities.SequencedEntityPolicy;
+import com.tcdng.unify.core.database.AbstractEntityPolicy;
 
 /**
  * Base entity policy.
@@ -30,20 +28,10 @@ import com.tcdng.unify.core.system.entities.SequencedEntityPolicy;
  * @since 4.1
  */
 @Component("base-entitypolicy")
-public class BaseEntityPolicy<T extends BaseEntity> extends SequencedEntityPolicy<T> {
+public class BaseEntityPolicy<T extends BaseEntity> extends AbstractEntityPolicy<T> {
 
     public BaseEntityPolicy() {
         super(true); // Set now
-    }
-
-    @Override
-    public Object preCreate(T record, Date now) throws UnifyException {
-        Long id = record.getId();
-        if (id == null || id >= 0) {
-            return super.preCreate(record, now);
-        }
-
-        return id;
     }
 
     protected final boolean isEnterprise() throws UnifyException {

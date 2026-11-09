@@ -15,8 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
+import com.tcdng.unify.core.annotation.Id;
 import com.tcdng.unify.core.annotation.Policy;
-import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
+import com.tcdng.unify.core.database.AbstractEntity;
 
 /**
  * Base class for all entities.
@@ -25,6 +26,22 @@ import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
  * @since 4.1
  */
 @Policy("base-entitypolicy")
-public abstract class BaseEntity extends AbstractSequencedEntity {
+public abstract class BaseEntity  extends AbstractEntity {
+
+    @Id
+    private Long id;
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean isIdBlank() {
+        return id == null;
+    }
 
 }

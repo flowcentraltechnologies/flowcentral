@@ -29,7 +29,7 @@ public final class UserUtils {
 
     }
 
-    public static boolean isSystem(Long userId) {
-        return DefaultApplicationConstants.SYSTEM_ENTITY_ID.equals(userId);
+    public static boolean isSystem(String loginId) {
+        return DefaultApplicationConstants.SYSTEM_LOGINID.equals(loginId);
     }
 }

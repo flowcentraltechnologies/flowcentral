@@ -147,9 +147,8 @@ public class WorkspaceModuleServiceImpl extends AbstractFlowCentralService
         if (WorkspaceModuleNameConstants.WORKSPACE_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
             logInfo("Installing default workspaces ...");
             if (!environment()
-                    .exists(new WorkspaceQuery().id(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID))) {
-                Workspace workspace = new Workspace(DefaultApplicationConstants.ROOT_WORKSPACE_ENTITY_ID,
-                        DefaultApplicationConstants.ROOT_WORKSPACE_CODE,
+                    .exists(new WorkspaceQuery().code(DefaultApplicationConstants.ROOT_WORKSPACE_CODE))) {
+                Workspace workspace = new Workspace(DefaultApplicationConstants.ROOT_WORKSPACE_CODE,
                         DefaultApplicationConstants.ROOT_WORKSPACE_NAME,
                         resolveSessionMessage(DefaultApplicationConstants.ROOT_WORKSPACE_DESC));
                 environment().create(workspace);

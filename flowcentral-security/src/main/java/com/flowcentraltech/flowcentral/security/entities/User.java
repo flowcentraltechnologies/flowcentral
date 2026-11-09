@@ -101,8 +101,7 @@ public class User extends BaseStatusWorkEntity {
     @ChildList(editable = false)
     private List<UserLoginEvent> userLoginEventList;
     
-    public User(Long id, String fullName, String loginId, String email, Boolean passwordExpires) {
-        this.setId(id);
+    public User(String fullName, String loginId, String email, Boolean passwordExpires) {
         this.fullName = fullName;
         this.loginId = loginId;
         this.email = email;

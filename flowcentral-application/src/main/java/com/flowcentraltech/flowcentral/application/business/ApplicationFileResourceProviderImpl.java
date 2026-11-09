@@ -48,7 +48,7 @@ public class ApplicationFileResourceProviderImpl extends AbstractFileResourcePro
     public UploadedFile readFileResource(String category, String resourceName) throws UnifyException {
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(
                 FileAttachmentCategoryType.fromCode(category), SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
-                SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, resourceName);
+                SystemFileResourceConstants.FILERESOURCE_INST_ID, resourceName);
         return attachment != null ? attachment.getFile() : null;
     }
 

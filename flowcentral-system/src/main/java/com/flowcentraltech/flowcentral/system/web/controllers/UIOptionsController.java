@@ -100,7 +100,7 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
     private byte[] loadFileResource(String resourceName) throws UnifyException {
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment(
                 FileAttachmentCategoryType.FILERESOURCE_CATEGORY, SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
-                SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, resourceName);
+                SystemFileResourceConstants.FILERESOURCE_INST_ID, resourceName);
         if (attachment != null) {
             return attachment.getFile().getDataAndInvalidate();
         }
@@ -112,12 +112,12 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
         if (resource != null) {
             fileAttachmentProvider.saveFileAttachment(FileAttachmentCategoryType.FILERESOURCE_CATEGORY,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
-                    SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, Attachment.newBuilder(type, false)
+                    SystemFileResourceConstants.FILERESOURCE_INST_ID, Attachment.newBuilder(type, false)
                             .name(resourceName).title("").file(UploadedFile.create(resourceName, resource)).build());
         } else {
             fileAttachmentProvider.deleteFileAttachment(FileAttachmentCategoryType.FILERESOURCE_CATEGORY,
                     SystemFileResourceConstants.FILERESOURCE_ENTITY_NAME,
-                    SystemFileResourceConstants.FILERESOURCE_ENTITY_INST_ID, resourceName);
+                    SystemFileResourceConstants.FILERESOURCE_INST_ID, resourceName);
         }
     }
 

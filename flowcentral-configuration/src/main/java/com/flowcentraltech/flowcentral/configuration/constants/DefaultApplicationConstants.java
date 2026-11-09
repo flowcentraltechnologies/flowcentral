@@ -29,15 +29,11 @@ public interface DefaultApplicationConstants {
 
     String ROOT_WORKSPACE_DESC = "$m{system.rootworkspace}";
 
-    Long ROOT_WORKSPACE_ENTITY_ID = -99L;
-
     String SYSTEM_LOGINID = "SYSTEM";
 
     String SYSTEM_FULLNAME = "$m{system.fullname}";
 
     String EXTERNAL_LOGINID = "EXTERNAL";
 
-    Long SYSTEM_ENTITY_ID = -99L;
-
-    Long DEVOPS_DEPARTMENT_ID = -99L;
+    String DEVOPS_DEPARTMENT_CODE = "DEVOPS";
 }

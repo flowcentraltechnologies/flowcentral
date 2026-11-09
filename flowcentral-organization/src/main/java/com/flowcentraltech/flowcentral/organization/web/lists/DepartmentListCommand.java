@@ -44,12 +44,11 @@ public class DepartmentListCommand extends AbstractOrganizationListCommand<ZeroP
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
         List<Listable> listables = new ArrayList<Listable>();
-        listables.addAll(
-                org().findMappedDepartments((MappedDepartmentQuery) new MappedDepartmentQuery()
-                        .addNotEquals("id", DefaultApplicationConstants.DEVOPS_DEPARTMENT_ID)
-                        .addSelect("id", "description").addOrder("description").ignoreEmptyCriteria(true)));
+        listables.addAll(org().findMappedDepartments((MappedDepartmentQuery) new MappedDepartmentQuery()
+                .addNotEquals("code", DefaultApplicationConstants.DEVOPS_DEPARTMENT_CODE).addSelect("id", "description")
+                .addOrder("description").ignoreEmptyCriteria(true)));
         Department devOpDepartment = org().findDepartment(
-                (DepartmentQuery) new DepartmentQuery().id(DefaultApplicationConstants.DEVOPS_DEPARTMENT_ID));
+                (DepartmentQuery) new DepartmentQuery().code(DefaultApplicationConstants.DEVOPS_DEPARTMENT_CODE));
         if (devOpDepartment != null) {
             listables.add(devOpDepartment);
         }
