@@ -415,10 +415,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId)
             throws UnifyException {
-        final boolean isSystem = DefaultApplicationConstants.SYSTEM_LOGINID.equalsIgnoreCase(loginId);
+        final boolean isUserReserved = DefaultApplicationConstants.SYSTEM_LOGINID.equalsIgnoreCase(loginId);
         if (isTenancyEnabled()) {
             if (loginTenantId == null) {
-                if (isSystem) {
+                if (isUserReserved) {
                     loginTenantId = Entity.PRIMARY_TENANT_ID;
                 } else {
                     if (systemModuleService.getTenantCount() > 0) {
@@ -449,8 +449,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_NOT_ACTIVE);
         }
 
-        if (!isSystem && !Boolean.TRUE.equals(user.getLocalPasswordOnly()) && systemModuleService.getSysParameterValue(
-                boolean.class, SecurityModuleSysParamConstants.ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION)) {
+        if (!isUserReserved && !Boolean.TRUE.equals(user.getLocalPasswordOnly())
+                && systemModuleService.getSysParameterValue(boolean.class,
+                        SecurityModuleSysParamConstants.ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION)) {
             PasswordAutenticationService passwordAuthService = (PasswordAutenticationService) getComponent(
                     PasswordAutenticationService.class);
             if (!passwordAuthService.authenticate(loginId, user.getEmail(), password)) {
@@ -459,7 +460,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         } else {
             password = passwordCryptograph.encrypt(password);
             if (user.getPassword() == null || !user.getPassword().equals(password)) {
-                if (accountLockingEnabled && !user.isReserved()) { // No locking for reserved users
+                if (accountLockingEnabled && !isUserReserved) { // No locking for reserved users
                     updateLoginAttempts(user);
                 }
 
@@ -559,7 +560,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHCODE, branchCode);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BUSINESSUNITDESC, businessUnitDesc);
-        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, user.isReserved());
+        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, isUserReserved);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPERVISORFLAG, user.getSupervisor());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SHORTCUTDECK, null);
         return user;
@@ -906,7 +907,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private UserToken createUserToken(User user, MappedBranch userBranch, Long loginTenantId) throws UnifyException {
-        boolean allowMultipleLogin = user.isReserved();
+        final boolean isUserReserved = DefaultApplicationConstants.SYSTEM_LOGINID.equalsIgnoreCase(user.getLoginId());
+        boolean allowMultipleLogin = isUserReserved;
         if (!allowMultipleLogin) {
             allowMultipleLogin = Boolean.TRUE.equals(user.getAllowMultipleLogin());
         }
@@ -917,7 +919,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                     SecurityModuleSysParamConstants.SYSTEMWIDE_MULTILOGIN);
         }
 
-        boolean globalAccess = user.isReserved();
+        boolean globalAccess = isUserReserved;
         String colorScheme = ColorUtils.getConformingColorSchemeCode(
                 getContainerSetting(String.class, UnifyCorePropertyConstants.APPLICATION_COLORSCHEME));
         return UserToken.newBuilder().userLoginId(user.getLoginId()).userName(user.getFullName())
@@ -925,7 +927,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 .ipAddress(getSessionContext().getRemoteAddress())
                 .branchCode(userBranch != null ? userBranch.getCode() : null)
                 .zoneCode(userBranch != null ? userBranch.getZoneCode() : null).colorScheme(colorScheme)
-                .globalAccess(globalAccess).reservedUser(user.isReserved()).allowMultipleLogin(allowMultipleLogin)
+                .globalAccess(globalAccess).reservedUser(isUserReserved).allowMultipleLogin(allowMultipleLogin)
                 .build();
     }
 

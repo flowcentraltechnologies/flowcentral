@@ -113,7 +113,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
-import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
+import com.tcdng.unify.core.system.entities.AbstractSequenceEntity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.QueryUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -1849,7 +1849,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             takeAuditSnapshot(rCtx.auditEventType());
             entityInstId = (Long) entityActionResult.getResult();
             if (_entityDef.delegated()) {
-                ((AbstractSequencedEntity) inst).setId(entityInstId);
+                ((AbstractSequenceEntity) inst).setId(entityInstId);
             }
         }
 

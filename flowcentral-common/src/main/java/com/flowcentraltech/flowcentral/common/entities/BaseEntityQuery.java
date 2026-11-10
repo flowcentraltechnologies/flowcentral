@@ -18,7 +18,8 @@ package com.flowcentraltech.flowcentral.common.entities;
 import java.util.Collection;
 
 import com.tcdng.unify.core.criterion.CompoundRestriction;
-import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.system.entities.AbstractSequenceEntity;
+import com.tcdng.unify.core.system.entities.SequenceEntityQuery;
 
 /**
  * Base query object for base entity sub-classes.
@@ -26,7 +27,7 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-public abstract class BaseEntityQuery<T extends BaseEntity> extends Query<T> {
+public abstract class BaseEntityQuery<T extends AbstractSequenceEntity> extends SequenceEntityQuery<T> {
 
     public BaseEntityQuery(Class<T> entityClass) {
         super(entityClass);

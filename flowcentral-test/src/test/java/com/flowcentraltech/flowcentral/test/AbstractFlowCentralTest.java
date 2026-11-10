@@ -22,7 +22,7 @@ import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.DatabaseTransactionManager;
 import com.tcdng.unify.core.database.Query;
-import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
+import com.tcdng.unify.core.system.entities.AbstractSequenceEntity;
 
 /**
  * Convenient abstract base class for flowcentral tests.
@@ -48,7 +48,7 @@ public abstract class AbstractFlowCentralTest extends AbstractUnifyComponentTest
         tm.beginTransaction();
         try {
             for (Class<? extends Entity> type : entityClasses) {
-                if (AbstractSequencedEntity.class.isAssignableFrom(type)) {
+                if (AbstractSequenceEntity.class.isAssignableFrom(type)) {
                     db.deleteAll(Query.of(type).addGreaterThan("id", 0L));
                 } else {
                     db.deleteAll(Query.of(type).ignoreEmptyCriteria(true));

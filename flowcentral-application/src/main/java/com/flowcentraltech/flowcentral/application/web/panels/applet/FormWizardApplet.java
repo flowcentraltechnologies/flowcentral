@@ -38,7 +38,7 @@ import com.tcdng.unify.common.database.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Database;
-import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
+import com.tcdng.unify.core.system.entities.AbstractSequenceEntity;
 import com.tcdng.unify.web.ui.widget.Page;
 
 /**
@@ -118,7 +118,7 @@ public class FormWizardApplet extends AbstractApplet implements SweepingCommitPo
         EntityActionResult entityActionResult = createInst();
         Long entityInstId = (Long) inst.getId();
         if (_entityDef.delegated()) {
-            ((AbstractSequencedEntity) inst).setId(entityInstId);
+            ((AbstractSequenceEntity) inst).setId(entityInstId);
         }
 
         final AppletDef appletDef = getRootAppletDef();

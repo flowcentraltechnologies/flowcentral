@@ -19,7 +19,8 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerProp
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.database.AbstractEntityPolicy;
+import com.tcdng.unify.core.system.entities.AbstractSequenceEntity;
+import com.tcdng.unify.core.system.entities.SequenceEntityPolicy;
 
 /**
  * Base entity policy.
@@ -28,15 +29,15 @@ import com.tcdng.unify.core.database.AbstractEntityPolicy;
  * @since 4.1
  */
 @Component("base-entitypolicy")
-public class BaseEntityPolicy<T extends BaseEntity> extends AbstractEntityPolicy<T> {
+public class BaseEntityPolicy<T extends AbstractSequenceEntity> extends SequenceEntityPolicy<T> {
 
     public BaseEntityPolicy() {
         super(true); // Set now
     }
 
     protected final boolean isEnterprise() throws UnifyException {
-        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(
+                getContainerSetting(String.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
 
 }
