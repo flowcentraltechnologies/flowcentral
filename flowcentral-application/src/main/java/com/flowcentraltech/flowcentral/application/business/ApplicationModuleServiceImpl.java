@@ -5455,7 +5455,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     entityId = oldAppEntity.getId();
                 }
 
-                appletUtilities.sequence().ensureCachedBlockSequence(appEntityConfig.getType());
 
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());
@@ -6134,8 +6133,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appEntity.setConfigType(ConfigType.CUSTOM);
                 populateChildList(appEntity, applicationName, appEntityConfig, true);
                 Long entityId = (Long) environment().create(appEntity);
-
-                appletUtilities.sequence().ensureCachedBlockSequence(appEntityConfig.getType());
 
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());
