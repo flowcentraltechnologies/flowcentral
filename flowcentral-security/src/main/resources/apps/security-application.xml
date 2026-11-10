@@ -177,7 +177,7 @@
 			<filters>
 				<filter name="nonSystemRecords"
 					description="$m{common.filter.nonsystemrecords}">
-					<restriction type="GREATER_THAN" field="id" paramA="0" />
+					<restriction type="NOT_EQUALS" field="loginId" paramA="SYSTEM" />
 				</filter>
 			</filters>
 			<valuesset>
@@ -249,7 +249,7 @@
 			<filters>
 				<filter name="nonSystemRecords"
 					description="$m{common.filter.nonsystemrecords}">
-					<restriction type="GREATER_THAN" field="id" paramA="0" />
+					<restriction type="NOT_EQUALS" field="loginId" paramA="SYSTEM" />
 				</filter>
 			</filters>
 		</applet>
