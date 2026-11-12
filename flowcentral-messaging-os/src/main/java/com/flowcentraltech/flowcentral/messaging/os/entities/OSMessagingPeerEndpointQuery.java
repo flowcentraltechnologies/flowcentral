@@ -32,19 +32,19 @@ public class OSMessagingPeerEndpointQuery extends BaseStatusEntityQuery<OSMessag
     }
 
     public OSMessagingPeerEndpointQuery appId(String appId) {
-        return (OSMessagingPeerEndpointQuery) addEquals("appId", appId);
+        return (OSMessagingPeerEndpointQuery) equals("appId", appId);
     }
 
     public OSMessagingPeerEndpointQuery name(String name) {
-        return (OSMessagingPeerEndpointQuery) addEquals("name", name);
+        return (OSMessagingPeerEndpointQuery) equals("name", name);
     }
 
     public OSMessagingPeerEndpointQuery nameNotIn(Collection<String> names) {
-        return (OSMessagingPeerEndpointQuery) addNotAmongst("name", names);
+        return (OSMessagingPeerEndpointQuery) notamongst("name", names);
     }
 
     public OSMessagingPeerEndpointQuery descriptionLike(String description) {
-        return (OSMessagingPeerEndpointQuery) addLike("description", description);
+        return (OSMessagingPeerEndpointQuery) like("description", description);
     }
 
 }

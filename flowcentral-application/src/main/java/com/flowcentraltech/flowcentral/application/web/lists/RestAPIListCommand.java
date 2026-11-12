@@ -48,7 +48,7 @@ public class RestAPIListCommand extends AbstractApplicationListCommand<ZeroParam
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         List<AppAPI> appApiList = application().findAppAPIs((AppAPIQuery) new AppAPIQuery().type(APIType.REST_CRUD)
-                .addSelect("applicationName", "name", "description").addOrder("description"));
+                .select("applicationName", "name", "description").order("description"));
         if (!DataUtils.isBlank(appApiList)) {
             List<ListData> list = new ArrayList<ListData>();
             for (AppAPI appAPI : appApiList) {

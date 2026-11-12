@@ -125,22 +125,22 @@ public class EntityTextSearchWidget extends AbstractFlowCentralPopupTextField {
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
             query.ignoreEmptyCriteria(true);
             if (br != null) {
-                query.addRestriction(br);
+                query.restriction(br);
             }
 
             if (!StringUtils.isBlank(input)) {
                 Restriction like = getUplAttribute(boolean.class, "caseInsensitive") ? new ILike(searchField, input)
                         : new Like(searchField, input);
-                query.addRestriction(like);
+                query.restriction(like);
             }
 
             addMoreResultRestriction(query);
             if (limit > 0) {
-                query.setLimit(limit);
+                query.limit(limit);
             }
 
-            query.addSelect(searchField);
-            query.addOrder(searchField);
+            query.select(searchField);
+            query.order(searchField);
 
             List<Listable> result = new ArrayList<Listable>();
             List<? extends Entity> entityList = environment().listAll(query);

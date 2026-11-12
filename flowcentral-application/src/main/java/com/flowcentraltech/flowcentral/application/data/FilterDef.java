@@ -190,7 +190,7 @@ public class FilterDef implements Listable {
             return this;
         }
 
-        public Builder addRestrictionDef(FilterConditionType type, String fieldName, String paramA, String paramB,
+        public Builder restrictionDef(FilterConditionType type, String fieldName, String paramA, String paramB,
                 int depth) {
             filterRestrictionDefList.add(new FilterRestrictionDef(type, fieldName, paramA, paramB, depth));
             return this;

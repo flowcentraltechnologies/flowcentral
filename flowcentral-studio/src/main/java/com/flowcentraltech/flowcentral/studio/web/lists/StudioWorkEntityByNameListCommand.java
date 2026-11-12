@@ -55,7 +55,7 @@ public class StudioWorkEntityByNameListCommand extends AbstractApplicationListCo
             AppEntityQuery query = new AppEntityQuery();
             query.applicationId(applicationId);
             query.isWorkEntity();
-            query.addSelect("name", "description");
+            query.select("name", "description");
             List<AppEntity> appEntityList = application().findAppEntities(query);
             if (!DataUtils.isBlank(appEntityList)) {
                 final String applicationName = getDocumentAttribute(String.class,

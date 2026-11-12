@@ -114,7 +114,7 @@ public class QuickTableEdit {
     public void loadEntryList() throws UnifyException {
         final BeanListTable _beanTable = getEntryBeanTable();
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                .addEquals(baseField, baseId);
+                .equals(baseField, baseId);
         List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
 
         _beanTable.setSourceObjectKeepSelected(resultList);

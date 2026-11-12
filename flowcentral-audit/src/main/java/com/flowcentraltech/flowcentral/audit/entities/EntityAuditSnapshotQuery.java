@@ -30,7 +30,7 @@ public class EntityAuditSnapshotQuery extends BaseAuditEntityQuery<EntityAuditSn
     }
 
     public EntityAuditSnapshotQuery entityAuditDetailsId(Long entityAuditDetailsId) {
-        return (EntityAuditSnapshotQuery) addEquals("entityAuditDetailsId", entityAuditDetailsId);
+        return (EntityAuditSnapshotQuery) equals("entityAuditDetailsId", entityAuditDetailsId);
     }
 
 }

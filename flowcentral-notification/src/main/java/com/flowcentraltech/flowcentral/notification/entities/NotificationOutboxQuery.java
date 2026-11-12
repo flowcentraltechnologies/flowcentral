@@ -36,35 +36,35 @@ public class NotificationOutboxQuery extends BaseAuditEntityQuery<NotificationOu
     }
 
     public NotificationOutboxQuery notificationChannelId(Long notificationChannelId) {
-        return (NotificationOutboxQuery) addEquals("notificationChannelId", notificationChannelId);
+        return (NotificationOutboxQuery) equals("notificationChannelId", notificationChannelId);
     }
 
     public NotificationOutboxQuery moduleId(Long moduleId) {
-        return (NotificationOutboxQuery) addEquals("moduleId", moduleId);
+        return (NotificationOutboxQuery) equals("moduleId", moduleId);
     }
 
     public NotificationOutboxQuery moduleName(String moduleName) {
-        return (NotificationOutboxQuery) addEquals("moduleName", moduleName);
+        return (NotificationOutboxQuery) equals("moduleName", moduleName);
     }
 
     public NotificationOutboxQuery type(NotifType type) {
-        return (NotificationOutboxQuery) addEquals("type", type);
+        return (NotificationOutboxQuery) equals("type", type);
     }
 
     public NotificationOutboxQuery sentOn(Date date) {
-        return (NotificationOutboxQuery) addBetween("sentDt", CalendarUtils.getMidnightDate(date),
+        return (NotificationOutboxQuery) between("sentDt", CalendarUtils.getMidnightDate(date),
                 CalendarUtils.getLastSecondDate(date));
     }
 
     public NotificationOutboxQuery due(Date now) {
-        return (NotificationOutboxQuery) addLessThanEqual("nextAttemptDt", now);
+        return (NotificationOutboxQuery) lesseq("nextAttemptDt", now);
     }
 
     public NotificationOutboxQuery status(NotificationOutboxStatus status) {
-        return (NotificationOutboxQuery) addEquals("status", status);
+        return (NotificationOutboxQuery) equals("status", status);
     }
 
     public NotificationOutboxQuery importance(ImportanceType importance) {
-        return (NotificationOutboxQuery) addEquals("importance", importance);
+        return (NotificationOutboxQuery) equals("importance", importance);
     }
 }

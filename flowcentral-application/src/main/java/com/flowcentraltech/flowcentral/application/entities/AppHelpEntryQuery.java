@@ -30,7 +30,7 @@ public class AppHelpEntryQuery extends BaseAuditEntityQuery<AppHelpEntry> {
     }
 
     public AppHelpEntryQuery appHelpSheetId(Long appHelpSheetId) {
-        return (AppHelpEntryQuery) addEquals("appHelpSheetId", appHelpSheetId);
+        return (AppHelpEntryQuery) equals("appHelpSheetId", appHelpSheetId);
     }
 
 }

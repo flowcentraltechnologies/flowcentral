@@ -449,7 +449,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 for (String target : targets) {
                     final List<Long> osMessagingAsyncIdList = environment().valueList(Long.class, "id",
                             new OSMessagingAsyncOutQuery().target(target).isNotSent()
-                                    .setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
+                                    .limit(MAX_PROCESSING_BATCH_SIZE).order("id"));
                     if (!DataUtils.isBlank(osMessagingAsyncIdList)) {
                         outgoingQueuedExec.execute(osMessagingAsyncIdList);
                         messageCount += osMessagingAsyncIdList.size();
@@ -485,7 +485,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                 for (String processor : processors) {
                     final List<Long> osMessagingInAsyncIdList = environment().valueList(Long.class, "id",
                             new OSMessagingAsyncInQuery().processor(processor).isNotProcessed()
-                                    .setLimit(MAX_PROCESSING_BATCH_SIZE).addOrder("id"));
+                                    .limit(MAX_PROCESSING_BATCH_SIZE).order("id"));
                     if (!DataUtils.isBlank(osMessagingInAsyncIdList)) {
                         incomingQueuedExec.execute(osMessagingInAsyncIdList);
                         messageCount += osMessagingInAsyncIdList.size();

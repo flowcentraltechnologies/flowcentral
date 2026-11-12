@@ -36,16 +36,16 @@ public class ChartDataSourceQuery extends BaseApplicationEntityQuery<ChartDataSo
     }
 
     public ChartDataSourceQuery entity(String entity) {
-        return (ChartDataSourceQuery) addEquals("entity", entity);
+        return (ChartDataSourceQuery) equals("entity", entity);
     }
 
     public ChartDataSourceQuery isExpired(Date now) {
-        return (ChartDataSourceQuery) addRestriction(
+        return (ChartDataSourceQuery) restriction(
                 new And().add(new IsNotNull("activeSnapshotExpiresOn")).add(new Less("activeSnapshotExpiresOn", now)));
     }
 
     public ChartDataSourceQuery isNotExpired(Date now) {
-        return (ChartDataSourceQuery) addRestriction(new And().add(new IsNotNull("activeSnapshotExpiresOn"))
+        return (ChartDataSourceQuery) restriction(new And().add(new IsNotNull("activeSnapshotExpiresOn"))
                 .add(new GreaterOrEqual("activeSnapshotExpiresOn", now)));
     }
 

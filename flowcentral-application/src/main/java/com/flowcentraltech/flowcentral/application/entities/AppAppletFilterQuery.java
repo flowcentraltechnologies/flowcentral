@@ -34,16 +34,16 @@ public class AppAppletFilterQuery extends BaseConfigNamedEntityQuery<AppAppletFi
     }
 
     public AppAppletFilterQuery appAppletId(Long appAppletId) {
-        return (AppAppletFilterQuery) addEquals("appAppletId", appAppletId);
+        return (AppAppletFilterQuery) equals("appAppletId", appAppletId);
     }
 
     public AppAppletFilterQuery byOwner(String ownerId) {
-        return (AppAppletFilterQuery) addRestriction(new Or().add(new Equals("ownershipType", OwnershipType.GLOBAL))
+        return (AppAppletFilterQuery) restriction(new Or().add(new Equals("ownershipType", OwnershipType.GLOBAL))
                 .add(new And().add(new Equals("ownershipType", OwnershipType.USER)).add(new Equals("owner", ownerId))));
     }
 
     public AppAppletFilterQuery quickFilter(boolean quickFilter) {
-        return (AppAppletFilterQuery) addEquals("quickFilter", quickFilter);
+        return (AppAppletFilterQuery) equals("quickFilter", quickFilter);
     }
 
 }

@@ -406,20 +406,20 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public List<? extends Listable> getNamesSystemParameters() throws UnifyException {
         return environment()
-                .listAll(new SystemParameterQuery().type(SysParamType.NAME).addSelect("code", "description"));
+                .listAll(new SystemParameterQuery().type(SysParamType.NAME).select("code", "description"));
     }
 
     @Override
     public List<? extends Listable> getContactSystemParameters() throws UnifyException {
         return environment()
-                .listAll(new SystemParameterQuery().type(SysParamType.CONTACT).addSelect("code", "description"));
+                .listAll(new SystemParameterQuery().type(SysParamType.CONTACT).select("code", "description"));
     }
 
     @Override
     public List<? extends Listable> getFilterSystemParameters() throws UnifyException {
         List<ListData> result = Collections.emptyList();
-        List<SystemParameter> params = environment().listAll(new SystemParameterQuery().addIsNotNull("filterName")
-                .addSelect("type", "code", "filterName").addOrder("filterName"));
+        List<SystemParameter> params = environment().listAll(new SystemParameterQuery().notnull("filterName")
+                .select("type", "code", "filterName").order("filterName"));
         if (!DataUtils.isBlank(params)) {
             result = new ArrayList<ListData>();
             for (SystemParameter systemParameter : params) {

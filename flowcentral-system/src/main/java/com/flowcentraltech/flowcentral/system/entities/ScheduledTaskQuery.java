@@ -34,14 +34,14 @@ public class ScheduledTaskQuery extends BaseStatusEntityQuery<ScheduledTask> {
     }
 
     public ScheduledTaskQuery descriptionLike(String description) {
-        return (ScheduledTaskQuery) addLike("description", description);
+        return (ScheduledTaskQuery) like("description", description);
     }
 
     public ScheduledTaskQuery taskName(String taskName) {
-        return (ScheduledTaskQuery) addEquals("taskName", taskName);
+        return (ScheduledTaskQuery) equals("taskName", taskName);
     }
 
     public ScheduledTaskQuery readyToRunOn(Date date) {
-        return (ScheduledTaskQuery) addLessThanEqual("nextExecutionOn", date).addEquals("status", RecordStatus.ACTIVE);
+        return (ScheduledTaskQuery) lesseq("nextExecutionOn", date).equals("status", RecordStatus.ACTIVE);
     }
 }

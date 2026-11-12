@@ -32,30 +32,30 @@ public class BranchQuery extends BaseStatusEntityQuery<Branch> {
     }
 
     public BranchQuery hubId(Long hubId) {
-        return (BranchQuery) addEquals("hubId", hubId);
+        return (BranchQuery) equals("hubId", hubId);
     }
 
     public BranchQuery zoneId(Long zoneId) {
-        return (BranchQuery) addEquals("zoneId", zoneId);
+        return (BranchQuery) equals("zoneId", zoneId);
     }
 
     public BranchQuery code(String code) {
-        return (BranchQuery) addEquals("code", code);
+        return (BranchQuery) equals("code", code);
     }
 
     public BranchQuery codeIn(Collection<String> code) {
-        return (BranchQuery) addAmongst("code", code);
+        return (BranchQuery) amongst("code", code);
     }
 
     public BranchQuery sortCode(String sortCode) {
-        return (BranchQuery) addEquals("sortCode", sortCode);
+        return (BranchQuery) equals("sortCode", sortCode);
     }
 
     public BranchQuery sortCodeLike(String sortCode) {
-        return (BranchQuery) addLike("sortCode", sortCode);
+        return (BranchQuery) like("sortCode", sortCode);
     }
 
     public BranchQuery descriptionLike(String description) {
-        return (BranchQuery) addLike("description", description);
+        return (BranchQuery) like("description", description);
     }
 }

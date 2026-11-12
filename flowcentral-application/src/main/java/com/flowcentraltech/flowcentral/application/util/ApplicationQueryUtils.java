@@ -45,57 +45,57 @@ public final class ApplicationQueryUtils {
     public static void addWidgetTypeCriteria(Query<AppWidgetType> query, String applicationName,
             EntityFieldDataType entityFieldDataType) {
         if (entityFieldDataType == null) {
-            query.addRestriction(new IsNull("dataType"));
+            query.restriction(new IsNull("dataType"));
             if (!StringUtils.isBlank(applicationName)) {
-                query.addEquals("applicationName", applicationName);
+                query.equals("applicationName", applicationName);
             }
         } else {
             if (entityFieldDataType.isArray()) {
-                query.addRestriction(new And().add(new Equals("applicationName", "application"))
+                query.restriction(new And().add(new Equals("applicationName", "application"))
                         .add(new Amongst("name", Arrays.asList("textarea", "textareamedium", "textarealarge",
                                 "textareaxlarge", "textareaxxlarge"))));
             } else if (entityFieldDataType.isEntityRef()) {
                 if (entityFieldDataType.isRefFileUpload()) {
-                    query.addRestriction(new And().add(new Equals("applicationName", "application"))
+                    query.restriction(new And().add(new Equals("applicationName", "application"))
                             .add(new Equals("name", "fileupload")));
                 } else {
-                    query.addRestriction(new And().add(new Equals("applicationName", "application")).add(new Amongst(
+                    query.restriction(new And().add(new Equals("applicationName", "application")).add(new Amongst(
                             "name", Arrays.asList("entitylist", "entitysearch", "entityselect", "entitysearchview"))));
                 }
             } else if (EntityFieldDataType.BLOB.equals(entityFieldDataType)) {
-                query.addRestriction(new And().add(new Equals("applicationName", "application"))
+                query.restriction(new And().add(new Equals("applicationName", "application"))
                         .add(new Amongst("name", Arrays.asList("fileuploadwildcard", "fileuploadimage", "fileuploadcsv",
                                 "fileuploadexcel", "fileuploadpdf", "fileuploadtext", "picture"))));
             } else if (EntityFieldDataType.CLOB.equals(entityFieldDataType)) {
-                query.addRestriction(new And().add(new Equals("applicationName", "application"))
+                query.restriction(new And().add(new Equals("applicationName", "application"))
                         .add(new Amongst("name",
                                 Arrays.asList("richtexteditor", "richtexteditormedium", "richtexteditorlarge",
                                         "richtexteditorxlarge", "richtexteditorxxlarge", "textarea", "textareamedium",
                                         "textarealarge", "textareaxlarge", "textareaxxlarge"))));
             } else if (entityFieldDataType.isEnumDataType()) {
-                query.addRestriction(new Or()
+                query.restriction(new Or()
                         .add(new And().add(new Equals("applicationName", "application")).add(
                                 new Amongst("name", Arrays.asList("enumlist", "enumreadonlytext", "enumlistlabel"))))
                         .add(new And().add(new Equals("dataType", DataType.STRING))
                                 .add(new Equals("enumOption", Boolean.TRUE)).add(new Equals("listOption", true))));
             } else if (entityFieldDataType.isEnumDynamic()) {
-                query.addEquals("applicationName", "application").addEquals("name", "enumlist");
+                query.equals("applicationName", "application").equals("name", "enumlist");
             } else if (entityFieldDataType.isMapped()) {
-                query.addRestriction(new Equals("inputType", InputType.MAPPED));
+                query.restriction(new Equals("inputType", InputType.MAPPED));
                 if (!StringUtils.isBlank(applicationName)) {
-                    query.addAmongst("applicationName", Arrays.asList("application", applicationName));
+                    query.amongst("applicationName", Arrays.asList("application", applicationName));
                 }
             } else {
                 DataType dataType = entityFieldDataType.dataType();
                 if (dataType == null) {
-                    query.addRestriction(new IsNull("dataType"));
+                    query.restriction(new IsNull("dataType"));
                 } else {
-                    query.addRestriction(new And().add(new Amongst("dataType", dataType.convertibleFromTypes()))
+                    query.restriction(new And().add(new Amongst("dataType", dataType.convertibleFromTypes()))
                             .add(new Equals("listOption", true)));
                 }
 
                 if (!StringUtils.isBlank(applicationName)) {
-                    query.addAmongst("applicationName", Arrays.asList("application", applicationName));
+                    query.amongst("applicationName", Arrays.asList("application", applicationName));
                 }
             }
         }
@@ -103,16 +103,16 @@ public final class ApplicationQueryUtils {
 
     public static void addWidgetTypeCriteria(Query<AppWidgetType> query, String applicationName, DataType dataType) {
         if (dataType == null) {
-            query.addRestriction(new IsNull("dataType"));
+            query.restriction(new IsNull("dataType"));
         } else {
-            query.addRestriction(new And().add(new Amongst("dataType", dataType.convertibleFromTypes()))
+            query.restriction(new And().add(new Amongst("dataType", dataType.convertibleFromTypes()))
                     .add(new Equals("listOption", true)));
         }
 
         if (!StringUtils.isBlank(applicationName)) {
-            query.addAmongst("applicationName", Arrays.asList("application", applicationName));
+            query.amongst("applicationName", Arrays.asList("application", applicationName));
         } else {
-            query.addEquals("applicationName", "application");
+            query.equals("applicationName", "application");
         }
    }
 }

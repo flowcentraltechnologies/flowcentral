@@ -45,7 +45,7 @@ public class StudioFormAnnotationListCommand extends AbstractApplicationListComm
         if (longParams.isPresent()) {
             return application()
                     .findAppFormAnnotations((AppFormAnnotationQuery) new AppFormAnnotationQuery()
-                            .appFormId(longParams.getValue()).addSelect("name", "description"));
+                            .appFormId(longParams.getValue()).select("name", "description"));
         }
 
         return Collections.emptyList();

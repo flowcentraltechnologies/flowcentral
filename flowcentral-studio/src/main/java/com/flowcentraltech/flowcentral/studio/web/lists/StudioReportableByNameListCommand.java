@@ -59,7 +59,7 @@ public class StudioReportableByNameListCommand extends AbstractApplicationListCo
         if (QueryUtils.isValidLongCriteria(applicationId)) {
             List<ReportableDefinition> reportableDefinitionList = reportModuleService
                     .findReportDefinitions((ReportableDefinitionQuery) new ReportableDefinitionQuery()
-                            .applicationId(applicationId).addSelect("name", "description"));
+                            .applicationId(applicationId).select("name", "description"));
             if (!DataUtils.isBlank(reportableDefinitionList)) {
                 final String applicationName = getDocumentAttribute(String.class,
                         AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);

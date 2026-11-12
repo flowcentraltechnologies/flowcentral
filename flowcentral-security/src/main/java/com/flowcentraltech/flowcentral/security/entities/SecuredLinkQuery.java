@@ -31,22 +31,22 @@ public class SecuredLinkQuery extends BaseAuditEntityQuery<SecuredLink> {
     }
 
     public SecuredLinkQuery assignedToLoginId(String assignedToLoginId) {
-        return (SecuredLinkQuery) addEquals("assignedToLoginId", assignedToLoginId);
+        return (SecuredLinkQuery) equals("assignedToLoginId", assignedToLoginId);
     }
 
     public SecuredLinkQuery type(SecuredLinkType type) {
-        return (SecuredLinkQuery) addEquals("type", type);
+        return (SecuredLinkQuery) equals("type", type);
     }
 
     public SecuredLinkQuery accessKey(String accessKey) {
-        return (SecuredLinkQuery) addEquals("accessKey", accessKey);
+        return (SecuredLinkQuery) equals("accessKey", accessKey);
     }
 
     public SecuredLinkQuery contentPath(String contentPath) {
-        return (SecuredLinkQuery) addEquals("contentPath", contentPath);
+        return (SecuredLinkQuery) equals("contentPath", contentPath);
     }
 
     public SecuredLinkQuery titleLike(String title) {
-        return (SecuredLinkQuery) addLike("title", title);
+        return (SecuredLinkQuery) like("title", title);
     }
 }

@@ -384,7 +384,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
 
         final Query<?> query = appletUtilities.application().queryOf(entityDef.getLongName()).ignoreEmptyCriteria(true);
         if (restriction != null) {
-            query.addRestriction(restriction);
+            query.restriction(restriction);
         }
 
         int groupingStart = 0;
@@ -523,7 +523,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public List<? extends Listable> getEntityChartDataSources(String entity) throws UnifyException {
         List<ChartDataSource> list = environment().listAll(new ChartDataSourceQuery().entity(entity)
-                .addSelect("name", "description", "applicationName").addOrder("description"));
+                .select("name", "description", "applicationName").order("description"));
         return ApplicationNameUtils.getListableList(list);
     }
 
@@ -560,7 +560,7 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
     @Override
     public List<? extends Listable> getChartDataSourceListByEntity(String entity) throws UnifyException {
         List<ChartDataSource> sources = environment()
-                .listAll(new ChartDataSourceQuery().entity(entity).addSelect("applicationName", "name", "description"));
+                .listAll(new ChartDataSourceQuery().entity(entity).select("applicationName", "name", "description"));
         return ApplicationNameUtils.getListableList(sources);
     }
 

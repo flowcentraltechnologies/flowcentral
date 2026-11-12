@@ -30,7 +30,7 @@ public class AppEntityExpressionQuery extends BaseConfigNamedEntityQuery<AppEnti
     }
 
     public AppEntityExpressionQuery appEntityId(Long appEntityId) {
-        return (AppEntityExpressionQuery) addEquals("appEntityId", appEntityId);
+        return (AppEntityExpressionQuery) equals("appEntityId", appEntityId);
     }
 
 }

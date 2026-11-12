@@ -261,7 +261,7 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
         if (!query.isEmptyCriteria()) {
             Restriction restriction = query.getRestrictions();
             restriction.fieldSwap(queryFieldMap);
-            _query.addRestriction(restriction);
+            _query.restriction(restriction);
         }
 
         if (query.getOrder() != null) {

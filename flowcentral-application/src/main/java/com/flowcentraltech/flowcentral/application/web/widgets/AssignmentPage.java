@@ -257,11 +257,11 @@ public class AssignmentPage {
             final Date now = ctx.au().getNow();
             // Assigned list
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                    .addEquals(assignmentPageDef.getBaseField(), baseId);
+                    .equals(assignmentPageDef.getBaseField(), baseId);
             if (filterGroupDef != null) {
                 Restriction br = filterGroupDef.getRestriction(FilterType.TAB, null, now);
                 if (br != null) {
-                    query.addRestriction(br);
+                    query.restriction(br);
                 }
             }
 
@@ -300,15 +300,15 @@ public class AssignmentPage {
                             .listLean((Class<? extends Entity>) _baseEntityClassDef.getEntityClass(), baseId);
                     Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
                             new BeanValueStore(baseInst).getReader(), now);
-                    query.addRestriction(br);
+                    query.restriction(br);
                 } else if (_assignRefDef.isWithFilter()) {
                     Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
                             null, now);
-                    query.addRestriction(br);
+                    query.restriction(br);
                 }
 
                 if (!assignedIdList.isEmpty()) {
-                    query.addNotAmongst("id", assignedIdList);
+                    query.notamongst("id", assignedIdList);
                 } else {
                     query.ignoreEmptyCriteria(true);
                 }

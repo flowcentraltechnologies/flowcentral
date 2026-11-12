@@ -81,7 +81,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public Listable getConfig(String configName) throws UnifyException {
         EndpointConfig config = environment()
-                .find(new EndpointConfigQuery().name(configName).addSelect("name", "description"));
+                .find(new EndpointConfigQuery().name(configName).select("name", "description"));
         return config != null ? new ListData(config.getName(), config.getDescription()) : null;
     }
 
@@ -103,15 +103,15 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
                 ? searchInput.getInput()
                 : null;
         final int limit = StringUtils.isBlank(input) ? MAX_SEARCH_LIMIT
-                : (searchInput != null ? searchInput.getLimit() : 0);
+                : (searchInput != null ? searchInput.limit() : 0);
         EndpointConfigQuery query = new EndpointConfigQuery();
         if (!StringUtils.isBlank(input)) {
             query.nameStartsWith(input);
         }
 
-        query.setLimit(limit).ignoreEmptyCriteria(true);
+        query.limit(limit).ignoreEmptyCriteria(true);
         List<EndpointConfig> configs = environment()
-                .findAll(query.addSelect("name", "description").addOrder("description"));
+                .findAll(query.select("name", "description").order("description"));
         if (!DataUtils.isBlank(configs)) {
             List<ListData> result = new ArrayList<ListData>();
             for (EndpointConfig config : configs) {

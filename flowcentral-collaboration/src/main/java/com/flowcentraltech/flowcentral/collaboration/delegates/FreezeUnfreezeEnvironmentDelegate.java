@@ -60,11 +60,11 @@ public class FreezeUnfreezeEnvironmentDelegate extends AbstractPseudoEntityEnvir
 						.applicationName(info.getApplicationName()).type(info.getType());
 				int frozen = environment().countAll(query);
 				query = Query.of(ApplicationCollaborationUtils.getEntityClass(info.getType()))
-						.addEquals("applicationName", info.getApplicationName());
+						.equals("applicationName", info.getApplicationName());
 				return environment().countAll(query) - frozen;
 			} else {
 				Query<? extends Entity> query = Query.of(ApplicationCollaborationUtils.getEntityClass(info.getType()))
-						.addEquals("applicationName", info.getApplicationName());
+						.equals("applicationName", info.getApplicationName());
 				return environment().countAll(query);
 			}
 		}
@@ -85,11 +85,11 @@ public class FreezeUnfreezeEnvironmentDelegate extends AbstractPseudoEntityEnvir
                         .applicationName(info.getApplicationName()).type(info.getType());
                 int frozen = environment().countAll(query);
                 query = Query.of(ApplicationCollaborationUtils.getEntityClass(info.getType()))
-                        .addEquals("applicationName", info.getApplicationName());
+                        .equals("applicationName", info.getApplicationName());
                 return (environment().countAll(query) - frozen) > 0;
             } else {
                 Query<? extends Entity> query = Query.of(ApplicationCollaborationUtils.getEntityClass(info.getType()))
-                        .addEquals("applicationName", info.getApplicationName());
+                        .equals("applicationName", info.getApplicationName());
                 return environment().exists(query);
             }
         }
@@ -143,8 +143,8 @@ public class FreezeUnfreezeEnvironmentDelegate extends AbstractPseudoEntityEnvir
 			throws UnifyException {
 		CollaborationFreezeQuery query = new CollaborationFreezeQuery().applicationName(info.getApplicationName())
 				.type(info.getType());
-		query.setOffset(req.getOffset());
-		query.setLimit(req.getLimit());
+		query.offset(req.offset());
+		query.limit(req.limit());
 		for (CollaborationFreeze collaborationFreeze : environment().findAll(query)) {
 			FreezeUnfreeze freezeUnfreeze = new FreezeUnfreeze();
 			freezeUnfreeze.setApplicationName(collaborationFreeze.getApplicationName());
@@ -168,12 +168,12 @@ public class FreezeUnfreezeEnvironmentDelegate extends AbstractPseudoEntityEnvir
 			throws UnifyException {
 		Query<? extends BaseApplicationEntity> query = Query
 				.of(ApplicationCollaborationUtils.getEntityClass(info.getType()))
-				.addEquals("applicationName", info.getApplicationName());
-		query.setOffset(req.getOffset());
-		query.setLimit(req.getLimit());
+				.equals("applicationName", info.getApplicationName());
+		query.offset(req.offset());
+		query.limit(req.limit());
 		List<String> frozenenResourceList = getFrozenResources(info);
 		if (!frozenenResourceList.isEmpty()) {
-			query.addNotAmongst("name", frozenenResourceList);
+			query.notamongst("name", frozenenResourceList);
 		}
 
 		for (BaseApplicationEntity baseApplicationEntity : environment().listAll(query)) {

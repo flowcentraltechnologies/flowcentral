@@ -30,6 +30,6 @@ public class ModuleQuery extends BaseStatusEntityQuery<Module> {
     }
 
     public ModuleQuery name(String name) {
-        return (ModuleQuery) addEquals("name", name);
+        return (ModuleQuery) equals("name", name);
     }
 }

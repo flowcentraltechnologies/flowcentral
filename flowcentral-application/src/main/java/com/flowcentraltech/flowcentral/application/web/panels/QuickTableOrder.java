@@ -83,7 +83,7 @@ public class QuickTableOrder {
     public void loadOrderItems() throws UnifyException {
         orderItems = new ArrayList<OrderItem>();
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                .addEquals(baseField, baseId).addOrder(orderField);
+                .equals(baseField, baseId).order(orderField);
         List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
         for (Entity inst : resultList) {
             final ValueStoreReader reader = new BeanValueStore(inst).getReader();

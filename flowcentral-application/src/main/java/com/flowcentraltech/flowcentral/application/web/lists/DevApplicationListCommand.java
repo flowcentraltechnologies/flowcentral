@@ -41,7 +41,7 @@ public class DevApplicationListCommand extends AbstractApplicationListCommand<Ze
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         return application()
-                .findApplications((ApplicationQuery) new ApplicationQuery().isDevelopable().addOrder("description"));
+                .findApplications((ApplicationQuery) new ApplicationQuery().isDevelopable().order("description"));
     }
 
 }

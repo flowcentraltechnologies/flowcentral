@@ -301,7 +301,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
 
         Map<String, ReportableField> fieldMap = environment().listAllMap(String.class, "name",
                 new ReportableFieldQuery().reportableId(reportableDefinition.getId()).parameterOnly(false)
-                        .setLenient(true));
+                        .lenient(true));
         boolean isSelectAll = defaultReportColumnList == null;
         if (!isSelectAll) {
             for (DefaultReportColumn defaultColumn : defaultReportColumnList) {
@@ -372,7 +372,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
             logDebug("Generating letter report for entity type [{0}] using generator [{1}]...",
                     reportOptions.getEntity(), reportOptions.getLetterGenerator());
             Query<? extends Entity> query = appletUtilities.application().queryOf(reportOptions.getEntity());
-            query.addRestriction(reportOptions.getRestriction());
+            query.restriction(reportOptions.getRestriction());
             Entity entity = environment().list(query);
             if (entity != null) {
                 logDebug("Backing entity record found for letter report...");
@@ -606,8 +606,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService
                         .add(new Equals("name", np.getEntityName())));
             }
 
-            List<ReportConfiguration> rcList = environment().listAll(new ReportConfigurationQuery().addRestriction(or)
-                    .addSelect("applicationName", "applicationDesc", "name", "description"));
+            List<ReportConfiguration> rcList = environment().listAll(new ReportConfigurationQuery().restriction(or)
+                    .select("applicationName", "applicationDesc", "name", "description"));
             for (ReportConfiguration rc : rcList) {
                 resultList.add(new ReportListing(rc.getApplicationName(), rc.getApplicationDesc(),
                         ApplicationNameUtils.getApplicationEntityLongName(rc.getApplicationName(), rc.getName()),

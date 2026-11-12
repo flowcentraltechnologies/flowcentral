@@ -31,10 +31,10 @@ public class WorkflowSetValuesQuery extends BaseConfigNamedEntityQuery<WorkflowS
     }
 
     public WorkflowSetValuesQuery workflowId(Long workflowId) {
-        return (WorkflowSetValuesQuery) addEquals("workflowId", workflowId);
+        return (WorkflowSetValuesQuery) equals("workflowId", workflowId);
     }
 
     public WorkflowSetValuesQuery type(WorkflowSetValuesType type) {
-        return (WorkflowSetValuesQuery) addEquals("type", type);
+        return (WorkflowSetValuesQuery) equals("type", type);
     }
 }

@@ -30,19 +30,19 @@ public class OSMessagingAsyncOutQuery extends BaseAuditEntityQuery<OSMessagingAs
     }
 
     public OSMessagingAsyncOutQuery correlationId(String correlationId) {
-        return (OSMessagingAsyncOutQuery) addEquals("correlationId", correlationId);
+        return (OSMessagingAsyncOutQuery) equals("correlationId", correlationId);
     }
 
     public OSMessagingAsyncOutQuery target(String target) {
-        return (OSMessagingAsyncOutQuery) addEquals("target", target);
+        return (OSMessagingAsyncOutQuery) equals("target", target);
     }
 
     public OSMessagingAsyncOutQuery isSent() {
-        return (OSMessagingAsyncOutQuery) addIsNotNull("sentOn");
+        return (OSMessagingAsyncOutQuery) notnull("sentOn");
     }
 
     public OSMessagingAsyncOutQuery isNotSent() {
-        return (OSMessagingAsyncOutQuery) addIsNull("sentOn");
+        return (OSMessagingAsyncOutQuery) isnull("sentOn");
     }
 
 }

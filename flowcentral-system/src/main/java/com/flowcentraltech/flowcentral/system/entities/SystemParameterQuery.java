@@ -33,35 +33,35 @@ public class SystemParameterQuery extends BaseAuditEntityQuery<SystemParameter> 
     }
 
     public SystemParameterQuery moduleId(Long moduleId) {
-        return (SystemParameterQuery) addEquals("moduleId", moduleId);
+        return (SystemParameterQuery) equals("moduleId", moduleId);
     }
 
     public SystemParameterQuery moduleIdNotIn(Collection<Long> moduleId) {
-        return (SystemParameterQuery) addNotAmongst("moduleId", moduleId);
+        return (SystemParameterQuery) notamongst("moduleId", moduleId);
     }
 
     public SystemParameterQuery moduleCode(String moduleCode) {
-        return (SystemParameterQuery) addEquals("moduleCode", moduleCode);
+        return (SystemParameterQuery) equals("moduleCode", moduleCode);
     }
 
     public SystemParameterQuery type(SysParamType type) {
-        return (SystemParameterQuery) addEquals("type", type);
+        return (SystemParameterQuery) equals("type", type);
     }
 
     public SystemParameterQuery code(String code) {
-        return (SystemParameterQuery) addEquals("code", code);
+        return (SystemParameterQuery) equals("code", code);
     }
 
     public SystemParameterQuery codeLike(String code) {
-        return (SystemParameterQuery) addLike("code", code);
+        return (SystemParameterQuery) like("code", code);
     }
 
     public SystemParameterQuery codeBeginsWith(String code) {
-        return (SystemParameterQuery) addBeginsWith("code", code);
+        return (SystemParameterQuery) begins("code", code);
     }
 
     public SystemParameterQuery codeNotIn(Collection<String> codes) {
-        return (SystemParameterQuery) addNotAmongst("code", codes);
+        return (SystemParameterQuery) notamongst("code", codes);
     }
 
 }

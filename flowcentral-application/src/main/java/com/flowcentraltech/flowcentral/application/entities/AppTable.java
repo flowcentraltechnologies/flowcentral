@@ -258,7 +258,7 @@ public class AppTable extends BaseApplicationEntity {
         return limitSelectToColumns;
     }
 
-    public void setLimitSelectToColumns(boolean limitSelectToColumns) {
+    public void limitSelectToColumns(boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
     }
 

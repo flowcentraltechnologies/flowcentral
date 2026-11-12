@@ -89,9 +89,9 @@ public class EntityAssignmentAudit {
         if (entityAuditInfo.isWithInclusions()) {
             List<EntityFieldAudit> fieldAudits = new ArrayList<EntityFieldAudit>();
             final Map<String, List<Object>> vals = new LinkedHashMap<String, List<Object>>();
-            Query<? extends Entity> query = Query.of(assignClass).addEquals(baseFieldName, baseId);
+            Query<? extends Entity> query = Query.of(assignClass).equals(baseFieldName, baseId);
             for (String fieldName : entityAuditInfo.getInclusions()) {
-                query.addSelect(fieldName);
+                query.select(fieldName);
                 vals.put(fieldName, new ArrayList<Object>());
             }
 

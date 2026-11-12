@@ -30,27 +30,27 @@ public class WorkflowQuery extends BaseApplicationEntityQuery<Workflow> {
     }
 
     public WorkflowQuery entity(String entity) {
-        return (WorkflowQuery) addEquals("entity", entity);
+        return (WorkflowQuery) equals("entity", entity);
     }
 
     public WorkflowQuery entityBeginsWith(String entity) {
-        return (WorkflowQuery) addBeginsWith("entity", entity);
+        return (WorkflowQuery) begins("entity", entity);
     }
 
     public WorkflowQuery isWithLoadingTable() {
-        return (WorkflowQuery) addIsNotNull("loadingTable");
+        return (WorkflowQuery) notnull("loadingTable");
     }
 
     public WorkflowQuery runnable() {
-        return (WorkflowQuery) addEquals("runnable", true);
+        return (WorkflowQuery) equals("runnable", true);
     }
 
     public WorkflowQuery notPublished() {
-        return (WorkflowQuery) addEquals("published", false);
+        return (WorkflowQuery) equals("published", false);
     }
 
     public WorkflowQuery notRunnable() {
-        return (WorkflowQuery) addEquals("runnable", false);
+        return (WorkflowQuery) equals("runnable", false);
     }
 
 }

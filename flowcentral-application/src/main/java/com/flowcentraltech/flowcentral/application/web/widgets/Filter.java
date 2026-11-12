@@ -253,12 +253,12 @@ public class Filter {
             FilterDef.Builder fdb = FilterDef.newBuilder(au);
             for (FilterCondition fo : conditionList) {
                 if (fo.getType().isFieldVal() || fo.getType().isParameterVal()) {
-                    fdb.addRestrictionDef(fo.getType(), fo.getFieldName(), fo.getParamFieldA(), fo.getParamFieldB(),
+                    fdb.restrictionDef(fo.getType(), fo.getFieldName(), fo.getParamFieldA(), fo.getParamFieldB(),
                             fo.getDepth());
                 } else {
                     String paramA = fo.isWithParamInputA() ? fo.getParamInputA().getStringValue() : null;
                     String paramB = fo.isWithParamInputB() ? fo.getParamInputB().getStringValue() : null;
-                    fdb.addRestrictionDef(fo.getType(), fo.getFieldName(), paramA, paramB, fo.getDepth());
+                    fdb.restrictionDef(fo.getType(), fo.getFieldName(), paramA, paramB, fo.getDepth());
                 }
             }
             return fdb.build();

@@ -32,22 +32,22 @@ public class ReportableFieldQuery extends BaseEntityQuery<ReportableField> {
     }
 
     public ReportableFieldQuery reportableId(Long reportableId) {
-        return (ReportableFieldQuery) addEquals("reportableId", reportableId);
+        return (ReportableFieldQuery) equals("reportableId", reportableId);
     }
 
     public ReportableFieldQuery parameterOnly(boolean parameterOnly) {
-        return (ReportableFieldQuery) addEquals("parameterOnly", parameterOnly);
+        return (ReportableFieldQuery) equals("parameterOnly", parameterOnly);
     }
 
     public ReportableFieldQuery name(String name) {
-        return (ReportableFieldQuery) addEquals("name", name);
+        return (ReportableFieldQuery) equals("name", name);
     }
 
     public ReportableFieldQuery nameIn(Collection<String> names) {
-        return (ReportableFieldQuery) addAmongst("name", names);
+        return (ReportableFieldQuery) amongst("name", names);
     }
 
     public ReportableFieldQuery nameNotIn(Collection<String> names) {
-        return (ReportableFieldQuery) addNotAmongst("name", names);
+        return (ReportableFieldQuery) notamongst("name", names);
     }
 }

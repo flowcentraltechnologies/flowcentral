@@ -59,7 +59,7 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
         if (UsageType.isQualifiesEntity(usageType)) {
             List<WfChannel> wfChannelList = environment()
                     .listAll(new WfChannelQuery().entityBeginsWith(applicationNameBase)
-                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
+                            .applicationNameNot(applicationName).select("applicationName", "name", "entity"));
             for (WfChannel wfChannel : wfChannelList) {
                 Usage usage = new Usage(UsageType.ENTITY, "WfChannel",
                         wfChannel.getApplicationName() + "." + wfChannel.getName(), "entity", wfChannel.getEntity());
@@ -68,7 +68,7 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
 
             List<Workflow> workflowList = environment()
                     .listAll(new WorkflowQuery().entityBeginsWith(applicationNameBase)
-                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
+                            .applicationNameNot(applicationName).select("applicationName", "name", "entity"));
             for (Workflow workflow : workflowList) {
                 Usage usage = new Usage(UsageType.ENTITY, "Workflow",
                         workflow.getApplicationName() + "." + workflow.getName(), "entity", workflow.getEntity());
@@ -77,7 +77,7 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
 
             List<WfStep> wfStepList = environment().listAll(
                     new WfStepQuery().applicationNameNot(applicationName).appletNameBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "workflowName", "name", "appletName"));
+                            .select("applicationName", "workflowName", "name", "appletName"));
             for (WfStep wfStep : wfStepList) {
                 Usage usage = new Usage(UsageType.ENTITY, "WfStep",
                         wfStep.getApplicationName() + "." + wfStep.getWorkflowName() + "." + wfStep.getName(),
@@ -96,18 +96,18 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
         long usages = 0L;
         if (UsageType.isQualifiesEntity(usageType)) {
             usages += environment().countAll(new WfChannelQuery().entityBeginsWith(applicationNameBase)
-                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
+                    .applicationNameNot(applicationName).select("applicationName", "name", "entity"));
 
             usages += environment().countAll(new WorkflowQuery().entityBeginsWith(applicationNameBase)
-                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
+                    .applicationNameNot(applicationName).select("applicationName", "name", "entity"));
 
             usages += environment().countAll(
                     new WfStepQuery().applicationNameNot(applicationName).appletNameBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "workflowName", "name", "appletName"));
+                            .select("applicationName", "workflowName", "name", "appletName"));
 
             usages += environment().countAll(
                     new WfStepAlertQuery().applicationNameNot(applicationName).templateBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "workflowName", "wfStepName", "name", "template"));
+                            .select("applicationName", "workflowName", "wfStepName", "name", "template"));
         }
 
         return usages;
@@ -118,7 +118,7 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
         List<Usage> usageList = new ArrayList<Usage>();
         if (UsageType.isQualifiesEntity(usageType)) {
             List<WfChannel> wfChannelList = environment()
-                    .listAll(new WfChannelQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+                    .listAll(new WfChannelQuery().entity(entity).select("applicationName", "name", "entity"));
             for (WfChannel wfChannel : wfChannelList) {
                 Usage usage = new Usage(UsageType.ENTITY, "WfChannel",
                         wfChannel.getApplicationName() + "." + wfChannel.getName(), "entity", wfChannel.getEntity());
@@ -126,7 +126,7 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
             }
 
             List<Workflow> workflowList = environment()
-                    .listAll(new WorkflowQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+                    .listAll(new WorkflowQuery().entity(entity).select("applicationName", "name", "entity"));
             for (Workflow workflow : workflowList) {
                 Usage usage = new Usage(UsageType.ENTITY, "Workflow",
                         workflow.getApplicationName() + "." + workflow.getName(), "entity", workflow.getEntity());
@@ -142,10 +142,10 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
         long usages = 0L;
         if (UsageType.isQualifiesEntity(usageType)) {
             usages += environment()
-                    .countAll(new WfChannelQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+                    .countAll(new WfChannelQuery().entity(entity).select("applicationName", "name", "entity"));
 
             usages += environment()
-                    .countAll(new WorkflowQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+                    .countAll(new WorkflowQuery().entity(entity).select("applicationName", "name", "entity"));
         }
 
         return usages;

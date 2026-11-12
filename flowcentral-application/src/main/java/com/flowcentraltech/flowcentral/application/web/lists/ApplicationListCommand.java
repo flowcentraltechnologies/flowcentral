@@ -41,7 +41,7 @@ public class ApplicationListCommand extends AbstractApplicationListCommand<ZeroP
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         return application().findApplications(
-                (ApplicationQuery) new ApplicationQuery().addOrder("description").ignoreEmptyCriteria(true));
+                (ApplicationQuery) new ApplicationQuery().order("description").ignoreEmptyCriteria(true));
     }
 
 }

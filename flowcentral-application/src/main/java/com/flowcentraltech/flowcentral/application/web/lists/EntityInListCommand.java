@@ -56,14 +56,14 @@ public class EntityInListCommand extends AbstractApplicationListCommand<AssignPa
 
             EntityClassDef _assignEntityClassDef = application().getEntityClassDef(_assignRefDef.getEntity());
             Query<?> query = Query.of((Class<? extends Entity>) _assignEntityClassDef.getEntityClass());
-            query.addAmongst("id", params.getAssignedIdList(Long.class));
+            query.amongst("id", params.getAssignedIdList(Long.class));
             
             if (parts.isWithSearchField() && !StringUtils.isBlank(params.getSearchText1())) {
-                query.addILike(parts.getSearchField(), params.getSearchText1());
+                query.ilike(parts.getSearchField(), params.getSearchText1());
             }
             
             if (parts.isWithDescField()) {
-                query.addSelect("id", parts.getDescField()).addOrder(parts.getDescField());
+                query.select("id", parts.getDescField()).order(parts.getDescField());
             }
 
             return environment().listAll(query);

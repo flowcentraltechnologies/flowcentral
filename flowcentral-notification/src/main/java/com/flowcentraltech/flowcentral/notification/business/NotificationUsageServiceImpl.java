@@ -55,7 +55,7 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
         if (UsageType.isQualifiesEntity(usageType)) {
             List<NotificationTemplate> notificationTemplateList = environment()
                     .listAll(new NotificationTemplateQuery().entityBeginsWith(applicationNameBase)
-                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
+                            .applicationNameNot(applicationName).select("applicationName", "name", "entity"));
             for (NotificationTemplate notificationTemplate : notificationTemplateList) {
                 Usage usage = new Usage(UsageType.ENTITY, "NotificationTemplate",
                         notificationTemplate.getApplicationName() + "." + notificationTemplate.getName(), "entity",
@@ -75,7 +75,7 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
         // Notification template
         if (UsageType.isQualifiesEntity(usageType)) {
             usages += environment().countAll(new NotificationTemplateQuery().entityBeginsWith(applicationNameBase)
-                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
+                    .applicationNameNot(applicationName).select("applicationName", "name", "entity"));
         }
 
         return usages;
@@ -87,7 +87,7 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
         // Notification template
         if (UsageType.isQualifiesEntity(usageType)) {
             List<NotificationTemplate> notificationTemplateList = environment().listAll(
-                    new NotificationTemplateQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+                    new NotificationTemplateQuery().entity(entity).select("applicationName", "name", "entity"));
             for (NotificationTemplate notificationTemplate : notificationTemplateList) {
                 Usage usage = new Usage(UsageType.ENTITY, "NotificationTemplate",
                         notificationTemplate.getApplicationName() + "." + notificationTemplate.getName(), "entity",
@@ -105,7 +105,7 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
         // Notification template
         if (UsageType.isQualifiesEntity(usageType)) {
             usages += environment().countAll(
-                    new NotificationTemplateQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+                    new NotificationTemplateQuery().entity(entity).select("applicationName", "name", "entity"));
         }
 
         return usages;

@@ -44,7 +44,7 @@ public class ReportConfigurationNotInListCommand extends AbstractReportListComma
             query.idNotIn(params.getAssignedIdList(Long.class));
         }
 
-        query.addSelect("id", "description").addOrder("description").ignoreEmptyCriteria(true);
+        query.select("id", "description").order("description").ignoreEmptyCriteria(true);
         return getReportModuleService().findReportConfigurations(query);
     }
 

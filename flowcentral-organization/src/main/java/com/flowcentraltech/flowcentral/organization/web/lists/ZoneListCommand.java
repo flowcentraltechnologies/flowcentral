@@ -39,8 +39,8 @@ public class ZoneListCommand extends AbstractOrganizationListCommand<ZeroParams>
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return org().findZones((ZoneQuery) new ZoneQuery().addSelect("id", "description")
-                .addOrder("description").ignoreEmptyCriteria(true));
+        return org().findZones((ZoneQuery) new ZoneQuery().select("id", "description")
+                .order("description").ignoreEmptyCriteria(true));
     }
 
 }

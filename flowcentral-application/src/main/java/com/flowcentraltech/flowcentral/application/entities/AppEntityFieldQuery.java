@@ -35,71 +35,71 @@ public class AppEntityFieldQuery extends BaseConfigEntityQuery<AppEntityField> {
     }
 
     public AppEntityFieldQuery appEntityId(Long appEntityId) {
-        return (AppEntityFieldQuery) addEquals("appEntityId", appEntityId);
+        return (AppEntityFieldQuery) equals("appEntityId", appEntityId);
     }
 
     public AppEntityFieldQuery appEntityName(String appEntityName) {
-        return (AppEntityFieldQuery) addEquals("appEntityName", appEntityName);
+        return (AppEntityFieldQuery) equals("appEntityName", appEntityName);
     }
 
     public AppEntityFieldQuery name(String name) {
-        return (AppEntityFieldQuery) addEquals("name", name);
+        return (AppEntityFieldQuery) equals("name", name);
     }
 
     public AppEntityFieldQuery nameNotIn(String... name) {
-        return (AppEntityFieldQuery) addNotAmongst("name", Arrays.asList(name));
+        return (AppEntityFieldQuery) notamongst("name", Arrays.asList(name));
     }
 
     public AppEntityFieldQuery applicationName(String applicationName) {
-        return (AppEntityFieldQuery) addEquals("applicationName", applicationName);
+        return (AppEntityFieldQuery) equals("applicationName", applicationName);
     }
 
     public AppEntityFieldQuery applicationNameNot(String applicationName) {
-        return (AppEntityFieldQuery) addNotEquals("applicationName", applicationName);
+        return (AppEntityFieldQuery) notequals("applicationName", applicationName);
     }
 
     public AppEntityFieldQuery dataType(EntityFieldDataType type) {
-        return (AppEntityFieldQuery) addEquals("dataType", type);
+        return (AppEntityFieldQuery) equals("dataType", type);
     }
 
     public AppEntityFieldQuery dataTypeIn(EntityFieldDataType... type) {
-        return (AppEntityFieldQuery) addAmongst("dataType", Arrays.asList(type));
+        return (AppEntityFieldQuery) amongst("dataType", Arrays.asList(type));
     }
 
     public AppEntityFieldQuery dataTypeNotIn(EntityFieldDataType... type) {
-        return (AppEntityFieldQuery) addNotAmongst("dataType", Arrays.asList(type));
+        return (AppEntityFieldQuery) notamongst("dataType", Arrays.asList(type));
     }
 
     public AppEntityFieldQuery type(EntityFieldType type) {
-        return (AppEntityFieldQuery) addEquals("type", type);
+        return (AppEntityFieldQuery) equals("type", type);
     }
 
     public AppEntityFieldQuery referencesIn(Collection<String> references) {
-        return (AppEntityFieldQuery) addAmongst("references", references);
+        return (AppEntityFieldQuery) amongst("references", references);
     }
 
     public AppEntityFieldQuery referencesBeginsWith(String references) {
-        return (AppEntityFieldQuery) addBeginsWith("references", references);
+        return (AppEntityFieldQuery) begins("references", references);
     }
 
     public AppEntityFieldQuery inputWidgetBeginsWith(String inputWidget) {
-        return (AppEntityFieldQuery) addBeginsWith("inputWidget", inputWidget);
+        return (AppEntityFieldQuery) begins("inputWidget", inputWidget);
     }
 
     public AppEntityFieldQuery suggestionTypeBeginsWith(String suggestionType) {
-        return (AppEntityFieldQuery) addBeginsWith("suggestionType", suggestionType);
+        return (AppEntityFieldQuery) begins("suggestionType", suggestionType);
     }
 
     public AppEntityFieldQuery lingualWidgetBeginsWith(String lingualWidget) {
-        return (AppEntityFieldQuery) addBeginsWith("lingualWidget", lingualWidget);
+        return (AppEntityFieldQuery) begins("lingualWidget", lingualWidget);
     }
 
     public AppEntityFieldQuery isEntityField() {
-        return (AppEntityFieldQuery) addIsNull("key");
+        return (AppEntityFieldQuery) isnull("key");
     }
 
     public AppEntityFieldQuery isListField() {
-        return (AppEntityFieldQuery) addIsNotNull("key").addIsNotNull("property");
+        return (AppEntityFieldQuery) notnull("key").notnull("property");
     }
 
 }

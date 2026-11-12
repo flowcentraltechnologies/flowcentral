@@ -186,7 +186,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public <T extends Entity> T find(Class<T> clazz, Object id) throws UnifyException {
-        return (T) db(clazz).find(Query.of(clazz).addEquals("id", id));
+        return (T) db(clazz).find(Query.of(clazz).equals("id", id));
     }
 
     @Override
@@ -196,7 +196,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public <T extends Entity> T findLean(Class<T> clazz, Object id) throws UnifyException {
-        return (T) db(clazz).findLean(Query.of(clazz).addEquals("id", id));
+        return (T) db(clazz).findLean(Query.of(clazz).equals("id", id));
     }
 
     @Override
@@ -254,7 +254,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public <T extends Entity> T list(Class<T> clazz, Object id) throws UnifyException {
-        return (T) db(clazz).list(Query.of(clazz).addEquals("id", id));
+        return (T) db(clazz).list(Query.of(clazz).equals("id", id));
     }
 
     @Override
@@ -264,7 +264,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public <T extends Entity> T listLean(Class<T> clazz, Object id) throws UnifyException {
-        return (T) db(clazz).listLean(Query.of(clazz).addEquals("id", id));
+        return (T) db(clazz).listLean(Query.of(clazz).equals("id", id));
     }
 
     @Override
@@ -300,7 +300,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public <T, U extends Entity> T listValue(Class<T> valueClazz, Class<U> recordClazz, Object id, String property)
             throws UnifyException {
-        return db(recordClazz).value(valueClazz, property, Query.of(recordClazz).addEquals("id", id));
+        return db(recordClazz).value(valueClazz, property, Query.of(recordClazz).equals("id", id));
     }
 
     @Override
@@ -621,13 +621,13 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public <T, U extends Entity> List<T> getAssignedList(Class<U> entityClass, Class<T> valueClass, String baseField,
             Object baseId, String valueField) throws UnifyException {
-        return db(entityClass).valueList(valueClass, valueField, Query.of(entityClass).addEquals(baseField, baseId));
+        return db(entityClass).valueList(valueClass, valueField, Query.of(entityClass).equals(baseField, baseId));
     }
 
     @Override
     public <T, U extends Entity> Set<T> getAssignedSet(Class<U> entityClass, Class<T> valueClass, String baseField,
             Object baseId, String valueField) throws UnifyException {
-        return db(entityClass).valueSet(valueClass, valueField, Query.of(entityClass).addEquals(baseField, baseId));
+        return db(entityClass).valueSet(valueClass, valueField, Query.of(entityClass).equals(baseField, baseId));
     }
 
     @Override
@@ -636,7 +636,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
             List<T> valueList) throws UnifyException {
         final Database db = db(entityClass);
         int updated = 0;
-        db.deleteAll(Query.of(entityClass).addEquals(baseField, baseId));
+        db.deleteAll(Query.of(entityClass).equals(baseField, baseId));
         if (!DataUtils.isBlank(valueList)) {
             Entity inst = ReflectUtils.newInstance(entityClass); // TODO Get from class manager
             DataUtils.setBeanProperty(inst, baseField, baseId);
@@ -673,7 +673,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
                 }
             }
         } else {
-            db.deleteAll(Query.of(entityClass).addEquals(baseField, baseId));
+            db.deleteAll(Query.of(entityClass).equals(baseField, baseId));
             if (!DataUtils.isBlank(instList)) {
                 for (T inst : instList) {
                     DataUtils.setBeanProperty(inst, baseField, baseId);

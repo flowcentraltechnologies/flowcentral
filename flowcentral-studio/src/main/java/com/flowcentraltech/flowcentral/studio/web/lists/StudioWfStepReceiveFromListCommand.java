@@ -55,7 +55,7 @@ public class StudioWfStepReceiveFromListCommand extends AbstractApplicationListC
             WfStep wfStep = workflowModuleService.findLeanWorkflowStepById(longParam.getValue());
             List<WfStep> stepList = workflowModuleService
                     .findWorkflowSteps((WfStepQuery) new WfStepQuery().workflowId(wfStep.getWorkflowId())
-                            .receivableFrom().idNot(longParam.getValue()).addSelect("name", "description"));
+                            .receivableFrom().idNot(longParam.getValue()).select("name", "description"));
             if (!DataUtils.isBlank(stepList)) {
                 List<ListData> list = new ArrayList<ListData>();
                 for (WfStep rwfStep : stepList) {

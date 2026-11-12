@@ -198,12 +198,12 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
 
         Set<String> childEntityList = (Set<String>) getWriteWork().get(Set.class, "ref.childentitylist");
         if (childEntityList != null) {
-            query.addAmongst("entity", childEntityList);
+            query.amongst("entity", childEntityList);
         }
 
         Restriction restriction = getWriteWork().get(Restriction.class, "ref.restriction");
         if (restriction != null) {
-            query.addRestriction(restriction);
+            query.restriction(restriction);
         }
     }
 

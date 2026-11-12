@@ -48,23 +48,23 @@ public class UserQuery extends BaseStatusWorkEntityQuery<User> {
     }
 
     public UserQuery fullNameLike(String fullName) {
-        return (UserQuery) addLike("fullName", fullName);
+        return (UserQuery) like("fullName", fullName);
     }
 
     public UserQuery loginId(String loginId) {
         ignoreTenancy(DefaultApplicationConstants.SYSTEM_LOGINID.equals(loginId));
-        return (UserQuery) addEquals("loginId", loginId);
+        return (UserQuery) equals("loginId", loginId);
     }
 
     public UserQuery loginIdLike(String loginId) {
-        return (UserQuery) addLike("loginId", loginId);
+        return (UserQuery) like("loginId", loginId);
     }
 
     public UserQuery password(String password) {
-        return (UserQuery) addEquals("password", password);
+        return (UserQuery) equals("password", password);
     }
 
     public UserQuery branchId(Long branchId) {
-        return (UserQuery) addEquals("branchId", branchId);
+        return (UserQuery) equals("branchId", branchId);
     }
 }

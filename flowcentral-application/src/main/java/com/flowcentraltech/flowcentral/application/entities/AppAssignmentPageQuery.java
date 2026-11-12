@@ -28,11 +28,11 @@ public class AppAssignmentPageQuery extends BaseApplicationEntityQuery<AppAssign
     }
 
     public AppAssignmentPageQuery entity(String entity) {
-        return (AppAssignmentPageQuery) addEquals("entity", entity);
+        return (AppAssignmentPageQuery) equals("entity", entity);
     }
 
     public AppAssignmentPageQuery entityBeginsWith(String entity) {
-        return (AppAssignmentPageQuery) addBeginsWith("entity", entity);
+        return (AppAssignmentPageQuery) begins("entity", entity);
     }
 
 }

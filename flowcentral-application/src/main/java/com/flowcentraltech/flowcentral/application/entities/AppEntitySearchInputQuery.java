@@ -30,7 +30,7 @@ public class AppEntitySearchInputQuery extends BaseConfigNamedEntityQuery<AppEnt
     }
 
     public AppEntitySearchInputQuery appEntityId(Long appEntityId) {
-        return (AppEntitySearchInputQuery) addEquals("appEntityId", appEntityId);
+        return (AppEntitySearchInputQuery) equals("appEntityId", appEntityId);
     }
 
 }

@@ -49,7 +49,7 @@ public class StudioEntityBooleanFieldListCommand extends AbstractApplicationList
             ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getValue());
             return application().findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                     .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
-                    .dataType(EntityFieldDataType.BOOLEAN).addSelect("name", "label").addOrder("label"));
+                    .dataType(EntityFieldDataType.BOOLEAN).select("name", "label").order("label"));
         }
 
         return Collections.emptyList();

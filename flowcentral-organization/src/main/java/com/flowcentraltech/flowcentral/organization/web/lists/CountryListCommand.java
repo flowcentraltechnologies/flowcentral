@@ -39,8 +39,8 @@ public class CountryListCommand extends AbstractOrganizationListCommand<ZeroPara
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return org().findCountries((CountryQuery) new CountryQuery().addSelect("id", "description")
-                .ignoreEmptyCriteria(true).addOrder("description"));
+        return org().findCountries((CountryQuery) new CountryQuery().select("id", "description")
+                .ignoreEmptyCriteria(true).order("description"));
     }
 
 }

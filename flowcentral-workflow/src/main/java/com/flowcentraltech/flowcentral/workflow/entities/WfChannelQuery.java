@@ -30,10 +30,10 @@ public class WfChannelQuery extends BaseApplicationEntityQuery<WfChannel> {
     }
 
     public WfChannelQuery entity(String entity) {
-        return (WfChannelQuery) addEquals("entity", entity);
+        return (WfChannelQuery) equals("entity", entity);
     }
 
     public WfChannelQuery entityBeginsWith(String entity) {
-        return (WfChannelQuery) addBeginsWith("entity", entity);
+        return (WfChannelQuery) begins("entity", entity);
     }
 }

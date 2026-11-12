@@ -50,7 +50,7 @@ public class StudioOnDeleteAppAppletPolicy extends AbstractStudioAppletActionPol
                 PrivilegeNameUtils.getAppletPrivilegeName(appletName));
         // Delete facade applets
         List<AppApplet> facadeAppletList = environment()
-                .listAll(new AppAppletQuery().routeToApplet(appletName).addSelect("name", "applicationName"));
+                .listAll(new AppAppletQuery().routeToApplet(appletName).select("name", "applicationName"));
         for (AppApplet facadeApplet : facadeAppletList) {
             unregisterPrivilege(appApplet.getApplicationId(),
                     ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE,

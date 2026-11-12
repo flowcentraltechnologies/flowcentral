@@ -48,7 +48,7 @@ public class StudioTabMappedFormListCommand extends AbstractApplicationListComma
             final EntityDef entityDef = application().getEntityDef(params.getEntity());
             final EntityFieldDef entityFieldDef = entityDef.getFieldDef(params.getField());
             return ApplicationNameUtils.getListableList(application().findAppForms((AppFormQuery) new AppFormQuery()
-                    .entity(entityFieldDef.getMapping()).addSelect("applicationName", "name", "description")));
+                    .entity(entityFieldDef.getMapping()).select("applicationName", "name", "description")));
         }
 
         return Collections.emptyList();

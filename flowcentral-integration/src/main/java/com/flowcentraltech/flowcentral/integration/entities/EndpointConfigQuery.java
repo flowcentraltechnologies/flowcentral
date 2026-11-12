@@ -31,18 +31,18 @@ public class EndpointConfigQuery extends BaseStatusEntityQuery<EndpointConfig> {
     }
 
     public EndpointConfigQuery name(String name) {
-        return (EndpointConfigQuery) addEquals("name", name);
+        return (EndpointConfigQuery) equals("name", name);
     }
 
     public EndpointConfigQuery nameStartsWith(String name) {
-        return (EndpointConfigQuery) addIBeginsWith("name", name);
+        return (EndpointConfigQuery) ibegins("name", name);
     }
 
     public EndpointConfigQuery descriptionLike(String description) {
-        return (EndpointConfigQuery) addLike("description", description);
+        return (EndpointConfigQuery) like("description", description);
     }
 
     public EndpointConfigQuery endpointType(EndpointType endpointType) {
-        return (EndpointConfigQuery) addEquals("endpointType", endpointType);
+        return (EndpointConfigQuery) equals("endpointType", endpointType);
     }
 }

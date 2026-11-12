@@ -31,6 +31,6 @@ public class AppFormActionQuery extends BaseConfigNamedEntityQuery<AppFormAction
     }
 
     public AppFormActionQuery appFormId(Long appFormId) {
-        return (AppFormActionQuery) addEquals("appFormId", appFormId);
+        return (AppFormActionQuery) equals("appFormId", appFormId);
     }
 }

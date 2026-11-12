@@ -30,7 +30,7 @@ public class AppTableFilterQuery extends BaseConfigNamedEntityQuery<AppTableFilt
     }
 
     public AppTableFilterQuery appTableId(Long appTableId) {
-        return (AppTableFilterQuery) addEquals("appTableId", appTableId);
+        return (AppTableFilterQuery) equals("appTableId", appTableId);
     }
 
 }

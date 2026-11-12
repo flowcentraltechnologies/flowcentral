@@ -30,19 +30,19 @@ public class OSMessagingAsyncInQuery extends BaseAuditEntityQuery<OSMessagingAsy
     }
 
     public OSMessagingAsyncInQuery correlationId(String correlationId) {
-        return (OSMessagingAsyncInQuery) addEquals("correlationId", correlationId);
+        return (OSMessagingAsyncInQuery) equals("correlationId", correlationId);
     }
 
     public OSMessagingAsyncInQuery processor(String processor) {
-        return (OSMessagingAsyncInQuery) addEquals("processor", processor);
+        return (OSMessagingAsyncInQuery) equals("processor", processor);
     }
 
     public OSMessagingAsyncInQuery isProcessed() {
-        return (OSMessagingAsyncInQuery) addIsNotNull("processedOn");
+        return (OSMessagingAsyncInQuery) notnull("processedOn");
     }
 
     public OSMessagingAsyncInQuery isNotProcessed() {
-        return (OSMessagingAsyncInQuery) addIsNull("processedOn");
+        return (OSMessagingAsyncInQuery) isnull("processedOn");
     }
 
 }

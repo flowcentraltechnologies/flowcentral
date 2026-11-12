@@ -31,19 +31,19 @@ public class NotificationChannelQuery extends BaseStatusEntityQuery<Notification
     }
 
     public NotificationChannelQuery notifType(NotifType notifType) {
-        return (NotificationChannelQuery) addEquals("notificationType", notifType);
+        return (NotificationChannelQuery) equals("notificationType", notifType);
     }
 
     public NotificationChannelQuery name(String name) {
-        return (NotificationChannelQuery) addEquals("name", name);
+        return (NotificationChannelQuery) equals("name", name);
     }
 
     public NotificationChannelQuery nameLike(String name) {
-        return (NotificationChannelQuery) addLike("name", name);
+        return (NotificationChannelQuery) like("name", name);
     }
 
     public NotificationChannelQuery descriptionLike(String description) {
-        return (NotificationChannelQuery) addLike("description", description);
+        return (NotificationChannelQuery) like("description", description);
     }
 
 }

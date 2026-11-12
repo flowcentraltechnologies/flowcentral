@@ -163,9 +163,9 @@ public class EntitySelectWidget extends AbstractFlowCentralPopupTextField {
 
         String listKey = getListkey();
         if (StringUtils.isBlank(listKey)) {
-            query.addEquals("id", keyVal);
+            query.equals("id", keyVal);
         } else {
-            query.addEquals(listKey, keyVal);
+            query.equals(listKey, keyVal);
         }
 
         Listable result = environment().listLean(query);

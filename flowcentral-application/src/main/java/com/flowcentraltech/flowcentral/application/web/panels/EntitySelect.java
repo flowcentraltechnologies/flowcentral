@@ -81,7 +81,7 @@ public class EntitySelect {
             String fieldNameB, ValueStore formValueStore, String selectHandlerName, String order, int limit) {
         this.entityTable = new EntityTable(au, tableDef, null);
         this.entityTable.setOrder(new Order().add(!StringUtils.isBlank(order) ? order : searchFieldName));
-        this.entityTable.setLimit(limit);
+        this.entityTable.limit(limit);
         this.fieldName = searchFieldName;
         this.fieldNameA = fieldNameA;
         this.fieldNameB = fieldNameB;

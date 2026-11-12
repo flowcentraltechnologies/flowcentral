@@ -48,7 +48,7 @@ public class ReportConfigFieldListCommand extends AbstractReportListCommand<Long
                     .getReportConfigReportableDefinitionId(longParams.getValue());
             List<ReportableField> list = getReportModuleService()
                     .findReportableFields((ReportableFieldQuery) new ReportableFieldQuery()
-                            .reportableId(reportableDefinitionId).addSelect("name", "description"));
+                            .reportableId(reportableDefinitionId).select("name", "description"));
             return EntityUtils.getListablesFromEntityList(list, "name", "description");
         }
 

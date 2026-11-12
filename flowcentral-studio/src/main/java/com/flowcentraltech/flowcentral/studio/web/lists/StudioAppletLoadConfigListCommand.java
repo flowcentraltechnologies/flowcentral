@@ -51,7 +51,7 @@ public class StudioAppletLoadConfigListCommand extends AbstractApplicationListCo
                 ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entity);
                 return application().findAppEntityUploads(
                         (AppEntityUploadQuery) new AppEntityUploadQuery().applicationName(np.getApplicationName())
-                                .entityName(np.getEntityName()).addSelect("id", "name", "description"));
+                                .entityName(np.getEntityName()).select("id", "name", "description"));
             }
         }
 

@@ -30,23 +30,23 @@ public class ApplicationQuery extends BaseConfigNamedEntityQuery<Application> {
     }
 
     public ApplicationQuery moduleId(Long moduleId) {
-        return (ApplicationQuery) addEquals("moduleId", moduleId);
+        return (ApplicationQuery) equals("moduleId", moduleId);
     }
 
     public ApplicationQuery moduleName(String moduleName) {
-        return (ApplicationQuery) addEquals("moduleName", moduleName);
+        return (ApplicationQuery) equals("moduleName", moduleName);
     }
 
     public ApplicationQuery isMenuAccess() {
-        return (ApplicationQuery) addEquals("menuAccess", true);
+        return (ApplicationQuery) equals("menuAccess", true);
     }
 
     public ApplicationQuery isDevelopable() {
-        return (ApplicationQuery) addEquals("developable", true);
+        return (ApplicationQuery) equals("developable", true);
     }
 
     public ApplicationQuery isInstallable() {
-        return (ApplicationQuery) addEquals("installable", true);
+        return (ApplicationQuery) equals("installable", true);
     }
 
 }

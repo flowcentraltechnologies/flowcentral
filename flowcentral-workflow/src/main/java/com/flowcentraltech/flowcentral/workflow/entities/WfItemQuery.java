@@ -40,87 +40,87 @@ public class WfItemQuery extends BaseAuditEntityQuery<WfItem> {
     }
 
     public WfItemQuery wfItemEventId(Long wfItemEventId) {
-        return (WfItemQuery) addEquals("wfItemEventId", wfItemEventId);
+        return (WfItemQuery) equals("wfItemEventId", wfItemEventId);
     }
 
     public WfItemQuery workRecId(Long workRecId) {
-        return (WfItemQuery) addEquals("workRecId", workRecId);
+        return (WfItemQuery) equals("workRecId", workRecId);
     }
 
     public WfItemQuery entity(String entity) {
-        return (WfItemQuery) addEquals("entity", entity);
+        return (WfItemQuery) equals("entity", entity);
     }
 
     public WfItemQuery isInWorkflow(String entity, Long entityInstId) {
-        return (WfItemQuery) addEquals("entity", entity).addEquals("originWorkRecId", entityInstId);
+        return (WfItemQuery) equals("entity", entity).equals("originWorkRecId", entityInstId);
     }
 
     public WfItemQuery wfStepName(String wfStepName) {
-        return (WfItemQuery) addEquals("wfStepName", wfStepName);
+        return (WfItemQuery) equals("wfStepName", wfStepName);
     }
 
     public WfItemQuery branchCode(String branchCode) {
-        return (WfItemQuery) addEquals("branchCode", branchCode);
+        return (WfItemQuery) equals("branchCode", branchCode);
     }
 
     public WfItemQuery departmentCode(String departmentCode) {
-        return (WfItemQuery) addEquals("departmentCode", departmentCode);
+        return (WfItemQuery) equals("departmentCode", departmentCode);
     }
 
     public WfItemQuery applicationName(String applicationName) {
-        return (WfItemQuery) addEquals("applicationName", applicationName);
+        return (WfItemQuery) equals("applicationName", applicationName);
     }
 
     public WfItemQuery workflowName(String workflowName) {
-        return (WfItemQuery) addEquals("workflowName", workflowName);
+        return (WfItemQuery) equals("workflowName", workflowName);
     }
 
     public WfItemQuery wfItemDescLike(String wfItemDesc) {
-        return (WfItemQuery) addLike("wfItemDesc", wfItemDesc);
+        return (WfItemQuery) like("wfItemDesc", wfItemDesc);
     }
 
     public WfItemQuery heldBy(String heldBy) {
-        return (WfItemQuery) addEquals("heldBy", heldBy);
+        return (WfItemQuery) equals("heldBy", heldBy);
     }
 
     public WfItemQuery isHeld() {
-        return (WfItemQuery) addIsNotNull("heldBy");
+        return (WfItemQuery) notnull("heldBy");
     }
 
     public WfItemQuery isUnheld() {
-        return (WfItemQuery) addIsNull("heldBy");
+        return (WfItemQuery) isnull("heldBy");
     }
 
     public WfItemQuery stepDt(Date stepDt) {
-        return (WfItemQuery) addEquals("stepDt", stepDt);
+        return (WfItemQuery) equals("stepDt", stepDt);
     }
 
     public WfItemQuery ejectionDue(Date now) {
-        return (WfItemQuery) addRestriction(
+        return (WfItemQuery) restriction(
                 new And().add(new IsNotNull("ejectionDt")).add(new Less("ejectionDt", now)));
     }
 
     public WfItemQuery reminderDue(Date now) {
-        return (WfItemQuery) addRestriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("reminderDt"))
+        return (WfItemQuery) restriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("reminderDt"))
                 .add(new Less("reminderDt", now)));
     }
 
     public WfItemQuery expirationDue(Date now) {
-        return (WfItemQuery) addRestriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("expectedDt"))
+        return (WfItemQuery) restriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("expectedDt"))
                 .add(new Less("expectedDt", now)));
     }
 
     public WfItemQuery criticalDue(Date now) {
-        return (WfItemQuery) addRestriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("criticalDt"))
+        return (WfItemQuery) restriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("criticalDt"))
                 .add(new Less("criticalDt", now)));
     }
 
     public WfItemQuery isUnheldOrHeldBy(String heldBy) {
-        return (WfItemQuery) addRestriction(new Or().add(new IsNull("heldBy")).add(new Equals("heldBy", heldBy)));
+        return (WfItemQuery) restriction(new Or().add(new IsNull("heldBy")).add(new Equals("heldBy", heldBy)));
     }
 
     public WfItemQuery notForwardedBy(String userLoginId) {
-        return (WfItemQuery) addRestriction(
+        return (WfItemQuery) restriction(
                 new Or().add(new NotEquals("forwardedBy", userLoginId)).add(new IsNull("forwardedBy")));
     }
 }

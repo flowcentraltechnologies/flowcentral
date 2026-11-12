@@ -28,11 +28,11 @@ public class AppHelpSheetQuery extends BaseApplicationEntityQuery<AppHelpSheet> 
     }
 
     public AppHelpSheetQuery entity(String entity) {
-        return (AppHelpSheetQuery) addEquals("entity", entity);
+        return (AppHelpSheetQuery) equals("entity", entity);
     }
 
     public AppHelpSheetQuery entityBeginsWith(String entity) {
-        return (AppHelpSheetQuery) addBeginsWith("entity", entity);
+        return (AppHelpSheetQuery) begins("entity", entity);
     }
 
 }

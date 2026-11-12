@@ -170,14 +170,14 @@ public final class DiffUtils {
                                     ? au.environment()
                                             .valueList(Long.class, assignmentPageDef.getAssignField(), Query
                                                     .of((Class<? extends Entity>) assignEntityClassDef.getEntityClass())
-                                                    .addAmongst("id", lChildIdList))
+                                                    .amongst("id", lChildIdList))
                                     : Collections.emptyList();
 
                             final List<Long> rAssignedIdList = !rChildIdList.isEmpty()
                                     ? au.environment()
                                             .valueList(Long.class, assignmentPageDef.getAssignField(), Query
                                                     .of((Class<? extends Entity>) assignEntityClassDef.getEntityClass())
-                                                    .addAmongst("id", rChildIdList))
+                                                    .amongst("id", rChildIdList))
                                     : Collections.emptyList();
 
                             ListCommand<AssignParams> listCommand = (ListCommand<AssignParams>) au
@@ -267,7 +267,7 @@ public final class DiffUtils {
 
             EntityClassDef cEntityDef = au.getAppletEntityClassDef(childTabDef.getApplet());
             List<Long> resultList = au.environment().valueList(Long.class, "id",
-                    Query.of((Class<? extends Entity>) cEntityDef.getEntityClass()).addRestriction(childRestriction));
+                    Query.of((Class<? extends Entity>) cEntityDef.getEntityClass()).restriction(childRestriction));
             Collections.sort(resultList);
             return resultList;
         }

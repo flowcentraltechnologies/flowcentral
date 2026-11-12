@@ -98,7 +98,7 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
             WorkflowEditor.Builder web = WorkflowEditor.newBuilder(au(), entityDef, workflowId);
             boolean isOldDesign = false;
             for (WfStep step : au().environment()
-                    .listAllWithChildren(Query.of(WfStep.class).addEquals("workflowId", workflowId).addOrder("id"))) {
+                    .listAllWithChildren(Query.of(WfStep.class).equals("workflowId", workflowId).order("id"))) {
                 web.addStep(step);
                 isOldDesign |= step.getDesignX() != 0;
                 isOldDesign |= step.getDesignY() != 0;

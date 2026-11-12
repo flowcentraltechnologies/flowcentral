@@ -37,7 +37,7 @@ public class SearchInput {
         return input;
     }
 
-    public int getLimit() {
+    public int limit() {
         return limit;
     }
 }

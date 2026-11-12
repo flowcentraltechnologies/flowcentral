@@ -28,6 +28,6 @@ public class AppEnumerationQuery extends BaseApplicationEntityQuery<AppEnumerati
     }
 
     public AppEnumerationQuery labelLike(String label) {
-        return (AppEnumerationQuery) addILike("label", label);
+        return (AppEnumerationQuery) ilike("label", label);
     }
 }

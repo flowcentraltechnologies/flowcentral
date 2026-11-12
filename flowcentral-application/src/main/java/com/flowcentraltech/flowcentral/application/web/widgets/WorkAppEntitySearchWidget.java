@@ -38,7 +38,7 @@ public class WorkAppEntitySearchWidget extends EntitySearchWidget {
     @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
         super.addMoreResultRestriction(query);
-        query.addRestriction(ApplicationEntityUtils.WORK_ENTITY_RESTRICTION);
+        query.restriction(ApplicationEntityUtils.WORK_ENTITY_RESTRICTION);
     }
 
 }

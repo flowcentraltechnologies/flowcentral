@@ -31,7 +31,7 @@ public class DashboardSectionQuery extends BaseAuditEntityQuery<DashboardSection
     }
 
     public DashboardSectionQuery dashboardId(Long dashboardId) {
-        return (DashboardSectionQuery) addEquals("dashboardId", dashboardId);
+        return (DashboardSectionQuery) equals("dashboardId", dashboardId);
     }
 
 }

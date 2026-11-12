@@ -30,15 +30,15 @@ public class AppWidgetRulesQuery extends BaseAuditEntityQuery<AppWidgetRules> {
     }
 
     public AppWidgetRulesQuery entityInstId(Long entityInstId) {
-        return (AppWidgetRulesQuery) addEquals("entityInstId", entityInstId);
+        return (AppWidgetRulesQuery) equals("entityInstId", entityInstId);
     }
 
     public AppWidgetRulesQuery entity(String entity) {
-        return (AppWidgetRulesQuery) addEquals("entity", entity);
+        return (AppWidgetRulesQuery) equals("entity", entity);
     }
 
     public AppWidgetRulesQuery category(String category) {
-        return (AppWidgetRulesQuery) addEquals("category", category);
+        return (AppWidgetRulesQuery) equals("category", category);
     }
 
 }

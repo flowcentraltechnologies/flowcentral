@@ -51,7 +51,7 @@ public class StudioWfStepFilterListCommand extends AbstractApplicationListComman
         if (longParam.isPresent()) {
             WfStep wfStep = workflowModuleService.findLeanWorkflowStepById(longParam.getValue());
             return workflowModuleService.findWorkflowFilters((WorkflowFilterQuery) new WorkflowFilterQuery()
-                    .workflowId(wfStep.getWorkflowId()).addSelect("name", "description"));
+                    .workflowId(wfStep.getWorkflowId()).select("name", "description"));
         }
 
         return Collections.emptyList();

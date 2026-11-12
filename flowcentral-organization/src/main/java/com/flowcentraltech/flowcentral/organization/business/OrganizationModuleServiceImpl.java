@@ -271,7 +271,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
         List<RolePrivilege> rolePrivilegeList = environment()
-                .listAll(new RolePrivilegeQuery().applicationId(applicationId).addSelect("roleCode", "privilegeCode"));
+                .listAll(new RolePrivilegeQuery().applicationId(applicationId).select("roleCode", "privilegeCode"));
         for (RolePrivilege rolePrivilege : rolePrivilegeList) {
             Set<String> privilegeCodes = privilegeBackup.get(rolePrivilege.getRoleCode());
             if (privilegeCodes == null) {
@@ -426,7 +426,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             if (!DataUtils.isBlank(branchCodeList)) {
                 List<BranchInfo> branchInfoList = new ArrayList<BranchInfo>();
                 List<Branch> branchList = environment().findAll(new BranchQuery().codeIn(branchCodeList)
-                        .addSelect("code", "description").addOrder("description"));
+                        .select("code", "description").order("description"));
                 for (Branch branch : branchList) {
                     branchInfoList.add(new BranchInfo(branch.getCode(), branch.getDescription()));
                 }

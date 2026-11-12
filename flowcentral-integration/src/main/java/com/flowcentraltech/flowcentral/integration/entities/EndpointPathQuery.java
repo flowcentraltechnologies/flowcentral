@@ -30,14 +30,14 @@ public class EndpointPathQuery extends BaseAuditEntityQuery<EndpointPath> {
     }
 
     public EndpointPathQuery name(String name) {
-        return (EndpointPathQuery) addEquals("name", name);
+        return (EndpointPathQuery) equals("name", name);
     }
 
     public EndpointPathQuery descriptionLike(String description) {
-        return (EndpointPathQuery) addLike("description", description);
+        return (EndpointPathQuery) like("description", description);
     }
 
     public EndpointPathQuery endpointConfigName(String endpointConfigName) {
-        return (EndpointPathQuery) addEquals("endpointConfigName", endpointConfigName);
+        return (EndpointPathQuery) equals("endpointConfigName", endpointConfigName);
     }
 }

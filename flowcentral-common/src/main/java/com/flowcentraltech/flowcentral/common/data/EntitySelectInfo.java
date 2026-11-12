@@ -60,7 +60,7 @@ public class EntitySelectInfo {
 		return defaultFilter;
 	}
 
-	public int getLimit() {
+	public int limit() {
 		return limit;
 	}
 

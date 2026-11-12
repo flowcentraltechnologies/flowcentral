@@ -31,15 +31,15 @@ public class EntityAuditConfigQuery extends BaseStatusEntityQuery<EntityAuditCon
     }
     
     public EntityAuditConfigQuery sourceType(AuditSourceType sourceType) {
-        return (EntityAuditConfigQuery) addEquals("sourceType", sourceType);
+        return (EntityAuditConfigQuery) equals("sourceType", sourceType);
     }
 
     public EntityAuditConfigQuery name(String name) {
-        return (EntityAuditConfigQuery) addEquals("name", name);
+        return (EntityAuditConfigQuery) equals("name", name);
     }
 
     public EntityAuditConfigQuery entity(String entity) {
-        return (EntityAuditConfigQuery) addEquals("entity", entity);
+        return (EntityAuditConfigQuery) equals("entity", entity);
     }
 
 }

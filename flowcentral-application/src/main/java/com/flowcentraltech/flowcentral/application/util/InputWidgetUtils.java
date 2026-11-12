@@ -1335,7 +1335,7 @@ public final class InputWidgetUtils {
                     String paramA = p.length > 3 ? p[3] : null;
                     String paramB = p.length > 4 ? p[4] : null;
                     int depth = Integer.parseInt(p[1]);
-                    fdb.addRestrictionDef(type, fieldName, paramA, paramB, depth);
+                    fdb.restrictionDef(type, fieldName, paramA, paramB, depth);
                 }
             } catch (IOException e) {
                 throw new UnifyOperationException(e);
@@ -1368,7 +1368,7 @@ public final class InputWidgetUtils {
         if (restriction != null) {
             FilterDef.Builder fdb = FilterDef.newBuilder(au);
             fdb.name(name).description(description);
-            InputWidgetUtils.addRestriction(fdb, restriction, 0);
+            InputWidgetUtils.restriction(fdb, restriction, 0);
             return fdb.build();
         }
 
@@ -1376,15 +1376,15 @@ public final class InputWidgetUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static void addRestriction(FilterDef.Builder fdb, Restriction restriction, int depth)
+    private static void restriction(FilterDef.Builder fdb, Restriction restriction, int depth)
             throws UnifyException {
         final FilterConditionType conditionType = restriction.getConditionType();
         if (conditionType.isCompound()) {
             CompoundRestriction compoundRestriction = (CompoundRestriction) restriction;
-            fdb.addRestrictionDef(conditionType, null, null, null, depth);
+            fdb.restrictionDef(conditionType, null, null, null, depth);
             int subDepth = depth + 1;
             for (Restriction subRestriction : compoundRestriction.getRestrictionList()) {
-                InputWidgetUtils.addRestriction(fdb, subRestriction, subDepth);
+                InputWidgetUtils.restriction(fdb, subRestriction, subDepth);
             }
         } else {
             String paramA = null;
@@ -1400,7 +1400,7 @@ public final class InputWidgetUtils {
                 paramA = CommonInputUtils.buildCollectionString(
                         DataUtils.convert(List.class, String.class, multipleParamRestriction.getParams()));
             }
-            fdb.addRestrictionDef(conditionType, ((SimpleRestriction) restriction).getFieldName(), paramA, paramB,
+            fdb.restrictionDef(conditionType, ((SimpleRestriction) restriction).getFieldName(), paramA, paramB,
                     depth);
         }
     }

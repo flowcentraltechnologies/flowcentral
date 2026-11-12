@@ -31,14 +31,14 @@ public class EnvironmentVariableQuery extends BaseAuditEntityQuery<EnvironmentVa
     }
 
     public EnvironmentVariableQuery name(String name) {
-        return (EnvironmentVariableQuery) addEquals("name", name);
+        return (EnvironmentVariableQuery) equals("name", name);
     }
 
     public EnvironmentVariableQuery nameLike(String name) {
-        return (EnvironmentVariableQuery) addLike("name", name);
+        return (EnvironmentVariableQuery) like("name", name);
     }
 
     public EnvironmentVariableQuery descriptionLike(String description) {
-        return (EnvironmentVariableQuery) addLike("description", description);
+        return (EnvironmentVariableQuery) like("description", description);
     }
 }

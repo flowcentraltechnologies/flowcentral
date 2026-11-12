@@ -227,7 +227,7 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 	protected EntitySelect createEntitySelect(EntityActionResult entityActionResult) throws UnifyException {
 		EntitySelectInfo entitySelectInfo = entityActionResult.getEntitySelect();
 		final RefDef refDef = au().getRefDef(entitySelectInfo.getRef());
-		final int limit = entitySelectInfo.getLimit();
+		final int limit = entitySelectInfo.limit();
 		final String filter = entitySelectInfo.getDefaultFilter();
 		EntitySelect entitySelect = au().constructEntitySelect(refDef,
 				new BeanValueStore(entitySelectInfo.getInst()), null, null, filter, limit);

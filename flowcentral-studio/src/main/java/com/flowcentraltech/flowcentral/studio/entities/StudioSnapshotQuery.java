@@ -30,7 +30,7 @@ public class StudioSnapshotQuery extends BaseAuditEntityQuery<StudioSnapshot> {
     }
 
     public StudioSnapshotQuery snapshotDetailsId(Long snapshotDetailsId) {
-        return (StudioSnapshotQuery) addEquals("snapshotDetailsId", snapshotDetailsId);
+        return (StudioSnapshotQuery) equals("snapshotDetailsId", snapshotDetailsId);
     }
 
 }

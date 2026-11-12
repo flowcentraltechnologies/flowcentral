@@ -35,38 +35,38 @@ public abstract class BaseWorkEntityQuery<T extends BaseWorkEntity> extends Base
     }
 
     public final BaseWorkEntityQuery<T> workBranchCode(String workBranchCode) {
-        return (BaseWorkEntityQuery<T>) addEquals("workBranchCode", workBranchCode);
+        return (BaseWorkEntityQuery<T>) equals("workBranchCode", workBranchCode);
     }
 
     public final BaseWorkEntityQuery<T> workBranchCodeIsNull() {
-        return (BaseWorkEntityQuery<T>) addIsNull("workBranchCode");
+        return (BaseWorkEntityQuery<T>) isnull("workBranchCode");
     }
 
     public final BaseWorkEntityQuery<T> workDepartmentCode(String workDepartmentCode) {
-        return (BaseWorkEntityQuery<T>) addEquals("workDepartmentCode", workDepartmentCode);
+        return (BaseWorkEntityQuery<T>) equals("workDepartmentCode", workDepartmentCode);
     }
 
     public final BaseWorkEntityQuery<T> workDepartmentCodeIsNull() {
-        return (BaseWorkEntityQuery<T>) addIsNull("workDepartmentCode");
+        return (BaseWorkEntityQuery<T>) isnull("workDepartmentCode");
     }
 
     public final BaseWorkEntityQuery<T> inWorkflow(boolean inWorkflow) {
-        return (BaseWorkEntityQuery<T>) addEquals("inWorkflow", inWorkflow);
+        return (BaseWorkEntityQuery<T>) equals("inWorkflow", inWorkflow);
     }
 
     public final BaseWorkEntityQuery<T> processingStatus(ProcessingStatus processingStatus) {
-        return (BaseWorkEntityQuery<T>) addEquals("processingStatus", processingStatus);
+        return (BaseWorkEntityQuery<T>) equals("processingStatus", processingStatus);
     }
 
     public final BaseWorkEntityQuery<T> originalCopyId(Long originalCopyId) {
-        return (BaseWorkEntityQuery<T>) addEquals("originalCopyId", originalCopyId);
+        return (BaseWorkEntityQuery<T>) equals("originalCopyId", originalCopyId);
     }
     
     public final BaseWorkEntityQuery<T> isOriginalVersion() {
-        return (BaseWorkEntityQuery<T>) addEquals("wfItemVersionType", WfItemVersionType.ORIGINAL);
+        return (BaseWorkEntityQuery<T>) equals("wfItemVersionType", WfItemVersionType.ORIGINAL);
     }
     
     public final BaseWorkEntityQuery<T> isDraftVersion() {
-        return (BaseWorkEntityQuery<T>) addEquals("wfItemVersionType", WfItemVersionType.DRAFT);
+        return (BaseWorkEntityQuery<T>) equals("wfItemVersionType", WfItemVersionType.DRAFT);
     }
 }

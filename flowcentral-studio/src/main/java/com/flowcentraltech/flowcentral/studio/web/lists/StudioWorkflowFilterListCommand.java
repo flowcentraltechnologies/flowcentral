@@ -56,7 +56,7 @@ public class StudioWorkflowFilterListCommand extends AbstractApplicationListComm
                     resolveSessionMessage("$m{studio.workflow.filter.always}")));
             for (Listable filter : workflowModuleService.findWorkflowFilters(
                     (WorkflowFilterQuery) new WorkflowFilterQuery().workflowId(longParam.getValue())
-                            .addSelect("name", "description").addOrder("description"))) {
+                            .select("name", "description").order("description"))) {
                 list.add(new ListData(filter.getListKey(), filter.getListDescription()));
             }
 

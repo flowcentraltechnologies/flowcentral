@@ -34,46 +34,46 @@ public class RoleQuery extends BaseStatusWorkEntityQuery<Role> {
     }
 
     @Override
-    public RoleQuery addOrder(String field) {
-        return (RoleQuery) super.addOrder(field);
+    public RoleQuery order(String field) {
+        return (RoleQuery) super.order(field);
     }
 
     @Override
-    public RoleQuery addSelect(String field) {
-        return (RoleQuery) super.addSelect(field);
+    public RoleQuery select(String field) {
+        return (RoleQuery) super.select(field);
     }
 
     public RoleQuery departmentId(Long departmentId) {
-        return (RoleQuery) addEquals("departmentId", departmentId);
+        return (RoleQuery) equals("departmentId", departmentId);
     }
 
     public RoleQuery codeIn(List<String> codeList) {
-        return (RoleQuery) addAmongst("code", codeList);
+        return (RoleQuery) amongst("code", codeList);
     }
 
     public RoleQuery code(String code) {
-        return (RoleQuery) addEquals("code", code);
+        return (RoleQuery) equals("code", code);
     }
 
     public RoleQuery codeLike(String code) {
-        return (RoleQuery) addLike("code", code);
+        return (RoleQuery) like("code", code);
     }
 
     public RoleQuery description(String description) {
-        return (RoleQuery) addEquals("description", description);
+        return (RoleQuery) equals("description", description);
     }
 
     public RoleQuery descriptionLike(String description) {
-        return (RoleQuery) addLike("description", description);
+        return (RoleQuery) like("description", description);
     }
 
     public RoleQuery activeBefore(Date activeBefore) {
-        return (RoleQuery) addRestriction(
-                new OrBuilder().lessEqual("activeBefore", activeBefore).isNull("activeBefore").build());
+        return (RoleQuery) restriction(
+                new OrBuilder().lesseq("activeBefore", activeBefore).isNull("activeBefore").build());
     }
 
     public RoleQuery activeAfter(Date activeAfter) {
-        return (RoleQuery) addRestriction(
+        return (RoleQuery) restriction(
                 new OrBuilder().greaterEqual("activeAfter", activeAfter).isNull("activeAfter").build());
     }
 }

@@ -48,7 +48,7 @@ public class StudioFormListCommand extends AbstractApplicationListCommand<ZeroPa
                 AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
             return application().findAppForms((AppFormQuery) new AppFormQuery().applicationId(applicationId)
-                    .addSelect("id", "name", "description"));
+                    .select("id", "name", "description"));
         }
 
         return Collections.emptyList();

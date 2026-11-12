@@ -129,7 +129,7 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
             ReportEditor.Builder teb = ReportEditor.newBuilder(entityDef);
             for (com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn : au().environment()
                     .findAll(Query.of(com.flowcentraltech.flowcentral.report.entities.ReportColumn.class)
-                            .addEquals("reportConfigurationId", baseId).addOrder("id"))) {
+                            .equals("reportConfigurationId", baseId).order("id"))) {
                 teb.addColumn(reportColumn.getFieldName(), reportColumn.getRenderWidget(),
                         reportColumn.getColumnOrder() != null ? reportColumn.getColumnOrder().code() : null,
                         reportColumn.getHorizAlignType() != null ? reportColumn.getHorizAlignType().code() : null,

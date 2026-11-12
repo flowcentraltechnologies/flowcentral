@@ -31,7 +31,7 @@ public class WfStepUserActionQuery extends BaseNamedEntityQuery<WfStepUserAction
     }
 
     public WfStepUserActionQuery wfStepId(Long wfStepId) {
-        return (WfStepUserActionQuery) addEquals("wfStepId", wfStepId);
+        return (WfStepUserActionQuery) equals("wfStepId", wfStepId);
     }
 
 }

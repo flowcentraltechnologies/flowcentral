@@ -31,15 +31,15 @@ public class CollaborationFreezeQuery extends BaseAuditEntityQuery<Collaboration
     }
 
     public CollaborationFreezeQuery type(CollaborationType type) {
-        return (CollaborationFreezeQuery) addEquals("type", type);
+        return (CollaborationFreezeQuery) equals("type", type);
     }
 
     public CollaborationFreezeQuery applicationName(String applicationName) {
-        return (CollaborationFreezeQuery) addEquals("applicationName", applicationName);
+        return (CollaborationFreezeQuery) equals("applicationName", applicationName);
     }
 
     public CollaborationFreezeQuery resourceName(String resourceName) {
-        return (CollaborationFreezeQuery) addEquals("resourceName", resourceName);
+        return (CollaborationFreezeQuery) equals("resourceName", resourceName);
     }
 
 }

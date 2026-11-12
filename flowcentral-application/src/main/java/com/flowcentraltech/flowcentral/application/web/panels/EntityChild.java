@@ -145,7 +145,7 @@ public class EntityChild extends AbstractPanelFormBinding {
         mCtx = ctx;
         mRestriction = restriction;
         childInst = ctx.getEnvironment().listLean(
-                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addRestriction(restriction));
+                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).restriction(restriction));
         if (childInst != null) {
             FormContext _ctx = new FormContext(ctx.getAppletContext(), childFormDef, ctx.getFormEventHandlers(),
                     childInst);

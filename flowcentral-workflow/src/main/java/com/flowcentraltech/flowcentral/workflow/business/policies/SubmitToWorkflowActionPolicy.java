@@ -62,7 +62,7 @@ public class SubmitToWorkflowActionPolicy extends AbstractFormActionPolicy {
     @Override
     public List<? extends Listable> getRuleList(String entityName) throws UnifyException {
         final List<Workflow> workflows = workflowModuleService.findWorkflows((WorkflowQuery) new WorkflowQuery()
-                .entity(entityName).runnable().addSelect("applicationName", "name", "description"));
+                .entity(entityName).runnable().select("applicationName", "name", "description"));
         if (!DataUtils.isBlank(workflows)) {
             List<ListData> result = new ArrayList<ListData>();
             for (Workflow workflow : workflows) {

@@ -30,15 +30,15 @@ public class AppSetValuesQuery extends BaseAuditEntityQuery<AppSetValues> {
     }
 
     public AppSetValuesQuery entityInstId(Long entityInstId) {
-        return (AppSetValuesQuery) addEquals("entityInstId", entityInstId);
+        return (AppSetValuesQuery) equals("entityInstId", entityInstId);
     }
 
     public AppSetValuesQuery entity(String entity) {
-        return (AppSetValuesQuery) addEquals("entity", entity);
+        return (AppSetValuesQuery) equals("entity", entity);
     }
 
     public AppSetValuesQuery category(String category) {
-        return (AppSetValuesQuery) addEquals("category", category);
+        return (AppSetValuesQuery) equals("category", category);
     }
 
 }

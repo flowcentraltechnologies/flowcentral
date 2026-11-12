@@ -30,7 +30,7 @@ public class ChartQuery extends BaseApplicationEntityQuery<Chart> {
     }
 
     public ChartQuery provider(String provider) {
-        return (ChartQuery) addEquals("provider", provider);
+        return (ChartQuery) equals("provider", provider);
     }
 
 }

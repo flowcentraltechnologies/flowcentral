@@ -32,18 +32,18 @@ public class UserGroupMemberQuery extends BaseAuditEntityQuery<UserGroupMember> 
     }
 
     public UserGroupMemberQuery userGroupId(Long userGroupId) {
-        return (UserGroupMemberQuery) addEquals("userGroupId", userGroupId);
+        return (UserGroupMemberQuery) equals("userGroupId", userGroupId);
     }
 
     public UserGroupMemberQuery userGroupIdIn(Collection<Long> userGroupId) {
-        return (UserGroupMemberQuery) addAmongst("userGroupId", userGroupId);
+        return (UserGroupMemberQuery) amongst("userGroupId", userGroupId);
     }
 
     public UserGroupMemberQuery userId(Long userId) {
-        return (UserGroupMemberQuery) addEquals("userId", userId);
+        return (UserGroupMemberQuery) equals("userId", userId);
     }
 
     public UserGroupMemberQuery userLoginId(String userLoginId) {
-        return (UserGroupMemberQuery) addEquals("userLoginId", userLoginId);
+        return (UserGroupMemberQuery) equals("userLoginId", userLoginId);
     }
 }

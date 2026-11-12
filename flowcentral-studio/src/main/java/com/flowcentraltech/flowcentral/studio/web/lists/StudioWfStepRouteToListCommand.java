@@ -55,7 +55,7 @@ public class StudioWfStepRouteToListCommand extends AbstractApplicationListComma
             WfStep wfStep = workflowModuleService.findLeanWorkflowStepById(longParam.getValue());
             List<WfStep> stepList = workflowModuleService
                     .findWorkflowSteps((WfStepQuery) new WfStepQuery().workflowId(wfStep.getWorkflowId()).routableTo()
-                            .idNot(longParam.getValue()).addSelect("name", "description"));
+                            .idNot(longParam.getValue()).select("name", "description"));
             if (!DataUtils.isBlank(stepList)) {
                 List<ListData> list = new ArrayList<ListData>();
                 for (WfStep rwfStep : stepList) {

@@ -35,7 +35,7 @@ public class UserGroupQuery extends BaseStatusEntityQuery<UserGroup> {
     }
 
     public UserGroupQuery name(String name) {
-        return (UserGroupQuery) addEquals("name", name);
+        return (UserGroupQuery) equals("name", name);
     }
 
 }

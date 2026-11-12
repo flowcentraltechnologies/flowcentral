@@ -58,7 +58,7 @@ public class EntityAuditTrailEntriesRestrictionResolver extends AbstractAuditSea
         final String baseAuditNo = getSessionAttribute(String.class, AuditModuleSessionAttributes.AUDIT_BASE_AUDIT_NO);
         if (!StringUtils.isBlank(baseAuditNo)) {
             EntityAuditKeys entityAuditKeys = environment()
-                    .list(new EntityAuditKeysQuery().auditNo(baseAuditNo).addSelect("auditConfigName", "entityId"));
+                    .list(new EntityAuditKeysQuery().auditNo(baseAuditNo).select("auditConfigName", "entityId"));
             if (entityAuditKeys != null) {
                 and.add(new Equals("auditConfigName", entityAuditKeys.getAuditConfigName()));
                 and.add(new Equals("entityId", entityAuditKeys.getEntityId()));

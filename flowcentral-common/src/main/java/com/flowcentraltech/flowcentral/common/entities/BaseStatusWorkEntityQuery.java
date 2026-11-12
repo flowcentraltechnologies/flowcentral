@@ -34,6 +34,6 @@ public abstract class BaseStatusWorkEntityQuery<T extends BaseStatusWorkEntity> 
     }
 
     public final BaseStatusWorkEntityQuery<T> status(RecordStatus status) {
-        return (BaseStatusWorkEntityQuery<T>) addEquals("status", status);
+        return (BaseStatusWorkEntityQuery<T>) equals("status", status);
     }
 }

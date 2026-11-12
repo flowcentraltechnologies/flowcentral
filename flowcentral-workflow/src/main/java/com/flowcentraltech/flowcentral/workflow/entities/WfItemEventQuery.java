@@ -36,26 +36,26 @@ public class WfItemEventQuery extends BaseEntityQuery<WfItemEvent> {
     }
 
     public WfItemEventQuery wfItemHistId(Long wfItemHistId) {
-        return (WfItemEventQuery) addEquals("wfItemHistId", wfItemHistId);
+        return (WfItemEventQuery) equals("wfItemHistId", wfItemHistId);
     }
 
     public WfItemEventQuery reminderDue(Date now) {
-        return (WfItemEventQuery) addRestriction(
+        return (WfItemEventQuery) restriction(
                 new And().add(new IsNotNull("reminderDt")).add(new Less("reminderDt", now)));
     }
 
     public WfItemEventQuery expirationDue(Date now) {
-        return (WfItemEventQuery) addRestriction(
+        return (WfItemEventQuery) restriction(
                 new And().add(new IsNotNull("expectedDt")).add(new Less("expectedDt", now)));
     }
 
     public WfItemEventQuery criticalDue(Date now) {
-        return (WfItemEventQuery) addRestriction(
+        return (WfItemEventQuery) restriction(
                 new And().add(new IsNotNull("criticalDt")).add(new Less("criticalDt", now)));
     }
 
     public WfItemEventQuery commentsOnly() {
-        return (WfItemEventQuery) addIsNotNull("comment");
+        return (WfItemEventQuery) notnull("comment");
     }
 
 }

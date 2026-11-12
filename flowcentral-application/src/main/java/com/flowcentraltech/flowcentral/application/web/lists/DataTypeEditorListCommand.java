@@ -55,7 +55,7 @@ public class DataTypeEditorListCommand extends AbstractApplicationListCommand<St
                         AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);
                 AppWidgetTypeQuery query = new AppWidgetTypeQuery();
                 ApplicationQueryUtils.addWidgetTypeCriteria(query, applicationName, dataType);
-                query.addSelect("editor", "description").addOrder("description");
+                query.select("editor", "description").order("description");
                 List<AppWidgetType> widgetTypeList = application().findAppWidgetTypes(query);
                 if (!DataUtils.isBlank(widgetTypeList)) {
                     final List<Listable> list = new ArrayList<Listable>();

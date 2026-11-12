@@ -30,7 +30,7 @@ public class WorkflowFilterQuery extends BaseConfigNamedEntityQuery<WorkflowFilt
     }
 
     public WorkflowFilterQuery workflowId(Long workflowId) {
-        return (WorkflowFilterQuery) addEquals("workflowId", workflowId);
+        return (WorkflowFilterQuery) equals("workflowId", workflowId);
     }
 
 }

@@ -128,7 +128,7 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
         if (entityDef != null) {
             TableEditor.Builder teb = TableEditor.newBuilder(au(), entityDef);
             for (AppTableColumn appTableColumn : au().environment()
-                    .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
+                    .findAll(Query.of(AppTableColumn.class).equals("appTableId", baseId).order("id"))) {
                 teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
                         appTableColumn.getLinkAct(), appTableColumn.getSymbol(), appTableColumn.getOrder(),
                         appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(),

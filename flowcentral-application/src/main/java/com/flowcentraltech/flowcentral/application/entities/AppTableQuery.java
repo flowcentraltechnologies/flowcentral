@@ -28,11 +28,11 @@ public class AppTableQuery extends BaseApplicationEntityQuery<AppTable> {
     }
 
     public AppTableQuery entity(String entity) {
-        return (AppTableQuery) addEquals("entity", entity);
+        return (AppTableQuery) equals("entity", entity);
     }
 
     public AppTableQuery entityBeginsWith(String entity) {
-        return (AppTableQuery) addBeginsWith("entity", entity);
+        return (AppTableQuery) begins("entity", entity);
     }
 
 }

@@ -135,31 +135,31 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                 query.ignoreEmptyCriteria(true);
                 if (!StringUtils.isBlank(applicationName)) {
-                    query.addRestriction(new Equals("applicationName", applicationName));
+                    query.restriction(new Equals("applicationName", applicationName));
                 }
                 
                 if (br != null) {
-                    query.addRestriction(br);
+                    query.restriction(br);
                 }
 
                 if (!StringUtils.isBlank(input)) {
                     Restriction like = caseInsensitive ? new ILike(searchField, input.trim())
                             : new Like(searchField, input.trim());
-                    query.addRestriction(like);
+                    query.restriction(like);
                 }
 
                 addMoreResultRestriction(entityClassDef, query);
                 if (limit > 0) {
-                    query.setLimit(limit);
+                    query.limit(limit);
                 }
 
                 if (refDef.isWithOrderField()) {
-                    query.addOrder(refDef.getOrderField());
+                    query.order(refDef.getOrderField());
                     if (query.isSelect()) {
-                        query.addSelect(refDef.getOrderField());
+                        query.select(refDef.getOrderField());
                     }
                 } else {
-                    query.addOrder(searchField);
+                    query.order(searchField);
                 }
 
                 List<? extends Listable> result = environment().listAll(query);

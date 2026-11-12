@@ -60,16 +60,16 @@ public class UniqueEntityWfBinaryPolicy extends AbstractWfBinaryPolicy {
             for (UniqueConstraintDef uniqueConstraintDef: entityDef.getUniqueConstraintList()) {
                 Query query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                 if (id != null) {
-                    query.addNotEquals("id", id);
+                    query.notequals("id", id);
                 }
 
                 for (String fieldName : uniqueConstraintDef.getFieldList()) {
-                    query.addEquals(fieldName, wfItemReader.read(fieldName));
+                    query.equals(fieldName, wfItemReader.read(fieldName));
                 }
 
                 if (uniqueConstraintDef.isWithConditionList()) {
                     for (UniqueConditionDef ucd: uniqueConstraintDef.getConditionList()) {
-                        query.addRestriction(ucd.getRestriction());
+                        query.restriction(ucd.getRestriction());
                     }
                 }
 

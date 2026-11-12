@@ -30,7 +30,7 @@ public class NotificationTemplateParamQuery extends BaseAuditEntityQuery<Notific
     }
 
     public NotificationTemplateParamQuery notificationTemplateId(Long notificationTemplateId) {
-        return (NotificationTemplateParamQuery) addEquals("notificationTemplateId", notificationTemplateId);
+        return (NotificationTemplateParamQuery) equals("notificationTemplateId", notificationTemplateId);
     }
 
 }

@@ -31,30 +31,30 @@ public class AppAppletPropQuery extends BaseConfigEntityQuery<AppAppletProp> {
     }
 
     public AppAppletPropQuery appAppletId(Long appAppletId) {
-        return (AppAppletPropQuery) addEquals("appAppletId", appAppletId);
+        return (AppAppletPropQuery) equals("appAppletId", appAppletId);
     }
 
     public AppAppletPropQuery applicationNameNot(String applicationName) {
-        return (AppAppletPropQuery) addNotEquals("applicationName", applicationName);
+        return (AppAppletPropQuery) notequals("applicationName", applicationName);
     }
 
     public AppAppletPropQuery applicationName(String applicationName) {
-        return (AppAppletPropQuery) addEquals("applicationName", applicationName);
+        return (AppAppletPropQuery) equals("applicationName", applicationName);
     }
 
     public AppAppletPropQuery appletName(String appletName) {
-        return (AppAppletPropQuery) addEquals("appletName", appletName);
+        return (AppAppletPropQuery) equals("appletName", appletName);
     }
 
     public AppAppletPropQuery name(String name) {
-        return (AppAppletPropQuery) addEquals("name", name);
+        return (AppAppletPropQuery) equals("name", name);
     }
 
     public AppAppletPropQuery valueBeginsWith(String value) {
-        return (AppAppletPropQuery) addBeginsWith("value", value);
+        return (AppAppletPropQuery) begins("value", value);
     }
 
     public AppAppletPropQuery value(String value) {
-        return (AppAppletPropQuery) addEquals("value", value);
+        return (AppAppletPropQuery) equals("value", value);
     }
 }

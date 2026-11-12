@@ -33,40 +33,40 @@ public class WorkspacePrivilegeQuery extends BaseAuditEntityQuery<WorkspacePrivi
     }
 
     public WorkspacePrivilegeQuery workspaceId(Long workspaceId) {
-        return (WorkspacePrivilegeQuery) addEquals("workspaceId", workspaceId);
+        return (WorkspacePrivilegeQuery) equals("workspaceId", workspaceId);
     }
 
     public WorkspacePrivilegeQuery workspaceIdIn(List<Long> workspaceIdList) {
-        return (WorkspacePrivilegeQuery) addAmongst("workspaceId", workspaceIdList);
+        return (WorkspacePrivilegeQuery) amongst("workspaceId", workspaceIdList);
     }
 
     public WorkspacePrivilegeQuery workspaceCode(String workspaceCode) {
-        return (WorkspacePrivilegeQuery) addEquals("workspaceCode", workspaceCode);
+        return (WorkspacePrivilegeQuery) equals("workspaceCode", workspaceCode);
     }
 
     public WorkspacePrivilegeQuery privilegeCatCode(String privilegeCatCode) {
-        return (WorkspacePrivilegeQuery) addEquals("privilegeCatCode", privilegeCatCode);
+        return (WorkspacePrivilegeQuery) equals("privilegeCatCode", privilegeCatCode);
     }
 
     public WorkspacePrivilegeQuery privilegeId(Long privilegeId) {
-        return (WorkspacePrivilegeQuery) addEquals("privilegeId", privilegeId);
+        return (WorkspacePrivilegeQuery) equals("privilegeId", privilegeId);
     }
 
     public WorkspacePrivilegeQuery privilegeIdIn(Collection<Long> privilegeId) {
-        return (WorkspacePrivilegeQuery) addAmongst("privilegeId", privilegeId);
+        return (WorkspacePrivilegeQuery) amongst("privilegeId", privilegeId);
     }
 
     public WorkspacePrivilegeQuery privilegeIdNotIn(Collection<Long> privilegeId) {
-        return (WorkspacePrivilegeQuery) addNotAmongst("privilegeId", privilegeId);
+        return (WorkspacePrivilegeQuery) notamongst("privilegeId", privilegeId);
     }
 
     @Override
-    public WorkspacePrivilegeQuery addSelect(String field) {
-        return (WorkspacePrivilegeQuery) super.addSelect(field);
+    public WorkspacePrivilegeQuery select(String field) {
+        return (WorkspacePrivilegeQuery) super.select(field);
     }
 
     @Override
-    public WorkspacePrivilegeQuery addOrder(String field) {
-        return (WorkspacePrivilegeQuery) super.addOrder(field);
+    public WorkspacePrivilegeQuery order(String field) {
+        return (WorkspacePrivilegeQuery) super.order(field);
     }
 }

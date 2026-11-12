@@ -52,7 +52,7 @@ public class StudioAppletIntegerFieldListCommand extends AbstractApplicationList
                 ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entity);
                 return application().findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                         .applicationName(parts.getApplicationName()).appEntityName(parts.getEntityName())
-                        .dataType(EntityFieldDataType.INTEGER).addSelect("name", "label").addOrder("label"));
+                        .dataType(EntityFieldDataType.INTEGER).select("name", "label").order("label"));
             }
         }
 

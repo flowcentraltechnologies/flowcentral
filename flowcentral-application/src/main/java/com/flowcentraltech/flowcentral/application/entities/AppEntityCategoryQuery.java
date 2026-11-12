@@ -30,23 +30,23 @@ public class AppEntityCategoryQuery extends BaseConfigEntityQuery<AppEntityCateg
     }
 
     public AppEntityCategoryQuery appEntityId(Long appEntityId) {
-        return (AppEntityCategoryQuery) addEquals("appEntityId", appEntityId);
+        return (AppEntityCategoryQuery) equals("appEntityId", appEntityId);
     }
 
     public AppEntityCategoryQuery appEntityName(String appEntityName) {
-        return (AppEntityCategoryQuery) addEquals("appEntityName", appEntityName);
+        return (AppEntityCategoryQuery) equals("appEntityName", appEntityName);
     }
 
     public AppEntityCategoryQuery name(String name) {
-        return (AppEntityCategoryQuery) addEquals("name", name);
+        return (AppEntityCategoryQuery) equals("name", name);
     }
 
     public AppEntityCategoryQuery applicationName(String applicationName) {
-        return (AppEntityCategoryQuery) addEquals("applicationName", applicationName);
+        return (AppEntityCategoryQuery) equals("applicationName", applicationName);
     }
 
     public AppEntityCategoryQuery applicationNameNot(String applicationName) {
-        return (AppEntityCategoryQuery) addNotEquals("applicationName", applicationName);
+        return (AppEntityCategoryQuery) notequals("applicationName", applicationName);
     }
 
 }

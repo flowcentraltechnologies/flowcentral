@@ -44,7 +44,7 @@ public class UserNotInListCommand extends AbstractSecurityListCommand<AssignPara
             query.idNotIn(params.getAssignedIdList(Long.class));
         }
 
-        query.addSelect("id", "fullName").addOrder("fullName").ignoreEmptyCriteria(true);
+        query.select("id", "fullName").order("fullName").ignoreEmptyCriteria(true);
         return getSecurityModuleService().findUsers(query);
     }
 

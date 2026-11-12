@@ -30,6 +30,6 @@ public class ReportConfigurationQuery extends BaseApplicationEntityQuery<ReportC
     }
 
     public ReportConfigurationQuery reportableBeginsWith(String reportable) {
-        return (ReportConfigurationQuery) addBeginsWith("reportable", reportable);
+        return (ReportConfigurationQuery) begins("reportable", reportable);
     }
 }

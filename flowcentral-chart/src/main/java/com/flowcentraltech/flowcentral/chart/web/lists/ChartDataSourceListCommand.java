@@ -49,7 +49,7 @@ public class ChartDataSourceListCommand extends AbstractZeroParamsListCommand {
         List<ListData> resultList = new ArrayList<ListData>();
         for (ChartDataSource chart : chartModuleService
                 .findChartDataSources((ChartDataSourceQuery) new ChartDataSourceQuery()
-                        .addSelect("applicationName", "name", "description").ignoreEmptyCriteria(true))) {
+                        .select("applicationName", "name", "description").ignoreEmptyCriteria(true))) {
             resultList.add(new ListData(
                     ApplicationNameUtils.getApplicationEntityLongName(chart.getApplicationName(), chart.getName()),
                     chart.getDescription()));

@@ -56,7 +56,7 @@ public class DashboardUsageServiceImpl extends AbstractFlowCentralService implem
         if (UsageType.isQualifiesEntity(usageType)) {
             List<DashboardTile> dashboardTileList = environment().listAll(
                     new DashboardTileQuery().applicationNameNot(applicationName).chartBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "dashboardName", "name", "chart"));
+                            .select("applicationName", "dashboardName", "name", "chart"));
             for (DashboardTile dashboardTile : dashboardTileList) {
                 Usage usage = new Usage(
                         UsageType.ENTITY, "DashboardTile", dashboardTile.getApplicationName() + "."
@@ -78,7 +78,7 @@ public class DashboardUsageServiceImpl extends AbstractFlowCentralService implem
         if (UsageType.isQualifiesEntity(usageType)) {
             usages += environment().countAll(
                     new DashboardTileQuery().applicationNameNot(applicationName).chartBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "dashboardName", "name", "chart"));
+                            .select("applicationName", "dashboardName", "name", "chart"));
         }
 
         return usages;

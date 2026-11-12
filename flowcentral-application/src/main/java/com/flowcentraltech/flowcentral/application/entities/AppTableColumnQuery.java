@@ -31,6 +31,6 @@ public class AppTableColumnQuery extends BaseConfigEntityQuery<AppTableColumn> {
     }
 
     public AppTableColumnQuery appTableId(Long appTableId) {
-        return (AppTableColumnQuery) addEquals("appTableId", appTableId);
+        return (AppTableColumnQuery) equals("appTableId", appTableId);
     }
 }

@@ -30,23 +30,23 @@ public class FileAttachmentQuery extends BaseAuditEntityQuery<FileAttachment> {
     }
 
     public FileAttachmentQuery type(FileAttachmentType type) {
-        return (FileAttachmentQuery) addEquals("type", type);
+        return (FileAttachmentQuery) equals("type", type);
     }
 
     public FileAttachmentQuery entityInstId(Long entityInstId) {
-        return (FileAttachmentQuery) addEquals("entityInstId", entityInstId);
+        return (FileAttachmentQuery) equals("entityInstId", entityInstId);
     }
 
     public FileAttachmentQuery entity(String entity) {
-        return (FileAttachmentQuery) addEquals("entity", entity);
+        return (FileAttachmentQuery) equals("entity", entity);
     }
 
     public FileAttachmentQuery category(String category) {
-        return (FileAttachmentQuery) addEquals("category", category);
+        return (FileAttachmentQuery) equals("category", category);
     }
 
     public FileAttachmentQuery name(String name) {
-        return (FileAttachmentQuery) addEquals("name", name);
+        return (FileAttachmentQuery) equals("name", name);
     }
 
 }

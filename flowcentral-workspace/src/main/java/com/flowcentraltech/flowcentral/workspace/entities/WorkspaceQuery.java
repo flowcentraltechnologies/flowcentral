@@ -33,23 +33,23 @@ public class WorkspaceQuery extends BaseStatusEntityQuery<Workspace> {
     }
 
     public WorkspaceQuery code(String code) {
-        return (WorkspaceQuery) addEquals("code", code);
+        return (WorkspaceQuery) equals("code", code);
     }
 
     public WorkspaceQuery codeNotMaster() {
-        return (WorkspaceQuery) addNotEquals("code", DefaultApplicationConstants.ROOT_WORKSPACE_CODE);
+        return (WorkspaceQuery) notequals("code", DefaultApplicationConstants.ROOT_WORKSPACE_CODE);
     }
 
     public WorkspaceQuery codeIn(Collection<String> codeList) {
-        return (WorkspaceQuery) addAmongst("code", codeList);
+        return (WorkspaceQuery) amongst("code", codeList);
     }
 
     public WorkspaceQuery name(String name) {
-        return (WorkspaceQuery) addEquals("name", name);
+        return (WorkspaceQuery) equals("name", name);
     }
 
     public WorkspaceQuery nameLike(String name) {
-        return (WorkspaceQuery) addLike("name", name);
+        return (WorkspaceQuery) like("name", name);
     }
 
 }

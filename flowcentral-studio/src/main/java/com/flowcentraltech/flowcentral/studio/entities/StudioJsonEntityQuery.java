@@ -30,7 +30,7 @@ public class StudioJsonEntityQuery extends BaseAuditEntityQuery<StudioJsonEntity
     }
 
     public StudioJsonEntityQuery applicationId(Long applicationId) {
-        return (StudioJsonEntityQuery) addEquals("applicationId", applicationId);
+        return (StudioJsonEntityQuery) equals("applicationId", applicationId);
     }
 
 }

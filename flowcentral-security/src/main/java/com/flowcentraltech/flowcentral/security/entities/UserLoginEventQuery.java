@@ -47,11 +47,11 @@ public class UserLoginEventQuery extends BaseAuditEntityQuery<UserLoginEvent> {
     }
 
     public UserLoginEventQuery userFullNameLike(String userFullName) {
-        return (UserLoginEventQuery) addLike("userFullName", userFullName);
+        return (UserLoginEventQuery) like("userFullName", userFullName);
     }
 
     public UserLoginEventQuery userLoginId(String userLoginId) {
-        return (UserLoginEventQuery) addEquals("userLoginId", userLoginId);
+        return (UserLoginEventQuery) equals("userLoginId", userLoginId);
     }
 
 }

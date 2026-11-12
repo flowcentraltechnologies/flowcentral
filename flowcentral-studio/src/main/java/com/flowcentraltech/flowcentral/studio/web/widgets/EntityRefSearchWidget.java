@@ -56,7 +56,7 @@ public class EntityRefSearchWidget extends EntitySearchWidget {
 
         Set<String> childEntityList = (Set<String>) getWriteWork().get(Set.class, "ref.childentitylist");
         if (childEntityList != null) {
-            query.addAmongst("entity", childEntityList);
+            query.amongst("entity", childEntityList);
         }
     }
 }

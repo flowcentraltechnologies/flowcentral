@@ -43,7 +43,7 @@ public class ReportConfigurationInListCommand extends AbstractReportListCommand<
         if (params.isAssignedIdList()) {
             ReportConfigurationQuery query = new ReportConfigurationQuery();
             query.idIn(params.getAssignedIdList(Long.class));
-            query.addSelect("id", "description").addOrder("description");
+            query.select("id", "description").order("description");
             return getReportModuleService().findReportConfigurations(query);
         }
 

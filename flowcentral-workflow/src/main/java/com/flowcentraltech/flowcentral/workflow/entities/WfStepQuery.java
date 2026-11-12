@@ -44,77 +44,77 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     }
 
     public WfStepQuery workflowId(Long workflowId) {
-        return (WfStepQuery) addEquals("workflowId", workflowId);
+        return (WfStepQuery) equals("workflowId", workflowId);
     }
 
     public WfStepQuery userActionable() {
-        return (WfStepQuery) addIsNotNull("appletName").addAmongst("type", ACTIONABLES);
+        return (WfStepQuery) notnull("appletName").amongst("type", ACTIONABLES);
     }
 
     public WfStepQuery routableTo() {
-        return (WfStepQuery) addRestriction(new And().add(new NotEquals("type", WorkflowStepType.START))
+        return (WfStepQuery) restriction(new And().add(new NotEquals("type", WorkflowStepType.START))
                 .add(new NotEquals("type", WorkflowStepType.ERROR)));
     }
 
     public WfStepQuery receivableFrom() {
-        return (WfStepQuery) addRestriction(new And().add(new NotEquals("type", WorkflowStepType.END))
+        return (WfStepQuery) restriction(new And().add(new NotEquals("type", WorkflowStepType.END))
                 .add(new NotEquals("type", WorkflowStepType.ERROR)));
     }
 
     public WfStepQuery supportsAutoload() {
-        return (WfStepQuery) addRestriction(
+        return (WfStepQuery) restriction(
                 new And().add(new Equals("type", WorkflowStepType.START)).add(new IsNotNull("autoLoadConditionName")));
     }
 
     public WfStepQuery workflowRunnable(boolean workflowRunnable) {
-        return (WfStepQuery) addEquals("workflowRunnable", workflowRunnable);
+        return (WfStepQuery) equals("workflowRunnable", workflowRunnable);
     }
 
     public WfStepQuery workflowDevelopable(boolean workflowDevelopable) {
-        return (WfStepQuery) addEquals("workflowDevelopable", workflowDevelopable);
+        return (WfStepQuery) equals("workflowDevelopable", workflowDevelopable);
     }
     
     public WfStepQuery withCasePrefix() {
-        return (WfStepQuery) addIsNotNull("workflowCasePrefix");
+        return (WfStepQuery) notnull("workflowCasePrefix");
     }
     
     public WfStepQuery withCaseApplet() {
-        return (WfStepQuery) addIsNotNull("workflowCaseApplet");
+        return (WfStepQuery) notnull("workflowCaseApplet");
     }
 
     public WfStepQuery withEjectionRestriction() {
-        return (WfStepQuery) addIsNotNull("ejectionRestriction");
+        return (WfStepQuery) notnull("ejectionRestriction");
     }
 
     public WfStepQuery type(WorkflowStepType type) {
-        return (WfStepQuery) addEquals("type", type);
+        return (WfStepQuery) equals("type", type);
     }
 
     public WfStepQuery typeIn(List<WorkflowStepType> type) {
-        return (WfStepQuery) addAmongst("type", type);
+        return (WfStepQuery) amongst("type", type);
     }
 
     public WfStepQuery applicationNameNot(String applicationName) {
-        return (WfStepQuery) addNotEquals("applicationName", applicationName);
+        return (WfStepQuery) notequals("applicationName", applicationName);
     }
 
     public WfStepQuery applicationName(String applicationName) {
-        return (WfStepQuery) addEquals("applicationName", applicationName);
+        return (WfStepQuery) equals("applicationName", applicationName);
     }
 
     public WfStepQuery workflowName(String workflowName) {
-        return (WfStepQuery) addEquals("workflowName", workflowName);
+        return (WfStepQuery) equals("workflowName", workflowName);
     }
 
     public WfStepQuery appletNameBeginsWith(String appletName) {
-        return (WfStepQuery) addBeginsWith("appletName", appletName);
+        return (WfStepQuery) begins("appletName", appletName);
     }
 
     public WfStepQuery workflowLoadingTable(String workflowLoadingTable) {
-        return (WfStepQuery) addEquals("workflowLoadingTable", workflowLoadingTable);
+        return (WfStepQuery) equals("workflowLoadingTable", workflowLoadingTable);
     }
 
     public WfStepQuery isWithLoadingTable() {
-        return (WfStepQuery) addIsNotNull("workflowLoadingTable");
+        return (WfStepQuery) notnull("workflowLoadingTable");
     }
 }

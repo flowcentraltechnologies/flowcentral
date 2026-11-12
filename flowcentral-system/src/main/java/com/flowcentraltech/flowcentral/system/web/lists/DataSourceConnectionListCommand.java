@@ -41,7 +41,7 @@ public class DataSourceConnectionListCommand extends AbstractSystemListCommand<Z
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
         return system().findDataSourceConnections((DataSourceConnectionQuery) new DataSourceConnectionQuery()
-                .addSelect("id", "name", "description").ignoreEmptyCriteria(true));
+                .select("id", "name", "description").ignoreEmptyCriteria(true));
     }
 
 }

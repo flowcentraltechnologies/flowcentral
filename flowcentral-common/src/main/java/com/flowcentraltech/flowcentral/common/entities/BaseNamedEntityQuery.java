@@ -40,19 +40,19 @@ public abstract class BaseNamedEntityQuery<T extends BaseNamedEntity> extends Ba
     }
 
     public final BaseNamedEntityQuery<T> name(String name) {
-        return (BaseNamedEntityQuery<T>) addEquals("name", name);
+        return (BaseNamedEntityQuery<T>) equals("name", name);
     }
 
     public final BaseNamedEntityQuery<T> nameIn(Collection<String> name) {
-        return (BaseNamedEntityQuery<T>) addAmongst("name", name);
+        return (BaseNamedEntityQuery<T>) amongst("name", name);
     }
 
     public final BaseNamedEntityQuery<T> nameLike(String name) {
-        return (BaseNamedEntityQuery<T>) addLike("name", name);
+        return (BaseNamedEntityQuery<T>) like("name", name);
     }
 
     public final BaseNamedEntityQuery<T> descriptionLike(String description) {
-        return (BaseNamedEntityQuery<T>) addLike("description", description);
+        return (BaseNamedEntityQuery<T>) like("description", description);
     }
 
 }

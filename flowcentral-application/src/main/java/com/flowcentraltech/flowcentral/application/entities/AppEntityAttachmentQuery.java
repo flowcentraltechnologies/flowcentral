@@ -30,7 +30,7 @@ public class AppEntityAttachmentQuery extends BaseConfigNamedEntityQuery<AppEnti
     }
 
     public AppEntityAttachmentQuery appEntityId(Long appEntityId) {
-        return (AppEntityAttachmentQuery) addEquals("appEntityId", appEntityId);
+        return (AppEntityAttachmentQuery) equals("appEntityId", appEntityId);
     }
 
 }

@@ -30,7 +30,7 @@ public class AppAppletRouteToAppletQuery extends BaseAuditEntityQuery<AppAppletR
     }
 
     public AppAppletRouteToAppletQuery appAppletId(Long appAppletId) {
-        return (AppAppletRouteToAppletQuery) addEquals("appAppletId", appAppletId);
+        return (AppAppletRouteToAppletQuery) equals("appAppletId", appAppletId);
     }
 
 }

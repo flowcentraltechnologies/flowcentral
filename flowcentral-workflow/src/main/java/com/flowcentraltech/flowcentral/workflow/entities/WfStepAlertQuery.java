@@ -31,10 +31,10 @@ public class WfStepAlertQuery extends BaseNamedEntityQuery<WfStepAlert> {
     }
 
     public WfStepAlertQuery applicationNameNot(String applicationName) {
-        return (WfStepAlertQuery) addNotEquals("applicationName", applicationName);
+        return (WfStepAlertQuery) notequals("applicationName", applicationName);
     }
 
     public WfStepAlertQuery templateBeginsWith(String template) {
-        return (WfStepAlertQuery) addBeginsWith("template", template);
+        return (WfStepAlertQuery) begins("template", template);
     }
 }

@@ -37,45 +37,45 @@ public class ReportGroupRoleQuery extends BaseAuditEntityQuery<ReportGroupRole> 
     }
 
     public ReportGroupRoleQuery reportGroupId(Long reportGroupId) {
-        return (ReportGroupRoleQuery) addEquals("reportGroupId", reportGroupId);
+        return (ReportGroupRoleQuery) equals("reportGroupId", reportGroupId);
     }
 
     public ReportGroupRoleQuery reportGroupIdIn(Collection<Long> reportGroupId) {
-        return (ReportGroupRoleQuery) addAmongst("reportGroupId", reportGroupId);
+        return (ReportGroupRoleQuery) amongst("reportGroupId", reportGroupId);
     }
 
     public ReportGroupRoleQuery roleId(Long roleId) {
-        return (ReportGroupRoleQuery) addEquals("roleId", roleId);
+        return (ReportGroupRoleQuery) equals("roleId", roleId);
     }
 
     public ReportGroupRoleQuery roleIdNot(Long roleId) {
-        return (ReportGroupRoleQuery) addNotEquals("roleId", roleId);
+        return (ReportGroupRoleQuery) notequals("roleId", roleId);
     }
 
     public ReportGroupRoleQuery roleCode(String roleCode) {
-        return (ReportGroupRoleQuery) addEquals("roleCode", roleCode);
+        return (ReportGroupRoleQuery) equals("roleCode", roleCode);
     }
 
     public ReportGroupRoleQuery roleCodeNot(String roleCode) {
-        return (ReportGroupRoleQuery) addNotEquals("roleCode", roleCode);
+        return (ReportGroupRoleQuery) notequals("roleCode", roleCode);
     }
 
     public ReportGroupRoleQuery roleStatus(RecordStatus roleStatus) {
-        return (ReportGroupRoleQuery) addEquals("roleStatus", roleStatus);
+        return (ReportGroupRoleQuery) equals("roleStatus", roleStatus);
     }
 
     public ReportGroupRoleQuery roleCodeIn(Collection<String> roleCode) {
-        return (ReportGroupRoleQuery) addAmongst("roleCode", roleCode);
+        return (ReportGroupRoleQuery) amongst("roleCode", roleCode);
     }
 
     public ReportGroupRoleQuery roleCodeNotIn(Collection<String> roleCode) {
-        return (ReportGroupRoleQuery) addNotAmongst("roleCode", roleCode);
+        return (ReportGroupRoleQuery) notamongst("roleCode", roleCode);
     }
 
     public ReportGroupRoleQuery roleActiveTime(Date date) throws UnifyException {
         date = CalendarUtils.getTimeOfDay(date);
-        return (ReportGroupRoleQuery) addRestriction(
+        return (ReportGroupRoleQuery) restriction(
                 new OrBuilder().less("activeBefore", date).isNull("activeBefore").build())
-                        .addRestriction(new OrBuilder().greater("activeAfter", date).isNull("activeAfter").build());
+                        .restriction(new OrBuilder().greater("activeAfter", date).isNull("activeAfter").build());
     }
 }

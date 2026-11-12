@@ -510,7 +510,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             throws UnifyException {
         if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
             final Query<? extends BaseApplicationEntity> _query = query.copy();
-            _query.addSelect("applicationName", "name", "description");
+            _query.select("applicationName", "name", "description");
             List<? extends BaseApplicationEntity> list = environment().listAll(_query);
             return ApplicationNameUtils.getApplicationEntityLongNames(list);
         }
@@ -523,7 +523,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             throws UnifyException {
         if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
             final Query<? extends BaseApplicationEntity> _query = query.copy();
-            _query.addSelect("applicationName", "name", "description");
+            _query.select("applicationName", "name", "description");
             List<? extends BaseApplicationEntity> list = environment().listAll(_query);
             return ApplicationNameUtils.getListableList(list);
         }
@@ -2184,7 +2184,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             if (BaseVersionEntity.class.isAssignableFrom(entityClass)) {
                 final boolean isClearMergeVersion = BaseApplicationEntity.class.isAssignableFrom(entityClass)
                         && !isEnterprise();
-                Query<?> query = Query.of((Class<? extends Entity>) entityClass).addEquals("id", inst.getId());
+                Query<?> query = Query.of((Class<? extends Entity>) entityClass).equals("id", inst.getId());
                 long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
                 Update update = isClearMergeVersion
                         ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
@@ -2305,7 +2305,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                     Query<? extends Entity> query = br != null
                             ? Query.ofDefaultingToAnd((Class<? extends Entity>) _entityClassDef.getEntityClass(), br)
                             : Query.of((Class<? extends Entity>) _entityClassDef.getEntityClass());
-                    query.addEquals("id", currVal);
+                    query.equals("id", currVal);
                     if (environmentService.countAll(query) == 0) {
                         DataUtils.setBeanProperty(inst, _formFieldDef.getFieldName(), null);
                         change = true;

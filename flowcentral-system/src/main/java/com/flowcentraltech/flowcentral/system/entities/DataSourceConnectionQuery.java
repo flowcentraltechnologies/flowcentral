@@ -31,7 +31,7 @@ public class DataSourceConnectionQuery extends BaseAuditEntityQuery<DataSourceCo
     }
 
     public DataSourceConnectionQuery name(String name) {
-        return (DataSourceConnectionQuery) addEquals("name", name);
+        return (DataSourceConnectionQuery) equals("name", name);
     }
 
 }

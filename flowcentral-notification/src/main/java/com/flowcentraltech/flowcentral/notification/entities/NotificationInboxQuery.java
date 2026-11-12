@@ -31,10 +31,10 @@ public class NotificationInboxQuery extends BaseAuditEntityQuery<NotificationInb
     }
 
     public NotificationInboxQuery userLoginId(String userLoginId) {
-        return (NotificationInboxQuery) addEquals("userLoginId", userLoginId);
+        return (NotificationInboxQuery) equals("userLoginId", userLoginId);
     }
 
     public NotificationInboxQuery status(NotificationInboxStatus status) {
-        return (NotificationInboxQuery) addEquals("status", status);
+        return (NotificationInboxQuery) equals("status", status);
     }
 }

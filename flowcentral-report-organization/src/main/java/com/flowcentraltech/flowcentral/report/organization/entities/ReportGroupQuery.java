@@ -35,7 +35,7 @@ public class ReportGroupQuery extends BaseStatusEntityQuery<ReportGroup> {
     }
 
     public ReportGroupQuery name(String name) {
-        return (ReportGroupQuery) addEquals("name", name);
+        return (ReportGroupQuery) equals("name", name);
     }
 
 }

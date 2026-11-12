@@ -30,14 +30,14 @@ public class ZoneQuery extends BaseStatusEntityQuery<Zone> {
     }
 
     public ZoneQuery code(String code) {
-        return (ZoneQuery) addEquals("code", code);
+        return (ZoneQuery) equals("code", code);
     }
 
     public ZoneQuery codeLike(String code) {
-        return (ZoneQuery) addLike("code", code);
+        return (ZoneQuery) like("code", code);
     }
 
     public ZoneQuery descriptionLike(String description) {
-        return (ZoneQuery) addLike("description", description);
+        return (ZoneQuery) like("description", description);
     }
 }

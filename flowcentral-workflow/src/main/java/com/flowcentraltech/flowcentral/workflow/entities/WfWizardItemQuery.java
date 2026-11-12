@@ -31,14 +31,14 @@ public class WfWizardItemQuery extends BaseEntityQuery<WfWizardItem> {
     }
 
     public WfWizardItemQuery wizard(String wizard) {
-        return (WfWizardItemQuery) addEquals("wizard", wizard);
+        return (WfWizardItemQuery) equals("wizard", wizard);
     }
 
     public WfWizardItemQuery ownerId(String ownerId) {
-        return (WfWizardItemQuery) addEquals("ownerId", ownerId);
+        return (WfWizardItemQuery) equals("ownerId", ownerId);
     }
 
     public WfWizardItemQuery primaryEntityId(Long primaryEntityId) {
-        return (WfWizardItemQuery) addEquals("primaryEntityId", primaryEntityId);
+        return (WfWizardItemQuery) equals("primaryEntityId", primaryEntityId);
     }
 }

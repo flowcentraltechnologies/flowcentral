@@ -205,11 +205,11 @@ public class EntryTablePage {
     public void loadEntryList() throws UnifyException {
         final BeanListTable _beanTable = getEntryBeanTable();
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                .addEquals(baseField, baseId);
+                .equals(baseField, baseId);
         Restriction br = filterGroupDef != null ? filterGroupDef.getRestriction(FilterType.TAB, null, ctx.au().getNow())
                 : null;
         if (br != null) {
-            query.addRestriction(br);
+            query.restriction(br);
         }
 
         List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);

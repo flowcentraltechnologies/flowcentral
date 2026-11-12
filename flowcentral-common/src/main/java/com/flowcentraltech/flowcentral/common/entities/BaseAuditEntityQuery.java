@@ -41,62 +41,62 @@ public abstract class BaseAuditEntityQuery<T extends BaseAuditEntity> extends Ba
     }
 
     public final BaseAuditEntityQuery<T> createdBy(String createdBy) {
-        return (BaseAuditEntityQuery<T>) addEquals("createdBy", createdBy);
+        return (BaseAuditEntityQuery<T>) equals("createdBy", createdBy);
     }
 
     public final BaseAuditEntityQuery<T> createdOn(Date date) {
-        return (BaseAuditEntityQuery<T>) addBetween("createDt", CalendarUtils.getMidnightDate(date),
+        return (BaseAuditEntityQuery<T>) between("createDt", CalendarUtils.getMidnightDate(date),
                 CalendarUtils.getLastSecondDate(date));
     }
 
     public final BaseAuditEntityQuery<T> createdBetween(Date fromDate, Date toDate) {
-        return (BaseAuditEntityQuery<T>) addBetween("createDt", CalendarUtils.getMidnightDate(fromDate),
+        return (BaseAuditEntityQuery<T>) between("createDt", CalendarUtils.getMidnightDate(fromDate),
                 CalendarUtils.getLastSecondDate(toDate));
     }
 
     public final BaseAuditEntityQuery<T> createdBefore(Date date) {
-        return (BaseAuditEntityQuery<T>) addLessThan("createDt", date);
+        return (BaseAuditEntityQuery<T>) less("createDt", date);
     }
 
     public final BaseAuditEntityQuery<T> createdOnBefore(Date date) {
-        return (BaseAuditEntityQuery<T>) addLessThanEqual("createDt", date);
+        return (BaseAuditEntityQuery<T>) lesseq("createDt", date);
     }
 
     public final BaseAuditEntityQuery<T> createdAfter(Date date) {
-        return (BaseAuditEntityQuery<T>) addGreaterThan("createDt", date);
+        return (BaseAuditEntityQuery<T>) greater("createDt", date);
     }
 
     public final BaseAuditEntityQuery<T> createdOnAfter(Date date) {
-        return (BaseAuditEntityQuery<T>) addGreaterThanEqual("createDt", date);
+        return (BaseAuditEntityQuery<T>) greatereq("createDt", date);
     }
 
     public final BaseAuditEntityQuery<T> updatedBy(String updatedBy) {
-        return (BaseAuditEntityQuery<T>) addEquals("updatedBy", updatedBy);
+        return (BaseAuditEntityQuery<T>) equals("updatedBy", updatedBy);
     }
 
     public final BaseAuditEntityQuery<T> updatedOn(Date date) {
-        return (BaseAuditEntityQuery<T>) addBetween("updateDt", CalendarUtils.getMidnightDate(date),
+        return (BaseAuditEntityQuery<T>) between("updateDt", CalendarUtils.getMidnightDate(date),
                 CalendarUtils.getLastSecondDate(date));
     }
 
     public final BaseAuditEntityQuery<T> updatedBetween(Date fromDate, Date toDate) {
-        return (BaseAuditEntityQuery<T>) addBetween("updateDt", CalendarUtils.getMidnightDate(fromDate),
+        return (BaseAuditEntityQuery<T>) between("updateDt", CalendarUtils.getMidnightDate(fromDate),
                 CalendarUtils.getLastSecondDate(toDate));
     }
 
     public final BaseAuditEntityQuery<T> updatedBefore(Date date) {
-        return (BaseAuditEntityQuery<T>) addLessThan("updateDt", date);
+        return (BaseAuditEntityQuery<T>) less("updateDt", date);
     }
 
     public final BaseAuditEntityQuery<T> updatedOnBefore(Date date) {
-        return (BaseAuditEntityQuery<T>) addLessThanEqual("updateDt", date);
+        return (BaseAuditEntityQuery<T>) lesseq("updateDt", date);
     }
 
     public final BaseAuditEntityQuery<T> updatedAfter(Date date) {
-        return (BaseAuditEntityQuery<T>) addGreaterThan("updateDt", date);
+        return (BaseAuditEntityQuery<T>) greater("updateDt", date);
     }
 
     public final BaseAuditEntityQuery<T> updatedOnAfter(Date date) {
-        return (BaseAuditEntityQuery<T>) addGreaterThanEqual("updateDt", date);
+        return (BaseAuditEntityQuery<T>) greatereq("updateDt", date);
     }
 }

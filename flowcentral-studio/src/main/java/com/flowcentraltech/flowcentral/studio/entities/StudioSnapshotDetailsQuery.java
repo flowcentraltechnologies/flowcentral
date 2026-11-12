@@ -31,7 +31,7 @@ public class StudioSnapshotDetailsQuery extends BaseAuditEntityQuery<StudioSnaps
     }
 
     public StudioSnapshotDetailsQuery studioSnapshotType(StudioSnapshotType studioSnapshotType) {
-        return (StudioSnapshotDetailsQuery) addEquals("studioSnapshotType", studioSnapshotType);
+        return (StudioSnapshotDetailsQuery) equals("studioSnapshotType", studioSnapshotType);
     }
 
 }

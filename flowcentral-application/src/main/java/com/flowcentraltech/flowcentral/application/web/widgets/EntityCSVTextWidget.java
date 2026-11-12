@@ -53,15 +53,15 @@ public class EntityCSVTextWidget extends AbstractFlowCentralControl {
         if (val != null) {
             EntityClassDef entityClassDef = au.getEntityClassDef(getUplAttribute(String.class, "entity"));
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                    .addEquals(getUplAttribute(String.class, "key"), val);
+                    .equals(getUplAttribute(String.class, "key"), val);
             Restriction restriction = getMoreRestriction();
             if (restriction != null) {
-                query.addRestriction(restriction);
+                query.restriction(restriction);
             }
             
             String property = getUplAttribute(String.class, "property");
             List<String> descriptions = au.environment().valueList(String.class, property,
-                    query.addOrder(property).setDistinct(getUplAttribute(boolean.class, "distinct")));
+                    query.order(property).distinct(getUplAttribute(boolean.class, "distinct")));
             return StringUtils.buildSpacedCommaSeparatedString(descriptions);
         }
 

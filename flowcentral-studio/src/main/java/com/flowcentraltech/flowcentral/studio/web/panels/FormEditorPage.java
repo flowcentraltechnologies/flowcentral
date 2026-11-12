@@ -178,7 +178,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
         if (formDef != null) {
             FormEditor.Builder feb = FormEditor.newBuilder(au(), formDef);
             for (AppFormElement appFormElement : au().environment()
-                    .findAll(Query.of(AppFormElement.class).addEquals("appFormId", baseId).addOrder("id"))) {
+                    .findAll(Query.of(AppFormElement.class).equals("appFormId", baseId).order("id"))) {
                 switch (appFormElement.getType()) {
                     case FIELD:
                         if (formDef.getEntityDef().isWithFieldDef(appFormElement.getElementName())) {

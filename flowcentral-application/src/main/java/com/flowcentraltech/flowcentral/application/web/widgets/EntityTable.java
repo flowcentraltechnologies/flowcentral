@@ -77,11 +77,11 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
         return getTableDef().getColorLegendInfo() != null && !getTableDef().getColorLegendInfo().isEmpty();
     }
 
-    public int getLimit() {
+    public int limit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void limit(int limit) {
         this.limit = limit;
     }
 
@@ -89,7 +89,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
         return limitSelectToColumns;
     }
 
-    public void setLimitSelectToColumns(boolean limitSelectToColumns) {
+    public void limitSelectToColumns(boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
     }
 
@@ -159,7 +159,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
         if (restriction != null) {
             Query<? extends Entity> query = Query
                     .ofDefaultingToAnd((Class<? extends Entity>) entityClassDef.getEntityClass(), restriction)
-                    .setOrder(getOrder()).setOffset(dispStartIndex).setLimit(dispEndIndex - dispStartIndex);
+                    .setOrder(getOrder()).offset(dispStartIndex).limit(dispEndIndex - dispStartIndex);
             if (limitSelectToColumns && tableDef.isLimitSelectToColumns()) {
                 query.setSelect(tableDef.getSelect());
             }
@@ -168,8 +168,8 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
         }
 
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                .ignoreEmptyCriteria(true).setOrder(getOrder()).setOffset(dispStartIndex)
-                .setLimit(dispEndIndex - dispStartIndex);
+                .ignoreEmptyCriteria(true).setOrder(getOrder()).offset(dispStartIndex)
+                .limit(dispEndIndex - dispStartIndex);
         if (limitSelectToColumns && tableDef.isLimitSelectToColumns()) {
             query.setSelect(tableDef.getSelect());
         }

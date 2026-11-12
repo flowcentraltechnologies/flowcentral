@@ -48,7 +48,7 @@ public class ChartListCommand extends AbstractZeroParamsListCommand {
     public List<? extends Listable> execute(Locale locale, ZeroParams param) throws UnifyException {
         List<ListData> resultList = new ArrayList<ListData>();
         for (Chart chart : chartModuleService.findCharts((ChartQuery) new ChartQuery()
-                .addSelect("applicationName", "name", "description").ignoreEmptyCriteria(true))) {
+                .select("applicationName", "name", "description").ignoreEmptyCriteria(true))) {
             resultList.add(new ListData(
                     ApplicationNameUtils.getApplicationEntityLongName(chart.getApplicationName(), chart.getName()),
                     chart.getDescription()));

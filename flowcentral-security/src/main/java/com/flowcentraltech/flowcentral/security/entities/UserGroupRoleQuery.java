@@ -37,45 +37,45 @@ public class UserGroupRoleQuery extends BaseAuditEntityQuery<UserGroupRole> {
     }
 
     public UserGroupRoleQuery userGroupId(Long userGroupId) {
-        return (UserGroupRoleQuery) addEquals("userGroupId", userGroupId);
+        return (UserGroupRoleQuery) equals("userGroupId", userGroupId);
     }
 
     public UserGroupRoleQuery userGroupIdIn(Collection<Long> userGroupId) {
-        return (UserGroupRoleQuery) addAmongst("userGroupId", userGroupId);
+        return (UserGroupRoleQuery) amongst("userGroupId", userGroupId);
     }
 
     public UserGroupRoleQuery roleId(Long roleId) {
-        return (UserGroupRoleQuery) addEquals("roleId", roleId);
+        return (UserGroupRoleQuery) equals("roleId", roleId);
     }
 
     public UserGroupRoleQuery roleIdNot(Long roleId) {
-        return (UserGroupRoleQuery) addNotEquals("roleId", roleId);
+        return (UserGroupRoleQuery) notequals("roleId", roleId);
     }
 
     public UserGroupRoleQuery roleCode(String roleCode) {
-        return (UserGroupRoleQuery) addEquals("roleCode", roleCode);
+        return (UserGroupRoleQuery) equals("roleCode", roleCode);
     }
 
     public UserGroupRoleQuery roleCodeNot(String roleCode) {
-        return (UserGroupRoleQuery) addNotEquals("roleCode", roleCode);
+        return (UserGroupRoleQuery) notequals("roleCode", roleCode);
     }
 
     public UserGroupRoleQuery roleStatus(RecordStatus roleStatus) {
-        return (UserGroupRoleQuery) addEquals("roleStatus", roleStatus);
+        return (UserGroupRoleQuery) equals("roleStatus", roleStatus);
     }
 
     public UserGroupRoleQuery roleCodeIn(Collection<String> roleCode) {
-        return (UserGroupRoleQuery) addAmongst("roleCode", roleCode);
+        return (UserGroupRoleQuery) amongst("roleCode", roleCode);
     }
 
     public UserGroupRoleQuery roleCodeNotIn(Collection<String> roleCode) {
-        return (UserGroupRoleQuery) addNotAmongst("roleCode", roleCode);
+        return (UserGroupRoleQuery) notamongst("roleCode", roleCode);
     }
 
     public UserGroupRoleQuery roleActiveTime(Date date) throws UnifyException {
         date = CalendarUtils.getTimeOfDay(date);
-        return (UserGroupRoleQuery) addRestriction(
+        return (UserGroupRoleQuery) restriction(
                 new OrBuilder().less("activeBefore", date).isNull("activeBefore").build())
-                        .addRestriction(new OrBuilder().greater("activeAfter", date).isNull("activeAfter").build());
+                        .restriction(new OrBuilder().greater("activeAfter", date).isNull("activeAfter").build());
     }
 }

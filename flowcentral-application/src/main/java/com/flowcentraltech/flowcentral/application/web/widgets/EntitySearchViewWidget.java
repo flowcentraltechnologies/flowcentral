@@ -68,7 +68,7 @@ public class EntitySearchViewWidget extends AbstractControl {
             final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
             ;
-            query.addEquals("id", keyVal);
+            query.equals("id", keyVal);
 
             Listable result = environment().listLean(query);
             if (result != null && refDef != null) {

@@ -54,7 +54,7 @@ public class EntityFieldDefInputWidgetListCommand extends AbstractApplicationLis
             AppWidgetTypeQuery appWidgetTypeQuery = new AppWidgetTypeQuery();
             appWidgetTypeQuery.applicationNameNot("studio");
             ApplicationQueryUtils.addWidgetTypeCriteria(appWidgetTypeQuery, null, fieldType);
-            appWidgetTypeQuery.addSelect("applicationName", "name", "description").addOrder("description");
+            appWidgetTypeQuery.select("applicationName", "name", "description").order("description");
             List<AppWidgetType> widgetTypeList = application().findAppWidgetTypes(appWidgetTypeQuery);
             return ApplicationNameUtils.getListableList(widgetTypeList);
         }

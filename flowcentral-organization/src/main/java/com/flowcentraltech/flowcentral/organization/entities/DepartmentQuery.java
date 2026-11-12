@@ -30,14 +30,14 @@ public class DepartmentQuery extends BaseStatusEntityQuery<Department> {
     }
 
     public DepartmentQuery code(String code) {
-        return (DepartmentQuery) addEquals("code", code);
+        return (DepartmentQuery) equals("code", code);
     }
 
     public DepartmentQuery codeLike(String code) {
-        return (DepartmentQuery) addLike("code", code);
+        return (DepartmentQuery) like("code", code);
     }
 
     public DepartmentQuery descriptionLike(String description) {
-        return (DepartmentQuery) addLike("description", description);
+        return (DepartmentQuery) like("description", description);
     }
 }

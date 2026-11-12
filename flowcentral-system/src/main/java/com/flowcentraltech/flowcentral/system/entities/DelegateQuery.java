@@ -31,14 +31,14 @@ public class DelegateQuery extends BaseStatusEntityQuery<Delegate> {
     }
 
     public DelegateQuery name(String name) {
-        return (DelegateQuery) addEquals("name", name);
+        return (DelegateQuery) equals("name", name);
     }
 
     public DelegateQuery nameLike(String name) {
-        return (DelegateQuery) addLike("name", name);
+        return (DelegateQuery) like("name", name);
     }
 
     public DelegateQuery descriptionLike(String description) {
-        return (DelegateQuery) addLike("description", description);
+        return (DelegateQuery) like("description", description);
     }
 }

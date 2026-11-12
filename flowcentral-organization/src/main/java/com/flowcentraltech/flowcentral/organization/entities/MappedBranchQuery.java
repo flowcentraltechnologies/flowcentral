@@ -30,26 +30,26 @@ public class MappedBranchQuery extends BaseEntityQuery<MappedBranch> {
     }
 
     public MappedBranchQuery zoneId(Long zoneId) {
-        return (MappedBranchQuery) addEquals("zoneId", zoneId);
+        return (MappedBranchQuery) equals("zoneId", zoneId);
     }
 
     public MappedBranchQuery tenantId(Long tenantId) {
-        return (MappedBranchQuery) addEquals("tenantId", tenantId);
+        return (MappedBranchQuery) equals("tenantId", tenantId);
     }
 
     public MappedBranchQuery code(String code) {
-        return (MappedBranchQuery) addEquals("code", code);
+        return (MappedBranchQuery) equals("code", code);
     }
 
     public MappedBranchQuery sortCode(String sortCode) {
-        return (MappedBranchQuery) addEquals("sortCode", sortCode);
+        return (MappedBranchQuery) equals("sortCode", sortCode);
     }
 
     public MappedBranchQuery sortCodeLike(String sortCode) {
-        return (MappedBranchQuery) addLike("sortCode", sortCode);
+        return (MappedBranchQuery) like("sortCode", sortCode);
     }
 
     public MappedBranchQuery descriptionLike(String description) {
-        return (MappedBranchQuery) addLike("description", description);
+        return (MappedBranchQuery) like("description", description);
     }
 }

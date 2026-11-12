@@ -206,14 +206,14 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                     if (multiErrorMessages || !ctx.isWithFieldError(fieldList)) {
                         Query query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                         if (isUpdate) {
-                            query.addNotEquals("id", id);
+                            query.notequals("id", id);
                         }
 
                         if (originalCopyId != null) {
-                            query.addNotEquals("id", originalCopyId);
+                            query.notequals("id", originalCopyId);
                         } else {
                             if (entityClassDef.isWorkType()) {
-                                query.addIsNotNull("wfItemVersionType");
+                                query.notnull("wfItemVersionType");
                             }
                         }
 
@@ -227,15 +227,15 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                             }
 
                             if (constDef.isCaseInsensitive() && val instanceof String) {
-                                query.addIEquals(fieldName, (String) val);
+                                query.iequals(fieldName, (String) val);
                             } else {
-                                query.addEquals(fieldName, val);
+                                query.equals(fieldName, val);
                             }
                         }
 
                         if (constDef.isWithConditionList()) {
                             for (UniqueConditionDef ucd : constDef.getConditionList()) {
-                                query.addRestriction(ucd.getRestriction());
+                                query.restriction(ucd.getRestriction());
                             }
                         }
 

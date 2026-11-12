@@ -31,6 +31,6 @@ public class AppFormAnnotationQuery extends BaseConfigNamedEntityQuery<AppFormAn
     }
 
     public AppFormAnnotationQuery appFormId(Long appFormId) {
-        return (AppFormAnnotationQuery) addEquals("appFormId", appFormId);
+        return (AppFormAnnotationQuery) equals("appFormId", appFormId);
     }
 }

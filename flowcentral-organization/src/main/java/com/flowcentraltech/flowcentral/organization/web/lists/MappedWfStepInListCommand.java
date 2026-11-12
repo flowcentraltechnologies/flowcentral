@@ -45,7 +45,7 @@ public class MappedWfStepInListCommand extends AbstractOrganizationListCommand<A
             MappedWfStepQuery query = new MappedWfStepQuery();
             query.workflowId(params.getFilterId1(Long.class));
             query.idIn(params.getAssignedIdList(Long.class));
-            query.addSelect("id", "description").addOrder("description");
+            query.select("id", "description").order("description");
             return environment().findAll(query);
         }
 

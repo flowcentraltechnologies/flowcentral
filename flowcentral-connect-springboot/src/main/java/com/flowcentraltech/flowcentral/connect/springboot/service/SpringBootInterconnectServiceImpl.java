@@ -311,12 +311,12 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
                             CriteriaQuery<?> cq = createQuery(entityInfo.getImplClass(), em, req);
                             TypedQuery<?> query = em.createQuery(cq);
-                            if (req.getOffset() >= 0) {
-                                query.setFirstResult(req.getOffset());
+                            if (req.offset() >= 0) {
+                                query.setFirstResult(req.offset());
                             }
 
-                            if (req.getLimit() > 0) {
-                                query.setMaxResults(req.getLimit());
+                            if (req.limit() > 0) {
+                                query.setMaxResults(req.limit());
                             }
 
                             List<?> results = query.getResultList();

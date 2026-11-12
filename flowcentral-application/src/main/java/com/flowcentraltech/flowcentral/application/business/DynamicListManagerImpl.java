@@ -100,8 +100,8 @@ public class DynamicListManagerImpl extends AbstractDynamicListManager implement
                     
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
                     AppEnumeration appEnumeration = environmentService
-                            .list(Query.of(AppEnumeration.class).addEquals("name", nameParts.getEntityName())
-                                    .addEquals("applicationName", nameParts.getApplicationName()));
+                            .list(Query.of(AppEnumeration.class).equals("name", nameParts.getEntityName())
+                                    .equals("applicationName", nameParts.getApplicationName()));
                     
                     List<EnumerationItemDef> itemsList = new ArrayList<EnumerationItemDef>();
                     for (AppEnumerationItem item : appEnumeration.getItemList()) {

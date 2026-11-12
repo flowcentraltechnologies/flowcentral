@@ -31,6 +31,6 @@ public class WfItemHistQuery extends BaseAuditEntityQuery<WfItemHist> {
     }
 
     public WfItemHistQuery itemDescLike(String itemDesc) {
-        return (WfItemHistQuery) addLike("itemDesc", itemDesc);
+        return (WfItemHistQuery) like("itemDesc", itemDesc);
     }
 }

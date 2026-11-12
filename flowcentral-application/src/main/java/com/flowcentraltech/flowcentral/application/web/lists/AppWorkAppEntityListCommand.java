@@ -45,7 +45,7 @@ public class AppWorkAppEntityListCommand extends AbstractApplicationListCommand<
         if (params.isPresent()) {
             return ApplicationNameUtils.getListableList(
                     application().findAppEntities((AppEntityQuery) new AppEntityQuery().isWorkEntity()
-                            .applicationId(params.getValue()).addSelect("applicationName", "name", "description")));
+                            .applicationId(params.getValue()).select("applicationName", "name", "description")));
         }
 
         return Collections.emptyList();

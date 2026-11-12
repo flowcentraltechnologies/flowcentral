@@ -30,7 +30,7 @@ public class AppFormFilterQuery extends BaseConfigNamedEntityQuery<AppFormFilter
     }
 
     public AppFormFilterQuery appFormId(Long appFormId) {
-        return (AppFormFilterQuery) addEquals("appFormId", appFormId);
+        return (AppFormFilterQuery) equals("appFormId", appFormId);
     }
 
 }

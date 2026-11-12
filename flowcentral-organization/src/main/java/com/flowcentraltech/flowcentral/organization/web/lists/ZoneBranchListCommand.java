@@ -42,7 +42,7 @@ public class ZoneBranchListCommand extends AbstractOrganizationListCommand<LongP
     public List<? extends Listable> execute(Locale locale, LongParam params) throws UnifyException {
         if (params.isPresent()) {
             return org().findMappedBranches((MappedBranchQuery) new MappedBranchQuery().zoneId(params.getValue())
-                    .addSelect("id", "description").addOrder("description").ignoreEmptyCriteria(true));
+                    .select("id", "description").order("description").ignoreEmptyCriteria(true));
         }
 
         return Collections.emptyList();

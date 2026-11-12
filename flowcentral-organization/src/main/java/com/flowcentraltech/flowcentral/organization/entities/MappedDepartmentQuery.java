@@ -30,18 +30,18 @@ public class MappedDepartmentQuery extends BaseEntityQuery<MappedDepartment> {
     }
 
     public MappedDepartmentQuery tenantId(Long tenantId) {
-        return (MappedDepartmentQuery) addEquals("tenantId", tenantId);
+        return (MappedDepartmentQuery) equals("tenantId", tenantId);
     }
 
     public MappedDepartmentQuery code(String code) {
-        return (MappedDepartmentQuery) addEquals("code", code);
+        return (MappedDepartmentQuery) equals("code", code);
     }
 
     public MappedDepartmentQuery codeLike(String code) {
-        return (MappedDepartmentQuery) addLike("code", code);
+        return (MappedDepartmentQuery) like("code", code);
     }
 
     public MappedDepartmentQuery descriptionLike(String description) {
-        return (MappedDepartmentQuery) addLike("description", description);
+        return (MappedDepartmentQuery) like("description", description);
     }
 }

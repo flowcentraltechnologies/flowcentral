@@ -38,55 +38,55 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
     }
 
     public final BaseApplicationEntityQuery<T> applicationId(Long applicationId) {
-        return (BaseApplicationEntityQuery<T>) addEquals("applicationId", applicationId);
+        return (BaseApplicationEntityQuery<T>) equals("applicationId", applicationId);
     }
 
     public final BaseApplicationEntityQuery<T> applicationName(String applicationName) {
-        return (BaseApplicationEntityQuery<T>) addEquals("applicationName", applicationName);
+        return (BaseApplicationEntityQuery<T>) equals("applicationName", applicationName);
     }
 
     public final BaseApplicationEntityQuery<T> applicationNameNot(String applicationName) {
-        return (BaseApplicationEntityQuery<T>) addNotEquals("applicationName", applicationName);
+        return (BaseApplicationEntityQuery<T>) notequals("applicationName", applicationName);
     }
 
     public final BaseApplicationEntityQuery<T> applicationNameIn(Collection<String> applicationNames) {
-        return (BaseApplicationEntityQuery<T>) addAmongst("applicationName", applicationNames);
+        return (BaseApplicationEntityQuery<T>) amongst("applicationName", applicationNames);
     }
 
     public final BaseApplicationEntityQuery<T> moduleName(String moduleName) {
-        return (BaseApplicationEntityQuery<T>) addEquals("moduleName", moduleName);
+        return (BaseApplicationEntityQuery<T>) equals("moduleName", moduleName);
     }
 
     public final BaseApplicationEntityQuery<T> devMergeVersionNo(String devMergeVersionNo) {
-        return (BaseApplicationEntityQuery<T>) addEquals("devMergeVersionNo", devMergeVersionNo);
+        return (BaseApplicationEntityQuery<T>) equals("devMergeVersionNo", devMergeVersionNo);
     }
 
     public final BaseApplicationEntityQuery<T> devVersionType(DevelopmentVersionType devVersionType) {
-        return (BaseApplicationEntityQuery<T>) addEquals("devVersionType", devVersionType);
+        return (BaseApplicationEntityQuery<T>) equals("devVersionType", devVersionType);
     }
 
     public final BaseApplicationEntityQuery<T> isCurrentDevVersion() {
-        return (BaseApplicationEntityQuery<T>) addEquals("devVersionType", DevelopmentVersionType.CURRENT);
+        return (BaseApplicationEntityQuery<T>) equals("devVersionType", DevelopmentVersionType.CURRENT);
     }
 
     public final BaseApplicationEntityQuery<T> classified(boolean classified) {
-        return (BaseApplicationEntityQuery<T>) addEquals("classified", classified);
+        return (BaseApplicationEntityQuery<T>) equals("classified", classified);
     }
 
     public final BaseApplicationEntityQuery<T> developable(boolean developable) {
-        return (BaseApplicationEntityQuery<T>) addEquals("developable", developable);
+        return (BaseApplicationEntityQuery<T>) equals("developable", developable);
     }
 
     public final BaseApplicationEntityQuery<T> deprecated(boolean deprecated) {
-        return (BaseApplicationEntityQuery<T>) addEquals("deprecated", deprecated);
+        return (BaseApplicationEntityQuery<T>) equals("deprecated", deprecated);
     }
 
     public final BaseApplicationEntityQuery<T> isNotDeprecated() {
-        return (BaseApplicationEntityQuery<T>) addEquals("deprecated", false);
+        return (BaseApplicationEntityQuery<T>) equals("deprecated", false);
     }
 
     public final BaseApplicationEntityQuery<T> isDeprecated() {
-        return (BaseApplicationEntityQuery<T>) addEquals("deprecated", true);
+        return (BaseApplicationEntityQuery<T>) equals("deprecated", true);
     }
 
 }

@@ -49,7 +49,7 @@ public abstract class AbstractFlowCentralTest extends AbstractUnifyComponentTest
         try {
             for (Class<? extends Entity> type : entityClasses) {
                 if (AbstractSequenceEntity.class.isAssignableFrom(type)) {
-                    db.deleteAll(Query.of(type).addGreaterThan("id", 0L));
+                    db.deleteAll(Query.of(type).greater("id", 0L));
                 } else {
                     db.deleteAll(Query.of(type).ignoreEmptyCriteria(true));
                 }

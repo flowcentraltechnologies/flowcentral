@@ -30,7 +30,7 @@ public class RemoteRepoConfigQuery extends BaseStatusEntityQuery<RemoteRepoConfi
     }
 
     public RemoteRepoConfigQuery name(String name) {
-        return (RemoteRepoConfigQuery) addEquals("name", name);
+        return (RemoteRepoConfigQuery) equals("name", name);
     }
 
 }

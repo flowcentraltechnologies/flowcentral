@@ -30,30 +30,30 @@ public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
     }
 
     public AppEntityQuery entityClass(String entityClass) {
-        return (AppEntityQuery) addEquals("entityClass", entityClass);
+        return (AppEntityQuery) equals("entityClass", entityClass);
     }
 
     public AppEntityQuery isWorkEntity() {
-        return (AppEntityQuery) addAmongst("baseType", ApplicationEntityUtils.BASE_WORK_TYPES);
+        return (AppEntityQuery) amongst("baseType", ApplicationEntityUtils.BASE_WORK_TYPES);
     }
 
     public AppEntityQuery delegate(String delegate) {
-        return (AppEntityQuery) addEquals("delegate", delegate);
+        return (AppEntityQuery) equals("delegate", delegate);
     }
 
     public AppEntityQuery isDelegated() {
-        return (AppEntityQuery) addIsNotNull("delegate");
+        return (AppEntityQuery) notnull("delegate");
     }
 
     public AppEntityQuery isNotDelegated() {
-        return (AppEntityQuery) addIsNull("delegate");
+        return (AppEntityQuery) isnull("delegate");
     }
 
     public AppEntityQuery isMapped() {
-        return (AppEntityQuery) addEquals("mapped", Boolean.TRUE);
+        return (AppEntityQuery) equals("mapped", Boolean.TRUE);
     }
 
     public AppEntityQuery isSchemaUpdateRequired() {
-        return (AppEntityQuery) addEquals("schemaUpdateRequired", Boolean.TRUE);
+        return (AppEntityQuery) equals("schemaUpdateRequired", Boolean.TRUE);
     }
 }

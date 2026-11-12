@@ -42,34 +42,34 @@ public abstract class BaseEntityQuery<T extends AbstractSequenceEntity> extends 
     }
 
     public BaseEntityQuery<T> id(Long id) {
-        return (BaseEntityQuery<T>) addEquals("id", id);
+        return (BaseEntityQuery<T>) equals("id", id);
     }
 
     public BaseEntityQuery<T> idNot(Long id) {
-        return (BaseEntityQuery<T>) addNotEquals("id", id);
+        return (BaseEntityQuery<T>) notequals("id", id);
     }
 
     public BaseEntityQuery<T> idIn(Collection<Long> ids) {
-        return (BaseEntityQuery<T>) addAmongst("id", ids);
+        return (BaseEntityQuery<T>) amongst("id", ids);
     }
 
     public BaseEntityQuery<T> idNotIn(Collection<Long> ids) {
-        return (BaseEntityQuery<T>) addNotAmongst("id", ids);
+        return (BaseEntityQuery<T>) notamongst("id", ids);
     }
 
     public BaseEntityQuery<T> reserved() {
-        return (BaseEntityQuery<T>) addLessThan("id", 0L);
+        return (BaseEntityQuery<T>) less("id", 0L);
     }
 
     public BaseEntityQuery<T> notReserved() {
-        return (BaseEntityQuery<T>) addGreaterThan("id", 0L);
+        return (BaseEntityQuery<T>) greater("id", 0L);
     }
 
     public BaseEntityQuery<T> orderById() {
-        return (BaseEntityQuery<T>) addOrder("id");
+        return (BaseEntityQuery<T>) order("id");
     }
 
     public BaseEntityQuery<T> selectId() {
-        return (BaseEntityQuery<T>) addSelect("id");
+        return (BaseEntityQuery<T>) select("id");
     }
 }

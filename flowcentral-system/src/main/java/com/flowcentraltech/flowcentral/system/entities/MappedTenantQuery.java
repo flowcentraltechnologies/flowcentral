@@ -30,7 +30,7 @@ public class MappedTenantQuery extends BaseEntityQuery<MappedTenant> {
     }
 
     public MappedTenantQuery name(String name) {
-        return (MappedTenantQuery) addEquals("name", name);
+        return (MappedTenantQuery) equals("name", name);
     }
 
 }

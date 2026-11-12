@@ -31,6 +31,6 @@ public class AppTableLoadingQuery extends BaseConfigNamedEntityQuery<AppTableLoa
     }
 
     public AppTableLoadingQuery appTableId(Long appTableId) {
-        return (AppTableLoadingQuery) addEquals("appTableId", appTableId);
+        return (AppTableLoadingQuery) equals("appTableId", appTableId);
     }
 }

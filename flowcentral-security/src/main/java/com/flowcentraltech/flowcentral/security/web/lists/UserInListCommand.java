@@ -43,7 +43,7 @@ public class UserInListCommand extends AbstractSecurityListCommand<AssignParams>
         if (params.isAssignedIdList()) {
             UserQuery query = new UserQuery();
             query.idIn(params.getAssignedIdList(Long.class));
-            query.addSelect("id", "fullName").addOrder("fullName");
+            query.select("id", "fullName").order("fullName");
             return getSecurityModuleService().findUsers(query);
         }
 

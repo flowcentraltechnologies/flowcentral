@@ -31,14 +31,14 @@ public class AppFormRelatedListQuery extends BaseConfigNamedEntityQuery<AppFormR
     }
 
     public AppFormRelatedListQuery appFormId(Long appFormId) {
-        return (AppFormRelatedListQuery) addEquals("appFormId", appFormId);
+        return (AppFormRelatedListQuery) equals("appFormId", appFormId);
     }
 
     public AppFormRelatedListQuery applicationNameNot(String applicationName) {
-        return (AppFormRelatedListQuery) addNotEquals("applicationName", applicationName);
+        return (AppFormRelatedListQuery) notequals("applicationName", applicationName);
     }
 
     public AppFormRelatedListQuery appletBeginsWith(String applet) {
-        return (AppFormRelatedListQuery) addBeginsWith("applet", applet);
+        return (AppFormRelatedListQuery) begins("applet", applet);
     }
 }

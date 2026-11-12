@@ -31,10 +31,10 @@ public class CollaborationLockHistoryQuery extends BaseAuditEntityQuery<Collabor
     }
 
     public CollaborationLockHistoryQuery type(CollaborationType type) {
-        return (CollaborationLockHistoryQuery) addEquals("type", type);
+        return (CollaborationLockHistoryQuery) equals("type", type);
     }
 
     public CollaborationLockHistoryQuery resourceName(String resourceName) {
-        return (CollaborationLockHistoryQuery) addEquals("resourceName", resourceName);
+        return (CollaborationLockHistoryQuery) equals("resourceName", resourceName);
     }
 }

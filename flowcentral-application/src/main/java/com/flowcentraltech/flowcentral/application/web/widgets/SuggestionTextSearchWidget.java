@@ -51,18 +51,18 @@ public class SuggestionTextSearchWidget extends EntityTextSearchWidget {
             if (suggestionTypeDef.isWithParent()) {
                 ApplicationEntityNameParts pparts = ApplicationNameUtils
                         .getApplicationEntityNameParts(suggestionTypeDef.getParent());
-                query.addRestriction(new Or()
+                query.restriction(new Or()
                         .add(new And().add(new Equals("applicationName", parts.getApplicationName()))
                                 .add(new Equals("suggestionTypeName", parts.getEntityName())))
                         .add(new And().add(new Equals("applicationName", pparts.getApplicationName()))
                                 .add(new Equals("suggestionTypeName", pparts.getEntityName()))));
             } else {
-                query.addEquals("applicationName", parts.getApplicationName()).addEquals("suggestionTypeName",
+                query.equals("applicationName", parts.getApplicationName()).equals("suggestionTypeName",
                         parts.getEntityName());
             }
             
             if (parts.isWithMinorName()) {
-                query.addEquals("fieldName", parts.getMinorName());
+                query.equals("fieldName", parts.getMinorName());
             }
         }
     }

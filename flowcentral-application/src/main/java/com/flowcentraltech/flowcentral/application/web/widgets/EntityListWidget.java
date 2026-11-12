@@ -107,18 +107,18 @@ public class EntityListWidget extends AbstractEntityListWidget {
 
                 addMoreResultRestriction(entityClassDef, query);
                 if (limit > 0) {
-                    query.setLimit(limit);
+                    query.limit(limit);
                 }
 
                 if (refDef.isWithOrderField()) {
-                    query.addOrder(refDef.getOrderField());
+                    query.order(refDef.getOrderField());
                     if (query.isSelect()) {
-                        query.addSelect(refDef.getOrderField());
+                        query.select(refDef.getOrderField());
                     }
                 } else {
                     String searchField = getSearchField(entityClassDef, refDef);
                     if (searchField != null) {
-                        query.addOrder(searchField);
+                        query.order(searchField);
                     }
                 }
 

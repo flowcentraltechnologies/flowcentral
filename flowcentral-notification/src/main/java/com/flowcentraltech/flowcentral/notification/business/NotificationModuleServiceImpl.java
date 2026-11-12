@@ -265,7 +265,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     @Override
     public List<NotifLargeTextInfo> getEntityNotifLargeTexts(String entityName) throws UnifyException {
         List<NotificationLargeText> largeTexts = environment().listAll(new NotificationLargeTextQuery()
-                .entity(entityName).addSelect("applicationName", "name", "description"));
+                .entity(entityName).select("applicationName", "name", "description"));
         if (!DataUtils.isBlank(largeTexts)) {
             List<NotifLargeTextInfo> infos = new ArrayList<NotifLargeTextInfo>();
             for (NotificationLargeText largeText : largeTexts) {
@@ -283,7 +283,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
             throws UnifyException {
         List<NotificationTemplate> templates = environment()
-                .listAll(new NotificationTemplateQuery().moduleName(moduleName).addSelect("applicationName", "name"));
+                .listAll(new NotificationTemplateQuery().moduleName(moduleName).select("applicationName", "name"));
         if (!DataUtils.isBlank(templates)) {
             List<DynamicNotifTemplateInfo> resultList = new ArrayList<DynamicNotifTemplateInfo>();
             for (NotificationTemplate template : templates) {
@@ -305,7 +305,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public List<DynamicNotifLargeTextInfo> generateNotifLargeTextInfos(String basePackage, String moduleName)
             throws UnifyException {
         List<NotificationLargeText> largeTexts = environment()
-                .listAll(new NotificationLargeTextQuery().moduleName(moduleName).addSelect("applicationName", "name"));
+                .listAll(new NotificationLargeTextQuery().moduleName(moduleName).select("applicationName", "name"));
         if (!DataUtils.isBlank(largeTexts)) {
             List<DynamicNotifLargeTextInfo> resultList = new ArrayList<DynamicNotifLargeTextInfo>();
             for (NotificationLargeText largeText : largeTexts) {
@@ -331,14 +331,14 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     @Override
     public List<? extends Listable> findNotificationTemplatesByApplicationId(Long applicationId) throws UnifyException {
         List<NotificationTemplate> templateList = environment().listAll(new NotificationTemplateQuery()
-                .applicationId(applicationId).addSelect("applicationName", "name", "description"));
+                .applicationId(applicationId).select("applicationName", "name", "description"));
         return ApplicationNameUtils.getListableList(templateList);
     }
 
     @Override
     public List<? extends Listable> findNotificationTemplatesByEntity(String entity) throws UnifyException {
         List<NotificationTemplate> templateList = environment().listAll(
-                new NotificationTemplateQuery().entity(entity).addSelect("applicationName", "name", "description"));
+                new NotificationTemplateQuery().entity(entity).select("applicationName", "name", "description"));
         return ApplicationNameUtils.getListableList(templateList);
     }
 
@@ -523,7 +523,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                     List<Long> pendingNotificationIdList = environment().valueList(Long.class, "id",
                                             new NotificationOutboxQuery().type(notifType).due(now)
                                                     .status(NotificationOutboxStatus.NOT_SENT)
-                                                    .setLimit(localMaxBatchSize));
+                                                    .limit(localMaxBatchSize));
                                     if (!DataUtils.isBlank(pendingNotificationIdList)) {
                                         logDebug("Sending [{0}] notifications via channel [{1}]...",
                                                 pendingNotificationIdList.size(), notifChannelDef.getDescription());

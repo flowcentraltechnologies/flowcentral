@@ -78,7 +78,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
         AndBuilder ab = (AndBuilder) new AndBuilder().equals("applicationName", originApplicationName)
                 .equals("workflowName", workflowName).equals("wfStepName", wfStepName);
         entitySearch.setBaseRestriction(ab.build(), au.specialParamProvider());
-        entitySearch.getEntityTable().setLimitSelectToColumns(false);
+        entitySearch.getEntityTable().limitSelectToColumns(false);
         singleFormAppletDef = au.getAppletDef(appletName);
         wfStepDef = wms.getWfDef(workflowName).getWfStepDef(wfStepName);
         setAltSubCaption(wfStepDef.getLabel());

@@ -31,6 +31,6 @@ public class AppFormValidationPolicyQuery extends BaseConfigNamedEntityQuery<App
     }
 
     public AppFormValidationPolicyQuery appFormId(Long appFormId) {
-        return (AppFormValidationPolicyQuery) addEquals("appFormId", appFormId);
+        return (AppFormValidationPolicyQuery) equals("appFormId", appFormId);
     }
 }

@@ -140,19 +140,19 @@ public class DataSourceRequest extends BaseRequest {
         this.ignoreEmptyCriteria = ignoreEmptyCriteria;
     }
 
-    public int getOffset() {
+    public int offset() {
         return offset;
     }
 
-    public void setOffset(int offset) {
+    public void offset(int offset) {
         this.offset = offset;
     }
 
-    public int getLimit() {
+    public int limit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void limit(int limit) {
         this.limit = limit;
     }
     

@@ -48,7 +48,7 @@ public class StudioEntityKeyListCommand extends AbstractApplicationListCommand<L
                     .findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                             .appEntityId(params.getValue()).dataTypeIn(EntityFieldDataType.ENUM_REF,
                                     EntityFieldDataType.REF, EntityFieldDataType.REF_UNLINKABLE)
-                            .addSelect("id", "name", "label").addOrder("name"));
+                            .select("id", "name", "label").order("name"));
         }
 
         return Collections.emptyList();

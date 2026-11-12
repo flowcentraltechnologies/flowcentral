@@ -31,6 +31,6 @@ public class AppFormWidgetRulesPolicyQuery extends BaseConfigNamedEntityQuery<Ap
     }
 
     public AppFormWidgetRulesPolicyQuery appFormId(Long appFormId) {
-        return (AppFormWidgetRulesPolicyQuery) addEquals("appFormId", appFormId);
+        return (AppFormWidgetRulesPolicyQuery) equals("appFormId", appFormId);
     }
 }

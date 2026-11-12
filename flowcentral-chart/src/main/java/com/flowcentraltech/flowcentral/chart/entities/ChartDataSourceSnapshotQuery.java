@@ -32,19 +32,19 @@ public class ChartDataSourceSnapshotQuery extends BaseEntityQuery<ChartDatasourc
     }
 
     public ChartDataSourceSnapshotQuery chartDataSourceId(Long chartDataSourceId) {
-        return (ChartDataSourceSnapshotQuery) addEquals("chartDataSourceId", chartDataSourceId);
+        return (ChartDataSourceSnapshotQuery) equals("chartDataSourceId", chartDataSourceId);
     }
 
     public ChartDataSourceSnapshotQuery viewOption(String viewOption) {
-        return (ChartDataSourceSnapshotQuery) addEquals("viewOption", viewOption);
+        return (ChartDataSourceSnapshotQuery) equals("viewOption", viewOption);
     }
 
     public ChartDataSourceSnapshotQuery isExpired(Date now) {
-        return (ChartDataSourceSnapshotQuery) addLessThan("snapshotExpiresOn", now);
+        return (ChartDataSourceSnapshotQuery) less("snapshotExpiresOn", now);
     }
 
     public ChartDataSourceSnapshotQuery isNotExpired(Date now) {
-        return (ChartDataSourceSnapshotQuery) addGreaterThanEqual("snapshotExpiresOn", now);
+        return (ChartDataSourceSnapshotQuery) greatereq("snapshotExpiresOn", now);
     }
 
 }

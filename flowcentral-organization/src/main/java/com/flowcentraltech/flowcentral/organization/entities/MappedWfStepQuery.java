@@ -33,11 +33,11 @@ public class MappedWfStepQuery extends BaseEntityQuery<MappedWfStep> {
     }
 
     public MappedWfStepQuery workflowId(Long workflowId) {
-        return (MappedWfStepQuery) addEquals("workflowId", workflowId);
+        return (MappedWfStepQuery) equals("workflowId", workflowId);
     }
 
     public MappedWfStepQuery typeIn(List<WorkflowStepType> type) {
-        return (MappedWfStepQuery) addAmongst("type", type);
+        return (MappedWfStepQuery) amongst("type", type);
     }
 
 }

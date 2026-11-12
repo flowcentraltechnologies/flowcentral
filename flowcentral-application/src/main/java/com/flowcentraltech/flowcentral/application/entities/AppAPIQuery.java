@@ -30,11 +30,11 @@ public class AppAPIQuery extends BaseApplicationEntityQuery<AppAPI> {
     }
 
     public AppAPIQuery type(APIType type) {
-        return (AppAPIQuery) addEquals("type", type);
+        return (AppAPIQuery) equals("type", type);
     }
 
     public AppAPIQuery entity(String entity) {
-        return (AppAPIQuery) addEquals("entity", entity);
+        return (AppAPIQuery) equals("entity", entity);
     }
 
 }

@@ -35,64 +35,64 @@ public class RolePrivilegeQuery extends BaseAuditEntityQuery<RolePrivilege> {
     }
 
     public RolePrivilegeQuery applicationId(Long applicationId) {
-        return (RolePrivilegeQuery) addEquals("applicationId", applicationId);
+        return (RolePrivilegeQuery) equals("applicationId", applicationId);
     }
 
     public RolePrivilegeQuery roleId(Long roleId) {
-        return (RolePrivilegeQuery) addEquals("roleId", roleId);
+        return (RolePrivilegeQuery) equals("roleId", roleId);
     }
 
     public RolePrivilegeQuery roleIdIn(List<Long> roleIdList) {
-        return (RolePrivilegeQuery) addAmongst("roleId", roleIdList);
+        return (RolePrivilegeQuery) amongst("roleId", roleIdList);
     }
 
     public RolePrivilegeQuery roleCode(String roleCode) {
-        return (RolePrivilegeQuery) addEquals("roleCode", roleCode);
+        return (RolePrivilegeQuery) equals("roleCode", roleCode);
     }
 
     public RolePrivilegeQuery roleWfItemVersionType(WfItemVersionType roleWfItemVersionType) {
-        return (RolePrivilegeQuery) addEquals("roleWfItemVersionType", roleWfItemVersionType);
+        return (RolePrivilegeQuery) equals("roleWfItemVersionType", roleWfItemVersionType);
     }
 
     public RolePrivilegeQuery privilegeConfigType(ConfigType privilegeConfigType) {
-        return (RolePrivilegeQuery) addEquals("privilegeConfigType", privilegeConfigType);
+        return (RolePrivilegeQuery) equals("privilegeConfigType", privilegeConfigType);
     }
 
     public RolePrivilegeQuery isCustom() {
-        return (RolePrivilegeQuery) addEquals("privilegeConfigType", ConfigType.CUSTOM);
+        return (RolePrivilegeQuery) equals("privilegeConfigType", ConfigType.CUSTOM);
     }
 
     public RolePrivilegeQuery privilegeCatCode(String privilegeCatCode) {
-        return (RolePrivilegeQuery) addEquals("privilegeCatCode", privilegeCatCode);
+        return (RolePrivilegeQuery) equals("privilegeCatCode", privilegeCatCode);
     }
 
     public RolePrivilegeQuery privilegeCode(String privilegeCode) {
-        return (RolePrivilegeQuery) addEquals("privilegeCode", privilegeCode);
+        return (RolePrivilegeQuery) equals("privilegeCode", privilegeCode);
     }
 
     public RolePrivilegeQuery privilegeId(Long privilegeId) {
-        return (RolePrivilegeQuery) addEquals("privilegeId", privilegeId);
+        return (RolePrivilegeQuery) equals("privilegeId", privilegeId);
     }
 
     public RolePrivilegeQuery privilegeIdIn(Collection<Long> privilegeId) {
-        return (RolePrivilegeQuery) addAmongst("privilegeId", privilegeId);
+        return (RolePrivilegeQuery) amongst("privilegeId", privilegeId);
     }
 
     public RolePrivilegeQuery privilegeIdNotIn(Collection<Long> privilegeId) {
-        return (RolePrivilegeQuery) addNotAmongst("privilegeId", privilegeId);
+        return (RolePrivilegeQuery) notamongst("privilegeId", privilegeId);
     }
 
     public RolePrivilegeQuery moduleCode(String moduleCode) {
-        return (RolePrivilegeQuery) addEquals("moduleCode", moduleCode);
+        return (RolePrivilegeQuery) equals("moduleCode", moduleCode);
     }
 
     @Override
-    public RolePrivilegeQuery addSelect(String field) {
-        return (RolePrivilegeQuery) super.addSelect(field);
+    public RolePrivilegeQuery select(String field) {
+        return (RolePrivilegeQuery) super.select(field);
     }
 
     @Override
-    public RolePrivilegeQuery addOrder(String field) {
-        return (RolePrivilegeQuery) super.addOrder(field);
+    public RolePrivilegeQuery order(String field) {
+        return (RolePrivilegeQuery) super.order(field);
     }
 }

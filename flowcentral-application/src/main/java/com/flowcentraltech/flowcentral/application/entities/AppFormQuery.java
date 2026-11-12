@@ -30,15 +30,15 @@ public class AppFormQuery extends BaseApplicationEntityQuery<AppForm> {
     }
 
     public AppFormQuery entity(String entity) {
-        return (AppFormQuery) addEquals("entity", entity);
+        return (AppFormQuery) equals("entity", entity);
     }
 
     public AppFormQuery type(FormType type) {
-        return (AppFormQuery) addEquals("type", type);
+        return (AppFormQuery) equals("type", type);
     }
 
     public AppFormQuery entityBeginsWith(String entity) {
-        return (AppFormQuery) addBeginsWith("entity", entity);
+        return (AppFormQuery) begins("entity", entity);
     }
 
 }

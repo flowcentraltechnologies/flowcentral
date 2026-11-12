@@ -30,15 +30,15 @@ public class AppEntityUniqueConstraintQuery extends BaseConfigNamedEntityQuery<A
     }
 
     public AppEntityUniqueConstraintQuery appEntityId(Long appEntityId) {
-        return (AppEntityUniqueConstraintQuery) addEquals("appEntityId", appEntityId);
+        return (AppEntityUniqueConstraintQuery) equals("appEntityId", appEntityId);
     }
 
     public AppEntityUniqueConstraintQuery applicationName(String applicationName) {
-        return (AppEntityUniqueConstraintQuery) addEquals("applicationName", applicationName);
+        return (AppEntityUniqueConstraintQuery) equals("applicationName", applicationName);
     }
 
     public AppEntityUniqueConstraintQuery entityName(String entityName) {
-        return (AppEntityUniqueConstraintQuery) addEquals("entityName", entityName);
+        return (AppEntityUniqueConstraintQuery) equals("entityName", entityName);
     }
 
 

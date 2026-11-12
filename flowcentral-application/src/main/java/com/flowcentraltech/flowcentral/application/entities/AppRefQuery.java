@@ -28,10 +28,10 @@ public class AppRefQuery extends BaseApplicationEntityQuery<AppRef> {
     }
 
     public AppRefQuery entity(String entity) {
-        return (AppRefQuery) addEquals("entity", entity);
+        return (AppRefQuery) equals("entity", entity);
     }
 
     public AppRefQuery entityBeginsWith(String entity) {
-        return (AppRefQuery) addBeginsWith("entity", entity);
+        return (AppRefQuery) begins("entity", entity);
     }
 }

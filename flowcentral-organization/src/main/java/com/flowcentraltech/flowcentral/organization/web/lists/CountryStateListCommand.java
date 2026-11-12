@@ -42,7 +42,7 @@ public class CountryStateListCommand extends AbstractOrganizationListCommand<Lon
     public List<? extends Listable> execute(Locale locale, LongParam params) throws UnifyException {
         if (params.isPresent()) {
             return org().findStates((StateQuery) new StateQuery().countryId(params.getValue())
-                    .addSelect("id", "description").addOrder("description"));
+                    .select("id", "description").order("description"));
         }
 
         return Collections.emptyList();

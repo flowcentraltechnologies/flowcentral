@@ -31,14 +31,14 @@ public class AppAppletAlertQuery extends BaseConfigNamedEntityQuery<AppAppletAle
     }
 
     public AppAppletAlertQuery appAppletId(Long appAppletId) {
-        return (AppAppletAlertQuery) addEquals("appAppletId", appAppletId);
+        return (AppAppletAlertQuery) equals("appAppletId", appAppletId);
     }
 
     public AppAppletAlertQuery applicationName(String applicationName) {
-        return (AppAppletAlertQuery) addEquals("applicationName", applicationName);
+        return (AppAppletAlertQuery) equals("applicationName", applicationName);
     }
 
     public AppAppletAlertQuery appletName(String appletName) {
-        return (AppAppletAlertQuery) addEquals("appletName", appletName);
+        return (AppAppletAlertQuery) equals("appletName", appletName);
     }
 }

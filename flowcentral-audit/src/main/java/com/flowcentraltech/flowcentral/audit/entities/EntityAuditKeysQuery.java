@@ -31,31 +31,31 @@ public class EntityAuditKeysQuery extends BaseAuditEntityQuery<EntityAuditKeys> 
     }
 
     public EntityAuditKeysQuery entityAuditDetailsId(Long entityAuditDetailsId) {
-        return (EntityAuditKeysQuery) addEquals("entityAuditDetailsId", entityAuditDetailsId);
+        return (EntityAuditKeysQuery) equals("entityAuditDetailsId", entityAuditDetailsId);
     }
 
     public EntityAuditKeysQuery entityAuditConfigId(Long entityAuditConfigId) {
-        return (EntityAuditKeysQuery) addEquals("entityAuditConfigId", entityAuditConfigId);
+        return (EntityAuditKeysQuery) equals("entityAuditConfigId", entityAuditConfigId);
     }
 
     public EntityAuditKeysQuery entityId(Long entityId) {
-        return (EntityAuditKeysQuery) addEquals("entityId", entityId);
+        return (EntityAuditKeysQuery) equals("entityId", entityId);
     }
 
     public EntityAuditKeysQuery auditConfigName(String auditConfigName) {
-        return (EntityAuditKeysQuery) addEquals("auditConfigName", auditConfigName);
+        return (EntityAuditKeysQuery) equals("auditConfigName", auditConfigName);
     }
 
     public EntityAuditKeysQuery eventType(AuditEventType eventType) {
-        return (EntityAuditKeysQuery) addEquals("eventType", eventType);
+        return (EntityAuditKeysQuery) equals("eventType", eventType);
     }
 
     public EntityAuditKeysQuery auditNo(String auditNo) {
-        return (EntityAuditKeysQuery) addEquals("auditNo", auditNo);
+        return (EntityAuditKeysQuery) equals("auditNo", auditNo);
     }
 
     public EntityAuditKeysQuery userLoginId(String userLoginId) {
-        return (EntityAuditKeysQuery) addEquals("userLoginId", userLoginId);
+        return (EntityAuditKeysQuery) equals("userLoginId", userLoginId);
     }
 
 }

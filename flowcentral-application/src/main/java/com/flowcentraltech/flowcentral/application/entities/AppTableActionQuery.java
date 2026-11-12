@@ -31,6 +31,6 @@ public class AppTableActionQuery extends BaseConfigNamedEntityQuery<AppTableActi
     }
 
     public AppTableActionQuery appTableId(Long appTableId) {
-        return (AppTableActionQuery) addEquals("appTableId", appTableId);
+        return (AppTableActionQuery) equals("appTableId", appTableId);
     }
 }

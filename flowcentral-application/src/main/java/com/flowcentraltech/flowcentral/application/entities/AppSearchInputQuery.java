@@ -30,15 +30,15 @@ public class AppSearchInputQuery extends BaseAuditEntityQuery<AppSearchInput> {
     }
 
     public AppSearchInputQuery entityInstId(Long entityInstId) {
-        return (AppSearchInputQuery) addEquals("entityInstId", entityInstId);
+        return (AppSearchInputQuery) equals("entityInstId", entityInstId);
     }
 
     public AppSearchInputQuery entity(String entity) {
-        return (AppSearchInputQuery) addEquals("entity", entity);
+        return (AppSearchInputQuery) equals("entity", entity);
     }
 
     public AppSearchInputQuery category(String category) {
-        return (AppSearchInputQuery) addEquals("category", category);
+        return (AppSearchInputQuery) equals("category", category);
     }
 
 }

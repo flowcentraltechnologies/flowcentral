@@ -33,31 +33,31 @@ public class DelegateRedirectQuery extends BaseAuditEntityQuery<DelegateRedirect
     }
 
     public DelegateRedirectQuery delegateId(Long delegateId) {
-        return (DelegateRedirectQuery) addEquals("delegateId", delegateId);
+        return (DelegateRedirectQuery) equals("delegateId", delegateId);
     }
 
     public DelegateRedirectQuery delegateIdNotIn(Collection<Long> delegateId) {
-        return (DelegateRedirectQuery) addNotAmongst("delegateId", delegateId);
+        return (DelegateRedirectQuery) notamongst("delegateId", delegateId);
     }
 
     public DelegateRedirectQuery delegateName(String delegateName) {
-        return (DelegateRedirectQuery) addEquals("delegateName", delegateName);
+        return (DelegateRedirectQuery) equals("delegateName", delegateName);
     }
 
     public DelegateRedirectQuery type(SysParamType type) {
-        return (DelegateRedirectQuery) addEquals("type", type);
+        return (DelegateRedirectQuery) equals("type", type);
     }
 
     public DelegateRedirectQuery name(String name) {
-        return (DelegateRedirectQuery) addEquals("name", name);
+        return (DelegateRedirectQuery) equals("name", name);
     }
 
     public DelegateRedirectQuery nameLike(String name) {
-        return (DelegateRedirectQuery) addLike("name", name);
+        return (DelegateRedirectQuery) like("name", name);
     }
 
     public DelegateRedirectQuery shortDescriptionLike(String shortDescription) {
-        return (DelegateRedirectQuery) addLike("shortDescription", shortDescription);
+        return (DelegateRedirectQuery) like("shortDescription", shortDescription);
     }
 
 }

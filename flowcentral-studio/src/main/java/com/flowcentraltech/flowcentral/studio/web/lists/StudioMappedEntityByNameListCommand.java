@@ -45,7 +45,7 @@ public class StudioMappedEntityByNameListCommand extends AbstractApplicationList
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         List<AppEntity> appEntityList = application()
                 .findAppEntities((AppEntityQuery) new AppEntityQuery().isMapped()
-                        .addSelect("applicationName", "name", "description").addOrder("description"));
+                        .select("applicationName", "name", "description").order("description"));
         return ApplicationNameUtils.getListableList(appEntityList);
     }
 

@@ -30,7 +30,7 @@ public class AppEntityProcessVariableQuery extends BaseConfigEntityQuery<AppEnti
     }
 
     public AppEntityProcessVariableQuery appEntityId(Long appEntityId) {
-        return (AppEntityProcessVariableQuery) addEquals("appEntityId", appEntityId);
+        return (AppEntityProcessVariableQuery) equals("appEntityId", appEntityId);
     }
 
 }

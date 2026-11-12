@@ -31,14 +31,14 @@ public class CredentialQuery extends BaseStatusEntityQuery<Credential> {
     }
 
     public CredentialQuery name(String name) {
-        return (CredentialQuery) addEquals("name", name);
+        return (CredentialQuery) equals("name", name);
     }
 
     public CredentialQuery nameLike(String name) {
-        return (CredentialQuery) addLike("name", name);
+        return (CredentialQuery) like("name", name);
     }
 
     public CredentialQuery descriptionLike(String description) {
-        return (CredentialQuery) addLike("description", description);
+        return (CredentialQuery) like("description", description);
     }
 }

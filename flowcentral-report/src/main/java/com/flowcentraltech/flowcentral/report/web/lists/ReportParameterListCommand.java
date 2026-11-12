@@ -48,7 +48,7 @@ public class ReportParameterListCommand extends AbstractReportListCommand<LongPa
         if (longParams.isPresent()) {
             List<ReportParameter> list = getReportModuleService()
                     .findReportParameters((ReportParameterQuery) new ReportParameterQuery()
-                            .reportConfigurationId(longParams.getValue()).addSelect("name", "description"));
+                            .reportConfigurationId(longParams.getValue()).select("name", "description"));
             if (!DataUtils.isBlank(list)) {
                 List<ListData> resultList = new ArrayList<ListData>();
                 for (ReportParameter reportParameter : list) {

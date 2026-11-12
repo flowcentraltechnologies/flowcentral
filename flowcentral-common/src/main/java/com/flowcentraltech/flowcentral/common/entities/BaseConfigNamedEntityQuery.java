@@ -40,23 +40,23 @@ public abstract class BaseConfigNamedEntityQuery<T extends BaseConfigNamedEntity
     }
 
     public final BaseConfigNamedEntityQuery<T> configType(ConfigType configType) {
-        return (BaseConfigNamedEntityQuery<T>) addEquals("configType", configType);
+        return (BaseConfigNamedEntityQuery<T>) equals("configType", configType);
     }
 
     public final BaseConfigNamedEntityQuery<T> isCustom() {
-        return (BaseConfigNamedEntityQuery<T>) addEquals("configType", ConfigType.CUSTOM);
+        return (BaseConfigNamedEntityQuery<T>) equals("configType", ConfigType.CUSTOM);
     }
 
     public final BaseConfigNamedEntityQuery<T> isNotCustom() {
-        return (BaseConfigNamedEntityQuery<T>) addNotEquals("configType", ConfigType.CUSTOM);
+        return (BaseConfigNamedEntityQuery<T>) notequals("configType", ConfigType.CUSTOM);
     }
 
     public final BaseConfigNamedEntityQuery<T> isStatic() {
-        return (BaseConfigNamedEntityQuery<T>) addEquals("configType", ConfigType.STATIC);
+        return (BaseConfigNamedEntityQuery<T>) equals("configType", ConfigType.STATIC);
     }
 
     public final BaseConfigNamedEntityQuery<T> isNotStatic() {
-        return (BaseConfigNamedEntityQuery<T>) addNotEquals("configType", ConfigType.STATIC);
+        return (BaseConfigNamedEntityQuery<T>) notequals("configType", ConfigType.STATIC);
     }
 
 }

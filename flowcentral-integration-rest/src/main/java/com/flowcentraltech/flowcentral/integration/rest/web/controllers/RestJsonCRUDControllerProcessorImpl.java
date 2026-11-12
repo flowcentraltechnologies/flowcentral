@@ -278,14 +278,14 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
                     case "_offset": {
                         final int offset = DataUtils.convert(int.class, parameters.getParam("_offset"));
                         if (offset >= 0) {
-                            query.setOffset(offset);
+                            query.offset(offset);
                         }
                     }
                         break;
                     case "_limit": {
                         final int limit = DataUtils.convert(int.class, parameters.getParam("_limit"));
                         if (limit > 0) {
-                            query.setLimit(limit);
+                            query.limit(limit);
                         }
                     }
                         break;
@@ -295,7 +295,7 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
                             final int index = _val.lastIndexOf('_');
                             final String _order = index > 0 ? _val.substring(0, index) : _val;
                             final String _direc = index > 0 ? _val.substring(index + 1).toUpperCase() : "ASC";
-                            query.addOrder(OrderType.fromCode(_direc), _order);
+                            query.order(OrderType.fromCode(_direc), _order);
                         }
                     }
                         break;
@@ -347,7 +347,7 @@ public class RestJsonCRUDControllerProcessorImpl extends AbstractHttpCRUDControl
                                     }
                                 }
 
-                                query.addRestriction(type.createSimpleCriteria(fieldName, paramA, paramB));
+                                query.restriction(type.createSimpleCriteria(fieldName, paramA, paramB));
                             } else {
                                 return getBadRequestResponse("Unknown condition type [" + cond + "].");
                             }

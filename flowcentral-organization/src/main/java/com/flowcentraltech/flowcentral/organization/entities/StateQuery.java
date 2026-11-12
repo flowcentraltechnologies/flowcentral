@@ -30,22 +30,22 @@ public class StateQuery extends BaseStatusEntityQuery<State> {
     }
 
     public StateQuery countryId(Long countryId) {
-        return (StateQuery) addEquals("countryId", countryId);
+        return (StateQuery) equals("countryId", countryId);
     }
 
     public StateQuery countryCode(String countryCode) {
-        return (StateQuery) addEquals("countryCode", countryCode);
+        return (StateQuery) equals("countryCode", countryCode);
     }
 
     public StateQuery code(String code) {
-        return (StateQuery) addEquals("code", code);
+        return (StateQuery) equals("code", code);
     }
 
     public StateQuery codeLike(String code) {
-        return (StateQuery) addLike("code", code);
+        return (StateQuery) like("code", code);
     }
 
     public StateQuery descriptionLike(String description) {
-        return (StateQuery) addLike("description", description);
+        return (StateQuery) like("description", description);
     }
 }

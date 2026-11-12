@@ -289,7 +289,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                 StudioModuleSysParamConstants.SNAPSHOT_DETAILS_LIMIT);
         List<SnapshotDetails> details = new ArrayList<SnapshotDetails>();
         List<StudioSnapshotDetails> studioSnapshotDetails = environment().listAll(new StudioSnapshotDetailsQuery()
-                .createdBetween(fromDate, toDate).addOrder(OrderType.DESCENDING, "createDt").setLimit(limit));
+                .createdBetween(fromDate, toDate).order(OrderType.DESCENDING, "createDt").limit(limit));
         for (StudioSnapshotDetails _studioSnapshotDetails : studioSnapshotDetails) {
             SnapshotDetails snapshotDetails = new SnapshotDetails(_studioSnapshotDetails.getId(),
                     _studioSnapshotDetails.getSnapshotTypeDesc(), _studioSnapshotDetails.getSnapshotName(),

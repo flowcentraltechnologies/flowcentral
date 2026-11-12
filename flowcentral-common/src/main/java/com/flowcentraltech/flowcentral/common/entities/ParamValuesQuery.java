@@ -28,15 +28,15 @@ public class ParamValuesQuery extends BaseAuditEntityQuery<ParamValues> {
     }
 
     public ParamValuesQuery entityInstId(Long entityInstId) {
-        return (ParamValuesQuery) addEquals("entityInstId", entityInstId);
+        return (ParamValuesQuery) equals("entityInstId", entityInstId);
     }
 
     public ParamValuesQuery entity(String entity) {
-        return (ParamValuesQuery) addEquals("entity", entity);
+        return (ParamValuesQuery) equals("entity", entity);
     }
 
     public ParamValuesQuery category(String category) {
-        return (ParamValuesQuery) addEquals("category", category);
+        return (ParamValuesQuery) equals("category", category);
     }
 
 }

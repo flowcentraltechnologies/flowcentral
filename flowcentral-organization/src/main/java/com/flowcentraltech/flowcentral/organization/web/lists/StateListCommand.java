@@ -39,8 +39,8 @@ public class StateListCommand extends AbstractOrganizationListCommand<ZeroParams
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return org().findStates((StateQuery) new StateQuery().addSelect("id", "description").ignoreEmptyCriteria(true)
-                .addOrder("description"));
+        return org().findStates((StateQuery) new StateQuery().select("id", "description").ignoreEmptyCriteria(true)
+                .order("description"));
     }
 
 }

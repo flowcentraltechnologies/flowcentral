@@ -108,9 +108,9 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
             logDebug("Loading items with workflow step [{0}]...", workflowStepInfo.getStepName());
             logDebug("Including work items with ID in [{0}]...", workItemIdList);
             Query<? extends Entity> query = application().queryOf(getSourceEntity());
-            query.addAmongst("id", workItemIdList);
+            query.amongst("id", workItemIdList);
             if (params.isWithRestriction()) {
-                query.addRestriction(params.getRestriction());
+                query.restriction(params.getRestriction());
             }
 
             if (workflowStepInfo.isWithWorkItemFilterGen()) {
@@ -119,7 +119,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
                 Restriction restriction = loadingFilterGenerator.generate(workflowStepInfo.getWorkflowLongName(),
                         workflowStepInfo.getStepName());
                 if (restriction != null) {
-                    query.addRestriction(restriction);
+                    query.restriction(restriction);
                 }
             }
 
@@ -130,7 +130,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
                 Restriction restriction = wfDef.getFilterDef(wfStepDef.getWorkItemLoadingRestriction()).getFilterDef()
                         .getRestriction(entityDef, null, appletUtilities.getNow());
                 if (restriction != null) {
-                    query.addRestriction(restriction);
+                    query.restriction(restriction);
                 }
             }
 

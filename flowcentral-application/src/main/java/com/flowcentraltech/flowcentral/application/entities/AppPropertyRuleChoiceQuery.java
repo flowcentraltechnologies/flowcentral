@@ -31,6 +31,6 @@ public class AppPropertyRuleChoiceQuery extends BaseConfigEntityQuery<AppPropert
     }
 
     public AppPropertyRuleChoiceQuery appPropertyRuleId(Long appPropertyRuleId) {
-        return (AppPropertyRuleChoiceQuery) addEquals("appPropertyRuleId", appPropertyRuleId);
+        return (AppPropertyRuleChoiceQuery) equals("appPropertyRuleId", appPropertyRuleId);
     }
 }

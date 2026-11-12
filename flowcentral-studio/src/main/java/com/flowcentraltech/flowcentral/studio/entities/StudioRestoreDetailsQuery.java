@@ -32,15 +32,15 @@ public class StudioRestoreDetailsQuery extends BaseAuditEntityQuery<StudioRestor
     }
 
     public StudioRestoreDetailsQuery snapshotDetailsId(Long snapshotDetailsId) {
-        return (StudioRestoreDetailsQuery) addEquals("snapshotDetailsId", snapshotDetailsId);
+        return (StudioRestoreDetailsQuery) equals("snapshotDetailsId", snapshotDetailsId);
     }
 
     public StudioRestoreDetailsQuery studioSnapshotType(StudioSnapshotType studioSnapshotType) {
-        return (StudioRestoreDetailsQuery) addEquals("studioSnapshotType", studioSnapshotType);
+        return (StudioRestoreDetailsQuery) equals("studioSnapshotType", studioSnapshotType);
     }
 
     public StudioRestoreDetailsQuery taskStatus(TaskStatus taskStatus) {
-        return (StudioRestoreDetailsQuery) addEquals("taskStatus", taskStatus);
+        return (StudioRestoreDetailsQuery) equals("taskStatus", taskStatus);
     }
 
 }

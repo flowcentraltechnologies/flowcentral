@@ -853,8 +853,8 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         req.setQuery(au.delegateUtilities().encodeDelegateQuery(query));
         req.setOrder(au.delegateUtilities().encodeDelegateOrder(query));
         req.setIgnoreEmptyCriteria(query.isIgnoreEmptyCriteria());
-        req.setOffset(query.getOffset());
-        req.setLimit(query.getLimit());
+        req.offset(query.offset());
+        req.limit(query.limit());
         
         List<DataSourceParam> params = Collections.emptyList();
         if (query.isWithParams()) {

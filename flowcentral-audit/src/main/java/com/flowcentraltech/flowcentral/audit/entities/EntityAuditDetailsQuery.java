@@ -31,11 +31,11 @@ public class EntityAuditDetailsQuery extends BaseAuditEntityQuery<EntityAuditDet
     }
 
     public EntityAuditDetailsQuery eventType(AuditEventType eventType) {
-        return (EntityAuditDetailsQuery) addEquals("eventType", eventType);
+        return (EntityAuditDetailsQuery) equals("eventType", eventType);
     }
 
     public EntityAuditDetailsQuery userLoginId(String userLoginId) {
-        return (EntityAuditDetailsQuery) addEquals("userLoginId", userLoginId);
+        return (EntityAuditDetailsQuery) equals("userLoginId", userLoginId);
     }
 
 }

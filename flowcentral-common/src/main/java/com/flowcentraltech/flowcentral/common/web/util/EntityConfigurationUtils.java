@@ -88,7 +88,7 @@ public final class EntityConfigurationUtils {
             final String input = search != null && !StringUtils.isBlank(search.getInput())
                     ? search.getInput().toLowerCase()
                     : null;
-            int limit = search != null ? search.getLimit() : 0;
+            int limit = search != null ? search.limit() : 0;
             for (UnifyComponentConfig unifyComponentConfig : configList) {
                 String description = unifyComponentConfig.getDescription() != null
                         ? messageResolver.resolveSessionMessage(unifyComponentConfig.getDescription())

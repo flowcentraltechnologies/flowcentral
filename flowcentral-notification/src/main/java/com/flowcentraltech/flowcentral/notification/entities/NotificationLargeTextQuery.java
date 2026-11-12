@@ -30,10 +30,10 @@ public class NotificationLargeTextQuery extends BaseApplicationEntityQuery<Notif
     }
 
     public NotificationLargeTextQuery entity(String entity) {
-        return (NotificationLargeTextQuery) addEquals("entity", entity);
+        return (NotificationLargeTextQuery) equals("entity", entity);
     }
 
     public NotificationLargeTextQuery entityBeginsWith(String entity) {
-        return (NotificationLargeTextQuery) addBeginsWith("entity", entity);
+        return (NotificationLargeTextQuery) begins("entity", entity);
     }
 }

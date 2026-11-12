@@ -39,7 +39,7 @@ public abstract class BaseConfigEntityQuery<T extends BaseConfigEntity> extends 
     }
 
     public final BaseConfigEntityQuery<T> configType(ConfigType configType) {
-        return (BaseConfigEntityQuery<T>) addEquals("configType", configType);
+        return (BaseConfigEntityQuery<T>) equals("configType", configType);
     }
 
 }

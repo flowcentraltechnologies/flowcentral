@@ -30,6 +30,6 @@ public class SectorQuery extends BaseAuditEntityQuery<Sector> {
     }
 
     public SectorQuery name(String name) {
-        return (SectorQuery) addEquals("name", name);
+        return (SectorQuery) equals("name", name);
     }
 }

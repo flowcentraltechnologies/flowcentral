@@ -31,6 +31,6 @@ public class AppAppletSetValuesQuery extends BaseConfigNamedEntityQuery<AppApple
     }
 
     public AppAppletSetValuesQuery appAppletId(Long appAppletId) {
-        return (AppAppletSetValuesQuery) addEquals("appAppletId", appAppletId);
+        return (AppAppletSetValuesQuery) equals("appAppletId", appAppletId);
     }
 }

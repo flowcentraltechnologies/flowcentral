@@ -280,8 +280,8 @@ public class UnifyInterconnectServiceImpl extends AbstractBusinessService
                             case FIND_ALL: {
                                 Query<? extends Entity> query = createQuery(
                                         (Class<? extends Entity>) entityInfo.getImplClass(), req);
-                                query.setOffset(req.getOffset());
-                                query.setLimit(req.getLimit());
+                                query.offset(req.offset());
+                                query.limit(req.limit());
 
                                 List<?> results = db().findAll(query);
                                 result = results.toArray(new Object[results.size()]);
@@ -304,8 +304,8 @@ public class UnifyInterconnectServiceImpl extends AbstractBusinessService
                             case LIST_ALL: {
                                 Query<? extends Entity> query = createQuery(
                                         (Class<? extends Entity>) entityInfo.getImplClass(), req);
-                                query.setOffset(req.getOffset());
-                                query.setLimit(req.getLimit());
+                                query.offset(req.offset());
+                                query.limit(req.limit());
 
                                 List<?> results = db().listAll(query);
                                 result = results.toArray(new Object[results.size()]);
@@ -384,7 +384,7 @@ public class UnifyInterconnectServiceImpl extends AbstractBusinessService
                             case VALUE: {
                                 Query<? extends Entity> query = createQuery(
                                         (Class<? extends Entity>) entityInfo.getImplClass(), req);
-                                query.setDistinct(req.getOperation().isDistinct());
+                                query.distinct(req.getOperation().isDistinct());
                                 EntityFieldInfo entityFieldInfo = entityInfo.getEntityFieldInfo(req.getFieldName());
                                 Object results = db().value(entityFieldInfo.getJavaClass(), req.getFieldName(), query);
                                 result = results != null ? new Object[] { results } : null;
@@ -393,7 +393,7 @@ public class UnifyInterconnectServiceImpl extends AbstractBusinessService
                             case VALUE_LIST: {
                                 Query<? extends Entity> query = createQuery(
                                         (Class<? extends Entity>) entityInfo.getImplClass(), req);
-                                query.setDistinct(req.getOperation().isDistinct());
+                                query.distinct(req.getOperation().isDistinct());
                                 EntityFieldInfo entityFieldInfo = entityInfo.getEntityFieldInfo(req.getFieldName());
                                 List<?> results = db().valueList(entityFieldInfo.getJavaClass(), req.getFieldName(), query);
                                 result = results.toArray(new Object[results.size()]);
@@ -402,7 +402,7 @@ public class UnifyInterconnectServiceImpl extends AbstractBusinessService
                             case VALUE_SET: {
                                 Query<? extends Entity> query = createQuery(
                                         (Class<? extends Entity>) entityInfo.getImplClass(), req);
-                                query.setDistinct(req.getOperation().isDistinct());
+                                query.distinct(req.getOperation().isDistinct());
                                 EntityFieldInfo entityFieldInfo = entityInfo.getEntityFieldInfo(req.getFieldName());
                                 List<?> results = new ArrayList<>(
                                         db().valueSet(entityFieldInfo.getJavaClass(), req.getFieldName(), query));
@@ -457,13 +457,13 @@ public class UnifyInterconnectServiceImpl extends AbstractBusinessService
         Query<T> query = Query.of(entityClass);
         Restriction restriction = createRestriction(entityInfo, req);
         if (restriction != null) {
-            query.addRestriction(restriction);
+            query.restriction(restriction);
         }
 
         List<OrderDef> orderDefList = interconnect.getOrderDef(entityInfo, req.getOrder());
         if (!orderDefList.isEmpty()) {
             for (OrderDef orderDef : orderDefList) {
-                query.addOrder(orderDef.isAscending() ? OrderType.ASCENDING : OrderType.DESCENDING,
+                query.order(orderDef.isAscending() ? OrderType.ASCENDING : OrderType.DESCENDING,
                         orderDef.getFieldName());
             }
         }

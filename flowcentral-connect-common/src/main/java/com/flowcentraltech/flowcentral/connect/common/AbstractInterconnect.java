@@ -863,7 +863,7 @@ public abstract class AbstractInterconnect {
                     String paramA = p.length > 3 ? p[3] : null;
                     String paramB = p.length > 4 ? p[4] : null;
                     int depth = Integer.parseInt(p[1]);
-                    fdb.addRestrictionDef(type, fieldName, paramA, paramB, depth);
+                    fdb.restrictionDef(type, fieldName, paramA, paramB, depth);
                 }
             } finally {
                 if (reader != null) {

@@ -30,10 +30,10 @@ public class AppSuggestionQuery extends BaseAuditEntityQuery<AppSuggestion> {
     }
 
     public AppSuggestionQuery applicationName(String applicationName) {
-        return (AppSuggestionQuery) addEquals("applicationName", applicationName);
+        return (AppSuggestionQuery) equals("applicationName", applicationName);
     }
 
     public AppSuggestionQuery suggestionTypeName(String suggestionTypeName) {
-        return (AppSuggestionQuery) addEquals("suggestionTypeName", suggestionTypeName);
+        return (AppSuggestionQuery) equals("suggestionTypeName", suggestionTypeName);
     }   
 }

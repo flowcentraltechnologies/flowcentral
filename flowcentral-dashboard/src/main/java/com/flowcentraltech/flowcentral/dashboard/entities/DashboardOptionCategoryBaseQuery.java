@@ -30,6 +30,6 @@ public class DashboardOptionCategoryBaseQuery extends BaseAuditEntityQuery<Dashb
     }
 
     public DashboardOptionCategoryBaseQuery dashboardOptionId(Long dashboardOptionId) {
-        return (DashboardOptionCategoryBaseQuery) addEquals("dashboardOptionId", dashboardOptionId);
+        return (DashboardOptionCategoryBaseQuery) equals("dashboardOptionId", dashboardOptionId);
     }
 }

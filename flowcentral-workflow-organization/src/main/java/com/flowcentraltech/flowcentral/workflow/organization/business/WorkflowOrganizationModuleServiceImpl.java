@@ -125,7 +125,7 @@ public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralSe
     @Override
     public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
         List<WfStepRole> wfStepRoleList = environment().listAll(new WfStepRoleQuery().workflowRunnable(true)
-                .applicationId(applicationId).addSelect("roleCode", "wfStepName", "workflowName", "applicationName"));
+                .applicationId(applicationId).select("roleCode", "wfStepName", "workflowName", "applicationName"));
         for (WfStepRole wfStepRole : wfStepRoleList) {
             Set<WfStepInfo> wfStepInfos = roleWfStepBackup.get(wfStepRole.getRoleCode());
             if (wfStepInfos == null) {
@@ -233,7 +233,7 @@ public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralSe
             String roleCode, String branchCode, String departmentCode) throws UnifyException {
         if (StringUtils.isBlank(roleCode)) {
             List<WfStep> wfStepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
-                    .workflowLoadingTable(loadingTableName).type(type).addSelect("name", "description", "label",
+                    .workflowLoadingTable(loadingTableName).type(type).select("name", "description", "label",
                             "entityName", "applicationName", "workflowName", "branchOnly", "departmentOnly"));
             if (!DataUtils.isBlank(wfStepList)) {
                 List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();
@@ -253,7 +253,7 @@ public class WorkflowOrganizationModuleServiceImpl extends AbstractFlowCentralSe
         } else {
             List<WfStepRole> wfStepRoleList = environment().listAll(new WfStepRoleQuery().workflowRunnable(true)
                     .roleCode(roleCode).workflowLoadingTable(loadingTableName).wfStepType(type).isWithLoadingTable()
-                    .isOriginal().addSelect("wfStepName", "wfStepDesc", "wfStepLabel", "entityName", "applicationName",
+                    .isOriginal().select("wfStepName", "wfStepDesc", "wfStepLabel", "entityName", "applicationName",
                             "workflowName", "branchOnly", "departmentOnly"));
             if (!DataUtils.isBlank(wfStepRoleList)) {
                 List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();

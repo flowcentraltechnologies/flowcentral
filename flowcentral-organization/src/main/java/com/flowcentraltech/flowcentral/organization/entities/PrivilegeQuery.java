@@ -33,35 +33,35 @@ public class PrivilegeQuery extends BaseAuditEntityQuery<Privilege> {
     }
 
     public PrivilegeQuery applicationId(Long applicationId) {
-        return (PrivilegeQuery) addEquals("applicationId", applicationId);
+        return (PrivilegeQuery) equals("applicationId", applicationId);
     }
 
     public PrivilegeQuery applicationName(String applicationName) {
-        return (PrivilegeQuery) addEquals("applicationName", applicationName);
+        return (PrivilegeQuery) equals("applicationName", applicationName);
     }
 
     public PrivilegeQuery configType(ConfigType configType) {
-        return (PrivilegeQuery) addEquals("configType", configType);
+        return (PrivilegeQuery) equals("configType", configType);
     }
 
     public PrivilegeQuery isCustom() {
-        return (PrivilegeQuery) addEquals("configType", ConfigType.CUSTOM);
+        return (PrivilegeQuery) equals("configType", ConfigType.CUSTOM);
     }
 
     public PrivilegeQuery code(String code) {
-        return (PrivilegeQuery) addEquals("code", code);
+        return (PrivilegeQuery) equals("code", code);
     }
 
     public PrivilegeQuery codeIn(Collection<String> code) {
-        return (PrivilegeQuery) addAmongst("code", code);
+        return (PrivilegeQuery) amongst("code", code);
     }
 
     public PrivilegeQuery privilegeCatCode(String privilegeCatCode) {
-        return (PrivilegeQuery) addEquals("privilegeCatCode", privilegeCatCode);
+        return (PrivilegeQuery) equals("privilegeCatCode", privilegeCatCode);
     }
 
     public PrivilegeQuery privilegeCategoryId(Long privilegeCategoryId) {
-        return (PrivilegeQuery) addEquals("privilegeCategoryId", privilegeCategoryId);
+        return (PrivilegeQuery) equals("privilegeCategoryId", privilegeCategoryId);
     }
 
 }

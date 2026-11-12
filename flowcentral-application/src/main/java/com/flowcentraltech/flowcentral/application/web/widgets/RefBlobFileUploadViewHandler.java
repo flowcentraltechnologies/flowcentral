@@ -85,11 +85,11 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
         final String blobDescFieldName = entityDef.getBlobDescFieldName();
 
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                .addEquals("id", id);
+                .equals("id", id);
         final String fileName = !StringUtils.isBlank(blobDescFieldName)
                 ? environment().value(String.class, blobDescFieldName, query)
                 : null;
-        query.addIsNotNull(blobFieldName);
+        query.notnull(blobFieldName);
         final boolean present = environment().countAll(query) > 0;
 
         FileAttachmentInfo fileAttachmentInfo = new FileAttachmentInfo(type);

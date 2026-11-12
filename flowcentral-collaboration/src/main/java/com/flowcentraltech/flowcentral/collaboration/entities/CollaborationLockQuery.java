@@ -31,14 +31,14 @@ public class CollaborationLockQuery extends BaseAuditEntityQuery<CollaborationLo
     }
 
     public CollaborationLockQuery type(CollaborationType type) {
-        return (CollaborationLockQuery) addEquals("type", type);
+        return (CollaborationLockQuery) equals("type", type);
     }
 
     public CollaborationLockQuery applicationName(String applicationName) {
-        return (CollaborationLockQuery) addEquals("applicationName", applicationName);
+        return (CollaborationLockQuery) equals("applicationName", applicationName);
     }
 
     public CollaborationLockQuery resourceName(String resourceName) {
-        return (CollaborationLockQuery) addEquals("resourceName", resourceName);
+        return (CollaborationLockQuery) equals("resourceName", resourceName);
     }
 }

@@ -32,43 +32,43 @@ public class AppAppletQuery extends BaseApplicationEntityQuery<AppApplet> {
     }
 
     public AppAppletQuery routeToApplet(String routeToApplet) {
-        return (AppAppletQuery) addEquals("routeToApplet", routeToApplet);
+        return (AppAppletQuery) equals("routeToApplet", routeToApplet);
     }
 
     public AppAppletQuery entity(String entity) {
-        return (AppAppletQuery) addEquals("entity", entity);
+        return (AppAppletQuery) equals("entity", entity);
     }
 
     public AppAppletQuery entityBeginsWith(String entity) {
-        return (AppAppletQuery) addBeginsWith("entity", entity);
+        return (AppAppletQuery) begins("entity", entity);
     }
 
     public AppAppletQuery entityIn(Collection<String> entity) {
-        return (AppAppletQuery) addAmongst("entity", entity);
+        return (AppAppletQuery) amongst("entity", entity);
     }
 
     public AppAppletQuery portalAccess(boolean portalAccess) {
-        return (AppAppletQuery) addEquals("portalAccess", portalAccess);
+        return (AppAppletQuery) equals("portalAccess", portalAccess);
     }
 
     public AppAppletQuery menuAccess(boolean menuAccess) {
-        return (AppAppletQuery) addEquals("menuAccess", menuAccess);
+        return (AppAppletQuery) equals("menuAccess", menuAccess);
     }
 
     public AppAppletQuery type(AppletType type) {
-        return (AppAppletQuery) addEquals("type", type);
+        return (AppAppletQuery) equals("type", type);
     }
 
     public AppAppletQuery typeNotIn(Collection<AppletType> type) {
-        return (AppAppletQuery) addNotAmongst("type", type);
+        return (AppAppletQuery) notamongst("type", type);
     }
 
     public AppAppletQuery typeIn(Collection<AppletType> type) {
-        return (AppAppletQuery) addAmongst("type", type);
+        return (AppAppletQuery) amongst("type", type);
     }
 
     public AppAppletQuery unreserved() {
-        return (AppAppletQuery) addAmongst("type", AppletType.UNRESERVED_LIST);
+        return (AppAppletQuery) amongst("type", AppletType.UNRESERVED_LIST);
     }
 
 }

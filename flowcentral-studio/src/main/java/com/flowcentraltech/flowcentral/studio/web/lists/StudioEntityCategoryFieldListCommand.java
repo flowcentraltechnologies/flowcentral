@@ -48,7 +48,7 @@ public class StudioEntityCategoryFieldListCommand extends AbstractApplicationLis
                     .appEntityId(params.getValue())
                     .dataTypeIn(EntityFieldDataType.DATE, EntityFieldDataType.TIMESTAMP, EntityFieldDataType.TIMESTAMP_UTC)
                     .nameNotIn("versionNo", "originalCopyId")
-                    .addSelect("id", "name", "label").addOrder("name"));
+                    .select("id", "name", "label").order("name"));
         }
 
         return Collections.emptyList();

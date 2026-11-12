@@ -1301,7 +1301,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             final FormDef mFormDef = au().getFormDef(formName);
             final FormContext mCtx = entityChild.getMCtx();
             final Entity childInst = au().environment().listLean(
-                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addRestriction(mRestriction));
+                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).restriction(mRestriction));
             if (childInst != null) {
                 FormContext _ctx = new FormContext(mCtx.getAppletContext(), mFormDef, mCtx.getFormEventHandlers(),
                         childInst);
@@ -1605,12 +1605,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (currUniqueConstraintDef != null && currUniqueConstraintDef.isWithFields()) {
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) _inst.getClass());
             for (String fieldName : currUniqueConstraintDef.getFieldList()) {
-                query.addEquals(fieldName, ReflectUtils.getBeanProperty(_inst, fieldName));
+                query.equals(fieldName, ReflectUtils.getBeanProperty(_inst, fieldName));
             }
 
             if (currUniqueConstraintDef.isWithConditionList()) {
                 for (UniqueConditionDef ucd : currUniqueConstraintDef.getConditionList()) {
-                    query.addRestriction(ucd.getRestriction());
+                    query.restriction(ucd.getRestriction());
                 }
             }
 

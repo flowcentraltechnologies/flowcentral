@@ -49,7 +49,7 @@ public class StudioEntityRefFieldListCommand extends AbstractApplicationListComm
             ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getValue());
             return application().findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                     .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
-                    .dataType(EntityFieldDataType.REF).addSelect("name", "label"));
+                    .dataType(EntityFieldDataType.REF).select("name", "label"));
         }
 
         return Collections.emptyList();

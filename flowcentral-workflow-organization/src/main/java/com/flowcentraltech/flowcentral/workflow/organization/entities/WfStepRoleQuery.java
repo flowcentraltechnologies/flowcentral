@@ -35,62 +35,62 @@ public class WfStepRoleQuery extends BaseEntityQuery<WfStepRole> {
     }
 
     public WfStepRoleQuery roleCode(String roleCode) {
-        return (WfStepRoleQuery) addEquals("roleCode", roleCode);
+        return (WfStepRoleQuery) equals("roleCode", roleCode);
     }
 
     public WfStepRoleQuery wfStepName(String wfStepName) {
-        return (WfStepRoleQuery) addEquals("wfStepName", wfStepName);
+        return (WfStepRoleQuery) equals("wfStepName", wfStepName);
     }
     
     public WfStepRoleQuery workflowName(String workflowName) {
-        return (WfStepRoleQuery) addEquals("workflowName", workflowName);
+        return (WfStepRoleQuery) equals("workflowName", workflowName);
     }
     
     public WfStepRoleQuery workflowRunnable(boolean workflowRunnable) {
-        return (WfStepRoleQuery) addEquals("workflowRunnable", workflowRunnable);
+        return (WfStepRoleQuery) equals("workflowRunnable", workflowRunnable);
     }
     
     public WfStepRoleQuery wfStepId(Long wfStepId) {
-        return (WfStepRoleQuery) addEquals("wfStepId", wfStepId);
+        return (WfStepRoleQuery) equals("wfStepId", wfStepId);
     }
     
     public WfStepRoleQuery roleId(Long roleId) {
-        return (WfStepRoleQuery) addEquals("roleId", roleId);
+        return (WfStepRoleQuery) equals("roleId", roleId);
     }
     
     public WfStepRoleQuery applicationId(Long applicationId) {
-        return (WfStepRoleQuery) addEquals("applicationId", applicationId);
+        return (WfStepRoleQuery) equals("applicationId", applicationId);
     }
     
     public WfStepRoleQuery applicationName(String applicationName) {
-        return (WfStepRoleQuery) addEquals("applicationName", applicationName);
+        return (WfStepRoleQuery) equals("applicationName", applicationName);
     }
     
     public WfStepRoleQuery wfStepType(WorkflowStepType wfStepType) {
-        return (WfStepRoleQuery) addEquals("wfStepType", wfStepType);
+        return (WfStepRoleQuery) equals("wfStepType", wfStepType);
     }
     
     public WfStepRoleQuery wfStepTypeIn(List<WorkflowStepType> wfStepTypes) {
-        return (WfStepRoleQuery) addAmongst("wfStepType", wfStepTypes);
+        return (WfStepRoleQuery) amongst("wfStepType", wfStepTypes);
     }
     
     public WfStepRoleQuery workflowLoadingTable(String workflowLoadingTable) {
-        return (WfStepRoleQuery) addEquals("workflowLoadingTable", workflowLoadingTable);
+        return (WfStepRoleQuery) equals("workflowLoadingTable", workflowLoadingTable);
     }
     
     public WfStepRoleQuery isWithLoadingTable() {
-        return (WfStepRoleQuery) addIsNotNull("workflowLoadingTable");
+        return (WfStepRoleQuery) notnull("workflowLoadingTable");
     }
     
     public WfStepRoleQuery isOriginal() {
-        return (WfStepRoleQuery) addEquals("wfItemVersionType", WfItemVersionType.ORIGINAL);
+        return (WfStepRoleQuery) equals("wfItemVersionType", WfItemVersionType.ORIGINAL);
     }
 
     public WfStepRoleQuery configType(ConfigType configType) {
-        return (WfStepRoleQuery) addEquals("configType", configType);
+        return (WfStepRoleQuery) equals("configType", configType);
     }
 
     public WfStepRoleQuery isCustom() {
-        return (WfStepRoleQuery) addEquals("configType", ConfigType.CUSTOM);
+        return (WfStepRoleQuery) equals("configType", ConfigType.CUSTOM);
     }
 }

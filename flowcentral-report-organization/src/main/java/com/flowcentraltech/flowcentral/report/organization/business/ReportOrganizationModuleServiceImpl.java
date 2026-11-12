@@ -87,7 +87,7 @@ public class ReportOrganizationModuleServiceImpl extends AbstractFlowCentralServ
     @Override
     public void backupApplicationRolePrivileges(Long applicationId) throws UnifyException {
         List<ReportGroupMember> groupMemberList = environment()
-                .listAll(new ReportGroupMemberQuery().applicationId(applicationId).addSelect("reportGroupName",
+                .listAll(new ReportGroupMemberQuery().applicationId(applicationId).select("reportGroupName",
                         "reportConfigurationName", "applicationName"));
         for (ReportGroupMember reportGroupMember : groupMemberList) {
             Set<ReportInfo> reportConfigs = groupMemberBackup.get(reportGroupMember.getReportGroupName());
@@ -125,14 +125,14 @@ public class ReportOrganizationModuleServiceImpl extends AbstractFlowCentralServ
     @Override
     public List<ReportGroup> findReportGroupsByRole(String roleCode) throws UnifyException {
         if (StringUtils.isBlank(roleCode)) {
-            return environment().findAll(new ReportGroupQuery().status(RecordStatus.ACTIVE).addOrder("label"));
+            return environment().findAll(new ReportGroupQuery().status(RecordStatus.ACTIVE).order("label"));
         }
 
         List<Long> reportGroupIdList = environment().valueList(Long.class, "reportGroupId",
                 new ReportGroupRoleQuery().roleCode(roleCode));
         if (!DataUtils.isBlank(reportGroupIdList)) {
             return environment().findAll(
-                    new ReportGroupQuery().status(RecordStatus.ACTIVE).idIn(reportGroupIdList).addOrder("label"));
+                    new ReportGroupQuery().status(RecordStatus.ACTIVE).idIn(reportGroupIdList).order("label"));
         }
 
         return Collections.emptyList();
@@ -144,7 +144,7 @@ public class ReportOrganizationModuleServiceImpl extends AbstractFlowCentralServ
                 new ReportGroupMemberQuery().reportGroupId(reportGroupId));
         if (!DataUtils.isBlank(reportConfigurationIdList)) {
             return environment().listAll(new ReportConfigurationQuery().isNotDeprecated()
-                    .idIn(reportConfigurationIdList).addOrder("description"));
+                    .idIn(reportConfigurationIdList).order("description"));
         }
 
         return Collections.emptyList();

@@ -30,15 +30,15 @@ public class AppFieldSequenceQuery extends BaseAuditEntityQuery<AppFieldSequence
     }
 
     public AppFieldSequenceQuery entityInstId(Long entityInstId) {
-        return (AppFieldSequenceQuery) addEquals("entityInstId", entityInstId);
+        return (AppFieldSequenceQuery) equals("entityInstId", entityInstId);
     }
 
     public AppFieldSequenceQuery entity(String entity) {
-        return (AppFieldSequenceQuery) addEquals("entity", entity);
+        return (AppFieldSequenceQuery) equals("entity", entity);
     }
 
     public AppFieldSequenceQuery category(String category) {
-        return (AppFieldSequenceQuery) addEquals("category", category);
+        return (AppFieldSequenceQuery) equals("category", category);
     }
 
 }

@@ -30,19 +30,19 @@ public class AppEntityUploadQuery extends BaseConfigNamedEntityQuery<AppEntityUp
     }
 
     public AppEntityUploadQuery appEntityId(Long appEntityId) {
-        return (AppEntityUploadQuery) addEquals("appEntityId", appEntityId);
+        return (AppEntityUploadQuery) equals("appEntityId", appEntityId);
     }
 
     public AppEntityUploadQuery applicationId(Long applicationId) {
-        return (AppEntityUploadQuery) addEquals("applicationId", applicationId);
+        return (AppEntityUploadQuery) equals("applicationId", applicationId);
     }
 
     public AppEntityUploadQuery applicationName(String applicationName) {
-        return (AppEntityUploadQuery) addEquals("applicationName", applicationName);
+        return (AppEntityUploadQuery) equals("applicationName", applicationName);
     }
 
     public AppEntityUploadQuery entityName(String entityName) {
-        return (AppEntityUploadQuery) addEquals("entityName", entityName);
+        return (AppEntityUploadQuery) equals("entityName", entityName);
     }
 
 }

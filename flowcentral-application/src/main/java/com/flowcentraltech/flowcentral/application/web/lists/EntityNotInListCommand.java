@@ -67,20 +67,20 @@ public class EntityNotInListCommand extends AbstractApplicationListCommand<Assig
                 Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
                         new BeanValueStore(baseInst).getReader(), application().getNow());
                 if (br != null) {
-                    query.addRestriction(br);
+                    query.restriction(br);
                 }
             }
 
             if (params.isAssignedIdList()) {
-                query.addNotAmongst("id", params.getAssignedIdList(Long.class));
+                query.notamongst("id", params.getAssignedIdList(Long.class));
             }
 
             if (parts.isWithSearchField() && !StringUtils.isBlank(params.getSearchText2())) {
-                query.addILike(parts.getSearchField(), params.getSearchText2());
+                query.ilike(parts.getSearchField(), params.getSearchText2());
             }
             
             if (parts.isWithDescField()) {
-                query.addSelect("id", parts.getDescField()).addOrder(parts.getDescField());
+                query.select("id", parts.getDescField()).order(parts.getDescField());
             }
 
             query.ignoreEmptyCriteria(true);

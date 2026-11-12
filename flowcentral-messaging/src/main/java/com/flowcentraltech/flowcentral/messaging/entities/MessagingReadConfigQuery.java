@@ -30,11 +30,11 @@ public class MessagingReadConfigQuery extends BaseStatusEntityQuery<MessagingRea
     }
 
     public MessagingReadConfigQuery name(String name) {
-        return (MessagingReadConfigQuery) addEquals("name", name);
+        return (MessagingReadConfigQuery) equals("name", name);
     }
 
     public MessagingReadConfigQuery descriptionLike(String description) {
-        return (MessagingReadConfigQuery) addLike("description", description);
+        return (MessagingReadConfigQuery) like("description", description);
     }
 
 }

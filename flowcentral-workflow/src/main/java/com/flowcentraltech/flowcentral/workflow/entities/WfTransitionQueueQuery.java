@@ -31,7 +31,7 @@ public class WfTransitionQueueQuery extends BaseEntityQuery<WfTransitionQueue> {
     }
 
     public WfTransitionQueueQuery unprocessed() {
-        return (WfTransitionQueueQuery) addIsNull("processingDt");
+        return (WfTransitionQueueQuery) isnull("processingDt");
     }
 
 }

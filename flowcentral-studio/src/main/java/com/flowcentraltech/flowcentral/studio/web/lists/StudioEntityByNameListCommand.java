@@ -53,7 +53,7 @@ public class StudioEntityByNameListCommand extends AbstractApplicationListComman
                 AppletDocumentAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
             List<AppEntity> appEntityList = application().findAppEntities((AppEntityQuery) new AppEntityQuery()
-                    .applicationId(applicationId).addSelect("name", "description").addOrder("description"));
+                    .applicationId(applicationId).select("name", "description").order("description"));
             if (!DataUtils.isBlank(appEntityList)) {
                 final String applicationName = getDocumentAttribute(String.class,
                         AppletDocumentAttributeConstants.CURRENT_APPLICATION_NAME);

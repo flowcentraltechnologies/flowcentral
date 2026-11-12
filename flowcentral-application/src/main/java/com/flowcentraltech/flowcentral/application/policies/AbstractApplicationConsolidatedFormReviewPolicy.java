@@ -80,7 +80,7 @@ public abstract class AbstractApplicationConsolidatedFormReviewPolicy extends Ab
             String entityLongName, boolean skippable, String errMsgKey, String... targets) throws UnifyException {
         EntityClassDef entityClassDef = application().getEntityClassDef(entityLongName);
         int count = environment().countAll(
-                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals(fkFieldName, parentId));
+                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).equals(fkFieldName, parentId));
         if (count == 0) {
             if (skippable) {
                 messages.addSkippableError(errMsgKey, targets);

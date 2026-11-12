@@ -33,15 +33,15 @@ public class NotificationTemplateQuery extends BaseApplicationEntityQuery<Notifi
     }
 
     public NotificationTemplateQuery entity(String entity) {
-        return (NotificationTemplateQuery) addEquals("entity", entity);
+        return (NotificationTemplateQuery) equals("entity", entity);
     }
 
     public NotificationTemplateQuery entityIsOrIsNull(String entity) {
-        return (NotificationTemplateQuery) addRestriction(
+        return (NotificationTemplateQuery) restriction(
                 new Or().add(new IsNull("entity")).add(new Equals("entity", entity)));
     }
 
     public NotificationTemplateQuery entityBeginsWith(String entity) {
-        return (NotificationTemplateQuery) addBeginsWith("entity", entity);
+        return (NotificationTemplateQuery) begins("entity", entity);
     }
 }

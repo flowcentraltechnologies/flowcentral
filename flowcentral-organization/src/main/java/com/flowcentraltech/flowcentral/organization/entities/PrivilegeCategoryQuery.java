@@ -32,14 +32,14 @@ public class PrivilegeCategoryQuery extends BaseAuditEntityQuery<PrivilegeCatego
     }
 
     public PrivilegeCategoryQuery code(String code) {
-        return (PrivilegeCategoryQuery) addEquals("code", code);
+        return (PrivilegeCategoryQuery) equals("code", code);
     }
 
     public PrivilegeCategoryQuery codeIn(Collection<String> code) {
-        return (PrivilegeCategoryQuery) addAmongst("code", code);
+        return (PrivilegeCategoryQuery) amongst("code", code);
     }
 
     public PrivilegeCategoryQuery descriptionLike(String description) {
-        return (PrivilegeCategoryQuery) addLike("description", description);
+        return (PrivilegeCategoryQuery) like("description", description);
     }
 }

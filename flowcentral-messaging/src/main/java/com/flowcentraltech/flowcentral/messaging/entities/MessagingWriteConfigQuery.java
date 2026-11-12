@@ -30,11 +30,11 @@ public class MessagingWriteConfigQuery extends BaseStatusEntityQuery<MessagingWr
     }
 
     public MessagingWriteConfigQuery name(String name) {
-        return (MessagingWriteConfigQuery) addEquals("name", name);
+        return (MessagingWriteConfigQuery) equals("name", name);
     }
 
     public MessagingWriteConfigQuery descriptionLike(String description) {
-        return (MessagingWriteConfigQuery) addLike("description", description);
+        return (MessagingWriteConfigQuery) like("description", description);
     }
 
 }

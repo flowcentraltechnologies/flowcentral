@@ -584,8 +584,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 protected SuggestionTypeDef create(String longName, Object... args) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
                     AppSuggestionType appSuggestionType = environment()
-                            .list(Query.of(AppSuggestionType.class).addEquals("name", nameParts.getEntityName())
-                                    .addEquals("applicationName", nameParts.getApplicationName()));
+                            .list(Query.of(AppSuggestionType.class).equals("name", nameParts.getEntityName())
+                                    .equals("applicationName", nameParts.getApplicationName()));
                     if (appSuggestionType == null) {
                         appSuggestionType = new AppSuggestionType();
                         Long applicationId = getApplicationDef(nameParts.getApplicationName()).getId();
@@ -924,7 +924,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected EntityDef create(String entityClass, Object... arg1) throws Exception {
                     AppEntity appEntity = environment()
-                            .list(new AppEntityQuery().entityClass(entityClass).addSelect("applicationName", "name"));
+                            .list(new AppEntityQuery().entityClass(entityClass).select("applicationName", "name"));
                     return appEntity != null
                             ? getEntityDef(ApplicationNameUtils
                                     .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName()))
@@ -1619,8 +1619,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public boolean isComponentPresent(Class<? extends BaseApplicationEntity> type, String longName)
             throws UnifyException {
         ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-        return environment().countAll(Query.of(type).addEquals("applicationName", parts.getApplicationName())
-                .addEquals("name", parts.getEntityName())) > 0;
+        return environment().countAll(Query.of(type).equals("applicationName", parts.getApplicationName())
+                .equals("name", parts.getEntityName())) > 0;
     }
 
     @Override
@@ -1633,7 +1633,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Long Id) throws UnifyException {
-        Entity inst = environment().listLean(queryOf(wrapperType).addEquals("id", Id));
+        Entity inst = environment().listLean(queryOf(wrapperType).equals("id", Id));
         return wrapperOf(wrapperType, inst);
     }
 
@@ -1764,11 +1764,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 .getApplicationEntityNameParts(suggestionTypeLongName);
                         suggestion = suggestion.trim();
                         AppSuggestionQuery query = (AppSuggestionQuery) new AppSuggestionQuery()
-                                .addEquals("applicationName", parts.getApplicationName())
-                                .addEquals("suggestionTypeName", parts.getEntityName())
-                                .addIEquals("suggestion", suggestion);
+                                .equals("applicationName", parts.getApplicationName())
+                                .equals("suggestionTypeName", parts.getEntityName())
+                                .iequals("suggestion", suggestion);
                         if (parts.isWithMinorName()) {
-                            query.addEquals("fieldName", entityFieldDef.getFieldName());
+                            query.equals("fieldName", entityFieldDef.getFieldName());
                         }
 
                         if (environment().countAll(query) == 0) {
@@ -1808,14 +1808,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         if (BaseVersionEntity.class.isAssignableFrom(entityClass)) {
             final boolean isClearMergeVersion = BaseApplicationEntity.class.isAssignableFrom(entityClass)
                     && !isEnterprise();
-            Query<?> query = Query.of((Class<? extends Entity>) entityClass).addEquals("id", id);
+            Query<?> query = Query.of((Class<? extends Entity>) entityClass).equals("id", id);
             long bumpedVersionNo = environment().value(long.class, "versionNo", query) + 1L;
             Update update = isClearMergeVersion
                     ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
                     : new Update().add("versionNo", bumpedVersionNo);
 
             if (AppEntity.class.equals(entityClass)) {
-                query.addEquals("configType", ConfigType.CUSTOM).addIsNull("delegate");
+                query.equals("configType", ConfigType.CUSTOM).isnull("delegate");
                 update.add("schemaUpdateRequired", true);
             }
 
@@ -1841,7 +1841,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public String getAppEntity(Long appEntityId) throws UnifyException {
         AppEntity appEntity = environment()
-                .listLean(new AppEntityQuery().id(appEntityId).addSelect("applicationName", "name"));
+                .listLean(new AppEntityQuery().id(appEntityId).select("applicationName", "name"));
         return ApplicationNameUtils.getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName());
     }
 
@@ -1888,7 +1888,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<String> getApplicationNames(String moduleName) throws UnifyException {
         return environment().valueList(String.class, "name",
-                new ApplicationQuery().moduleName(moduleName).addOrder("name"));
+                new ApplicationQuery().moduleName(moduleName).order("name"));
     }
 
     @Override
@@ -1936,7 +1936,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entity);
         List<? extends Entity> list = environment()
                 .findAll(new AppEntityUniqueConstraintQuery().applicationName(parts.getApplicationName())
-                        .entityName(parts.getEntityName()).addSelect("name", "description"));
+                        .entityName(parts.getEntityName()).select("name", "description"));
         return EntityUtils.getListablesFromEntityList(list, "name", "description");
     }
 
@@ -1950,7 +1950,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         logDebug("Finding related application applets for form [{0}]...", formId);
         String entityName = environment().value(String.class, "entity", new AppFormQuery().id(formId));
         List<AppRef> refList = environment()
-                .listAll(new AppRefQuery().entity(entityName).addSelect("name", "applicationName"));
+                .listAll(new AppRefQuery().entity(entityName).select("name", "applicationName"));
         if (!DataUtils.isBlank(refList)) {
             List<String> refNameList = new ArrayList<String>();
             for (AppRef appRef : refList) {
@@ -1960,7 +1960,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             List<AppEntityField> fieldList = environment()
                     .listAll(new AppEntityFieldQuery().dataType(EntityFieldDataType.REF).referencesIn(refNameList)
-                            .addSelect("appEntityName", "applicationName"));
+                            .select("appEntityName", "applicationName"));
             if (!DataUtils.isBlank(fieldList)) {
                 Set<String> entityNameList = new HashSet<String>();
                 for (AppEntityField appEntityField : fieldList) {
@@ -1991,8 +1991,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean isWorkEntityWithPendingDraft(Class<? extends WorkEntity> entityClass, Long id)
             throws UnifyException {
-        return environment().countAll(Query.of(entityClass).addEquals("originalCopyId", id)
-                .addEquals("wfItemVersionType", WfItemVersionType.DRAFT)) > 0;
+        return environment().countAll(Query.of(entityClass).equals("originalCopyId", id)
+                .equals("wfItemVersionType", WfItemVersionType.DRAFT)) > 0;
     }
 
     @Override
@@ -2113,7 +2113,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public String getAppComponentEntity(String componentEntityName, Long appComponentId) throws UnifyException {
         EntityClassDef entityClassDef = getEntityClassDef(componentEntityName);
         return environment().value(String.class, "entity",
-                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", appComponentId));
+                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).equals("id", appComponentId));
     }
 
     @Override
@@ -2146,7 +2146,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         Long appEntityId = environment().value(Long.class, "id",
                 new AppEntityQuery().applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
         List<AppEntitySearchInput> entitySearchInputList = environment()
-                .findAll(new AppEntitySearchInputQuery().appEntityId(appEntityId).addSelect("name", "description"));
+                .findAll(new AppEntitySearchInputQuery().appEntityId(appEntityId).select("name", "description"));
         return EntityUtils.getListablesFromEntityList(entitySearchInputList, "name", "description");
     }
 
@@ -2166,7 +2166,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<? extends Listable> findAppAppletFiltersListable(Long appAppletId) throws UnifyException {
         List<AppAppletFilter> filterList = environment()
-                .findAll(new AppAppletFilterQuery().appAppletId(appAppletId).addSelect("name", "description"));
+                .findAll(new AppAppletFilterQuery().appAppletId(appAppletId).select("name", "description"));
         return EntityUtils.getListablesFromEntityList(filterList, "name", "description");
     }
 
@@ -2216,7 +2216,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         logDebug("Finding related application entity fields for form [{0}] and applet [{1}]...", formId, appletName);
         String entityName = environment().value(String.class, "entity", new AppFormQuery().id(formId));
         List<AppRef> refList = environment()
-                .listAll(new AppRefQuery().entity(entityName).addSelect("name", "applicationName"));
+                .listAll(new AppRefQuery().entity(entityName).select("name", "applicationName"));
         if (!DataUtils.isBlank(refList)) {
             List<String> refNameList = new ArrayList<String>();
             for (AppRef appRef : refList) {
@@ -2248,7 +2248,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public Set<String> findChildAppEntities(String entityName) throws UnifyException {
         logDebug("Finding child entities for [{0}]...", entityName);
         List<AppRef> refList = environment()
-                .listAll(new AppRefQuery().entity(entityName).addSelect("name", "applicationName"));
+                .listAll(new AppRefQuery().entity(entityName).select("name", "applicationName"));
         if (!DataUtils.isBlank(refList)) {
             List<String> refNames = new ArrayList<String>();
             for (AppRef appRef : refList) {
@@ -2258,7 +2258,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             List<AppEntityField> fieldList = environment()
                     .listAll(new AppEntityFieldQuery().dataType(EntityFieldDataType.REF).referencesIn(refNames)
-                            .addSelect("appEntityName", "applicationName"));
+                            .select("appEntityName", "applicationName"));
             if (!DataUtils.isBlank(fieldList)) {
                 Set<String> result = new HashSet<String>();
                 for (AppEntityField appEntityField : fieldList) {
@@ -2277,7 +2277,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public Set<String> findBlobEntities(String entityName) throws UnifyException {
         logDebug("Finding BLOB entities for [{0}]...", entityName);
         List<AppEntityField> fieldList = environment().listAll(new AppEntityFieldQuery()
-                .dataType(EntityFieldDataType.BLOB).addSelect("appEntityName", "applicationName"));
+                .dataType(EntityFieldDataType.BLOB).select("appEntityName", "applicationName"));
         if (!DataUtils.isBlank(fieldList)) {
             Set<String> result = new HashSet<String>();
             for (AppEntityField appEntityField : fieldList) {
@@ -2287,7 +2287,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             if (!result.isEmpty()) {
                 List<AppRef> refList = environment()
-                        .listAll(new AppRefQuery().entity(entityName).addSelect("name", "applicationName"));
+                        .listAll(new AppRefQuery().entity(entityName).select("name", "applicationName"));
 
                 List<String> refNames = new ArrayList<String>();
                 for (AppRef appRef : refList) {
@@ -2296,7 +2296,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 fieldList = environment().listAll(new AppEntityFieldQuery().dataType(EntityFieldDataType.REF)
-                        .referencesIn(refNames).addSelect("appEntityName", "applicationName"));
+                        .referencesIn(refNames).select("appEntityName", "applicationName"));
                 if (!DataUtils.isBlank(fieldList)) {
                     for (AppEntityField appEntityField : fieldList) {
                         String refEntityName = ApplicationNameUtils.getApplicationEntityLongName(
@@ -2381,7 +2381,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<String> findEntityAppForms(String entity) throws UnifyException {
         List<AppForm> formList = environment()
-                .listAll(new AppFormQuery().entity(entity).addSelect("name", "applicationName"));
+                .listAll(new AppFormQuery().entity(entity).select("name", "applicationName"));
         if (!DataUtils.isBlank(formList)) {
             List<String> resultList = new ArrayList<String>();
             for (AppForm appForm : formList) {
@@ -2456,7 +2456,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public List<String> findEntityAppTables(String entity) throws UnifyException {
         logDebug("Finding tables for entity [{0}]...", entity);
         List<AppTable> tableList = environment()
-                .listAll(new AppTableQuery().entity(entity).addSelect("name", "applicationName"));
+                .listAll(new AppTableQuery().entity(entity).select("name", "applicationName"));
         if (!DataUtils.isBlank(tableList)) {
             List<String> resultList = new ArrayList<String>();
             for (AppTable appTable : tableList) {
@@ -2485,11 +2485,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             Class<T> componentClazz, String filterBy, String filter) throws UnifyException {
         return StringUtils.isBlank(filter)
                 ? environment().valueList(Long.class, "id",
-                        Query.of(componentClazz).addEquals("applicationName", applicationName)
-                                .addNotEndWith("name", "_wRunnable").addOrder("id"))
+                        Query.of(componentClazz).equals("applicationName", applicationName)
+                                .notends("name", "_wRunnable").order("id"))
                 : environment().valueList(Long.class, "id",
-                        Query.of(componentClazz).addEquals("applicationName", applicationName)
-                                .addNotEndWith("name", "_wRunnable").addILike(filterBy, filter).addOrder("id"));
+                        Query.of(componentClazz).equals("applicationName", applicationName)
+                                .notends("name", "_wRunnable").ilike(filterBy, filter).order("id"));
     }
 
     @Override
@@ -2497,26 +2497,26 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             Class<T> componentClazz, String filterBy, String filter) throws UnifyException {
         return StringUtils.isBlank(filter)
                 ? environment().valueList(Long.class, "id",
-                        Query.of(componentClazz).addEquals("applicationName", applicationName)
-                                .addNotEquals("classified", true).addOrder("id"))
+                        Query.of(componentClazz).equals("applicationName", applicationName)
+                                .notequals("classified", true).order("id"))
                 : environment().valueList(Long.class, "id",
-                        Query.of(componentClazz).addEquals("applicationName", applicationName)
-                                .addILike(filterBy, filter).addNotEquals("classified", true).addOrder("id"));
+                        Query.of(componentClazz).equals("applicationName", applicationName)
+                                .ilike(filterBy, filter).notequals("classified", true).order("id"));
     }
 
     @Override
     public <T extends BaseApplicationEntity> List<String> findAppComponentNames(String applicationName,
             Class<T> componentClazz) throws UnifyException {
         return environment().valueList(String.class, "name",
-                Query.of(componentClazz).addEquals("applicationName", applicationName).addOrder("name"));
+                Query.of(componentClazz).equals("applicationName", applicationName).order("name"));
     }
 
     @Override
     public <T extends BaseApplicationEntity> List<Long> findCustomAppComponentIdList(String applicationName,
             Class<T> componentClazz) throws UnifyException {
         return environment().valueList(Long.class, "id",
-                Query.of(componentClazz).addEquals("applicationName", applicationName)
-                        .addEquals("configType", ConfigType.CUSTOM).addOrder("id"));
+                Query.of(componentClazz).equals("applicationName", applicationName)
+                        .equals("configType", ConfigType.CUSTOM).order("id"));
     }
 
     @Override
@@ -2527,7 +2527,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public ApplicationDef getApplicationDef(Long applicationId) throws UnifyException {
         final String applicationName = environment().value(String.class, "name",
-                Query.of(Application.class).addEquals("id", applicationId));
+                Query.of(Application.class).equals("id", applicationId));
         return applicationDefFactoryMap.get(applicationName);
     }
 
@@ -2541,8 +2541,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 ApplicationModuleSysParamConstants.SECTOR_SORT_ON_MENU);
         List<Application> applicationList = (indicateMenuSectorLabels || indicateSectorColors) && sectorSortOnMenu
                 ? environment().listAll(
-                        new ApplicationQuery().isMenuAccess().addOrder("sectorShortCode", "displayIndex", "label"))
-                : environment().listAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));
+                        new ApplicationQuery().isMenuAccess().order("sectorShortCode", "displayIndex", "label"))
+                : environment().listAll(new ApplicationQuery().isMenuAccess().order("displayIndex", "label"));
         if (!DataUtils.isBlank(applicationList)) {
             List<ApplicationMenuDef> resultList = new ArrayList<ApplicationMenuDef>();
             final String importApplicationName = appletUtilities.system().getSysParameterValue(String.class,
@@ -2571,7 +2571,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public APIDef getAPIDef(Long apiId) throws UnifyException {
-        AppAPI appAPI = environment().listLean(new AppAPIQuery().id(apiId).addSelect("applicationName", "name"));
+        AppAPI appAPI = environment().listLean(new AppAPIQuery().id(apiId).select("applicationName", "name"));
         String apiName = ApplicationNameUtils.getApplicationEntityLongName(appAPI.getApplicationName(),
                 appAPI.getName());
         return apiDefFactoryMap.get(apiName);
@@ -2632,7 +2632,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public AppletDef getAppletDef(Long appAppletId) throws UnifyException {
         AppApplet appApplet = environment()
-                .listLean(new AppAppletQuery().id(appAppletId).addSelect("applicationName", "name"));
+                .listLean(new AppAppletQuery().id(appAppletId).select("applicationName", "name"));
         String appletName = ApplicationNameUtils.getApplicationEntityLongName(appApplet.getApplicationName(),
                 appApplet.getName());
         return appletDefFactoryMap.get(appletName);
@@ -2680,12 +2680,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public List<? extends Listable> getDynamicEnumLists(String applicationName, String label, int limit)
             throws UnifyException {
         AppEnumerationQuery query = (AppEnumerationQuery) new AppEnumerationQuery().applicationName(applicationName)
-                .addSelect("applicationName", "name", "label").addOrder("label");
+                .select("applicationName", "name", "label").order("label");
         if (!StringUtils.isBlank(label)) {
             query.labelLike(label);
         }
 
-        query.setLimit(limit);
+        query.limit(limit);
 
         List<AppEnumeration> enumerations = environment().listAll(query);
         List<ListData> list = new ArrayList<ListData>();
@@ -2703,7 +2703,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         applicationNames.add("application");
         applicationNames.add(applicationName);
         List<AppWidgetType> widgets = environment().listAll(new AppWidgetTypeQuery().applicationNameIn(applicationNames)
-                .addSelect("applicationName", "name", "description").addOrder("description"));
+                .select("applicationName", "name", "description").order("description"));
         List<ListData> list = new ArrayList<ListData>();
         for (AppWidgetType widget : widgets) {
             String longName = ApplicationNameUtils.getApplicationEntityLongName(widget.getApplicationName(),
@@ -2723,7 +2723,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<Class<?>> getDelegateEntities(List<String> entityLongNames) throws UnifyException {
         List<AppEntity> entityList = environment()
-                .listAll(new AppEntityQuery().isDelegated().addSelect("applicationName", "name", "delegate"));
+                .listAll(new AppEntityQuery().isDelegated().select("applicationName", "name", "delegate"));
         if (!entityList.isEmpty()) {
             logDebug("Resolving delegate entities...");
             Set<String> entityAliases = new HashSet<String>(entityLongNames);
@@ -2894,7 +2894,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final EntityClassDef childEntityClassDef = getEntityClassDef(refDef.getEntity());
         Class<? extends Entity> childEntityClass = (Class<? extends Entity>) childEntityClassDef.getEntityClass();
         // Delete older child records
-        environment().deleteAll(Query.of(childEntityClass).addEquals(childFkFieldName, entityInst.getId()));
+        environment().deleteAll(Query.of(childEntityClass).equals(childFkFieldName, entityInst.getId()));
         PropertyListDef propertyListDef = propertyRuleDef.getPropertyListDef(entityInst);
         if (propertyListDef != null) {
             // Create new child records
@@ -2979,7 +2979,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final EntityDef entityDef = getEntityDef(ownerEntityName);
         List<FileAttachment> fileAttachmentList = environment()
                 .findAll(new FileAttachmentQuery().category(category.code()).entity(entityDef.getTableName())
-                        .entityInstId(ownerInstId).addSelect("id", "type", "versionNo", "name", "title", "fileName"));
+                        .entityInstId(ownerInstId).select("id", "type", "versionNo", "name", "title", "fileName"));
         if (!DataUtils.isBlank(fileAttachmentList)) {
             List<AttachmentDetails> list = new ArrayList<AttachmentDetails>();
             for (FileAttachment fileAttachment : fileAttachmentList) {
@@ -3278,10 +3278,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             throws UnifyException {
         final EntityDef entityDef = entityClassDef.getEntityDef();
         if (entityDef.isWithDescriptiveFieldList()) {
-            Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id",
+            Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).equals("id",
                     entityId);
             for (EntityFieldDef entityFieldDef : entityDef.getDescriptiveFieldDefList()) {
-                query.addSelect(entityFieldDef.getFieldName());
+                query.select(entityFieldDef.getFieldName());
             }
 
             Entity inst = environment().list(query);
@@ -3291,7 +3291,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         fieldName = entityDef.isWithDescriptionField() ? "description" : fieldName;
         if (fieldName != null) {
             List<String> descList = environment().valueList(String.class, fieldName,
-                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", entityId));
+                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).equals("id", entityId));
             if (descList.size() == 1) {
                 return descList.get(0);
             }
@@ -3312,7 +3312,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         fieldName = fieldName == null ? "description" : fieldName;
         if (fieldName != null && entityDef.isWithFieldDef(fieldName)) {
             return environment().value(String.class, fieldName,
-                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", inst.getId()));
+                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).equals("id", inst.getId()));
         }
 
         return "";
@@ -3322,7 +3322,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public DelegateEntityInfo getDelegateEntity(String entityName) throws UnifyException {
         ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entityName);
         AppEntity appEntity = environment().find(new AppEntityQuery().applicationName(parts.getApplicationName())
-                .name(parts.getEntityName()).addSelect("delegate", "dataSourceName"));
+                .name(parts.getEntityName()).select("delegate", "dataSourceName"));
         return appEntity != null
                 ? new DelegateEntityInfo(appEntity.getDelegate(), entityName, appEntity.getDataSourceName())
                 : new DelegateEntityInfo(entityName);
@@ -3330,8 +3330,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<DelegateEntityInfo> getDelegateEntitiesByDelegate(String delegate) throws UnifyException {
-        List<AppEntity> entityList = environment().listAll(new AppEntityQuery().addEquals("delegate", delegate)
-                .addSelect("applicationName", "name", "dataSourceName"));
+        List<AppEntity> entityList = environment().listAll(new AppEntityQuery().equals("delegate", delegate)
+                .select("applicationName", "name", "dataSourceName"));
         if (!DataUtils.isBlank(entityList)) {
             List<DelegateEntityInfo> resultList = new ArrayList<DelegateEntityInfo>(entityList.size());
             for (AppEntity appEntity : entityList) {
@@ -3350,7 +3350,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<DelegateEntityInfo> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException {
         List<AppEntity> entityList = environment().listAll(new AppEntityQuery()
-                .addEquals("dataSourceName", dataSourceName).addSelect("applicationName", "name", "delegate"));
+                .equals("dataSourceName", dataSourceName).select("applicationName", "name", "delegate"));
         if (!DataUtils.isBlank(entityList)) {
             List<DelegateEntityInfo> resultList = new ArrayList<DelegateEntityInfo>(entityList.size());
             for (AppEntity appEntity : entityList) {
@@ -3370,7 +3370,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<DelegateEntityInfo> getDelegateEntities() throws UnifyException {
         List<AppEntity> entityList = environment().listAll(
-                new AppEntityQuery().addIsNotNull("delegate").addSelect("applicationName", "name", "dataSourceName"));
+                new AppEntityQuery().notnull("delegate").select("applicationName", "name", "dataSourceName"));
         if (!DataUtils.isBlank(entityList)) {
             List<DelegateEntityInfo> resultList = new ArrayList<DelegateEntityInfo>(entityList.size());
             for (AppEntity appEntity : entityList) {
@@ -4252,7 +4252,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             List<PortalAppletOption> options = Collections.emptyList();
             final List<AppAppletFilter> quickFilters = environment().findAll(new AppAppletFilterQuery()
-                    .appAppletId(appletDef.getId()).quickFilter(true).addSelect("name", "description"));
+                    .appAppletId(appletDef.getId()).quickFilter(true).select("name", "description"));
             if (!DataUtils.isBlank(quickFilters)) {
                 options = new ArrayList<PortalAppletOption>();
                 for (AppAppletFilter filter : quickFilters) {
@@ -4371,7 +4371,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 applicationId, true);
         deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId, true);
 
-        environment().updateAll(new ApplicationQuery().addEquals("id", applicationId),
+        environment().updateAll(new ApplicationQuery().equals("id", applicationId),
                 new Update().add("menuAccess", false));
 
         logDebug(taskMonitor, "Application with ID [{0}] successfully deleted.", applicationId);
@@ -4478,7 +4478,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                                     Object cval = DataUtils.convert(listOnlyDataType.dataType().javaClass(),
                                             csvRecord.get(listProp.getFieldName()), formatter);
-                                    query.addEquals(listProp.getProperty(), cval);
+                                    query.equals(listProp.getProperty(), cval);
                                 }
 
                                 val = environment().value(Long.class, "id", query);
@@ -4507,12 +4507,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             if (recMap.keySet().containsAll(constDef.getFieldList())) {
                                 Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                                 for (String fieldName : constDef.getFieldList()) {
-                                    query.addEquals(fieldName, recMap.get(fieldName).getVal());
+                                    query.equals(fieldName, recMap.get(fieldName).getVal());
                                 }
 
                                 if (constDef.isWithConditionList()) {
                                     for (UniqueConditionDef ucd : constDef.getConditionList()) {
-                                        query.addRestriction(ucd.getRestriction());
+                                        query.restriction(ucd.getRestriction());
                                     }
                                 }
 
@@ -4657,9 +4657,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         // If any schema has changed, pull other entities that have schema changed
         final boolean schemaUpdated = db()
-                .countAll(new AppEntityQuery().isSchemaUpdateRequired().isCustom().addAmongst("id", ids)) > 0;
+                .countAll(new AppEntityQuery().isSchemaUpdateRequired().isCustom().amongst("id", ids)) > 0;
         List<String> otherSchemaUpdateEntities = schemaUpdated ? appletUtilities.getApplicationEntitiesLongNames(
-                (AppEntityQuery) new AppEntityQuery().isSchemaUpdateRequired().isCustom().addNotAmongst("id", ids))
+                (AppEntityQuery) new AppEntityQuery().isSchemaUpdateRequired().isCustom().notamongst("id", ids))
                 : Collections.emptyList();
         for (String entity : otherSchemaUpdateEntities) {
             buildDynamicEntityInfos(entity, dynamicEntityInfoMap);
@@ -4743,14 +4743,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private List<String> getDependentEntities(String entity) throws UnifyException {
         List<AppRef> refList = environment()
-                .listAll(new AppRefQuery().entity(entity).addSelect("applicationName", "name"));
+                .listAll(new AppRefQuery().entity(entity).select("applicationName", "name"));
         if (!DataUtils.isBlank(refList)) {
             List<String> refNameList = ApplicationNameUtils.getApplicationEntityLongNames(refList);
             Set<Long> appEntityList = environment().valueSet(Long.class, "appEntityId", new AppEntityFieldQuery()
-                    .addEquals("dataType", EntityFieldDataType.REF).addAmongst("references", refNameList));
+                    .equals("dataType", EntityFieldDataType.REF).amongst("references", refNameList));
             if (!DataUtils.isBlank(appEntityList)) {
                 List<AppEntity> entityList = environment()
-                        .listAll(new AppEntityQuery().idIn(appEntityList).addSelect("applicationName", "name"));
+                        .listAll(new AppEntityQuery().idIn(appEntityList).select("applicationName", "name"));
                 return ApplicationNameUtils.getApplicationEntityLongNames(entityList);
             }
         }
@@ -4782,7 +4782,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 formatter);
                         refId = environment().value(Long.class, "id",
                                 Query.of((Class<? extends Entity>) refEntityClassDef.getEntityClass())
-                                        .addEquals(entityFieldDef.getProperty(), cListVal));
+                                        .equals(entityFieldDef.getProperty(), cListVal));
                     }
 
                     return new RecLoadInfo(entityFieldDef.getKey(), refId, null);
@@ -4905,16 +4905,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private List<AppletDef> getImportDataAppletDefs(String appletFilter) throws UnifyException {
         Query<AppApplet> query = new AppAppletQuery().type(AppletType.DATA_IMPORT).menuAccess(true)
-                .addSelect("applicationName", "name");
+                .select("applicationName", "name");
         if (isTenancyEnabled() && !getUserToken().isPrimaryTenant()) {
-            query.addEquals("allowSecondaryTenants", Boolean.TRUE);
+            query.equals("allowSecondaryTenants", Boolean.TRUE);
         }
 
         if (!StringUtils.isBlank(appletFilter)) {
-            query.addILike("label", appletFilter);
+            query.ilike("label", appletFilter);
         }
 
-        query.addEquals("deprecated", Boolean.FALSE);
+        query.equals("deprecated", Boolean.FALSE);
         List<AppApplet> appAppletList = environment().listAll(query);
         if (!DataUtils.isBlank(appAppletList)) {
             List<AppletDef> resultList = new ArrayList<AppletDef>();
@@ -4933,14 +4933,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             throws UnifyException {
         Query<AppApplet> query = new AppAppletQuery().menuAccess(true).unreserved().applicationName(applicationName);
         if (isTenancyEnabled() && !getUserToken().isPrimaryTenant()) {
-            query.addEquals("allowSecondaryTenants", Boolean.TRUE);
+            query.equals("allowSecondaryTenants", Boolean.TRUE);
         }
 
         if (!StringUtils.isBlank(appletFilter)) {
-            query.addILike("label", appletFilter);
+            query.ilike("label", appletFilter);
         }
 
-        query.addEquals("deprecated", Boolean.FALSE);
+        query.equals("deprecated", Boolean.FALSE);
         List<String> appAppletList = environment().valueList(String.class, "name", query);
         if (!DataUtils.isBlank(appAppletList)) {
             List<AppletDef> resultList = new ArrayList<AppletDef>();
@@ -4997,7 +4997,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         // TODO Mapped
 //        List<AppEntity> entityList = environment()
 //                .listAll(new AppEntityQuery().delegate(ApplicationModuleNameConstants.MAPPEDENTITY_ENVIRONMENT_DELEGATE)
-//                        .addSelect("applicationName", "name"));
+//                        .select("applicationName", "name"));
 //        for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
 //            getEntityClassDef(entityLongName);
 //        }
@@ -5006,7 +5006,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private void ensureAllWorkflowCopyComponents(boolean isInstallationPerformed) throws UnifyException {
         List<String> updateDraftApplets = new ArrayList<String>();
         List<AppAppletProp> appAppletPropList = environment().listAll(new AppAppletPropQuery()
-                .name(AppletPropertyConstants.WORKFLOWCOPY).value("true").addSelect("applicationName", "appletName"));
+                .name(AppletPropertyConstants.WORKFLOWCOPY).value("true").select("applicationName", "appletName"));
         for (AppAppletProp appAppletProp : appAppletPropList) {
             updateDraftApplets.add(ApplicationNameUtils.getApplicationEntityLongName(appAppletProp.getApplicationName(),
                     appAppletProp.getAppletName()));
@@ -5525,7 +5525,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setMultiSelect(appTableConfig.getMultiSelect());
                     appTable.setNonConforming(appTableConfig.getNonConforming());
                     appTable.setFixedRows(appTableConfig.getFixedRows());
-                    appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
+                    appTable.limitSelectToColumns(appTableConfig.limitSelectToColumns());
                     appTable.setClassified(appTableConfig.getClassified());
                     appTable.setDeprecated(false);
                     appTable.setConfigType(ConfigType.STATIC);
@@ -5554,7 +5554,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppTable.setMultiSelect(appTableConfig.getMultiSelect());
                     oldAppTable.setNonConforming(appTableConfig.getNonConforming());
                     oldAppTable.setFixedRows(appTableConfig.getFixedRows());
-                    oldAppTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
+                    oldAppTable.limitSelectToColumns(appTableConfig.limitSelectToColumns());
                     oldAppTable.setConfigType(ConfigType.STATIC);
                     oldAppTable.setClassified(appTableConfig.getClassified());
                     oldAppTable.setDeprecated(false);
@@ -6196,7 +6196,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appTable.setMultiSelect(appTableConfig.getMultiSelect());
                 appTable.setNonConforming(appTableConfig.getNonConforming());
                 appTable.setFixedRows(appTableConfig.getFixedRows());
-                appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
+                appTable.limitSelectToColumns(appTableConfig.limitSelectToColumns());
                 appTable.setClassified(appTableConfig.getClassified());
                 appTable.setDeprecated(false);
                 appTable.setConfigType(ConfigType.CUSTOM);
@@ -7710,15 +7710,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final EntityClassDef childEntityClassDef = getEntityClassDef(refDef.getEntity());
         return environment().valueMap(String.class, propertyRuleDef.getPropNameField(), String.class,
                 propertyRuleDef.getPropValField(),
-                Query.of((Class<? extends Entity>) childEntityClassDef.getEntityClass()).addEquals(childFkFieldName,
+                Query.of((Class<? extends Entity>) childEntityClassDef.getEntityClass()).equals(childFkFieldName,
                         entityInst.getId()));
     }
 
     private <T extends BaseApplicationEntity> T getApplicationEntity(Class<T> entityClazz, String longName)
             throws UnifyException {
         ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-        T inst = environment().list(Query.of(entityClazz).addEquals("name", nameParts.getEntityName())
-                .addEquals("applicationName", nameParts.getApplicationName()));
+        T inst = environment().list(Query.of(entityClazz).equals("name", nameParts.getEntityName())
+                .equals("applicationName", nameParts.getApplicationName()));
         if (inst == null) {
             throw new UnifyException(ApplicationModuleErrorConstants.CANNOT_FIND_APPLICATION_ENTITY,
                     nameParts.getEntityName(), entityClazz, nameParts.getApplicationName());
@@ -7759,7 +7759,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     ? DynamicEntityInfo.ManagedType.NOT_MANAGED
                     : DynamicEntityInfo.ManagedType.MANAGED;
             final Optional<Boolean> opt = db().valueOptional(boolean.class, "schemaUpdateRequired",
-                    new AppEntityQuery().addEquals("id", entityDef.getId()));
+                    new AppEntityQuery().equals("id", entityDef.getId()));
             final boolean schemaUpdateRequired = !opt.isPresent() || opt.get();
             DynamicEntityInfo.Builder deib = DynamicEntityInfo
                     .newBuilder(dynamicEntityType, className, managedType, schemaUpdateRequired)

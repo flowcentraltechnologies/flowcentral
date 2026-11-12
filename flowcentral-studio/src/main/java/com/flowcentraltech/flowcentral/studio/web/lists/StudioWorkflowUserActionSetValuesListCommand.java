@@ -55,7 +55,7 @@ public class StudioWorkflowUserActionSetValuesListCommand extends AbstractApplic
             for (Listable setValues : workflowModuleService
                     .findWorkflowSetValues((WorkflowSetValuesQuery) new WorkflowSetValuesQuery()
                             .workflowId(longParam.getValue()).type(WorkflowSetValuesType.USER_ACTION)
-                            .addSelect("name", "description").addOrder("description"))) {
+                            .select("name", "description").order("description"))) {
                 list.add(new ListData(setValues.getListKey(), setValues.getListDescription()));
             }
 

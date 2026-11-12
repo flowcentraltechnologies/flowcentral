@@ -128,8 +128,8 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
 
     protected Query<? extends Entity> getQuery(String entity, DataSourceRequest req) throws UnifyException {
         Query<? extends Entity> query = utilities().decodeDelegateQuery(entity, req.getQuery(), req.getOrder());
-        query.setOffset(req.getOffset());
-        query.setLimit(req.getLimit());
+        query.offset(req.offset());
+        query.limit(req.limit());
         return query;
     }
 

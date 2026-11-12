@@ -30,7 +30,7 @@ public class NotificationLargeTextParamQuery extends BaseAuditEntityQuery<Notifi
     }
 
     public NotificationLargeTextParamQuery notifLargeTextId(Long notifLargeTextId) {
-        return (NotificationLargeTextParamQuery) addEquals("notifLargeTextId", notifLargeTextId);
+        return (NotificationLargeTextParamQuery) equals("notifLargeTextId", notifLargeTextId);
     }
 
 }

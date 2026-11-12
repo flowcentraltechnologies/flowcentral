@@ -30,10 +30,10 @@ public class ReportableDefinitionQuery extends BaseApplicationEntityQuery<Report
     }
 
     public ReportableDefinitionQuery entity(String entity) {
-        return (ReportableDefinitionQuery) addEquals("entity", entity);
+        return (ReportableDefinitionQuery) equals("entity", entity);
     }
 
     public ReportableDefinitionQuery entityBeginsWith(String entity) {
-        return (ReportableDefinitionQuery) addBeginsWith("entity", entity);
+        return (ReportableDefinitionQuery) begins("entity", entity);
     }
 }

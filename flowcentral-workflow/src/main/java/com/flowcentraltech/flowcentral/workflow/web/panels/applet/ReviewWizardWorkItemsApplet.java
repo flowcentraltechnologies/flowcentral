@@ -200,7 +200,7 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
                     priEntityInst);
             final EntityClassDef _entityClassDef = au().getEntityClassDef(_entityDef.getLongName());
             currEntityInst = au().environment().listLean(Query
-                    .of((Class<? extends Entity>) _entityClassDef.getEntityClass()).addRestriction(childRestriction));
+                    .of((Class<? extends Entity>) _entityClassDef.getEntityClass()).restriction(childRestriction));
         }
 
         if (currEntityInst == null) {

@@ -33,30 +33,30 @@ public class ReportGroupMemberQuery extends BaseAuditEntityQuery<ReportGroupMemb
     }
     
     public ReportGroupMemberQuery reportGroupId(Long reportGroupId) {
-        return (ReportGroupMemberQuery) addEquals("reportGroupId", reportGroupId);
+        return (ReportGroupMemberQuery) equals("reportGroupId", reportGroupId);
     }
 
     public ReportGroupMemberQuery reportGroupName(String reportGroupName) {
-        return (ReportGroupMemberQuery) addEquals("reportGroupName", reportGroupName);
+        return (ReportGroupMemberQuery) equals("reportGroupName", reportGroupName);
     }
 
     public ReportGroupMemberQuery ueportGroupIdIn(Collection<Long> reportGroupId) {
-        return (ReportGroupMemberQuery) addAmongst("reportGroupId", reportGroupId);
+        return (ReportGroupMemberQuery) amongst("reportGroupId", reportGroupId);
     }
 
     public ReportGroupMemberQuery applicationId(Long applicationId) {
-        return (ReportGroupMemberQuery) addEquals("applicationId", applicationId);
+        return (ReportGroupMemberQuery) equals("applicationId", applicationId);
     }
 
     public ReportGroupMemberQuery reportConfigurationId(Long reportConfigurationId) {
-        return (ReportGroupMemberQuery) addEquals("reportConfigurationId", reportConfigurationId);
+        return (ReportGroupMemberQuery) equals("reportConfigurationId", reportConfigurationId);
     }
 
     public ReportGroupMemberQuery configType(ConfigType configType) {
-        return (ReportGroupMemberQuery) addEquals("configType", configType);
+        return (ReportGroupMemberQuery) equals("configType", configType);
     }
 
     public ReportGroupMemberQuery isCustom() {
-        return (ReportGroupMemberQuery) addEquals("configType", ConfigType.CUSTOM);
+        return (ReportGroupMemberQuery) equals("configType", ConfigType.CUSTOM);
     }
 }

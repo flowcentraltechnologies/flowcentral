@@ -60,7 +60,7 @@ public class QueryDef {
             this.filterRestrictionDefList = new ArrayList<FilterRestrictionDef>();
         }
         
-        public Builder addRestrictionDef(RestrictionType type, String fieldName, String paramA, String paramB,
+        public Builder restrictionDef(RestrictionType type, String fieldName, String paramA, String paramB,
                 int depth) {
             filterRestrictionDefList.add(new FilterRestrictionDef(type, fieldName, paramA, paramB, depth));
             return this;

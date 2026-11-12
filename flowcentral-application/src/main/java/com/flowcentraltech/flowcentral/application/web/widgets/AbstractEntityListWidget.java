@@ -176,7 +176,7 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
         }
 
         if (StringUtils.isBlank(listKey)) {
-            query.addEquals("id", decodedKey.getValue());
+            query.equals("id", decodedKey.getValue());
         } else {
             if ("longName".equals(listKey)) {
                 String longName = (String) decodedKey.getValue();
@@ -185,10 +185,10 @@ public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupT
                 }
 
                 ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                query.addEquals("name", np.getEntityName());
-                query.addEquals("applicationName", np.getApplicationName());
+                query.equals("name", np.getEntityName());
+                query.equals("applicationName", np.getApplicationName());
             } else {
-                query.addEquals(listKey, decodedKey.getValue());
+                query.equals(listKey, decodedKey.getValue());
             }
         }
 

@@ -49,7 +49,7 @@ public class StudioEntitySeriesFieldListCommand extends AbstractApplicationListC
                     .dataTypeIn(EntityFieldDataType.DECIMAL, EntityFieldDataType.DOUBLE, EntityFieldDataType.FLOAT,
                             EntityFieldDataType.INTEGER, EntityFieldDataType.LONG, EntityFieldDataType.SHORT)
                     .nameNotIn("versionNo", "originalCopyId")
-                    .addSelect("id", "name", "label").addOrder("name"));
+                    .select("id", "name", "label").order("name"));
         }
 
         return Collections.emptyList();

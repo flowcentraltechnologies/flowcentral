@@ -52,12 +52,12 @@ public class StudioOnUpdateAppEntityPolicy extends StudioOnCreateComponentPolicy
 
         // Update base fields if necessary
         EntityBaseType currentBaseType = environment().value(EntityBaseType.class, "baseType",
-                Query.of(AppEntity.class).addEquals("id", appEntity.getId()));
+                Query.of(AppEntity.class).equals("id", appEntity.getId()));
         if (!currentBaseType.equals(appEntity.getBaseType())) {
             // Delete old base fields
             final Long appEntityId = appEntity.getId();
-            environment().deleteAll(Query.of(AppEntityField.class).addEquals("type", EntityFieldType.BASE)
-                    .addEquals("appEntityId", appEntityId));
+            environment().deleteAll(Query.of(AppEntityField.class).equals("type", EntityFieldType.BASE)
+                    .equals("appEntityId", appEntityId));
 
             // Add new base fields
             List<AppEntityField> newBaseFieldList = application().getEntityBaseTypeFieldList(appEntity.getBaseType(),

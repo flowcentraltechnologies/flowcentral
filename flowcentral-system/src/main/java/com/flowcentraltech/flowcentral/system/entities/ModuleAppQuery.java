@@ -33,31 +33,31 @@ public class ModuleAppQuery extends BaseAuditEntityQuery<ModuleApp> {
     }
 
     public ModuleAppQuery moduleId(Long moduleId) {
-        return (ModuleAppQuery) addEquals("moduleId", moduleId);
+        return (ModuleAppQuery) equals("moduleId", moduleId);
     }
 
     public ModuleAppQuery moduleIdNotIn(Collection<Long> moduleId) {
-        return (ModuleAppQuery) addNotAmongst("moduleId", moduleId);
+        return (ModuleAppQuery) notamongst("moduleId", moduleId);
     }
 
     public ModuleAppQuery moduleName(String moduleName) {
-        return (ModuleAppQuery) addEquals("moduleName", moduleName);
+        return (ModuleAppQuery) equals("moduleName", moduleName);
     }
 
     public ModuleAppQuery type(SysParamType type) {
-        return (ModuleAppQuery) addEquals("type", type);
+        return (ModuleAppQuery) equals("type", type);
     }
 
     public ModuleAppQuery name(String name) {
-        return (ModuleAppQuery) addEquals("name", name);
+        return (ModuleAppQuery) equals("name", name);
     }
 
     public ModuleAppQuery nameLike(String name) {
-        return (ModuleAppQuery) addLike("name", name);
+        return (ModuleAppQuery) like("name", name);
     }
 
     public ModuleAppQuery shortDescriptionLike(String shortDescription) {
-        return (ModuleAppQuery) addLike("shortDescription", shortDescription);
+        return (ModuleAppQuery) like("shortDescription", shortDescription);
     }
 
 }

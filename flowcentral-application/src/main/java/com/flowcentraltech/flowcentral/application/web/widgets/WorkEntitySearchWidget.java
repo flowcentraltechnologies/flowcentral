@@ -38,6 +38,6 @@ public class WorkEntitySearchWidget extends EntitySearchWidget {
     @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
         super.addMoreResultRestriction(query);
-        query.addRestriction(WORK_ENTITY_RESTRICTION);
+        query.restriction(WORK_ENTITY_RESTRICTION);
     }
 }

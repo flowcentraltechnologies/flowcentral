@@ -47,7 +47,7 @@ public class EntityImageProvider extends AbstractImageProvider {
         if (image.isPresent()) {
             EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(image.getEntity());
             return appletUtilities.environment().value(byte[].class, image.getFieldName(), Query
-                    .of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", image.getInstId()));
+                    .of((Class<? extends Entity>) entityClassDef.getEntityClass()).equals("id", image.getInstId()));
         } else if (image.isNullInstance()) {
             return DataUtils.ZEROLEN_BYTE_ARRAY;
         }

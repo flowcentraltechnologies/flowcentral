@@ -30,11 +30,11 @@ public class MappedRoleWfStepQuery extends BaseEntityQuery<MappedRoleWfStep> {
     }
 
     public MappedRoleWfStepQuery wfStepId(Long wfStepId) {
-        return (MappedRoleWfStepQuery) addEquals("wfStepId", wfStepId);
+        return (MappedRoleWfStepQuery) equals("wfStepId", wfStepId);
     }
 
     public MappedRoleWfStepQuery roleId(Long roleId) {
-        return (MappedRoleWfStepQuery) addEquals("roleId", roleId);
+        return (MappedRoleWfStepQuery) equals("roleId", roleId);
     }
 
 }

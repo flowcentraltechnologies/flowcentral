@@ -31,34 +31,34 @@ public class AppFormElementQuery extends BaseConfigEntityQuery<AppFormElement> {
     }
 
     public AppFormElementQuery appFormId(Long appFormId) {
-        return (AppFormElementQuery) addEquals("appFormId", appFormId);
+        return (AppFormElementQuery) equals("appFormId", appFormId);
     }
 
     public AppFormElementQuery type(FormElementType type) {
-        return (AppFormElementQuery) addEquals("type", type);
+        return (AppFormElementQuery) equals("type", type);
     }
 
     public AppFormElementQuery applicationNameNot(String applicationName) {
-        return (AppFormElementQuery) addNotEquals("applicationName", applicationName);
+        return (AppFormElementQuery) notequals("applicationName", applicationName);
     }
 
     public AppFormElementQuery tabAppletBeginsWith(String tabApplet) {
-        return (AppFormElementQuery) addBeginsWith("tabApplet", tabApplet);
+        return (AppFormElementQuery) begins("tabApplet", tabApplet);
     }
 
     public AppFormElementQuery tabReferenceBeginsWith(String tabReference) {
-        return (AppFormElementQuery) addBeginsWith("tabReference", tabReference);
+        return (AppFormElementQuery) begins("tabReference", tabReference);
     }
 
     public AppFormElementQuery tabMappedFormBeginsWith(String tabMappedForm) {
-        return (AppFormElementQuery) addBeginsWith("tabMappedForm", tabMappedForm);
+        return (AppFormElementQuery) begins("tabMappedForm", tabMappedForm);
     }
 
     public AppFormElementQuery inputReferenceBeginsWith(String inputReference) {
-        return (AppFormElementQuery) addBeginsWith("inputReference", inputReference);
+        return (AppFormElementQuery) begins("inputReference", inputReference);
     }
 
     public AppFormElementQuery inputWidgetBeginsWith(String inputWidget) {
-        return (AppFormElementQuery) addBeginsWith("inputWidget", inputWidget);
+        return (AppFormElementQuery) begins("inputWidget", inputWidget);
     }
 }

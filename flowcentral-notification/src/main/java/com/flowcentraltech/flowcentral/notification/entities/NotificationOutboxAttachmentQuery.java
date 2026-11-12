@@ -30,7 +30,7 @@ public class NotificationOutboxAttachmentQuery extends BaseAuditEntityQuery<Noti
     }
 
     public NotificationOutboxAttachmentQuery notificationId(Long notificationId) {
-        return (NotificationOutboxAttachmentQuery) addEquals("notificationId", notificationId);
+        return (NotificationOutboxAttachmentQuery) equals("notificationId", notificationId);
     }
 
 }

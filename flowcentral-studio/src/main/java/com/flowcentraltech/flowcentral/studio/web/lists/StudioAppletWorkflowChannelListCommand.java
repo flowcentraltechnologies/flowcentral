@@ -54,7 +54,7 @@ public class StudioAppletWorkflowChannelListCommand extends AbstractApplicationL
             if (!StringUtils.isBlank(entity)) {
                 return ApplicationNameUtils
                         .getListableList(workflowModuleService.findWorkflowChannels((WfChannelQuery) new WfChannelQuery()
-                                .entity(entity).addSelect("applicationName", "name", "description")));
+                                .entity(entity).select("applicationName", "name", "description")));
             }
         }
 

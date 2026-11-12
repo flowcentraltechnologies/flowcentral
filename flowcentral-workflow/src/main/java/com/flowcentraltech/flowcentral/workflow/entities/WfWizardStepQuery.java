@@ -30,7 +30,7 @@ public class WfWizardStepQuery extends BaseConfigNamedEntityQuery<WfWizardStep> 
     }
 
     public WfWizardStepQuery wfWizardId(Long wfWizardId) {
-        return (WfWizardStepQuery) addEquals("wfWizardId", wfWizardId);
+        return (WfWizardStepQuery) equals("wfWizardId", wfWizardId);
     }
 
 }
