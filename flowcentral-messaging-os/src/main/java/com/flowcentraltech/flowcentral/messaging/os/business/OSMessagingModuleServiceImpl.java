@@ -211,7 +211,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                                 break; // Stop sending to target
                             }
                         }
-                    } catch (UnifyException e) {
+                    } catch (Exception e) {
                         logError(e);
                     }
                 }
@@ -225,7 +225,7 @@ public class OSMessagingModuleServiceImpl extends AbstractFlowCentralService imp
                     for (Long osMessagingAsyncId : osMessagingAsyncIds) {
                         try {
                             processAsynchronousMessage(osMessagingAsyncId);
-                        } catch (UnifyException e) {
+                        } catch (Exception e) {
                             logError(e);
                         }
                     }
