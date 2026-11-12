@@ -75,7 +75,7 @@ public class ReportGroupRoleQuery extends BaseAuditEntityQuery<ReportGroupRole> 
     public ReportGroupRoleQuery roleActiveTime(Date date) throws UnifyException {
         date = CalendarUtils.getTimeOfDay(date);
         return (ReportGroupRoleQuery) restriction(
-                new OrBuilder().less("activeBefore", date).isNull("activeBefore").build())
-                        .restriction(new OrBuilder().greater("activeAfter", date).isNull("activeAfter").build());
+                new OrBuilder().less("activeBefore", date).isnull("activeBefore").build())
+                        .restriction(new OrBuilder().greater("activeAfter", date).isnull("activeAfter").build());
     }
 }

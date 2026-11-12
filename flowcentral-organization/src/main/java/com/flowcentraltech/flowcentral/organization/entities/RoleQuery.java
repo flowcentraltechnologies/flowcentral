@@ -69,11 +69,11 @@ public class RoleQuery extends BaseStatusWorkEntityQuery<Role> {
 
     public RoleQuery activeBefore(Date activeBefore) {
         return (RoleQuery) restriction(
-                new OrBuilder().lesseq("activeBefore", activeBefore).isNull("activeBefore").build());
+                new OrBuilder().lesseq("activeBefore", activeBefore).isnull("activeBefore").build());
     }
 
     public RoleQuery activeAfter(Date activeAfter) {
         return (RoleQuery) restriction(
-                new OrBuilder().greaterEqual("activeAfter", activeAfter).isNull("activeAfter").build());
+                new OrBuilder().greatereq("activeAfter", activeAfter).isnull("activeAfter").build());
     }
 }
