@@ -260,11 +260,11 @@ public class AppTableConfig extends BaseClassifiedConfig {
         this.fixedRows = fixedRows;
     }
 
-    public Boolean limitSelectToColumns() {
+    public Boolean getLimitSelectToColumns() {
         return limitSelectToColumns;
     }
 
-    public void limitSelectToColumns(Boolean limitSelectToColumns) {
+    public void setLimitSelectToColumns(Boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
     }
 

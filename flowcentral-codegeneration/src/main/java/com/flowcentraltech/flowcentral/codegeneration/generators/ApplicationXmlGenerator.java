@@ -794,7 +794,7 @@ public class ApplicationXmlGenerator extends AbstractResourcesArtifactGenerator 
                 appTableConfig.setMultiSelect(appTable.isMultiSelect());
                 appTableConfig.setNonConforming(appTable.isNonConforming());
                 appTableConfig.setFixedRows(appTable.isFixedRows());
-                appTableConfig.limitSelectToColumns(appTable.isLimitSelectToColumns());
+                appTableConfig.setLimitSelectToColumns(appTable.isLimitSelectToColumns());
                 appTableConfig.setClassified(appTable.isClassified());
 
                 // Columns

@@ -389,7 +389,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                     appTable.setHeaderToUpperCase(false);
                     appTable.setHeaderCenterAlign(false);
                     appTable.setBasicSearch(true);
-                    appTable.limitSelectToColumns(true);
+                    appTable.setLimitSelectToColumns(true);
                     List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
                     for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                         if (entityFieldDef.isTableViewable()

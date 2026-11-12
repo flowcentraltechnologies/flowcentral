@@ -5525,7 +5525,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setMultiSelect(appTableConfig.getMultiSelect());
                     appTable.setNonConforming(appTableConfig.getNonConforming());
                     appTable.setFixedRows(appTableConfig.getFixedRows());
-                    appTable.limitSelectToColumns(appTableConfig.limitSelectToColumns());
+                    appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     appTable.setClassified(appTableConfig.getClassified());
                     appTable.setDeprecated(false);
                     appTable.setConfigType(ConfigType.STATIC);
@@ -5554,7 +5554,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     oldAppTable.setMultiSelect(appTableConfig.getMultiSelect());
                     oldAppTable.setNonConforming(appTableConfig.getNonConforming());
                     oldAppTable.setFixedRows(appTableConfig.getFixedRows());
-                    oldAppTable.limitSelectToColumns(appTableConfig.limitSelectToColumns());
+                    oldAppTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     oldAppTable.setConfigType(ConfigType.STATIC);
                     oldAppTable.setClassified(appTableConfig.getClassified());
                     oldAppTable.setDeprecated(false);
@@ -6196,7 +6196,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appTable.setMultiSelect(appTableConfig.getMultiSelect());
                 appTable.setNonConforming(appTableConfig.getNonConforming());
                 appTable.setFixedRows(appTableConfig.getFixedRows());
-                appTable.limitSelectToColumns(appTableConfig.limitSelectToColumns());
+                appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                 appTable.setClassified(appTableConfig.getClassified());
                 appTable.setDeprecated(false);
                 appTable.setConfigType(ConfigType.CUSTOM);
