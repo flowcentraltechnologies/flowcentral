@@ -249,7 +249,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public <T, U extends Entity> List<T> claimRows(Class<T> idClass, Query<U> query, Update update)
             throws UnifyException {
-        return db(query.getEntityClass()).claimRows(idClass, query, update);
+        return db(query.getEntityClass()).claimUnlockedRows(idClass, query, update);
     }
 
     @Override

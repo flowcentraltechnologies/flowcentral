@@ -85,6 +85,11 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
+    public boolean isSupportsRowLocking() throws UnifyException {
+        return false;
+    }
+
+    @Override
     public boolean isReadOnly() throws UnifyException {
         return true;
     }
@@ -247,7 +252,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
-    public <T, U extends Entity> List<T> claimRows(Class<T> idClass, Query<U> query, Update update)
+    public <T, U extends Entity> List<T> claimUnlockedRows(Class<T> idClass, Query<U> query, Update update)
             throws UnifyException {
         throwUnsupportedOperationException();
         return null;
