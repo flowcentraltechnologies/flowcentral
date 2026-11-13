@@ -363,6 +363,10 @@ public class WfStepDef {
         return delayMinutes;
     }
 
+    public boolean isWithReminders() {
+        return reminderMinutes > 0 || criticalMinutes > 0 || expiryMinutes > 0;
+    }    
+    
     public boolean isWithApplet() {
         return appletDef != null;
     }

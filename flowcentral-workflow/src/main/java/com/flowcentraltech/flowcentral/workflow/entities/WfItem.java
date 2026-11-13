@@ -34,7 +34,7 @@ import com.tcdng.unify.core.security.SecurityComponents;
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-@Table(name = "FC_WORKITEM", indexes = {@Index({"workRecId"})})
+@Table(name = "FC_WORKITEM", indexes = {@Index({"wfItemEventId"}), @Index({"workRecId"})})
 public class WfItem extends BaseAuditEntity {
 
     @ForeignKey(type = WfItemEvent.class)
@@ -57,12 +57,6 @@ public class WfItem extends BaseAuditEntity {
 
     @Column
     private Long workRecId;
-
-    @Column
-    private boolean criticalAlertSent;
-
-    @Column
-    private boolean expirationAlertSent;
 
     @Column(type = ColumnType.CLOB, name = "PROCESS_VARIABLES", nullable = true,
             transformer = SecurityComponents.TWOWAY_STRING_CRYPTOGRAPH)
@@ -193,22 +187,6 @@ public class WfItem extends BaseAuditEntity {
 
     public void setWorkRecId(Long workRecId) {
         this.workRecId = workRecId;
-    }
-
-    public boolean isCriticalAlertSent() {
-        return criticalAlertSent;
-    }
-
-    public void setCriticalAlertSent(boolean criticalAlertSent) {
-        this.criticalAlertSent = criticalAlertSent;
-    }
-
-    public boolean isExpirationAlertSent() {
-        return expirationAlertSent;
-    }
-
-    public void setExpirationAlertSent(boolean expirationAlertSent) {
-        this.expirationAlertSent = expirationAlertSent;
     }
 
     public Long getWfItemHistId() {

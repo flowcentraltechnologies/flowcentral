@@ -120,6 +120,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WorkflowDesignation;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
+import com.flowcentraltech.flowcentral.workflow.entities.WfItemAlert;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemEvent;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemEventQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemHist;
@@ -197,8 +198,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         implements WorkflowModuleService, ApplicationAppletDefProvider, PortalWorkflowProvider {
 
     private static final String WFITEM_EJECTION_LOCK = "wf::itemejection-lock";
-
-    private static final String WFITEMALERT_QUEUE_LOCK = "wf::itemalert-lock";
 
     private static final String WFTRANSITION_QUEUE_LOCK = "wf::transitionqueue-lock";
 
@@ -1314,94 +1313,35 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return Collections.emptyList();
     }
 
-    @Periodic(PeriodicType.FAST)
-    public void sendWorkItemAlerts(TaskMonitor taskMonitor) throws UnifyException {
-        if (tryGrabLock(WFITEMALERT_QUEUE_LOCK)) {
-            try {
-                final Date now = getNow();
-                final int batchSize = appletUtil.system().getSysParameterValue(int.class,
-                        WorkflowModuleSysParamConstants.WF_WORKITEM_ALERT_BATCH_SIZE);
-                List<WfItem> wfItemList = environment().listAll(new WfItemQuery().reminderDue(now).limit(batchSize));
-                if (!DataUtils.isBlank(wfItemList)) {
-                    logInfo("Sending [{0}] reminder work item alerts...", wfItemList.size());
-                    for (WfItem wfItem : wfItemList) {
-                        boolean sent = sendWorkItemAlert(createTransitionItem(wfItem), now,
-                                WorkflowAlertType.REMINDER_NOTIFICATION);
-                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                                sent ? new Update().add("reminderAlertSent", true)
-                                        : new Update().add("reminderAlertSent", false).add("reminderDt", null));
-                    }
-
-                    commitTransactions();
-                }
-
-                wfItemList = environment().listAll(new WfItemQuery().criticalDue(now).limit(batchSize));
-                if (!DataUtils.isBlank(wfItemList)) {
-                    logInfo("Sending [{0}] critical work item alerts...", wfItemList.size());
-                    for (WfItem wfItem : wfItemList) {
-                        boolean sent = sendWorkItemAlert(createTransitionItem(wfItem), now,
-                                WorkflowAlertType.CRITICAL_NOTIFICATION);
-                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                                new Update().add("criticalAlertSent", sent).add("criticalDt", null));
-                    }
-
-                    commitTransactions();
-                }
-
-                wfItemList = environment().listAll(new WfItemQuery().expirationDue(now).limit(batchSize));
-                if (!DataUtils.isBlank(wfItemList)) {
-                    logInfo("Sending [{0}] expiration work item alerts...", wfItemList.size());
-                    for (WfItem wfItem : wfItemList) {
-                        boolean sent = sendWorkItemAlert(createTransitionItem(wfItem), now,
-                                WorkflowAlertType.EXPIRATION_NOTIFICATION);
-                        environment().updateById(WfItemEvent.class, wfItem.getWfItemEventId(),
-                                new Update().add("expirationAlertSent", sent).add("expectedDt", null));
-                    }
-
-                    commitTransactions();
-                }
-            } finally {
-                releaseLock(WFITEMALERT_QUEUE_LOCK);
-            }
-        }
-    }
 
     @SuppressWarnings("unchecked")
-    private boolean sendWorkItemAlert(TransitionItem transitionItem, Date now, WorkflowAlertType type) {
-        try {
-            final WfItem wfItem = transitionItem.getWfItem();
-            final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-            final WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
-            final List<WfAlertDef> alertList = type.isOnReminder() ? wfStepDef.getReminderAlertList()
-                    : (type.isOnCritical() ? wfStepDef.getCriticalAlertList() : wfStepDef.getExpirationAlertList());
-            if (!DataUtils.isBlank(alertList)) {
-                final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfItem.getEntity());
-                final WorkEntity inst = (WorkEntity) environment()
-                        .list((Class<? extends Entity>) entityClassDef.getEntityClass(), wfItem.getOriginWorkRecId());
-                final ValueStoreReader reader = new BeanValueStore(inst).getReader();
-                final String heldBy = wfItem.getHeldBy();
-                SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(), wfItem);
-                transitionItem.setProcessVariable(DefaultProcessVariableConstants.WFITEM_LINK_VARIABLE,
-                        securedLinkInfo.getLinkUrl());
-                transitionItem.setProcessVariable(DefaultProcessVariableConstants.WFITEM_HTMLLINK_VARIABLE,
-                        securedLinkInfo.getHtmlLink());
+    public void sendWorkItemAlert(final WfItem wfItem, Date now, WorkflowAlertType type) throws UnifyException {
+        final TransitionItem transitionItem = createTransitionItem(wfItem);
+        final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+        final WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+        final List<WfAlertDef> alertList = type.isOnReminder() ? wfStepDef.getReminderAlertList()
+                : (type.isOnCritical() ? wfStepDef.getCriticalAlertList() : wfStepDef.getExpirationAlertList());
+        if (!DataUtils.isBlank(alertList)) {
+            final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfItem.getEntity());
+            final WorkEntity inst = (WorkEntity) environment()
+                    .list((Class<? extends Entity>) entityClassDef.getEntityClass(), wfItem.getOriginWorkRecId());
+            final ValueStoreReader reader = new BeanValueStore(inst).getReader();
+            final String heldBy = wfItem.getHeldBy();
+            SecuredLinkInfo securedLinkInfo = getWorkItemSecuredLink(wfStepDef.getStepAppletName(), wfItem);
+            transitionItem.setProcessVariable(DefaultProcessVariableConstants.WFITEM_LINK_VARIABLE,
+                    securedLinkInfo.getLinkUrl());
+            transitionItem.setProcessVariable(DefaultProcessVariableConstants.WFITEM_HTMLLINK_VARIABLE,
+                    securedLinkInfo.getHtmlLink());
 
-                final Long tenantId = getTenantIdFromTransitionItem(entityClassDef, reader);
-                for (WfAlertDef wfAlertDef : alertList) {
-                    sendAlert(transitionItem, wfStepDef, wfAlertDef, tenantId, heldBy);
-                }
-
-                if (type.isOnReminder()) {
-                    CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE, wfStepDef.getReminderMinutes());
-                }
+            final Long tenantId = getTenantIdFromTransitionItem(entityClassDef, reader);
+            for (WfAlertDef wfAlertDef : alertList) {
+                sendAlert(transitionItem, wfStepDef, wfAlertDef, tenantId, heldBy);
             }
 
-            return true;
-        } catch (Exception e) {
-            logSevere(e);
+            if (type.isOnReminder()) {
+                CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE, wfStepDef.getReminderMinutes());
+            }
         }
-
-        return false;
     }
 
     private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
@@ -2244,25 +2184,31 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         wfItemEvent.setErrorTrace(errorTrace);
         wfItemEvent.setErrorDoc(errorDoc);
         wfItemEvent.setPrevWfStepName(prevWfStepName);
+        final Long wfItemEventId = (Long) environment().create(wfItemEvent);
 
-        if (wfStepDef.isSettling()) {
+        if (wfStepDef.isUserAction() && wfStepDef.isWithReminders()) {
+            WfItemAlert wfItemAlert = new WfItemAlert();
+            wfItemAlert.setWfItemEventId(wfItemEventId);
+
             if (wfStepDef.getReminderMinutes() > 0) {
-                wfItemEvent.setReminderDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                wfItemAlert.setReminderDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
                         wfStepDef.getReminderMinutes()));
             }
 
             if (wfStepDef.getCriticalMinutes() > 0) {
-                wfItemEvent.setCriticalDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                wfItemAlert.setCriticalDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
                         wfStepDef.getCriticalMinutes()));
             }
 
             if (wfStepDef.getExpiryMinutes() > 0) {
-                wfItemEvent.setExpectedDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                wfItemAlert.setExpectedDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
                         wfStepDef.getExpiryMinutes()));
             }
+
+            environment().create(wfItemAlert);
         }
 
-        return (Long) environment().create(wfItemEvent);
+        return wfItemEventId;
     }
 
     private class TransitionItem {

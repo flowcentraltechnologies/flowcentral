@@ -577,13 +577,13 @@
 				<field name="errorCode"
 					label="$m{workflow.wfitemevent.errorcode}" type="STRING" maxLen="32"
 					nullable="true" />
-				<field name="reminderAlertSent"
+				<field name="reminderSent"
 					label="$m{workflow.wfitemevent.reminderalertsent}" type="BOOLEAN"
 					nullable="true" />
-				<field name="criticalAlertSent"
+				<field name="criticalSent"
 					label="$m{workflow.wfitemevent.criticalalertsent}" type="BOOLEAN"
 					nullable="true" />
-				<field name="expirationAlertSent"
+				<field name="expirationSent"
 					label="$m{workflow.wfitemevent.expirationalertsent}" type="BOOLEAN"
 					nullable="true" />
 				<field name="errorMsg"
@@ -639,10 +639,6 @@
 				<field name="ejectionDt"
 					label="$m{workflow.wfitem.ejectiondt}" type="TIMESTAMP"
 					nullable="true" />
-				<field name="criticalAlertSent"
-					label="$m{workflow.wfitem.criticalalertsent}" type="BOOLEAN" />
-				<field name="expirationAlertSent"
-					label="$m{workflow.wfitem.expirationalertsent}" type="BOOLEAN" />
 				<field name="wfStepName" label="$m{workflow.wfitem.stepname}"
 					type="LIST_ONLY" key="wfItemEventId" property="wfStepName" />
 				<field name="stepDt" label="$m{workflow.wfitem.stepdt}"
@@ -1014,14 +1010,6 @@
 							column="1" required="true" />
 						<field name="stepDt" inputWidget="application.datetime"
 							column="1" required="true" />
-						<field name="criticalDt" inputWidget="application.datetime"
-							column="1" />
-						<field name="expectedDt" inputWidget="application.datetime"
-							column="1" />
-						<field name="criticalAlertSent"
-							inputWidget="application.checkbox" column="1" />
-						<field name="expirationAlertSent"
-							inputWidget="application.checkbox" column="1" />
 					</section>
 					<section name="errorDetails" columns="TYPE_1">
 						<field name="errorCode" inputWidget="application.text"

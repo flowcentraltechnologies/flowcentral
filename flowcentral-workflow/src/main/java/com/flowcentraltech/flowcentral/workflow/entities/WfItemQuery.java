@@ -100,21 +100,6 @@ public class WfItemQuery extends BaseAuditEntityQuery<WfItem> {
                 new And().add(new IsNotNull("ejectionDt")).add(new Less("ejectionDt", now)));
     }
 
-    public WfItemQuery reminderDue(Date now) {
-        return (WfItemQuery) restriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("reminderDt"))
-                .add(new Less("reminderDt", now)));
-    }
-
-    public WfItemQuery expirationDue(Date now) {
-        return (WfItemQuery) restriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("expectedDt"))
-                .add(new Less("expectedDt", now)));
-    }
-
-    public WfItemQuery criticalDue(Date now) {
-        return (WfItemQuery) restriction(new And().add(new IsNull("actionDt")).add(new IsNotNull("criticalDt"))
-                .add(new Less("criticalDt", now)));
-    }
-
     public WfItemQuery isUnheldOrHeldBy(String heldBy) {
         return (WfItemQuery) restriction(new Or().add(new IsNull("heldBy")).add(new Equals("heldBy", heldBy)));
     }

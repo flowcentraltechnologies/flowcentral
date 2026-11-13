@@ -22,15 +22,17 @@ import com.flowcentraltech.flowcentral.application.business.ApplicationWorkItemU
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfErrorTrace;
-import com.flowcentraltech.flowcentral.workflow.data.WorkItemEvent;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
+import com.flowcentraltech.flowcentral.workflow.data.WorkItemEvent;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
+import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizard;
@@ -563,4 +565,18 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * @throws UnifyException
      */
     WfErrorTrace fetchErrorWorkItemExceptionMessage(Long workRecId, String workflowName) throws UnifyException;
+    
+    /**
+     * Sends a work item alert.
+     * 
+     * @param wfItem
+     *               the workflow item
+     * @param now
+     *               now
+     * @param type
+     *               the alert type
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void sendWorkItemAlert(WfItem wfItem, Date now, WorkflowAlertType type) throws UnifyException;
 }
