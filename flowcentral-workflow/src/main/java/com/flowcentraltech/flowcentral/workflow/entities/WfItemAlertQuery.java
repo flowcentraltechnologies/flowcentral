@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
 import com.tcdng.unify.core.criterion.AndBuilder;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Query;
 
 /**
@@ -28,6 +29,27 @@ import com.tcdng.unify.core.database.Query;
  */
 public class WfItemAlertQuery extends BaseEntityQuery<WfItemAlert> {
 
+    private static final Restriction REMINDER_DUE = new AndBuilder().isnull("actionDt")
+                                                                .equals("disabled", false)
+                                                                .equals("reminderSent", false)
+                                                                .notnull("reminderDt")
+                                                                .less("reminderDt", Query.expOfNow())
+                                                                .build();
+    
+    private static final Restriction EXPIRATION_DUE = new AndBuilder().isnull("actionDt")
+                                                                .equals("disabled", false)
+                                                                .equals("expirationSent", false)
+                                                                .notnull("expectedDt")
+                                                                .less("expectedDt", Query.expOfNow())
+                                                                .build();
+    
+    private static final Restriction CRITICAL_DUE = new AndBuilder().isnull("actionDt")
+                                                                .equals("disabled", false)
+                                                                .equals("criticalSent", false)
+                                                                .notnull("criticalDt")
+                                                                .less("criticalDt", Query.expOfNow())
+                                                                .build();
+    
     public WfItemAlertQuery() {
         super(WfItemAlert.class);
     }
@@ -37,18 +59,15 @@ public class WfItemAlertQuery extends BaseEntityQuery<WfItemAlert> {
     }
 
     public WfItemAlertQuery reminderDue() {
-        return (WfItemAlertQuery) restriction(new AndBuilder().isnull("actionDt").equals("reminderSent", false)
-                .equals("disabled", false).notnull("reminderDt").less("reminderDt", Query.expOfNow()).build());
+        return (WfItemAlertQuery) restriction(REMINDER_DUE);
     }
 
     public WfItemAlertQuery expirationDue() {
-        return (WfItemAlertQuery) restriction(new AndBuilder().isnull("actionDt").equals("expirationSent", false)
-                .equals("disabled", false).notnull("expectedDt").less("expectedDt", Query.expOfNow()).build());
+        return (WfItemAlertQuery) restriction(EXPIRATION_DUE);
     }
 
     public WfItemAlertQuery criticalDue() {
-        return (WfItemAlertQuery) restriction(new AndBuilder().isnull("actionDt").equals("criticalSent", false)
-                .equals("disabled", false).notnull("criticalDt").less("criticalDt", Query.expOfNow()).build());
+        return (WfItemAlertQuery) restriction(CRITICAL_DUE);
     }
 
 }

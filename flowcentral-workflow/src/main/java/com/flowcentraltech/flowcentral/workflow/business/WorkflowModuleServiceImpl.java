@@ -121,6 +121,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemAlert;
+import com.flowcentraltech.flowcentral.workflow.entities.WfItemAlertQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemEvent;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemEventQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemHist;
@@ -1111,6 +1112,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
                     new Update().add("actor", userLoginId).add("actionDt", actionDate != null ? actionDate : getNow())
                             .add("comment", comment).add("wfAction", userActionDef.getLabel()));
+
+            // Disable any pending alerts
+            environment().updateAll(new WfItemAlertQuery().wfItemEventId(wfItem.getWfItemEventId()),
+                    new Update().set("disabled", true));
 
             // Prepare event for next step. If error step and next step is not specified
             // jump to the work item previous step

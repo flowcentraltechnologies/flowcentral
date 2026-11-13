@@ -21,48 +21,52 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemAlertQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Transactional;
-import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.JobFetchInfo;
 
 /**
- * Send work item expiration job handler.
+ * Abstract base class for sending work item notification job handlers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Transactional
-@Component("sendworkitemexpiration-jobhandler")
-public class SendWorkItemExpirationrJobHandler extends AbstractWorkflowJobHandler {
+public abstract class AbstractSendWorkItemNotifJobHandler extends AbstractWorkflowJobHandler {
+
+    private final String name;
+    
+    private final WorkflowAlertType type;
+        
+    public AbstractSendWorkItemNotifJobHandler(String name, WorkflowAlertType type) {
+        this.name = name;
+        this.type = type;
+    }
 
     @Override
-    public void performWork(Long workItemId) throws UnifyException {
-        logInfo("Sending expiration alert for work item [{0}]...", workItemId);
+    public final void performWork(Long workItemId) throws UnifyException {
+        logInfo("Sending {0} alert for work item [{1}]...", name, workItemId);
         final Long wfItemEventId = environment().value(Long.class, "wfItemEventId",
                 new WfItemAlertQuery().id(workItemId));
         final WfItem wfItem = environment().list(new WfItemQuery().wfItemEventId(wfItemEventId));
         if (wfItem != null) {
-            workflow().sendWorkItemAlert(wfItem, getNow(), WorkflowAlertType.EXPIRATION_NOTIFICATION);
+            workflow().sendWorkItemAlert(wfItem, getNow(), type);
         }
     }
 
     @Override
-    public void notifyFail(Long workItemId) throws UnifyException {
+    public final void notifyFail(Long workItemId) throws UnifyException {
         
     }
 
     @Override
-    protected JobFetchInfo getJobFetchInfo() throws UnifyException {
+    protected final JobFetchInfo getJobFetchInfo() throws UnifyException {
         final int batchSize = system().getSysParameterValue(int.class,
                 WorkflowModuleSysParamConstants.WF_WORKITEM_ALERT_BATCH_SIZE);
-        return JobFetchInfo.newBuilder()
-                    .title("Send expiration alert")
-                    .claimQuery(new WfItemAlertQuery().expirationDue())
-                    .claimUpdate(new Update().set("expirationSent", true))
-                    .fetchBatchSize(batchSize)
+        JobFetchInfo.Builder jb = JobFetchInfo.newBuilder();
+        populateJobFetchInfo(jb);
+        return jb.fetchBatchSize(batchSize)
                     .jobMaxAttempts(1)
                     .build();
     }
 
+    protected abstract void populateJobFetchInfo(JobFetchInfo.Builder jb) throws UnifyException;
+    
 }

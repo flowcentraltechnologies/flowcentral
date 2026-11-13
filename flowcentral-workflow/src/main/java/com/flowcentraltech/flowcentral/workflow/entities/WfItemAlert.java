@@ -47,16 +47,16 @@ public class WfItemAlert extends BaseEntity {
     @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date criticalDt;
 
-    @Column
+    @Column(name = "REMINDER_SENT_FG")
     private boolean reminderSent;
 
-    @Column
+    @Column(name = "REMINDER_SENT_FG")
     private boolean criticalSent;
 
-    @Column
+    @Column(name = "REMINDER_SENT_FG")
     private boolean expirationSent;
 
-    @Column
+    @Column(name = "DISABLED_FG")
     private boolean disabled;
 
     @ListOnly(key = "wfItemEventId", property = "actionDt")
