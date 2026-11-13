@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.entities;
 
+import com.tcdng.unify.common.annotation.Index;
+import com.tcdng.unify.common.annotation.Indexes;
 import com.tcdng.unify.core.annotation.Column;
 
 /**
@@ -24,6 +26,8 @@ import com.tcdng.unify.core.annotation.Column;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
+@Indexes({
+    @Index({"name"})})
 public abstract class BaseNamedEntity extends BaseAuditEntity {
 
     @Column(name = "ENTITY_NM", length = 64)

@@ -54,7 +54,7 @@ public class WfItem extends BaseAuditEntity {
 
     @Column(type = ColumnType.TIMESTAMP, nullable = true)
     private Date ejectionDt;
-
+    
     @Column
     private Long workRecId;
 

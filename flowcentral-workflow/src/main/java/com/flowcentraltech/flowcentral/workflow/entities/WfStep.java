@@ -16,12 +16,15 @@
 
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
+import com.tcdng.unify.common.annotation.ColumnType;
+import com.tcdng.unify.common.annotation.Index;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.common.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.Child;
@@ -36,8 +39,11 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Table(name = "FC_WORKSTEP", uniqueConstraints = { @UniqueConstraint({ "workflowId", "name" }),
-        @UniqueConstraint({ "workflowId", "description" }) })
+@Table(name = "FC_WORKSTEP", uniqueConstraints ={
+        @UniqueConstraint({ "workflowId", "name" }),
+        @UniqueConstraint({ "workflowId", "description" }) },
+        indexes = {
+                @Index({"name"})})
 public class WfStep extends BaseConfigNamedEntity {
 
     @ForeignKey(Workflow.class)
@@ -96,6 +102,9 @@ public class WfStep extends BaseConfigNamedEntity {
 
     @Column(name = "APPLET_SET_VALUES_NM", length = 64, nullable = true)
     private String appletSetValuesName;
+
+    @Column(type = ColumnType.TIMESTAMP, name = "EJECT_CHECK_ON", nullable = true)
+    private Date ejectCheckOn;
 
     @Column
     private int designX;
@@ -349,6 +358,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setAppletSetValuesName(String appletSetValuesName) {
         this.appletSetValuesName = appletSetValuesName;
+    }
+
+    public Date getEjectCheckOn() {
+        return ejectCheckOn;
+    }
+
+    public void setEjectCheckOn(Date ejectCheckOn) {
+        this.ejectCheckOn = ejectCheckOn;
     }
 
     public int getDesignX() {

@@ -30,7 +30,8 @@ import com.tcdng.unify.core.annotation.ListOnly;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Table(name = "FC_WORKSTEPALERT", uniqueConstraints = { @UniqueConstraint({ "wfStepId", "name" }),
+@Table(name = "FC_WORKSTEPALERT", uniqueConstraints = {
+        @UniqueConstraint({ "wfStepId", "name" }),
         @UniqueConstraint({ "wfStepId", "description" }) })
 public class WfStepAlert extends BaseNamedEntity {
 

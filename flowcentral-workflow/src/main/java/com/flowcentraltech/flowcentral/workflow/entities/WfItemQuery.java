@@ -19,13 +19,13 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
-import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.criterion.Equals;
-import com.tcdng.unify.core.criterion.IsNotNull;
 import com.tcdng.unify.core.criterion.IsNull;
-import com.tcdng.unify.core.criterion.Less;
 import com.tcdng.unify.core.criterion.NotEquals;
 import com.tcdng.unify.core.criterion.Or;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Query;
 
 /**
  * Workflow item query.
@@ -34,6 +34,11 @@ import com.tcdng.unify.core.criterion.Or;
  * @version 1.0
  */
 public class WfItemQuery extends BaseAuditEntityQuery<WfItem> {
+
+    private static final Restriction EJECTION_DUE = new AndBuilder()
+                                                                .notnull("ejectionDt")
+                                                                .less("ejectionDt", Query.expOfNow())
+                                                                .build();
 
     public WfItemQuery() {
         super(WfItem.class);
@@ -94,10 +99,9 @@ public class WfItemQuery extends BaseAuditEntityQuery<WfItem> {
     public WfItemQuery stepDt(Date stepDt) {
         return (WfItemQuery) equals("stepDt", stepDt);
     }
-
-    public WfItemQuery ejectionDue(Date now) {
-        return (WfItemQuery) restriction(
-                new And().add(new IsNotNull("ejectionDt")).add(new Less("ejectionDt", now)));
+    
+    public WfItemQuery ejectionDue() {
+        return (WfItemQuery) restriction(EJECTION_DUE);
     }
 
     public WfItemQuery isUnheldOrHeldBy(String heldBy) {

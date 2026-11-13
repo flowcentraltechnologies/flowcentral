@@ -579,4 +579,14 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     void sendWorkItemAlert(WfItem wfItem, Date now, WorkflowAlertType type) throws UnifyException;
+
+    /**
+     * Ejects step work items by condition.
+     * 
+     * @param wfStepId
+     *               the workflow step ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void ejectWorkItems(Long wfStepId) throws UnifyException;
 }

@@ -1349,95 +1349,83 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void ejectWorkItems(Long wfStepId) throws UnifyException {
+        final int batchSize = appletUtil.system().getSysParameterValue(int.class,
+                WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);       
+        final WfStep wfStep = environment().list(new WfStepQuery().equals("id", wfStepId)
+                .select("applicationName", "workflowName", "name", "ejectionRestriction"));
+        List<WfItem> wfItemList = environment().listAll(new WfItemQuery().workflowName(wfStep.getWorkflowName())
+                .wfStepName(wfStep.getName()).ejectionDue().limit(batchSize));
+        List<Long> ejected = Collections.emptyList();
+        if (!DataUtils.isBlank(wfItemList)) {
+            logInfo("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
+            ejected = new ArrayList<Long>();
+            
+            for (WfItem wfItem : wfItemList) {
+                final Long wfItemId = wfItem.getId();
+                final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+                final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+                final String nextStepName = currentWfStepDef.getNextStepName();
+
+                final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
+                ejectWfItem(wfItem, nextWfStepDef);
+                ejected.add(wfItemId);
+            }
+        }
+
+        final String workflowName = ApplicationNameUtils
+                .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
+        final WfDef wfDef = getWfDef(workflowName);
+        final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfStep.getName());
+        final String nextStepName = currentWfStepDef.getNextStepName();
+
+        final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
+
+        final EntityClassDef entityDef = appletUtil.getEntityClassDef(wfDef.getEntity());
+        final Restriction restriction = wfDef.getFilterDef(wfStep.getEjectionRestriction()).getFilterDef()
+                .getRestriction(entityDef.getEntityDef(), null, getNow());
+        if (restriction != null) {
+            WfItemQuery wfItemQuery = (WfItemQuery) new WfItemQuery().workflowName(workflowName)
+                    .wfStepName(wfStep.getName()).limit(batchSize);
+            if (!DataUtils.isBlank(ejected)) {
+                wfItemQuery.notamongst("id", ejected);
+            }
+
+            List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
+            if (!DataUtils.isBlank(workRecIds)) {
+                List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
+                        Query.of((Class<? extends Entity>) entityDef.getEntityClass())
+                                .amongst("id", workRecIds).restriction(restriction));
+                if (!DataUtils.isBlank(actWorkRecIds)) {
+                    wfItemList = environment()
+                            .listAll(new WfItemQuery().amongst("workRecId", actWorkRecIds));
+                    logInfo("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
+                    for (WfItem wfItem : wfItemList) {
+                        ejectWfItem(wfItem, nextWfStepDef);
+                    }
+                }
+            }
+        }
+    }
+
+    private void ejectWfItem(WfItem wfItem, WfStepDef nextWfStepDef) throws UnifyException {
+        final Long wfItemId = wfItem.getId();
+        final Long wfItemEventId = createWfItemEvent(nextWfStepDef,
+                wfItem.getWfItemHistId(), wfItem.getWfStepName(), null, null, null, null);
+
+        wfItem.setWfItemEventId(wfItemEventId);
+        wfItem.setEjectionDt(null);
+        environment().updateByIdVersion(wfItem);
+
+        pushToWfTransitionQueue(wfItemId, true);
+        commitTransactions();
+    }
+    
     private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
         return appletUtil.system().getWorkItemSecuredLink(appletName, wfItem.getWfItemEventId(), wfItem.getWfItemDesc(),
                 wfItem.getHeldBy());
-    }
-
-    @SuppressWarnings("unchecked")
-    @Periodic(PeriodicType.FASTER)
-    public void ejectDelayedWorkItem(TaskMonitor taskMonitor) throws UnifyException {
-        if (tryGrabLock(WFITEM_EJECTION_LOCK)) {
-            try {
-                final Date now = getNow();
-                final int batchSize = appletUtil.system().getSysParameterValue(int.class,
-                        WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
-                List<WfItem> wfItemList = environment().listAll(new WfItemQuery().ejectionDue(now).limit(batchSize));
-                List<Long> ejected = new ArrayList<Long>();
-                if (!DataUtils.isBlank(wfItemList)) {
-                    logInfo("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
-                    for (WfItem wfItem : wfItemList) {
-                        final Long wfItemId = wfItem.getId();
-                        final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-                        final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
-                        final String nextStepName = currentWfStepDef.getNextStepName();
-
-                        final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
-                        final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(),
-                                wfItem.getWfStepName(), null, null, null, null);
-
-                        wfItem.setWfItemEventId(wfItemEventId);
-                        wfItem.setEjectionDt(null);
-                        environment().updateByIdVersion(wfItem);
-
-                        pushToWfTransitionQueue(wfItemId, true);
-                        commitTransactions();
-
-                        ejected.add(wfItemId);
-                    }
-                }
-
-                List<WfStep> stepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
-                        .withEjectionRestriction()
-                        .select("applicationName", "workflowName", "name", "ejectionRestriction").distinct(true));
-                for (WfStep wfStep : stepList) {
-                    final String workflowName = ApplicationNameUtils
-                            .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
-                    final WfDef wfDef = getWfDef(workflowName);
-                    final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfStep.getName());
-                    final String nextStepName = currentWfStepDef.getNextStepName();
-
-                    final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
-
-                    final EntityClassDef entityDef = appletUtil.getEntityClassDef(wfDef.getEntity());
-                    final Restriction restriction = wfDef.getFilterDef(wfStep.getEjectionRestriction()).getFilterDef()
-                            .getRestriction(entityDef.getEntityDef(), null, now);
-                    if (restriction != null) {
-                        WfItemQuery wfItemQuery = (WfItemQuery) new WfItemQuery().workflowName(workflowName)
-                                .wfStepName(wfStep.getName()).limit(batchSize);
-                        if (!DataUtils.isBlank(ejected)) {
-                            wfItemQuery.notamongst("id", ejected);
-                        }
-
-                        List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
-                        if (!DataUtils.isBlank(workRecIds)) {
-                            List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
-                                    Query.of((Class<? extends Entity>) entityDef.getEntityClass())
-                                            .amongst("id", workRecIds).restriction(restriction));
-                            if (!DataUtils.isBlank(actWorkRecIds)) {
-                                wfItemList = environment()
-                                        .listAll(new WfItemQuery().amongst("workRecId", actWorkRecIds));
-                                logInfo("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
-                                for (WfItem wfItem : wfItemList) {
-                                    final Long wfItemId = wfItem.getId();
-                                    final Long wfItemEventId = createWfItemEvent(nextWfStepDef,
-                                            wfItem.getWfItemHistId(), wfItem.getWfStepName(), null, null, null, null);
-
-                                    wfItem.setWfItemEventId(wfItemEventId);
-                                    wfItem.setEjectionDt(null);
-                                    environment().updateByIdVersion(wfItem);
-
-                                    pushToWfTransitionQueue(wfItemId, true);
-                                    commitTransactions();
-                                }
-                            }
-                        }
-                    }
-                }
-            } finally {
-                releaseLock(WFITEM_EJECTION_LOCK);
-            }
-        }
     }
 
     @Periodic(PeriodicType.FASTEST)

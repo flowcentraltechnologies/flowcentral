@@ -22,9 +22,13 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNotNull;
 import com.tcdng.unify.core.criterion.NotEquals;
+import com.tcdng.unify.core.criterion.OrBuilder;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Query;
 
 /**
  * Workflow step query.
@@ -38,6 +42,15 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
             WorkflowStepType.START,
             WorkflowStepType.USER_ACTION,
             WorkflowStepType.ERROR);
+
+    private static final Restriction EJECTION_CHECK_DUE = new AndBuilder()
+                                                                .equals("workflowRunnable", true)
+                                                                .equals("type", WorkflowStepType.DELAY)
+                                                                .restriction(new OrBuilder()
+                                                                            .isnull("ejectCheckOn")
+                                                                            .less("ejectCheckOn", Query.expOfNow())
+                                                                            .build())
+                                                                .build();
 
     public WfStepQuery() {
         super(WfStep.class);
@@ -82,8 +95,8 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
         return (WfStepQuery) notnull("workflowCaseApplet");
     }
 
-    public WfStepQuery withEjectionRestriction() {
-        return (WfStepQuery) notnull("ejectionRestriction");
+    public WfStepQuery ejectionCheckDue() {
+        return (WfStepQuery) restriction(EJECTION_CHECK_DUE);
     }
 
     public WfStepQuery type(WorkflowStepType type) {

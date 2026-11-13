@@ -332,6 +332,9 @@
 					type="STRING" />
 				<field name="appletSetValuesName"
 					label="$m{workflow.step.appletsetvaluesname}" type="STRING" />
+				<field name="ejectCheckOn"
+					label="$m{workflow.step.ejectcheckon}" type="TIMESTAMP"
+					nullable="true" />
 				<field name="typeDesc" label="$m{workflow.step.typedesc}"
 					type="LIST_ONLY" key="type" property="description" />
 				<field name="priorityDesc"

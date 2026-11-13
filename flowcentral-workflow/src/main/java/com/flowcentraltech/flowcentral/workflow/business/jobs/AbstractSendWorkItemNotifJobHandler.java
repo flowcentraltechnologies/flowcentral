@@ -63,7 +63,7 @@ public abstract class AbstractSendWorkItemNotifJobHandler extends AbstractWorkfl
         JobFetchInfo.Builder jb = JobFetchInfo.newBuilder();
         populateJobFetchInfo(jb);
         return jb.fetchBatchSize(batchSize)
-                    .jobMaxAttempts(1)
+                    .jobMaxAttempts(4)
                     .build();
     }
 
