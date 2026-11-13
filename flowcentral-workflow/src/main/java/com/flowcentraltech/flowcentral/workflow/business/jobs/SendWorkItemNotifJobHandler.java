@@ -43,11 +43,6 @@ public class SendWorkItemNotifJobHandler extends AbstractWorkflowJobHandler {
     }
 
     @Override
-    protected boolean ready() throws UnifyException {
-        return true;
-    }
-
-    @Override
     protected final JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
                 .title("Send work item reminder alerts")

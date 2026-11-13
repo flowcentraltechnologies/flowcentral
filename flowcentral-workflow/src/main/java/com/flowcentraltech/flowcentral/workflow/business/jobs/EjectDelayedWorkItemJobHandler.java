@@ -43,11 +43,6 @@ public class EjectDelayedWorkItemJobHandler extends AbstractWorkflowJobHandler {
     }
 
     @Override
-    protected boolean ready() throws UnifyException {
-        return true;
-    }
-
-    @Override
     protected JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
                     .title("Eject delayed work items")

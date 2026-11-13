@@ -45,7 +45,7 @@ public class AutoloadingJobHandler extends AbstractWorkflowJobHandler {
 
     @Override
     protected boolean ready() throws UnifyException {
-        return system().getSysParameterValue(boolean.class,
+        return super.ready() && system().getSysParameterValue(boolean.class,
                 WorkflowModuleSysParamConstants.WF_ENABLE_AUTOLOADING);
     }
 

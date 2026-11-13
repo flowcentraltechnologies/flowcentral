@@ -338,7 +338,7 @@
 				<field name="reminderCheckOn"
 					label="$m{workflow.step.remindercheckon}" type="TIMESTAMP"
 					nullable="true" />
-				<field name="ejectCheckOn"
+				<field name="autoLoadingCheckOn"
 					label="$m{workflow.step.autoloadingcheckon}" type="TIMESTAMP"
 					nullable="true" />
 				<field name="typeDesc" label="$m{workflow.step.typedesc}"
@@ -647,7 +647,7 @@
 				<field name="wfStepName"
 					label="$m{workflow.wfitemalert.wfstepname}" type="LIST_ONLY"
 					key="wfItemEventId" property="wfStepName" />
-				<field name="actionDt"
+				<field name="workflowName"
 					label="$m{workflow.wfitemalert.workflowname}" type="LIST_ONLY"
 					key="wfItemEventId" property="workflowName" />
 			</fields>
