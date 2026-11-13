@@ -148,6 +148,8 @@
 			description="$m{workflow.wfitemhist.reference}" entity="wfItemHist" />
 		<reference name="wfItemEventRef"
 			description="$m{workflow.wfitemevent.reference}" entity="wfItemEvent" />
+		<reference name="wfItemAlertRef"
+			description="$m{workflow.wfitemalert.reference}" entity="wfItemAlert" />
 		<reference name="wfItemRef"
 			description="$m{workflow.wfitem.reference}" entity="wfItem" />
 		<reference name="workflowChannelRef"
@@ -552,15 +554,6 @@
 					maxLen="64" />
 				<field name="stepDt" label="$m{workflow.wfitemevent.stepdt}"
 					type="TIMESTAMP" />
-				<field name="reminderDt"
-					label="$m{workflow.wfitemevent.reminderdt}" type="TIMESTAMP"
-					nullable="true" />
-				<field name="expectedDt"
-					label="$m{workflow.wfitemevent.expecteddt}" type="TIMESTAMP"
-					nullable="true" />
-				<field name="criticalDt"
-					label="$m{workflow.wfitemevent.criticaldt}" type="TIMESTAMP"
-					nullable="true" />
 				<field name="actionDt"
 					label="$m{workflow.wfitemevent.actiondt}" type="TIMESTAMP"
 					nullable="true" />
@@ -576,15 +569,6 @@
 					maxLen="64" nullable="true" />
 				<field name="errorCode"
 					label="$m{workflow.wfitemevent.errorcode}" type="STRING" maxLen="32"
-					nullable="true" />
-				<field name="reminderSent"
-					label="$m{workflow.wfitemevent.reminderalertsent}" type="BOOLEAN"
-					nullable="true" />
-				<field name="criticalSent"
-					label="$m{workflow.wfitemevent.criticalalertsent}" type="BOOLEAN"
-					nullable="true" />
-				<field name="expirationSent"
-					label="$m{workflow.wfitemevent.expirationalertsent}" type="BOOLEAN"
 					nullable="true" />
 				<field name="errorMsg"
 					label="$m{workflow.wfitemevent.errormsg}" type="STRING"
@@ -621,6 +605,36 @@
 				<field name="priorityDesc"
 					label="$m{workflow.wfitemevent.prioritydesc}" type="LIST_ONLY"
 					key="priority" property="description" />
+			</fields>
+		</entity>
+		<entity name="wfItemAlert"
+			description="$m{workflow.wfitemalert}"
+			label="$m{workflow.wfitemalert.label}"
+			type="com.flowcentraltech.flowcentral.workflow.entities.WfItemAlert">
+			<fields>
+				<field name="wfItemEventId"
+					label="$m{workflow.wfitemalert.wfitemeventid}" type="REF"
+					references="wfItemEventRef" inputWidget="application.entitylist" />
+				<field name="reminderDt"
+					label="$m{workflow.wfitemalert.reminderdt}" type="TIMESTAMP"
+					nullable="true" />
+				<field name="expectedDt"
+					label="$m{workflow.wfitemalert.expecteddt}" type="TIMESTAMP"
+					nullable="true" />
+				<field name="criticalDt"
+					label="$m{workflow.wfitemalert.criticaldt}" type="TIMESTAMP"
+					nullable="true" />
+				<field name="reminderSent"
+					label="$m{workflow.wfitemalert.reminderalertsent}" type="BOOLEAN"/>
+				<field name="criticalSent"
+					label="$m{workflow.wfitemalert.criticalalertsent}" type="BOOLEAN" />
+				<field name="expirationSent"
+					label="$m{workflow.wfitemalert.expirationalertsent}" type="BOOLEAN" />
+				<field name="disabled"
+					label="$m{workflow.wfitemalert.disabled}" type="BOOLEAN" />
+				<field name="actionDt"
+					label="$m{workflow.wfitemalert.actiondt}" type="LIST_ONLY"
+					key="wfItemEventId" property="actionDt" />
 			</fields>
 		</entity>
 		<entity name="wfItem" description="$m{workflow.wfitem}"

@@ -50,10 +50,10 @@ public class WfItemAlert extends BaseEntity {
     @Column(name = "REMINDER_SENT_FG")
     private boolean reminderSent;
 
-    @Column(name = "REMINDER_SENT_FG")
+    @Column(name = "CRITICAL_SENT_FG")
     private boolean criticalSent;
 
-    @Column(name = "REMINDER_SENT_FG")
+    @Column(name = "EXPIRATION_SENT_FG")
     private boolean expirationSent;
 
     @Column(name = "DISABLED_FG")
