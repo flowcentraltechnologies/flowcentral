@@ -66,6 +66,9 @@ public class ScheduledTask extends BaseStatusEntity {
     @Column(length = 256, nullable = true)
     private String months;
 
+    @Column(name = "TRIGGER_CHECK_FG")
+    private boolean triggerCheck;
+    
     @Child(category = "scheduledtask")
     private ParamValues paramValues;
 
@@ -148,6 +151,14 @@ public class ScheduledTask extends BaseStatusEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isTriggerCheck() {
+        return triggerCheck;
+    }
+
+    public void setTriggerCheck(boolean triggerCheck) {
+        this.triggerCheck = triggerCheck;
     }
 
     public ParamValues getParamValues() {

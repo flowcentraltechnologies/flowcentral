@@ -16,10 +16,11 @@
 
 package com.flowcentraltech.flowcentral.system.entities;
 
-import java.util.Date;
-
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
+import com.tcdng.unify.core.criterion.AndBuilder;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Query;
 
 /**
  * Scheduled task query.
@@ -29,6 +30,11 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
  */
 public class ScheduledTaskQuery extends BaseStatusEntityQuery<ScheduledTask> {
 
+    private static final Restriction READY_TO_RUN = new AndBuilder()
+                                                                .equals("triggerCheck", false)
+                                                                .equals("status", RecordStatus.ACTIVE)
+                                                                .lesseq("nextExecutionOn", Query.expOfNow())
+                                                                .build();
     public ScheduledTaskQuery() {
         super(ScheduledTask.class);
     }
@@ -41,7 +47,7 @@ public class ScheduledTaskQuery extends BaseStatusEntityQuery<ScheduledTask> {
         return (ScheduledTaskQuery) equals("taskName", taskName);
     }
 
-    public ScheduledTaskQuery readyToRunOn(Date date) {
-        return (ScheduledTaskQuery) lesseq("nextExecutionOn", date).equals("status", RecordStatus.ACTIVE);
+    public ScheduledTaskQuery readyToRun() {
+        return (ScheduledTaskQuery) restriction(READY_TO_RUN);
     }
 }

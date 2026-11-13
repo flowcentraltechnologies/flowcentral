@@ -402,4 +402,14 @@ public interface SystemModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     void updateSystemParameters(List<SysParamInfo> params) throws UnifyException;
+
+    /**
+     * Triggers scheduled task.
+     * 
+     * @param scheduledTaskId
+     *                        the scheduled task ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void triggerScheduledTasks(Long scheduledTaskId) throws UnifyException;
 }

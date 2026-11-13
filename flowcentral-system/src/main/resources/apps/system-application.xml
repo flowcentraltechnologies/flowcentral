@@ -596,6 +596,9 @@
 				<field name="months" label="$m{system.scheduledtask.months}"
 					type="STRING" inputWidget="monthschecklist" maxLen="256"
 					nullable="true" auditable="true"/>
+				<field name="triggerCheck"
+					label="$m{system.scheduledtask.triggercheck}"
+					type="BOOLEAN" inputWidget="application.checkbox"/>
 			</fields>
 			<uniqueConstraints>
 				<uniqueConstraint name="descUc"
