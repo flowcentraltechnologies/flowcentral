@@ -1955,12 +1955,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return true;
     }
 
-    private WfItemAccessible createWfItemAccessible(WfItem wfItem, WorkEntity wfEntityInst) {
-        return new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getWfItemEventId(), wfItem.getBranchCode(),
-                wfItem.getDepartmentCode(), wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
-                wfEntityInst.getPreferredWorkflowName(), wfItem.getWfStepName(), wfItem.getEntity(),
-                wfItem.getInitiatedBy(), wfItem.getCreateDt(), wfItem.getStepDt(), wfItem.getReminderDt(),
-                wfItem.getExpectedDt(), wfItem.getCriticalDt());
+    private WfItemAccessible createWfItemAccessible(WfItem wfItem, WorkEntity wfEntityInst) throws UnifyException {
+        final WfItemAlert wfItemAlert = environment()
+                .find(new WfItemAlertQuery().wfItemEventId(wfItem.getWfItemEventId()));
+        return wfItemAlert != null
+                ? new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getWfItemEventId(), wfItem.getBranchCode(),
+                        wfItem.getDepartmentCode(), wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
+                        wfEntityInst.getPreferredWorkflowName(), wfItem.getWfStepName(), wfItem.getEntity(),
+                        wfItem.getInitiatedBy(), wfItem.getCreateDt(), wfItem.getStepDt(), wfItemAlert.getReminderDt(),
+                        wfItemAlert.getExpectedDt(), wfItemAlert.getCriticalDt())
+                : new WfItemAccessible(wfItem.getWorkRecId(), wfItem.getWfItemEventId(), wfItem.getBranchCode(),
+                        wfItem.getDepartmentCode(), wfItem.getWfItemDesc(), wfItem.getWorkflowName(),
+                        wfEntityInst.getPreferredWorkflowName(), wfItem.getWfStepName(), wfItem.getEntity(),
+                        wfItem.getInitiatedBy(), wfItem.getCreateDt(), wfItem.getStepDt(), null, null, null);
     }
 
     @SuppressWarnings("unchecked")

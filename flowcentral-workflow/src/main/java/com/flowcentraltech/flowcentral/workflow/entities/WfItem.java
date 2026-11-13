@@ -74,15 +74,6 @@ public class WfItem extends BaseAuditEntity {
     @ListOnly(key = "wfItemEventId", property = "actionDt")
     private Date actionDt;
 
-    @ListOnly(key = "wfItemEventId", property = "reminderDt")
-    private Date reminderDt;
-
-    @ListOnly(key = "wfItemEventId", property = "expectedDt")
-    private Date expectedDt;
-
-    @ListOnly(key = "wfItemEventId", property = "criticalDt")
-    private Date criticalDt;
-
     @ListOnly(key = "wfItemEventId", property = "applicationName")
     private String applicationName;
 
@@ -219,30 +210,6 @@ public class WfItem extends BaseAuditEntity {
 
     public void setActionDt(Date actionDt) {
         this.actionDt = actionDt;
-    }
-
-    public Date getReminderDt() {
-        return reminderDt;
-    }
-
-    public void setReminderDt(Date reminderDt) {
-        this.reminderDt = reminderDt;
-    }
-
-    public Date getExpectedDt() {
-        return expectedDt;
-    }
-
-    public void setExpectedDt(Date expectedDt) {
-        this.expectedDt = expectedDt;
-    }
-
-    public Date getCriticalDt() {
-        return criticalDt;
-    }
-
-    public void setCriticalDt(Date criticalDt) {
-        this.criticalDt = criticalDt;
     }
 
     public String getProcessVariables() {

@@ -657,12 +657,6 @@
 					type="LIST_ONLY" key="wfItemEventId" property="wfStepName" />
 				<field name="stepDt" label="$m{workflow.wfitem.stepdt}"
 					type="LIST_ONLY" key="wfItemEventId" property="stepDt" />
-				<field name="reminderDt" label="$m{workflow.wfitem.reminderdt}"
-					type="LIST_ONLY" key="wfItemEventId" property="reminderDt" />
-				<field name="expectedDt" label="$m{workflow.wfitem.expecteddt}"
-					type="LIST_ONLY" key="wfItemEventId" property="expectedDt" />
-				<field name="criticalDt" label="$m{workflow.wfitem.criticaldt}"
-					type="LIST_ONLY" key="wfItemEventId" property="criticalDt" />
 				<field name="actionDt" label="$m{workflow.wfitem.actiondt}"
 					type="LIST_ONLY" key="wfItemEventId" property="actionDt" />
 				<field name="wfItemCaseNo"
