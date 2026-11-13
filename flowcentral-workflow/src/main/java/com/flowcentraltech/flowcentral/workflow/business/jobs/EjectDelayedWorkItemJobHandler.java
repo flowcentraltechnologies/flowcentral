@@ -43,11 +43,16 @@ public class EjectDelayedWorkItemJobHandler extends AbstractWorkflowJobHandler {
     }
 
     @Override
+    protected boolean ready() throws UnifyException {
+        return true;
+    }
+
+    @Override
     protected JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
                     .title("Eject delayed work items")
                     .claimQuery(new WfStepQuery().ejectionCheckDue())
-                    .claimUpdate(new Update().setNowWithOffset("ejectCheckOn", 30))
+                    .claimUpdate(new Update().setNowWithOffset("ejectCheckOn", 20))
                     .fetchBatchSize(64)
                     .jobMaxAttempts(4)
                     .build();

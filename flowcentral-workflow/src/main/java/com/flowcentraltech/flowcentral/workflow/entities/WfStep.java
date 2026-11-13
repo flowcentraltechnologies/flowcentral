@@ -43,7 +43,8 @@ import com.tcdng.unify.core.annotation.ListOnly;
         @UniqueConstraint({ "workflowId", "name" }),
         @UniqueConstraint({ "workflowId", "description" }) },
         indexes = {
-                @Index({"name"})})
+                @Index({"type"}),
+                @Index({"autoLoadConditionName"})})
 public class WfStep extends BaseConfigNamedEntity {
 
     @ForeignKey(Workflow.class)
@@ -105,6 +106,12 @@ public class WfStep extends BaseConfigNamedEntity {
 
     @Column(type = ColumnType.TIMESTAMP, name = "EJECT_CHECK_ON", nullable = true)
     private Date ejectCheckOn;
+
+    @Column(type = ColumnType.TIMESTAMP, name = "REMINDER_CHECK_ON", nullable = true)
+    private Date reminderCheckOn;
+
+    @Column(type = ColumnType.TIMESTAMP, name = "AUTOLOAD_CHECK_ON", nullable = true)
+    private Date autoLoadingCheckOn;
 
     @Column
     private int designX;
@@ -366,6 +373,22 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setEjectCheckOn(Date ejectCheckOn) {
         this.ejectCheckOn = ejectCheckOn;
+    }
+
+    public Date getReminderCheckOn() {
+        return reminderCheckOn;
+    }
+
+    public void setReminderCheckOn(Date reminderCheckOn) {
+        this.reminderCheckOn = reminderCheckOn;
+    }
+
+    public Date getAutoLoadingCheckOn() {
+        return autoLoadingCheckOn;
+    }
+
+    public void setAutoLoadingCheckOn(Date autoLoadingCheckOn) {
+        this.autoLoadingCheckOn = autoLoadingCheckOn;
     }
 
     public int getDesignX() {

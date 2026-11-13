@@ -167,9 +167,7 @@ import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.constant.OrderType;
-import com.tcdng.unify.core.criterion.Equals;
-import com.tcdng.unify.core.criterion.IsNull;
-import com.tcdng.unify.core.criterion.Or;
+import com.tcdng.unify.core.criterion.OrBuilder;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -199,8 +197,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         implements WorkflowModuleService, ApplicationAppletDefProvider, PortalWorkflowProvider {
 
     private static final String WFTRANSITION_QUEUE_LOCK = "wf::transitionqueue-lock";
-
-    private static final String WFAUTOLOADING_LOCK = "wf::autoloading-lock";
 
     private static final String WFWORKFLOWCOPY_LOCK = "wf::workflowcopy-lock";
 
@@ -1507,6 +1503,30 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return false;
     }
     
+    @SuppressWarnings("unchecked")
+    @Override
+    public void autoLoadWorkItems(Long wfStepId) throws UnifyException {
+        final int batchSize = appletUtil.system().getSysParameterValue(int.class,
+                WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
+        final WfStep wfStep = environment().list(new WfStepQuery().equals("id", wfStepId).select("applicationName",
+                "workflowName", "name"));
+
+        WfDef wfDef = getWfDef(wfStep.getWorkflowName());
+        EntityClassDef entityClassDef = appletUtil.application()
+                .getEntityClassDef(wfDef.getEntity());
+        Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName())
+                .getFilterDef().getRestriction(entityClassDef.getEntityDef(), null, getNow());
+        List<? extends WorkEntity> entityList = environment().listAll(Query
+                .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
+                .restriction(restriction).restriction(new OrBuilder()
+                        .equals("inWorkflow", Boolean.FALSE).isnull("inWorkflow").build())
+                .order("id").limit(batchSize));
+        
+        for (WorkEntity inst : entityList) {
+            submitToWorkflowByName(wfStep.getWorkflowName(), inst);
+        }
+    }
+
     private SecuredLinkInfo getWorkItemSecuredLink(String appletName, WfItem wfItem) throws UnifyException {
         return appletUtil.system().getWorkItemSecuredLink(appletName, wfItem.getWfItemEventId(), wfItem.getWfItemDesc(),
                 wfItem.getHeldBy());
@@ -1544,44 +1564,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfTransitionQueue.setProcessingDt(null);
                     environment().updateByIdVersion(wfTransitionQueue);
                     commitTransactions();
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Periodic(PeriodicType.FASTER)
-    public void processAutoloadingItems(TaskMonitor taskMonitor) throws UnifyException {
-        if (appletUtil.system().getSysParameterValue(boolean.class,
-                WorkflowModuleSysParamConstants.WF_ENABLE_AUTOLOADING)) {
-            if (tryGrabLock(WFAUTOLOADING_LOCK)) {
-                try {
-                    final Date now = getNow();
-                    final int batchSize = appletUtil.system().getSysParameterValue(int.class,
-                            WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
-                    List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().workflowRunnable(true)
-                            .supportsAutoload().select("applicationName", "workflowName", "autoLoadConditionName"));
-                    if (!DataUtils.isBlank(autoLoadStepList)) {
-                        for (WfStep wfStep : autoLoadStepList) {
-                            String workflowName = ApplicationNameUtils.getApplicationEntityLongName(
-                                    wfStep.getApplicationName(), wfStep.getWorkflowName());
-                            WfDef wfDef = getWfDef(workflowName);
-                            EntityClassDef entityClassDef = appletUtil.application()
-                                    .getEntityClassDef(wfDef.getEntity());
-                            Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName())
-                                    .getFilterDef().getRestriction(entityClassDef.getEntityDef(), null, now);
-                            List<? extends WorkEntity> entityList = environment().listAll(Query
-                                    .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
-                                    .restriction(restriction).restriction(new Or()
-                                            .add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
-                                    .order("id").limit(batchSize));
-                            for (WorkEntity inst : entityList) {
-                                submitToWorkflowByName(workflowName, inst);
-                            }
-                        }
-                    }
-                } finally {
-                    releaseLock(WFAUTOLOADING_LOCK);
                 }
             }
         }

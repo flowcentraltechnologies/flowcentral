@@ -578,7 +578,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     void sendWorkItemAlerts(Long wfStepId) throws UnifyException;
 
     /**
-     * Ejects step work items by condition.
+     * Ejects step work items.
      * 
      * @param wfStepId
      *               the workflow step ID
@@ -586,4 +586,14 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     void ejectWorkItems(Long wfStepId) throws UnifyException;
+
+    /**
+     * Performs auto-loading of step work items.
+     * 
+     * @param wfStepId
+     *               the workflow step ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void autoLoadWorkItems(Long wfStepId) throws UnifyException;
 }

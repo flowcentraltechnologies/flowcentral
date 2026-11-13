@@ -61,6 +61,16 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
                                                                             .build())
                                                                 .build();
 
+    private static final Restriction AUTOLOADING_CHECK_DUE = new AndBuilder()
+                                                                .equals("workflowRunnable", true)
+                                                                .equals("type", WorkflowStepType.START)
+                                                                .notnull("autoLoadConditionName")
+                                                                .restriction(new OrBuilder()
+                                                                            .isnull("autoLoadingCheckOn")
+                                                                            .less("autoLoadingCheckOn", Query.expOfNow())
+                                                                            .build())
+                                                                .build();
+
     public WfStepQuery() {
         super(WfStep.class);
     }
@@ -107,9 +117,13 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     public WfStepQuery ejectionCheckDue() {
         return (WfStepQuery) restriction(EJECTION_CHECK_DUE);
     }
-
+    
     public WfStepQuery reminderCheckDue() {
         return (WfStepQuery) restriction(REMINDER_CHECK_DUE);
+    }
+
+    public WfStepQuery autoLoadingCheckDue() {
+        return (WfStepQuery) restriction(AUTOLOADING_CHECK_DUE);
     }
 
     public WfStepQuery type(WorkflowStepType type) {

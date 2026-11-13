@@ -43,11 +43,16 @@ public class SendWorkItemNotifJobHandler extends AbstractWorkflowJobHandler {
     }
 
     @Override
+    protected boolean ready() throws UnifyException {
+        return true;
+    }
+
+    @Override
     protected final JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
                 .title("Send work item reminder alerts")
                 .claimQuery(new WfStepQuery().reminderCheckDue())
-                .claimUpdate(new Update().setNowWithOffset("reminderCheckOn", 30))
+                .claimUpdate(new Update().setNowWithOffset("reminderCheckOn", 20))
                 .fetchBatchSize(64)
                 .jobMaxAttempts(4)
                 .build();

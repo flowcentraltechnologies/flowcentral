@@ -335,6 +335,12 @@
 				<field name="ejectCheckOn"
 					label="$m{workflow.step.ejectcheckon}" type="TIMESTAMP"
 					nullable="true" />
+				<field name="reminderCheckOn"
+					label="$m{workflow.step.remindercheckon}" type="TIMESTAMP"
+					nullable="true" />
+				<field name="ejectCheckOn"
+					label="$m{workflow.step.autoloadingcheckon}" type="TIMESTAMP"
+					nullable="true" />
 				<field name="typeDesc" label="$m{workflow.step.typedesc}"
 					type="LIST_ONLY" key="type" property="description" />
 				<field name="priorityDesc"
@@ -638,6 +644,12 @@
 				<field name="actionDt"
 					label="$m{workflow.wfitemalert.actiondt}" type="LIST_ONLY"
 					key="wfItemEventId" property="actionDt" />
+				<field name="wfStepName"
+					label="$m{workflow.wfitemalert.wfstepname}" type="LIST_ONLY"
+					key="wfItemEventId" property="wfStepName" />
+				<field name="actionDt"
+					label="$m{workflow.wfitemalert.workflowname}" type="LIST_ONLY"
+					key="wfItemEventId" property="workflowName" />
 			</fields>
 		</entity>
 		<entity name="wfItem" description="$m{workflow.wfitem}"
