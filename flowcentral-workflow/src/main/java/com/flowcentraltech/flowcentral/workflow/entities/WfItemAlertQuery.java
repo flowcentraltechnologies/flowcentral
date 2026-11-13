@@ -58,6 +58,14 @@ public class WfItemAlertQuery extends BaseEntityQuery<WfItemAlert> {
         return (WfItemAlertQuery) equals("wfItemEventId", wfItemEventId);
     }
 
+    public WfItemAlertQuery wfStepName(String wfStepName) {
+        return (WfItemAlertQuery) equals("wfStepName", wfStepName);
+    }
+
+    public WfItemAlertQuery workflowName(String workflowName) {
+        return (WfItemAlertQuery) equals("workflowName", workflowName);
+    }
+
     public WfItemAlertQuery reminderDue() {
         return (WfItemAlertQuery) restriction(REMINDER_DUE);
     }

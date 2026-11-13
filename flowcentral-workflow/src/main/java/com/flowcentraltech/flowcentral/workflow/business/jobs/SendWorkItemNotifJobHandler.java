@@ -15,33 +15,42 @@
  */
 package com.flowcentraltech.flowcentral.workflow.business.jobs;
 
-import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
-import com.flowcentraltech.flowcentral.workflow.entities.WfItemAlertQuery;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.criterion.Update;
-import com.tcdng.unify.core.data.JobFetchInfo.Builder;
+import com.tcdng.unify.core.data.JobFetchInfo;
 
 /**
- * Send work item expiration job handler.
+ * Class for sending work item notification job handlers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
 @Transactional
-@Component("sendworkitemexpiration-jobhandler")
-public class SendWorkItemExpirationJobHandler extends AbstractSendWorkItemNotifJobHandler {
+@Component("sendworkitemreminder-jobhandler")
+public class SendWorkItemNotifJobHandler extends AbstractWorkflowJobHandler {
 
-    public SendWorkItemExpirationJobHandler() {
-        super("expiration", WorkflowAlertType.EXPIRATION_NOTIFICATION);
+    @Override
+    public final void performWork(Long wfStepId) throws UnifyException {
+        workflow().sendWorkItemAlerts(wfStepId);
     }
 
     @Override
-    protected void populateJobFetchInfo(Builder jb) throws UnifyException {
-        jb.title("Send expiration alert")
-            .claimQuery(new WfItemAlertQuery().expirationDue())
-            .claimUpdate(new Update().set("expirationSent", true));
+    public final void notifyFail(Long wfStepId) throws UnifyException {
+        
     }
 
+    @Override
+    protected final JobFetchInfo getJobFetchInfo() throws UnifyException {
+        return JobFetchInfo.newBuilder()
+                .title("Send work item reminder alerts")
+                .claimQuery(new WfStepQuery().reminderCheckDue())
+                .claimUpdate(new Update().setNowWithOffset("reminderCheckOn", 30))
+                .fetchBatchSize(64)
+                .jobMaxAttempts(4)
+                .build();
+    }
+    
 }

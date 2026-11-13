@@ -52,6 +52,15 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
                                                                             .build())
                                                                 .build();
 
+    private static final Restriction REMINDER_CHECK_DUE = new AndBuilder()
+                                                                .equals("workflowRunnable", true)
+                                                                .equals("type", WorkflowStepType.USER_ACTION)
+                                                                .restriction(new OrBuilder()
+                                                                            .isnull("reminderCheckOn")
+                                                                            .less("reminderCheckOn", Query.expOfNow())
+                                                                            .build())
+                                                                .build();
+
     public WfStepQuery() {
         super(WfStep.class);
     }
@@ -97,6 +106,10 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
 
     public WfStepQuery ejectionCheckDue() {
         return (WfStepQuery) restriction(EJECTION_CHECK_DUE);
+    }
+
+    public WfStepQuery reminderCheckDue() {
+        return (WfStepQuery) restriction(REMINDER_CHECK_DUE);
     }
 
     public WfStepQuery type(WorkflowStepType type) {

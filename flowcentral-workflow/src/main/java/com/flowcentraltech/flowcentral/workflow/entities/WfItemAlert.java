@@ -62,6 +62,12 @@ public class WfItemAlert extends BaseEntity {
     @ListOnly(key = "wfItemEventId", property = "actionDt")
     private Date actionDt;
 
+    @ListOnly(key = "wfItemEventId", property = "wfStepName")
+    private String wfStepName;
+
+    @ListOnly(key = "wfItemEventId", property = "workflowName")
+    private String workflowName;
+
     @Override
     public String getDescription() {
         return null;
@@ -137,6 +143,22 @@ public class WfItemAlert extends BaseEntity {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public String getWfStepName() {
+        return wfStepName;
+    }
+
+    public void setWfStepName(String wfStepName) {
+        this.wfStepName = wfStepName;
+    }
+
+    public String getWorkflowName() {
+        return workflowName;
+    }
+
+    public void setWorkflowName(String workflowName) {
+        this.workflowName = workflowName;
     }
 
 }
