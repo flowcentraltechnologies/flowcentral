@@ -1511,8 +1511,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public void autoLoadWorkItems(Long wfStepId) throws UnifyException {
         final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                 WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
-        final WfStep wfStep = environment()
-                .list(new WfStepQuery().equals("id", wfStepId).select("applicationName", "workflowName", "name"));
+        final WfStep wfStep = environment().list(new WfStepQuery().equals("id", wfStepId).select("applicationName",
+                "workflowName", "name", "autoLoadConditionName"));
 
         final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
                 wfStep.getWorkflowName());
