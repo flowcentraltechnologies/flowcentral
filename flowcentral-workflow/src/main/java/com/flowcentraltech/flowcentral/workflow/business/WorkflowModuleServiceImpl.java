@@ -1350,7 +1350,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);       
         final WfStep wfStep = environment().list(new WfStepQuery().equals("id", wfStepId)
                 .select("applicationName", "workflowName", "name", "ejectionRestriction"));
-        List<WfItem> wfItemList = environment().listAll(new WfItemQuery().workflowName(wfStep.getWorkflowName())
+        final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
+                wfStep.getWorkflowName());
+
+        List<WfItem> wfItemList = environment().listAll(new WfItemQuery().workflowName(workflowName)
                 .wfStepName(wfStep.getName()).ejectionDue().limit(batchSize));
         List<Long> ejected = Collections.emptyList();
         if (!DataUtils.isBlank(wfItemList)) {
@@ -1369,8 +1372,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
         }
 
-        final String workflowName = ApplicationNameUtils
-                .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
         final WfDef wfDef = getWfDef(workflowName);
         final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfStep.getName());
         final String nextStepName = currentWfStepDef.getNextStepName();
@@ -1424,9 +1425,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 WorkflowModuleSysParamConstants.WF_WORKITEM_ALERT_BATCH_SIZE);
         final WfStep wfStep = environment().list(new WfStepQuery().equals("id", wfStepId).select("applicationName",
                 "workflowName", "name", "ejectionRestriction"));
+        final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
+                wfStep.getWorkflowName());
 
-        List<WfItemAlert> wfItemAlertList = environment().listAll(new WfItemAlertQuery()
-                .workflowName(wfStep.getWorkflowName()).wfStepName(wfStep.getName()).reminderDue().limit(batchSize));
+        List<WfItemAlert> wfItemAlertList = environment().listAll(new WfItemAlertQuery().workflowName(workflowName)
+                .wfStepName(wfStep.getName()).reminderDue().limit(batchSize));
         if (!DataUtils.isBlank(wfItemAlertList)) {
             logInfo("Sending [{0}] reminder work item alerts...", wfItemAlertList.size());
             for (WfItemAlert wfItemAlert : wfItemAlertList) {
@@ -1436,7 +1439,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             commitTransactions();
         }
 
-        wfItemAlertList = environment().listAll(new WfItemAlertQuery().workflowName(wfStep.getWorkflowName())
+        wfItemAlertList = environment().listAll(new WfItemAlertQuery().workflowName(workflowName)
                 .wfStepName(wfStep.getName()).criticalDue().limit(batchSize));
         if (!DataUtils.isBlank(wfItemAlertList)) {
             logInfo("Sending [{0}] critical work item alerts...", wfItemAlertList.size());
@@ -1447,7 +1450,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             commitTransactions();
         }
 
-        wfItemAlertList = environment().listAll(new WfItemAlertQuery().workflowName(wfStep.getWorkflowName())
+        wfItemAlertList = environment().listAll(new WfItemAlertQuery().workflowName(workflowName)
                 .wfStepName(wfStep.getName()).criticalDue().limit(batchSize));
         if (!DataUtils.isBlank(wfItemAlertList)) {
             logInfo("Sending [{0}] expiration work item alerts...", wfItemAlertList.size());
@@ -1508,22 +1511,22 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public void autoLoadWorkItems(Long wfStepId) throws UnifyException {
         final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                 WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
-        final WfStep wfStep = environment().list(new WfStepQuery().equals("id", wfStepId).select("applicationName",
-                "workflowName", "name"));
+        final WfStep wfStep = environment()
+                .list(new WfStepQuery().equals("id", wfStepId).select("applicationName", "workflowName", "name"));
 
-        WfDef wfDef = getWfDef(wfStep.getWorkflowName());
-        EntityClassDef entityClassDef = appletUtil.application()
-                .getEntityClassDef(wfDef.getEntity());
-        Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName())
-                .getFilterDef().getRestriction(entityClassDef.getEntityDef(), null, getNow());
-        List<? extends WorkEntity> entityList = environment().listAll(Query
-                .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
-                .restriction(restriction).restriction(new OrBuilder()
-                        .equals("inWorkflow", Boolean.FALSE).isnull("inWorkflow").build())
-                .order("id").limit(batchSize));
-        
+        final String workflowName = ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
+                wfStep.getWorkflowName());
+        WfDef wfDef = getWfDef(workflowName);
+        EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfDef.getEntity());
+        Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName()).getFilterDef()
+                .getRestriction(entityClassDef.getEntityDef(), null, getNow());
+        List<? extends WorkEntity> entityList = environment().listAll(
+                Query.of((Class<? extends WorkEntity>) entityClassDef.getEntityClass()).restriction(restriction)
+                        .restriction(new OrBuilder().equals("inWorkflow", Boolean.FALSE).isnull("inWorkflow").build())
+                        .order("id").limit(batchSize));
+
         for (WorkEntity inst : entityList) {
-            submitToWorkflowByName(wfStep.getWorkflowName(), inst);
+            submitToWorkflowByName(workflowName, inst);
         }
     }
 
