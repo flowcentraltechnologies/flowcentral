@@ -287,6 +287,9 @@
 					label="$m{notification.notificationchannel.messagesperminute}"
 					type="INTEGER" inputWidget="application.integer" nullable="true"
 					precision="6" />
+				<field name="sendCheck"
+					label="$m{notification.notificationchannel.sendcheck}" type="BOOLEAN"
+					inputWidget="application.checkbox" />
 				<field name="notificationTypeDesc"
 					label="$m{notification.notificationchannel.typedesc}"
 					type="LIST_ONLY" key="notificationType" property="description" />
