@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.notification.business;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -79,8 +78,6 @@ import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.annotation.Periodic;
-import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
@@ -91,7 +88,6 @@ import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.StaleableFactoryMap;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
-import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -106,10 +102,6 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(NotificationModuleNameConstants.NOTIFICATION_MODULE_SERVICE)
 public class NotificationModuleServiceImpl extends AbstractFlowCentralService implements NotificationModuleService {
-
-    private static final String SEND_NOTIFICATION_LOCK = "notif::sendnotification-lock";
-
-    private static final List<NotifType> NOTIFICATION_TYPE_LIST = Arrays.asList(NotifType.EMAIL, NotifType.SMS);
 
     private static final String PAGE_BREAK = Pattern.quote("[page-break]");
 
@@ -475,110 +467,89 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             environment().updateByIdVersion(channel);
         }
     }
+    
+    @Override
+    public void sendNotifications(Long notificationChannelId) throws UnifyException {
+        final int maxBatchSize = au.system().getSysParameterValue(int.class,
+                NotificationModuleSysParamConstants.NOTIFICATION_MAX_BATCH_SIZE);
+        final int maxAttempts = au.system().getSysParameterValue(int.class,
+                NotificationModuleSysParamConstants.NOTIFICATION_MAXIMUM_TRIES);
+        final int retryMinutes = au.system().getSysParameterValue(int.class,
+                NotificationModuleSysParamConstants.NOTIFICATION_RETRY_MINUTES);
 
-    @Periodic(PeriodicType.FAST)
-    public void sendNotifications(TaskMonitor taskMonitor) throws UnifyException {
-        if (au.system().getSysParameterValue(boolean.class, NotificationModuleSysParamConstants.NOTIFICATION_ENABLED)
-                && tryGrabLock(SEND_NOTIFICATION_LOCK)) {
-            try {
-                final int maxBatchSize = au.system().getSysParameterValue(int.class,
-                        NotificationModuleSysParamConstants.NOTIFICATION_MAX_BATCH_SIZE);
-                final int maxAttempts = au.system().getSysParameterValue(int.class,
-                        NotificationModuleSysParamConstants.NOTIFICATION_MAXIMUM_TRIES);
-                final int retryMinutes = au.system().getSysParameterValue(int.class,
-                        NotificationModuleSysParamConstants.NOTIFICATION_RETRY_MINUTES);
+        final Date now = getNow();
+        NotifChannelDef notifChannelDef = null;
+        try {
+            final NotifType notifType = environment().value(NotifType.class, "notificationType",
+                    new NotificationChannelQuery().id(notificationChannelId));
+            TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(0L);
+            notifChannelDef = tenantChannelInfo.getNotificationChannelDef(notifType);
+            if (notifChannelDef.isThrottled()) {
+                if (notifChannelDef.isThrottledAndIsNotDue(now)) {
+                    return;
+                }
+            }
 
-                final Date now = environment().getNow();
-                for (NotifType notifType : NOTIFICATION_TYPE_LIST) {
-                    for (Long tenantId : au.system().getPrimaryMappedTenantIds()) {
-                        if (environment().exists(new NotificationChannelQuery().notifType(notifType)
-                                .status(RecordStatus.ACTIVE))) {
-                            TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(tenantId);
-                            final NotifChannelDef notifChannelDef = tenantChannelInfo
-                                    .getNotificationChannelDef(notifType);
-                            if (notifChannelDef.isThrottled()) {
-                                if (notifChannelDef.isThrottledAndIsNotDue(now)) {
-                                    continue;
-                                }
-                            }
-
-                            try {
-                                int localMaxBatchSize = notifChannelDef.isThrottled()
-                                        ? notifChannelDef.getMessagesPerMinute()
-                                        : notifChannelDef.getPropValue(int.class,
-                                                        NotificationChannelPropertyConstants.MAX_BATCH_SIZE);
-                                localMaxBatchSize = localMaxBatchSize == 0 ? maxBatchSize: localMaxBatchSize;
-                                final int localMaxAttempts = notifChannelDef
-                                        .isProp(NotificationChannelPropertyConstants.MAX_TRIES)
-                                                ? notifChannelDef.getPropValue(int.class,
-                                                        NotificationChannelPropertyConstants.MAX_TRIES, maxBatchSize)
-                                                : maxAttempts;
-                                final int localRetryMinutes = notifChannelDef
-                                        .isProp(NotificationChannelPropertyConstants.RETRY_MINUTES)
-                                                ? notifChannelDef.getPropValue(int.class,
-                                                        NotificationChannelPropertyConstants.RETRY_MINUTES)
-                                                : retryMinutes;
-                                localMaxBatchSize = 5;
-                                if (localMaxBatchSize > 0) {
-                                    List<Long> pendingNotificationIdList = environment().valueList(Long.class, "id",
-                                            new NotificationOutboxQuery().type(notifType).due(now)
-                                                    .status(NotificationOutboxStatus.NOT_SENT)
-                                                    .limit(localMaxBatchSize));
-                                    if (!DataUtils.isBlank(pendingNotificationIdList)) {
-                                        logDebug("Sending [{0}] notifications via channel [{1}]...",
-                                                pendingNotificationIdList.size(), notifChannelDef.getDescription());
-                                        NotificationMessagingChannel channel = getNotificationMessagingChannel(
-                                                notifType);
-                                        ChannelMessage[] messages = getChannelMessages(tenantId,
-                                                pendingNotificationIdList);
-                                        channel.sendMessages(notifChannelDef, messages);
-                                        for (ChannelMessage message : messages) {
-                                            final int attempts = message.getAttempts() + 1;
-                                            Update update = new Update().add("attempts", attempts);
-                                            if (message.isSent()) {
-                                                update.add("sentDt", now);
-                                                update.add("status", NotificationOutboxStatus.SENT);
-                                            } else {
-                                                if (attempts >= localMaxAttempts || !message.isRetry()) {
-                                                    update.add("status", NotificationOutboxStatus.ABORTED);
-                                                } else {
-                                                    Date nextAttemptDt = CalendarUtils.getNowWithFrequencyOffset(now,
-                                                            FrequencyUnit.MINUTE, localRetryMinutes);
-                                                    update.add("nextAttemptDt", nextAttemptDt);
-                                                }
-                                            }
-
-                                            environment().updateById(NotificationOutbox.class, message.getOriginId(),
-                                                    update);
-                                            if (message.isWithError()) {
-                                                NotificationOutboxError error = new NotificationOutboxError();
-                                                error.setNotificationId(message.getOriginId());
-                                                error.setError(message.getError());
-                                                environment().create(error);
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
-                                logSevere(e);
-                            } finally {
-                                if (notifChannelDef.isThrottled()) {
-                                    NotificationChannel notificationChannel = environment()
-                                            .find(new NotificationChannelQuery().name(notifChannelDef.getName()));
-                                    Date nextTransmissionOn = CalendarUtils.getNowWithFrequencyOffset(now,
-                                            FrequencyUnit.MINUTE, 1);
-                                    notificationChannel.setNextTransmissionOn(nextTransmissionOn);
-                                    environment().updateByIdVersion(notificationChannel);
-                                }
-
-                                commitTransactions();
+            int localMaxBatchSize = notifChannelDef.isThrottled() ? notifChannelDef.getMessagesPerMinute()
+                    : notifChannelDef.getPropValue(int.class, NotificationChannelPropertyConstants.MAX_BATCH_SIZE);
+            localMaxBatchSize = localMaxBatchSize == 0 ? maxBatchSize : localMaxBatchSize;
+            final int localMaxAttempts = notifChannelDef.isProp(NotificationChannelPropertyConstants.MAX_TRIES)
+                    ? notifChannelDef.getPropValue(int.class, NotificationChannelPropertyConstants.MAX_TRIES,
+                            maxBatchSize)
+                    : maxAttempts;
+            final int localRetryMinutes = notifChannelDef.isProp(NotificationChannelPropertyConstants.RETRY_MINUTES)
+                    ? notifChannelDef.getPropValue(int.class, NotificationChannelPropertyConstants.RETRY_MINUTES)
+                    : retryMinutes;
+            localMaxBatchSize = 5;
+            if (localMaxBatchSize > 0) {
+                List<Long> pendingNotificationIdList = environment().valueList(Long.class, "id",
+                        new NotificationOutboxQuery().type(notifType).due(now).status(NotificationOutboxStatus.NOT_SENT)
+                                .limit(localMaxBatchSize));
+                if (!DataUtils.isBlank(pendingNotificationIdList)) {
+                    logDebug("Sending [{0}] notifications via channel [{1}]...", pendingNotificationIdList.size(),
+                            notifChannelDef.getDescription());
+                    NotificationMessagingChannel channel = getNotificationMessagingChannel(notifType);
+                    ChannelMessage[] messages = getChannelMessages(0L, pendingNotificationIdList);
+                    channel.sendMessages(notifChannelDef, messages);
+                    for (ChannelMessage message : messages) {
+                        final int attempts = message.getAttempts() + 1;
+                        Update update = new Update().add("attempts", attempts);
+                        if (message.isSent()) {
+                            update.add("sentDt", now);
+                            update.add("status", NotificationOutboxStatus.SENT);
+                        } else {
+                            if (attempts >= localMaxAttempts || !message.isRetry()) {
+                                update.add("status", NotificationOutboxStatus.ABORTED);
+                            } else {
+                                Date nextAttemptDt = CalendarUtils.getNowWithFrequencyOffset(now, FrequencyUnit.MINUTE,
+                                        localRetryMinutes);
+                                update.add("nextAttemptDt", nextAttemptDt);
                             }
                         }
 
+                        environment().updateById(NotificationOutbox.class, message.getOriginId(), update);
+                        if (message.isWithError()) {
+                            NotificationOutboxError error = new NotificationOutboxError();
+                            error.setNotificationId(message.getOriginId());
+                            error.setError(message.getError());
+                            environment().create(error);
+                        }
                     }
                 }
-            } finally {
-                releaseLock(SEND_NOTIFICATION_LOCK);
+            }
+        } catch (Exception e) {
+            logSevere(e);
+        } finally {
+            if (notifChannelDef != null && notifChannelDef.isThrottled()) {
+                NotificationChannel notificationChannel = environment()
+                        .find(new NotificationChannelQuery().name(notifChannelDef.getName()));
+                Date nextTransmissionOn = CalendarUtils.getNowWithFrequencyOffset(now, FrequencyUnit.MINUTE, 1);
+                notificationChannel.setNextTransmissionOn(nextTransmissionOn);
+                notificationChannel.setSendCheck(false);
+                environment().updateByIdVersion(notificationChannel);
+            } else {
+                environment().updateById(NotificationChannel.class, notificationChannelId,
+                        new Update().set("sendCheck", false));
             }
         }
     }

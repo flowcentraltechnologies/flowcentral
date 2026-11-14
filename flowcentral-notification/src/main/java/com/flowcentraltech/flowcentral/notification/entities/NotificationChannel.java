@@ -36,8 +36,11 @@ import com.tcdng.unify.core.annotation.Policy;
  * @since 4.1
  */
 @Policy("notificationchannel-entitypolicy")
-@Table(name = "FC_NOTIFCHANNEL", uniqueConstraints = { @UniqueConstraint({ "notificationType" }),
-        @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
+@Table(name = "FC_NOTIFCHANNEL",
+        uniqueConstraints = {
+                @UniqueConstraint({ "notificationType" }),
+                @UniqueConstraint({ "name" }),
+                @UniqueConstraint({ "description" }) })
 public class NotificationChannel extends BaseStatusEntity {
 
     @ForeignKey
@@ -60,6 +63,9 @@ public class NotificationChannel extends BaseStatusEntity {
 
     @Column(nullable = true)
     private Integer messagesPerMinute;
+
+    @Column(name = "SEND_CHECK_FG")
+    private boolean sendCheck;
     
     @ListOnly(key = "notificationType", property = "description")
     private String notificationTypeDesc;
@@ -118,6 +124,14 @@ public class NotificationChannel extends BaseStatusEntity {
 
     public void setNextTransmissionOn(Date nextTransmissionOn) {
         this.nextTransmissionOn = nextTransmissionOn;
+    }
+
+    public boolean isSendCheck() {
+        return sendCheck;
+    }
+
+    public void setSendCheck(boolean sendCheck) {
+        this.sendCheck = sendCheck;
     }
 
     public Integer getMessagesPerMinute() {

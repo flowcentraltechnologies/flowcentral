@@ -264,4 +264,14 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     void updateEmailSettings(EmailSettingsInfo settings) throws UnifyException;
+
+    /**
+     * Sends channel pending notifications.
+     * 
+     * @param notificationChannelId
+     *                              the channel ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void sendNotifications(Long notificationChannelId) throws UnifyException;
 }

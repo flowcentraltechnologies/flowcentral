@@ -15,8 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.core.criterion.AndBuilder;
+import com.tcdng.unify.core.criterion.Restriction;
 
 /**
  * Notification channel query class;
@@ -25,6 +28,11 @@ import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
  * @since 4.1
  */
 public class NotificationChannelQuery extends BaseStatusEntityQuery<NotificationChannel> {
+
+    private static final Restriction READY_TO_SEND = new AndBuilder()
+                                                                .equals("sendCheck", false)
+                                                                .equals("status", RecordStatus.ACTIVE)
+                                                                .build();
 
     public NotificationChannelQuery() {
         super(NotificationChannel.class);
@@ -44,6 +52,10 @@ public class NotificationChannelQuery extends BaseStatusEntityQuery<Notification
 
     public NotificationChannelQuery descriptionLike(String description) {
         return (NotificationChannelQuery) like("description", description);
+    }
+
+    public NotificationChannelQuery readyToSend() {
+        return (NotificationChannelQuery) restriction(READY_TO_SEND);
     }
 
 }
