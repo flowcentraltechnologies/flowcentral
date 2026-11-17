@@ -484,11 +484,6 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                     new NotificationChannelQuery().id(notificationChannelId));
             TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(0L);
             notifChannelDef = tenantChannelInfo.getNotificationChannelDef(notifType);
-            if (notifChannelDef.isThrottled()) {
-                if (notifChannelDef.isThrottledAndIsNotDue(now)) {
-                    return;
-                }
-            }
 
             int localMaxBatchSize = notifChannelDef.isThrottled() ? notifChannelDef.getMessagesPerMinute()
                     : notifChannelDef.getPropValue(int.class, NotificationChannelPropertyConstants.MAX_BATCH_SIZE);
@@ -541,12 +536,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             logSevere(e);
         } finally {
             if (notifChannelDef != null && notifChannelDef.isThrottled()) {
-                NotificationChannel notificationChannel = environment()
-                        .find(new NotificationChannelQuery().name(notifChannelDef.getName()));
-                Date nextTransmissionOn = CalendarUtils.getNowWithFrequencyOffset(now, FrequencyUnit.MINUTE, 1);
-                notificationChannel.setNextTransmissionOn(nextTransmissionOn);
-                notificationChannel.setSendCheck(false);
-                environment().updateByIdVersion(notificationChannel);
+                environment().updateById(NotificationChannel.class, notificationChannelId,
+                        new Update().setNowWithOffset("nextTransmissionOn", 60).set("sendCheck", false));
             } else {
                 environment().updateById(NotificationChannel.class, notificationChannelId,
                         new Update().set("sendCheck", false));
@@ -746,7 +737,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                         NotifChannelDef.Builder ncdb = NotifChannelDef.newBuilder(
                                 notificationChannel.getNotificationType(), notificationChannel.getSenderName(),
-                                notificationChannel.getSenderContact(), notificationChannel.getNextTransmissionOn(),
+                                notificationChannel.getSenderContact(),
                                 DataUtils.convert(int.class, notificationChannel.getMessagesPerMinute()), name,
                                 notificationChannel.getDescription(), notificationChannel.getId(),
                                 notificationChannel.getVersionNo());

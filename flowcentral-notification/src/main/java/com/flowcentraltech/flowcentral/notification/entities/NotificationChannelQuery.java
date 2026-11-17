@@ -19,7 +19,9 @@ import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.core.criterion.AndBuilder;
+import com.tcdng.unify.core.criterion.OrBuilder;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Query;
 
 /**
  * Notification channel query class;
@@ -30,6 +32,10 @@ import com.tcdng.unify.core.criterion.Restriction;
 public class NotificationChannelQuery extends BaseStatusEntityQuery<NotificationChannel> {
 
     private static final Restriction READY_TO_SEND = new AndBuilder()
+                                                                .restriction(new OrBuilder()
+                                                                                .isnull("nextTransmissionOn")
+                                                                                .less("nextTransmissionOn", Query.expOfNow())
+                                                                                .build())
                                                                 .equals("sendCheck", false)
                                                                 .equals("status", RecordStatus.ACTIVE)
                                                                 .build();

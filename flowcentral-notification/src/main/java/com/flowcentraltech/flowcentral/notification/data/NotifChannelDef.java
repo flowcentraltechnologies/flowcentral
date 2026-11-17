@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.notification.data;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,21 +40,18 @@ public class NotifChannelDef extends BaseNamedDef {
 
     private Map<String, NotifChannelPropDef> propDefMap;
 
-    private Date nextTransmissionOn;
-
     private int messagesPerMinute;
 
     private boolean channelConfigured;
 
     private NotifChannelDef(NotifType notifType, String senderName, String senderContact,
-            Map<String, NotifChannelPropDef> propDefMap, Date nextTransmissionOn, int messagesPerMinute, String name,
+            Map<String, NotifChannelPropDef> propDefMap, int messagesPerMinute, String name,
             String description, Long id, long version) {
         super(name, description, id, version);
         this.notifType = notifType;
         this.senderName = senderName;
         this.senderContact = senderContact;
         this.propDefMap = propDefMap;
-        this.nextTransmissionOn = nextTransmissionOn;
         this.messagesPerMinute = messagesPerMinute;
 
     }
@@ -72,20 +68,12 @@ public class NotifChannelDef extends BaseNamedDef {
         return senderContact;
     }
 
-    public Date getNextTransmissionOn() {
-        return nextTransmissionOn;
-    }
-
     public int getMessagesPerMinute() {
         return messagesPerMinute;
     }
 
     public boolean isThrottled() {
-        return messagesPerMinute > 0 && nextTransmissionOn != null;
-    }
-
-    public boolean isThrottledAndIsNotDue(Date now) {
-        return isThrottled() && nextTransmissionOn.compareTo(now) > 0;
+        return messagesPerMinute > 0;
     }
 
     public boolean isChannelConfigured() {
@@ -129,9 +117,9 @@ public class NotifChannelDef extends BaseNamedDef {
         return notifChannelPropDef;
     }
 
-    public static Builder newBuilder(NotifType type, String senderName, String senderContact, Date nextTransmissionOn,
+    public static Builder newBuilder(NotifType type, String senderName, String senderContact,
             int messagesPerMinute, String name, String description, Long id, long version) {
-        return new Builder(type, senderName, senderContact, nextTransmissionOn, messagesPerMinute, name, description,
+        return new Builder(type, senderName, senderContact, messagesPerMinute, name, description,
                 id, version);
     }
 
@@ -149,21 +137,18 @@ public class NotifChannelDef extends BaseNamedDef {
 
         private String description;
 
-        private Date nextTransmissionOn;
-
         private int messagesPerMinute;
 
         private Long id;
 
         private long version;
 
-        public Builder(NotifType type, String senderName, String senderContact, Date nextTransmissionOn,
+        public Builder(NotifType type, String senderName, String senderContact,
                 int messagesPerMinute, String name, String description, Long id, long version) {
             this.type = type;
             this.senderName = senderName;
             this.senderContact = senderContact;
             this.propDefMap = new HashMap<String, NotifChannelPropDef>();
-            this.nextTransmissionOn = nextTransmissionOn;
             this.messagesPerMinute = messagesPerMinute;
             this.name = name;
             this.description = description;
@@ -182,7 +167,7 @@ public class NotifChannelDef extends BaseNamedDef {
 
         public NotifChannelDef build() {
             return new NotifChannelDef(type, senderName, senderContact, Collections.unmodifiableMap(propDefMap),
-                    nextTransmissionOn, messagesPerMinute, name, description, id, version);
+                    messagesPerMinute, name, description, id, version);
         }
     }
 }
