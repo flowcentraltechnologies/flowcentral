@@ -32,22 +32,22 @@ import com.tcdng.unify.core.data.JobFetchInfo;
  */
 @Transactional
 @Component("triggerscheduledtask-jobhandler")
-public class TriggerScheduledTaskJobHandler extends AbstractSystemJobHandler {
+public class TriggerScheduledTaskJobHandler extends AbstractScheduledTaskJobHandler {
 
     @Override
-    public void performWork(Long scheduledTaskId) throws UnifyException {
-        system().triggerScheduledTasks(scheduledTaskId);
+    public void performWork(String payloadId) throws UnifyException {
+        system().triggerScheduledTasks(Long.valueOf(payloadId));
     }
 
     @Override
-    public void notifyFail(Long scheduledTaskId) throws UnifyException {
-        environment().updateById(ScheduledTask.class, scheduledTaskId, new Update().set("triggerCheck", false));
+    public void notifyFail(String payloadId) throws UnifyException {
+        environment().updateById(ScheduledTask.class, Long.valueOf(payloadId), new Update().set("triggerCheck", false));
     }
 
     @Override
     protected boolean ready() throws UnifyException {
-         return super.ready() && system().getSysParameterValue(boolean.class,
-                 SystemModuleSysParamConstants.SYSTEM_SCHEDULER_ENABLED);
+        return super.ready()
+                && system().getSysParameterValue(boolean.class, SystemModuleSysParamConstants.SYSTEM_SCHEDULER_ENABLED);
     }
 
     @Override

@@ -31,15 +31,15 @@ import com.tcdng.unify.core.data.JobFetchInfo;
  */
 @Transactional
 @Component("autoloading-jobhandler")
-public class AutoloadingJobHandler extends AbstractWorkflowJobHandler {
+public class AutoloadingJobHandler extends AbstractWorkflowStepJobHandler {
 
     @Override
-    public final void performWork(Long wfStepId) throws UnifyException {
-        workflow().autoLoadWorkItems(wfStepId);
+    public final void performWork(String payloadId) throws UnifyException {
+        workflow().autoLoadWorkItems(payloadId);
     }
 
     @Override
-    public final void notifyFail(Long wfStepId) throws UnifyException {
+    public final void notifyFail(String payloadId) throws UnifyException {
         
     }
 

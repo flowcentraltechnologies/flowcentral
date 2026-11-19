@@ -30,15 +30,15 @@ import com.tcdng.unify.core.data.JobFetchInfo;
  */
 @Transactional
 @Component("sendworkitemreminder-jobhandler")
-public class SendWorkItemNotifJobHandler extends AbstractWorkflowJobHandler {
+public class SendWorkItemNotifJobHandler extends AbstractWorkflowStepJobHandler {
 
     @Override
-    public final void performWork(Long wfStepId) throws UnifyException {
-        workflow().sendWorkItemAlerts(wfStepId);
+    public final void performWork(String payloadId) throws UnifyException {
+        workflow().sendWorkItemAlerts(payloadId);
     }
 
     @Override
-    public final void notifyFail(Long wfStepId) throws UnifyException {
+    public final void notifyFail(String payloadId) throws UnifyException {
         
     }
 

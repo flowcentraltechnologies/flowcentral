@@ -30,15 +30,15 @@ import com.tcdng.unify.core.data.JobFetchInfo;
  */
 @Transactional
 @Component("ejectdelayedworkitem-jobhandler")
-public class EjectDelayedWorkItemJobHandler extends AbstractWorkflowJobHandler {
+public class EjectDelayedWorkItemJobHandler extends AbstractWorkflowStepJobHandler {
 
     @Override
-    public void performWork(Long wfStepId) throws UnifyException {
-        workflow().ejectWorkItems(wfStepId);
+    public void performWork(String payloadId) throws UnifyException {
+        workflow().ejectWorkItems(payloadId);
     }
 
     @Override
-    public void notifyFail(Long wfStepId) throws UnifyException {
+    public void notifyFail(String payloadId) throws UnifyException {
 
     }
 

@@ -570,30 +570,30 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     /**
      * Sends step work item alert.
      * 
-     * @param wfStepId
-     *               the workflow step ID
+     * @param payloadId
+     *               the payload ID
      * @throws UnifyException
      *                        if an error occurs
      */
-    void sendWorkItemAlerts(Long wfStepId) throws UnifyException;
+    void sendWorkItemAlerts(String payloadId) throws UnifyException;
 
     /**
      * Ejects step work items.
      * 
-     * @param wfStepId
-     *               the workflow step ID
+     * @param payloadId
+     *               the payload ID
      * @throws UnifyException
      *                        if an error occurs
      */
-    void ejectWorkItems(Long wfStepId) throws UnifyException;
+    void ejectWorkItems(String payloadId) throws UnifyException;
 
     /**
      * Performs auto-loading of step work items.
      * 
-     * @param wfStepId
-     *               the workflow step ID
+     * @param payloadId
+     *               the payload ID
      * @throws UnifyException
      *                        if an error occurs
      */
-    void autoLoadWorkItems(Long wfStepId) throws UnifyException;
+    void autoLoadWorkItems(String payloadId) throws UnifyException;
 }

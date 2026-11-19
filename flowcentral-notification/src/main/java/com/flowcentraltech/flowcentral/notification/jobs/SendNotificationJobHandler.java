@@ -35,13 +35,13 @@ import com.tcdng.unify.core.data.JobFetchInfo;
 public class SendNotificationJobHandler extends AbstractNotificationJobHandler {
 
     @Override
-    public void performWork(Long notificationChannelId) throws UnifyException {
-        notification().sendNotifications(notificationChannelId);
+    public void performWork(String payloadId) throws UnifyException {
+        notification().sendNotifications(Long.valueOf(payloadId));
     }
 
     @Override
-    public void notifyFail(Long notificationChannelId) throws UnifyException {
-        environment().updateById(NotificationChannel.class, notificationChannelId,
+    public void notifyFail(String payloadId) throws UnifyException {
+        environment().updateById(NotificationChannel.class, Long.valueOf(payloadId),
                 new Update().set("sendCheck", false));
     }
 
