@@ -52,7 +52,6 @@ public class AutoloadingJobHandler extends AbstractWorkflowStepJobHandler {
     @Override
     protected final JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
-                .title("Perform workflow auto-loading")
                 .claimQuery(new WfStepQuery().autoLoadingCheckDue())
                 .claimUpdate(new Update().setNowWithOffset("autoLoadingCheckOn", 20))
                 .fetchBatchSize(64)

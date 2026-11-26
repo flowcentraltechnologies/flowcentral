@@ -53,10 +53,9 @@ public class TriggerScheduledTaskJobHandler extends AbstractScheduledTaskJobHand
     @Override
     protected JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
-                .title("Trigger scheduled task")
                 .claimQuery(new ScheduledTaskQuery().readyToRun())
                 .claimUpdate(new Update().set("triggerCheck", true))
-                .fetchBatchSize(16)
+                .fetchBatchSize(32)
                 .jobMaxAttempts(4)
                 .build();
     }

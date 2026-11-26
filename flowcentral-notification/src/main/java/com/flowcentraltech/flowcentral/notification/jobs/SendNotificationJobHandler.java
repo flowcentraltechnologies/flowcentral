@@ -54,7 +54,6 @@ public class SendNotificationJobHandler extends AbstractNotificationJobHandler {
     @Override
     protected JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
-                .title("Send notifications")
                 .claimQuery(new NotificationChannelQuery().readyToSend())
                 .claimUpdate(new Update().set("sendCheck", true))
                 .fetchBatchSize(4)

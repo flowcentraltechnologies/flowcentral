@@ -596,4 +596,14 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     void autoLoadWorkItems(String payloadId) throws UnifyException;
+
+    /**
+     * Performs workflow transition
+     * 
+     * @param payloadId
+     *                  the payload
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void performWfTransition(String payloadId) throws UnifyException;
 }

@@ -38,7 +38,10 @@ public class WfTransitionQueue extends BaseEntity {
     private Date processingDt;
 
     @Column
-    private Boolean flowTransition;
+    private boolean flowTransition;
+
+    @Column
+    private boolean failedTransition;
 
     @Override
     public String getDescription() {
@@ -61,12 +64,20 @@ public class WfTransitionQueue extends BaseEntity {
         this.processingDt = processingDt;
     }
 
-    public Boolean getFlowTransition() {
+    public boolean isFlowTransition() {
         return flowTransition;
     }
 
-    public void setFlowTransition(Boolean flowTransition) {
+    public void setFlowTransition(boolean flowTransition) {
         this.flowTransition = flowTransition;
+    }
+
+    public boolean isFailedTransition() {
+        return failedTransition;
+    }
+
+    public void setFailedTransition(boolean failedTransition) {
+        this.failedTransition = failedTransition;
     }
 
 }

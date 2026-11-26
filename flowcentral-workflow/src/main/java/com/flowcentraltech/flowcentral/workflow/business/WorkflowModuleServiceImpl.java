@@ -134,7 +134,6 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserActionQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueue;
-import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueueQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizard;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardItemQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardQuery;
@@ -159,10 +158,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.annotation.Periodic;
-import com.tcdng.unify.core.annotation.PeriodicType;
 import com.tcdng.unify.core.annotation.Synchronized;
-import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
@@ -196,8 +192,6 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component(WorkflowModuleNameConstants.WORKFLOW_MODULE_SERVICE)
 public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         implements WorkflowModuleService, ApplicationAppletDefProvider, PortalWorkflowProvider {
-
-    private static final String WFTRANSITION_QUEUE_LOCK = "wf::transitionqueue-lock";
 
     private static final String WFWORKFLOWCOPY_LOCK = "wf::workflowcopy-lock";
 
@@ -1543,80 +1537,38 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 wfItem.getHeldBy());
     }
 
-    @Periodic(PeriodicType.FASTEST)
-    public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
-        List<WfTransitionQueue> pendingList = null;
-        if (tryGrabLock(WFTRANSITION_QUEUE_LOCK)) {
-            try {
-                final int batchSize = appletUtil.system().getSysParameterValue(int.class,
-                        WorkflowModuleSysParamConstants.WFTRANSITION_PROCESSING_BATCH_SIZE);
-                pendingList = environment()
-                        .findAll(new WfTransitionQueueQuery().unprocessed().orderById().limit(batchSize));
-                if (!DataUtils.isBlank(pendingList)) {
-                    logInfo("Fetched [{0}] transition queue items...", pendingList.size());
-                    List<Long> pendingIdList = new ArrayList<Long>();
-                    for (WfTransitionQueue wfTransitionQueue : pendingList) {
-                        pendingIdList.add(wfTransitionQueue.getId());
-                    }
-
-                    environment().updateAll(new WfTransitionQueueQuery().idIn(pendingIdList),
-                            new Update().add("processingDt", getNow()));
-                }
-                commitTransactions();
-            } finally {
-                releaseLock(WFTRANSITION_QUEUE_LOCK);
-            }
-        }
-
-        if (!DataUtils.isBlank(pendingList)) {
-            logInfo("Performing workflow transition for [{0}] items...", pendingList.size());
-            for (WfTransitionQueue wfTransitionQueue : pendingList) {
-                if (!performWfTransition(wfTransitionQueue)) {
-                    wfTransitionQueue.setProcessingDt(null);
-                    environment().updateByIdVersion(wfTransitionQueue);
-                    commitTransactions();
-                }
-            }
-        }
-    }
-
     @SuppressWarnings("unchecked")
-    @Transactional(TransactionAttribute.REQUIRES_NEW)
-    public boolean performWfTransition(WfTransitionQueue wfTransitionQueue) throws UnifyException {
+    @Override
+    public void performWfTransition(String payloadId) throws UnifyException {
+        final Long wfTransitionQueueId = Long.valueOf(payloadId);
+        final WfTransitionQueue wfTransitionQueue = environment().list(WfTransitionQueue.class, wfTransitionQueueId);
         final WfItem wfItem = environment().list(WfItem.class, wfTransitionQueue.getWfItemId());
-        if (wfItem == null) {
-            return true;
-        }
+        if (wfItem != null) {
+            final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+            final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
+            WorkEntity wfEntityInst = (WorkEntity) environment()
+                    .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
+            if (wfEntityInst != null) {
+                try {
+                    final String forwardedBy = wfItem.getForwardedBy() != null ? wfItem.getForwardedBy()
+                            : DefaultApplicationConstants.SYSTEM_LOGINID;
+                    final UserToken userToken = UserToken.newBuilder().userLoginId(forwardedBy)
+                            .userName(wfItem.getForwardedByName() != null ? wfItem.getForwardedByName()
+                                    : DefaultApplicationConstants.SYSTEM_FULLNAME)
+                            .branchCode(wfEntityInst.getWorkBranchCode())
+                            .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(forwardedBy)).build();
+                    getSessionContext().setUserToken(userToken);
 
-        final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
-        WorkEntity wfEntityInst = (WorkEntity) environment()
-                .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
-        if (wfEntityInst != null) {
-            try {
-                final String forwardedBy = wfItem.getForwardedBy() != null ? wfItem.getForwardedBy()
-                        : DefaultApplicationConstants.SYSTEM_LOGINID;
-                final UserToken userToken = UserToken.newBuilder().userLoginId(forwardedBy)
-                        .userName(wfItem.getForwardedByName() != null ? wfItem.getForwardedByName()
-                                : DefaultApplicationConstants.SYSTEM_FULLNAME)
-                        .branchCode(wfEntityInst.getWorkBranchCode())
-                        .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(forwardedBy)).build();
-                getSessionContext().setUserToken(userToken);
-
-                final TransitionItem transitionItem = createTransitionItem(wfItem, wfDef, wfEntityInst,
-                        Boolean.TRUE.equals(wfTransitionQueue.getFlowTransition()));
-                if (doWfTransition(transitionItem)) {
-                    environment().deleteById(wfTransitionQueue);
-                    return true;
+                    final TransitionItem transitionItem = createTransitionItem(wfItem, wfDef, wfEntityInst,
+                            wfTransitionQueue.isFlowTransition());
+                    doWfTransition(transitionItem);
+                } catch (Exception e) {
+                    logError(e);
                 }
-            } catch (Exception e) {
-                logError(e);
             }
-
-            return false;
         }
 
-        return true;
+        environment().deleteById(wfTransitionQueue);
     }
 
     @Override
