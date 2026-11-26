@@ -99,7 +99,6 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.UserTokenProvider;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
@@ -461,7 +460,16 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             password = passwordCryptograph.encrypt(password);
             if (user.getPassword() == null || !user.getPassword().equals(password)) {
                 if (accountLockingEnabled && !isUserReserved) { // No locking for reserved users
-                    updateLoginAttempts(user);
+                    int loginAttempts = user.getLoginAttempts() + 1;
+                    Update update = new Update();
+                    update.add("loginAttempts", Integer.valueOf(loginAttempts));
+                    if (systemModuleService.getSysParameterValue(int.class,
+                            SecurityModuleSysParamConstants.MAXIMUM_LOGIN_TRIES) <= loginAttempts) {
+                        update.add("loginLocked", Boolean.TRUE);
+                    }
+
+                    environment().updateAll(new UserQuery().id(user.getId()), update);
+                    commitTransactions();
                 }
 
                 throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
@@ -564,19 +572,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPERVISORFLAG, user.getSupervisor());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SHORTCUTDECK, null);
         return user;
-    }
-
-    @Transactional(TransactionAttribute.REQUIRES_NEW)
-    public void updateLoginAttempts(User user) throws UnifyException {
-        int loginAttempts = user.getLoginAttempts() + 1;
-        Update update = new Update();
-        update.add("loginAttempts", Integer.valueOf(loginAttempts));
-        if (systemModuleService.getSysParameterValue(int.class,
-                SecurityModuleSysParamConstants.MAXIMUM_LOGIN_TRIES) <= loginAttempts) {
-            update.add("loginLocked", Boolean.TRUE);
-        }
-
-        environment().updateAll(new UserQuery().id(user.getId()), update);
     }
 
     @Override
