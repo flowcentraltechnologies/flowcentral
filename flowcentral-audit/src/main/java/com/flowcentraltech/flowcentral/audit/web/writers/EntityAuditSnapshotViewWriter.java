@@ -49,11 +49,6 @@ public class EntityAuditSnapshotViewWriter extends AbstractWidgetWriter {
     private AuditModuleService auditModuleService;
 
     @Override
-    protected void doWritePaperStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
-        doWriteStructureAndContent(writer, widget);
-    }
-
-    @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         EntityAuditSnapshotViewWidget entityAuditSnapshotViewWidget = (EntityAuditSnapshotViewWidget) widget;
         writer.write("<div");

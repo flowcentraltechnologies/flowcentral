@@ -42,11 +42,6 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractWidgetWriter;
 public class CommentListingWriter extends AbstractWidgetWriter {
 
     @Override
-    protected void doWritePaperStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
-        doWriteStructureAndContent(writer, widget);
-    }
-
-    @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         CommentListing commentListing = (CommentListing) widget;
         writer.write("<div ");

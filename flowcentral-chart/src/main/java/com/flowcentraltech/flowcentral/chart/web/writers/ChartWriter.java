@@ -58,11 +58,6 @@ public class ChartWriter extends AbstractWidgetWriter {
     private AppletUtilities appletUtilities;
 
     @Override
-    protected void doWritePaperStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
-        doWriteStructureAndContent(writer, widget);
-    }
-
-    @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         ChartWidget chartWidget = (ChartWidget) widget;
         final ChartConfiguration chartConfiguration = chartWidget.getChartConfiguration();
