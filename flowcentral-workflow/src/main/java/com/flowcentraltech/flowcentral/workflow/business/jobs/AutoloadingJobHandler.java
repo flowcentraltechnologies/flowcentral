@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.workflow.business.jobs;
 
-import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -33,29 +32,23 @@ import com.tcdng.unify.core.data.JobFetchInfo;
 @Component("autoloading-jobhandler")
 public class AutoloadingJobHandler extends AbstractWorkflowStepJobHandler {
 
-    @Override
-    public final void performWork(String payloadId) throws UnifyException {
-        workflow().autoLoadWorkItems(payloadId);
-    }
+    private static final int AUTOLOADING_CLAIM_SECONDS = 24 * 60 * 60; // 24 Hours
+
+    private static final int AUTOLOADING_CHECK_SECONDS = 25; // 25 seconds
 
     @Override
-    public final void notifyFail(String payloadId) throws UnifyException {
-        
-    }
-
-    @Override
-    protected boolean ready() throws UnifyException {
-        return super.ready() && system().getSysParameterValue(boolean.class,
-                WorkflowModuleSysParamConstants.WF_ENABLE_AUTOLOADING);
+    protected void process(Long wfStepId) throws UnifyException {
+        workflow().autoLoadWorkItems(wfStepId);
     }
 
     @Override
     protected final JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
                 .claimQuery(new WfStepQuery().autoLoadingCheckDue())
-                .claimUpdate(new Update().setNowWithOffset("autoLoadingCheckOn", 20))
-                .fetchBatchSize(64)
-                .jobMaxAttempts(4)
+                .claimUpdate(new Update().setNowWithOffset("autoLoadingCheckOn", AUTOLOADING_CLAIM_SECONDS))
+                .passUpdate(new Update().setNowWithOffset("autoLoadingCheckOn", AUTOLOADING_CHECK_SECONDS))
+                .failUpdate(new Update().setNowWithOffset("autoLoadingCheckOn", AUTOLOADING_CHECK_SECONDS))
+                .fetchBatchSize(16)
                 .build();
     }
     

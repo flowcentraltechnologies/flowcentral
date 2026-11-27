@@ -16,10 +16,12 @@
 package com.flowcentraltech.flowcentral.workflow.business.jobs;
 
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueue;
 import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueueQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.constant.JobItemStatus;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.JobFetchInfo;
 
@@ -33,14 +35,13 @@ import com.tcdng.unify.core.data.JobFetchInfo;
 @Component("workflowtransition-jobhandler")
 public class WorkflowTransitionJobHandler extends AbstractWorkflowJobHandler {
 
-    @Override
-    public final void performWork(String payloadId) throws UnifyException {
-        workflow().performWfTransition(payloadId);
+    public WorkflowTransitionJobHandler() {
+        super(WfTransitionQueue.class);
     }
 
     @Override
-    public final void notifyFail(String payloadId) throws UnifyException {
-        
+    protected void process(Long wfTransitionQueueId) throws UnifyException {
+        workflow().performWfTransition(wfTransitionQueueId);
     }
 
     @Override
@@ -50,8 +51,9 @@ public class WorkflowTransitionJobHandler extends AbstractWorkflowJobHandler {
         return JobFetchInfo.newBuilder()
                 .claimQuery(new WfTransitionQueueQuery().unprocessed())
                 .claimUpdate(new Update().setNow("processingDt"))
+                .passUpdate(new Update().set("status", JobItemStatus.COMPLETED))
+                .failUpdate(new Update().set("status", JobItemStatus.ERROR))
                 .fetchBatchSize(batchSize)
-                .jobMaxAttempts(1)
                 .build();
     }
     

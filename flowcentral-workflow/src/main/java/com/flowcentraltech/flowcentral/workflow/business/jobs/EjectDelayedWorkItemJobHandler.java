@@ -32,23 +32,23 @@ import com.tcdng.unify.core.data.JobFetchInfo;
 @Component("ejectdelayedworkitem-jobhandler")
 public class EjectDelayedWorkItemJobHandler extends AbstractWorkflowStepJobHandler {
 
-    @Override
-    public void performWork(String payloadId) throws UnifyException {
-        workflow().ejectWorkItems(payloadId);
-    }
+    private static final int EJECT_CLAIM_SECONDS = 24 * 60 * 60; // 24 Hours
+
+    private static final int EJECT_CHECK_SECONDS = 25; // 25 seconds
 
     @Override
-    public void notifyFail(String payloadId) throws UnifyException {
-
+    protected void process(Long wfStepId) throws UnifyException {
+        workflow().ejectWorkItems(wfStepId);
     }
 
     @Override
     protected JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
                     .claimQuery(new WfStepQuery().ejectionCheckDue())
-                    .claimUpdate(new Update().setNowWithOffset("ejectCheckOn", 20))
-                    .fetchBatchSize(64)
-                    .jobMaxAttempts(4)
+                    .claimUpdate(new Update().setNowWithOffset("ejectCheckOn", EJECT_CLAIM_SECONDS))
+                    .passUpdate(new Update().setNowWithOffset("ejectCheckOn", EJECT_CHECK_SECONDS))
+                    .failUpdate(new Update().setNowWithOffset("ejectCheckOn", EJECT_CHECK_SECONDS))
+                    .fetchBatchSize(16)
                     .build();
     }
 

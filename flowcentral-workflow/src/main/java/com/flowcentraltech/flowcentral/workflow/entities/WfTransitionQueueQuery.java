@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
+import com.tcdng.unify.core.constant.JobItemStatus;
 
 /**
  * Workflow transition queue.
@@ -31,7 +32,10 @@ public class WfTransitionQueueQuery extends BaseEntityQuery<WfTransitionQueue> {
     }
 
     public WfTransitionQueueQuery unprocessed() {
-        return (WfTransitionQueueQuery) isnull("processingDt");
+        return (WfTransitionQueueQuery) isnull("processingDt").equals("status", JobItemStatus.PENDING);
     }
 
+    public WfTransitionQueueQuery status(JobItemStatus status) {
+        return (WfTransitionQueueQuery) equals("status", status);
+    }
 }

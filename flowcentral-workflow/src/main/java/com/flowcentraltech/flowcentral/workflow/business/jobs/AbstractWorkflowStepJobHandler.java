@@ -15,14 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.business.jobs;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
-import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
-import com.tcdng.unify.core.UnifyException;
 
 /**
  * Base class for workflow step job handlers.
@@ -32,23 +25,8 @@ import com.tcdng.unify.core.UnifyException;
  */
 public abstract class AbstractWorkflowStepJobHandler extends AbstractWorkflowJobHandler {
 
-    @Override
-    protected final List<String> getPayloadIds(List<Long> workItemIds) throws UnifyException {
-        if (!workItemIds.isEmpty()) {
-            List<WfStep> steps = workflow().findWorkflowSteps((WfStepQuery) new WfStepQuery().idIn(workItemIds)
-                    .select("workflowName", "applicationName", "name"));
-            if (!steps.isEmpty()) {
-                List<String> payloadIds = new ArrayList<String>();
-                for (WfStep wfStep : steps) {
-                    payloadIds.add(ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
-                            wfStep.getWorkflowName(), wfStep.getName()));
-                }
-
-                return payloadIds;
-            }
-        }
-
-        return Collections.emptyList();
+    public AbstractWorkflowStepJobHandler() {
+        super(WfStep.class);
     }
 
 }

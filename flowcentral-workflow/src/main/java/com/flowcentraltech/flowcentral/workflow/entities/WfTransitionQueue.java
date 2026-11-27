@@ -19,8 +19,10 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.tcdng.unify.common.annotation.Index;
 import com.tcdng.unify.common.annotation.Table;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.constant.JobItemStatus;
 
 /**
  * Workflow transition queue entity.
@@ -28,9 +30,14 @@ import com.tcdng.unify.core.annotation.Column;
  * @author FlowCentral Technologies Limited
  * @since 4.1
  */
-@Table(name = "FC_WORKTRANSITIONQUEUE")
+@Table(name = "FC_WORKTRANSITIONQUEUE",
+        indexes = {
+                @Index("status")})
 public class WfTransitionQueue extends BaseEntity {
 
+    @Column
+    private JobItemStatus status;
+    
     @Column
     private Long wfItemId;
 
@@ -39,9 +46,6 @@ public class WfTransitionQueue extends BaseEntity {
 
     @Column
     private boolean flowTransition;
-
-    @Column
-    private boolean failedTransition;
 
     @Override
     public String getDescription() {
@@ -72,12 +76,12 @@ public class WfTransitionQueue extends BaseEntity {
         this.flowTransition = flowTransition;
     }
 
-    public boolean isFailedTransition() {
-        return failedTransition;
+    public JobItemStatus getStatus() {
+        return status;
     }
 
-    public void setFailedTransition(boolean failedTransition) {
-        this.failedTransition = failedTransition;
+    public void setStatus(JobItemStatus status) {
+        this.status = status;
     }
 
 }

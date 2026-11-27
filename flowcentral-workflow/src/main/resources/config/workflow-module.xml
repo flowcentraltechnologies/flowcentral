@@ -19,10 +19,10 @@
 
 	<!-- System Parameters -->
 	<sysParameters>
-		<sysParameter code="WF-0001" defaultVal="64"
+		<sysParameter code="WF-0001" defaultVal="32"
 			description="$m{workflow.sysparam.processingbatchsize}"
 			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
-		<sysParameter code="WF-0002" defaultVal="64"
+		<sysParameter code="WF-0002" defaultVal="32"
 			description="$m{workflow.sysparam.autoloadingbatchsize}"
 			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
 		<sysParameter code="WF-0003" defaultVal="true"
@@ -31,10 +31,10 @@
 		<sysParameter code="WF-0004" defaultVal="true"
 			description="$m{workflow.sysparam.enableautoloading}"
 			editor="!ui-select list:booleanlist" type="BOOLEAN" editable="true" />
-		<sysParameter code="WF-0005" defaultVal="64"
+		<sysParameter code="WF-0005" defaultVal="32"
 			description="$m{workflow.sysparam.itemalertbatchsize}"
 			editor="!ui-integer precision:2" type="NUMBER" editable="true" />
-		<sysParameter code="WF-0006" defaultVal="128"
+		<sysParameter code="WF-0006" defaultVal="32"
 			description="$m{workflow.sysparam.itemejectionbatchsize}"
 			editor="!ui-integer precision:4" type="NUMBER" editable="true" />
 		<sysParameter code="WF-0007" defaultVal="true"

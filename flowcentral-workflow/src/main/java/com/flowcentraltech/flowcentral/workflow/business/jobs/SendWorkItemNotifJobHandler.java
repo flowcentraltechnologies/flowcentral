@@ -32,23 +32,23 @@ import com.tcdng.unify.core.data.JobFetchInfo;
 @Component("sendworkitemreminder-jobhandler")
 public class SendWorkItemNotifJobHandler extends AbstractWorkflowStepJobHandler {
 
-    @Override
-    public final void performWork(String payloadId) throws UnifyException {
-        workflow().sendWorkItemAlerts(payloadId);
-    }
+    private static final int REMINDER_CLAIM_SECONDS = 24 * 60 * 60; // 24 Hours
+
+    private static final int REMINDER_CHECK_SECONDS = 25; // 25 seconds
 
     @Override
-    public final void notifyFail(String payloadId) throws UnifyException {
-        
+    protected void process(Long wfStepId) throws UnifyException {
+        workflow().sendWorkItemAlerts(wfStepId);
     }
 
     @Override
     protected final JobFetchInfo getJobFetchInfo() throws UnifyException {
         return JobFetchInfo.newBuilder()
                 .claimQuery(new WfStepQuery().reminderCheckDue())
-                .claimUpdate(new Update().setNowWithOffset("reminderCheckOn", 20))
-                .fetchBatchSize(64)
-                .jobMaxAttempts(4)
+                .claimUpdate(new Update().setNowWithOffset("reminderCheckOn", REMINDER_CLAIM_SECONDS))
+                .passUpdate(new Update().setNowWithOffset("ejectCheckOn", REMINDER_CHECK_SECONDS))
+                .failUpdate(new Update().setNowWithOffset("ejectCheckOn", REMINDER_CHECK_SECONDS))
+                .fetchBatchSize(16)
                 .build();
     }
     

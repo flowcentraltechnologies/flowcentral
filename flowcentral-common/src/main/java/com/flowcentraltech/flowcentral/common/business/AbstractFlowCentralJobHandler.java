@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.common.business;
 
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.system.AbstractClusterJobHandler;
 
@@ -28,6 +29,10 @@ public abstract class AbstractFlowCentralJobHandler extends AbstractClusterJobHa
 
     @Configurable
     private EnvironmentService environmentService;
+
+    public AbstractFlowCentralJobHandler(Class<? extends Entity> payloadEntityClass) {
+        super(payloadEntityClass);
+    }
 
     protected final EnvironmentService environment() {
         return environmentService;

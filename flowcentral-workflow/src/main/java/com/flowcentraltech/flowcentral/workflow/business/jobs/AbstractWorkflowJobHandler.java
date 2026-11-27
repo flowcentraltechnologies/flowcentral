@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.business.jobs;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralJobHandler;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
-import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.annotation.Configurable;
 
 /**
@@ -35,17 +35,16 @@ public abstract class AbstractWorkflowJobHandler extends AbstractFlowCentralJobH
     @Configurable
     private SystemModuleService systemModuleService;
 
+    public AbstractWorkflowJobHandler(Class<? extends Entity> payloadEntityClass) {
+        super(payloadEntityClass);
+    }
+
     protected final WorkflowModuleService workflow() {
         return workflowModuleService;
     }
 
     protected final SystemModuleService system() {
         return systemModuleService;
-    }
-
-    @Override
-    protected boolean ready() throws UnifyException {
-        return workflowModuleService != null && systemModuleService != null;
     }
 
 }

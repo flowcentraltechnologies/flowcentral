@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -134,6 +133,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserActionQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueue;
+import com.flowcentraltech.flowcentral.workflow.entities.WfTransitionQueueQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizard;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardItemQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardQuery;
@@ -162,6 +162,7 @@ import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.application.InstallationContext;
 import com.tcdng.unify.core.constant.FrequencyUnit;
+import com.tcdng.unify.core.constant.JobItemStatus;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.OrBuilder;
@@ -1340,61 +1341,63 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @SuppressWarnings("unchecked")
     @Override
-    public void ejectWorkItems(String payloadId) throws UnifyException {
-        final ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(payloadId);
-        final int batchSize = appletUtil.system().getSysParameterValue(int.class,
-                WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
-        final String workflowName = nameParts.getNormalLongName();
-        final String stepName = nameParts.getMinorName();
-        List<WfItem> wfItemList = environment().listAll(
-                new WfItemQuery().workflowName(workflowName).wfStepName(stepName).ejectionDue().limit(batchSize));
-        List<Long> ejected = Collections.emptyList();
-        if (!DataUtils.isBlank(wfItemList)) {
-            logInfo("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
-            ejected = new ArrayList<Long>();
+    public void ejectWorkItems(final Long wfStepId) throws UnifyException {
+        final WfStep wfStep = environment().list(new WfStepQuery().id(wfStepId).select("applicationName",
+                "workflowName", "name", "ejectionRestriction"));
+        if (wfStep != null) {
+            final int batchSize = appletUtil.system().getSysParameterValue(int.class,
+                    WorkflowModuleSysParamConstants.WF_WORKITEM_EJECTION_BATCH_SIZE);
+            final String workflowName = ApplicationNameUtils.ensureLongNameReference(wfStep.getApplicationName(),
+                    wfStep.getWorkflowName());
+            final String stepName = wfStep.getName();
+            List<WfItem> wfItemList = environment().listAll(
+                    new WfItemQuery().workflowName(workflowName).wfStepName(stepName).ejectionDue().limit(batchSize));
+            List<Long> ejected = Collections.emptyList();
+            if (!DataUtils.isBlank(wfItemList)) {
+                logInfo("Ejecting [{0}] delayed work item(s) based on delay minutes...", wfItemList.size());
+                ejected = new ArrayList<Long>();
 
-            for (WfItem wfItem : wfItemList) {
-                final Long wfItemId = wfItem.getId();
-                final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-                final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+                for (WfItem wfItem : wfItemList) {
+                    final Long wfItemId = wfItem.getId();
+                    final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+                    final WfStepDef currentWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+                    final String nextStepName = currentWfStepDef.getNextStepName();
+
+                    final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
+                    ejectWfItem(wfItem, nextWfStepDef);
+                    ejected.add(wfItemId);
+                }
+            }
+
+            final String ejectionRestriction = wfStep.getEjectionRestriction();
+            if (!StringUtils.isBlank(ejectionRestriction)) {
+                final WfDef wfDef = getWfDef(workflowName);
+                final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
                 final String nextStepName = currentWfStepDef.getNextStepName();
 
                 final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
-                ejectWfItem(wfItem, nextWfStepDef);
-                ejected.add(wfItemId);
-            }
-        }
 
-        final Optional<String> optional = environment().valueOptional(String.class, "ejectionRestriction",
-                new WfStepQuery().applicationName(nameParts.getApplicationName())
-                        .workflowName(nameParts.getEntityName()).name(nameParts.getMinorName()));
-        if (optional.isPresent()) {
-            final WfDef wfDef = getWfDef(workflowName);
-            final WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
-            final String nextStepName = currentWfStepDef.getNextStepName();
+                final EntityClassDef entityDef = appletUtil.getEntityClassDef(wfDef.getEntity());
+                final Restriction restriction = wfDef.getFilterDef(ejectionRestriction).getFilterDef()
+                        .getRestriction(entityDef.getEntityDef(), null, getNow());
+                if (restriction != null) {
+                    WfItemQuery wfItemQuery = (WfItemQuery) new WfItemQuery().workflowName(workflowName)
+                            .wfStepName(stepName).limit(batchSize);
+                    if (!DataUtils.isBlank(ejected)) {
+                        wfItemQuery.notamongst("id", ejected);
+                    }
 
-            final WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
-
-            final EntityClassDef entityDef = appletUtil.getEntityClassDef(wfDef.getEntity());
-            final Restriction restriction = wfDef.getFilterDef(optional.get()).getFilterDef()
-                    .getRestriction(entityDef.getEntityDef(), null, getNow());
-            if (restriction != null) {
-                WfItemQuery wfItemQuery = (WfItemQuery) new WfItemQuery().workflowName(workflowName)
-                        .wfStepName(stepName).limit(batchSize);
-                if (!DataUtils.isBlank(ejected)) {
-                    wfItemQuery.notamongst("id", ejected);
-                }
-
-                List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
-                if (!DataUtils.isBlank(workRecIds)) {
-                    List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
-                            Query.of((Class<? extends Entity>) entityDef.getEntityClass()).amongst("id", workRecIds)
-                                    .restriction(restriction));
-                    if (!DataUtils.isBlank(actWorkRecIds)) {
-                        wfItemList = environment().listAll(new WfItemQuery().amongst("workRecId", actWorkRecIds));
-                        logInfo("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
-                        for (WfItem wfItem : wfItemList) {
-                            ejectWfItem(wfItem, nextWfStepDef);
+                    List<Long> workRecIds = environment().valueList(Long.class, "workRecId", wfItemQuery);
+                    if (!DataUtils.isBlank(workRecIds)) {
+                        List<Long> actWorkRecIds = environment().valueList(Long.class, "id",
+                                Query.of((Class<? extends Entity>) entityDef.getEntityClass()).amongst("id", workRecIds)
+                                        .restriction(restriction));
+                        if (!DataUtils.isBlank(actWorkRecIds)) {
+                            wfItemList = environment().listAll(new WfItemQuery().amongst("workRecId", actWorkRecIds));
+                            logInfo("Ejecting [{0}] delayed work item(s) based on condition...", wfItemList.size());
+                            for (WfItem wfItem : wfItemList) {
+                                ejectWfItem(wfItem, nextWfStepDef);
+                            }
                         }
                     }
                 }
@@ -1416,17 +1419,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
     
     @Override
-    public void sendWorkItemAlerts(String payloadId) throws UnifyException {
-        final ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(payloadId);
-        final Optional<Long> optional = environment().valueOptional(Long.class, "id",
-                new WfStepQuery().applicationName(nameParts.getApplicationName())
-                        .workflowName(nameParts.getEntityName()).name(nameParts.getMinorName()));
-        if (optional.isPresent()) {
+    public void sendWorkItemAlerts(final Long wfStepId) throws UnifyException {
+        final WfStep wfStep = environment().list(new WfStepQuery().id(wfStepId).select("applicationName",
+                "workflowName", "name"));
+        if (wfStep != null) {
             final Date now = getNow();
             final int batchSize = appletUtil.system().getSysParameterValue(int.class,
                     WorkflowModuleSysParamConstants.WF_WORKITEM_ALERT_BATCH_SIZE);
-            final String workflowName = nameParts.getNormalLongName();
-            final String stepName = nameParts.getMinorName();
+            final String workflowName = ApplicationNameUtils.ensureLongNameReference(wfStep.getApplicationName(),
+                    wfStep.getWorkflowName());
+            final String stepName = wfStep.getName();
 
             List<WfItemAlert> wfItemAlertList = environment().listAll(new WfItemAlertQuery().workflowName(workflowName)
                     .wfStepName(stepName).reminderDue().limit(batchSize));
@@ -1508,26 +1510,28 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     
     @SuppressWarnings("unchecked")
     @Override
-    public void autoLoadWorkItems(String payloadId) throws UnifyException {
-        final ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(payloadId);
-        final Optional<String> optional = environment().valueOptional(String.class, "autoLoadConditionName",
-                new WfStepQuery().applicationName(nameParts.getApplicationName())
-                        .workflowName(nameParts.getEntityName()).name(nameParts.getMinorName()));
-        if (optional.isPresent()) {
-            final int batchSize = appletUtil.system().getSysParameterValue(int.class,
-                    WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
-            final String workflowName = nameParts.getNormalLongName();
-            WfDef wfDef = getWfDef(workflowName);
-            EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfDef.getEntity());
-            Restriction restriction = wfDef.getFilterDef(optional.get()).getFilterDef()
-                    .getRestriction(entityClassDef.getEntityDef(), null, getNow());
-            List<? extends WorkEntity> entityList = environment().listAll(Query
-                    .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass()).restriction(restriction)
-                    .restriction(new OrBuilder().equals("inWorkflow", Boolean.FALSE).isnull("inWorkflow").build())
-                    .order("id").limit(batchSize));
+    public void autoLoadWorkItems(final Long wfStepId) throws UnifyException {
+        final WfStep wfStep = environment().list(
+                new WfStepQuery().id(wfStepId).select("applicationName", "workflowName", "autoLoadConditionName"));
+        if (wfStep != null) {
+            final String autoLoadConditionName = wfStep.getAutoLoadConditionName();
+            if (!StringUtils.isBlank(autoLoadConditionName)) {
+                final int batchSize = appletUtil.system().getSysParameterValue(int.class,
+                        WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
+                final String workflowName = ApplicationNameUtils.ensureLongNameReference(wfStep.getApplicationName(),
+                        wfStep.getWorkflowName());
+                WfDef wfDef = getWfDef(workflowName);
+                EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfDef.getEntity());
+                Restriction restriction = wfDef.getFilterDef(autoLoadConditionName).getFilterDef()
+                        .getRestriction(entityClassDef.getEntityDef(), null, getNow());
+                List<? extends WorkEntity> entityList = environment().listAll(Query
+                        .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass()).restriction(restriction)
+                        .restriction(new OrBuilder().equals("inWorkflow", Boolean.FALSE).isnull("inWorkflow").build())
+                        .order("id").limit(batchSize));
 
-            for (WorkEntity inst : entityList) {
-                submitToWorkflowByName(workflowName, inst);
+                for (WorkEntity inst : entityList) {
+                    submitToWorkflowByName(workflowName, inst);
+                }
             }
         }
     }
@@ -1539,36 +1543,36 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @SuppressWarnings("unchecked")
     @Override
-    public void performWfTransition(String payloadId) throws UnifyException {
-        final Long wfTransitionQueueId = Long.valueOf(payloadId);
-        final WfTransitionQueue wfTransitionQueue = environment().list(WfTransitionQueue.class, wfTransitionQueueId);
-        final WfItem wfItem = environment().list(WfItem.class, wfTransitionQueue.getWfItemId());
-        if (wfItem != null) {
-            final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-            final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
-            WorkEntity wfEntityInst = (WorkEntity) environment()
-                    .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
-            if (wfEntityInst != null) {
-                try {
-                    final String forwardedBy = wfItem.getForwardedBy() != null ? wfItem.getForwardedBy()
-                            : DefaultApplicationConstants.SYSTEM_LOGINID;
-                    final UserToken userToken = UserToken.newBuilder().userLoginId(forwardedBy)
-                            .userName(wfItem.getForwardedByName() != null ? wfItem.getForwardedByName()
-                                    : DefaultApplicationConstants.SYSTEM_FULLNAME)
-                            .branchCode(wfEntityInst.getWorkBranchCode())
-                            .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(forwardedBy)).build();
-                    getSessionContext().setUserToken(userToken);
+    public void performWfTransition(final Long wfTransitionQueueId) throws UnifyException {
+        final WfTransitionQueue wfTransitionQueue = environment()
+                .list(new WfTransitionQueueQuery().id(wfTransitionQueueId));
+        if (wfTransitionQueue != null) {
+            final WfItem wfItem = environment().list(WfItem.class, wfTransitionQueue.getWfItemId());
+            if (wfItem != null) {
+                final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+                final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
+                WorkEntity wfEntityInst = (WorkEntity) environment()
+                        .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
+                if (wfEntityInst != null) {
+                    try {
+                        final String forwardedBy = wfItem.getForwardedBy() != null ? wfItem.getForwardedBy()
+                                : DefaultApplicationConstants.SYSTEM_LOGINID;
+                        final UserToken userToken = UserToken.newBuilder().userLoginId(forwardedBy)
+                                .userName(wfItem.getForwardedByName() != null ? wfItem.getForwardedByName()
+                                        : DefaultApplicationConstants.SYSTEM_FULLNAME)
+                                .branchCode(wfEntityInst.getWorkBranchCode())
+                                .reservedUser(DefaultApplicationConstants.SYSTEM_LOGINID.equals(forwardedBy)).build();
+                        getSessionContext().setUserToken(userToken);
 
-                    final TransitionItem transitionItem = createTransitionItem(wfItem, wfDef, wfEntityInst,
-                            wfTransitionQueue.isFlowTransition());
-                    doWfTransition(transitionItem);
-                } catch (Exception e) {
-                    logError(e);
+                        final TransitionItem transitionItem = createTransitionItem(wfItem, wfDef, wfEntityInst,
+                                wfTransitionQueue.isFlowTransition());
+                        doWfTransition(transitionItem);
+                    } catch (Exception e) {
+                        logError(e);
+                    }
                 }
             }
         }
-
-        environment().deleteById(wfTransitionQueue);
     }
 
     @Override
@@ -1700,6 +1704,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         WfTransitionQueue wfTransitionQueue = new WfTransitionQueue();
         wfTransitionQueue.setWfItemId(wfItemId);
         wfTransitionQueue.setFlowTransition(flowTransition);
+        wfTransitionQueue.setStatus(JobItemStatus.PENDING);
         environment().create(wfTransitionQueue);
     }
 
