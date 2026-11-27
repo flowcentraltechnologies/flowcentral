@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.notification.jobs;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralJobHandler;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.annotation.Configurable;
 
 /**
@@ -35,17 +35,16 @@ public abstract class AbstractNotificationJobHandler extends AbstractFlowCentral
     @Configurable
     private NotificationModuleService notificationModuleService;
 
+    public AbstractNotificationJobHandler(Class<? extends Entity> payloadEntityClass) {
+        super(payloadEntityClass);
+    }
+
     protected final SystemModuleService system() {
         return systemModuleService;
     }
 
     protected final NotificationModuleService notification() {
         return notificationModuleService;
-    }
-
-    @Override
-    protected boolean ready() throws UnifyException {
-        return systemModuleService != null && notificationModuleService != null;
     }
 
 }

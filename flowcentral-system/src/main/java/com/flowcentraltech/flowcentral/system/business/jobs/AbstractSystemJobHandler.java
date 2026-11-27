@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.system.business.jobs;
 
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralJobHandler;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.common.database.Entity;
 import com.tcdng.unify.core.annotation.Configurable;
 
 /**
@@ -31,13 +31,12 @@ public abstract class AbstractSystemJobHandler extends AbstractFlowCentralJobHan
     @Configurable
     private SystemModuleService systemModuleService;
 
-    protected final SystemModuleService system() {
-        return systemModuleService;
+    public AbstractSystemJobHandler(Class<? extends Entity> payloadEntityClass) {
+        super(payloadEntityClass);
     }
 
-    @Override
-    protected boolean ready() throws UnifyException {
-        return systemModuleService != null;
+    protected final SystemModuleService system() {
+        return systemModuleService;
     }
 
 }

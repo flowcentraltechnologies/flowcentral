@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.system.business.jobs;
 
+import com.flowcentraltech.flowcentral.system.entities.ScheduledTask;
+
 /**
  * Base class for system job handlers.
  * 
@@ -22,5 +24,9 @@ package com.flowcentraltech.flowcentral.system.business.jobs;
  * @since 4.1
  */
 public abstract class AbstractScheduledTaskJobHandler extends AbstractSystemJobHandler {
+
+    public AbstractScheduledTaskJobHandler() {
+        super(ScheduledTask.class);
+    }
 
 }

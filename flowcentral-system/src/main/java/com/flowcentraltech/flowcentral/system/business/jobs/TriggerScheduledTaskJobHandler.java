@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.system.business.jobs;
 
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.system.entities.ScheduledTask;
 import com.flowcentraltech.flowcentral.system.entities.ScheduledTaskQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -35,13 +34,8 @@ import com.tcdng.unify.core.data.JobFetchInfo;
 public class TriggerScheduledTaskJobHandler extends AbstractScheduledTaskJobHandler {
 
     @Override
-    public void performWork(String payloadId) throws UnifyException {
-        system().triggerScheduledTasks(Long.valueOf(payloadId));
-    }
-
-    @Override
-    public void notifyFail(String payloadId) throws UnifyException {
-        environment().updateById(ScheduledTask.class, Long.valueOf(payloadId), new Update().set("triggerCheck", false));
+    protected void process(Long scheduledTaskId) throws UnifyException {
+        system().triggerScheduledTasks(scheduledTaskId);
     }
 
     @Override
@@ -55,8 +49,9 @@ public class TriggerScheduledTaskJobHandler extends AbstractScheduledTaskJobHand
         return JobFetchInfo.newBuilder()
                 .claimQuery(new ScheduledTaskQuery().readyToRun())
                 .claimUpdate(new Update().set("triggerCheck", true))
-                .fetchBatchSize(32)
-                .jobMaxAttempts(4)
+                .passUpdate(new Update().set("triggerCheck", false))
+                .failUpdate(new Update().set("triggerCheck", false))
+                .fetchBatchSize(16)
                 .build();
     }
 

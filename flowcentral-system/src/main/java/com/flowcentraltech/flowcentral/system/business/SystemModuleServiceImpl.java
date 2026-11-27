@@ -667,7 +667,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService implemen
 
 
     @Override
-    public void triggerScheduledTasks(Long scheduledTaskId) throws UnifyException {
+    public void triggerScheduledTasks(final Long scheduledTaskId) throws UnifyException {
         final ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
 
         // Working dates

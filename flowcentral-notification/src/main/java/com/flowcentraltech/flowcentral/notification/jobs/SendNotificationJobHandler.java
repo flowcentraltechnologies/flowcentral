@@ -34,17 +34,15 @@ import com.tcdng.unify.core.data.JobFetchInfo;
 @Component("sendnotification-jobhandler")
 public class SendNotificationJobHandler extends AbstractNotificationJobHandler {
 
-    @Override
-    public void performWork(String payloadId) throws UnifyException {
-        notification().sendNotifications(Long.valueOf(payloadId));
+    public SendNotificationJobHandler() {
+        super(NotificationChannel.class);
     }
 
     @Override
-    public void notifyFail(String payloadId) throws UnifyException {
-        environment().updateById(NotificationChannel.class, Long.valueOf(payloadId),
-                new Update().set("sendCheck", false));
+    protected void process(Long notificationChannelId) throws UnifyException {
+        notification().sendNotifications(notificationChannelId);
     }
-
+    
     @Override
     protected boolean ready() throws UnifyException {
         return super.ready() && system().getSysParameterValue(boolean.class,
@@ -56,8 +54,9 @@ public class SendNotificationJobHandler extends AbstractNotificationJobHandler {
         return JobFetchInfo.newBuilder()
                 .claimQuery(new NotificationChannelQuery().readyToSend())
                 .claimUpdate(new Update().set("sendCheck", true))
-                .fetchBatchSize(4)
-                .jobMaxAttempts(4)
+                .passUpdate(new Update().set("sendCheck", false))
+                .failUpdate(new Update().set("sendCheck", false))
+                .fetchBatchSize(2)
                 .build();
     }
 
